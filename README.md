@@ -1,4 +1,4 @@
-HIỆN TẠI THÌ PROJECT MÌNH T ĐANG TẠO 6 BRANCH GỒM: main, develop, khanh, thông, minh, hiếu
+HIỆN TẠI THÌ PROJECT MÌNH T ĐANG TẠO 6 BRANCH GỒM: main, develop, khanh, thông, minh, hiếu  
 MỖI NGƯỜI CHỈ ĐẨY CODE LÊN BRANCH CỦA MÌNH *** KHÔNG ĐƯỢC ĐẨY LÊN MAIN ***
 TRƯỚC MỖI BUỔI REVIEW THÌ SẼ ĐẨY CODE LÊN BRANCH DEVELOP. TRONG BUỔI REIVEW SẼ TEST, NẾU OKE THÌ MỚI ĐẨY LÊN main
 *****KHÔNG ĐẨY LÊN main, KHÔNG ĐẨY LÊN main, KHÔNG ĐẨY LÊN main- ĐIỀU GÌ QUAN TRỌNG NHẮC LẠI 3 LẦN
