@@ -7,7 +7,8 @@
                                               + cd tới folder đó  
                                               + clone project về: git clone https://github.com/khanh030106/DATN-LearnOva.git  
 
-Quy trình mỗi ngày như sau: + Mở Terminal  
+Quy trình mỗi ngày như sau:   
+                            + Mở Terminal  
                             + cd TỚI FOLDER CHUNG ĐỂ PROJECT  
                             + chuyển sang branch của mình: git checkout tênbranch (ví dụ: git checkout khanh, nhớ thay tên t bằng branch của mình)  
                             + kéo code mới nhất từ branch mình: git pull origin tênbranch (ví dụ: git pull origin khanh, nhớ thay tên t bằng branch của mình)  
