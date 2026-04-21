@@ -1,10 +1,13 @@
--HIỆN TẠI THÌ PROJECT MÌNH T ĐANG TẠO 6 BRANCH GỒM: main, develop, khanh, thông, minh, hiếu  
--MỖI NGƯỜI CHỈ ĐẨY CODE LÊN BRANCH CỦA MÌNH *** KHÔNG ĐƯỢC ĐẨY LÊN MAIN ***  
--TRƯỚC MỖI BUỔI REVIEW THÌ SẼ ĐẨY CODE LÊN BRANCH DEVELOP. TRONG BUỔI REIVEW SẼ TEST, NẾU OKE THÌ MỚI ĐẨY LÊN main  
+-Hiện tại thì project mình t đang tạo 6 branch gồm: main, develop, khanh, thông, minh, hiếu  
+-Mỗi người chỉ được đẩy code lên branch của mình *** KHÔNG ĐƯỢC ĐẨY LÊN MAIN ***  
+-Trước mỗi buổi review thì sẽ đẩy lên develop. Trong buổi review sẽ test, nếu oke mới đẩy lên main  
 *****KHÔNG ĐẨY LÊN main, KHÔNG ĐẨY LÊN main, KHÔNG ĐẨY LÊN main- ĐIỀU GÌ QUAN TRỌNG NHẮC LẠI 3 LẦN  
 
-QUY TRÌNH MỖI NGÀY NHƯ SAU: + CLONE PROJECT VỀ (NẾU CHƯA CÓ TRÊN MÁY)  
-                            + cd TỚI FOLDER CHUNG ĐỂ PROJECT  
+-Clone project vể (lần đầu và chỉ làm 1 lần): + Tạo 1 folder (ví dụ: DATN)  
+                                              + cd tới folder đó  
+                                              + clone project về: git clone https://github.com/khanh030106/DATN-LearnOva.git  
+
+Quy trình mỗi ngày như sau: + cd TỚI FOLDER CHUNG ĐỂ PROJECT  
                             + chuyển sang branch của mình: git checkout tênbranch (ví dụ: git checkout khanh, nhớ thay tên t bằng branch của mình)  
                             + kéo code mới nhất từ branch mình: git pull origin tênbranch (ví dụ: git pull origin khanh, nhớ thay tên t bằng branch của mình)  
                             + merge code mới từ team: git merge develop  
