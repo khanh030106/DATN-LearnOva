@@ -19,4 +19,5 @@ Quy trình mỗi ngày như sau:
                             + Commit phần đã code trong ngày: git commit -m "nội dung commit" (ví dụ: git commit -m "xong service xử lí đăng nhập")  
                             + Push code lên branch của mình, KHÔNG PUSH LÊN main: git push origin tênbranch (ví dụ: git push origin khanh, nhớ thay tên t bằng branch của mình)  
                             
-  *******CHỖ NÀO KHÔNG HIỂU THÌ IB HỎI AE LIỀN CHỨ KHÔNG GẮNG LÀM HOẶC LÀM ĐẠI
+  *******CHỖ NÀO KHÔNG HIỂU THÌ IB HỎI AE LIỀN CHỨ KHÔNG GẮNG LÀM HOẶC LÀM ĐẠI  
+  Hiện tại thì trong mỗi folder đều đang có 1 file .gitkeep t tạo để giữ chỗ, khi ae tạo thêm file trong folder này thì có thể xóa file .gitkeep
