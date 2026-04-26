@@ -345,7 +345,9 @@ ROLE: + ADMIN
             
             Quản lý email (reset password, nhắc học)
             
-            
+     ---- quản lý cmt bổ sung trong cmt 
+       xóa hoặc ẩn những cmt tiêu cực ko phù hợp spam 
+
             
 🎯 V. PHÂN QUYỀN (ROLE)
             
@@ -357,7 +359,10 @@ ROLE: + ADMIN
             
             
             CUSTOMER → Học, mua, tương tác
-            
+---------- bổ sung admin -------
++ có thể hiển thị những user đang hoạt đọngo 
++ có thể thông báo cho tòan bộ hệ ( user, giảng viên)
++ 
             
 
 
