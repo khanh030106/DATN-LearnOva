@@ -204,3 +204,5 @@ CREATE INDEX idx_wishlist_user_id ON Wishlist(user_id);
 CREATE INDEX idx_email_token ON EmailVerificationTokens(token);
 CREATE INDEX idx_email_token_user ON EmailVerificationTokens(user_id)
     WHERE is_used = FALSE;
+
+-- DONE INDEX
