@@ -11,6 +11,6 @@ CHƯC NĂNG CHÍNH: + UP KHÓA HỌC
 
 ROLE: + ADMIN
       + CUSTOMER
-      + TEACHER
+      + TEACHERz
 
 -ADMIN: +
