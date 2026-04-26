@@ -18,7 +18,7 @@ CREATE TABLE Users(
 
 CREATE TYPE role_name AS ENUM ('ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER');
 CREATE TABLE Roles(
-                      role_id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL ,
+                      role_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL ,
                       role_name role_name NOT NULL
 );
 
