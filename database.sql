@@ -3,7 +3,7 @@ CREATE TYPE account_type AS ENUM('LOCAL', 'GOOGLE', 'FACEBOOK', 'GITHUB');
 CREATE TABLE Users(
                       user_id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY ,
                       full_name VARCHAR(100) NOT NULL ,
-                      email TEXT NOT NULL ,
+                      email TEXT UNIQUE NOT NULL ,
                       phone VARCHAR(10) NULL ,
                       avatar TEXT NULL ,
                       cover_image TEXT NULL ,
@@ -26,8 +26,8 @@ CREATE TABLE UserRole(
                          user_id BIGINT NOT NULL ,
                          role_id BIGINT NOT NULL ,
                          PRIMARY KEY (user_id, role_id),
-                         FOREIGN KEY (user_id) REFERENCES Users(user_id),
-                         FOREIGN KEY (role_id) REFERENCES Roles(role_id)
+                         FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE ,
+                         FOREIGN KEY (role_id) REFERENCES Roles(role_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Categories(
@@ -77,10 +77,9 @@ CREATE TABLE Enrollment(
 );
 
 CREATE TABLE Cart(
-    cart_id BIGINT NOT NULL ,
+    cart_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL ,
     user_id BIGINT NOT NULL ,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ,
-    PRIMARY KEY (cart_id),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
@@ -115,10 +114,12 @@ CREATE TYPE payment_method AS ENUM ('COD', 'E-WALLET');
 CREATE TABLE PaymentHistory(
     payment_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL ,
     course_id BIGINT NOT NULL ,
+    user_id BIGINT NOT NULL ,
     payment_method payment_method NOT NULL ,
     amount NUMERIC(10, 2) NOT NULL ,
     payment_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    FOREIGN KEY (course_id) REFERENCES Courses(course_id)
+    FOREIGN KEY (course_id) REFERENCES Courses(course_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
 CREATE TABLE Promotions(
@@ -151,14 +152,14 @@ CREATE TABLE Review(
 CREATE TYPE discount_type AS ENUM('Fixed', 'Percent');
 CREATE TABLE Vouchers(
     voucher_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL ,
-    code TEXT NOT NULL ,
+    code TEXT UNIQUE NOT NULL ,
     description TEXT NOT NULL ,
     discount_type discount_type NOT NULL ,
     discount_value NUMERIC(10, 2) NOT NULL ,
     min_order_amount NUMERIC(10, 2) NOT NULL ,
     max_order_amount NUMERIC(10, 2) NOT NULL ,
     usage_limit INTEGER NOT NULL ,
-    used_count INTEGER,
+    used_count INTEGER DEFAULT 0 NOT NULL ,
     start_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL ,
     end_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL ,
     is_active BOOLEAN DEFAULT TRUE NOT NULL ,
@@ -172,3 +173,34 @@ CREATE TABLE Wishlist(
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (course_id) REFERENCES Courses(course_id)
 );
+
+CREATE INDEX idx_users_active ON Users(user_id)
+    WHERE is_deleted = FALSE AND is_active = TRUE;
+
+CREATE INDEX idx_courses_active ON Courses(course_id)
+    WHERE is_deleted = FALSE;
+
+CREATE INDEX idx_courses_price ON Courses(price);
+CREATE INDEX idx_courses_level ON Courses(level);
+
+CREATE INDEX idx_enrollment_user_id ON Enrollment(user_id);
+
+CREATE INDEX idx_course_categories_cat ON CourseCategories(categories_id);
+CREATE INDEX idx_course_owner_owner ON CourseOwner(owner_id);
+CREATE INDEX idx_cart_items_course ON CartItems(course_id);
+
+CREATE INDEX idx_notif_user_id ON Notifications(user_id);
+
+CREATE INDEX idx_notif_unread ON Notifications(user_id)
+    WHERE is_read = FALSE;
+
+CREATE INDEX idx_vouchers_active ON Vouchers(end_date)
+    WHERE is_active = TRUE;
+
+CREATE INDEX idx_promotions_dates ON Promotions(start_date, end_date);
+
+CREATE INDEX idx_wishlist_user_id ON Wishlist(user_id);
+
+CREATE INDEX idx_email_token ON EmailVerificationTokens(token);
+CREATE INDEX idx_email_token_user ON EmailVerificationTokens(user_id)
+    WHERE is_used = FALSE;

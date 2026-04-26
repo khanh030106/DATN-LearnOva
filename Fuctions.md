@@ -16,8 +16,8 @@ CHƯC NĂNG CHÍNH: + UP KHÓA HỌC
                  + CHAT BOT  
                  + GIỚI THIỆU NGƯỜI DÙNG (CÓ ƯU ĐÃI CHO NGƯỜI GIỚI THIỆU)
                  + ĐĂNG NHẬP BẰNG GG, FB, GITHUB
-                 + QUÊN MẬT KHẨU (LINK TOKEN)
-                 + ĐĂNG KÝ TÀI KHOẢN ( XÁC THỰC CHÍNH CHỦ QUA EMAIL)
+                 + QUÊN MẬT KHẨU (TOKEN)
+                 + ĐĂNG KÝ TÀI KHOẢN ( XÁC THỰC EMAIL)
                  + SẢN PHẦM GỢI Ý ( DỰA TRÊN LỊCH SỬ MUA HÀNG KHÓA HỌC YÊU THÍCH, GIỎ HÀNG, LS TÌM KIẾM)
                  + LỊCH SỬ MUA HÀNG, LS KHÓA HỌC, TIẾN ĐỘ HỌC TẬP (HIỂN THỊ %, VIDEO ĐÃ HỌC, CHƯA HỌC) 
                  + NHẮC HỌC ( GMAIL)
@@ -47,25 +47,13 @@ ROLE: + ADMIN
 -ADMIN: +
 -------------------------------- CỤ THỂ RÕ RÀNG HƠN ------------------------
 🎯 I. CHỨC NĂNG CHÍNH CỦA HỆ THỐNG (CORE FEATURES)
-📚 Quản lý khóa học
-            
-            
-            Upload khóa học
-            
-            
+    Quản lý khóa học
+
             CRUD khóa học (TEACHER)
-            
-            
             Duyệt khóa học (ADMIN)
-            
-            
             Xem khóa học (USER)
-            
-            
             Tìm kiếm khóa học (USER)
-            
-            
-            
+
 🛒 Mua & thanh toán
             
             
