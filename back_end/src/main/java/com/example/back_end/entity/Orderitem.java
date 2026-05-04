@@ -12,7 +12,9 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "orderitems")
+@Table(name = "orderitems", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"order_id", "course_id"})
+})
 public class Orderitem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +30,7 @@ public class Orderitem {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "course_id", nullable = false)
-    private Cours course;
+    private Course course;
 
     @NotNull
     @Column(name = "original_price", nullable = false, precision = 10, scale = 2)

@@ -44,7 +44,7 @@ public class Category {
     @NotNull
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at", nullable = false)
-    private OffsetDateTime createdAt;
+    private Instant createdAt;
 
     @NotNull
     @ColumnDefault("CURRENT_TIMESTAMP")

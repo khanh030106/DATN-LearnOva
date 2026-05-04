@@ -1,11 +1,13 @@
 package com.example.back_end.entity;
 
+import com.example.back_end.entity.enums.GenderType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -44,8 +46,10 @@ public class User {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "gender", columnDefinition = "gender_type")
-    private Object gender;
+    @org.hibernate.annotations.JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    private GenderType gender;
 
     @Column(name = "password_hash", length = Integer.MAX_VALUE)
     private String passwordHash;
@@ -76,7 +80,7 @@ public class User {
     private Set<Cart> carts = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "instructor")
-    private Set<Cours> courses = new LinkedHashSet<>();
+    private Set<Course> courses = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
     private Set<Enrollment> enrollments = new LinkedHashSet<>();
@@ -100,6 +104,11 @@ public class User {
     private Set<Userauthprovider> userauthproviders = new LinkedHashSet<>();
 
     @ManyToMany
+    @JoinTable(
+            name = "userrole",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private Set<Role> roles = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")

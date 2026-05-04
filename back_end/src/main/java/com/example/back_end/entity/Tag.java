@@ -41,7 +41,7 @@ public class Tag {
     private Instant updatedAt;
 
     @ManyToMany(mappedBy = "tags")
-    private Set<Cours> courses = new LinkedHashSet<>();
+    private Set<Course> courses = new LinkedHashSet<>();
 
 
 }

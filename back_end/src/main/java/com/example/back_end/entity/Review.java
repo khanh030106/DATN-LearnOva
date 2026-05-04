@@ -13,7 +13,9 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "reviews")
+@Table(name = "reviews",  uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "course_id"})
+})
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +26,7 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "course_id", nullable = false)
-    private Cours course;
+    private Course course;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -58,7 +58,7 @@ public class Lesson {
     @NotNull
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at", nullable = false)
-    private OffsetDateTime createdAt;
+    private Instant createdAt;
 
     @NotNull
     @ColumnDefault("false")
@@ -73,7 +73,7 @@ public class Lesson {
     @OneToMany(mappedBy = "lesson")
     private Set<Lessonprogress> lessonprogresses = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "lesson")
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Lessonsource> lessonsources = new LinkedHashSet<>();
 
 
