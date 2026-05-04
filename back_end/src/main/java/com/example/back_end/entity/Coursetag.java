@@ -1,0 +1,30 @@
+package com.example.back_end.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "coursetags")
+public class Coursetag {
+    @EmbeddedId
+    private CoursetagId id;
+
+    @MapsId("courseId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "course_id", nullable = false)
+    private Cours course;
+
+    @MapsId("tagId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "tag_id", nullable = false)
+    private Tag tag;
+
+
+}
