@@ -1,4 +1,6 @@
-CREATE EXTENSION IF NOT EXISTS unaccent;
+CREATE EXTENSION IF NOT EXISTS unaccent;SELECT tablename
+                                        FROM pg_tables
+                                        WHERE schemaname = 'public';
 
 CREATE OR REPLACE FUNCTION immutable_unaccent(text)
     RETURNS TEXT AS $$
