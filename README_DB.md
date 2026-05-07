@@ -57,28 +57,16 @@ Chỉ cần chạy thẳng:
 
 ---
 
-### Trường hợp 2 — Có thay đổi schema mới (có file V2, V3... được push lên)
+### Trường hợp 2 — Có thay đổi schema mới
 
 ```powershell
-git pull
+pull project again
 ./mvnw spring-boot:run
 ```
 
-Flyway tự động phát hiện file migration mới và cập nhật DB. Không cần làm gì thêm! ✅
+Flyway tự động phát hiện file migration mới và cập nhật DB. Không cần làm gì thêm!
 
----
-
-## Gặp lỗi?
-
-| Lỗi | Nguyên nhân | Cách fix |
-|-----|-------------|----------|
-| `password authentication failed` | Sai password hoặc chưa set biến môi trường | Kiểm tra lại Bước 3, nhớ mở lại PowerShell |
-| `database "DATN" does not exist` | Chưa tạo DB | Làm lại Bước 2 |
-| `Connection refused` | PostgreSQL chưa chạy | Mở Services → khởi động PostgreSQL |
-| `checksum mismatch` | File migration bị sửa | Liên hệ người quản lý DB |
-
----
 
 >  **Lưu ý:** Mỗi người dùng password PostgreSQL của máy mình. Không dùng chung password.
 >
-> ⚠️ **Không tự ý thay đổi cấu trúc DB.** Mọi thay đổi schema phải do người quản lý DB thực hiện.
+>  **Không tự ý thay đổi cấu trúc DB.**
