@@ -3,7 +3,6 @@
 
 - [PostgreSQL 18](https://www.postgresql.org/download/) đã được cài đặt
 - [Java 25+](https://www.oracle.com/java/technologies/downloads/) đã được cài đặt
-- Đã clone project về máy
 
 ---
 
@@ -11,62 +10,41 @@
 
 ### Bước 1 — Clone project
 
-```powershell
-git clone <link_repo>
-cd <tên_thư_mục_project>
-```
+#### 1. Tạo folder ở chỗ muốn để DATN (đặt tên là DATN hay chi đó)
+#### 2. Lấy Path của folder đó: Click chuột phải vào foler chọn Copy as path  
+![img.png](img.png)
+#### 3. cd tới folder nớ
+- Mở **Terminal** gõ cd, cách rồi **Ctrl V** rồi Enter
+- ![img_1.png](img_1.png)
+#### 4. Copy link repo từ github: chọn code -> HTTPS -> biểu tưởng coppy
+![img_2.png](img_2.png)
 
----
+#### 5. Mở Terminal nãy lên lại: git clone rồi ctrl V rồi Enter
+![img_3.png](img_3.png)
 
 ### Bước 2 — Tạo database trống
 
 Mở **pgAdmin** → click phải vào **Databases** → **Create** → **Database** → đặt tên `DATN` → nhấn **Save**.
 
-Hoặc dùng psql:
-
-```sql
-CREATE DATABASE "DATN";
+### Bước 3 - Set Environment Variable
+#### 1. Mở foler back_end, tạo file .env ở root project bằng cách click chuột phải vào back_end -> new file -> .env -> Enter -> Set url, username và password DB của mình (không được có dấu cách)
+#### 2. Mở application.properties trong src/main/java/resources ra rồi thêm biến vào (tên phaỉ giống trong env). Phải đặt 3 biến như hình: DB_URL, DB_USERNAME, DB_PASSWORD
+![img_4.png](img_4.png)
+#### 3. Vẫn ở back_end, mở Terminal (góc dưới phải), git checkout + tên bản thân (ví dụ: git checkout khanh)
+![img_8.png](img_8.png)
+#### 4. Set biến (thay bằng URL, USER, PASSWORD của mình, coppy từ .env sang, tên biến cũng phải giống trong .env và application.properties), làm lần lượt 3 lệnh, làm từng lệnh 1, xong 1 lệnh thì Enter rồi làm lệnh tiếp theo
+```powershell
+$env:DB_URL="jdbc:postgresql://localhost:5432/DATN"  
+$env:DB_USERNAME="thay bẳng username DB của bản thân"    
+$env:DB_PASSWORD="thay bằng password của bản thân"
 ```
+![img_6.png](img_6.png)
+#### 5. gitignore
+- Vẫn ở back_end, mở file .gitignore, thêm .env vào
+![img_7.png](img_7.png)
+
 ### Bước 4 — Chạy app lần đầu
 
 ```powershell
 ./mvnw spring-boot:run
 ```
-
-Flyway sẽ **tự động tạo toàn bộ bảng** trong DB. Không cần làm gì thêm! ✅
-
-Log thành công sẽ trông như này:
-
-```
-Successfully validated 1 migration
-Successfully baselined schema with version: 1
-Started BackEndApplication in X seconds
-```
-
----
-
-## Các lần sau (làm mỗi ngày)
-
-### Trường hợp 1 — Không có thay đổi schema
-
-Chỉ cần chạy thẳng:
-
-```powershell
-./mvnw spring-boot:run
-```
-
----
-
-### Trường hợp 2 — Có thay đổi schema mới
-
-```powershell
-pull project again
-./mvnw spring-boot:run
-```
-
-Flyway tự động phát hiện file migration mới và cập nhật DB. Không cần làm gì thêm!
-
-
->  **Lưu ý:** Mỗi người dùng password PostgreSQL của máy mình. Không dùng chung password.
->
->  **Không tự ý thay đổi cấu trúc DB.**
