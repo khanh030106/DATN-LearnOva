@@ -13,8 +13,16 @@
 #### 1. Tạo folder ở chỗ muốn để DATN (đặt tên là DATN hay chi đó)
 #### 2. Lấy Path của folder đó: Click chuột phải vào foler chọn Copy as path  
 ![img.png](img.png)
+#### 3. cd tới folder nớ
+- Mở **Terminal** gõ cd rồi **Ctrl V** rồi Enter
+- ![img_1.png](img_1.png)
+#### 4. Copy link repo từ github: chọn code -> HTTPS -> biểu tưởng coppy
+![img_2.png](img_2.png)
 
-```powershell
+#### 5. Mở Terminal nãy lên lại: git clone rồi ctrl V rồi Enter
+![img_3.png](img_3.png)
+
+
 
 
 ```
