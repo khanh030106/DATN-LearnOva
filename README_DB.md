@@ -31,7 +31,7 @@ Mở **pgAdmin** → click phải vào **Databases** → **Create** → **Databa
 #### 2. Mở application.properties trong src/main/java/resources ra rồi thêm biến vào (tên phaỉ giống trong env). Phải đặt 3 biến như hình: DB_URL, DB_USERNAME, DB_PASSWORD
 ![img_4.png](img_4.png)
 #### 3. Vẫn ở back_end, mở Terminal (góc dưới phải), git checkout + tên bản thân (ví dụ: git checkout khanh)
-![img_5.png](img_5.png)
+![img_8.png](img_8.png)
 #### 4. Set biến (thay bằng URL, USER, PASSWORD của mình, coppy từ .env sang, tên biến cũng phải giống trong .env và application.properties), làm lần lượt 3 lệnh, làm từng lệnh 1, xong 1 lệnh thì Enter rồi làm lệnh tiếp theo
 ```powershell
 $env:DB_URL="jdbc:postgresql://localhost:5432/DATN"  
