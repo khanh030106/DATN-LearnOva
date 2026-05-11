@@ -3,7 +3,6 @@
 
 - [PostgreSQL 18](https://www.postgresql.org/download/) đã được cài đặt
 - [Java 25+](https://www.oracle.com/java/technologies/downloads/) đã được cài đặt
-- Đã clone project về máy
 
 ---
 
@@ -11,9 +10,13 @@
 
 ### Bước 1 — Clone project
 
+#### 1. Tạo folder ở chỗ muốn để DATN (đặt tên là DATN hay chi đó)
+#### 2. Lấy Path của folder đó: Click chuột phải vào foler chọn Copy as path  
+![img.png](img.png)
+
 ```powershell
-git clone <link_repo>
-cd <tên_thư_mục_project>
+
+
 ```
 
 ---
@@ -22,10 +25,6 @@ cd <tên_thư_mục_project>
 
 Mở **pgAdmin** → click phải vào **Databases** → **Create** → **Database** → đặt tên `DATN` → nhấn **Save**.
 
-Hoặc dùng psql:
-
-```sql
-CREATE DATABASE "DATN";
 ```
 ### Bước 4 — Chạy app lần đầu
 
@@ -33,7 +32,7 @@ CREATE DATABASE "DATN";
 ./mvnw spring-boot:run
 ```
 
-Flyway sẽ **tự động tạo toàn bộ bảng** trong DB. Không cần làm gì thêm! ✅
+Flyway sẽ **tự động tạo toàn bộ bảng** trong DB
 
 Log thành công sẽ trông như này:
 
