@@ -1,8 +1,7 @@
---
+﻿--
 -- PostgreSQL database dump
 --
 
-\restrict cMkkoRuw6YbYq6K4rfgx4owMLeH0Wt9kwMboEMbPr2YnuvtLcg8K40RbWPPJlua
 
 -- Dumped from database version 18.3
 -- Dumped by pg_dump version 18.3
@@ -492,7 +491,7 @@ BEGIN
         SELECT 1 FROM Enrollments
         WHERE user_id = NEW.user_id AND course_id = v_course_id
     ) THEN
-        RAISE EXCEPTION 'User % chưa enrolled vào course %', NEW.user_id, v_course_id;
+        RAISE EXCEPTION 'User % chÆ°a enrolled vÃ o course %', NEW.user_id, v_course_id;
     END IF;
 
     RETURN NEW;
@@ -514,7 +513,7 @@ BEGIN
         SELECT 1 FROM Enrollments
         WHERE user_id = NEW.user_id AND course_id = NEW.course_id
     ) THEN
-        RAISE EXCEPTION 'User % chưa enrolled vào course % nên không thể review',
+        RAISE EXCEPTION 'User % chÆ°a enrolled vÃ o course % nÃªn khÃ´ng thá»ƒ review',
             NEW.user_id, NEW.course_id;
     END IF;
 
@@ -540,8 +539,8 @@ BEGIN
     WHERE lesson_id = NEW.lesson_id;
 
     IF NEW.watched_seconds > v_duration THEN
-        -- Tự clamp về duration thay vì raise exception
-        -- Tránh lỗi do network lag hoặc player report thừa vài giây
+        -- Tá»± clamp vá» duration thay vÃ¬ raise exception
+        -- TrÃ¡nh lá»—i do network lag hoáº·c player report thá»«a vÃ i giÃ¢y
         NEW.watched_seconds := v_duration;
     END IF;
 
@@ -631,13 +630,13 @@ DECLARE
     v_done_lessons   INTEGER;
     v_new_percent    INTEGER;
 BEGIN
-    -- Xác định course từ lesson
+    -- XÃ¡c Ä‘á»‹nh course tá»« lesson
     SELECT s.course_id INTO v_course_id
     FROM Lessons l
              JOIN Sections s ON l.section_id = s.section_id
     WHERE l.lesson_id = NEW.lesson_id;
 
-    -- Tổng số lesson của course (không tính lesson đã xóa)
+    -- Tá»•ng sá»‘ lesson cá»§a course (khÃ´ng tÃ­nh lesson Ä‘Ã£ xÃ³a)
     SELECT COUNT(*) INTO v_total_lessons
     FROM Lessons l
              JOIN Sections s ON l.section_id = s.section_id
@@ -645,7 +644,7 @@ BEGIN
       AND l.is_deleted = FALSE
       AND s.is_deleted = FALSE;
 
-    -- Số lesson user đã hoàn thành
+    -- Sá»‘ lesson user Ä‘Ã£ hoÃ n thÃ nh
     SELECT COUNT(*) INTO v_done_lessons
     FROM LessonProgress lp
              JOIN Lessons l ON lp.lesson_id = l.lesson_id
@@ -656,14 +655,14 @@ BEGIN
       AND l.is_deleted = FALSE
       AND s.is_deleted = FALSE;
 
-    -- Tính phần trăm, tránh chia 0
+    -- TÃ­nh pháº§n trÄƒm, trÃ¡nh chia 0
     IF v_total_lessons = 0 THEN
         v_new_percent := 0;
     ELSE
         v_new_percent := FLOOR(v_done_lessons * 100.0 / v_total_lessons);
     END IF;
 
-    -- Cập nhật progress và completed_at nếu đạt 100%
+    -- Cáº­p nháº­t progress vÃ  completed_at náº¿u Ä‘áº¡t 100%
     UPDATE Enrollments
     SET
         progress_percent = v_new_percent,
@@ -2469,5 +2468,8 @@ ALTER TABLE ONLY public.wishlist
 -- PostgreSQL database dump complete
 --
 
-\unrestrict cMkkoRuw6YbYq6K4rfgx4owMLeH0Wt9kwMboEMbPr2YnuvtLcg8K40RbWPPJlua
 
+
+REFRESH MATERIALIZED VIEW courseratingsummary;
+
+REFRESH MATERIALIZED VIEW courseratingsummary;
