@@ -43,6 +43,13 @@ $env:DB_PASSWORD="thay bằng password của bản thân"
 - Vẫn ở back_end, mở file .gitignore, thêm .env vào
 ![img_7.png](img_7.png)
 
+### Bước 5
+```powershell
+[System.Environment]::SetEnvironmentVariable("DB_URL", "jdbc:postgresql://localhost:5432/DATN", "User")
+[System.Environment]::SetEnvironmentVariable("DB_USERNAME", "postgres", "User")
+[System.Environment]::SetEnvironmentVariable("DB_PASSWORD", "123", "User")
+```
+
 ### Bước 4 — Chạy app lần đầu
 
 ```powershell
