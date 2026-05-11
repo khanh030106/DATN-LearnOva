@@ -26,7 +26,7 @@ CREATE EXTENSION IF NOT EXISTS unaccent WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION unaccent; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION unaccent; Type: COMMENT; Schema: -; Owner:
 --
 
 COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
@@ -579,7 +579,7 @@ ALTER FUNCTION public.courses_search_vector_update() OWNER TO postgres;
 CREATE FUNCTION public.immutable_unaccent(text) RETURNS text
     LANGUAGE sql IMMUTABLE PARALLEL SAFE
     AS $_$
-SELECT unaccent($1);
+SELECT public.unaccent($1);
 $_$;
 
 
@@ -2470,6 +2470,4 @@ ALTER TABLE ONLY public.wishlist
 
 
 
-REFRESH MATERIALIZED VIEW courseratingsummary;
-
-REFRESH MATERIALIZED VIEW courseratingsummary;
+REFRESH MATERIALIZED VIEW pulic.courseratingsummary;
