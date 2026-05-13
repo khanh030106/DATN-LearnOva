@@ -25,7 +25,6 @@ import java.time.LocalDate;
 public class InsertUsers {
 
     public static void main(String[] args) {
-        // Load .env variables into System properties if they are not already set
         loadEnv();
 
         // SecurityConfig
