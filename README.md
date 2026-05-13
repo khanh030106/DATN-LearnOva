@@ -17,7 +17,7 @@ Quy trình mỗi ngày như sau:
                             + Rồi code  
                             + Sau khi code xong thì check các file thay đổi: Mở terminal ở folder project: git status  
                             + Add code: git add .  
-                            + Commit phần đã code trong ngày: git commit -m "nội dung commit" (ví dụ: git commit -m "xong service xử lí đăng nhập")  
+                            + Commit phần đã code trong ngày: git commit -m "nội dung commit" (Nội dung commit phải có tên của mình, ví dụ: git commit -m "khanh xong service xử lí đăng nhập")  
                             + Push code lên branch của mình, KHÔNG PUSH LÊN main: git push origin tênbranch (ví dụ: git push origin khanh, nhớ thay tên t bằng branch của mình)  
 
 
