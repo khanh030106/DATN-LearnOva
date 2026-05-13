@@ -1,4 +1,4 @@
--Hiện tại thì project mình t đang tạo 6 branch gồm: main, develop, khanh, thông, minh, hiếu  
+-Hiện tại thì project mình t đang tạo 6 branch gồm: main, develop, khanh, thong, minh, hieu  
 -Mỗi người chỉ được đẩy code lên branch của mình *** KHÔNG ĐƯỢC ĐẨY LÊN MAIN ***  
 -Trước mỗi buổi review thì sẽ đẩy lên develop. Trong buổi review sẽ test, nếu oke mới đẩy lên main  
 *****KHÔNG ĐẨY LÊN main, KHÔNG ĐẨY LÊN main, KHÔNG ĐẨY LÊN main- ĐIỀU GÌ QUAN TRỌNG NHẮC LẠI 3 LẦN  
