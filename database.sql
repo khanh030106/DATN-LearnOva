@@ -53,7 +53,7 @@ CREATE TABLE UserAuthProviders (
                                    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
-CREATE TYPE verification_type AS ENUM ('ACTIVE_ACCOUNT', 'RESET_PASSWORD');
+CREATE TYPE verification_type AS ENUM ('ACTIVE_ACCOUNT', 'RESET_PASSWORD', 'REFRESH_TOKEN');
 CREATE TABLE VerificationTokens (
                                     token_id   BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
                                     user_id    BIGINT NOT NULL,
