@@ -10,11 +10,6 @@ const LoginPage = () => {
         <div className="login-page">
             <LoginBanner />
             <LoginForm />
-
-            <Roles />
-
-            <Path />
-            <Footer />
         </div>
     );
 }
