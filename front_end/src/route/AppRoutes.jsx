@@ -9,15 +9,15 @@ const App = () => {
         <BrowserRouter>
             <Routes>
 
-                {/*<Route*/}
-                {/*    path="/"*/}
-                {/*    element={<Footer />}*/}
-                {/*/>*/}
+                <Route
+                    path="/"
+                    element={<Footer />}
+                />
 
-                {/*<Route*/}
-                {/*    path="/roles"*/}
-                {/*    element={<Roles />}*/}
-                {/*/>*/}
+                <Route
+                    path="/roles"
+                    element={<Roles />}
+                />
 
                 <Route
                     path="/learnova/auth/login"
