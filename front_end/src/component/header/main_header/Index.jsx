@@ -1,22 +1,22 @@
-import {logo} from '../../../assets/LogoText.png'
+import logo from "../../../assets/LogoText.png";
 import NavMenu from "./NavMenu.jsx";
 import HeaderAction from "./HeaderAction.jsx";
-
+import "./Header.css";
 
 const Header = () => {
-    return (
-        <header className="main-header">
-            <div className="header-container">
-                <a href="/" className="logo">
-                    <img src={logo} alt="logo" />
-                </a>
+  return (
+    <header className="main-header">
+      <div className="header-container">
+        <a href="/" className="logo">
+          <img src={logo} alt="logo" />
+        </a>
 
-                <NavMenu/>
+        <NavMenu />
 
-                <HeaderAction/>
-            </div>
-        </header>
-    );
-}
+        <HeaderAction />
+      </div>
+    </header>
+  );
+};
 
 export default Header;

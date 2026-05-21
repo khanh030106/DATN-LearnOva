@@ -1,0 +1,193 @@
+* {
+  box-sizing: border-box;
+}
+
+.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 18px 24px;
+  background: linear-gradient(180deg, #fffaf1 0%, #f9edd6 100%);
+  border-bottom: 1px solid rgba(232, 190, 116, 0.22);
+}
+
+.header-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  min-height: 70px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.logo img {
+  display: block;
+  width: auto;
+  height: 42px;
+  object-fit: contain;
+}
+
+.nav-menu {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-list li {
+  display: flex;
+}
+
+.nav-menu-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 2px;
+  color: #7b520f;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.nav-menu-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 3px;
+  width: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: #e8be74;
+  transition: width 0.25s ease;
+}
+
+.nav-menu-link:hover::after,
+.nav-menu-link-active::after {
+  width: 100%;
+}
+
+.nav-menu-link-active {
+  color: #e8be74;
+}
+
+.header-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.header-action-cart,
+.header-action-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  border-radius: 14px;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.header-action-cart {
+  width: 42px;
+  color: #7b520f;
+  border-radius: 0;
+}
+
+.header-action-login {
+  padding: 0 20px;
+  background: linear-gradient(180deg, #e8be74 0%, #dfb05e 100%);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  border: 1px solid rgba(214, 160, 74, 0.35);
+  box-shadow: 0 12px 24px rgba(232, 190, 116, 0.24);
+  border-radius: 10px;
+}
+
+.header-action-login:hover {
+  background: linear-gradient(180deg, #e3b665 0%, #d9a95f 100%);
+  box-shadow: 0 14px 28px rgba(217, 169, 95, 0.28);
+}
+
+@media (max-width: 1024px) {
+  .header-container {
+    gap: 20px;
+    padding: 12px 18px;
+  }
+
+  .nav-list {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 860px) {
+  .main-header {
+    padding: 12px 14px;
+  }
+
+  .header-container {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nav-menu {
+    order: 3;
+    width: 100%;
+  }
+
+  .nav-list {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px 20px;
+  }
+}
+
+@media (max-width: 520px) {
+  .header-container {
+    border-radius: 18px;
+    padding: 12px 14px;
+  }
+
+  .logo img {
+    height: 40px;
+  }
+
+  .header-section {
+    gap: 10px;
+  }
+
+  .header-action-login {
+    padding: 0 16px;
+  }
+}

@@ -26,7 +26,7 @@ CREATE EXTENSION IF NOT EXISTS unaccent WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION unaccent; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION unaccent; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
@@ -2469,5 +2469,4 @@ ALTER TABLE ONLY public.wishlist
 --
 
 
-
-REFRESH MATERIALIZED VIEW pulic.courseratingsummary;
+REFRESH MATERIALIZED VIEW public.courseratingsummary;
