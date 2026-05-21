@@ -1,0 +1,68 @@
+.instructor-card {
+    text-align: center;
+}
+
+.instructor-card__avatar-wrapper {
+    width: 254px;
+    height: 254px;
+    margin: 0 auto 26px;
+    padding: 13px;
+    border: 1.5px solid #d3dceb;
+    border-radius: 50%;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.instructor-card:hover .instructor-card__avatar-wrapper {
+    border-color: #D4A95C;
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(212, 169, 92, 0.18);
+}
+
+.instructor-card__avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+.instructor-card h3 {
+    margin: 0 0 10px;
+    color: #1F2937;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 26px;
+    font-weight: 500;
+}
+
+.instructor-card__role {
+    margin: 0 0 20px;
+    color: #D4A95C;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+}
+
+.instructor-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: #7a8aa6;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.instructor-card__meta strong {
+    color: #D4A95C;
+}
+
+@media (max-width: 768px) {
+    .instructor-card__avatar-wrapper {
+        width: 220px;
+        height: 220px;
+    }
+
+    .instructor-card h3 {
+        font-size: 24px;
+    }
+}

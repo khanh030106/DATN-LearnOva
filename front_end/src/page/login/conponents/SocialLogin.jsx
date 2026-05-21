@@ -1,5 +1,5 @@
-import gg_svg from "../../../assets/Ggoogle.svg"
-import fb_svg from "../../../assets/Facebook.svg"
+import gg_svg from "../../../assets/login/Ggoogle.svg"
+import fb_svg from "../../../assets/login/Facebook.svg"
 
 const SocialLogin = () => {
     return (

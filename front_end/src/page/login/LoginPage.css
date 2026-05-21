@@ -16,7 +16,7 @@ body{
     width: 50%;
     min-height: 100vh;
 
-    background-image: url("../../assets/BannerImage.jpg");
+    background-image: url("../../assets/login/BannerImage.jpg");
     background-size: cover;
     background-position: center;
 
@@ -98,7 +98,7 @@ body{
     min-height: 100vh;
     position: relative;
 
-    background-image: url("../../assets/LoginBackground.jpg");
+    background-image: url("../../assets/login/LoginBackground.jpg");
     background-size: cover;
     background-position: center;
 

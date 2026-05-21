@@ -1,5 +1,6 @@
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import LoginPage from "../page/login/LoginPage.jsx";
+import Instructors from "../page/home/instructors/Instructors.jsx";
 
 
 
