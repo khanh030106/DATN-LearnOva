@@ -14,8 +14,6 @@ export const AurhProvider = ({children}) =>{
         const data = await Login(email, password);
 
         localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
-
         setAccessToken(data.accessToken);
 
         return data;
