@@ -30,6 +30,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
+        String path = request.getServletPath();
+
+        if (path.startsWith("/api/learnova/auth/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (header == null || !header.startsWith("Bearer ")){
             filterChain.doFilter(request, response);

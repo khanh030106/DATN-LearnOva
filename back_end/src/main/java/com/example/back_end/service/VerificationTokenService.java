@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -37,7 +38,7 @@ public class VerificationTokenService {
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setTokenType(VerificationType.REFRESH_TOKEN);
         refreshToken.setCreatedAt(Instant.now());
-        refreshToken.setExpiredAt(OffsetDateTime.now().plusDays(refreshTokenExpiration));
+        refreshToken.setExpiredAt(OffsetDateTime.now().plus(Duration.ofMillis(refreshTokenExpiration)));
         refreshToken.setIsUsed(false);
 
         return verificationTokenRepository.save(refreshToken);

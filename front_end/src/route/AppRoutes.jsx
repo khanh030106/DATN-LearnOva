@@ -8,7 +8,7 @@ const App = () => {
         <BrowserRouter>
             <Routes>
 
-                <Route path="api/learnova/auth/login" element={<LoginPage />} />
+                <Route path="/learnova/auth/login" element={<LoginPage />} />
 
             </Routes>
         </BrowserRouter>

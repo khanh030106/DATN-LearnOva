@@ -1,13 +1,16 @@
 import {Link, useNavigate} from "react-router-dom";
 import {useState} from "react";
-import {ArrowLeft, Eye, EyeOff, Lock, Mail} from "lucide-react";
+import {Eye, EyeOff, Lock, Mail} from "lucide-react";
 import SocialLogin from "./SocialLogin.jsx";
+import {useAuth} from "../../../hook/UseAuth.jsx"
 
 const LoginForm = () => {
     const navigate = useNavigate();
     const [form, setForm] = useState({email: '', password: '', remember: false});
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
+
+    const {login} = useAuth();
 
     const handleChange = (e) => {
         const {name, value, type, checked} = e.target;
@@ -21,6 +24,7 @@ const LoginForm = () => {
         e.preventDefault();
         setError('');
         try {
+            await login(form.email, form.password);
             navigate('/');
         }catch (err) {
             setError('Login failed. Please check your credentials and try again.');
@@ -79,7 +83,7 @@ const LoginForm = () => {
                             <Link to="/forgot-password" className="form-option-forgot">Forgot password?</Link>
                         </div>
 
-                        <button type="submit" className="btn-login"></button>
+                        <button type="submit" className="btn-login">Log in</button>
                     </form>
 
                     <SocialLogin/>

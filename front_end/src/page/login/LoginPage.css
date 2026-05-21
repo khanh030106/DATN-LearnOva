@@ -245,10 +245,6 @@ body{
     box-shadow: 0 14px 34px rgba(232, 190, 116, 0.28);
 }
 
-.btn-login::before {
-    content: "Log in";
-}
-
 .login-form-panel-register {
     margin-top: 28px;
     text-align: center;
