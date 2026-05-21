@@ -103,7 +103,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Userauthprovider> userauthproviders = new LinkedHashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "userrole",
             joinColumns = @JoinColumn(name = "user_id"),
