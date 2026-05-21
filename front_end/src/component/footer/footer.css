@@ -1,0 +1,141 @@
+.footer {
+    background: #E8BE74;
+    color: #ffffff;
+    padding-top: 100px;
+    padding-bottom: 50px;
+    border-top: 2px solid rgba(255,255,255,0.25);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* CONTAINER */
+.footer-container {
+    max-width: 1280px;
+    margin: auto;
+    padding: 0 24px;
+}
+
+/* GRID */
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 60px;
+    margin-bottom: 80px;
+}
+
+/* LOGO */
+.footer-logo {
+    font-size: 44px;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: -0.8px;
+
+    text-shadow: 0 3px 10px rgba(0,0,0,0.18);
+}
+
+/* DESC (giữ nhẹ, dễ đọc) */
+.footer-desc {
+    font-size: 14px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.9);
+    font-weight: 500;
+
+    text-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+/* TITLE (giữ vừa phải, không quá nặng) */
+.footer-title {
+    font-size: 12px;
+    letter-spacing: 2.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+
+    color: #ffffff;
+    margin-bottom: 22px;
+
+    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* LINKS (GIỮ NHẸ NHƯ CŨ - QUAN TRỌNG) */
+.footer-links a {
+    text-decoration: none;
+    color: rgba(255,255,255,0.88);
+    font-size: 13px;
+    font-weight: 500;   /* giữ nhẹ lại */
+    transition: 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+    transform: translateX(3px);
+}
+
+/* NEWS TEXT (giữ cân bằng) */
+.footer-news {
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+/* SUBSCRIBE */
+.footer-subscribe {
+    display: flex;
+    background: rgba(255,255,255,0.18);
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.25);
+}
+
+.footer-subscribe input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.footer-subscribe input::placeholder {
+    color: rgba(255,255,255,0.75);
+}
+
+.footer-subscribe button {
+    background: #ffffff;
+    color: #111827;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 12px;
+}
+
+/* BOTTOM */
+.footer-bottom {
+    padding-top: 35px;
+    border-top: 1px solid rgba(255,255,255,0.25);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-bottom p {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+}
+
+/* SOCIAL */
+.footer-social span {
+    cursor: pointer;
+    font-size: 20px;
+    color: #ffffff;
+    transition: 0.2s ease;
+}
+
+.footer-social span:hover {
+    transform: translateY(-3px);
+}
