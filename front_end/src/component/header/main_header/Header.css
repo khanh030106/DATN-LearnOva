@@ -6,8 +6,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  padding: 18px 24px;
-  background: linear-gradient(180deg, #fffaf1 0%, #f9edd6 100%);
+  padding: 7px 0;
   border-bottom: 1px solid rgba(232, 190, 116, 0.22);
 }
 
@@ -15,7 +14,6 @@
   max-width: 1280px;
   margin: 0 auto;
   min-height: 70px;
-  padding: 12px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -64,11 +62,11 @@
   display: inline-flex;
   align-items: center;
   padding: 10px 2px;
-  color: #7b520f;
+  color: #ffffff;
   text-decoration: none;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  font-size: 21px;
+  font-family: math;
+  letter-spacing: 0.05em;
   transition:
     color 0.2s ease,
     transform 0.2s ease;
@@ -80,9 +78,9 @@
   left: 0;
   bottom: 3px;
   width: 0;
-  height: 2px;
+  height: 1px;
   border-radius: 999px;
-  background: #e8be74;
+  background: #ffffff;
   transition: width 0.25s ease;
 }
 
@@ -93,6 +91,51 @@
 
 .nav-menu-link-active {
   color: #e8be74;
+}
+
+.header-search {
+  width: 230px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid rgba(232, 190, 116, 0.45);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+}
+
+.header-search-icon {
+  color: #e8be74;
+  flex-shrink: 0;
+}
+
+.header-search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.header-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (max-width: 1024px) {
+  .header-search {
+    width: 200px;
+  }
+}
+
+@media (max-width: 860px) {
+  .header-search {
+    order: 4;
+    width: min(100%, 420px);
+  }
 }
 
 .header-section {
@@ -120,24 +163,20 @@
 
 .header-action-cart {
   width: 42px;
-  color: #7b520f;
+  color: #ffffff;
   border-radius: 0;
 }
 
 .header-action-login {
   padding: 0 20px;
-  background: linear-gradient(180deg, #e8be74 0%, #dfb05e 100%);
   color: #ffffff;
-  font-size: 14px;
-  font-weight: 800;
+  font-size: 19px;
   border: 1px solid rgba(214, 160, 74, 0.35);
-  box-shadow: 0 12px 24px rgba(232, 190, 116, 0.24);
   border-radius: 10px;
 }
 
 .header-action-login:hover {
   background: linear-gradient(180deg, #e3b665 0%, #d9a95f 100%);
-  box-shadow: 0 14px 28px rgba(217, 169, 95, 0.28);
 }
 
 @media (max-width: 1024px) {

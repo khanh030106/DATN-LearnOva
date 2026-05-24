@@ -1,8 +1,8 @@
 import "./footer.css";
-import {Link} from "react-router-dom";
-import {LinkIcon} from "lucide-react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faFacebookF, faInstagram, faLinkedinIn} from "@fortawesome/free-brands-svg-icons";
 
-export default function Footer() {
+const Footer = () => {
     return (
         <footer className="footer">
             <div className="footer-container">
@@ -15,33 +15,33 @@ export default function Footer() {
                         </div>
 
                         <p className="footer-desc">
-                            Kiến tạo tri thức tương lai.
-                            Nền tảng học tập trực tuyến
-                            hàng đầu dành cho người Việt toàn cầu.
+                            Shaping the future of knowledge.
+                            A leading online learning platform
+                            for global learners everywhere.
                         </p>
                     </div>
 
                     <div>
                         <h5 className="footer-title">
-                            LIÊN KẾT
+                            LINKS
                         </h5>
 
                         <ul className="footer-links">
                             <li>
                                 <a href="#">
-                                    Khóa học phổ biến
+                                    Popular Courses
                                 </a>
                             </li>
 
                             <li>
                                 <a href="#">
-                                    Lộ trình học tập
+                                    Learning Paths
                                 </a>
                             </li>
 
                             <li>
                                 <a href="#">
-                                    Giảng viên
+                                    Instructors
                                 </a>
                             </li>
                         </ul>
@@ -49,25 +49,25 @@ export default function Footer() {
 
                     <div>
                         <h5 className="footer-title">
-                            HỖ TRỢ
+                            SUPPORT
                         </h5>
 
                         <ul className="footer-links">
                             <li>
                                 <a href="#">
-                                    Trung tâm hỗ trợ
+                                    Help Center
                                 </a>
                             </li>
 
                             <li>
                                 <a href="#">
-                                    Điều khoản dịch vụ
+                                    Terms of Service
                                 </a>
                             </li>
 
                             <li>
                                 <a href="#">
-                                    Chính sách bảo mật
+                                    Privacy Policy
                                 </a>
                             </li>
                         </ul>
@@ -75,21 +75,21 @@ export default function Footer() {
 
                     <div>
                         <h5 className="footer-title">
-                            BẢN TIN
+                            NEWSLETTER
                         </h5>
 
                         <p className="footer-news">
-                            Nhận thông báo về các khóa học mới nhất.
+                            Get updates about the latest courses and learning resources.
                         </p>
 
                         <div className="footer-subscribe">
                             <input
                                 type="email"
-                                placeholder="Email của bạn"
+                                placeholder="Your email"
                             />
 
                             <button>
-                                Gửi
+                                Submit
                             </button>
                         </div>
                     </div>
@@ -100,13 +100,21 @@ export default function Footer() {
 
                     <p>
                         © 2024 LearnOva.
-                        Kiến tạo tri thức tương lai.
+                        Shaping the future of knowledge.
                     </p>
 
                     <div className="footer-social">
-                        <span>🌐</span>
-                        <span>🎓</span>
-                        <span><LinkIcon/></span>
+                        <a href="#">
+                            <FontAwesomeIcon icon={faFacebookF} />
+                        </a>
+
+                        <a href="#">
+                            <FontAwesomeIcon icon={faLinkedinIn} />
+                        </a>
+
+                        <a href="#">
+                            <FontAwesomeIcon icon={faInstagram} />
+                        </a>
                     </div>
 
                 </div>
@@ -115,3 +123,5 @@ export default function Footer() {
         </footer>
     );
 }
+
+export default Footer;

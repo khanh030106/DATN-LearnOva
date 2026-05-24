@@ -1,5 +1,5 @@
 .learning-section {
-    padding: 100px 20px;
+    padding-top: 50px;
     background: white;
 }
 
@@ -15,14 +15,15 @@
 
 .learning-header h2 {
     font-size: 42px;
-    color: #111827;
-    margin-bottom: 20px;
+    color: #e5a600;
+    margin-bottom: 5px;
 }
 
 .learning-header p {
-    max-width: 700px;
+    max-width: 800px;
     margin: auto;
     color: #6b7280;
+    font-size: 17px;
     line-height: 1.7;
 }
 
@@ -33,8 +34,10 @@
 }
 
 .learning-card {
-    padding: 40px;
-    border-radius: 32px;
+    padding: 15px 40px 40px;
+    border-radius: 20px;
+    border: 1px solid #fae4aa;
+    background: #fffcea;
     transition: 0.4s;
     cursor: pointer;
 }
@@ -42,14 +45,6 @@
 .learning-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-}
-
-.learning-card.blue {
-    background: #eef2ff;
-}
-
-.learning-card.brown {
-    background: #f5f0ed;
 }
 
 .learning-top {
@@ -64,6 +59,7 @@
     height: 70px;
     border-radius: 20px;
     background: white;
+    color: #c98a2e;
 
     display: flex;
     align-items: center;
@@ -72,7 +68,7 @@
 
 .learning-top h3 {
     font-size: 28px;
-    margin-bottom: 8px;
+    margin: 0;
     color: #1e293b;
 }
 
@@ -80,24 +76,18 @@
     font-size: 14px;
     font-weight: 700;
     text-transform: uppercase;
-}
-
-.learning-card.blue span {
-    color: #00236f;
-}
-
-.learning-card.brown span {
-    color: #4b1c00;
+    color: #9a641f;
 }
 
 .learning-steps {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 28px;
 }
 
 .step-item {
     display: flex;
+    align-items: flex-start;
     gap: 18px;
 }
 
@@ -110,28 +100,33 @@
     align-items: center;
     justify-content: center;
 
+    background: #ffa522;
     color: white;
     font-weight: bold;
     flex-shrink: 0;
 }
 
-.step-number.blue {
-    background: #00236f;
+.step-content {
+    flex: 1;
+    min-width: 0;
+    padding-top: 0;
 }
 
-.step-number.brown {
-    background: #4b1c00;
-}
-
-.step-item h4 {
+.step-content h4 {
     font-size: 18px;
-    margin-bottom: 8px;
+    margin: 0 0 6px;
     color: #1e293b;
+    line-height: 1.2;
 }
 
-.step-item p {
+.step-content p {
     color: #64748b;
-    line-height: 1.6;
+    line-height: 1.4;
+    margin: 0;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .learning-btn {
@@ -141,6 +136,7 @@
     border: none;
     border-radius: 14px;
 
+    background: #ffa522;
     color: white;
     font-size: 16px;
     font-weight: 700;
@@ -149,20 +145,8 @@
     transition: 0.3s;
 }
 
-.learning-btn.blue {
-    background: #00236f;
-}
-
-.learning-btn.blue:hover {
-    background: #001a52;
-}
-
-.learning-btn.brown {
-    background: #4b1c00;
-}
-
-.learning-btn.brown:hover {
-    background: #3d1700;
+.learning-btn:hover {
+    background: #ee9823;
 }
 
 @media (max-width: 992px) {

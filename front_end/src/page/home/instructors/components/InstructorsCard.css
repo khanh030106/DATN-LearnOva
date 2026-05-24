@@ -7,7 +7,7 @@
     height: 254px;
     margin: 0 auto 26px;
     padding: 13px;
-    border: 1.5px solid #d3dceb;
+    border: 1px solid #ffd34f;
     border-radius: 50%;
     transition: border-color 0.25s ease, transform 0.25s ease;
 }
@@ -36,10 +36,10 @@
 
 .instructor-card__role {
     margin: 0 0 20px;
-    color: #D4A95C;
+    color: #e7a600;
     font-size: 14px;
     font-weight: 800;
-    letter-spacing: 1.2px;
+    letter-spacing: 1px;
 }
 
 .instructor-card__meta {
@@ -53,7 +53,7 @@
 }
 
 .instructor-card__meta strong {
-    color: #D4A95C;
+    color: #ffad19;
 }
 
 @media (max-width: 768px) {

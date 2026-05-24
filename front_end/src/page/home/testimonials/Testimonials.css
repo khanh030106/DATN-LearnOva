@@ -4,7 +4,6 @@
 
 .testimonials-section {
   padding: 96px 0;
-  background: linear-gradient(180deg, #f8f9ff 0%, #fffaf1 100%);
   overflow: hidden;
 }
 
@@ -16,8 +15,8 @@
 }
 
 .testimonials-title {
-  margin: 0 0 14px;
-  color: #7b520f;
+  margin: 0;
+  color: #fe9d00;
   font-size: clamp(2rem, 3vw, 2.8rem);
   line-height: 1.15;
   font-weight: 800;
@@ -29,7 +28,7 @@
   margin: 0 auto;
   max-width: 720px;
   color: #8a7650;
-  font-size: 0.95rem;
+  font-size: 19px;
   font-weight: 500;
   line-height: 1.7;
 }
@@ -44,7 +43,7 @@
   display: flex;
   gap: 32px;
   width: max-content;
-  padding: 12px 24px;
+  padding: 40px 0;
   animation: testimonials-scroll 50s linear infinite;
 }
 
@@ -61,8 +60,8 @@
   padding: 32px;
   border-radius: 20px;
   background: #ffffff;
-  border: 1px solid rgba(232, 190, 116, 0.14);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgb(255 227 189);
+  box-shadow: 0 10px 20px rgb(0 0 0 / 15%);
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
@@ -71,8 +70,8 @@
 
 .testimonial-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 18px 40px rgba(120, 86, 24, 0.12);
-  border-color: rgba(232, 190, 116, 0.24);
+  box-shadow: 0 10px 20px rgb(0 0 0 / 15%);
+  border-color: rgb(255 175 37 / 0.57);
 }
 
 .testimonial-top {
@@ -80,7 +79,7 @@
 }
 
 .testimonial-quote {
-  color: #d7dbe8;
+  color: #101010;
   margin-bottom: 16px;
 }
 
@@ -169,7 +168,7 @@
 
   .testimonials-track {
     gap: 20px;
-    padding: 12px 16px;
+    padding: 40px 0;
     animation-duration: 42s;
   }
 
@@ -186,3 +185,4 @@
     font-size: 0.9rem;
   }
 }
+

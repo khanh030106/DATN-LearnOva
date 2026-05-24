@@ -9,10 +9,10 @@ export default function Newsletter() {
           <div className="newsletter-overlay" />
 
           <div className="newsletter-content">
-            <Mail className="newsletter-icon" size={34} />
+            <Mail className="newsletter-icon" size={34} style={{color:'white'}}/>
 
             <h2 className="newsletter-title">
-              Subscribe to our knowledge newslette
+              Subscribe to our <span>knowledge newsletter</span>
             </h2>
 
             <p className="newsletter-description">

@@ -5,7 +5,7 @@ const HeaderAction = () => {
     return (
         <div className="header-section">
             <Link to="/cart" className="header-action-cart">
-                <ShoppingCart size={22}/>
+                <ShoppingCart size={25}/>
             </Link>
 
             <Link to={"/login"} className="header-action-login">

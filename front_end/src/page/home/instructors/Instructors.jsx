@@ -9,7 +9,7 @@ import instructor4 from '../../../assets/instructors/instructor-4.jpg';
 const instructors = [
     {
         id: 1,
-        name: 'Prof. Dr. Nguyen Van Minh',
+        name: 'Dr. Nguyen Van Minh',
         role: 'PHILOSOPHY & CULTURE EXPERT',
         students: '4.2k+ students',
         rating: 4.9,

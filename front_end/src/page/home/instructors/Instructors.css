@@ -1,5 +1,5 @@
 .instructors-section {
-    padding: 64px 36px 48px;
+    padding: 64px 0 48px;
     background: #ffffff;
 }
 
@@ -10,12 +10,11 @@
 }
 
 .instructors-section__header h2 {
-    margin: 0 0 20px;
-    color: #D4A95C;
-    font-family: Georgia, 'Times New Roman', serif;
+    color: #ffad19;
     font-size: 40px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.2;
+    margin-bottom: 3px;
 }
 
 .instructors-section__header p {

@@ -8,8 +8,7 @@ export default function Features() {
         <div className="features-card">
           <div className="features-content">
             <h2 className="features-title">
-              Outstanding Features at <br className="features-title-break" />{" "}
-              LearnOva
+              Outstanding Features
             </h2>
 
             <div className="features-list">
@@ -39,16 +38,6 @@ export default function Features() {
                 alt="Working"
               />
               <div className="features-image-overlay" />
-            </div>
-
-            <div className="features-badge">
-              <div className="features-badge-icon">
-                <CheckCircle size={24} />
-              </div>
-              <div className="features-badge-text">
-                <p className="features-badge-label">Community</p>
-                <p className="features-badge-value">50,000+ Students</p>
-              </div>
             </div>
           </div>
         </div>

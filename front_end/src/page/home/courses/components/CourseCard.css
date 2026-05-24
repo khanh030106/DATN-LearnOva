@@ -1,8 +1,9 @@
 .course-card {
     overflow: hidden;
-    border-radius: 12px;
+    border-radius: 10px;
+    border: 1px solid #ffc4414f;
     background: #ffffff;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+    box-shadow: 0 10px 20px rgb(15 23 42 / 13%);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -19,12 +20,17 @@
 }
 
 .course-card__body {
-    padding: 26px 24px 22px;
+    padding: 10px 10px 8px 15px;
 }
 
-.course-card__body h3 {
+.course-title{
+    text-decoration: none;
+}
+
+.course-title h3 {
     min-height: 56px;
-    margin: 0 0 16px;
+    margin: 0;
+    font-family: math;
     color: #061733;
     font-size: 22px;
     line-height: 1.25;
@@ -32,22 +38,26 @@
 }
 
 .course-card__teacher {
-    margin: 0 0 16px;
+    margin: 21px 0 0 0;
     color: #60708c;
-    font-size: 18px;
+    font-size: 17px;
 }
 
 .course-card__rating {
     display: flex;
     align-items: center;
     gap: 6px;
-    padding-bottom: 22px;
+    padding-bottom: 15px;
     border-bottom: 1px solid #edf0f5;
+}
+
+.course-card__rating span{
+    margin-bottom: 3px;
 }
 
 .course-card__rating strong {
     color: #ff9800;
-    font-size: 17px;
+    font-size: 16px;
 }
 
 .course-card__rating span {
@@ -65,37 +75,33 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 22px;
-}
-
-.course-card__old-price {
-    margin: 0 0 4px;
-    color: #7f8ca5;
-    font-size: 15px;
-    text-decoration: line-through;
+    padding-top: 10px;
 }
 
 .course-card__price {
     margin: 0;
-    color: #061733;
+    display: flex;
+    color: #bf9000;
     font-size: 24px;
     font-weight: 900;
 }
 
+.course-card__price .icon{
+    padding-top: 1px;
+}
+
 .course-card__cart {
-    width: 52px;
-    height: 52px;
-    border: 1px solid #edf0f5;
-    border-radius: 50%;
-    background: #ffffff;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+    width: 45px;
+    height: 45px;
+    border: 1px solid #5c6a8233;
+    border-radius: 10px;
+    background: #ffdb000a;
     cursor: pointer;
     font-size: 22px;
     transition: all 0.25s ease;
 }
 
 .course-card__cart:hover {
-    background: #E8BE74;
+    background: #e0af5b;
     color: #ffffff;
-    transform: scale(1.08);
 }

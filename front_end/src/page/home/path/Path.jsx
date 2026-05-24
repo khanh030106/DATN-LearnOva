@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Code, LineChart } from "lucide-react";
 
 import "./Path.css";
@@ -6,145 +5,93 @@ import "./Path.css";
 const paths = [
     {
         title: "Fullstack Developer",
-        duration: "6 - 8 tháng • 24 khóa học",
+        duration: "6 - 8 months • 24 courses",
         icon: Code,
-        color: "blue",
-
         steps: [
             {
-                t: "Nhập môn Web & HTML/CSS",
-                d: "Nắm vững cấu trúc web và tư duy thiết kế giao diện hiện đại.",
+                t: "Introduction to Web & HTML/CSS",
+                d: "Master web structure and modern interface design thinking.",
             },
             {
-                t: "JavaScript & ReactJS nâng cao",
-                d: "Xử lý logic phức tạp và xây dựng ứng dụng Single Page Application.",
+                t: "Advanced JavaScript & ReactJS",
+                d: "Handle complex logic and build Single Page Applications.",
             },
             {
-                t: "Backend với Node.js & Database",
-                d: "Xây dựng hệ thống API mạnh mẽ và quản trị cơ sở dữ liệu.",
+                t: "Backend with Node.js & Database",
+                d: "Build powerful API systems and manage databases.",
             },
         ],
     },
-
     {
         title: "Data Scientist",
-        duration: "8 - 10 tháng • 30 khóa học",
+        duration: "8 - 10 months • 30 courses",
         icon: LineChart,
-        color: "brown",
-
         steps: [
             {
-                t: "Toán xác suất & Python cơ bản",
-                d: "Nền tảng toán học và lập trình cho phân tích dữ liệu.",
+                t: "Probability Math & Basic Python",
+                d: "Build a foundation in mathematics and programming for data analysis.",
             },
             {
-                t: "Khai phá dữ liệu & SQL",
-                d: "Kỹ năng truy vấn và làm sạch các tập dữ liệu lớn.",
+                t: "Data Mining & SQL",
+                d: "Learn how to query and clean large datasets.",
             },
             {
                 t: "Machine Learning & AI",
-                d: "Xây dựng các mô hình dự báo và ứng dụng trí tuệ nhân tạo.",
+                d: "Build predictive models and apply artificial intelligence.",
             },
         ],
     },
 ];
 
 const LearningPaths = () => {
-
     return (
         <section className="learning-section">
-
             <div className="learning-container">
-
                 <div className="learning-header">
-
-                    <h2>Lộ trình học tập bài bản</h2>
+                    <h2>Structured learning paths</h2>
 
                     <p>
-                        Chúng tôi thiết kế lộ trình từ con số 0 đến khi thành thạo,
-                        giúp bạn tự tin bước vào thị trường lao động.
+                        We design learning paths from beginner level to job-ready skills,
+                        helping you confidently enter the labor market.
                     </p>
-
                 </div>
 
                 <div className="learning-grid">
-
                     {paths.map((path, i) => (
-
-                        <motion.div
-                            key={i}
-                            initial={{ opacity: 0, y: 80 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{
-                                duration: 1,
-                                delay: i * 0.15,
-                            }}
-                            className={`learning-card ${path.color}`}
-                        >
-
+                        <div key={i} className="learning-card">
                             <div className="learning-top">
-
                                 <div className="learning-icon">
                                     <path.icon size={28} />
                                 </div>
 
                                 <div>
-
                                     <h3>{path.title}</h3>
-
                                     <span>{path.duration}</span>
-
                                 </div>
-
                             </div>
 
                             <div className="learning-steps">
-
                                 {path.steps.map((step, si) => (
-
-                                    <motion.div
-                                        key={si}
-                                        initial={{ opacity: 0, x: -20 }}
-                                        whileInView={{ opacity: 1, x: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{
-                                            duration: 0.6,
-                                            delay: 0.3 + si * 0.15,
-                                        }}
-                                        className="step-item"
-                                    >
-
-                                        <div className={`step-number ${path.color}`}>
+                                    <div key={si} className="step-item">
+                                        <div className="step-number">
                                             {si + 1}
                                         </div>
 
-                                        <div>
-
+                                        <div className="step-content">
                                             <h4>{step.t}</h4>
-
                                             <p>{step.d}</p>
-
                                         </div>
-
-                                    </motion.div>
-
+                                    </div>
                                 ))}
-
                             </div>
 
-                            <button className={`learning-btn ${path.color}`}>
-                                Xem chi tiết khóa học
+                            <button className="learning-btn">
+                                View course details
                             </button>
-
-                        </motion.div>
-
+                        </div>
                     ))}
-
                 </div>
-
             </div>
-
         </section>
     );
 };

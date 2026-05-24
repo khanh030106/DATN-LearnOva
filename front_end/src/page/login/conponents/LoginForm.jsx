@@ -25,7 +25,7 @@ const LoginForm = () => {
         setError('');
         try {
             await login(form.email, form.password);
-            navigate('/');
+            navigate('/learnova/home');
         }catch (err) {
             setError('Login failed. Please check your credentials and try again.');
         }

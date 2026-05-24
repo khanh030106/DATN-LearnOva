@@ -1,15 +1,20 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "../page/login/LoginPage.jsx";
-import Header from "../component/header/main_header/Index.jsx";
 import Home from "../page/home/Home.jsx";
+import HomeLayout from "../layout/home/HomeLayout.jsx";
 
 const App = () => {
     return (
         <BrowserRouter>
-            <Header />
             <Routes>
+
                 <Route path="/learnova/auth/login" element={<LoginPage />} />
-                <Route path="/learnova/home" element={<Home />} />
+
+                <Route  element={<HomeLayout />} >
+                    <Route path="/learnova/home" element={<Home />} />
+                </Route>
+
+
             </Routes>
         </BrowserRouter>
     );

@@ -1,0 +1,98 @@
+.home-content {
+    padding: 0 150px;
+}
+
+/* ============================================
+   HOME PAGE ANIMATIONS - CSS ONLY
+   ============================================ */
+
+/* START HOME SMOOTH ANIMATION REFACTOR */
+/**
+ * Home Page Reveal Animations
+ * - Only animate: opacity, transform (GPU accelerated)
+ * - Never animate: box-shadow, blur, filter, width, height, top, left
+ * - Duration: 500-700ms
+ * - will-change applied only during animation
+ */
+
+/* Base reveal element - hidden by default */
+.reveal-element {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* When element enters viewport, apply this class via JS */
+.reveal-element.reveal-visible {
+  animation: revealFadeUp 600ms ease-out forwards;
+}
+
+/* Alternative: with slightly more stagger for different sections */
+.reveal-element--delay-sm.reveal-visible {
+  animation: revealFadeUp 600ms ease-out forwards;
+  animation-delay: 50ms;
+}
+
+.reveal-element--delay-md.reveal-visible {
+  animation: revealFadeUp 600ms ease-out forwards;
+  animation-delay: 100ms;
+}
+
+/* Keyframe: fade in + slide up */
+@keyframes revealFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enable GPU acceleration during animation */
+.reveal-element.reveal-visible {
+  will-change: transform, opacity;
+}
+
+/* Alternative faster animation for sections (500ms) */
+@keyframes revealFadeUpFast {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal-element--fast.reveal-visible {
+  animation: revealFadeUpFast 500ms ease-out forwards;
+}
+
+/* END HOME SMOOTH ANIMATION REFACTOR */
+
+/* ============================================
+   SECTION REVEAL ANIMATIONS
+   ============================================ */
+
+.section-reveal-wrapper {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.section-reveal-wrapper.section-revealed {
+  animation: sectionRevealFadeUp 500ms ease-out forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes sectionRevealFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,39 +1,35 @@
-.course-section {
-    padding: 56px 36px;
-    background: #f6f8fb;
-}
 
 .course-section__header {
     display: flex;
-    align-items: flex-start;
     justify-content: space-between;
     gap: 24px;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
 }
 
 .course-section__header h2 {
-    margin: 0 0 10px;
-    color: #E8BE74;
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 44px;
-    font-weight: 500;
+    color: #ffaa16;
+    font-size: 38px;
+    font-weight: 600;
     line-height: 1.2;
+    font-family: math;
+    margin-bottom: 0;
 }
 
 .course-section__header p {
     margin: 0;
-    color: #52627a;
+    color: #3e5d8c;
     font-size: 20px;
+    font-family: math;
 }
 
 .course-section__link {
     display: inline-flex;
     align-items: center;
     margin-top: 26px;
-    color: #E8BE74;
+    color: #ffaa16;
     font-size: 20px;
     font-weight: 700;
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 .course-section__grid {

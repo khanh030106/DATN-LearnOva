@@ -8,6 +8,16 @@
     overflow: hidden;
 }
 
+/* Bọc Header bằng class này */
+.home-banner__header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    width: 100%;
+}
+
 .home-banner__bg,
 .home-banner__overlay,
 .home-banner__bottom-fade {
@@ -45,11 +55,7 @@
     right: 0;
     bottom: 0;
     height: 220px;
-    background: linear-gradient(
-            to bottom,
-            transparent,
-            rgba(255, 255, 255, 0.95)
-    );
+    background: linear-gradient(to bottom, #ffffff00, rgb(255 255 255));
 }
 
 .home-banner__content {
@@ -58,6 +64,10 @@
     max-width: 820px;
     padding: 80px 24px 120px;
     text-align: center;
+}
+
+.home-banner__content h1 em{
+    color: #E8BE74;
 }
 
 .home-banner__title {
@@ -91,8 +101,8 @@
     padding: 14px 36px;
     border: none;
     border-radius: 999px;
-    background: #ffffff;
-    color: #1a2f6e;
+    background: #E8BE74;
+    color: #292929;
     font-family: "Lora", Georgia, serif;
     font-size: 1rem;
     font-weight: 700;
@@ -105,3 +115,65 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(255, 255, 255, 0.35);
 }
+
+/* ============================================
+   BANNER TEXT ANIMATIONS - CSS ONLY
+   ============================================ */
+
+/* START HOME SMOOTH ANIMATION REFACTOR - BANNER TEXT ANIMATIONS */
+/**
+ * Banner text animations - lightweight, CSS-only
+ * - No Framer Motion jank
+ * - Only opacity + transform
+ * - GPU accelerated with backface-visibility + translateZ
+ * - Sequential appearance: subtitle → title → description → button
+ */
+
+/* Base state for all text elements */
+.home-banner__subtitle,
+.home-banner__title,
+.home-banner__actions {
+  opacity: 0;
+  transform: translateY(20px);
+  backface-visibility: hidden;
+  transform: translateZ(0) translateY(20px);
+}
+
+/* Subtitle: appear first (0ms) */
+.home-banner__subtitle {
+  animation: bannerTextFadeUp 600ms ease-out forwards;
+  animation-delay: 0ms;
+}
+
+/* Title: appear after subtitle (150ms) */
+.home-banner__title {
+  animation: bannerTextFadeUp 600ms ease-out forwards;
+  animation-delay: 150ms;
+}
+
+/* Actions (button): appear last (300ms) */
+.home-banner__actions {
+  animation: bannerTextFadeUp 600ms ease-out forwards;
+  animation-delay: 300ms;
+}
+
+/* Keyframes: fade in + slide up */
+@keyframes bannerTextFadeUp {
+  from {
+    opacity: 0;
+    transform: translateZ(0) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateZ(0) translateY(0);
+  }
+}
+
+/* Disable will-change after animation (browser cleanup) */
+.home-banner__subtitle,
+.home-banner__title,
+.home-banner__actions {
+  will-change: transform, opacity;
+}
+
+/* END HOME SMOOTH ANIMATION REFACTOR - BANNER TEXT ANIMATIONS */

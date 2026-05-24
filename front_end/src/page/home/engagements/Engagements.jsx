@@ -1,23 +1,23 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import "./FAQ.css";
+import "./Engagements.css";
 
 const faqs = [
   {
-    q: "Tôi có được nhận chứng chỉ sau khi hoàn thành không?",
-    a: "Tất cả các khóa học tại LearnOva đều cung cấp chứng chỉ điện tử có giá trị định danh cao. Bạn có thể sử dụng chứng chỉ này để đính kèm vào CV hoặc hồ sơ LinkedIn của mình.",
+    q: "Will I receive a certificate after completing the course?",
+    a: "All courses at LearnOva provide electronic certificates with high credibility. You can use these certificates to attach to your CV or LinkedIn profile.",
   },
   {
-    q: "Nếu tôi gặp khó khăn trong khi học thì hỏi ai?",
-    a: "Chúng tôi có hệ thống Q&A ngay dưới mỗi bài giảng. Ngoài ra, học viên sẽ được tham gia cộng đồng Discord riêng tư để được giải đáp 24/7.",
+    q: "Who can I ask if I have difficulties while learning?",
+    a: "We provide a Q&A system below every lecture. In addition, students will have access to a private Discord community for 24/7 support.",
   },
   {
-    q: "LearnOva có hỗ trợ giới thiệu việc làm không?",
-    a: "Đối với các lộ trình chuyên sâu, chúng tôi cam kết hỗ trợ sửa CV, luyện phỏng vấn và kết nối bạn trực tiếp với mạng lưới đối tác tuyển dụng.",
+    q: "Does LearnOva provide job placement support?",
+    a: "For intensive learning paths, we offer CV review support, interview practice sessions, and direct connections to our hiring partner network.",
   },
 ];
 
-export default function FAQ() {
+export default function Engagements() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
@@ -25,9 +25,9 @@ export default function FAQ() {
       <section className="faq-section">
         <div className="faq-container">
           <div className="faq-header">
-            <h2 className="faq-title">Câu hỏi thường gặp</h2>
+            <h2 className="faq-title">Frequently asked questions</h2>
             <p className="faq-subtitle">
-              Giải đáp những thắc mắc phổ biến nhất của các học viên mới.
+              Answering the most common questions from new students..
             </p>
           </div>
 
@@ -77,20 +77,19 @@ export default function FAQ() {
 
             <div className="final-cta-content">
               <h2 className="final-cta-title">
-                Bắt đầu hành trình chinh phục tri thức <br /> ngay hôm nay!
+                Start your journey to conquer knowledge now!
               </h2>
 
               <p className="final-cta-desc">
-                Gia nhập cộng đồng hơn 50,000 học viên và mở cánh cửa cơ hội
-                nghề nghiệp toàn cầu.
+                Join a community of over 50,000 students and open the door to global career opportunities.
               </p>
 
               <div className="final-cta-actions">
                 <button className="final-cta-primary">
-                  Đăng ký tài khoản miễn phí
+                  Register for a free account.
                 </button>
                 <button className="final-cta-secondary">
-                  Xem các khóa học hot
+                  Check out the hottest courses.
                 </button>
               </div>
             </div>

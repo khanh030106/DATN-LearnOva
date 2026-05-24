@@ -4,23 +4,58 @@ import Course from "./courses/Course.jsx";
 import Path from "./path/Path.jsx";
 import Instructors from "./instructors/Instructors.jsx";
 import Testimonials from "./testimonials/Testimonials.jsx";
-import FAQ from "./engagements/FAQ.jsx";
+import Engagements from "./engagements/Engagements.jsx";
 import Features from "./features/Features.jsx";
-import Newsletter from "./follow/Newsletter.jsx";
+import Newsletter from "./newsletter/Newsletter.jsx";
+import { useLenisScroll } from "../../hook/useLenisScroll.js";
+import AnimatedSection from "../../component/AnimatedSection.jsx";
+
+
+import './Home.css'
 
 
 const Home = () => {
+
+    useLenisScroll();
+
     return (
         <div>
             <Banner/>
-            <Role/>
-            <Course/>
-            <Path/>
-            <Instructors/>
-            <Testimonials/>
-            <FAQ/>
-            <Features/>
-            <Newsletter/>
+            <div className="home-content">
+
+                <AnimatedSection delay={0.3}>
+                    <Role/>
+                </AnimatedSection>
+
+                <AnimatedSection delay={0.4}>
+                    <Course/>
+                </AnimatedSection>
+
+                <AnimatedSection delay={0.4}>
+                    <Path/>
+                </AnimatedSection>
+
+                <AnimatedSection delay={0.3}>
+                    <Instructors/>
+                </AnimatedSection>
+
+                <AnimatedSection delay={0.4}>
+                    <Testimonials/>
+                </AnimatedSection>
+
+                <AnimatedSection delay={0.3}>
+                    <Engagements/>
+                </AnimatedSection>
+
+                <AnimatedSection delay={0.4}>
+                    <Features/>
+                </AnimatedSection>
+
+                <AnimatedSection delay={0.5}>
+                    <Newsletter/>
+                </AnimatedSection>
+
+            </div>
         </div>
     );
 }
