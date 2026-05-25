@@ -31,6 +31,12 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
+    /* START HOME REVEAL ANIMATION FIX - PREVENT CARD CLIPPING */
+    /* Ensure grid doesn't clip cards when they transform on hover */
+    overflow: visible;
+    /* Add padding-bottom for card hover effect (translateY: -8px + box-shadow) */
+    padding-bottom: 30px;
+    /* END HOME REVEAL ANIMATION FIX - PREVENT CARD CLIPPING */
 }
 
 .learning-card {

@@ -36,6 +36,12 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 28px;
+    /* START HOME REVEAL ANIMATION FIX - PREVENT CARD CLIPPING */
+    /* Ensure grid doesn't clip cards when they transform on hover */
+    overflow: visible;
+    /* Add padding-bottom for card hover effect (translateY: -6px + box-shadow) */
+    padding-bottom: 24px;
+    /* END HOME REVEAL ANIMATION FIX - PREVENT CARD CLIPPING */
 }
 
 @media (max-width: 1200px) {
