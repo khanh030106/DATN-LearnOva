@@ -27,6 +27,12 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 32px;
+    /* START HOME REVEAL ANIMATION FIX - PREVENT CARD CLIPPING */
+    /* Ensure grid doesn't clip cards when they transform on hover */
+    overflow: visible;
+    /* Add padding-bottom for card hover effect (translateY: -10px + box-shadow) */
+    padding-bottom: 32px;
+    /* END HOME REVEAL ANIMATION FIX - PREVENT CARD CLIPPING */
 }
 
 .role-card {

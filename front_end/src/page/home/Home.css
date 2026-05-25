@@ -3,96 +3,47 @@
 }
 
 /* ============================================
-   HOME PAGE ANIMATIONS - CSS ONLY
+   HOME PAGE REVEAL ANIMATION - LAYERED APPROACH
    ============================================ */
 
-/* START HOME SMOOTH ANIMATION REFACTOR */
+/* START HOME REVEAL ANIMATION REFACTOR - WRAPPER LAYER */
 /**
- * Home Page Reveal Animations
- * - Only animate: opacity, transform (GPU accelerated)
- * - Never animate: box-shadow, blur, filter, width, height, top, left
- * - Duration: 500-700ms
- * - will-change applied only during animation
+ * Reveal animation wrapper (parent layer)
+ * - Observes visibility via IntersectionObserver
+ * - Adds 'revealed' class when element enters viewport
+ * - Animates ONLY: opacity + transform translateY
+ * - NO conflict with child card hover effects
+ * 
+ * Flow:
+ * 1. .home-reveal: hidden state (opacity 0, translateY 20px)
+ * 2. IntersectionObserver triggers: add 'revealed' class
+ * 3. CSS transition: opacity + transform animate (600ms ease-out)
+ * 4. Delay applied via --delay custom property
+ * 5. Child elements (cards) keep separate hover effects
  */
 
-/* Base reveal element - hidden by default */
-.reveal-element {
+/* Reveal wrapper: Base state - HIDDEN */
+.home-reveal {
   opacity: 0;
   transform: translateY(20px);
+  /* CSS transition: ONLY opacity + transform (NOT all) */
+  transition: opacity 600ms ease-out, transform 600ms ease-out;
+  /* Apply delay from inline style --delay */
+  transition-delay: var(--delay, 0ms);
+  /* GPU acceleration */
+  backface-visibility: hidden;
+  will-change: opacity, transform;
+  /* START HOME REVEAL ANIMATION FIX - PREVENT CLIPPING */
+  /* Ensure wrapper doesn't clip child content during hover effects */
+  overflow: visible;
+  /* END HOME REVEAL ANIMATION FIX - PREVENT CLIPPING */
 }
 
-/* When element enters viewport, apply this class via JS */
-.reveal-element.reveal-visible {
-  animation: revealFadeUp 600ms ease-out forwards;
+/* Reveal wrapper: Visible state - added by IntersectionObserver */
+.home-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  /* Transition continues from base state */
 }
 
-/* Alternative: with slightly more stagger for different sections */
-.reveal-element--delay-sm.reveal-visible {
-  animation: revealFadeUp 600ms ease-out forwards;
-  animation-delay: 50ms;
-}
-
-.reveal-element--delay-md.reveal-visible {
-  animation: revealFadeUp 600ms ease-out forwards;
-  animation-delay: 100ms;
-}
-
-/* Keyframe: fade in + slide up */
-@keyframes revealFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Enable GPU acceleration during animation */
-.reveal-element.reveal-visible {
-  will-change: transform, opacity;
-}
-
-/* Alternative faster animation for sections (500ms) */
-@keyframes revealFadeUpFast {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.reveal-element--fast.reveal-visible {
-  animation: revealFadeUpFast 500ms ease-out forwards;
-}
-
-/* END HOME SMOOTH ANIMATION REFACTOR */
-
-/* ============================================
-   SECTION REVEAL ANIMATIONS
-   ============================================ */
-
-.section-reveal-wrapper {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.section-reveal-wrapper.section-revealed {
-  animation: sectionRevealFadeUp 500ms ease-out forwards;
-  will-change: transform, opacity;
-}
-
-@keyframes sectionRevealFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* END HOME REVEAL ANIMATION REFACTOR - WRAPPER LAYER */

@@ -8,7 +8,7 @@ import Engagements from "./engagements/Engagements.jsx";
 import Features from "./features/Features.jsx";
 import Newsletter from "./newsletter/Newsletter.jsx";
 import { useLenisScroll } from "../../hook/useLenisScroll.js";
-import AnimatedSection from "../../component/AnimatedSection.jsx";
+import RevealWrapper from "../../component/RevealWrapper.jsx";
 
 
 import './Home.css'
@@ -23,37 +23,38 @@ const Home = () => {
             <Banner/>
             <div className="home-content">
 
-                <AnimatedSection delay={0.3}>
+                <RevealWrapper delay={0.3}>
                     <Role/>
-                </AnimatedSection>
+                </RevealWrapper>
 
-                <AnimatedSection delay={0.4}>
+                <RevealWrapper delay={0.4}>
                     <Course/>
-                </AnimatedSection>
+                </RevealWrapper>
 
-                <AnimatedSection delay={0.4}>
+                <RevealWrapper delay={0.4}>
                     <Path/>
-                </AnimatedSection>
+                </RevealWrapper>
 
-                <AnimatedSection delay={0.3}>
+                <RevealWrapper delay={0.3}>
                     <Instructors/>
-                </AnimatedSection>
+                </RevealWrapper>
 
-                <AnimatedSection delay={0.4}>
+                <RevealWrapper delay={0.4}>
                     <Testimonials/>
-                </AnimatedSection>
+                </RevealWrapper>
 
-                <AnimatedSection delay={0.3}>
+                <RevealWrapper delay={0.3}>
                     <Engagements/>
-                </AnimatedSection>
+                </RevealWrapper>
 
-                <AnimatedSection delay={0.4}>
+                <RevealWrapper delay={0.4}>
                     <Features/>
-                </AnimatedSection>
+                </RevealWrapper>
 
-                <AnimatedSection delay={0.5}>
+                <RevealWrapper delay={0.5}>
                     <Newsletter/>
-                </AnimatedSection>
+                </RevealWrapper>
+
 
             </div>
         </div>
