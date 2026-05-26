@@ -1,7 +1,7 @@
 import { Smartphone, Verified, Headset } from "lucide-react";
 import "./Features.css";
 
-const feature = [
+const features = [
   {
     icon: Smartphone,
     title: "Learn anytime, anywhere",
@@ -28,13 +28,17 @@ export default function Features() {
             <h2 className="features-title">Outstanding Features</h2>
 
             <div className="features-list">
-              {feature.map((item) => (
-                <FeatureItem
-                  key={item.title}
-                  icon={item.icon}
-                  title={item.title}
-                  desc={item.desc}
-                />
+              {features.map(({ icon: Icon, title, desc }) => (
+                <div className="feature-item" key={title}>
+                  <div className="feature-item-icon">
+                    <Icon size={26} />
+                  </div>
+
+                  <div className="feature-item-body">
+                    <h4 className="feature-item-title">{title}</h4>
+                    <p className="feature-item-desc">{desc}</p>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -52,19 +56,5 @@ export default function Features() {
         </div>
       </div>
     </section>
-  );
-}
-
-function FeatureItem({ icon: Icon, title, desc }) {
-  return (
-    <div className="feature-item">
-      <div className="feature-item-icon">
-        <Icon size={26} />
-      </div>
-      <div className="feature-item-body">
-        <h4 className="feature-item-title">{title}</h4>
-        <p className="feature-item-desc">{desc}</p>
-      </div>
-    </div>
   );
 }
