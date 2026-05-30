@@ -8,7 +8,7 @@ const HeaderAction = () => {
                 <ShoppingCart size={25}/>
             </Link>
 
-            <Link to={"/login"} className="header-action-login">
+            <Link to={"/learnova/auth/login"} className="header-action-login">
                 Login
             </Link>
         </div>

@@ -1,10 +1,23 @@
-import axiosClient from "./AxiosClient.js";
+import axiosClient from "./axiosClient.js";
 
-export const Login = async (email, password) => {
-    const response = await axiosClient.post('/api/learnova/auth/login', {
+export const loginApi = async (email, password, remember) => {
+    const response = await axiosClient.post("/auth/login", {
         email,
         password,
+        remember
     });
 
     return response.data;
-}
+};
+
+export const refreshApi = async () => {
+    const response = await axiosClient.post("/auth/refresh");
+    return response.data;
+};
+
+export const logoutApi = async () => {
+    await axiosClient.post("/auth/logout");
+};
+
+
+

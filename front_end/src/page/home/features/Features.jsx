@@ -1,4 +1,4 @@
-import { Smartphone, Verified, Headset, CheckCircle } from "lucide-react";
+import { Smartphone, Verified, Headset } from "lucide-react";
 import "./Features.css";
 
 export default function Features() {
