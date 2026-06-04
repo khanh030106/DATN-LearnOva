@@ -61,4 +61,12 @@ public class VerificationTokenService {
     public void deleteRefreshTokenByUser(User user) {
         verificationTokenRepository.deleteByUserAndTokenType(user, VerificationType.REFRESH_TOKEN);
     }
+
+    @Transactional
+    public int deleteExpiredRefreshTokens() {
+        return verificationTokenRepository.deleteExpiredTokens(
+                VerificationType.REFRESH_TOKEN,
+                OffsetDateTime.now()
+        );
+    }
 }

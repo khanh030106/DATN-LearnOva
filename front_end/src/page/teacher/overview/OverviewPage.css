@@ -1,0 +1,450 @@
+.teacher-overview {
+  display: grid;
+  gap: 10px;
+}
+
+.teacher-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.teacher-metric,
+.teacher-panel {
+  border: 1px solid rgba(232, 190, 116, 0.22);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 10px 20px rgb(15 23 42 / 10%);
+}
+
+.teacher-metric {
+  min-height: 172px;
+  padding: 0 15px 15px 15px;
+  overflow: hidden;
+}
+
+.teacher-metric__heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #60708c;
+  font-weight: 800;
+}
+
+.teacher-metric__heading span {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fffaf0;
+  color: #0b45a0;
+}
+
+.teacher-metric--gold .teacher-metric__heading span {
+  color: #f69800;
+}
+
+.teacher-metric strong,
+.teacher-income-card strong {
+  display: block;
+  margin-top: 12px;
+  color: #003f98;
+  font-family: math;
+  font-size: clamp(1.7rem, 2.4vw, 2.15rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.teacher-metric strong small,
+.teacher-income-card strong small {
+  margin-left: 6px;
+  color: #8492ad;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.teacher-metric em,
+.teacher-income-card p {
+  display: block;
+  margin-top: 9px;
+  color: #0f9f6e;
+  font-size: 0.86rem;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.teacher-mini-chart,
+.teacher-income-chart {
+  min-height: 44px;
+  display: flex;
+  align-items: end;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.teacher-mini-chart span,
+.teacher-income-chart span {
+  width: 18px;
+  border-radius: 999px;
+  background: #eee4d6;
+}
+
+.teacher-mini-chart span:nth-child(1),
+.teacher-income-chart span:nth-child(1) {
+  height: 20px;
+}
+
+.teacher-mini-chart span:nth-child(2),
+.teacher-income-chart span:nth-child(2) {
+  height: 32px;
+}
+
+.teacher-mini-chart span:nth-child(3),
+.teacher-income-chart span:nth-child(3) {
+  height: 26px;
+}
+
+.teacher-mini-chart span:nth-child(4),
+.teacher-income-chart span:nth-child(4) {
+  height: 42px;
+}
+
+.teacher-mini-chart span:nth-child(5),
+.teacher-income-chart span:nth-child(5) {
+  height: 36px;
+}
+
+.teacher-mini-chart span:nth-child(6),
+.teacher-income-chart span:nth-child(6) {
+  height: 46px;
+  background: linear-gradient(180deg, #ffb000, #d9a95f);
+}
+
+.teacher-mini-chart--line {
+  position: relative;
+}
+
+.teacher-mini-chart--line span {
+  width: 16%;
+  height: 3px;
+  border-radius: 999px;
+  background: #f3d193;
+}
+
+.teacher-dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+  gap: 10px;
+}
+
+.teacher-panel {
+  padding: 0 15px 15px 15px;
+}
+
+.teacher-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.teacher-panel h1,
+.teacher-panel h2 {
+  color: #003f98;
+  font-family: math;
+  font-size: clamp(1.35rem, 1.7vw, 1.65rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.teacher-panel__header a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #003f98;
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.teacher-course-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.teacher-course-card {
+  overflow: hidden;
+  border: 1px solid rgba(232, 190, 116, 0.22);
+  border-radius: 10px;
+  background: #ffffff;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.teacher-course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.13);
+}
+
+.teacher-course-card__media {
+  position: relative;
+  height: 156px;
+}
+
+.teacher-course-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.teacher-course-card__media span {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #003f98;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.teacher-course-card__body {
+  padding: 14px;
+}
+
+.teacher-course-card__meta span {
+  display: inline-flex;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: #fff4df;
+  color: #003f98;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.teacher-course-card h3 {
+  min-height: 56px;
+  margin-top: 10px;
+  color: #003f98;
+  font-family: math;
+  font-size: 1.12rem;
+  line-height: 1.35;
+}
+
+.teacher-course-card footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  color: #7a8aa6;
+  font-size: 0.9rem;
+}
+
+.teacher-course-card footer span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.teacher-course-card footer span:last-child {
+  color: #f69800;
+  font-weight: 900;
+}
+
+.teacher-side-stack,
+.teacher-lower-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.teacher-lower-grid {
+  grid-template-columns: 0.9fr 1.1fr 1.05fr;
+}
+
+.teacher-notification-list {
+  display: grid;
+  gap: 10px;
+}
+
+.teacher-notification {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(232, 190, 116, 0.22);
+  border-radius: 10px;
+  background: #fffdf8;
+}
+
+.teacher-notification__icon {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff4df;
+  color: #f69800;
+}
+
+.teacher-notification__icon--navy {
+  background: #0b45a0;
+  color: #ffffff;
+}
+
+.teacher-notification strong {
+  color: #003f98;
+}
+
+.teacher-notification p,
+.teacher-notification time {
+  color: #60708c;
+  font-size: 0.86rem;
+}
+
+.teacher-income-card {
+  min-height: 166px;
+}
+
+.teacher-donut-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.teacher-donut {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  color: #60708c;
+  font-weight: 800;
+}
+
+.teacher-donut span {
+  width: 88px;
+  height: 88px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: conic-gradient(#003f98 0 72%, #e8be74 72% 88%, #f2eadc 88% 100%);
+  color: #003f98;
+  font-family: math;
+  font-size: 1.35rem;
+  box-shadow: inset 0 0 0 15px #ffffff;
+}
+
+.teacher-performance-table {
+  display: grid;
+  gap: 12px;
+}
+
+.teacher-performance-table div {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 54px 70px 70px;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(232, 190, 116, 0.18);
+  color: #60708c;
+  font-size: 0.88rem;
+}
+
+.teacher-performance-table strong,
+.teacher-performance-table b {
+  color: #003f98;
+}
+
+.teacher-performance-table em {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffb000, #f2b52d 72%, #f2eadc 72%);
+  color: transparent;
+}
+
+.teacher-question-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+}
+
+.teacher-question-card img {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.teacher-question-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.teacher-question-card strong {
+  color: #003f98;
+}
+
+.teacher-question-card time,
+.teacher-question-card small {
+  color: #8aa0bf;
+  font-size: 0.82rem;
+}
+
+.teacher-question-card p {
+  margin-top: 12px;
+  color: #60708c;
+  font-size: 0.92rem;
+  font-style: italic;
+  line-height: 1.65;
+}
+
+.teacher-question-card footer {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.teacher-question-card button {
+  min-width: 86px;
+  min-height: 38px;
+  border: 1px solid rgba(232, 190, 116, 0.26);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #003f98;
+  font-weight: 900;
+}
+
+.teacher-question-card button:first-child {
+  background: #003f98;
+  color: #ffffff;
+}
+
+@media (max-width: 1280px) {
+  .teacher-metrics-grid,
+  .teacher-lower-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .teacher-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 820px) {
+  .teacher-metrics-grid,
+  .teacher-course-preview-grid,
+  .teacher-lower-grid {
+    grid-template-columns: 1fr;
+  }
+}

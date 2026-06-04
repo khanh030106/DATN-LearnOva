@@ -23,6 +23,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final VerificationTokenService verificationTokenService;
     private final CustomUserDetailsService customUserDetailsService;
+    
 
     @Transactional
     public AuthTokenResponse login(LoginRequest request) {
