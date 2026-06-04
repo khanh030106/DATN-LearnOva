@@ -1,0 +1,19 @@
+.courseStatCard--pending {
+  border-color: rgba(232, 190, 116, 0.28);
+}
+
+.courseStatIcon--pending {
+  color: #d4a574;
+}
+
+.courseStatBar--pending {
+  background: #d4a574;
+}
+
+.courseStatTrend--pending {
+  color: #d4a574;
+}
+
+.courseStatTrend--pending .courseStatTrendPercent {
+  color: #d4a574;
+}

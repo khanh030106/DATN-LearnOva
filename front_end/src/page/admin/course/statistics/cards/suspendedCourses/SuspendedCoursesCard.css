@@ -1,0 +1,19 @@
+.courseStatCard--suspended {
+  border-color: rgba(233, 100, 158, 0.28);
+}
+
+.courseStatIcon--suspended {
+  color: #e9649e;
+}
+
+.courseStatBar--suspended {
+  background: #e9649e;
+}
+
+.courseStatTrend--suspended {
+  color: #e9649e;
+}
+
+.courseStatTrend--suspended .courseStatTrendPercent {
+  color: #e9649e;
+}

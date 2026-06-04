@@ -1,0 +1,299 @@
+.instructorTableSection {
+  width: 100%;
+  min-width: 0;
+}
+
+.instructorTableCard {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid rgba(232, 190, 116, 0.18);
+  box-shadow: 0 16px 36px rgba(120, 86, 24, 0.08);
+}
+
+.instructorTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 920px;
+}
+
+.instructorTable thead {
+  background: #fff8ec;
+}
+
+.instructorTable th,
+.instructorTable td {
+  padding: 18px 16px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(232, 190, 116, 0.14);
+}
+
+.instructorTable th {
+  color: #5e4c35;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.instructorTable tbody tr:hover {
+  background: rgba(255, 250, 241, 0.85);
+}
+
+.instructorTableBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(81, 88, 200, 0.1);
+  color: #2e2c60;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.instructorTableProfile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.instructorTableAvatar {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(232, 190, 116, 0.16);
+  color: #8a6a20;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.instructorTableProfileText {
+  min-width: 0;
+}
+
+.instructorTableName {
+  margin: 0;
+  color: #1b140c;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.instructorTableEmail {
+  margin: 4px 0 0;
+  color: #7a6b52;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.instructorTableTag {
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(232, 190, 116, 0.14);
+  color: #8a7650;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.instructorTableStat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.instructorTableStat strong {
+  color: #1b140c;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.instructorTableStat span {
+  color: #7a6b52;
+  font-size: 12px;
+}
+
+.instructorTableRate {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.instructorTableStar {
+  color: #f2b52d;
+}
+
+.instructorTableRate strong {
+  color: #1b140c;
+  font-size: 16px;
+}
+
+.instructorTableRate span {
+  color: #7a6b52;
+  font-size: 12px;
+}
+
+.instructorTableRevenue strong {
+  display: block;
+  color: #1b140c;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.instructorTableRevenue span {
+  color: #0f7f3c;
+  font-size: 12px;
+}
+
+.instructorTableStatus {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.instructorTableStatus--active {
+  background: rgba(26, 133, 92, 0.14);
+  color: #166a45;
+}
+
+.instructorTableStatus--paused {
+  background: rgba(247, 159, 6, 0.12);
+  color: #8a5d16;
+}
+
+.instructorTableStatus--locked {
+  background: rgba(255, 60, 60, 0.12);
+  color: #b02b2b;
+}
+
+.instructorTableActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.instructorActionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(157, 129, 88, 0.2);
+  background: #fffdf7;
+  color: #5e4c35;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.instructorActionButton:hover {
+  background: rgba(232, 190, 116, 0.18);
+  transform: translateY(-1px);
+}
+
+.instructorActionButton--danger {
+  border-color: rgba(255, 52, 52, 0.2);
+  color: #c33d3d;
+}
+
+.instructorTablePagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px;
+  border-top: 1px solid rgba(232, 190, 116, 0.14);
+  background: #fffdf7;
+}
+
+.instructorPaginationButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  padding: 10px 14px;
+  border: 1px solid rgba(157, 129, 88, 0.2);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #5e4c35;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.instructorPaginationButton:hover:not(:disabled) {
+  background: rgba(232, 190, 116, 0.18);
+}
+
+.instructorPaginationButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.instructorPaginationButton--active {
+  background: #f7e3c0;
+  border-color: rgba(232, 190, 116, 0.35);
+  color: #1b140c;
+}
+
+@media (max-width: 1100px) {
+  .instructorTable {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 960px) {
+  .instructorTableCard {
+    overflow-x: auto;
+  }
+
+  .instructorTable {
+    min-width: 860px;
+  }
+}
+
+@media (max-width: 700px) {
+  .instructorTable thead {
+    display: none;
+  }
+
+  .instructorTable,
+  .instructorTable tbody,
+  .instructorTable tr,
+  .instructorTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .instructorTable td {
+    padding: 12px 14px;
+  }
+
+  .instructorTableRow {
+    margin-bottom: 16px;
+  }
+
+  .instructorTableProfile {
+    flex-wrap: wrap;
+  }
+
+  .instructorTableActions {
+    justify-content: flex-start;
+  }
+}

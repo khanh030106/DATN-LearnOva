@@ -1,0 +1,251 @@
+.adminHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 24px;
+  background: linear-gradient(180deg, #fffdf8 0%, #fffaf0 100%);
+  border: 1px solid rgba(232, 190, 116, 0.28);
+  box-shadow: 0 12px 28px rgba(120, 86, 24, 0.08);
+  box-sizing: border-box;
+}
+
+.adminHeaderSearchBox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: clamp(420px, 40vw, 640px);
+  min-height: 54px;
+  padding: 0 18px;
+  background: #ffffff;
+  border: 1px solid rgba(232, 190, 116, 0.24);
+  border-radius: 999px;
+  box-sizing: border-box;
+}
+
+.adminHeaderSearchIcon {
+  flex-shrink: 0;
+  color: #8a7650;
+}
+
+.adminHeaderSearchInput {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #1f2937;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.adminHeaderSearchInput::placeholder {
+  color: #9ca3af;
+}
+
+.adminHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.adminHeaderIconGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 18px;
+  border-right: 1px solid rgba(232, 190, 116, 0.22);
+}
+
+.adminHeaderIconButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #5f6f86;
+  cursor: pointer;
+}
+
+.adminHeaderIconButton:hover {
+  background: #fffaf0;
+  color: #e8be74;
+}
+
+.adminHeaderBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff3434;
+  border: 2px solid #ffffff;
+}
+
+.adminHeaderLanguageButton {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-right: 1px solid rgba(232, 190, 116, 0.22);
+  background: transparent;
+  cursor: pointer;
+}
+
+.adminHeaderLanguageText {
+  color: #8a7650;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.adminHeaderLanguageButton:hover .adminHeaderLanguageText {
+  color: #1a2e6e;
+}
+
+.adminHeaderProfileButton {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 6px 4px 14px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.adminHeaderProfileButton:hover {
+  background: #fffaf0;
+}
+
+.adminHeaderProfileText {
+  text-align: right;
+}
+
+.adminHeaderOrganizationName {
+  display: block;
+  margin-bottom: 3px;
+  color: #8a7650;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.adminHeaderRoleName {
+  display: block;
+  color: #1a2e6e;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.adminHeaderAvatarWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.adminHeaderAvatar {
+  display: block;
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 3px solid #ffffff;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+}
+
+.adminHeaderOnlineStatus {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #22c55e;
+  border: 2px solid #ffffff;
+}
+
+.adminHeader {
+  width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .adminHeader {
+    flex-wrap: wrap;
+  }
+
+  .adminHeaderSearchBox {
+    width: 100%;
+    order: 1;
+  }
+
+  .adminHeaderActions {
+    width: 100%;
+    justify-content: space-between;
+    order: 2;
+  }
+}
+
+@media (max-width: 720px) {
+  .adminHeader {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .adminHeaderActions {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .adminHeaderIconGroup {
+    padding-right: 0;
+    border-right: none;
+  }
+
+  .adminHeaderLanguageButton {
+    border-right: none;
+    padding-left: 0;
+  }
+
+  .adminHeaderProfileButton {
+    width: 100%;
+    justify-content: space-between;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .adminHeaderSearchInput {
+    font-size: 14px;
+  }
+
+  .adminHeaderRoleName {
+    font-size: 14px;
+  }
+}
+
+.adminLayout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background: #fffaf0;
+}
+
+.adminLayoutContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+}
+
+.adminLayoutMain {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+}

@@ -1,0 +1,115 @@
+.dashboardStatistics {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+
+.dashboardStatisticsCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  min-height: 88px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #fffdf8 0%, #ffffff 100%);
+  border: 1px solid rgba(232, 190, 116, 0.26);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.dashboardStatisticsCardIcon {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: linear-gradient(135deg, #e8be74 0%, #d9a95f 100%);
+  box-shadow: 0 10px 18px rgba(232, 190, 116, 0.22);
+}
+
+.dashboardStatisticsCardBody {
+  min-width: 0;
+  flex: 1;
+}
+
+.dashboardStatisticsCardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.dashboardStatisticsCardLabel {
+  margin: 0;
+  color: #334155;
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.dashboardStatisticsCardChange {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.dashboardStatisticsCardChange--success {
+  color: #15803d;
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.dashboardStatisticsCardChange--info {
+  color: #2563eb;
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.dashboardStatisticsCardValue {
+  color: #111827;
+  font-size: 24px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 6px;
+}
+
+.dashboardStatisticsCardNote {
+  margin: 0;
+  color: #7a8496;
+  font-size: 12px;
+  line-height: 1.45;
+  font-style: italic;
+}
+
+@media (max-width: 1200px) {
+  .dashboardStatistics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboardStatistics {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .dashboardStatisticsCard {
+    padding: 14px 16px;
+  }
+
+  .dashboardStatisticsCardValue {
+    font-size: 22px;
+  }
+}

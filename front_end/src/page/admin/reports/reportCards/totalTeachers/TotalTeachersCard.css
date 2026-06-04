@@ -1,0 +1,44 @@
+.reportCard {
+  background: #fff8f0;
+  border: 1px solid rgba(232, 190, 116, 0.35);
+  border-radius: 6px;
+  padding: 12px 24px;
+}
+
+.reportCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.reportCardIcon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #b75a0b;
+}
+
+.reportCardIconAccentGold {
+  background: #f9ead6;
+}
+
+.reportCardLabel {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #61412c;
+}
+
+.reportCardValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2f1f14;
+  margin-bottom: 10px;
+}
+
+.reportCardNote {
+  font-size: 0.92rem;
+  color: #7a5b43;
+}

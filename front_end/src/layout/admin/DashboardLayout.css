@@ -1,0 +1,34 @@
+.adminLayout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background: #fffaf0;
+}
+
+.adminLayoutContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+}
+
+.adminLayoutMain {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .adminLayout {
+    flex-direction: column;
+  }
+
+  .adminLayoutContent {
+    padding: 0;
+  }
+
+  .adminLayoutMain {
+    padding: 0;
+  }
+}

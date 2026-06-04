@@ -1,0 +1,123 @@
+.revenueDonutCard {
+  width: 100%;
+  padding: 28px 30px;
+  border-radius: 16px;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+.revenueDonutHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.revenueDonutTitle {
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: #1b140c;
+}
+
+.revenueDonutSubtitle {
+  margin: 0;
+  color: #7a6b52;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.revenueDonutBody {
+  display: grid;
+  gap: 24px;
+}
+
+.revenueDonutChartWrapper {
+  position: relative;
+  width: 100%;
+  min-height: 340px;
+}
+
+.revenueDonutChartWrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.revenueDonutCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+
+.revenueDonutCenterValue {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1b140c;
+}
+
+.revenueDonutCenterLabel {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #5a4d34;
+  letter-spacing: 0.12em;
+}
+
+.revenueDonutCenterPercent {
+  margin-top: 8px;
+  color: #16a34a;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.revenueDonutLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.revenueDonutLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 180px;
+}
+
+.revenueDonutLegendDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.revenueDonutLegendText {
+  color: #5a4d34;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .revenueDonutHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 620px) {
+  .revenueDonutCard {
+    padding: 20px;
+  }
+
+  .revenueDonutCenterValue {
+    font-size: 24px;
+  }
+}

@@ -1,0 +1,65 @@
+.instructorManagementPage {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+  padding: 4px 0 10px;
+  box-sizing: border-box;
+}
+
+.instructorManagementContent {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 12px 24px;
+}
+
+.instructorManagementHero {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 20px;
+  border: 1px solid rgba(232, 190, 116, 0.24);
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fffaf0 0%, #fffdf8 48%, #ffffff 100%);
+  box-shadow: 0 12px 28px rgba(120, 86, 24, 0.08);
+}
+
+.instructorManagementEyebrow {
+  margin: 0;
+  color: #b46a00;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.instructorManagementTitle {
+  margin: 0;
+  color: #1b140c;
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.instructorManagementDescription {
+  margin: 0;
+  max-width: 760px;
+  color: #6f634e;
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .instructorManagementHero {
+    padding: 16px;
+  }
+
+  .instructorManagementTitle {
+    font-size: 22px;
+  }
+}

@@ -1,0 +1,21 @@
+.learningTabContent {
+  width: 100%;
+}
+
+.learningChartsGrid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 1200px) {
+  .learningChartsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .learningChartsGrid {
+    grid-template-columns: 1fr;
+  }
+}

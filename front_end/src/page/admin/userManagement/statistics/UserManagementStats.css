@@ -1,0 +1,353 @@
+.userManagementStats {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+
+.userManagementStatCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid rgba(232, 190, 116, 0.28);
+  border-radius: 16px;
+  background:
+    radial-gradient(
+      circle at 92% 10%,
+      rgba(232, 190, 116, 0.12),
+      transparent 22%
+    ),
+    linear-gradient(180deg, #fffaf0 0%, #ffffff 72%, #fffdf8 100%);
+  box-shadow: 0 10px 24px rgba(120, 86, 24, 0.08);
+  box-sizing: border-box;
+}
+
+.userManagementStatIcon {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  line-height: 1;
+}
+
+.userManagementStatIcon--blue {
+  color: #1a2e6e;
+  background: rgba(26, 46, 110, 0.08);
+}
+
+.userManagementStatIcon--green {
+  color: #8a7650;
+  background: rgba(232, 190, 116, 0.14);
+}
+
+.userManagementStatIcon--orange {
+  color: #b46a00;
+  background: rgba(232, 190, 116, 0.16);
+}
+
+.userManagementStatIcon--amber {
+  color: #8f5a00;
+  background: rgba(232, 190, 116, 0.18);
+}
+
+.userManagementStatIcon--red {
+  color: #c2410c;
+  background: rgba(194, 65, 12, 0.08);
+}
+
+.userManagementStatIcon svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.3;
+}
+
+.userManagementStatContent {
+  min-width: 0;
+  flex: 1;
+}
+
+.userManagementStatTitle {
+  margin: 0;
+  color: #8a7650;
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.userManagementStatValue {
+  margin-top: 4px;
+  color: #1a1a2e;
+  font-size: 24px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.userManagementStatTrend {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.userManagementStatTrend--success {
+  color: #0f8f52;
+}
+
+.userManagementStatTrend--info {
+  color: #b46a00;
+}
+
+.userManagementStatTrend--warning {
+  color: #b46a00;
+}
+
+.userManagementStatTrend--danger {
+  color: #c2410c;
+}
+
+.userManagementStatTrend--neutral {
+  color: #6f675b;
+}
+
+@media (max-width: 1200px) {
+  .userManagementStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .userManagementStats {
+    grid-template-columns: 1fr;
+  }
+
+  .userManagementStatCard {
+    padding: 14px 16px;
+  }
+
+  .userManagementStatValue {
+    font-size: 22px;
+  }
+}
+.userManagementStats {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+
+.userManagementStatCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(232, 190, 116, 0.24);
+  background:
+    radial-gradient(
+      circle at 92% 10%,
+      rgba(232, 190, 116, 0.08),
+      transparent 22%
+    ),
+    linear-gradient(180deg, #fffaf0 0%, #ffffff 72%, #fffdf8 100%);
+  box-shadow: 0 10px 24px rgba(120, 86, 24, 0.08);
+  box-sizing: border-box;
+}
+
+.userManagementStatIcon {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  line-height: 1;
+}
+
+.userManagementStatIcon--blue {
+  color: #1a2e6e;
+  background: rgba(26, 46, 110, 0.1);
+}
+
+.userManagementStatIcon--green {
+  color: #0f8f52;
+  background: rgba(15, 143, 82, 0.1);
+}
+
+.userManagementStatIcon--orange {
+  color: #b46a00;
+  background: rgba(232, 190, 116, 0.16);
+}
+
+.userManagementStatIcon--amber {
+  color: #c47700;
+  background: rgba(255, 207, 120, 0.18);
+}
+
+.userManagementStatIcon--red {
+  color: #c2410c;
+  background: rgba(194, 65, 12, 0.1);
+}
+
+.userManagementStatIcon svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.3;
+}
+
+.userManagementStatContent {
+  min-width: 0;
+  .userManagementStats {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+    align-items: stretch;
+  }
+
+  .userManagementStatCard {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+    padding: 16px 18px;
+    border: 1px solid rgba(232, 190, 116, 0.28);
+    border-radius: 16px;
+    background:
+      radial-gradient(
+        circle at 92% 10%,
+        rgba(232, 190, 116, 0.12),
+        transparent 22%
+      ),
+      linear-gradient(180deg, #fffaf0 0%, #ffffff 72%, #fffdf8 100%);
+    box-shadow: 0 10px 24px rgba(120, 86, 24, 0.08);
+    box-sizing: border-box;
+  }
+
+  .userManagementStatIcon {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: currentColor;
+    line-height: 1;
+  }
+
+  .userManagementStatIcon--blue {
+    color: #1a2e6e;
+    background: rgba(26, 46, 110, 0.08);
+  }
+
+  .userManagementStatIcon--green {
+    color: #8a7650;
+    background: rgba(232, 190, 116, 0.14);
+  }
+
+  .userManagementStatIcon--orange {
+    color: #b46a00;
+    background: rgba(232, 190, 116, 0.16);
+  }
+
+  .userManagementStatIcon--amber {
+    color: #8f5a00;
+    background: rgba(232, 190, 116, 0.18);
+  }
+
+  .userManagementStatIcon--red {
+    color: #c2410c;
+    background: rgba(194, 65, 12, 0.08);
+  }
+
+  .userManagementStatIcon svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.3;
+  }
+
+  .userManagementStatContent {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .userManagementStatTitle {
+    margin: 0;
+    color: #8a7650;
+    font-size: 12px;
+    line-height: 1.35;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .userManagementStatValue {
+    margin-top: 4px;
+    color: #1a1a2e;
+    font-size: 24px;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .userManagementStatTrend {
+    margin: 6px 0 0;
+    font-size: 12px;
+    line-height: 1.45;
+    font-weight: 600;
+  }
+
+  .userManagementStatTrend--success {
+    color: #0f8f52;
+  }
+
+  .userManagementStatTrend--info {
+    color: #b46a00;
+  }
+
+  .userManagementStatTrend--warning {
+    color: #b46a00;
+  }
+
+  .userManagementStatTrend--danger {
+    color: #c2410c;
+  }
+
+  .userManagementStatTrend--neutral {
+    color: #6f675b;
+  }
+
+  @media (max-width: 1200px) {
+    .userManagementStats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 700px) {
+    .userManagementStats {
+      grid-template-columns: 1fr;
+    }
+
+    .userManagementStatCard {
+      padding: 14px 16px;
+    }
+
+    .userManagementStatValue {
+      font-size: 22px;
+    }
+  }
+}

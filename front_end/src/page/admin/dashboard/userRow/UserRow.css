@@ -1,0 +1,371 @@
+.userRowSection {
+  width: 100%;
+  min-width: 0;
+}
+
+.userRowCard {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 28px 32px 30px;
+  border-radius: 6px;
+  border: 1px solid rgba(232, 190, 116, 0.28);
+  background:
+    radial-gradient(
+      circle at 90% 8%,
+      rgba(232, 190, 116, 0.16),
+      transparent 24%
+    ),
+    linear-gradient(180deg, #fffaf0 0%, #ffffff 60%, #fbfdff 100%);
+  box-shadow: 0 14px 34px rgba(120, 86, 24, 0.08);
+  box-sizing: border-box;
+}
+
+.userRowCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.userRowCardHeader--compact {
+  margin-bottom: 20px;
+}
+
+.userRowCardTitle {
+  margin: 0;
+  color: #1b140c;
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.userRowCardSubtitle {
+  margin: 6px 0 0;
+  color: #7a6b52;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.userRowLinkButton,
+.userRowRankButton {
+  border: 0;
+  background: transparent;
+  color: #ffad19;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.userRowLinkButton:hover,
+.userRowRankButton:hover {
+  color: #f69800;
+  transform: translateY(-1px);
+}
+
+.userRowTableHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 136px;
+  gap: 24px;
+  padding: 0 10px 14px 2px;
+  margin-bottom: 4px;
+  color: #9ca3af;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.userRowTableHeaderRole {
+  justify-self: end;
+  text-align: right;
+}
+
+.userRowList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.userRowItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 136px;
+  gap: 24px;
+  align-items: center;
+  padding: 14px 10px 14px 2px;
+  border-bottom: 1px solid rgba(232, 190, 116, 0.16);
+}
+
+.userRowItem:last-child {
+  border-bottom: 0;
+}
+
+.userRowItemUser {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.userRowAvatar {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.1);
+}
+
+.userRowItemMeta {
+  min-width: 0;
+}
+
+.userRowItemName {
+  margin: 0;
+  color: #001d4a;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+.userRowItemEmail {
+  margin: 2px 0 0;
+  color: #9ca3af;
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.userRowItemRoleWrap {
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.userRowItemRole {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(232, 190, 116, 0.22);
+  background: rgba(255, 250, 240, 0.95);
+  color: #b46a00;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.userRowItemStatusWrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.userRowStatusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.userRowStatusDot--online {
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+}
+
+.userRowStatusDot--offline {
+  background: #cbd5e1;
+}
+
+.userRowItemStatusText {
+  color: #7a6b52;
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.userRowTeacherList,
+.userRowActivityList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.userRowTeacherItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.userRowTeacherAvatarWrap {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.userRowTeacherAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.1);
+}
+
+.userRowTeacherRank {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: #001d4a;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  box-shadow: 0 10px 18px rgba(15, 23, 42, 0.18);
+}
+
+.userRowTeacherContent {
+  min-width: 0;
+  flex: 1;
+}
+
+.userRowTeacherName {
+  margin: 0;
+  color: #001d4a;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+.userRowTeacherCourseCount {
+  margin: 4px 0 0;
+  color: #9ca3af;
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+.userRowTeacherRating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  color: #f59e0b;
+}
+
+.userRowTeacherStar {
+  font-size: 10px;
+  line-height: 1;
+}
+
+.userRowTeacherRatingValue {
+  color: #1f2937;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.userRowRankButton {
+  margin-top: auto;
+  padding: 12px 0 0;
+  text-align: left;
+}
+
+.userRowActivityItem {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(232, 190, 116, 0.16);
+}
+
+.userRowActivityItem:last-child {
+  border-bottom: 0;
+}
+
+.userRowActivityDot {
+  width: 10px;
+  height: 10px;
+  margin-top: 4px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffb000 0%, #e8be74 100%);
+  box-shadow: 0 0 0 4px rgba(232, 190, 116, 0.14);
+}
+
+.userRowActivityContent {
+  min-width: 0;
+}
+
+.userRowActivityLabel {
+  margin: 0;
+  color: #b46a00;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.userRowActivityTitle {
+  margin: 4px 0 0;
+  color: #1b140c;
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.userRowActivityTime {
+  color: #9ca3af;
+  font-size: 10px;
+  line-height: 1.35;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (max-width: 1200px) {
+  .userRowCards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .userRowCard {
+    padding: 22px 18px 24px;
+  }
+
+  .userRowCardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .userRowItemStatusWrap {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 520px) {
+  .userRowCard {
+    padding: 18px 16px 20px;
+  }
+
+  .userRowCardTitle {
+    font-size: 18px;
+  }
+}

@@ -10,18 +10,4 @@ const axiosClient = axios.create({
     },
 });
 
-axiosClient.interceptors.request.use((config) =>{
-    const token = localStorage.getItem('accessToken');
-
-    if (token){
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-    },(error) => Promise.reject(error)
-
-);
-
-// Thiếu in terceptor response để xử lý lỗi 401 và refresh token nếu cần thiết
-
 export default axiosClient;

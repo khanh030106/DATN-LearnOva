@@ -1,0 +1,222 @@
+.voucherTableSection {
+  padding: 22px;
+  margin-top: 22px;
+}
+
+.voucherTableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.voucherTableTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.voucherTableSubtitle {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.voucherTableCount {
+  color: #475569;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* ===== SEARCH & FILTER ===== */
+.voucherTableControls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.voucherSearchInput {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  border-radius: 24px;
+  background: #ffffff;
+}
+
+.voucherSearchInput:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.voucherStatusSelect {
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  min-width: 130px;
+}
+
+.voucherStatusSelect:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.voucherCreateBtn {
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #047857;
+  background: #ecfdf5;
+  border: 1px solid #10b981;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.voucherCreateBtn:hover {
+  background: #d1fae5;
+  border-color: #059669;
+}
+
+/* ===== TABLE ===== */
+.voucherTableWrapper {
+  overflow-x: auto;
+}
+
+.voucherTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.voucherTable th {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.voucherTable td {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 13px;
+  color: #475569;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.voucherTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ===== STATUS BADGE ===== */
+.voucherBadge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.voucherBadge.active {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.voucherBadge.expired {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+/* ===== ACTIONS (ICONS) ===== */
+.voucherActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.voucherActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.voucherActionBtn:nth-child(1) {
+  /* XEM ICON */
+  color: #3b82f6;
+}
+
+.voucherActionBtn:nth-child(1):hover {
+  background: #dbeafe;
+  border-color: #3b82f6;
+  color: #1d4ed8;
+}
+
+.voucherActionBtn:nth-child(2) {
+  /* SỬA ICON */
+  color: #f59e0b;
+}
+
+.voucherActionBtn:nth-child(2):hover {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  color: #d97706;
+}
+
+.voucherActionBtn:nth-child(3) {
+  /* XÓA ICON */
+  color: #ef4444;
+}
+
+.voucherActionBtn:nth-child(3):hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #dc2626;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .voucherTableControls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .voucherSearchInput {
+    width: 100%;
+  }
+
+  .voucherStatusSelect,
+  .voucherCreateBtn {
+    width: 100%;
+  }
+
+  .voucherTable {
+    min-width: 100%;
+  }
+}

@@ -1,0 +1,128 @@
+.activityRowSection {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+}
+
+.activityRowCard {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 32px 30px;
+  border-radius: 6px;
+  border: 1px solid rgba(232, 190, 116, 0.28);
+  background:
+    radial-gradient(
+      circle at 90% 8%,
+      rgba(232, 190, 116, 0.16),
+      transparent 24%
+    ),
+    linear-gradient(180deg, #fffaf0 0%, #ffffff 60%, #fbfdff 100%);
+  box-shadow: 0 14px 34px rgba(120, 86, 24, 0.08);
+  box-sizing: border-box;
+}
+
+.activityRowCardHeader {
+  margin-bottom: 22px;
+}
+
+.activityRowCardTitle {
+  margin: 0;
+  color: #1b140c;
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.activityRowCardSubtitle {
+  margin: 6px 0 0;
+  color: #7a6b52;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.activityRowList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.activityRowItem {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(232, 190, 116, 0.16);
+}
+
+.activityRowItem:last-child {
+  border-bottom: 0;
+}
+
+.activityRowDot {
+  width: 10px;
+  height: 10px;
+  margin-top: 4px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffb000 0%, #e8be74 100%);
+  box-shadow: 0 0 0 4px rgba(232, 190, 116, 0.14);
+}
+
+.activityRowContent {
+  min-width: 0;
+}
+
+.activityRowLabel {
+  margin: 0;
+  color: #b46a00;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.activityRowTitle {
+  margin: 4px 0 0;
+  color: #1b140c;
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.activityRowTime {
+  color: #9ca3af;
+  font-size: 10px;
+  line-height: 1.35;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .activityRowCard {
+    padding: 22px 18px 24px;
+  }
+}
+
+@media (max-width: 520px) {
+  .activityRowCard {
+    padding: 18px 16px 20px;
+  }
+
+  .activityRowCardTitle {
+    font-size: 18px;
+  }
+
+  .activityRowItem {
+    grid-template-columns: 10px minmax(0, 1fr);
+  }
+
+  .activityRowTime {
+    grid-column: 2 / -1;
+    margin-top: 4px;
+  }
+}

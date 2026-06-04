@@ -25,20 +25,24 @@ public class VerificationTokenService {
     @Value("${jwt.refresh-token-expiration}")
     private Long refreshTokenExpiration;
 
+    @Value("${jwt.refresh-token-remember-expiration}")
+    private Long refreshTokenRememberExpiration;
+
     @Transactional
-    public Verificationtoken createRefreshToken(String email) {
+    public Verificationtoken createRefreshToken(String email, Boolean rememberMe) {
         User user = userRepository.findByEmailAndIsDeletedFalse(email, false)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         verificationTokenRepository.deleteByUserAndTokenType(user, VerificationType.REFRESH_TOKEN);
 
-        Verificationtoken refreshToken = new Verificationtoken();
+        Long expiration = Boolean.TRUE.equals(rememberMe) ? refreshTokenRememberExpiration : refreshTokenExpiration;
 
+        Verificationtoken refreshToken = new Verificationtoken();
         refreshToken.setUser(user);
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setTokenType(VerificationType.REFRESH_TOKEN);
         refreshToken.setCreatedAt(Instant.now());
-        refreshToken.setExpiredAt(OffsetDateTime.now().plus(Duration.ofMillis(refreshTokenExpiration)));
+        refreshToken.setExpiredAt(OffsetDateTime.now().plus(Duration.ofMillis(expiration)));
         refreshToken.setIsUsed(false);
 
         return verificationTokenRepository.save(refreshToken);

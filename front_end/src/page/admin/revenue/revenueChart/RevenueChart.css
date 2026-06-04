@@ -1,0 +1,149 @@
+.revenueChartCard {
+  width: 100%;
+  padding: 28px 30px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+.revenueChartHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.revenueChartTitleGroup {
+  min-width: 0;
+}
+
+.revenueChartTitle {
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: #1b140c;
+}
+
+.revenueChartSubtitle {
+  margin: 0;
+  color: #7a6b52;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.revenueChartFilters {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.revenueChartFilters::-webkit-scrollbar {
+  display: none;
+}
+
+.revenueChartFilterButton {
+  min-width: 72px;
+  padding: 8px 14px;
+  border: 1px solid rgba(160, 146, 117, 0.4);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #5a4d34;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1.2;
+  height: 34px;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.revenueChartFilterButton:hover,
+.revenueChartFilterButton.active {
+  border-color: rgba(183, 142, 52, 0.8);
+  background-color: #ffffff;
+}
+
+.revenueChartBody {
+  display: grid;
+  gap: 22px;
+}
+
+.revenueChartCanvas {
+  width: 100%;
+  height: 340px;
+  min-height: 300px;
+}
+
+.revenueChartCanvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.revenueChartLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: flex-start;
+}
+
+.revenueChartLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #5a4d34;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.revenueChartLegendDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.revenueChartLegendDot.gold {
+  background-color: #b78e34;
+}
+
+.revenueChartLegendDot.purple {
+  background-color: #7b5dd1;
+}
+
+.revenueChartLegendDot.red {
+  background-color: #ef4444;
+}
+
+@media (max-width: 900px) {
+  .revenueChartHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .revenueChartFilters {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 620px) {
+  .revenueChartCard {
+    padding: 20px;
+  }
+
+  .revenueChartTitle {
+    font-size: 20px;
+  }
+
+  .revenueChartCanvas {
+    height: 300px;
+  }
+}

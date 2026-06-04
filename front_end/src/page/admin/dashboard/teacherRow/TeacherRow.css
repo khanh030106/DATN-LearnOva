@@ -1,0 +1,167 @@
+.teacherRowSection {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+}
+
+.teacherRowCard {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 32px 30px;
+  border-radius: 6px;
+  border: 1px solid rgba(232, 190, 116, 0.28);
+  background:
+    radial-gradient(
+      circle at 90% 8%,
+      rgba(232, 190, 116, 0.16),
+      transparent 24%
+    ),
+    linear-gradient(180deg, #fffaf0 0%, #ffffff 60%, #fbfdff 100%);
+  box-shadow: 0 14px 34px rgba(120, 86, 24, 0.08);
+  box-sizing: border-box;
+}
+
+.teacherRowCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.teacherRowCardTitle {
+  margin: 0;
+  color: #1b140c;
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.teacherRowCardSubtitle {
+  margin: 6px 0 0;
+  color: #7a6b52;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.teacherRowList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.teacherRowItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.teacherRowAvatarWrap {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.teacherRowAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.1);
+}
+
+.teacherRowRank {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: #001d4a;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  box-shadow: 0 10px 18px rgba(15, 23, 42, 0.18);
+}
+
+.teacherRowContent {
+  min-width: 0;
+  flex: 1;
+}
+
+.teacherRowName {
+  margin: 0;
+  color: #001d4a;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+.teacherRowCourseCount {
+  margin: 4px 0 0;
+  color: #9ca3af;
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+.teacherRowRating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  color: #f59e0b;
+}
+
+.teacherRowStar {
+  font-size: 10px;
+  line-height: 1;
+}
+
+.teacherRowRatingValue {
+  color: #1f2937;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.teacherRowButton {
+  margin-top: auto;
+  padding: 12px 0 0;
+  border: 0;
+  background: transparent;
+  color: #ffad19;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.teacherRowButton:hover {
+  color: #f69800;
+}
+
+@media (max-width: 768px) {
+  .teacherRowCard {
+    padding: 22px 18px 24px;
+  }
+}
+
+@media (max-width: 520px) {
+  .teacherRowCard {
+    padding: 18px 16px 20px;
+  }
+
+  .teacherRowCardTitle {
+    font-size: 18px;
+  }
+}

@@ -1,0 +1,54 @@
+.transactionsCard {
+  background: #ffffff;
+  border: 1px solid rgba(232, 190, 116, 0.16);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 170px;
+  box-shadow: 0 8px 18px rgba(120, 86, 24, 0.06);
+}
+
+.transactionsCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transactionsCardTitle {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7a6b52;
+}
+
+.transactionsCardIcon {
+  width: 26px;
+  height: 26px;
+  color: #0f766e;
+}
+
+.transactionsCardBody {
+  margin-top: 18px;
+}
+
+.transactionsCardValue {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.transactionsCardMeta {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.transactionsCardSubtitle {
+  color: #64748b;
+  font-size: 13px;
+}

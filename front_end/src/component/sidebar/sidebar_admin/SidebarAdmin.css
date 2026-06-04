@@ -1,0 +1,200 @@
+.sidebarAdmin {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  width: 256px;
+  padding: 20px 16px;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(232, 190, 116, 0.12),
+      transparent 28%
+    ),
+    linear-gradient(180deg, #fffdf8 0%, #fffaf0 100%);
+  border-right: 1px solid rgba(232, 190, 116, 0.18);
+  box-shadow: 8px 0 24px rgba(15, 23, 42, 0.04);
+}
+
+.sidebarAdminBrand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px 18px;
+}
+
+.sidebarAdminBrandIcon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.sidebarAdminBrandIconImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.sidebarAdminBrandText {
+  min-width: 0;
+}
+
+.sidebarAdminBrandWordmark {
+  display: block;
+  width: 116px;
+  height: auto;
+  object-fit: contain;
+}
+
+.sidebarAdminBrandSubtitle {
+  margin: 4px 0 0;
+  color: #8a7650;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.sidebarAdminNav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.sidebarAdminNavItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 13px 14px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #5f6f86;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sidebarAdminNavItem:hover {
+  background: rgba(255, 250, 240, 0.9);
+  color: #1a2e6e;
+}
+
+.sidebarAdminNavItemActive {
+  background: linear-gradient(135deg, #ffab19 0%, #ffa107 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(255, 165, 23, 0.24);
+}
+
+.sidebarAdminNavItemActive:hover {
+  color: #ffffff;
+}
+
+.sidebarAdminNavIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.sidebarAdminNavLabel {
+  line-height: 1.2;
+}
+
+.sidebarAdminFooterActions {
+  margin-top: auto;
+  padding-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebarAdminFooterAction {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #5f6f86;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sidebarAdminFooterAction:hover {
+  background: rgba(255, 250, 240, 0.9);
+  color: #1a2e6e;
+}
+
+.sidebarAdminFooterActionDanger {
+  color: #ff3434;
+}
+
+.sidebarAdminFooterActionDanger:hover {
+  background: rgba(255, 52, 52, 0.06);
+  color: #ff3434;
+}
+
+.sidebarAdminFooterActionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+  .sidebarAdmin {
+    width: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebarAdmin {
+    width: 100%;
+    min-height: auto;
+    height: auto;
+    position: relative;
+    top: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(232, 190, 116, 0.18);
+  }
+
+  .sidebarAdminNav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sidebarAdminFooterActions {
+    margin-top: 18px;
+  }
+}
+
+@media (max-width: 520px) {
+  .sidebarAdmin {
+    padding: 16px;
+  }
+
+  .sidebarAdminNav {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebarAdminBrandWordmark {
+    width: 104px;
+  }
+}

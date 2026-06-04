@@ -1,0 +1,48 @@
+.pendingPaymentCard {
+  background: #ffffff;
+  border: 1px solid rgba(232, 190, 116, 0.16);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 170px;
+  box-shadow: 0 8px 18px rgba(120, 86, 24, 0.06);
+}
+
+.pendingPaymentCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pendingPaymentCardTitle {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7a6b52;
+}
+
+.pendingPaymentCardIcon {
+  width: 26px;
+  height: 26px;
+  color: #f59e0b;
+}
+
+.pendingPaymentCardBody {
+  margin-top: 18px;
+}
+
+.pendingPaymentCardValue {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.pendingPaymentCardNote {
+  margin-top: 10px;
+  color: #7a6b52;
+  font-size: 13px;
+}

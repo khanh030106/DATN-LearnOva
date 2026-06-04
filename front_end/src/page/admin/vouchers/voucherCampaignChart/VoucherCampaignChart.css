@@ -1,0 +1,55 @@
+.voucherCampaignChartSection {
+  background: transparent;
+  padding: 18px;
+  border-radius: 0;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 320px;
+}
+
+.voucherCampaignChartHeader {
+  margin-bottom: 0;
+}
+
+.voucherCampaignChartTitle {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.voucherCampaignChartSubtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.7;
+}
+
+.voucherCampaignChartCanvasWrapper {
+  width: 100%;
+  min-height: 240px;
+  max-height: 280px;
+  position: relative;
+}
+
+.voucherCampaignChartCanvasWrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.voucherCampaignChartSummary {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: #475569;
+  font-size: 13px;
+}
+
+.voucherCampaignChartSummary strong {
+  color: #111827;
+  font-weight: 700;
+}

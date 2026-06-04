@@ -24,10 +24,18 @@ const LoginForm = () => {
         e.preventDefault();
         setError('');
         try {
-            await login(form.email, form.password);
+            const data = await login(form.email, form.password, form.remember);
+
+            if (!data?.accessToken) {
+                throw new Error("No access token returned");
+            }
             navigate('/learnova/home');
         }catch (err) {
-            setError('Login failed. Please check your credentials and try again.');
+            const message =
+                err.response?.data?.message ||
+                "Login failed. Please check your email and password.";
+
+            setError(message);
         }
     }
 
@@ -70,6 +78,12 @@ const LoginForm = () => {
                                 </button>
                             </div>
                         </div>
+
+                        {error && (
+                            <p className="login-error">
+                                {error}
+                            </p>
+                        )}
 
                         <div className="form-options">
                             <label className="form-option-remember">

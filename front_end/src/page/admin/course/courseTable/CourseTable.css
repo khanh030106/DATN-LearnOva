@@ -1,0 +1,194 @@
+.courseTableSection {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.courseTableCard {
+  width: 100%;
+
+  .courseTableSection {
+    padding: 12px;
+  }
+
+  .courseTableCard {
+    background: transparent;
+    padding: 0;
+  }
+
+  .courseTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .courseTable thead th {
+    text-align: left;
+    padding: 10px 8px;
+    font-weight: 600;
+    color: #111827;
+    border-bottom: 1px solid #e6eef6;
+  }
+
+  .courseTable tbody td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #eef2f6;
+    vertical-align: middle;
+    color: #111827;
+  }
+
+  /* Action icons styling */
+  .courseTableActions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .actionButton {
+    background: transparent;
+    border: none;
+    padding: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 6px;
+    transition:
+      background-color 0.15s ease,
+      transform 0.08s ease;
+  }
+
+  .actionButton:hover {
+    background: rgba(232, 190, 116, 0.12);
+    transform: translateY(-1px);
+  }
+
+  .actionIcon {
+    width: 16px;
+    height: 16px;
+    color: #e8be74;
+  }
+
+  /* Slight spacing and visual balance for the actions column */
+  .courseTable td:last-child {
+    text-align: left;
+    width: 120px;
+  }
+
+  /* Rating star + value */
+  .courseTableRating {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .courseTableRatingIcon {
+    width: 16px;
+    height: 16px;
+    color: #e8be74;
+    flex-shrink: 0;
+  }
+
+  .courseTableRatingValue {
+    color: #111827;
+    font-weight: 600;
+  }
+
+  /* Remove row hover highlight */
+  .courseTable tbody tr:hover {
+    background: transparent;
+  }
+
+  /* Flattened/plain table: no chips, no rounded badges */
+  /* Any specialized classes were removed from JSX; keep styles minimal */
+
+  .courseTablePagination {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .paginationButton {
+    border: 1px solid #e6eef6;
+    background: #fff;
+    padding: 6px 10px;
+  }
+
+  .paginationButton--active {
+    background: #111827;
+    color: #fff;
+    border-color: transparent;
+  }
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 16px 0 0;
+}
+
+.paginationButton {
+  min-width: 42px;
+  padding: 10px 14px;
+  border: 1px solid rgba(232, 190, 116, 0.22);
+  border-radius: 9999px;
+  background-color: #fffdf8;
+  color: #7a6b52;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.paginationButton:hover:not(:disabled) {
+  border-color: #e8be74;
+  background-color: rgba(232, 190, 116, 0.12);
+}
+
+.paginationButton--active {
+  background-color: #e8be74;
+  color: #1b140c;
+  border-color: #e8be74;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1100px) {
+  .courseTable {
+    min-width: 760px;
+  }
+}
+
+@media (max-width: 860px) {
+  .courseTable {
+    min-width: 620px;
+  }
+
+  .courseTableInfo,
+  .courseTablePrice {
+    gap: 4px;
+  }
+}
+
+@media (max-width: 680px) {
+  .courseTable {
+    min-width: 520px;
+  }
+
+  .courseTable th,
+  .courseTable td {
+    padding: 12px 10px;
+    font-size: 13px;
+  }
+
+  .courseTableCategory,
+  .courseTableStudents,
+  .courseStatus {
+    font-size: 12px;
+  }
+}

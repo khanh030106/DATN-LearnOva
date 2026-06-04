@@ -1,0 +1,16 @@
+.dashboardTabContent {
+  display: grid;
+  gap: 20px;
+}
+
+.dashboardChartsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .dashboardChartsGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -46,7 +46,7 @@ body{
     z-index: 2;
     width: 100%;
     max-width: 760px;
-    padding-left: 72px;
+    padding-left: 48px;
     padding-right: 40px;
 }
 
@@ -192,6 +192,23 @@ body{
     background: transparent;
     color: #F8F6F2;
     font-size: 15px;
+}
+
+.form-field-input input:-webkit-autofill,
+.form-field-input input:-webkit-autofill:hover,
+.form-field-input input:-webkit-autofill:focus,
+.form-field-input input:-webkit-autofill:active {
+    -webkit-text-fill-color: #F8F6F2 !important;
+    caret-color: #F8F6F2;
+    border-radius: 0;
+    transition: background-color 9999s ease-in-out 0s;
+}
+
+.login-error {
+    color: #ff3434;
+    font-size: 14px;
+    font-weight: 500;
+    margin: -15px 0 10px 5px;
 }
 
 .form-field-input input::placeholder {

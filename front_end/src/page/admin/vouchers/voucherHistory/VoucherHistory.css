@@ -1,0 +1,146 @@
+.voucherHistorySection {
+  padding: 22px;
+  margin-top: 22px;
+}
+
+.voucherHistoryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.voucherHistoryTitleIcon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.voucherHistoryIcon {
+  font-size: 24px;
+  color: #f97316;
+}
+
+.voucherHistoryTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.voucherHistorySubtitle {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.voucherHistoryCount {
+  color: #475569;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* ===== SEARCH ===== */
+.voucherHistoryControls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.voucherHistorySearchInput {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.voucherHistorySearchInput:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+/* ===== TABLE ===== */
+.voucherHistoryTableWrapper {
+  overflow-x: auto;
+}
+
+.voucherHistoryTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1000px;
+}
+
+.voucherHistoryTable th {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.voucherHistoryTable tbody tr:hover {
+  background: #f3f4f6;
+}
+
+.voucherHistoryTable td {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 13px;
+  color: #475569;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.voucherHistoryTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.voucherHistoryCode {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #fef3c7;
+  color: #b45309;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.voucherHistoryDiscount {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.voucherHistoryFinal {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .voucherHistoryHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .voucherHistoryControls {
+    width: 100%;
+  }
+
+  .voucherHistorySearchInput {
+    width: 100%;
+  }
+
+  .voucherHistoryTable {
+    min-width: 100%;
+  }
+}

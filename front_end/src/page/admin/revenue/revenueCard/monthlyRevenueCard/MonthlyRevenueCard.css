@@ -1,0 +1,54 @@
+.monthlyRevenueCard {
+  background: #ffffff;
+  border: 1px solid rgba(232, 190, 116, 0.16);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 170px;
+  box-shadow: 0 8px 18px rgba(120, 86, 24, 0.06);
+}
+
+.monthlyRevenueCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.monthlyRevenueCardTitle {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7a6b52;
+}
+
+.monthlyRevenueCardIcon {
+  width: 26px;
+  height: 26px;
+  color: #7c3aed;
+}
+
+.monthlyRevenueCardBody {
+  margin-top: 18px;
+}
+
+.monthlyRevenueCardValue {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.monthlyRevenueCardFooter {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.monthlyRevenueCardSubtitle {
+  color: #64748b;
+  font-size: 13px;
+}

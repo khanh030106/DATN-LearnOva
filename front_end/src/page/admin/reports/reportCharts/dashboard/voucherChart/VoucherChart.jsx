@@ -1,0 +1,86 @@
+import { Bar } from "react-chartjs-2";
+import "../../chartConfig.js";
+import "./VoucherChart.css";
+
+const VoucherChart = () => {
+  const data = {
+    labels: ["01/05", "07/05", "14/05", "21/05", "28/05", "04/06"],
+    datasets: [
+      {
+        label: "Voucher",
+        data: [80, 120, 200, 320, 500, 850],
+        backgroundColor: "#8b5cf6",
+        borderRadius: 4,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    animation: false,
+    interaction: {
+      mode: "index",
+      intersect: false,
+    },
+    hover: {
+      mode: "index",
+      intersect: false,
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        padding: 12,
+        titleFont: { size: 14, weight: "600" },
+        bodyFont: { size: 13 },
+        cornerRadius: 4,
+        displayColors: false,
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          font: { size: 12, family: "system-ui" },
+          color: "#a89a85",
+          callback: (value) => value + " lượt",
+        },
+        grid: {
+          color: "rgba(232, 190, 116, 0.15)",
+          drawBorder: false,
+        },
+      },
+      x: {
+        ticks: {
+          font: { size: 12, family: "system-ui" },
+          color: "#8b7355",
+        },
+        grid: {
+          display: false,
+        },
+      },
+    },
+  };
+
+  return (
+    <div className="voucherChartCard">
+      <div className="chartCardHeader">
+        <div>
+          <div className="chartCardLabel">HIỆU SUẤT PHÂN BỐ KHUYẾN MẠI</div>
+          <div className="chartCardTitle">
+            Lượng sử dụng Voucher và mã giảm giá hàng tuần
+          </div>
+        </div>
+        <div className="chartCardBadge chartCardBadgePurple">Khuyến mại</div>
+      </div>
+      <div className="chartContainer">
+        <Bar data={data} options={options} />
+      </div>
+    </div>
+  );
+};
+
+export default VoucherChart;
