@@ -23,13 +23,6 @@ const CoursePreviewPanel = ({ course, sections }) => {
             <span><CheckCircle size={15} />15 lessons</span>
             <span><Clock size={15} />2h 45m</span>
           </div>
-          <nav>
-            <button type="button">About</button>
-            <button type="button">What you'll learn</button>
-            <button type="button">Curriculum</button>
-            <button type="button">Instructor</button>
-            <button type="button">Reviews</button>
-          </nav>
         </div>
       </section>
 

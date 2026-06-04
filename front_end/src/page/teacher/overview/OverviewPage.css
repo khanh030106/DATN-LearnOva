@@ -1,6 +1,7 @@
 .teacher-overview {
   display: grid;
-  gap: 10px;
+  gap: 7px;
+  color: #0f172a;
 }
 
 .teacher-metrics-grid {
@@ -11,137 +12,143 @@
 
 .teacher-metric,
 .teacher-panel {
-  border: 1px solid rgba(232, 190, 116, 0.22);
-  border-radius: 9px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 10px 20px rgb(15 23 42 / 10%);
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
 }
 
 .teacher-metric {
-  min-height: 172px;
-  padding: 0 15px 15px 15px;
+  min-height: 206px;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  padding: 10px 20px 20px 20px;
   overflow: hidden;
 }
 
 .teacher-metric__heading {
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: #60708c;
-  font-weight: 800;
+  gap: 14px;
+  color: #0f172a;
+  font-size: 0.98rem;
+  font-weight: 900;
+}
+
+.teacher-metric__heading p {
+  margin: 0;
+  font-size: 20px;
+  color: #0000ad;
 }
 
 .teacher-metric__heading span {
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: #fffaf0;
-  color: #0b45a0;
-}
-
-.teacher-metric--gold .teacher-metric__heading span {
-  color: #f69800;
+  background: #dbeafe;
+  color: #2563eb;
 }
 
 .teacher-metric strong,
 .teacher-income-card strong {
   display: block;
-  margin-top: 12px;
-  color: #003f98;
+  margin-top: 14px;
+  color: #071a33;
   font-family: math;
-  font-size: clamp(1.7rem, 2.4vw, 2.15rem);
-  font-weight: 700;
+  font-size: clamp(2rem, 2.7vw, 2.65rem);
+  font-weight: 800;
   line-height: 1;
 }
 
 .teacher-metric strong small,
 .teacher-income-card strong small {
-  margin-left: 6px;
-  color: #8492ad;
+  margin-left: 8px;
+  color: #475569;
   font-family: var(--font-sans);
-  font-size: 0.8rem;
-  font-weight: 800;
+  font-size: 0.82rem;
+  font-weight: 900;
 }
 
 .teacher-metric em,
 .teacher-income-card p {
   display: block;
-  margin-top: 9px;
-  color: #0f9f6e;
+  margin-top: 2px;
+  color: #059669;
   font-size: 0.86rem;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .teacher-mini-chart,
 .teacher-income-chart {
-  min-height: 44px;
+  align-self: end;
+  min-height: 50px;
   display: flex;
   align-items: end;
-  gap: 10px;
-  margin-top: 14px;
+  gap: 12px;
+  margin-top: 10px;
 }
 
 .teacher-mini-chart span,
 .teacher-income-chart span {
   width: 18px;
   border-radius: 999px;
-  background: #eee4d6;
+  background: #dbeafe;
 }
 
 .teacher-mini-chart span:nth-child(1),
 .teacher-income-chart span:nth-child(1) {
-  height: 20px;
+  height: 18px;
 }
 
 .teacher-mini-chart span:nth-child(2),
 .teacher-income-chart span:nth-child(2) {
-  height: 32px;
+  height: 30px;
 }
 
 .teacher-mini-chart span:nth-child(3),
 .teacher-income-chart span:nth-child(3) {
-  height: 26px;
+  height: 22px;
 }
 
 .teacher-mini-chart span:nth-child(4),
 .teacher-income-chart span:nth-child(4) {
-  height: 42px;
+  height: 38px;
 }
 
 .teacher-mini-chart span:nth-child(5),
 .teacher-income-chart span:nth-child(5) {
-  height: 36px;
+  height: 25px;
 }
 
 .teacher-mini-chart span:nth-child(6),
 .teacher-income-chart span:nth-child(6) {
-  height: 46px;
-  background: linear-gradient(180deg, #ffb000, #d9a95f);
-}
-
-.teacher-mini-chart--line {
-  position: relative;
+  height: 50px;
+  background: linear-gradient(180deg, #2563eb, #1d4ed8);
 }
 
 .teacher-mini-chart--line span {
-  width: 16%;
-  height: 3px;
+  width: 34px;
+  height: 18px;
   border-radius: 999px;
-  background: #f3d193;
+  background: linear-gradient(180deg, #93c5fd, #dbeafe);
+}
+
+.teacher-mini-chart--line span:nth-child(6) {
+  height: 38px;
 }
 
 .teacher-dashboard-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+  grid-template-columns: minmax(0, 1.25fr) minmax(390px, 0.9fr);
   gap: 10px;
 }
 
 .teacher-panel {
-  padding: 0 15px 15px 15px;
+  padding: 15px 20px 20px 20px;
 }
 
 .teacher-panel__header {
@@ -149,22 +156,23 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  margin-bottom: 10px;
 }
 
 .teacher-panel h1,
 .teacher-panel h2 {
-  color: #003f98;
-  font-family: math;
-  font-size: clamp(1.35rem, 1.7vw, 1.65rem);
-  font-weight: 800;
-  line-height: 1.2;
+  margin: 0;
+  color: #0015a8;
+  font-weight: 900;
+  line-height: 1.15;
+  font-size: 27px;
 }
 
 .teacher-panel__header a {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  color: #003f98;
+  gap: 10px;
+  color: #1d4ed8;
   text-decoration: none;
   font-size: 0.86rem;
   font-weight: 900;
@@ -173,25 +181,26 @@
 .teacher-course-preview-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 18px;
 }
 
 .teacher-course-card {
   overflow: hidden;
-  border: 1px solid rgba(232, 190, 116, 0.22);
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   background: #ffffff;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .teacher-course-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.13);
+  border-color: #cbd5e1;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.12);
 }
 
 .teacher-course-card__media {
   position: relative;
-  height: 156px;
+  height: 188px;
 }
 
 .teacher-course-card__media img {
@@ -202,39 +211,41 @@
 
 .teacher-course-card__media span {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  padding: 7px 10px;
-  border-radius: 8px;
-  background: #003f98;
+  top: 14px;
+  left: 14px;
+  padding: 3px 12px;
+  font-family: monospace;
+  border-radius: 4px;
+  background: #1d4ed8;
   color: #ffffff;
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
 .teacher-course-card__body {
-  padding: 14px;
+  padding: 16px;
 }
 
 .teacher-course-card__meta span {
   display: inline-flex;
-  padding: 5px 10px;
-  border-radius: 8px;
-  background: #fff4df;
-  color: #003f98;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
   font-size: 0.72rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
 .teacher-course-card h3 {
-  min-height: 56px;
-  margin-top: 10px;
-  color: #003f98;
+  min-height: 58px;
+  margin: 12px 0 0;
+  color: #071a33;
   font-family: math;
-  font-size: 1.12rem;
-  line-height: 1.35;
+  font-size: 1.25rem;
+  font-weight: 900;
+  line-height: 1.3;
 }
 
 .teacher-course-card footer {
@@ -242,132 +253,170 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 12px;
-  color: #7a8aa6;
-  font-size: 0.9rem;
+  margin-top: 22px;
+  color: #475569;
+  font-size: 0.92rem;
+  font-weight: 800;
 }
 
 .teacher-course-card footer span {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
 }
 
 .teacher-course-card footer span:last-child {
-  color: #f69800;
+  color: #f59e0b;
   font-weight: 900;
 }
 
-.teacher-side-stack,
-.teacher-lower-grid {
+.teacher-side-stack {
   display: grid;
-  gap: 10px;
-}
-
-.teacher-lower-grid {
-  grid-template-columns: 0.9fr 1.1fr 1.05fr;
+  gap: 7px;
 }
 
 .teacher-notification-list {
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .teacher-notification {
+  min-height: 78px;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   padding: 14px;
-  border: 1px solid rgba(232, 190, 116, 0.22);
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
-  background: #fffdf8;
+  background: #ffffff;
 }
 
 .teacher-notification__icon {
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: #fff4df;
-  color: #f69800;
+  background: #fef3c7;
+  color: #f59e0b;
 }
 
 .teacher-notification__icon--navy {
-  background: #0b45a0;
+  background: #1d4ed8;
   color: #ffffff;
 }
 
 .teacher-notification strong {
-  color: #003f98;
+  color: #071a33;
+  font-size: 0.98rem;
+  font-weight: 900;
 }
 
 .teacher-notification p,
 .teacher-notification time {
-  color: #60708c;
+  margin: 4px 0 0;
+  color: #475569;
   font-size: 0.86rem;
+  font-weight: 700;
 }
 
 .teacher-income-card {
-  min-height: 166px;
+  min-height: 198px;
+}
+
+.teacher-income-card .teacher-panel__header {
+  margin-bottom: 8px;
+}
+
+.teacher-income-chart {
+  max-width: 250px;
+  margin-top: 26px;
+}
+
+.teacher-lower-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.15fr) minmax(320px, 1fr);
+  gap: 10px;
+}
+
+.teacher-lower-grid .teacher-panel {
+  min-height: 260px;
 }
 
 .teacher-donut-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
-  margin-top: 20px;
+  margin-top: 18px;
 }
 
 .teacher-donut {
   display: grid;
   justify-items: center;
-  gap: 12px;
-  color: #60708c;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #475569;
   font-weight: 800;
 }
 
 .teacher-donut span {
-  width: 88px;
-  height: 88px;
+  width: 96px;
+  height: 96px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: conic-gradient(#003f98 0 72%, #e8be74 72% 88%, #f2eadc 88% 100%);
-  color: #003f98;
+  background: conic-gradient(#1d4ed8 0 74%, #93c5fd 74% 88%, #dbeafe 88% 100%);
+  color: #071a33;
   font-family: math;
-  font-size: 1.35rem;
-  box-shadow: inset 0 0 0 15px #ffffff;
+  font-size: 1.45rem;
+  font-weight: 900;
+  box-shadow: inset 0 0 0 16px #ffffff;
+}
+
+.teacher-donut strong {
+  color: #0f172a;
+  font-size: 0.88rem;
 }
 
 .teacher-performance-table {
   display: grid;
-  gap: 12px;
+  gap: 0;
+  margin-top: 8px;
 }
 
 .teacher-performance-table div {
   display: grid;
-  grid-template-columns: minmax(120px, 1fr) 54px 70px 70px;
+  grid-template-columns: minmax(130px, 1fr) 54px minmax(90px, 0.75fr) 70px;
   gap: 12px;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(232, 190, 116, 0.18);
-  color: #60708c;
-  font-size: 0.88rem;
+  min-height: 46px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.teacher-performance-table div:last-child {
+  border-bottom: 0;
 }
 
 .teacher-performance-table strong,
 .teacher-performance-table b {
-  color: #003f98;
+  color: #071a33;
+  font-weight: 900;
 }
 
 .teacher-performance-table em {
   height: 8px;
+  overflow: hidden;
   border-radius: 999px;
-  background: linear-gradient(90deg, #ffb000, #f2b52d 72%, #f2eadc 72%);
+  background: linear-gradient(90deg, #1d4ed8, #2563eb 72%, #dbeafe 72%);
   color: transparent;
 }
 
@@ -375,6 +424,10 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: 14px;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
 }
 
 .teacher-question-card img {
@@ -392,41 +445,45 @@
 }
 
 .teacher-question-card strong {
-  color: #003f98;
+  color: #071a33;
+  font-weight: 900;
 }
 
 .teacher-question-card time,
 .teacher-question-card small {
-  color: #8aa0bf;
-  font-size: 0.82rem;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .teacher-question-card p {
-  margin-top: 12px;
-  color: #60708c;
-  font-size: 0.92rem;
+  margin: 10px 0 0;
+  color: #475569;
+  font-size: 0.9rem;
   font-style: italic;
-  line-height: 1.65;
+  line-height: 1.6;
 }
 
 .teacher-question-card footer {
   display: flex;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 10px;
+  margin-top: 14px;
 }
 
 .teacher-question-card button {
-  min-width: 86px;
-  min-height: 38px;
-  border: 1px solid rgba(232, 190, 116, 0.26);
-  border-radius: 8px;
+  min-width: 78px;
+  min-height: 34px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
   background: #ffffff;
-  color: #003f98;
+  color: #1d4ed8;
+  font-size: 0.82rem;
   font-weight: 900;
 }
 
 .teacher-question-card button:first-child {
-  background: #003f98;
+  border-color: #1d4ed8;
+  background: #1d4ed8;
   color: #ffffff;
 }
 

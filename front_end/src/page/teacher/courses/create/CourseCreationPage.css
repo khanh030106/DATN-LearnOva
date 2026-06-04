@@ -633,11 +633,13 @@
 
 .teacher-publish-layout {
   grid-template-columns: minmax(0, 0.92fr) minmax(360px, 0.78fr);
+  align-items: start;
 }
 
 .teacher-publish-left {
   display: grid;
   gap: 10px;
+  align-content: start;
 }
 
 .teacher-course-summary,
@@ -646,11 +648,17 @@
   padding: 15px;
 }
 
+.teacher-course-summary h2,
+.teacher-next-card h2 {
+  margin: 0;
+}
+
 .teacher-course-summary > div {
   display: grid;
   grid-template-columns: 150px minmax(0, 1fr);
   gap: 12px;
-  margin-top: 12px;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .teacher-course-summary img {
@@ -679,13 +687,15 @@
 
 .teacher-next-card {
   display: grid;
-  gap: 10px;
+  gap: 8px;
+  align-content: start;
 }
 
 .teacher-next-card p {
   display: flex;
   align-items: center;
   gap: 9px;
+  margin: 0;
   color: #52637d;
   font-size: 0.82rem;
   font-weight: 800;

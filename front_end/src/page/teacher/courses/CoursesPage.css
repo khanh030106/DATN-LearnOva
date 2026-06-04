@@ -10,14 +10,14 @@
   justify-content: space-between;
   gap: 16px;
   padding: 0 15px 15px;
-  border: 1px solid rgba(232, 190, 116, 0.24);
+  border: 1px solid #e2e8f0;
   border-radius: 9px;
-  background: linear-gradient(135deg, rgba(255, 250, 240, 0.96), rgba(255, 255, 255, 0.96));
-  box-shadow: 0 10px 20px rgb(15 23 42 / 10%);
+  background: #ffffff;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
 }
 
 .teacher-page__header span {
-  color: #b48a35;
+  color: #1d4ed8;
   font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.14em;
@@ -26,7 +26,7 @@
 
 .teacher-page__header h1 {
   margin-top: 8px;
-  color: #003f98;
+  color: #071a33;
   font-family: math;
   font-size: clamp(1.35rem, 1.7vw, 1.65rem);
   font-weight: 800;
@@ -36,7 +36,7 @@
 .teacher-page__header p {
   max-width: 620px;
   margin-top: 8px;
-  color: #60708c;
+  color: #475569;
   font-size: 0.92rem;
   font-weight: 700;
 }
@@ -49,8 +49,8 @@
   padding: 0 16px;
   border: 0;
   border-radius: 8px;
-  background: linear-gradient(135deg, #ffb000, #f2b52d);
-  color: #1b140c;
+  background: #1d4ed8;
+  color: #ffffff;
   font-size: 0.86rem;
   font-weight: 800;
 }
@@ -68,10 +68,10 @@
   align-items: center;
   gap: 14px;
   padding: 15px;
-  border: 1px solid rgba(232, 190, 116, 0.18);
-  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
   background: #ffffff;
-  box-shadow: 0 10px 20px rgb(15 23 42 / 10%);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
 }
 
 .teacher-courses-summary-card__icon {
@@ -84,33 +84,33 @@
 }
 
 .teacher-courses-summary-card__icon--navy {
-  background: #eef6ff;
-  color: #003f98;
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 
 .teacher-courses-summary-card__icon--green {
-  background: #eafbf2;
-  color: #00a76f;
+  background: #dcfce7;
+  color: #22c55e;
 }
 
 .teacher-courses-summary-card__icon--gold {
-  background: #fff7e2;
-  color: #f69800;
+  background: #dbeafe;
+  color: #2563eb;
 }
 
 .teacher-courses-summary-card__icon--violet {
-  background: #f2edff;
-  color: #7c3aed;
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 
 .teacher-courses-summary-card__icon--blue {
-  background: #eef6ff;
-  color: #1677ff;
+  background: #dbeafe;
+  color: #2563eb;
 }
 
 .teacher-courses-summary-card small {
   display: block;
-  color: #60708c;
+  color: #475569;
   font-size: 0.82rem;
   font-weight: 800;
 }
@@ -118,7 +118,7 @@
 .teacher-courses-summary-card strong {
   display: block;
   margin-top: 7px;
-  color: #0d1d3f;
+  color: #071a33;
   font-family: math;
   font-size: clamp(1.45rem, 2vw, 1.85rem);
   font-weight: 800;
@@ -128,7 +128,7 @@
 .teacher-courses-summary-card em {
   display: block;
   margin-top: 8px;
-  color: #0f9f6e;
+  color: #059669;
   font-size: 0.78rem;
   font-style: normal;
   font-weight: 800;
@@ -144,11 +144,17 @@
 .teacher-courses-search,
 .teacher-courses-toolbar select {
   height: 32px;
-  border: 1px solid #dfe7f2;
+  border: 1px solid #e2e8f0;
   border-radius: 7px;
   background: #ffffff;
-  color: #52637d;
+  color: #475569;
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+}
+
+.teacher-courses-search:focus-within,
+.teacher-courses-toolbar select:focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
 }
 
 .teacher-courses-search {
@@ -161,7 +167,7 @@
 .teacher-courses-search svg {
   width: 15px;
   height: 15px;
-  color: #8aa0bf;
+  color: #94a3b8;
 }
 
 .teacher-courses-search input {
@@ -170,7 +176,7 @@
   border: 0;
   outline: 0;
   background: transparent;
-  color: #1f2937;
+  color: #0f172a;
   font: inherit;
   font-size: 0.82rem;
   font-weight: 700;
@@ -194,9 +200,9 @@
   padding: 0 14px;
   border: 0;
   border-radius: 7px;
-  background: #ffa100;
+  background: #1d4ed8;
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 900;
   font-size: 0.78rem;
   white-space: nowrap;
 }
@@ -210,7 +216,7 @@
 .teacher-courses-view-toggle {
   display: inline-flex;
   overflow: hidden;
-  border: 1px solid #dfe7f2;
+  border: 1px solid #e2e8f0;
   border-radius: 7px;
   background: #ffffff;
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
@@ -224,20 +230,20 @@
   justify-content: center;
   border: 0;
   background: transparent;
-  color: #60708c;
+  color: #64748b;
 }
 
 .teacher-courses-view-toggle__active {
-  background: #001a3d !important;
+  background: #071a33 !important;
   color: #ffffff !important;
 }
 
 .teacher-course-table {
   overflow: visible;
-  border: 1px solid rgba(232, 190, 116, 0.18);
-  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
   background: #ffffff;
-  box-shadow: 0 10px 20px rgb(15 23 42 / 10%);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
 }
 
 .teacher-course-table__head,
@@ -251,7 +257,7 @@
 .teacher-course-table__head {
   min-height: 44px;
   padding: 0 15px;
-  color: #52637d;
+  color: #475569;
   font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -267,12 +273,12 @@
   position: relative;
   min-height: 86px;
   padding: 0 15px;
-  border-top: 1px solid #eef2f7;
-  color: #0d1d3f;
+  border-top: 1px solid #e2e8f0;
+  color: #0f172a;
 }
 
 .teacher-course-row:hover {
-  background: #fffdf8;
+  background: #eff6ff;
 }
 
 .teacher-course-row > :nth-child(n + 2):nth-child(-n + 6) {
@@ -293,7 +299,7 @@
   height: 58px;
   overflow: hidden;
   border-radius: 7px;
-  background: #fffaf0;
+  background: #f1f5f9;
 }
 
 .teacher-course-row__media img {
@@ -316,7 +322,7 @@
 
 .teacher-course-row h2 {
   overflow: hidden;
-  color: #0d1d3f;
+  color: #071a33;
   font-family: math;
   font-size: 1.02rem;
   font-weight: 800;
@@ -329,14 +335,14 @@
   align-items: center;
   gap: 8px;
   margin-top: 7px;
-  color: #60708c;
+  color: #475569;
   font-size: 0.8rem;
   font-weight: 700;
 }
 
 .teacher-course-row > strong,
 .teacher-course-row__updated {
-  color: #0d1d3f;
+  color: #0f172a;
   font-size: 0.86rem;
   font-weight: 800;
 }
@@ -354,18 +360,18 @@
 }
 
 .teacher-course-row__status--published {
-  background: #eafbf2;
-  color: #00a76f;
+  background: #dcfce7;
+  color: #16a34a;
 }
 
 .teacher-course-row__status--draft {
-  background: #fff7e2;
-  color: #f69800;
+  background: #fef9c3;
+  color: #ca8a04;
 }
 
 .teacher-course-row__status--archived {
-  background: #eef6ff;
-  color: #1677ff;
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 
 .teacher-course-row__rating {
@@ -375,7 +381,7 @@
 }
 
 .teacher-course-row__rating svg {
-  color: #f69800;
+  color: #f59e0b;
 }
 
 .teacher-course-row__actions {
@@ -390,20 +396,22 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #dfe7f2;
+  border: 1px solid #e2e8f0;
   border-radius: 7px;
   background: #ffffff;
-  color: #24364d;
+  color: #0f172a;
 }
 
 .teacher-course-row__actions > button:hover {
-  border-color: rgba(232, 190, 116, 0.72);
-  color: #003f98;
+  border-color: #93c5fd;
+  background: #eff6ff;
+  color: #1d4ed8;
 }
 
 .teacher-course-row__actions > button:last-child:hover {
-  background: #fff4df;
-  color: #9f3412;
+  border-color: #fee2e2;
+  background: #fee2e2;
+  color: #ef4444;
 }
 
 .teacher-course-modal {
@@ -414,7 +422,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: rgba(6, 23, 51, 0.5);
+  background: rgba(7, 26, 51, 0.5);
   backdrop-filter: blur(8px);
 }
 
@@ -424,9 +432,9 @@
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
-  border: 1px solid rgba(232, 190, 116, 0.24);
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
-  background: linear-gradient(180deg, #fffdf8 0%, #ffffff 100%);
+  background: #ffffff;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
 }
 
@@ -445,12 +453,12 @@
   align-items: center;
   justify-content: center;
   border-radius: 14px;
-  background: #eafbf2;
-  color: #00a76f;
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 
 .teacher-course-modal__header h2 {
-  color: #003f98;
+  color: #071a33;
   font-family: math;
   font-size: clamp(1.35rem, 1.7vw, 1.65rem);
   font-weight: 800;
@@ -459,7 +467,7 @@
 
 .teacher-course-modal__header p {
   margin-top: 6px;
-  color: #8aa0bf;
+  color: #64748b;
   font-size: 0.95rem;
   font-weight: 700;
 }
@@ -472,8 +480,8 @@
   justify-content: center;
   border: 0;
   border-radius: 14px;
-  background: #f6f8fb;
-  color: #8aa0bf;
+  background: #f8fafc;
+  color: #64748b;
 }
 
 .teacher-module-list {
@@ -489,16 +497,16 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  border: 2px dashed rgba(232, 190, 116, 0.38);
+  border: 2px dashed #93c5fd;
   border-radius: 10px;
-  background: #fffaf0;
-  color: #003f98;
+  background: #eff6ff;
+  color: #1d4ed8;
   font-weight: 900;
 }
 
 .teacher-module-card {
   padding: 15px;
-  border: 1px solid rgba(232, 190, 116, 0.18);
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 10px 20px rgb(15 23 42 / 10%);
@@ -515,7 +523,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #003f98;
+  color: #1d4ed8;
 }
 
 .teacher-module-card__title {
@@ -524,7 +532,7 @@
 }
 
 .teacher-module-card__title span {
-  color: #8aa0bf;
+  color: #64748b;
   font-size: 0.76rem;
   font-weight: 900;
   letter-spacing: 0.1em;
@@ -551,7 +559,7 @@
   border: 0;
   border-radius: 10px;
   background: transparent;
-  color: #8aa0bf;
+  color: #64748b;
 }
 
 .teacher-lesson-list {
@@ -602,7 +610,7 @@
 
 .teacher-lesson-row__main small {
   overflow: hidden;
-  color: #8a7650;
+  color: #64748b;
   font-size: 0.76rem;
   font-weight: 800;
   text-overflow: ellipsis;
@@ -611,10 +619,10 @@
 
 .teacher-lesson-row select {
   height: 36px;
-  border: 1px solid rgba(232, 190, 116, 0.26);
+  border: 1px solid #e2e8f0;
   border-radius: 999px;
-  background: #fffdf8;
-  color: #003f98;
+  background: #f8fafc;
+  color: #1d4ed8;
   font-weight: 900;
   outline: 0;
   padding: 0 10px;
@@ -629,8 +637,8 @@
   padding: 6px 12px;
   border: 0;
   border-radius: 999px;
-  background: #eafbf2;
-  color: #00a76f;
+  background: #dcfce7;
+  color: #16a34a;
   font-size: 0.76rem;
   font-weight: 900;
 }
@@ -647,8 +655,8 @@
   justify-content: center;
   border: 0;
   border-radius: 50%;
-  background: #fff4df;
-  color: #9f3412;
+  background: #fee2e2;
+  color: #ef4444;
 }
 
 .teacher-lesson-row__delete:disabled {
@@ -661,7 +669,7 @@
   border: 2px dashed #dbe6f3;
   border-radius: 12px;
   background: #ffffff;
-  color: #8aa0bf;
+  color: #64748b;
   font-weight: 900;
 }
 
@@ -675,7 +683,7 @@
   min-height: 48px;
   border: 0;
   border-radius: 8px;
-  background: linear-gradient(135deg, #ffb000, #f2b52d);
+  background: #1d4ed8;
   color: #ffffff;
   font-size: 0.95rem;
   font-weight: 900;

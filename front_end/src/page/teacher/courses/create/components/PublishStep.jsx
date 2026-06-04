@@ -12,10 +12,6 @@ const PublishStep = ({
 }) => {
   return (
     <section className="teacher-create-step">
-      <div className="teacher-create-step__heading">
-        <h1>Publish Your Course</h1>
-        <p>Make your course live and available for students.</p>
-      </div>
 
       <div className="teacher-publish-layout">
         <div className="teacher-publish-left">
