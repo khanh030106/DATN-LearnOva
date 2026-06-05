@@ -1,39 +1,33 @@
 .instructorStatCard {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
+  gap: 16px;
   min-width: 0;
-  padding: 18px 18px 16px;
+  min-height: 172px;
+  padding: 22px 22px 18px;
   border-radius: 6px;
-  border: 1px solid rgba(37, 99, 235, 0.28);
-  background:
-    radial-gradient(
-      circle at 92% 8%,
-      rgba(37, 99, 235, 0.12),
-      transparent 22%
-    ),
-    linear-gradient(180deg, var(--blue-pale) 0%, #ffffff 72%, #f8fafc 100%);
-  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: var(--bg-main);
   box-sizing: border-box;
 }
 
 .instructorStatCard--gold {
-  border-left: 4px solid #b46a00;
+  border-left: 4px solid #2563eb;
 }
 
 .instructorStatIconWrap {
-  width: 48px;
-  height: 48px;
+  width: 54px;
+  height: 54px;
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 16px;
 }
 
 .instructorStatIconWrap--gold {
-  color: #b46a00;
-  background: rgba(37, 99, 235, 0.16);
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.12);
 }
 
 .instructorStatContent {
@@ -45,25 +39,25 @@
   margin: 0;
   color: var(--text-secondary);
   font-size: 12px;
-  line-height: 1.35;
+  line-height: 1.4;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .instructorStatValue {
-  margin: 6px 0 0;
-  color: #1b140c;
-  font-size: 28px;
-  line-height: 1.1;
+  margin: 10px 0 0;
+  color: #101828;
+  font-size: 32px;
+  line-height: 1.05;
   font-weight: 900;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
 }
 
 .instructorStatNote {
-  margin: 6px 0 0;
+  margin: 10px 0 0;
   color: var(--text-secondary);
-  font-size: 12px;
-  line-height: 1.5;
+  font-size: 13px;
+  line-height: 1.7;
   font-weight: 500;
 }

@@ -5,13 +5,13 @@ const categories = [
     label: "Programming",
     percent: 35,
     amount: "$857,500",
-    color: "#daa520",
+    color: "#1f2937",
   },
   {
     label: "AI & Data Science",
     percent: 25,
     amount: "$612,500",
-    color: "#2f4f4f",
+    color: "#334155",
   },
   {
     label: "Business & Entrepreneurship",
@@ -23,19 +23,19 @@ const categories = [
     label: "Design & UX/UI",
     percent: 10,
     amount: "$245,000",
-    color: "#9ca3af",
+    color: "#6b7280",
   },
   {
     label: "Subscriptions",
     percent: 9,
     amount: "$220,500",
-    color: "#b8860b",
+    color: "#94a3b8",
   },
   {
     label: "Professional Certificates",
     percent: 6,
     amount: "$147,000",
-    color: "#f3e5ab",
+    color: "#cbd5e1",
   },
 ];
 

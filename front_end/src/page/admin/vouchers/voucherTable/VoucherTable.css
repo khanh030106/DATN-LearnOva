@@ -156,48 +156,56 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 38px;
   padding: 0;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  border-radius: 10px;
   background: #ffffff;
   cursor: pointer;
-  color: #6b7280;
-  transition: all 0.2s ease;
+  color: var(--blue-dark);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
-.voucherActionBtn:nth-child(1) {
-  /* XEM ICON */
-  color: #3b82f6;
+.voucherActionBtn:hover {
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.22);
+  transform: translateY(-1px);
 }
 
-.voucherActionBtn:nth-child(1):hover {
-  background: #dbeafe;
-  border-color: #3b82f6;
-  color: #1d4ed8;
+.paginationButton {
+  min-width: 42px;
+  padding: 10px 14px;
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  border-radius: 10px;
+  background-color: #f8fafc;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
 
-.voucherActionBtn:nth-child(2) {
-  /* SỬA ICON */
-  color: #f59e0b;
+.paginationButton:hover:not(:disabled) {
+  border-color: var(--blue-primary);
+  background-color: rgba(37, 99, 235, 0.12);
 }
 
-.voucherActionBtn:nth-child(2):hover {
-  background: #fef3c7;
-  border-color: #f59e0b;
-  color: #d97706;
+.paginationButton--active {
+  background-color: var(--blue-primary);
+  color: #1b140c;
+  border-color: var(--blue-primary);
 }
 
-.voucherActionBtn:nth-child(3) {
-  /* XÓA ICON */
-  color: #ef4444;
-}
-
-.voucherActionBtn:nth-child(3):hover {
-  background: #fee2e2;
-  border-color: #ef4444;
-  color: #dc2626;
+.paginationButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 /* ===== RESPONSIVE ===== */

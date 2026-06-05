@@ -3,81 +3,108 @@
   flex-direction: column;
   gap: 16px;
   background: var(--blue-pale);
-  padding: 0;
 }
 
 .reportFilterContainer {
-  background: #ffffff;
-  border-top: 2px solid var(--blue-primary);
-  border-bottom: 1px solid rgba(37, 99, 235, 0.35);
-  padding: 20px 24px;
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 
 .reportFilterTitle {
-  margin-bottom: 18px;
+  margin-bottom: 10px;
 }
 
 .reportFilterTitle h3 {
   margin: 0 0 6px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #3f2b16;
-  letter-spacing: 0.5px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.04em;
 }
 
 .reportFilterTitle p {
   margin: 0;
-  font-size: 0.9rem;
-  color: #8b7355;
+  font-size: 0.92rem;
+  color: #475569;
+  line-height: 1.5;
 }
 
 .reportFilterGrid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 
 .filterField {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
 }
 
 .filterField label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  padding: 8px 12px;
-  font-size: 0.92rem;
-  border: 1px solid var(--border-light);
-  border-radius: 4px;
-  background: #ffffff;
-  color: var(--text-main);
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #64748b;
+}
+
+.filterInput {
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 0.95rem;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filterInput::-webkit-datetime-edit-year-field,
+.filterInput::-moz-placeholder {
+  opacity: 1;
 }
 
 .filterInput:hover {
-  border-color: var(--blue-strong);
+  border-color: rgba(37, 99, 235, 0.35);
 }
 
 .filterInput:focus {
   outline: none;
   border-color: var(--blue-primary);
-  background: var(--surface-hover);
-  .filterDateInput {
-    font-family:
-      system-ui,
-      -apple-system,
-      sans-serif;
-  }
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.filterDateInput {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
 .filterSelect {
   appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236f553f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
-  background-position: right 8px center;
+  background-position: right 14px center;
   background-size: 18px;
-  padding-right: 28px;
+  padding-right: 40px;
 }
 
 @media (max-width: 1280px) {
@@ -97,8 +124,8 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .reportFilterContainer {
-    padding: 16px 20px;
+  .reportFilterSection {
+    padding: 16px 18px;
   }
 }
 
@@ -108,10 +135,10 @@
   }
 
   .reportFilterTitle h3 {
-    font-size: 0.88rem;
+    font-size: 0.92rem;
   }
 
   .reportFilterTitle p {
-    font-size: 0.85rem;
+    font-size: 0.86rem;
   }
 }

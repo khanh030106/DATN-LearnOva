@@ -1,7 +1,4 @@
 .courseProgressChartCard {
-  background: #ffffff;
-  border: 1px solid rgba(37, 99, 235, 0.35);
-  border-radius: 6px;
   padding: 20px 24px;
   display: grid;
   gap: 16px;

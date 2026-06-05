@@ -1,6 +1,8 @@
 import {
   Ban,
   CalendarDays,
+  ChevronLeft,
+  ChevronRight,
   Eye,
   Mail,
   PencilLine,
@@ -272,10 +274,6 @@ const UsersList = () => {
 
                 <div className="userManagementUserStatusWrap">
                   <span className={getStatusClassName(user.statusTone)}>
-                    <span
-                      className="userManagementUserStatusDot"
-                      aria-hidden="true"
-                    />
                     <span>{statusInfo.label}</span>
                   </span>
                 </div>
@@ -334,11 +332,12 @@ const UsersList = () => {
           >
             <button
               type="button"
-              className="userManagementUsersPageButton"
+              className="userManagementUsersPageButton userManagementUsersPageButton--nav"
               disabled={currentPage === 1}
               onClick={() => goToPage(currentPage - 1)}
+              aria-label="Previous page"
             >
-              Before
+              <ChevronLeft size={16} aria-hidden="true" />
             </button>
 
             {Array.from({ length: totalPages }, (_, index) => index + 1).map(
@@ -348,6 +347,7 @@ const UsersList = () => {
                   type="button"
                   className={`userManagementUsersPageButton ${currentPage === page ? "userManagementUsersPageButton--active" : ""}`}
                   onClick={() => goToPage(page)}
+                  aria-label={`Go to page ${page}`}
                 >
                   {page}
                 </button>
@@ -356,11 +356,12 @@ const UsersList = () => {
 
             <button
               type="button"
-              className="userManagementUsersPageButton"
+              className="userManagementUsersPageButton userManagementUsersPageButton--nav"
               disabled={currentPage === totalPages}
               onClick={() => goToPage(currentPage + 1)}
+              aria-label="Next page"
             >
-              Next
+              <ChevronRight size={16} aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -393,7 +394,7 @@ const UsersList = () => {
                 type="button"
                 className="userManagementUsersModalClose"
                 onClick={closeActionPopup}
-                aria-label="Đóng popup"
+                aria-label="Close popup"
               >
                 <Ban size={16} aria-hidden="true" />
               </button>

@@ -6,9 +6,7 @@
   width: 100%;
   padding: 16px 20px;
   border-radius: 14px;
-  background: linear-gradient(180deg, var(--blue-pale) 0%, #f8fafc 100%);
   border: 1px solid rgba(37, 99, 235, 0.26);
-  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.06);
   box-sizing: border-box;
 }
 
@@ -80,25 +78,6 @@
 .instructorFiltersTab--active {
   background: rgba(37, 99, 235, 0.18);
   border-color: rgba(37, 99, 235, 0.35);
-}
-
-.instructorFilters {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 16px;
-  width: 100%;
-  padding: 16px 20px;
-  border-radius: 14px;
-  background: linear-gradient(
-    180deg,
-    var(--blue-pale) 0%,
-    var(--bg-secondary) 100%
-  );
-  border: 1px solid rgba(37, 99, 235, 0.18);
-  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.06);
-  width: 100%;
-  min-width: 0;
 }
 
 .instructorFiltersSearch {

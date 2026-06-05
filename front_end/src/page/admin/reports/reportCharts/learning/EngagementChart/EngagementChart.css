@@ -1,9 +1,6 @@
 .learningChartCard,
 .learningInfoCard {
-  background: #fff;
-  border-radius: 24px;
   padding: 24px;
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06);
 }
 
 .chartCardHeader {

@@ -1,9 +1,7 @@
 .revenueChartCard {
   width: 100%;
   padding: 28px 30px;
-  border-radius: 6px;
   border: none;
-  background: transparent;
   box-shadow: none;
   box-sizing: border-box;
 }

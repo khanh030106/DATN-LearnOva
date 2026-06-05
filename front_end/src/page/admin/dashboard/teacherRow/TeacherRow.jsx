@@ -30,13 +30,13 @@ const teachers = [
 
 const TeacherRow = () => {
   return (
-    <section className="teacherRowSection" aria-label="Giảng viên tiêu biểu">
+    <section className="teacherRowSection" aria-label="Featured Instructors">
       <div className="teacherRowCard">
         <div className="teacherRowCardHeader">
           <div>
-            <h3 className="teacherRowCardTitle">Giảng viên tiêu biểu</h3>
+            <h3 className="teacherRowCardTitle">Featured Instructors</h3>
             <p className="teacherRowCardSubtitle">
-              Những giảng viên đang dẫn đầu về chất lượng giảng dạy
+              Instructors leading in teaching quality
             </p>
           </div>
         </div>
@@ -56,7 +56,7 @@ const TeacherRow = () => {
               <div className="teacherRowContent">
                 <p className="teacherRowName">{teacher.name}</p>
                 <p className="teacherRowCourseCount">
-                  {teacher.courses} khóa học
+                  {teacher.courses} courses
                 </p>
               </div>
 
@@ -73,7 +73,7 @@ const TeacherRow = () => {
         </div>
 
         <button type="button" className="teacherRowButton">
-          Xem bảng xếp hạng
+          View Rankings
         </button>
       </div>
     </section>

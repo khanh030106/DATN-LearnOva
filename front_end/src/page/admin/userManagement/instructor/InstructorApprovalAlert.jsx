@@ -53,8 +53,6 @@ const InstructorApprovalAlert = () => {
       className="instructorApprovalAlert"
       aria-label={alertContent.title}
     >
-      <div className="instructorApprovalAlertDecoration" aria-hidden="true" />
-
       <div className="instructorApprovalAlertIcon" aria-hidden="true">
         !
       </div>

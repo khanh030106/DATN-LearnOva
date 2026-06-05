@@ -3,8 +3,8 @@ import "./ReportFilter.css";
 
 const ReportFilter = () => {
   const [filters, setFilters] = useState({
-    startDate: "01/05/2026",
-    endDate: "04/06/2026",
+    startDate: "2026-05-01",
+    endDate: "2026-06-04",
     reportType: "All Reports",
     category: "All Categories",
     instructor: "All Instructors",
@@ -40,7 +40,7 @@ const ReportFilter = () => {
             <input
               type="date"
               name="startDate"
-              value={filters.startDate.split("/").reverse().join("-")}
+              value={filters.startDate}
               onChange={handleDateChange}
               className="filterInput filterDateInput"
             />
@@ -52,7 +52,7 @@ const ReportFilter = () => {
             <input
               type="date"
               name="endDate"
-              value={filters.endDate.split("/").reverse().join("-")}
+              value={filters.endDate}
               onChange={handleDateChange}
               className="filterInput filterDateInput"
             />
