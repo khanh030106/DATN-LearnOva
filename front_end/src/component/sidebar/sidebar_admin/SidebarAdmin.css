@@ -6,37 +6,18 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  width: 256px;
-  padding: 20px 16px;
-  background:
-    radial-gradient(
-      circle at top left,
-      rgba(15, 44, 103, 0.22),
-      transparent 28%
-    ),
-    linear-gradient(180deg, #0c1f45 0%, #0f2b5b 100%);
-  border-right: 1px solid rgba(15, 44, 103, 0.35);
-  box-shadow: 8px 0 24px rgba(7, 26, 51, 0.18);
+  width: 250px;
+  padding: 26px 14px 18px;
+  background: linear-gradient(180deg, #071a33 0%, #0b2545 100%);
+  border-right: 1px solid rgba(147, 197, 253, 0.14);
+  color: #ffffff;
 }
 
 .sidebarAdminBrand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 6px 8px 18px;
-}
-
-.sidebarAdminBrandIcon {
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-}
-
-.sidebarAdminBrandIconImage {
   display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  padding: 0 0 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  text-align: center;
 }
 
 .sidebarAdminBrandText {
@@ -45,63 +26,69 @@
 
 .sidebarAdminBrandWordmark {
   display: block;
-  width: 116px;
+  width: 178px;
+  max-width: 100%;
   height: auto;
   object-fit: contain;
+  margin: 0 auto;
 }
 
 .sidebarAdminBrandSubtitle {
-  margin: 4px 0 0;
-  color: var(--blue-soft);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
+  margin: 8px auto 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
 .sidebarAdminNav {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 10px;
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
 }
 
 .sidebarAdminNavItem {
+  position: relative;
+  min-height: 50px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 13px 14px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: #e7f0ff;
-  text-align: left;
-  font-size: 14px;
-  font-weight: 600;
+  gap: 14px;
+  overflow: hidden;
+  padding: 0 18px 0 22px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.94);
   text-decoration: none;
-  cursor: pointer;
+  font-size: 1.02rem;
+  font-weight: 700;
   transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
+    background 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.sidebarAdminNavItem:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
+.sidebarAdminNavItem::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  content: "";
+  background: #2563eb;
+  transition: width 0.25s ease;
 }
 
+.sidebarAdminNavItem:hover,
 .sidebarAdminNavItemActive {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   color: #ffffff;
-  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.28);
+  background: rgba(0, 46, 162, 0.8);
 }
 
-.sidebarAdminNavItemActive:hover {
-  color: #ffffff;
+.sidebarAdminNavItem:hover::before,
+.sidebarAdminNavItemActive::before {
+  width: 0;
 }
 
-.sidebarAdminNavItemActive .sidebarAdminNavLabel,
+.sidebarAdminNavItem:hover .sidebarAdminNavIcon,
 .sidebarAdminNavItemActive .sidebarAdminNavIcon {
   color: #ffffff;
 }
@@ -135,28 +122,31 @@
   width: 100%;
   padding: 12px 14px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   background: transparent;
-  color: #5f6f86;
+  color: rgba(255, 255, 255, 0.72);
   text-align: left;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .sidebarAdminFooterAction:hover {
-  background: rgba(255, 250, 240, 0.9);
-  color: #1a2e6e;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 
 .sidebarAdminFooterActionDanger {
-  color: #ff3434;
+  color: #f87171;
 }
 
 .sidebarAdminFooterActionDanger:hover {
-  background: rgba(255, 52, 52, 0.06);
-  color: #ff3434;
+  background: rgba(248, 113, 113, 0.12);
+  color: #f87171;
 }
 
 .sidebarAdminFooterActionIcon {
@@ -180,11 +170,10 @@
     position: relative;
     top: auto;
     border-right: none;
-    border-bottom: 1px solid rgba(232, 190, 116, 0.18);
+    border-bottom: 1px solid rgba(147, 197, 253, 0.18);
   }
 
   .sidebarAdminNav {
-    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 

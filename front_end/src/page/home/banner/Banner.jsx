@@ -1,6 +1,6 @@
 import HomeBannerImg from "../../../assets/home/HomeBanner.jpg";
 import "./Banner.css";
-import Header from "../../../component/header/main_header/Header.jsx";
+import Header from "../../../component/header/user_header/Header.jsx";
 
 const HomeBanner = () => {
     return (

@@ -11,6 +11,15 @@ import Revenue from "../page/admin/revenue/Revenue.jsx";
 import Reports from "../page/admin/reports/Reports.jsx";
 import Vouchers from "../page/admin/vouchers/Vouchers.jsx";
 import VoucherCreate from "../page/admin/vouchers/voucherCreate/VoucherCreate.jsx";
+import TeacherLayout from "../layout/teacher/TeacherLayout.jsx";
+import OverviewPage from "../page/teacher/overview/OverviewPage.jsx";
+import CoursesPage from "../page/teacher/courses/CoursesPage.jsx";
+import CourseCreationPage from "../page/teacher/courses/create/CourseCreationPage.jsx";
+import PromotionsPage from "../page/teacher/promotions/PromotionsPage.jsx";
+import StudentsPage from "../page/teacher/students/StudentsPage.jsx";
+import RevenuePage from "../page/teacher/revenue/RevenuePage.jsx";
+import AnalyticsPage from "../page/teacher/analytics/AnalyticsPage.jsx";
+import QaPage from "../page/teacher/qa/QaPage.jsx";
 
 const App = () => {
   return (
@@ -31,6 +40,20 @@ const App = () => {
           <Route path="reports" element={<Reports />} />
           <Route path="vouchers" element={<Vouchers />} />
           <Route path="vouchers/create" element={<VoucherCreate />} />
+        </Route>
+        <Route element={<HomeLayout />}>
+          <Route path="/learnova/home" element={<Home />} />
+        </Route>
+
+        <Route path="/learnova/teacher" element={<TeacherLayout />}>
+          <Route index element={<OverviewPage />} />
+          <Route path="courses" element={<CoursesPage />} />
+          <Route path="courses/create" element={<CourseCreationPage />} />
+          <Route path="promotions" element={<PromotionsPage />} />
+          <Route path="students" element={<StudentsPage />} />
+          <Route path="revenue" element={<RevenuePage />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
+          <Route path="qa" element={<QaPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

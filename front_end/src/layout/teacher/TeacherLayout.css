@@ -1,0 +1,276 @@
+.teacher-shell {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  overflow: hidden;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.teacher-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 26px 14px 18px;
+  background: linear-gradient(180deg, #071a33 0%, #0b2545 100%);
+  border-right: 1px solid rgba(147, 197, 253, 0.14);
+}
+
+.teacher-brand {
+  display: block;
+  padding: 0 20px 18px;
+  border-bottom: 1px solid #ffffff4a;
+}
+
+.teacher-brand img {
+  display: block;
+  width: 178px;
+  max-width: 100%;
+}
+
+.teacher-brand small {
+  display: block;
+  color: #ffffff;
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.teacher-sidebar__collapse {
+  width: 52px;
+  height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: #fff7e8;
+  color: #24364d;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(232, 190, 116, 0.14);
+}
+
+.teacher-sidebar__nav-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.teacher-nav {
+  display: grid;
+  gap: 10px;
+}
+
+.teacher-nav__link {
+  position: relative;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  overflow: hidden;
+  padding: 0 18px 0 22px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-size: 0.96rem;
+  font-weight: 800;
+  transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.teacher-nav__link::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  content: "";
+  background: #2563eb;
+  transition: width 0.25s ease;
+}
+
+.teacher-nav__link svg,
+.teacher-nav__link span {
+  position: relative;
+  z-index: 1;
+}
+
+.teacher-nav__link svg {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.teacher-nav__link span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 17px;
+  font-family: math;
+  letter-spacing: 1.1px;
+}
+
+.teacher-nav__link:hover,
+.teacher-nav__link--active {
+  color: #ffffff;
+  background: #002ea2c9;
+}
+
+.teacher-nav__link:hover svg,
+.teacher-nav__link--active svg {
+  color: #ffffff;
+}
+
+.teacher-nav__link--active::before {
+  width: 0;
+}
+
+.teacher-sidebar__divider {
+  height: 1px;
+  margin: 0 12px;
+  background: rgba(232, 190, 116, 0.24);
+}
+
+.teacher-create {
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: auto;
+  border-radius: 10px;
+  background: #5440ec;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 900;
+  font-family: math, sans-serif;
+}
+
+.teacher-create svg {
+  color: #ffffff;
+}
+
+.teacher-sidebar__profile {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 18px 10px 0;
+  border-top: 1px solid rgba(147, 197, 253, 0.22);
+}
+
+.teacher-sidebar__profile img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.teacher-sidebar__profile strong {
+  display: block;
+  color: #ffffff;
+  font-size: 0.92rem;
+  line-height: 1.2;
+}
+
+.teacher-sidebar__profile small {
+  display: block;
+  margin-top: 3px;
+  color: #dbeafe;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.teacher-sidebar__profile-arrow {
+  color: #50619a;
+}
+
+.teacher-workspace {
+  min-width: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.teacher-main {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+}
+
+@media (max-width: 1080px) {
+  .teacher-shell {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .teacher-sidebar {
+    padding-inline: 14px;
+  }
+
+  .teacher-brand div,
+  .teacher-sidebar__collapse,
+  .teacher-nav__label,
+  .teacher-create span,
+  .teacher-sidebar__profile div,
+  .teacher-sidebar__profile-arrow {
+    display: none;
+  }
+
+  .teacher-brand,
+  .teacher-nav__link,
+  .teacher-create,
+  .teacher-sidebar__profile {
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  .teacher-sidebar__profile {
+    display: flex;
+  }
+}
+
+@media (max-width: 760px) {
+  .teacher-shell {
+    height: auto;
+    min-height: 100vh;
+    display: block;
+    overflow: visible;
+  }
+
+  .teacher-sidebar {
+    position: static;
+    height: auto;
+    padding: 18px 16px;
+  }
+
+  .teacher-nav {
+    grid-template-columns: repeat(4, minmax(54px, 1fr));
+  }
+
+  .teacher-main {
+    padding-inline: 16px;
+  }
+
+  .teacher-workspace {
+    height: auto;
+    overflow: visible;
+  }
+
+  .teacher-main {
+    overflow: visible;
+  }
+}
+
+@media (max-width: 460px) {
+  .teacher-sidebar {
+    padding-inline: 16px;
+  }
+
+  .teacher-nav {
+    grid-template-columns: repeat(3, minmax(54px, 1fr));
+  }
+}
