@@ -8,7 +8,7 @@ const ActiveUsersCard = ({ count, note }) => {
         <div className="reportCardIcon reportCardIconAccentBlue">
           <FiActivity size={18} />
         </div>
-        <span className="reportCardLabel">Người dùng hoạt động</span>
+        <span className="reportCardLabel">Active Users</span>
       </div>
       <div className="reportCardValue">{count}</div>
       <div className="reportCardNote">{note}</div>

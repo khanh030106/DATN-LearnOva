@@ -1,3 +1,34 @@
+/* =========================================
+   1. ĐỊNH NGHĨA BIẾN MÀU (COLOR VARIABLES)
+========================================= */
+:root {
+  --blue-deep-navy: #071a33;
+  --blue-dark: #0f172a;
+
+  --blue-primary: #1d4ed8;
+  --blue-strong: #2563eb;
+  --blue-medium: #3b82f6;
+
+  --blue-soft: #93c5fd;
+  --blue-pale: #dbeafe;
+
+  --blue-hover: #eff6ff;
+
+  --bg-main: #f8fafc;
+  --bg-secondary: #f1f5f9;
+
+  --border-light: #e2e8f0;
+  --border-soft: #cbd5e1;
+
+  --text-main: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-placeholder: #94a3b8;
+}
+
+/* =========================================
+   2. STYLES CHO COMPONENT
+========================================= */
 .dashboardStatistics {
   width: 100%;
   display: grid;
@@ -13,9 +44,9 @@
   padding: 16px 18px;
   min-height: 88px;
   border-radius: 6px;
-  background: linear-gradient(180deg, #fffdf8 0%, #ffffff 100%);
-  border: 1px solid rgba(232, 190, 116, 0.26);
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  background: linear-gradient(180deg, var(--bg-main) 0%, #ffffff 100%);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.08);
 }
 
 .dashboardStatisticsCardIcon {
@@ -27,8 +58,12 @@
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  background: linear-gradient(135deg, #e8be74 0%, #d9a95f 100%);
-  box-shadow: 0 10px 18px rgba(232, 190, 116, 0.22);
+  background: linear-gradient(
+    135deg,
+    var(--blue-primary) 0%,
+    var(--blue-strong) 100%
+  );
+  box-shadow: 0 10px 18px rgba(37, 99, 235, 0.22);
 }
 
 .dashboardStatisticsCardBody {
@@ -46,7 +81,8 @@
 
 .dashboardStatisticsCardLabel {
   margin: 0;
-  color: #334155;
+  /* CHANGED: Text Secondary theo Palette */
+  color: var(--text-secondary);
   font-size: 14px;
   line-height: 1.35;
   font-weight: 600;
@@ -67,17 +103,20 @@
 }
 
 .dashboardStatisticsCardChange--success {
+  /* Giữ màu xanh lá chuẩn semantic UI cho Success */
   color: #15803d;
   background: rgba(34, 197, 94, 0.12);
 }
 
 .dashboardStatisticsCardChange--info {
-  color: #2563eb;
-  background: rgba(59, 130, 246, 0.12);
+  /* CHANGED: Dùng dải màu Pale/Strong cho trạng thái Info */
+  color: var(--blue-strong);
+  background: var(--blue-pale);
 }
 
 .dashboardStatisticsCardValue {
-  color: #111827;
+  /* CHANGED: Text Main theo Palette */
+  color: var(--text-main);
   font-size: 24px;
   line-height: 1.1;
   font-weight: 800;
@@ -87,12 +126,16 @@
 
 .dashboardStatisticsCardNote {
   margin: 0;
-  color: #7a8496;
+  /* CHANGED: Text Muted theo Palette */
+  color: var(--text-muted);
   font-size: 12px;
   line-height: 1.45;
   font-style: italic;
 }
 
+/* =========================================
+   3. RESPONSIVE QUERIES
+========================================= */
 @media (max-width: 1200px) {
   .dashboardStatistics {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -6,13 +6,13 @@
 .reportChartsHeader h2 {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #3f2b16;
+  color: var(--text-main);
   margin: 0;
 }
 
 .reportChartsTabNav {
-  background: #fff8f0;
-  border: 1px solid rgba(232, 190, 116, 0.35);
+  background: #ffffff;
+  border: 1px solid rgba(37, 99, 235, 0.22);
   border-radius: 6px;
   padding: 0;
 }
@@ -39,13 +39,13 @@
 }
 
 .tabNavButton:hover {
-  background: rgba(232, 190, 116, 0.1);
-  color: #3f2b16;
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--blue-dark);
 }
 
 .tabNavButton.active {
-  color: #ff8c00;
-  border-bottom-color: #ff8c00;
+  color: var(--blue-strong);
+  border-bottom-color: var(--blue-strong);
 }
 
 .reportChartsContent {
@@ -75,12 +75,12 @@
 
   .tabNavButton {
     min-width: unset;
-    border-bottom: 1px solid rgba(232, 190, 116, 0.35);
+    border-bottom: 1px solid rgba(37, 99, 235, 0.2);
     border-left: 2px solid transparent;
   }
 
   .tabNavButton.active {
     border-bottom-color: transparent;
-    border-left-color: #ff8c00;
+    border-left-color: var(--blue-strong);
   }
 }

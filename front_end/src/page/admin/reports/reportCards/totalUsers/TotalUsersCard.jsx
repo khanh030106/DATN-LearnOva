@@ -8,7 +8,7 @@ const TotalUsersCard = ({ count, note }) => {
         <div className="reportCardIcon reportCardIconAccent">
           <FiUsers size={18} />
         </div>
-        <span className="reportCardLabel">Tổng người dùng</span>
+        <span className="reportCardLabel">Total Users</span>
       </div>
       <div className="reportCardValue">{count}</div>
       <div className="reportCardNote">{note}</div>

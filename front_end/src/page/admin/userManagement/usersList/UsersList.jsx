@@ -17,9 +17,9 @@ const usersData = [
     id: 1,
     name: "Nguyễn Minh Anh",
     email: "minhanh@learnoa.com",
-    role: "Học viên",
+    role: "Student",
     roleTone: "student",
-    status: "Đang hoạt động",
+    status: "Active",
     statusTone: "active",
     joinedAt: "12/01/2026",
     avatar: "https://i.pravatar.cc/120?img=32",
@@ -28,9 +28,9 @@ const usersData = [
     id: 2,
     name: "Trần Quốc Huy",
     email: "quochuy@learnoa.com",
-    role: "Giảng viên",
+    role: "Instructor",
     roleTone: "teacher",
-    status: "Chờ duyệt",
+    status: "Pending",
     statusTone: "pending",
     joinedAt: "18/01/2026",
     avatar: "https://i.pravatar.cc/120?img=12",
@@ -39,9 +39,9 @@ const usersData = [
     id: 3,
     name: "Phạm Gia Hân",
     email: "giahann@learnoa.com",
-    role: "Học viên",
+    role: "Student",
     roleTone: "student",
-    status: "Đang hoạt động",
+    status: "Active",
     statusTone: "active",
     joinedAt: "21/01/2026",
     avatar: "https://i.pravatar.cc/120?img=44",
@@ -52,7 +52,7 @@ const usersData = [
     email: "thanhtung@learnoa.com",
     role: "Admin",
     roleTone: "admin",
-    status: "Đang hoạt động",
+    status: "Active",
     statusTone: "active",
     joinedAt: "03/02/2026",
     avatar: "https://i.pravatar.cc/120?img=56",
@@ -61,9 +61,9 @@ const usersData = [
     id: 5,
     name: "Vũ Hồng Nhung",
     email: "hongnhung@learnoa.com",
-    role: "Học viên",
+    role: "Student",
     roleTone: "student",
-    status: "Bị khóa",
+    status: "Locked",
     statusTone: "locked",
     joinedAt: "09/02/2026",
     avatar: "https://i.pravatar.cc/120?img=48",
@@ -72,9 +72,9 @@ const usersData = [
     id: 6,
     name: "Đỗ Văn Khánh",
     email: "vankhanh@learnoa.com",
-    role: "Giảng viên",
+    role: "Instructor",
     roleTone: "teacher",
-    status: "Đang hoạt động",
+    status: "Active",
     statusTone: "active",
     joinedAt: "15/02/2026",
     avatar: "https://i.pravatar.cc/120?img=15",
@@ -83,9 +83,9 @@ const usersData = [
     id: 7,
     name: "Ngô Thùy Trang",
     email: "thuytrang@learnoa.com",
-    role: "Học viên",
+    role: "Student",
     roleTone: "student",
-    status: "Chờ duyệt",
+    status: "Pending",
     statusTone: "pending",
     joinedAt: "19/02/2026",
     avatar: "https://i.pravatar.cc/120?img=23",
@@ -96,7 +96,7 @@ const usersData = [
     email: "quangnhat@learnoa.com",
     role: "Admin",
     roleTone: "admin",
-    status: "Đang hoạt động",
+    status: "Active",
     statusTone: "active",
     joinedAt: "25/02/2026",
     avatar: "https://i.pravatar.cc/120?img=7",
@@ -105,9 +105,9 @@ const usersData = [
     id: 9,
     name: "Bùi Khánh Vy",
     email: "khanhvy@learnoa.com",
-    role: "Học viên",
+    role: "Student",
     roleTone: "student",
-    status: "Đang hoạt động",
+    status: "Active",
     statusTone: "active",
     joinedAt: "01/03/2026",
     avatar: "https://i.pravatar.cc/120?img=18",
@@ -116,9 +116,9 @@ const usersData = [
     id: 10,
     name: "Phan Nhật Minh",
     email: "nhatminh@learnoa.com",
-    role: "Giảng viên",
+    role: "Instructor",
     roleTone: "teacher",
-    status: "Đang hoạt động",
+    status: "Active",
     statusTone: "active",
     joinedAt: "04/03/2026",
     avatar: "https://i.pravatar.cc/120?img=29",
@@ -127,9 +127,9 @@ const usersData = [
     id: 11,
     name: "Hồ Thanh Thảo",
     email: "thanhao@learnoa.com",
-    role: "Học viên",
+    role: "Student",
     roleTone: "student",
-    status: "Chờ duyệt",
+    status: "Pending",
     statusTone: "pending",
     joinedAt: "06/03/2026",
     avatar: "https://i.pravatar.cc/120?img=34",
@@ -140,7 +140,7 @@ const usersData = [
     email: "giabao@learnoa.com",
     role: "Admin",
     roleTone: "admin",
-    status: "Đang hoạt động",
+    status: "Active",
     statusTone: "active",
     joinedAt: "08/03/2026",
     avatar: "https://i.pravatar.cc/120?img=21",
@@ -150,11 +150,11 @@ const usersData = [
 const roleMeta = {
   student: {
     icon: UserRound,
-    label: "Học viên",
+    label: "Student",
   },
   teacher: {
     icon: Shield,
-    label: "Giảng viên",
+    label: "Teacher",
   },
   admin: {
     icon: Shield,
@@ -164,22 +164,22 @@ const roleMeta = {
 
 const statusMeta = {
   active: {
-    label: "Đang hoạt động",
+    label: "Active",
   },
   pending: {
-    label: "Chờ duyệt",
+    label: "Pending",
   },
   locked: {
-    label: "Bị khóa",
+    label: "Locked",
   },
 };
 
 const tableColumns = [
-  { id: "user", label: "Người dùng" },
-  { id: "role", label: "Vai trò" },
-  { id: "status", label: "Trạng thái" },
-  { id: "joinedAt", label: "Ngày tham gia" },
-  { id: "actions", label: "Thao tác" },
+  { id: "user", label: "User" },
+  { id: "role", label: "Role" },
+  { id: "status", label: "Status" },
+  { id: "joinedAt", label: "Joined At" },
+  { id: "actions", label: "Actions" },
 ];
 
 const pageSize = 10;
@@ -217,14 +217,11 @@ const UsersList = () => {
   };
 
   return (
-    <section
-      className="userManagementUsersSection"
-      aria-label="Danh sách người dùng"
-    >
+    <section className="userManagementUsersSection" aria-label="User List">
       <div className="userManagementUsersCard">
         <div className="userManagementUsersHeader">
           <div>
-            <h3 className="userManagementUsersTitle">Danh sách người dùng</h3>
+            <h3 className="userManagementUsersTitle">User List</h3>
           </div>
         </div>
 
@@ -294,8 +291,8 @@ const UsersList = () => {
                   <button
                     type="button"
                     className="userManagementUserActionButton"
-                    aria-label={`Xem ${user.name}`}
-                    onClick={() => openActionPopup("Xem", user)}
+                    aria-label={`View ${user.name}`}
+                    onClick={() => openActionPopup("View", user)}
                   >
                     <Eye size={14} aria-hidden="true" />
                   </button>
@@ -303,8 +300,8 @@ const UsersList = () => {
                   <button
                     type="button"
                     className="userManagementUserActionButton userManagementUserActionButton--edit"
-                    aria-label={`Sửa ${user.name}`}
-                    onClick={() => openActionPopup("Sửa", user)}
+                    aria-label={`Edit ${user.name}`}
+                    onClick={() => openActionPopup("Edit", user)}
                   >
                     <PencilLine size={14} aria-hidden="true" />
                   </button>
@@ -312,8 +309,8 @@ const UsersList = () => {
                   <button
                     type="button"
                     className="userManagementUserActionButton userManagementUserActionButton--danger"
-                    aria-label={`Xóa ${user.name}`}
-                    onClick={() => openActionPopup("Xóa", user)}
+                    aria-label={`Delete ${user.name}`}
+                    onClick={() => openActionPopup("Delete", user)}
                   >
                     <Trash2 size={14} aria-hidden="true" />
                   </button>
@@ -325,15 +322,15 @@ const UsersList = () => {
 
         <div className="userManagementUsersFooter">
           <p className="userManagementUsersPageInfo">
-            Hiển thị{" "}
+            Displaying{" "}
             {Math.min((currentPage - 1) * pageSize + 1, usersData.length)}-
-            {Math.min(currentPage * pageSize, usersData.length)} trong tổng số{" "}
-            {usersData.length} người dùng
+            {Math.min(currentPage * pageSize, usersData.length)} out of{" "}
+            {usersData.length} users
           </p>
 
           <div
             className="userManagementUsersPagination"
-            aria-label="Phân trang người dùng"
+            aria-label="User Pagination"
           >
             <button
               type="button"
@@ -341,7 +338,7 @@ const UsersList = () => {
               disabled={currentPage === 1}
               onClick={() => goToPage(currentPage - 1)}
             >
-              Trước
+              Before
             </button>
 
             {Array.from({ length: totalPages }, (_, index) => index + 1).map(
@@ -363,7 +360,7 @@ const UsersList = () => {
               disabled={currentPage === totalPages}
               onClick={() => goToPage(currentPage + 1)}
             >
-              Sau
+              Next
             </button>
           </div>
         </div>
@@ -379,13 +376,13 @@ const UsersList = () => {
             className="userManagementUsersModal"
             role="dialog"
             aria-modal="true"
-            aria-label={`${selectedAction} người dùng`}
+            aria-label={`${selectedAction} User`}
             onClick={(event) => event.stopPropagation()}
           >
             <div className="userManagementUsersModalHeader">
               <div>
                 <p className="userManagementUsersModalEyebrow">
-                  {selectedAction} người dùng
+                  {selectedAction} User
                 </p>
                 <h4 className="userManagementUsersModalTitle">
                   {selectedUser.name}
@@ -413,20 +410,20 @@ const UsersList = () => {
 
               <div className="userManagementUsersModalInfo">
                 <div className="userManagementUsersModalRow">
-                  <span className="userManagementUsersModalLabel">Email</span>
+                  <span className="userManagementUsersModalLabel">Email: </span>
                   <span className="userManagementUsersModalValue">
                     {selectedUser.email}
                   </span>
                 </div>
                 <div className="userManagementUsersModalRow">
-                  <span className="userManagementUsersModalLabel">Vai trò</span>
+                  <span className="userManagementUsersModalLabel">Role: </span>
                   <span className="userManagementUsersModalValue">
                     {selectedUser.role}
                   </span>
                 </div>
                 <div className="userManagementUsersModalRow">
                   <span className="userManagementUsersModalLabel">
-                    Trạng thái
+                    Status:{" "}
                   </span>
                   <span className="userManagementUsersModalValue">
                     {selectedUser.status}
@@ -434,7 +431,7 @@ const UsersList = () => {
                 </div>
                 <div className="userManagementUsersModalRow">
                   <span className="userManagementUsersModalLabel">
-                    Ngày tham gia
+                    Joined Date:{" "}
                   </span>
                   <span className="userManagementUsersModalValue">
                     {selectedUser.joinedAt}
@@ -449,7 +446,7 @@ const UsersList = () => {
                 className="userManagementUsersModalPrimary"
                 onClick={closeActionPopup}
               >
-                Đóng
+                Close
               </button>
             </div>
           </div>

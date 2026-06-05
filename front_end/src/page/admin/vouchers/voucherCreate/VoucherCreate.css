@@ -24,8 +24,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 14px;
-  background: #ffe7c7;
-  color: #bf6d00;
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--blue-strong);
   font-size: 20px;
 }
 
@@ -51,8 +51,8 @@
 
 .voucherCreateFormCard,
 .voucherCreateSummaryCard {
-  background: #fffaf0;
-  border: 1px solid rgba(232, 190, 116, 0.3);
+  background: var(--blue-pale);
+  border: 1px solid rgba(37, 99, 235, 0.3);
   border-radius: 18px;
   padding: 24px;
 }
@@ -124,7 +124,7 @@
 }
 
 .voucherCreateSubmitBtn {
-  background: #e8be74;
+  background: var(--blue-primary);
   color: #1b140c;
 }
 
@@ -158,8 +158,8 @@
   align-items: center;
   padding: 8px 12px;
   border-radius: 999px;
-  background: #fff1d6;
-  color: #b45309;
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--blue-strong);
   font-size: 13px;
   font-weight: 700;
 }

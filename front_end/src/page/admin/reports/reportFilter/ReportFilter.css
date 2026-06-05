@@ -2,14 +2,14 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background: #fffaf0;
+  background: var(--blue-pale);
   padding: 0;
 }
 
 .reportFilterContainer {
-  background: #fff8f0;
-  border-top: 2px solid #e8be74;
-  border-bottom: 1px solid rgba(232, 190, 116, 0.35);
+  background: #ffffff;
+  border-top: 2px solid var(--blue-primary);
+  border-bottom: 1px solid rgba(37, 99, 235, 0.35);
   padding: 20px 24px;
 }
 
@@ -46,36 +46,29 @@
 .filterField label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #6f553f;
-}
-
-.filterInput {
+  color: var(--text-secondary);
   padding: 8px 12px;
   font-size: 0.92rem;
-  border: 1px solid rgba(232, 190, 116, 0.4);
+  border: 1px solid var(--border-light);
   border-radius: 4px;
-  background: #fefdfb;
-  color: #5e4734;
-  transition:
-    border-color 0.2s,
-    background-color 0.2s;
+  background: #ffffff;
+  color: var(--text-main);
 }
 
 .filterInput:hover {
-  border-color: rgba(232, 190, 116, 0.6);
+  border-color: var(--blue-strong);
 }
 
 .filterInput:focus {
   outline: none;
-  border-color: #e8be74;
-  background: #fffbf7;
-}
-
-.filterDateInput {
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
+  border-color: var(--blue-primary);
+  background: var(--surface-hover);
+  .filterDateInput {
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
 }
 
 .filterSelect {

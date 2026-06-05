@@ -50,7 +50,7 @@ const VoucherCampaignChart = () => {
         labels,
         datasets: [
           {
-            label: "Đã dùng",
+            label: "Used",
             data: dataValues,
             backgroundColor: gradient,
             borderRadius: 999,
@@ -87,8 +87,8 @@ const VoucherCampaignChart = () => {
               label(context) {
                 const item = campaignData[context.dataIndex];
                 return [
-                  `Đã dùng: ${item.used} lần`,
-                  `Doanh thu: $${item.revenue.toLocaleString("vi-VN")}`,
+                  `Used: ${item.used} times`,
+                  `Revenue: $${item.revenue.toLocaleString("vi-VN")}`,
                 ];
               },
             },
@@ -134,25 +134,23 @@ const VoucherCampaignChart = () => {
   return (
     <section
       className="voucherCampaignChartSection"
-      aria-label="Chiến dịch voucher hàng đầu"
+      aria-label="Top voucher campaigns"
     >
       <div className="voucherCampaignChartHeader">
         <div>
-          <h2 className="voucherCampaignChartTitle">
-            Chiến dịch Voucher Top Đầu
-          </h2>
+          <h2 className="voucherCampaignChartTitle">Top Voucher Campaigns</h2>
           <p className="voucherCampaignChartSubtitle">
-            Đối chiếu hiệu ích giảm giá và tổng doanh thu đem về.
+            Compare discount impact and total revenue generated.
           </p>
         </div>
       </div>
 
       <div className="voucherCampaignChartCanvasWrapper">
-        <canvas ref={canvasRef} aria-label="Biểu đồ chiến dịch voucher" />
+        <canvas ref={canvasRef} aria-label="Voucher campaign chart" />
       </div>
 
       <div className="voucherCampaignChartSummary">
-        <span>Chiết khấu tích luỹ:</span>
+        <span>Accumulated discount:</span>
         <strong>${totalRevenue.toLocaleString("vi-VN")} USD</strong>
       </div>
     </section>

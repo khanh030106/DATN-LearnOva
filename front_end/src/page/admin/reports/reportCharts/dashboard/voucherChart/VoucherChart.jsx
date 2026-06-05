@@ -46,7 +46,7 @@ const VoucherChart = () => {
         ticks: {
           font: { size: 12, family: "system-ui" },
           color: "#a89a85",
-          callback: (value) => value + " lượt",
+          callback: (value) => value + " uses",
         },
         grid: {
           color: "rgba(232, 190, 116, 0.15)",
@@ -69,12 +69,12 @@ const VoucherChart = () => {
     <div className="voucherChartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">HIỆU SUẤT PHÂN BỐ KHUYẾN MẠI</div>
+          <div className="chartCardLabel">PROMOTION PERFORMANCE</div>
           <div className="chartCardTitle">
-            Lượng sử dụng Voucher và mã giảm giá hàng tuần
+            Weekly Voucher and Discount Code Usage
           </div>
         </div>
-        <div className="chartCardBadge chartCardBadgePurple">Khuyến mại</div>
+        <div className="chartCardBadge chartCardBadgePurple">Promotion</div>
       </div>
       <div className="chartContainer">
         <Bar data={data} options={options} />

@@ -1,31 +1,31 @@
 import "./UserManagementFilters.css";
 
 const filterTabs = [
-  { id: "all", label: "Tất cả", active: true },
-  { id: "students", label: "Học viên", active: false },
-  { id: "teachers", label: "Giảng viên", active: false },
-  { id: "admins", label: "Admin", active: false },
-  { id: "locked", label: "Bị khóa", active: false },
+  { id: "all", label: "All", active: true },
+  { id: "students", label: "Students", active: false },
+  { id: "teachers", label: "Instructors", active: false },
+  { id: "admins", label: "Admins", active: false },
+  { id: "locked", label: "Locked", active: false },
 ];
 
 const searchFields = {
-  searchPlaceholder: "Tìm kiếm...",
-  roleLabel: "Vai trò",
-  statusLabel: "Trạng thái",
+  searchPlaceholder: "Search...",
+  roleLabel: "Role",
+  statusLabel: "Status",
 };
 
 const roleOptions = [
-  { id: "all", label: "Tất cả" },
-  { id: "students", label: "Học viên" },
-  { id: "teachers", label: "Giảng viên" },
-  { id: "admins", label: "Admin" },
+  { id: "all", label: "All" },
+  { id: "students", label: "Students" },
+  { id: "teachers", label: "Instructors" },
+  { id: "admins", label: "Admins" },
 ];
 
 const statusOptions = [
-  { id: "all", label: "Tất cả" },
-  { id: "active", label: "Đang hoạt động" },
-  { id: "pending", label: "Chờ duyệt" },
-  { id: "locked", label: "Bị khóa" },
+  { id: "all", label: "All" },
+  { id: "active", label: "Active" },
+  { id: "pending", label: "Pending" },
+  { id: "locked", label: "Locked" },
 ];
 
 const UserManagementFilters = ({
@@ -36,15 +36,12 @@ const UserManagementFilters = ({
   onStatusChange = () => {},
 }) => {
   return (
-    <div
-      className="userManagementFilters"
-      aria-label="Tìm kiếm và lọc người dùng"
-    >
+    <div className="userManagementFilters" aria-label="Search and filter users">
       <div className="userManagementFiltersRow">
         <div
           className="userManagementFiltersChips"
           role="tablist"
-          aria-label="Lọc nhanh"
+          aria-label="Quick filter"
         >
           {filterTabs.map((tab) => (
             <button

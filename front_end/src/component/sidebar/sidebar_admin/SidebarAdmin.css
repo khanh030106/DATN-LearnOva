@@ -11,12 +11,12 @@
   background:
     radial-gradient(
       circle at top left,
-      rgba(232, 190, 116, 0.12),
+      rgba(15, 44, 103, 0.22),
       transparent 28%
     ),
-    linear-gradient(180deg, #fffdf8 0%, #fffaf0 100%);
-  border-right: 1px solid rgba(232, 190, 116, 0.18);
-  box-shadow: 8px 0 24px rgba(15, 23, 42, 0.04);
+    linear-gradient(180deg, #0c1f45 0%, #0f2b5b 100%);
+  border-right: 1px solid rgba(15, 44, 103, 0.35);
+  box-shadow: 8px 0 24px rgba(7, 26, 51, 0.18);
 }
 
 .sidebarAdminBrand {
@@ -52,7 +52,7 @@
 
 .sidebarAdminBrandSubtitle {
   margin: 4px 0 0;
-  color: #8a7650;
+  color: var(--blue-soft);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.16em;
@@ -75,26 +75,34 @@
   border: none;
   border-radius: 6px;
   background: transparent;
-  color: #5f6f86;
+  color: #e7f0ff;
   text-align: left;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .sidebarAdminNavItem:hover {
-  background: rgba(255, 250, 240, 0.9);
-  color: #1a2e6e;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
 }
 
 .sidebarAdminNavItemActive {
-  background: linear-gradient(135deg, #ffab19 0%, #ffa107 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   color: #ffffff;
-  box-shadow: 0 10px 22px rgba(255, 165, 23, 0.24);
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.28);
 }
 
 .sidebarAdminNavItemActive:hover {
+  color: #ffffff;
+}
+
+.sidebarAdminNavItemActive .sidebarAdminNavLabel,
+.sidebarAdminNavItemActive .sidebarAdminNavIcon {
   color: #ffffff;
 }
 

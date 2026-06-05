@@ -4,7 +4,7 @@ import "./VoucherStructureChart.css";
 
 const VoucherStructureChart = () => {
   const data = {
-    labels: ["Giảm giá", "Hoàn tiền", "Shipper", "Khác"],
+    labels: ["Discount", "Cashback", "Shipping", "Other"],
     datasets: [
       {
         data: [45, 28, 15, 12],
@@ -41,7 +41,7 @@ const VoucherStructureChart = () => {
       <div className="chartCardHeader">
         <div>
           <div className="chartCardLabel">VOUCHER</div>
-          <div className="chartCardTitle">Tỷ lệ sử dụng voucher theo loại</div>
+          <div className="chartCardTitle">Voucher usage breakdown by type</div>
         </div>
         <div className="chartCardBadge chartCardBadgeOrange">45%</div>
       </div>

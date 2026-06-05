@@ -17,10 +17,10 @@ const netRevenueValues = [105, 135, 150, 142, 170, 156, 235];
 const reserveFundValues = [20, 14, 28, 12, 18, 22, 10];
 
 const timeRangeFilters = [
-  { value: "day", label: "Ngày" },
-  { value: "week", label: "Tuần" },
-  { value: "month", label: "Tháng" },
-  { value: "year", label: "Năm" },
+  { value: "day", label: "Day" },
+  { value: "week", label: "Week" },
+  { value: "month", label: "Month" },
+  { value: "year", label: "Year" },
 ];
 
 const verticalHoverLinePlugin = {
@@ -67,8 +67,8 @@ const RevenueChart = () => {
         labels: revenueChartLabels,
         datasets: [
           {
-            label: "Tổng doanh thu cơ sở (Giao dịch được ghi nhận)",
-            tooltipShortLabel: "Tổng doanh thu",
+            label: "Gross Revenue (Recorded Transactions)",
+            tooltipShortLabel: "Gross Revenue",
             data: totalRevenueValues,
             borderColor: "#b78e34",
             pointBackgroundColor: "#b78e34",
@@ -80,8 +80,8 @@ const RevenueChart = () => {
             borderWidth: 3,
           },
           {
-            label: "Doanh thu thực nhận (Đã khấu trừ hoàn trả)",
-            tooltipShortLabel: "Doanh thu thực nhận",
+            label: "Net Revenue (After Refund Deductions)",
+            tooltipShortLabel: "Net Revenue",
             data: netRevenueValues,
             borderColor: "#7b5dd1",
             pointBackgroundColor: "#7b5dd1",
@@ -93,8 +93,8 @@ const RevenueChart = () => {
             borderWidth: 3,
           },
           {
-            label: "Quỹ thanh khoản dự phòng dành cho yêu cầu hoàn học phí",
-            tooltipShortLabel: "Hoàn học phí",
+            label: "Reserve Liquidity Fund for Tuition Refund Requests",
+            tooltipShortLabel: "Refunds",
             data: reserveFundValues,
             borderColor: "#ef4444",
             pointBackgroundColor: "#ef4444",
@@ -151,7 +151,7 @@ const RevenueChart = () => {
             callbacks: {
               title(context) {
                 const title = context[0]?.label || "";
-                return ["THỜI ĐOẠN", title];
+                return ["PERIOD", title];
               },
               label(context) {
                 const value = context.parsed.y;
@@ -205,22 +205,22 @@ const RevenueChart = () => {
   }, []);
 
   return (
-    <section className="revenueChartCard" aria-label="Biểu đồ doanh thu">
+    <section className="revenueChartCard" aria-label="Revenue chart">
       <div className="revenueChartHeader">
         <div className="revenueChartTitleGroup">
           <h2 className="revenueChartTitle">
-            Chỉ số Doanh thu &amp; Đối chiếu Giao dịch
+            Revenue Metrics & Transaction Comparison
           </h2>
           <p className="revenueChartSubtitle">
-            Xem xu hướng tổng doanh thu cơ sở, doanh thu thực tế (Net) và quỹ
-            thanh khoản
+            View overall gross revenue trends, net revenue, and liquidity
+            reserve
           </p>
         </div>
 
         <div
           className="revenueChartFilters"
           role="group"
-          aria-label="Chọn khoảng thời gian"
+          aria-label="Select time range"
         >
           {timeRangeFilters.map((filter, index) => (
             <button
@@ -246,15 +246,15 @@ const RevenueChart = () => {
         <div className="revenueChartLegend">
           <div className="revenueChartLegendItem">
             <span className="revenueChartLegendDot gold" />
-            <span>Tổng doanh thu cơ sở</span>
+            <span>Gross Revenue</span>
           </div>
           <div className="revenueChartLegendItem">
             <span className="revenueChartLegendDot purple" />
-            <span>Doanh thu thực nhận</span>
+            <span>Net Revenue</span>
           </div>
           <div className="revenueChartLegendItem">
             <span className="revenueChartLegendDot red" />
-            <span>Quỹ thanh khoản dự phòng</span>
+            <span>Liquidity Reserve Fund</span>
           </div>
         </div>
       </div>

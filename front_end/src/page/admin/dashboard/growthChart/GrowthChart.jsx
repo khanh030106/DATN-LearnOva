@@ -9,12 +9,12 @@ const growthChartYears = [
 ];
 
 const growthChartSeries = [
-  { month: "Tháng 5", value: 4000 },
-  { month: "Tháng 6", value: 5500 },
-  { month: "Tháng 7", value: 4800 },
-  { month: "Tháng 8", value: 7200 },
-  { month: "Tháng 9", value: 9100 },
-  { month: "Tháng 10", value: 12400 },
+  { month: "May", value: 4000 },
+  { month: "June", value: 5500 },
+  { month: "July", value: 4800 },
+  { month: "August", value: 7200 },
+  { month: "September", value: 9100 },
+  { month: "October", value: 12400 },
 ];
 
 const chartData = growthChartSeries.map((item) => item.value);
@@ -35,10 +35,10 @@ const GrowthChart = () => {
         labels: chartLabels,
         datasets: [
           {
-            label: "Người dùng",
+            label: "Users",
             data: chartData,
-            backgroundColor: "rgba(255, 171, 25, 0.95)",
-            hoverBackgroundColor: "rgba(242, 181, 45, 1)",
+            backgroundColor: "#2563EB",
+            hoverBackgroundColor: "#1D4ED8",
             borderRadius: 6,
             borderSkipped: false,
             barThickness: 80,
@@ -57,15 +57,15 @@ const GrowthChart = () => {
             enabled: true,
             displayColors: false,
             padding: 12,
-            backgroundColor: "#ffffff",
-            titleColor: "#1b140c",
-            bodyColor: "#1f2937",
-            borderColor: "rgba(232, 190, 116, 0.45)",
+            backgroundColor: "#FFFFFF",
+            titleColor: "#0F172A",
+            bodyColor: "#475569",
+            borderColor: "#CBD5E1",
             borderWidth: 1,
             cornerRadius: 6,
             callbacks: {
               label(context) {
-                return `${context.parsed.y.toLocaleString("vi-VN")} người dùng`;
+                return `${context.parsed.y.toLocaleString("en-US")} users`;
               },
             },
           },
@@ -85,7 +85,7 @@ const GrowthChart = () => {
               drawBorder: false,
             },
             ticks: {
-              color: "#7a6b52",
+              color: "#475569",
               font: {
                 size: 12,
                 weight: 600,
@@ -97,7 +97,7 @@ const GrowthChart = () => {
             max: 14000,
             ticks: {
               stepSize: 3500,
-              color: "#9ca3af",
+              color: "#64748B",
               font: {
                 size: 11,
                 weight: 600,
@@ -107,7 +107,7 @@ const GrowthChart = () => {
               },
             },
             grid: {
-              color: "rgba(232, 190, 116, 0.24)",
+              color: "rgba(203, 213, 225, 0.6)",
               borderDash: [4, 4],
               drawBorder: false,
             },
@@ -122,14 +122,12 @@ const GrowthChart = () => {
   }, []);
 
   return (
-    <section className="growthChartCard" aria-label="Tăng trưởng người dùng">
+    <section className="growthChartCard" aria-label="User Growth Chart">
       <div className="growthChartCardHeader">
         <div className="growthChartCardTitleGroup">
-          <div className="growthChartCardBadge">Phân tích dữ liệu</div>
-          <h3 className="growthChartCardTitle">Tăng trưởng người dùng</h3>
-          <p className="growthChartCardSubtitle">
-            Dữ liệu theo 6 tháng gần nhất
-          </p>
+          <div className="growthChartCardBadge">DATA ANALYTICS</div>
+          <h3 className="growthChartCardTitle">User Growth</h3>
+          <p className="growthChartCardSubtitle">Data from the last 6 months</p>
         </div>
 
         <div className="growthChartCardFilter">
@@ -137,7 +135,7 @@ const GrowthChart = () => {
             className="growthChartCardFilterLabel"
             htmlFor="growthChartYear"
           >
-            Chu kỳ
+            Cycle
           </label>
 
           <select

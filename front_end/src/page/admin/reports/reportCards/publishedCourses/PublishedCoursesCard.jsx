@@ -8,7 +8,7 @@ const PublishedCoursesCard = ({ count, note }) => {
         <div className="reportCardIcon reportCardIconAccentPeach">
           <FiBookOpen size={18} />
         </div>
-        <span className="reportCardLabel">Khóa học đã xuất bản</span>
+        <span className="reportCardLabel">Published Courses</span>
       </div>
       <div className="reportCardValue">{count}</div>
       <div className="reportCardNote">{note}</div>

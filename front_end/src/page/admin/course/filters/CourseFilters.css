@@ -31,7 +31,7 @@
   left: 16px;
   top: 50%;
   transform: translateY(-50%);
-  color: #e8be74;
+  color: var(--blue-primary);
   pointer-events: none;
 }
 
@@ -40,8 +40,8 @@
   height: 42px;
   padding: 0 18px 0 42px;
   border-radius: 9999px;
-  border: 1px solid rgba(232, 190, 116, 0.22);
-  background-color: #fffdf8;
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  background-color: #f8fafc;
   color: #1b140c;
   font-size: 14px;
   font-weight: 500;
@@ -53,13 +53,13 @@
 }
 
 .courseSearchInput::placeholder {
-  color: #8a7650;
+  color: var(--text-secondary);
 }
 
 .courseSearchInput:focus {
   outline: none;
-  border-color: #e8be74;
-  background-color: #fffdf8;
+  border-color: var(--blue-primary);
+  background-color: #f8fafc;
 }
 
 /* Dropdown Wrapper */
@@ -76,10 +76,10 @@
   gap: 8px;
   height: 42px;
   padding: 0 16px;
-  border: 1px solid rgba(232, 190, 116, 0.22);
+  border: 1px solid rgba(37, 99, 235, 0.22);
   border-radius: 6px;
-  background-color: #fffdf8;
-  color: #7a6b52;
+  background-color: #f8fafc;
+  color: var(--text-secondary);
   font-size: 14px;
   font-weight: 500;
   font-family: "Inter", sans-serif;
@@ -103,13 +103,13 @@
 }
 
 .filterDropdownButton:hover {
-  border-color: #e8be74;
-  background-color: rgba(232, 190, 116, 0.06);
+  border-color: var(--blue-primary);
+  background-color: rgba(37, 99, 235, 0.06);
 }
 
 .filterDropdownButton.active {
-  border-color: #e8be74;
-  background-color: rgba(232, 190, 116, 0.08);
+  border-color: var(--blue-primary);
+  background-color: rgba(37, 99, 235, 0.08);
 }
 
 /* Dropdown Menu */
@@ -118,8 +118,8 @@
   top: calc(100% + 6px);
   left: 0;
   right: 0;
-  background-color: #fffdf8;
-  border: 1px solid rgba(232, 190, 116, 0.22);
+  background-color: #f8fafc;
+  border: 1px solid rgba(37, 99, 235, 0.22);
   border-radius: 6px;
   box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
   z-index: 1000;
@@ -134,7 +134,7 @@
   padding: 10px 16px;
   border: none;
   background-color: transparent;
-  color: #7a6b52;
+  color: var(--text-secondary);
   font-size: 14px;
   font-weight: 500;
   font-family: "Inter", sans-serif;
@@ -144,12 +144,12 @@
 }
 
 .filterDropdownItem:hover {
-  background-color: rgba(232, 190, 116, 0.12);
+  background-color: rgba(37, 99, 235, 0.12);
   color: #1b140c;
 }
 
 .filterDropdownItem.active {
-  background-color: rgba(232, 190, 116, 0.22);
+  background-color: rgba(37, 99, 235, 0.22);
   color: #1b140c;
   font-weight: 600;
 }
@@ -164,7 +164,7 @@
 }
 
 .priceFilterLabel {
-  color: #7a6b52;
+  color: var(--text-secondary);
   font-size: 13px;
   font-weight: 600;
   font-family: "Inter", sans-serif;
@@ -175,10 +175,10 @@
 
 .priceFilterTab {
   padding: 8px 16px;
-  border: 1px solid rgba(232, 190, 116, 0.22);
+  border: 1px solid rgba(37, 99, 235, 0.22);
   border-radius: 6px;
-  background-color: #fffdf8;
-  color: #7a6b52;
+  background-color: #f8fafc;
+  color: var(--text-secondary);
   font-size: 13px;
   font-weight: 600;
   font-family: "Inter", sans-serif;
@@ -192,14 +192,14 @@
 }
 
 .priceFilterTab:hover {
-  border-color: #e8be74;
-  background-color: rgba(232, 190, 116, 0.06);
+  border-color: var(--blue-primary);
+  background-color: rgba(37, 99, 235, 0.06);
   color: #1b140c;
 }
 
 .priceFilterTab.active {
-  border-color: #e8be74;
-  background-color: #e8be74;
+  border-color: var(--blue-primary);
+  background-color: var(--blue-primary);
   color: #1b140c;
   font-weight: 700;
 }

@@ -5,11 +5,11 @@ const ReportFilter = () => {
   const [filters, setFilters] = useState({
     startDate: "01/05/2026",
     endDate: "04/06/2026",
-    reportType: "Tất cả báo cáo",
-    category: "Tất cả Danh mục",
-    instructor: "Tất cả Giảng viên",
-    course: "Tất cả Khóa học",
-    userRole: "Tất cả Vai trò",
+    reportType: "All Reports",
+    category: "All Categories",
+    instructor: "All Instructors",
+    course: "All Courses",
+    userRole: "All Roles",
   });
 
   const handleDateChange = (e) => {
@@ -26,17 +26,17 @@ const ReportFilter = () => {
     <section className="reportFilterSection">
       <div className="reportFilterContainer">
         <div className="reportFilterTitle">
-          <h3>BỘ LỌC BÁO CÁO PHÂN TÍCH NÂNG CAO</h3>
+          <h3>ADVANCED ANALYTICS FILTERS</h3>
           <p>
-            Thiết lập phạm vi phân tích để tạo mẫu hoặc tải xuống biểu độ tương
-            quan dưới đây.
+            Set the analysis scope to preview or download the related analytics
+            below.
           </p>
         </div>
 
         <div className="reportFilterGrid">
           {/* Start Date */}
           <div className="filterField">
-            <label>Ngày bắt đầu</label>
+            <label>Start Date</label>
             <input
               type="date"
               name="startDate"
@@ -48,7 +48,7 @@ const ReportFilter = () => {
 
           {/* End Date */}
           <div className="filterField">
-            <label>Ngày kết thúc</label>
+            <label>End Date</label>
             <input
               type="date"
               name="endDate"
@@ -60,83 +60,83 @@ const ReportFilter = () => {
 
           {/* Report Type */}
           <div className="filterField">
-            <label>Loại Báo Cáo</label>
+            <label>Report Type</label>
             <select
               name="reportType"
               value={filters.reportType}
               onChange={handleSelectChange}
               className="filterInput filterSelect"
             >
-              <option>Tất cả báo cáo</option>
-              <option>Báo cáo doanh thu</option>
-              <option>Báo cáo người dùng</option>
-              <option>Báo cáo khóa học</option>
-              <option>Báo cáo giảng viên</option>
+              <option>All Reports</option>
+              <option>Revenue Report</option>
+              <option>User Report</option>
+              <option>Course Report</option>
+              <option>Instructor Report</option>
             </select>
           </div>
 
           {/* Category */}
           <div className="filterField">
-            <label>Danh mục chuyên ngành</label>
+            <label>Category</label>
             <select
               name="category"
               value={filters.category}
               onChange={handleSelectChange}
               className="filterInput filterSelect"
             >
-              <option>Tất cả Danh mục</option>
-              <option>Công nghệ</option>
-              <option>Kinh doanh</option>
-              <option>Thiết kế</option>
-              <option>Ngôn ngữ</option>
+              <option>All Categories</option>
+              <option>Technology</option>
+              <option>Business</option>
+              <option>Design</option>
+              <option>Language</option>
             </select>
           </div>
 
           {/* Instructor */}
           <div className="filterField">
-            <label>Giảng viên đóng góp</label>
+            <label>Instructor</label>
             <select
               name="instructor"
               value={filters.instructor}
               onChange={handleSelectChange}
               className="filterInput filterSelect"
             >
-              <option>Tất cả Giảng viên</option>
-              <option>Giảng viên A</option>
-              <option>Giảng viên B</option>
-              <option>Giảng viên C</option>
+              <option>All Instructors</option>
+              <option>Instructor A</option>
+              <option>Instructor B</option>
+              <option>Instructor C</option>
             </select>
           </div>
 
           {/* Course */}
           <div className="filterField">
-            <label>Khóa học cụ thể</label>
+            <label>Specific Course</label>
             <select
               name="course"
               value={filters.course}
               onChange={handleSelectChange}
               className="filterInput filterSelect"
             >
-              <option>Tất cả Khóa học</option>
-              <option>Khóa học 1</option>
-              <option>Khóa học 2</option>
-              <option>Khóa học 3</option>
+              <option>All Courses</option>
+              <option>Course 1</option>
+              <option>Course 2</option>
+              <option>Course 3</option>
             </select>
           </div>
 
           {/* User Role */}
           <div className="filterField">
-            <label>Vai trò người thực hiện</label>
+            <label>User Role</label>
             <select
               name="userRole"
               value={filters.userRole}
               onChange={handleSelectChange}
               className="filterInput filterSelect"
             >
-              <option>Tất cả Vai trò</option>
-              <option>Quản trị viên</option>
-              <option>Giảng viên</option>
-              <option>Học viên</option>
+              <option>All Roles</option>
+              <option>Administrator</option>
+              <option>Instructor</option>
+              <option>Student</option>
             </select>
           </div>
         </div>

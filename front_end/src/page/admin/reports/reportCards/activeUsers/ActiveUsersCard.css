@@ -1,6 +1,6 @@
 .reportCard {
-  background: #fff8f0;
-  border: 1px solid rgba(232, 190, 116, 0.35);
+  background: #ffffff;
+  border: 1px solid rgba(37, 99, 235, 0.35);
   border-radius: 6px;
   padding: 12px 24px;
 }
@@ -28,7 +28,7 @@
 .reportCardLabel {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #61412c;
+  color: var(--text-secondary);
 }
 
 .reportCardValue {

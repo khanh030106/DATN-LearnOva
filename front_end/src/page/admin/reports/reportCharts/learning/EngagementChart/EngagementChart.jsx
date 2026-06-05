@@ -38,7 +38,7 @@ const EngagementChart = () => {
         ticks: {
           color: "#8b7355",
           font: { size: 12, family: "system-ui" },
-          callback: (value) => `${value} điểm`,
+          callback: (value) => `${value} pts`,
         },
         grid: { color: "rgba(232, 190, 116, 0.15)", drawBorder: false },
       },
@@ -53,12 +53,12 @@ const EngagementChart = () => {
     <div className="learningChartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">SỰ TƯƠNG TÁC (ENGAGEMENT)</div>
+          <div className="chartCardLabel">ENGAGEMENT</div>
           <div className="chartCardTitle">
-            Chỉ số tương lượng giờ học tập chủ động
+            Active study hour interaction score
           </div>
         </div>
-        <div className="chartCardBadge chartCardBadgeGreen">73 điểm</div>
+        <div className="chartCardBadge chartCardBadgeGreen">73 pts</div>
       </div>
       <div className="chartContainer">
         <Bar data={data} options={options} />

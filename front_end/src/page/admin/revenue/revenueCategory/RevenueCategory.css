@@ -2,7 +2,7 @@
   width: 100%;
   padding: 22px;
   border-radius: 6px;
-  border: 1px solid rgba(232, 190, 116, 0.24);
+  border: 1px solid rgba(37, 99, 235, 0.24);
   background: rgba(255, 250, 241, 0.95);
   box-sizing: border-box;
 }
@@ -57,7 +57,7 @@
 
 .revenueCategoryAmount {
   font-size: 12px;
-  color: #7a6b52;
+  color: var(--text-secondary);
 }
 
 .revenueCategoryBarWrapper {

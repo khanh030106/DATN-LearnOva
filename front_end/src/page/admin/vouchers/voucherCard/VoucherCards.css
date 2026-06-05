@@ -15,7 +15,7 @@
   flex-direction: column;
   gap: 12px;
   min-height: 148px;
-  box-shadow: 0 12px 28px rgba(232, 190, 116, 0.08);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.08);
 }
 
 .voucherCardHeader {
@@ -32,7 +32,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: rgba(232, 190, 116, 0.12);
+  background: rgba(37, 99, 235, 0.12);
   color: #b97309;
 }
 
@@ -61,8 +61,8 @@
 }
 
 .accentGold .voucherCardIcon {
-  background: rgba(232, 190, 116, 0.18);
-  color: #ab6d0d;
+  background: rgba(37, 99, 235, 0.18);
+  color: var(--blue-strong);
 }
 
 .accentGreen .voucherCardIcon {
@@ -87,7 +87,7 @@
 
 .accentOrange .voucherCardIcon {
   background: rgba(255, 176, 45, 0.22);
-  color: #b45309;
+  color: var(--blue-strong);
 }
 
 @media (min-width: 1200px) {

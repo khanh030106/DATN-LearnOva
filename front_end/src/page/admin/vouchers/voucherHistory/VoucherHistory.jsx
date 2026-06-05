@@ -1,35 +1,35 @@
 import "./VoucherHistory.css";
 
-// ===== DỮ LIỆU LỊCH SỬ SỬ DỤNG VOUCHER =====
+// ===== VOUCHER USAGE HISTORY DATA =====
 const voucherHistories = [
   {
     id: 1,
     student: "Nguyễn Văn A",
-    course: "Lập Trình Web với React",
+    course: "Web Programming with React",
     code: "WELCOME2026",
-    originalPrice: "2.500.000 VND",
-    discount: "500.000 VND",
-    finalPrice: "2.000.000 VND",
+    originalPrice: "$105",
+    discount: "$21",
+    finalPrice: "$84",
     date: "2026-05-15 14:30",
   },
   {
     id: 2,
     student: "Trần Thị B",
-    course: "Python Cho Người Mới Bắt Đầu",
+    course: "Python for Beginners",
     code: "LEARNOVA50",
-    originalPrice: "1.500.000 VND",
-    discount: "750.000 VND",
-    finalPrice: "750.000 VND",
+    originalPrice: "$63",
+    discount: "$31",
+    finalPrice: "$32",
     date: "2026-05-14 09:15",
   },
   {
     id: 3,
     student: "Lê Minh C",
-    course: "Khóa Lập Trình Web",
+    course: "Web Programming Course",
     code: "WEBDEV30",
-    originalPrice: "3.000.000 VND",
-    discount: "30 USD",
-    finalPrice: "2.970.000 VND",
+    originalPrice: "$125",
+    discount: "$30",
+    finalPrice: "$95",
     date: "2026-05-13 16:45",
   },
   {
@@ -37,9 +37,9 @@ const voucherHistories = [
     student: "Phạm Hồng D",
     course: "JavaScript Advanced",
     code: "FIX500FF",
-    originalPrice: "2.200.000 VND",
-    discount: "500.000 VND",
-    finalPrice: "1.700.000 VND",
+    originalPrice: "$96",
+    discount: "$22",
+    finalPrice: "$74",
     date: "2026-05-12 11:20",
   },
   {
@@ -47,9 +47,9 @@ const voucherHistories = [
     student: "Đặng Anh E",
     course: "Design UI/UX",
     code: "WELCOME2026",
-    originalPrice: "1.800.000 VND",
-    discount: "500.000 VND",
-    finalPrice: "1.300.000 VND",
+    originalPrice: "$78",
+    discount: "$22",
+    finalPrice: "$56",
     date: "2026-05-11 13:00",
   },
   {
@@ -57,9 +57,9 @@ const voucherHistories = [
     student: "Vũ Tuấn F",
     course: "Node.js & Express",
     code: "LEARNOVA50",
-    originalPrice: "2.100.000 VND",
-    discount: "1.050.000 VND",
-    finalPrice: "1.050.000 VND",
+    originalPrice: "$91",
+    discount: "$46",
+    finalPrice: "$46",
     date: "2026-05-10 10:30",
   },
 ];
@@ -72,10 +72,10 @@ const VoucherHistory = () => {
         <div>
           <div className="voucherHistoryTitleIcon">
             <span className="voucherHistoryIcon">📋</span>
-            <h2 className="voucherHistoryTitle">Nhật Ký Sử Dụng Voucher</h2>
+            <h2 className="voucherHistoryTitle">Voucher Usage History</h2>
           </div>
           <p className="voucherHistorySubtitle">
-            Xem về các giao dịch đang ký khóa học sử dụng mã ưu đãi gặp đây
+            View course registration transactions using discount codes.
           </p>
         </div>
       </div>
@@ -84,7 +84,7 @@ const VoucherHistory = () => {
       <div className="voucherHistoryControls">
         <input
           type="text"
-          placeholder="Tìm tên học viên, mã..."
+          placeholder="Search student name, code..."
           className="voucherHistorySearchInput"
         />
       </div>
@@ -94,17 +94,17 @@ const VoucherHistory = () => {
         <table className="voucherHistoryTable">
           <thead>
             <tr>
-              <th>HỌC VIÊN</th>
-              <th>KHÓA HỌC ĐĂNG KÝ</th>
-              <th>MÃ ÁP DỤNG</th>
-              <th>ĐƠN GIÁ GỐC</th>
-              <th>MỨC ĐÃ GIẢM</th>
-              <th>THANH TOÁN</th>
-              <th>THỜI ĐIỂM DÙNG</th>
+              <th>STUDENT</th>
+              <th>REGISTERED COURSE</th>
+              <th>APPLIED CODE</th>
+              <th>ORIGINAL PRICE</th>
+              <th>DISCOUNT</th>
+              <th>PAID</th>
+              <th>USED AT</th>
             </tr>
           </thead>
           <tbody>
-            {/* MAPPING DỮ LIỆU LỊCH SỬ VOUCHER */}
+            {/* MAPPING VOUCHER HISTORY DATA */}
             {voucherHistories.map((h) => (
               <tr key={h.id}>
                 <td>{h.student}</td>

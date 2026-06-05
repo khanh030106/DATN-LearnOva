@@ -4,12 +4,7 @@ import "./RoleDistributionChart.css";
 
 const RoleDistributionChart = () => {
   const data = {
-    labels: [
-      "Học viên (Student)",
-      "Giảng viên (Instructor)",
-      "Quản trị viên (Admin)",
-      "Trợ giảng (T.A)",
-    ],
+    labels: ["Students", "Instructors", "Admins", "TAs"],
     datasets: [
       {
         data: [43240, 1240, 200, 600],
@@ -65,10 +60,8 @@ const RoleDistributionChart = () => {
     <div className="roleDistributionChartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">CẦU TRÚC THÀNH VIÊN</div>
-          <div className="chartCardTitle">
-            Ti trong phân phối Vai trò người dùng (User Role Distribution)
-          </div>
+          <div className="chartCardLabel">USER STRUCTURE</div>
+          <div className="chartCardTitle">User role distribution</div>
         </div>
       </div>
       <div className="doughnutChartContainer">
@@ -77,7 +70,7 @@ const RoleDistributionChart = () => {
         </div>
         <div className="doughnutStats">
           <div className="statItem">
-            <div className="statLabel">NGƯỜI DÙNG</div>
+            <div className="statLabel">USERS</div>
             <div className="statValue">45.280</div>
           </div>
         </div>

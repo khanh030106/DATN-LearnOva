@@ -3,28 +3,27 @@ import StudentEnrollmentCard from "./cards/studentEnrollment/StudentEnrollmentCa
 import RevenueSummaryCard from "./cards/revenueSummary/RevenueSummaryCard";
 import "./InstructorStatistics.css";
 
-// Dữ liệu tổng quan để map ra 3 khối thống kê.
 const instructorStatisticsData = [
   {
     id: "course-load",
     render: (props) => <CourseLoadCard {...props} />,
-    title: "Khóa học phụ trách",
+    title: "Managed Courses",
     value: "33",
-    note: "Số lượng khóa học đang được giảng viên quản lý.",
+    note: "Number of courses currently managed by instructors.",
   },
   {
     id: "student-enrollment",
     render: (props) => <StudentEnrollmentCard {...props} />,
-    title: "Học viên đăng ký",
+    title: "Student Enrollment",
     value: "5.680",
-    note: "Tổng số lượt học viên tham gia các lớp hiện có.",
+    note: "Total number of student enrollments in existing classes.",
   },
   {
     id: "revenue-summary",
     render: (props) => <RevenueSummaryCard {...props} />,
-    title: "Doanh thu hệ thống",
+    title: "System Revenue",
     value: "608.000.000 đ",
-    note: "Tổng doanh thu ước tính từ các giảng viên đang hoạt động.",
+    note: "Estimated total revenue from active instructors.",
   },
 ];
 

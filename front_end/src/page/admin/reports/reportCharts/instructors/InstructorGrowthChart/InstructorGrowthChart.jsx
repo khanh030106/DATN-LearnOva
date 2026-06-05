@@ -4,10 +4,10 @@ import "./InstructorGrowthChart.css";
 
 const InstructorGrowthChart = () => {
   const data = {
-    labels: ["Tháng 12", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"],
+    labels: ["Dec", "Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
       {
-        label: "Giảng viên mới",
+        label: "New Instructors",
         data: [92, 105, 110, 118, 125, 134],
         borderColor: "#f59e0b",
         backgroundColor: "rgba(245, 158, 11, 0.12)",
@@ -52,10 +52,8 @@ const InstructorGrowthChart = () => {
     <div className="chartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">QUY MÔ GIẢNG VIÊN</div>
-          <div className="chartCardTitle">
-            Tốc độ tăng trưởng giảng viên mới
-          </div>
+          <div className="chartCardLabel">INSTRUCTOR SCALE</div>
+          <div className="chartCardTitle">New Instructor Growth Rate</div>
         </div>
         <div className="chartCardBadge chartCardBadgeOrange">+16%</div>
       </div>

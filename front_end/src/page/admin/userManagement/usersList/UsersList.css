@@ -9,15 +9,7 @@
   min-width: 0;
   padding: 28px 32px 30px;
   border-radius: 6px;
-  border: 1px solid rgba(232, 190, 116, 0.28);
-  background:
-    radial-gradient(
-      circle at 90% 8%,
-      rgba(232, 190, 116, 0.16),
-      transparent 24%
-    ),
-    linear-gradient(180deg, #fffaf0 0%, #ffffff 60%, #fbfdff 100%);
-  box-shadow: 0 14px 34px rgba(120, 86, 24, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.28);
   box-sizing: border-box;
 }
 
@@ -31,7 +23,7 @@
 
 .userManagementUsersTitle {
   margin: 0;
-  color: #1b140c;
+  color: var(--text-main);
   font-size: 20px;
   line-height: 1.25;
   font-weight: 800;
@@ -40,7 +32,7 @@
 
 .userManagementUsersSubtitle {
   margin: 6px 0 0;
-  color: #7a6b52;
+  color: var(--text-secondary);
   font-size: 12px;
   line-height: 1.5;
   font-weight: 500;
@@ -52,10 +44,10 @@
   gap: 8px;
   min-height: 34px;
   padding: 0 14px;
-  border: 1px solid rgba(232, 190, 116, 0.28);
+  border: 1px solid var(--border-soft);
   border-radius: 999px;
-  background: #ffffff;
-  color: #b46a00;
+  background: var(--bg-main);
+  color: var(--blue-primary);
   font-size: 12px;
   font-weight: 800;
   cursor: pointer;
@@ -68,8 +60,8 @@
 
 .userManagementUsersHeaderButton:hover {
   transform: translateY(-1px);
-  border-color: rgba(232, 190, 116, 0.46);
-  box-shadow: 0 10px 18px rgba(120, 86, 24, 0.08);
+  border-color: rgba(37, 99, 235, 0.46);
+  box-shadow: 0 10px 18px rgba(37, 99, 235, 0.08);
 }
 
 .userManagementUsersTableHeader {
@@ -80,7 +72,7 @@
   gap: 16px;
   padding: 0 10px 14px 2px;
   margin-bottom: 4px;
-  color: #9ca3af;
+  color: var(--text-muted);
   font-size: 10px;
   font-weight: 800;
   text-transform: uppercase;
@@ -106,7 +98,7 @@
   gap: 16px;
   align-items: center;
   padding: 14px 10px 14px 2px;
-  border-bottom: 1px solid rgba(232, 190, 116, 0.16);
+  border-bottom: 1px solid rgba(37, 99, 235, 0.16);
 }
 
 .userManagementUserRow:last-child {
@@ -136,7 +128,7 @@
 
 .userManagementUserName {
   margin: 0;
-  color: #001d4a;
+  color: var(--text-main);
   font-size: 13px;
   line-height: 1.35;
   font-weight: 800;
@@ -147,7 +139,7 @@
   align-items: center;
   gap: 6px;
   margin-top: 2px;
-  color: #9ca3af;
+  color: var(--text-placeholder);
 }
 
 .userManagementUserEmail {
@@ -180,13 +172,13 @@
 }
 
 .userManagementUserRole {
-  border: 1px solid rgba(232, 190, 116, 0.22);
+  border: 1px solid rgba(37, 99, 235, 0.22);
   background: rgba(255, 250, 240, 0.95);
   color: #b46a00;
 }
 
 .userManagementUserRole--student {
-  color: #8a7650;
+  color: var(--text-secondary);
 }
 
 .userManagementUserRole--teacher {
@@ -198,21 +190,21 @@
 }
 
 .userManagementUserStatus {
-  border: 1px solid rgba(232, 190, 116, 0.18);
-  background: #fffdf8;
-  color: #7a6b52;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-main);
+  color: var(--text-secondary);
 }
 
 .userManagementUserStatus--active {
-  color: #0f8f52;
+  color: var(--blue-primary);
 }
 
 .userManagementUserStatus--pending {
-  color: #b46a00;
+  color: var(--blue-medium);
 }
 
 .userManagementUserStatus--locked {
-  color: #c2410c;
+  color: var(--text-muted);
 }
 
 .userManagementUserStatusDot {
@@ -220,13 +212,13 @@
   height: 8px;
   border-radius: 50%;
   background: currentColor;
-  box-shadow: 0 0 0 4px rgba(232, 190, 116, 0.12);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
 .userManagementUserJoined {
-  border: 1px solid rgba(232, 190, 116, 0.18);
-  background: #fffdf8;
-  color: #7a6b52;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  background: #f8fafc;
+  color: var(--text-secondary);
 }
 
 .userManagementUserActions {
@@ -241,10 +233,10 @@
   gap: 6px;
   min-height: 32px;
   padding: 0 12px;
-  border: 1px solid rgba(232, 190, 116, 0.24);
   border-radius: 6px;
   background: #ffffff;
-  color: #1a2e6e;
+  border: 1px solid var(--border-soft);
+  color: var(--blue-primary);
   font-size: 11px;
   font-weight: 800;
   cursor: pointer;
@@ -259,311 +251,282 @@
 }
 
 .userManagementUserActionButton--edit {
-  color: #b46a00;
+  color: var(--blue-primary);
 }
 
 .userManagementUserActionButton:hover {
   transform: translateY(-1px);
-  border-color: rgba(232, 190, 116, 0.42);
-  box-shadow: 0 10px 18px rgba(120, 86, 24, 0.08);
-}
-
-.userManagementUserActionButton--danger {
-  color: #c2410c;
-}
-
-.userManagementUsersFooter {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(232, 190, 116, 0.16);
-}
-
-.userManagementUsersPageInfo {
-  margin: 0;
-  color: #7a6b52;
-  font-size: 12px;
-  line-height: 1.5;
-  font-weight: 600;
-}
-
-.userManagementUsersPagination {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.userManagementUsersPageButton {
-  min-width: 38px;
-  min-height: 34px;
-  padding: 0 12px;
-  border: 1px solid rgba(232, 190, 116, 0.24);
-  border-radius: 6px;
-  background: #ffffff;
-  color: #1a2e6e;
-  font-size: 12px;
-  font-weight: 800;
-  cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.userManagementUsersPageButton:hover:not(:disabled) {
-  transform: translateY(-1px);
-  border-color: rgba(232, 190, 116, 0.42);
-  box-shadow: 0 10px 18px rgba(120, 86, 24, 0.08);
-}
-
-.userManagementUsersPageButton:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.userManagementUsersPageButton--active {
-  background: linear-gradient(135deg, #e8be74 0%, #d9a95f 100%);
-  color: #1b140c;
-  border-color: rgba(232, 190, 116, 0.52);
-}
-
-.userManagementUsersModalBackdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: rgba(15, 23, 42, 0.4);
-  backdrop-filter: blur(4px);
-}
-
-.userManagementUsersModal {
-  width: min(100%, 520px);
-  padding: 22px 22px 18px;
-  border-radius: 14px;
-  border: 1px solid rgba(232, 190, 116, 0.24);
-  background: linear-gradient(180deg, #fffaf0 0%, #ffffff 72%, #fffdf8 100%);
-  box-shadow: 0 24px 54px rgba(15, 23, 42, 0.18);
-  box-sizing: border-box;
-}
-
-.userManagementUsersModalHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 18px;
-}
-
-.userManagementUsersModalEyebrow {
-  margin: 0 0 4px;
-  color: #8a7650;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.userManagementUsersModalTitle {
-  margin: 0;
-  color: #1b140c;
-  font-size: 18px;
-  line-height: 1.3;
-  font-weight: 800;
-}
-
-.userManagementUsersModalClose {
-  width: 36px;
-  height: 36px;
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(232, 190, 116, 0.24);
-  border-radius: 50%;
-  background: #ffffff;
-  color: #1a2e6e;
-  cursor: pointer;
-}
-
-.userManagementUsersModalBody {
-  display: grid;
-  grid-template-columns: 84px minmax(0, 1fr);
-  gap: 16px;
-  align-items: start;
-}
-
-.userManagementUsersModalAvatarWrap {
-  width: 84px;
-  height: 84px;
-}
-
-.userManagementUsersModalAvatar {
-  width: 84px;
-  height: 84px;
-  border-radius: 14px;
-  object-fit: cover;
-  border: 2px solid #ffffff;
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.1);
-}
-
-.userManagementUsersModalInfo {
-  display: grid;
-  gap: 10px;
-}
-
-.userManagementUsersModalRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 10px 12px;
-  border: 1px solid rgba(232, 190, 116, 0.18);
-  border-radius: 6px;
-  background: #fffdf8;
-}
-
-.userManagementUsersModalLabel {
-  color: #8a7650;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.userManagementUsersModalValue {
-  color: #1b140c;
-  font-size: 12px;
-  font-weight: 700;
-  text-align: right;
-}
-
-.userManagementUsersModalFooter {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 18px;
-}
-
-.userManagementUsersModalPrimary {
-  min-height: 36px;
-  padding: 0 16px;
-  border: 1px solid rgba(232, 190, 116, 0.28);
-  border-radius: 999px;
-  background: linear-gradient(135deg, #e8be74 0%, #d9a95f 100%);
-  color: #1b140c;
-  font-size: 12px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-@media (max-width: 1200px) {
-  .userManagementUserRow,
-  .userManagementUsersTableHeader {
-    grid-template-columns:
-      minmax(0, 1.35fr) minmax(110px, 0.7fr) minmax(110px, 0.7fr)
-      minmax(110px, 0.7fr) minmax(150px, 0.85fr);
-  }
-}
-
-@media (max-width: 960px) {
-  .userManagementUsersCard {
-    padding: 24px 20px 22px;
-  }
-
-  .userManagementUsersHeader {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .userManagementUsersHeaderButton {
-    align-self: flex-start;
-  }
-
-  .userManagementUsersTableHeader {
-    display: none;
-  }
-
-  .userManagementUserRow {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 16px 0;
-  }
-
-  .userManagementUserActions {
-    justify-content: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .userManagementUserRoleWrap,
-  .userManagementUserStatusWrap,
-  .userManagementUserJoinedWrap {
-    display: flex;
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 640px) {
-  .userManagementUsersCard {
-    padding: 18px 16px 18px;
-  }
-
-  .userManagementUsersTitle {
-    font-size: 18px;
-  }
-
-  .userManagementUserActions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .userManagementUserActionButton {
-    width: 100%;
-    justify-content: center;
+  border-color: rgba(37, 99, 235, 0.42);
+  box-shadow: 0 10px 18px rgba(37, 99, 235, 0.08);
+  .userManagementUserActionButton--danger {
+    color: var(--blue-deep-navy);
   }
 
   .userManagementUsersFooter {
-    align-items: flex-start;
-    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(37, 99, 235, 0.16);
+    font-weight: 600;
   }
 
   .userManagementUsersPagination {
-    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
   }
 
   .userManagementUsersPageButton {
-    flex: 1 1 auto;
+    min-width: 38px;
+    min-height: 34px;
+    padding: 0 12px;
+    border: 1px solid var(--border-soft);
+    border-radius: 6px;
+    background: #ffffff;
+    color: var(--text-main);
+  }
+
+  .userManagementUsersPageButton:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: rgba(37, 99, 235, 0.42);
+    box-shadow: 0 10px 18px rgba(37, 99, 235, 0.08);
+  }
+  .userManagementUsersPageButton:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .userManagementUsersPageButton--active {
+    background: linear-gradient(
+      135deg,
+      var(--blue-primary) 0%,
+      var(--blue-strong) 100%
+    );
+    color: #ffffff;
+    border-color: rgba(37, 99, 235, 0.52);
+  }
+
+  .userManagementUsersModalBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
   }
 
   .userManagementUsersModal {
-    padding: 18px 16px 16px;
+    width: min(100%, 520px);
+    padding: 22px 22px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(37, 99, 235, 0.24);
+    background: #ffffff;
+    .userManagementUsersModalHeader {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .userManagementUsersModalEyebrow {
+      margin: 0 0 4px;
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .userManagementUsersModalTitle {
+      margin: 0;
+      color: #1b140c;
+      font-size: 18px;
+      line-height: 1.3;
+      font-weight: 800;
+    }
+
+    .userManagementUsersModalClose {
+      width: 36px;
+      height: 36px;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(37, 99, 235, 0.24);
+      border-radius: 50%;
+      background: #ffffff;
+      color: #1a2e6e;
+      cursor: pointer;
+    }
+
+    .userManagementUsersModalBody {
+      display: grid;
+      grid-template-columns: 84px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .userManagementUsersModalAvatarWrap {
+      width: 84px;
+      height: 84px;
+    }
+
+    .userManagementUsersModalAvatar {
+      width: 84px;
+      height: 84px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 2px solid #ffffff;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.1);
+    }
+
+    .userManagementUsersModalInfo {
+      display: grid;
+      gap: 10px;
+    }
+
+    .userManagementUsersModalRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 12px;
+      border: 1px solid rgba(37, 99, 235, 0.14);
+      border-radius: 6px;
+      background: var(--blue-hover);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .userManagementUsersModalValue {
+      color: #1b140c;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .userManagementUsersModalFooter {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 18px;
+    }
+
+    .userManagementUsersModalPrimary {
+      min-height: 36px;
+      padding: 0 16px;
+      border: 1px solid rgba(37, 99, 235, 0.28);
+      border-radius: 999px;
+      background: linear-gradient(
+        135deg,
+        var(--blue-primary) 0%,
+        var(--blue-strong) 100%
+      );
+      color: #ffffff;
+    }
   }
 
-  .userManagementUsersModalBody {
-    grid-template-columns: 1fr;
+  @media (max-width: 960px) {
+    .userManagementUsersCard {
+      padding: 24px 20px 22px;
+    }
+
+    .userManagementUsersHeader {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .userManagementUsersHeaderButton {
+      align-self: flex-start;
+    }
+
+    .userManagementUsersTableHeader {
+      display: none;
+    }
+
+    .userManagementUserRow {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 16px 0;
+    }
+
+    .userManagementUserActions {
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .userManagementUserRoleWrap,
+    .userManagementUserStatusWrap,
+    .userManagementUserJoinedWrap {
+      display: flex;
+      justify-content: flex-start;
+    }
   }
 
-  .userManagementUsersModalAvatarWrap {
-    width: 72px;
-    height: 72px;
-  }
+  @media (max-width: 640px) {
+    .userManagementUsersCard {
+      padding: 18px 16px 18px;
+    }
 
-  .userManagementUsersModalAvatar {
-    width: 72px;
-    height: 72px;
-  }
+    .userManagementUsersTitle {
+      font-size: 18px;
+    }
 
-  .userManagementUsersModalRow {
-    align-items: flex-start;
-    flex-direction: column;
-  }
+    .userManagementUserActions {
+      flex-direction: column;
+      align-items: stretch;
+    }
 
-  .userManagementUsersModalValue {
-    text-align: left;
+    .userManagementUserActionButton {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .userManagementUsersFooter {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .userManagementUsersPagination {
+      width: 100%;
+    }
+
+    .userManagementUsersPageButton {
+      flex: 1 1 auto;
+    }
+
+    .userManagementUsersModal {
+      padding: 18px 16px 16px;
+    }
+
+    .userManagementUsersModalBody {
+      grid-template-columns: 1fr;
+    }
+
+    .userManagementUsersModalAvatarWrap {
+      width: 72px;
+      height: 72px;
+    }
+
+    .userManagementUsersModalAvatar {
+      width: 72px;
+      height: 72px;
+    }
+
+    .userManagementUsersModalRow {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .userManagementUsersModalValue {
+      text-align: left;
+    }
   }
 }

@@ -1,13 +1,13 @@
 .totalRevenueCard {
-  background: #fffaf0;
-  border: 1px solid rgba(232, 190, 116, 0.28);
+  background: var(--blue-pale);
+  border: 1px solid rgba(37, 99, 235, 0.28);
   border-radius: 14px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 170px;
-  box-shadow: 0 10px 24px rgba(120, 86, 24, 0.08);
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
 }
 
 .totalRevenueCardHeader {
@@ -23,13 +23,13 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #7a6b52;
+  color: var(--text-secondary);
 }
 
 .totalRevenueCardIcon {
   width: 28px;
   height: 28px;
-  color: #e8be74;
+  color: var(--blue-primary);
 }
 
 .totalRevenueCardBody {

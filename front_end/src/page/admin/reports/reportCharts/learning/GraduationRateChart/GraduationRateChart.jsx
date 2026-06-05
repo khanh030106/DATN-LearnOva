@@ -4,10 +4,10 @@ import "./GraduationRateChart.css";
 
 const GraduationRateChart = () => {
   const data = {
-    labels: ["Tháng 12", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"],
+    labels: ["Dec", "Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
       {
-        label: "Hoàn thành",
+        label: "Completion",
         data: [58, 60, 62, 63, 65, 67],
         borderColor: "#f59e0b",
         backgroundColor: "rgba(245, 158, 11, 0.15)",
@@ -57,9 +57,9 @@ const GraduationRateChart = () => {
     <div className="learningChartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">KHẢO SÁT TỐT NGHIỆP</div>
+          <div className="chartCardLabel">GRADUATION RATE</div>
           <div className="chartCardTitle">
-            Biểu đồ tỉ lệ hoàn thành học phần trung bình (%)
+            Average course completion rate (%)
           </div>
         </div>
         <div className="chartCardBadge chartCardBadgeOrange">67%</div>

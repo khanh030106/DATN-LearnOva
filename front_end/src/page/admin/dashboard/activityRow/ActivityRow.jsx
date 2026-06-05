@@ -3,39 +3,39 @@ import "./ActivityRow.css";
 const activityLogs = [
   {
     id: 1,
-    label: "Khóa học mới",
-    title: "Đã thêm 2 khóa học vào hệ thống",
-    time: "5 phút trước",
+    label: "New Course",
+    title: "2 new courses have been added to the platform",
+    time: "5 min ago",
   },
   {
     id: 2,
-    label: "Người dùng",
-    title: "12 học viên mới đăng ký hôm nay",
-    time: "30 phút trước",
+    label: "Users",
+    title: "12 new students registered today",
+    time: "30 min ago",
   },
   {
     id: 3,
-    label: "Doanh thu",
-    title: "Cập nhật báo cáo doanh thu tháng hiện tại",
-    time: "2 giờ trước",
+    label: "Revenue",
+    title: "Monthly revenue report has been updated",
+    time: "2 hours ago",
   },
   {
     id: 4,
-    label: "Hệ thống",
-    title: "Đồng bộ dữ liệu thành công với máy chủ",
-    time: "Hôm nay",
+    label: "System",
+    title: "Data synchronized successfully with the server",
+    time: "Today",
   },
 ];
 
 const ActivityRow = () => {
   return (
-    <section className="activityRowSection" aria-label="Hoạt động gần đây">
+    <section className="activityRowSection" aria-label="Recent Activity">
       <div className="activityRowCard">
         <div className="activityRowCardHeader">
           <div>
-            <h3 className="activityRowCardTitle">Hoạt động gần đây</h3>
+            <h3 className="activityRowCardTitle">Recent Activity</h3>
             <p className="activityRowCardSubtitle">
-              Các thay đổi mới nhất trên hệ thống
+              The latest changes on the platform
             </p>
           </div>
         </div>

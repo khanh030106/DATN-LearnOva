@@ -1,12 +1,12 @@
 .transactionsCard {
   background: #ffffff;
-  border: 1px solid rgba(232, 190, 116, 0.16);
+  border: 1px solid rgba(37, 99, 235, 0.16);
   border-radius: 14px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   min-height: 170px;
-  box-shadow: 0 8px 18px rgba(120, 86, 24, 0.06);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.06);
 }
 
 .transactionsCardHeader {
@@ -21,7 +21,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #7a6b52;
+  color: var(--text-secondary);
 }
 
 .transactionsCardIcon {

@@ -6,117 +6,117 @@ const transactions = [
   {
     id: "GD-20240603-001",
     student: "Nguyễn Thị An",
-    course: "Tiếng Anh Giao Tiếp cơ bản",
+    course: "Basic English Communication",
     gateway: "VNPay",
     amount: "$240",
-    status: "Thành công",
-    type: "Hoàn tất",
+    status: "Successful",
+    type: "Completed",
   },
   {
     id: "GD-20240603-002",
     student: "Trần Minh Quân",
-    course: "Lập trình Next.js từ cơ bản đến nâng cao",
+    course: "Next.js Development from Beginner to Advanced",
     gateway: "Momo",
     amount: "$360",
-    status: "Đang xử lý",
-    type: "Thanh toán",
+    status: "Pending",
+    type: "Payment",
   },
   {
     id: "GD-20240603-003",
     student: "Lê Thị Hương",
-    course: "Thiết kế UX/UI cho sản phẩm học trực tuyến",
+    course: "UX/UI Design for Online Learning Products",
     gateway: "Banking",
     amount: "$180",
-    status: "Thất bại",
-    type: "Hoàn học phí",
+    status: "Failed",
+    type: "Refund",
   },
   {
     id: "GD-20240603-004",
     student: "Phạm Văn Dũng",
-    course: "Phân tích dữ liệu với Python",
+    course: "Data Analysis with Python",
     gateway: "VNPay",
     amount: "$420",
-    status: "Thành công",
-    type: "Thanh toán",
+    status: "Successful",
+    type: "Payment",
   },
   {
     id: "GD-20240603-005",
     student: "Hoàng Ngọc Mai",
-    course: "Quản lý dự án Agile cho giảng viên",
+    course: "Agile Project Management for Instructors",
     gateway: "Momo",
     amount: "$95",
-    status: "Thành công",
-    type: "Hoàn tất",
+    status: "Successful",
+    type: "Completed",
   },
   {
     id: "GD-20240603-006",
     student: "Đỗ Đức Anh",
-    course: "Marketing khóa học trên nền tảng số",
+    course: "Course Marketing on Digital Platforms",
     gateway: "Banking",
     amount: "$275",
-    status: "Đang xử lý",
-    type: "Thanh toán",
+    status: "Pending",
+    type: "Payment",
   },
   {
     id: "GD-20240603-007",
     student: "Nguyễn Thị Thu",
-    course: "Tạo nội dung tương tác với video",
+    course: "Creating Interactive Video Content",
     gateway: "VNPay",
     amount: "$150",
-    status: "Thành công",
-    type: "Hoàn tất",
+    status: "Successful",
+    type: "Completed",
   },
   {
     id: "GD-20240603-008",
     student: "Trần Duy Khang",
-    course: "Phát triển kỹ năng giảng dạy trực tuyến",
+    course: "Developing Online Teaching Skills",
     gateway: "Momo",
     amount: "$310",
-    status: "Thành công",
-    type: "Thanh toán",
+    status: "Successful",
+    type: "Payment",
   },
   {
     id: "GD-20240603-009",
     student: "Vũ Ngọc Mai",
-    course: "Nâng cao SEO cho khóa học",
+    course: "Advanced SEO for Courses",
     gateway: "Banking",
     amount: "$135",
-    status: "Thành công",
-    type: "Hoàn tất",
+    status: "Successful",
+    type: "Completed",
   },
   {
     id: "GD-20240603-010",
     student: "Phạm Quốc Bảo",
-    course: "Xây dựng lộ trình học cho doanh nghiệp",
+    course: "Building Corporate Learning Paths",
     gateway: "VNPay",
     amount: "$530",
-    status: "Đang xử lý",
-    type: "Thanh toán",
+    status: "Pending",
+    type: "Payment",
   },
   {
     id: "GD-20240603-011",
     student: "Hà Thanh Vân",
-    course: "Kỹ thuật livestream tương tác",
+    course: "Interactive Livestreaming Techniques",
     gateway: "Momo",
     amount: "$210",
-    status: "Thành công",
-    type: "Hoàn tất",
+    status: "Successful",
+    type: "Completed",
   },
   {
     id: "GD-20240603-012",
     student: "Trần Minh Tâm",
-    course: "Chiến lược bán khóa học trên LearnOva",
+    course: "Course Sales Strategy on LearnOva",
     gateway: "Banking",
     amount: "$390",
-    status: "Thành công",
-    type: "Thanh toán",
+    status: "Successful",
+    type: "Payment",
   },
 ];
 
 const statusClasses = {
-  "Thành công": "statusSuccess",
-  "Đang xử lý": "statusPending",
-  "Thất bại": "statusFailed",
+  Successful: "statusSuccess",
+  Pending: "statusPending",
+  Failed: "statusFailed",
 };
 
 const PAGE_SIZE = 5;
@@ -140,14 +140,14 @@ const TransactionLog = () => {
   return (
     <section
       className="transactionLogCard"
-      aria-label="Nhật ký giao dịch doanh thu"
+      aria-label="Revenue transaction log"
     >
       <div className="transactionLogHeader">
         <div>
-          <h2 className="transactionLogTitle">Nhật Ký Giao Dịch Doanh Thu</h2>
+          <h2 className="transactionLogTitle">Revenue Transaction Log</h2>
           <p className="transactionLogSubtitle">
-            Tra cứu nhanh toàn bộ luồng thu quỹ, lọc theo cổng thanh toán và
-            trạng thái đối soát.
+            Quickly search all cash flow records, filter by payment gateway and
+            reconciliation status.
           </p>
         </div>
       </div>
@@ -155,17 +155,17 @@ const TransactionLog = () => {
       <div className="transactionLogControls">
         <label className="transactionSearch">
           <Search size={16} />
-          <input placeholder="Tìm theo Mã GD, Tên học viên, Khóa học" />
+          <input placeholder="Search by transaction ID, student name, course" />
         </label>
         <div className="transactionFilters">
           <button type="button">
-            Tất cả Lĩnh vực <ChevronDown size={14} />
+            All Categories <ChevronDown size={14} />
           </button>
           <button type="button">
-            Mọi cổng TT <ChevronDown size={14} />
+            All Payment Gateways <ChevronDown size={14} />
           </button>
           <button type="button">
-            Mọi Trạng thái <ChevronDown size={14} />
+            All Statuses <ChevronDown size={14} />
           </button>
         </div>
       </div>
@@ -174,13 +174,13 @@ const TransactionLog = () => {
         <table className="transactionLogTable">
           <thead>
             <tr>
-              <th>MÃ GD</th>
-              <th>HỌC VIÊN</th>
-              <th>TÊN KHÓA HỌC</th>
-              <th>CỔNG THANH TOÁN</th>
-              <th>GIÁ TRỊ GIAO DỊCH</th>
-              <th>TRẠNG THÁI</th>
-              <th>HÀNH ĐỘNG</th>
+              <th>TRANSACTION ID</th>
+              <th>STUDENT</th>
+              <th>COURSE NAME</th>
+              <th>PAYMENT GATEWAY</th>
+              <th>TRANSACTION VALUE</th>
+              <th>STATUS</th>
+              <th>ACTION</th>
             </tr>
           </thead>
           <tbody>
@@ -202,7 +202,7 @@ const TransactionLog = () => {
                   <button
                     type="button"
                     className="transactionActionButton"
-                    aria-label={`Xem hóa đơn ${transaction.id}`}
+                    aria-label={`View invoice ${transaction.id}`}
                   >
                     <FileText size={16} />
                   </button>
@@ -221,7 +221,7 @@ const TransactionLog = () => {
             disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
-            Trước
+            Previous
           </button>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
@@ -241,7 +241,7 @@ const TransactionLog = () => {
             disabled={currentPage === totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
           >
-            Sau
+            Next
           </button>
         </div>
       ) : null}

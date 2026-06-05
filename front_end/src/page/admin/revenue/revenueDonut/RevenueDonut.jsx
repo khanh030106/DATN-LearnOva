@@ -3,10 +3,10 @@ import Chart from "chart.js/auto";
 import "./RevenueDonut.css";
 
 const revenueDonutLabels = [
-  "Khoá học mới",
-  "Bán gói VIP",
-  "Dịch vụ hỗ trợ",
-  "Phụ phí khác",
+  "New Courses",
+  "VIP Bundle Sales",
+  "Support Services",
+  "Other Fees",
 ];
 
 const revenueDonutValues = [42, 28, 18, 12];
@@ -68,23 +68,23 @@ const RevenueDonut = () => {
   }, []);
 
   return (
-    <section className="revenueDonutCard" aria-label="Cơ cấu nguồn doanh thu">
+    <section className="revenueDonutCard" aria-label="Revenue source breakdown">
       <div className="revenueDonutHeader">
         <div>
-          <h2 className="revenueDonutTitle">Cơ Cấu Nguồn Doanh Thu</h2>
+          <h2 className="revenueDonutTitle">Revenue Source Breakdown</h2>
           <p className="revenueDonutSubtitle">
-            Phân bổ nguồn thu chi tiết theo từng danh mục đào tạo của nền tảng.
+            Detailed revenue allocation by platform training category.
           </p>
         </div>
       </div>
 
       <div className="revenueDonutBody">
         <div className="revenueDonutChartWrapper">
-          <canvas ref={donutRef} aria-label="Biểu đồ tròn cơ cấu doanh thu" />
+          <canvas ref={donutRef} aria-label="Revenue composition donut chart" />
           <div className="revenueDonutCenter">
             <div className="revenueDonutCenterValue">$2.5M</div>
-            <div className="revenueDonutCenterLabel">TỔNG CƠ CẤU</div>
-            <div className="revenueDonutCenterPercent">100% Thu nhập</div>
+            <div className="revenueDonutCenterLabel">TOTAL BREAKDOWN</div>
+            <div className="revenueDonutCenterPercent">100% Revenue</div>
           </div>
         </div>
 

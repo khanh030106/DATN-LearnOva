@@ -16,44 +16,44 @@ import "./SidebarAdmin.css";
 const menuItems = [
   {
     id: "dashboard",
-    label: "Tổng quan",
+    label: "Overview",
     icon: LayoutDashboard,
     path: "/learnova/admin",
     end: true,
   },
   {
     id: "users",
-    label: "Người dùng",
+    label: "Users",
     icon: Users,
     path: "/learnova/admin/users",
   },
   {
     id: "teachers",
-    label: "Giảng viên",
+    label: "Instructors",
     icon: GraduationCap,
     path: "/learnova/admin/teachers",
   },
   {
     id: "courses",
-    label: "Khóa học",
+    label: "Courses",
     icon: BookOpen,
     path: "/learnova/admin/courses",
   },
   {
     id: "revenue",
-    label: "Doanh thu",
+    label: "Revenue",
     icon: CircleDollarSign,
     path: "/learnova/admin/revenue",
   },
   {
     id: "reports",
-    label: "Báo cáo",
+    label: "Reports",
     icon: BarChart3,
     path: "/learnova/admin/reports",
   },
   {
     id: "vouchers",
-    label: "Voucher",
+    label: "Vouchers",
     icon: Ticket,
     path: "/learnova/admin/vouchers",
   },
@@ -62,13 +62,13 @@ const menuItems = [
 const footerActions = [
   {
     id: "help",
-    label: "Trợ giúp",
+    label: "Help",
     icon: HelpCircle,
     path: "/learnova/admin/help",
   },
   {
     id: "logout",
-    label: "Đăng xuất",
+    label: "Logout",
     icon: LogOut,
     path: "/learnova/auth/login",
     variant: "danger",
@@ -91,7 +91,7 @@ const SidebarAdmin = ({
             alt="LearnOva"
             className="sidebarAdminBrandWordmark"
           />
-          <p className="sidebarAdminBrandSubtitle">Hệ thống quản trị</p>
+          <p className="sidebarAdminBrandSubtitle">Admin System</p>
         </div>
       </div>
 

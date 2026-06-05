@@ -26,7 +26,7 @@
 
 .revenueDonutSubtitle {
   margin: 0;
-  color: #7a6b52;
+  color: var(--text-secondary);
   font-size: 13px;
   line-height: 1.6;
 }

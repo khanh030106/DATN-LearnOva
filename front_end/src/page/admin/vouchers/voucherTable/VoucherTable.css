@@ -141,7 +141,7 @@
 
 .voucherBadge.expired {
   background: #fef3c7;
-  color: #b45309;
+  color: var(--blue-strong);
 }
 
 /* ===== ACTIONS (ICONS) ===== */

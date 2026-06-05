@@ -4,10 +4,10 @@ import "./CourseProgressChart.css";
 
 const CourseProgressChart = () => {
   const data = {
-    labels: ["Tháng 12", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"],
+    labels: ["Dec", "Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
       {
-        label: "Khóa học",
+        label: "Courses",
         data: [150, 200, 180, 220, 250, 280],
         backgroundColor: "#4f46e5",
         borderRadius: 4,
@@ -46,7 +46,7 @@ const CourseProgressChart = () => {
         ticks: {
           font: { size: 12, family: "system-ui" },
           color: "#a89a85",
-          callback: (value) => value + " KH",
+          callback: (value) => value + " Courses",
         },
         grid: {
           color: "rgba(232, 190, 116, 0.15)",
@@ -69,10 +69,10 @@ const CourseProgressChart = () => {
     <div className="courseProgressChartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">SỐ LƯỢNG KHÓA HỌC PHÁT TRIỂN</div>
-          <div className="chartCardTitle">Biểu độ phát hành khóa học mới</div>
+          <div className="chartCardLabel">COURSE GROWTH VOLUME</div>
+          <div className="chartCardTitle">New Course Release Trend</div>
         </div>
-        <div className="chartCardBadge chartCardBadgeBlue">Khóa học</div>
+        <div className="chartCardBadge chartCardBadgeBlue">Courses</div>
       </div>
       <div className="chartContainer">
         <Bar data={data} options={options} />

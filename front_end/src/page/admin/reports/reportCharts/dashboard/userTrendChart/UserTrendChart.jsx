@@ -4,10 +4,10 @@ import "./UserTrendChart.css";
 
 const UserTrendChart = () => {
   const data = {
-    labels: ["Tháng 12", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"],
+    labels: ["Dec", "Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
       {
-        label: "Người dùng",
+        label: "Users",
         data: [3000, 4000, 3500, 4500, 5000, 5500],
         borderColor: "#ff8c00",
         backgroundColor: "rgba(255, 140, 0, 0.1)",
@@ -52,7 +52,7 @@ const UserTrendChart = () => {
         ticks: {
           font: { size: 12, family: "system-ui" },
           color: "#a89a85",
-          callback: (value) => (value / 1000).toFixed(1) + "k SV",
+          callback: (value) => (value / 1000).toFixed(1) + "k Users",
         },
         grid: {
           color: "rgba(232, 190, 116, 0.15)",
@@ -75,10 +75,10 @@ const UserTrendChart = () => {
     <div className="userTrendChartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">XU HƯỚNG TĂNG TRƯỞNG NGƯỜI DÙNG</div>
-          <div className="chartCardTitle">Biểu độ Đăng ký mới hàng tháng</div>
+          <div className="chartCardLabel">USER GROWTH TREND</div>
+          <div className="chartCardTitle">Monthly New Registration Trend</div>
         </div>
-        <div className="chartCardBadge">Người dùng</div>
+        <div className="chartCardBadge">Users</div>
       </div>
       <div className="chartContainer">
         <Line data={data} options={options} />

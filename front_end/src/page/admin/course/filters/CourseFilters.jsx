@@ -3,31 +3,31 @@ import { ChevronDown, Search, Layers, Users, CalendarDays } from "lucide-react";
 import "./CourseFilters.css";
 
 const categoryFilterOptions = [
-  { id: "all", label: "Tất cả" },
-  { id: "programming", label: "Lập trình" },
-  { id: "design", label: "Thiết kế" },
+  { id: "all", label: "All Categories" },
+  { id: "programming", label: "Programming" },
+  { id: "design", label: "Design" },
   { id: "marketing", label: "Marketing" },
-  { id: "business", label: "Kinh doanh" },
+  { id: "business", label: "Business" },
 ];
 
 const instructorFilterOptions = [
-  { id: "all", label: "Tất cả" },
-  { id: "instructorNguyen", label: "Nguyễn Văn A" },
-  { id: "instructorTran", label: "Trần Thị B" },
-  { id: "instructorLe", label: "Lê Văn C" },
+  { id: "all", label: "All Instructors" },
+  { id: "instructorNguyen", label: "Nguyen Van A" },
+  { id: "instructorTran", label: "Tran Thi B" },
+  { id: "instructorLe", label: "Le Van C" },
 ];
 
 const publishSortOptions = [
-  { id: "newest", label: "Mới nhất" },
-  { id: "oldest", label: "Cũ nhất" },
-  { id: "popular", label: "Phổ biến nhất" },
-  { id: "rating", label: "Đánh giá cao" },
+  { id: "newest", label: "Newest" },
+  { id: "oldest", label: "Oldest" },
+  { id: "popular", label: "Most Popular" },
+  { id: "rating", label: "Highest Rated" },
 ];
 
 const priceTypeOptions = [
-  { id: "all", label: "Mọi hình thức" },
-  { id: "paid", label: "Trả phí" },
-  { id: "free", label: "Miễn phí (Free)" },
+  { id: "all", label: "All Types" },
+  { id: "paid", label: "Paid" },
+  { id: "free", label: "Free" },
 ];
 
 const CourseFilters = () => {
@@ -91,18 +91,18 @@ const CourseFilters = () => {
   };
 
   return (
-    <section className="courseFilters" aria-label="Bộ lọc khóa học">
+    <section className="courseFilters" aria-label="Course Filters">
       <div className="courseFiltersContainer" ref={filtersContainerRef}>
         <div className="courseFiltersRow">
           <div className="courseSearchField">
             <Search size={18} className="courseSearchIcon" />
             <input
               type="text"
-              placeholder="Tìm theo tên khóa học hoặc giảng viên..."
+              placeholder="Search by course name or instructor..."
               className="courseSearchInput"
               value={searchText}
               onChange={(event) => setSearchText(event.target.value)}
-              aria-label="Tìm kiếm khóa học"
+              aria-label="Search Courses"
             />
           </div>
 
@@ -112,7 +112,7 @@ const CourseFilters = () => {
                 isCategoryDropdownOpen ? "active" : ""
               }`}
               onClick={openCategoryDropdown}
-              aria-label="Lọc theo danh mục"
+              aria-label="Filter by Category"
             >
               <span className="filterButtonLabel">
                 <Layers size={16} color="#e8be74" />
@@ -154,11 +154,11 @@ const CourseFilters = () => {
                 isInstructorDropdownOpen ? "active" : ""
               }`}
               onClick={openInstructorDropdown}
-              aria-label="Lọc theo giảng viên"
+              aria-label="Filter by Instructor"
             >
               <span className="filterButtonLabel">
                 <Users size={16} color="#7a6b52" />
-                <span>Giảng viên ({getSelectedInstructorLabel()})</span>
+                <span>Instructor ({getSelectedInstructorLabel()})</span>
               </span>
               <ChevronDown
                 size={18}
@@ -198,11 +198,11 @@ const CourseFilters = () => {
                 isSortDropdownOpen ? "active" : ""
               }`}
               onClick={openSortDropdown}
-              aria-label="Sắp xếp khóa học"
+              aria-label="Sort Courses"
             >
               <span className="filterButtonLabel">
                 <CalendarDays size={16} color="#7a6b52" />
-                <span>Đăng tải: {getSelectedPublishSortLabel()}</span>
+                <span>Published: {getSelectedPublishSortLabel()}</span>
               </span>
               <ChevronDown
                 size={18}
@@ -236,7 +236,7 @@ const CourseFilters = () => {
         </div>
 
         <div className="priceFilterTabs">
-          <span className="priceFilterLabel">Dòng học phí:</span>
+          <span className="priceFilterLabel">Price Type:</span>
           {priceTypeOptions.map((option) => (
             <button
               key={option.id}

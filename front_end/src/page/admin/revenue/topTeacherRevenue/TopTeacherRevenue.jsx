@@ -47,29 +47,29 @@ const TopTeacherRevenue = () => {
   return (
     <section
       className="topRevenueBlockCard"
-      aria-label="Đối tác giảng viên thu nhập xuất sắc"
+      aria-label="Top earning instructor partners"
     >
       <div className="topRevenueBlockHeader">
         <div>
           <h2 className="topRevenueBlockTitle">
-            Đối Tác Giảng Viên Thu Nhập Xuất Sắc
+            Top Earning Instructor Partners
           </h2>
           <p className="topRevenueBlockSubtitle">
-            Top 5 giảng viên có tổng thu nhập lớn nhất thực lĩnh qua nền tảng.
+            Top 5 instructors with the highest platform payout earnings.
           </p>
         </div>
-        <span className="topRevenueBlockBadge">Tổng hợp</span>
+        <span className="topRevenueBlockBadge">Summary</span>
       </div>
 
       <div className="topRevenueBlockTableWrapper">
         <table className="topRevenueBlockTable topTeacherTable">
           <thead>
             <tr>
-              <th>HẠNG</th>
-              <th>GIẢNG VIÊN</th>
-              <th>KHÓA HỌC</th>
-              <th>TỔNG HỌC VIÊN</th>
-              <th>DOANH THU THU VỀ</th>
+              <th>RANK</th>
+              <th>INSTRUCTOR</th>
+              <th>COURSES</th>
+              <th>TOTAL STUDENTS</th>
+              <th>REVENUE EARNED</th>
             </tr>
           </thead>
           <tbody>

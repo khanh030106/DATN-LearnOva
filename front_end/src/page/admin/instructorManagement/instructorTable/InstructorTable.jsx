@@ -8,70 +8,70 @@ const instructorsData = [
     initials: "VH",
     name: "Nguyễn Văn Hùng",
     email: "hung.nguyen@academy.edu.vn",
-    specialization: "Lập trình Web & Cloud",
+    specialization: "Web Development & Cloud Computing",
     classes: 3,
     students: "1.250",
     rating: 4.8,
-    ratingText: "Tốt",
-    revenue: "145.000.000 đ",
-    payment: "Thanh toán đủ",
-    status: "Hoạt động",
+    ratingText: "Good",
+    revenue: "$145,000",
+    payment: "Paid",
+    status: "Active",
   },
   {
     id: "GV002",
     initials: "MT",
     name: "Trần Thị Minh Thư",
     email: "thu.tran@academy.edu.vn",
-    specialization: "Thiết kế UI/UX & Figma",
+    specialization: "UI/UX Design & Figma",
     classes: 3,
     students: "940",
     rating: 4.9,
-    ratingText: "Tốt",
-    revenue: "98.000.000 đ",
-    payment: "Thanh toán đủ",
-    status: "Hoạt động",
+    ratingText: "Good",
+    revenue: "$98,000",
+    payment: "Paid",
+    status: "Active",
   },
   {
     id: "GV003",
     initials: "LN",
     name: "Lê Ngọc Nam",
     email: "nam.le@academy.edu.vn",
-    specialization: "Quản trị dữ liệu & SQL",
+    specialization: "Database Administration & SQL",
     classes: 2,
     students: "765",
     rating: 4.7,
-    ratingText: "Khá",
-    revenue: "82.500.000 đ",
-    payment: "Còn nợ",
-    status: "Tạm ngưng",
+    ratingText: "Fair",
+    revenue: "$82,500",
+    payment: "Outstanding",
+    status: "Paused",
   },
   {
     id: "GV004",
     initials: "PH",
     name: "Phạm Hoài An",
     email: "an.pham@academy.edu.vn",
-    specialization: "Marketing kỹ thuật số",
+    specialization: "Digital Marketing",
     classes: 4,
     students: "1.120",
     rating: 4.6,
-    ratingText: "Tốt",
-    revenue: "112.000.000 đ",
-    payment: "Thanh toán đủ",
-    status: "Hoạt động",
+    ratingText: "Good",
+    revenue: "$112,000",
+    payment: "Paid",
+    status: "Active",
   },
   {
     id: "GV005",
     initials: "TT",
     name: "Trần Thị Thuỳ",
     email: "thuy.tran@academy.edu.vn",
-    specialization: "Thiết kế nội thất",
+    specialization: "Interior Design",
     classes: 2,
     students: "630",
     rating: 4.5,
-    ratingText: "Khá",
-    revenue: "67.900.000 đ",
-    payment: "Thanh toán đủ",
-    status: "Hoạt động",
+    ratingText: "Fair",
+    revenue: "$67,900",
+    payment: "Paid",
+    status: "Active",
   },
   {
     id: "GV006",
@@ -82,80 +82,80 @@ const instructorsData = [
     classes: 5,
     students: "1.420",
     rating: 4.9,
-    ratingText: "Tuyệt vời",
-    revenue: "162.500.000 đ",
-    payment: "Thanh toán đủ",
-    status: "Hoạt động",
+    ratingText: "Excellent",
+    revenue: "$162,500",
+    payment: "Paid",
+    status: "Active",
   },
   {
     id: "GV007",
     initials: "NL",
     name: "Ngọc Lan",
     email: "lan.ngoc@academy.edu.vn",
-    specialization: "Quản lý dự án Agile",
+    specialization: "Agile Project Management",
     classes: 3,
     students: "790",
     rating: 4.4,
-    ratingText: "Khá",
-    revenue: "89.400.000 đ",
-    payment: "Thanh toán đủ",
-    status: "Tạm ngưng",
+    ratingText: "Fair",
+    revenue: "$89,400",
+    payment: "Paid",
+    status: "Paused",
   },
   {
     id: "GV008",
     initials: "BT",
     name: "Bùi Thị Thảo",
     email: "thao.bui@academy.edu.vn",
-    specialization: "Kỹ năng thuyết trình",
+    specialization: "Public Speaking",
     classes: 2,
     students: "520",
     rating: 4.7,
-    ratingText: "Tốt",
-    revenue: "56.800.000 đ",
-    payment: "Thanh toán đủ",
-    status: "Hoạt động",
+    ratingText: "Good",
+    revenue: "$56,800",
+    payment: "Paid",
+    status: "Active",
   },
   {
     id: "GV009",
     initials: "HN",
     name: "Hà Nguyễn",
     email: "nguyen.ha@academy.edu.vn",
-    specialization: "Phân tích dữ liệu",
+    specialization: "Data Analysis",
     classes: 4,
     students: "1.010",
     rating: 4.8,
-    ratingText: "Tốt",
-    revenue: "130.000.000 đ",
-    payment: "Thanh toán đủ",
-    status: "Hoạt động",
+    ratingText: "Good",
+    revenue: "$130,000",
+    payment: "Paid",
+    status: "Active",
   },
   {
     id: "GV010",
     initials: "DV",
     name: "Đặng Văn Dũng",
     email: "dung.dang@academy.edu.vn",
-    specialization: "Kinh doanh trực tuyến",
+    specialization: "E-commerce Management",
     classes: 3,
     students: "880",
     rating: 4.6,
-    ratingText: "Tốt",
-    revenue: "95.300.000 đ",
-    payment: "Còn nợ",
-    status: "Hoạt động",
+    ratingText: "Good",
+    revenue: "$95,300",
+    payment: "Outstanding",
+    status: "Active",
   },
   {
     id: "GV011",
     initials: "HP",
     name: "Hoàng Phương",
     email: "phuong.hoang@academy.edu.vn",
-    specialization: "Tiếp thị nội dung",
+    specialization: "Content Marketing",
     classes: 2,
     students: "610",
     rating: 4.3,
-    ratingText: "Khá",
-    revenue: "58.200.000 đ",
-    payment: "Thanh toán đủ",
-    status: "Khóa",
+    ratingText: "Fair",
+    revenue: "$58,200",
+    payment: "Paid",
+    status: "Locked",
   },
   {
     id: "GV012",
@@ -166,10 +166,10 @@ const instructorsData = [
     classes: 3,
     students: "700",
     rating: 4.5,
-    ratingText: "Khá",
-    revenue: "79.500.000 đ",
-    payment: "Thanh toán đủ",
-    status: "Hoạt động",
+    ratingText: "Fair",
+    revenue: "$79,500",
+    payment: "Paid",
+    status: "Active",
   },
 ];
 
@@ -185,20 +185,20 @@ const InstructorTable = () => {
   return (
     <section
       className="instructorTableSection"
-      aria-label="Bảng quản lý giảng viên"
+      aria-label="Instructor Management Table"
     >
       <div className="instructorTableCard">
-        <table className="instructorTable" aria-label="Danh sách giảng viên">
+        <table className="instructorTable" aria-label="Instructor List">
           <thead>
             <tr>
-              <th>Mã GV</th>
-              <th>Giảng viên / Lĩnh vực</th>
-              <th>Số lớp</th>
-              <th>Học viên</th>
-              <th>Đánh giá</th>
-              <th>Doanh thu</th>
-              <th>Trạng thái</th>
-              <th>Thao tác quản trị</th>
+              <th>Instructor ID</th>
+              <th>Instructor / Specialization</th>
+              <th>Number of Classes</th>
+              <th>Students</th>
+              <th>Rating</th>
+              <th>Revenue</th>
+              <th>Status</th>
+              <th>Management Actions</th>
             </tr>
           </thead>
 
@@ -222,13 +222,13 @@ const InstructorTable = () => {
                 <td>
                   <div className="instructorTableStat">
                     <strong>{instructor.classes}</strong>
-                    <span>Lớp học</span>
+                    <span>Classes</span>
                   </div>
                 </td>
                 <td>
                   <div className="instructorTableStat">
                     <strong>{instructor.students}</strong>
-                    <span>người học</span>
+                    <span>Students</span>
                   </div>
                 </td>
                 <td>
@@ -247,9 +247,9 @@ const InstructorTable = () => {
                 <td>
                   <span
                     className={`instructorTableStatus instructorTableStatus--${
-                      instructor.status === "Hoạt động"
+                      instructor.status === "Active"
                         ? "active"
-                        : instructor.status === "Tạm ngưng"
+                        : instructor.status === "Paused"
                           ? "paused"
                           : "locked"
                     }`}
@@ -262,21 +262,21 @@ const InstructorTable = () => {
                     <button
                       type="button"
                       className="instructorActionButton"
-                      aria-label="Xem"
+                      aria-label="View"
                     >
                       <Eye size={16} />
                     </button>
                     <button
                       type="button"
                       className="instructorActionButton"
-                      aria-label="Sửa"
+                      aria-label="Edit"
                     >
                       <Edit3 size={16} />
                     </button>
                     <button
                       type="button"
                       className="instructorActionButton instructorActionButton--danger"
-                      aria-label="Xóa"
+                      aria-label="Delete"
                     >
                       <Trash2 size={16} />
                     </button>
@@ -294,7 +294,7 @@ const InstructorTable = () => {
             onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
             disabled={currentPage === 1}
           >
-            Trước
+            Previous
           </button>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
@@ -318,7 +318,7 @@ const InstructorTable = () => {
             }
             disabled={currentPage === totalPages}
           >
-            Sau
+            Next
           </button>
         </div>
       </div>

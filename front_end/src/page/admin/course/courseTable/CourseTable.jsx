@@ -5,47 +5,47 @@ import "./CourseTable.css";
 const courseTableData = [
   {
     id: "course-10",
-    title: "Học máy cơ bản cho nhà phân tích dữ liệu (Data Analysts)",
+    title: "Machine Learning Fundamentals for Data Analysts",
     instructor: "Vũ Hải Đăng",
-    category: "Trí tuệ nhân tạo (AI)",
+    category: "Artificial Intelligence (AI)",
     students: 180,
     rating: 4.7,
-    revenue: "0 đ",
+    revenue: "$0",
     publishDate: "01/06/2026",
-    status: "Đang mở",
+    status: "Published",
   },
   {
     id: "KH002",
-    title: "Thiết kế UI/UX Cơ bản",
+    title: "UI/UX Design Fundamentals",
     instructor: "Trần Thị B",
-    category: "Thiết kế",
+    category: "Design",
     students: 180,
     rating: 4.7,
-    revenue: "0 đ",
+    revenue: "$0",
     publishDate: "22/04/2026",
-    status: "Đang mở",
+    status: "Published",
   },
   {
     id: "KH003",
-    title: "Marketing kỹ thuật số",
+    title: "Digital Marketing",
     instructor: "Lê Văn C",
     category: "Marketing",
     students: 95,
     rating: 4.5,
-    revenue: "68.000.000 đ",
+    revenue: "$68.000",
     publishDate: "05/03/2026",
-    status: "Tạm khóa",
+    status: "Suspended",
   },
   {
     id: "KH004",
-    title: "Quản lý dự án Agile",
+    title: "Agile Project Management",
     instructor: "Ngọc Lan",
-    category: "Kinh doanh",
+    category: "Business",
     students: 132,
     rating: 4.6,
-    revenue: "89.000.000 đ",
+    revenue: "$89.000",
     publishDate: "16/02/2026",
-    status: "Đang mở",
+    status: "Published",
   },
   {
     id: "KH005",
@@ -54,86 +54,86 @@ const courseTableData = [
     category: "Marketing",
     students: 110,
     rating: 4.4,
-    revenue: "0 đ",
+    revenue: "$0",
     publishDate: "28/01/2026",
-    status: "Đang mở",
+    status: "Published",
   },
   {
     id: "KH006",
-    title: "React Frontend nâng cao",
+    title: "Advanced React Frontend Development",
     instructor: "Quách Duy Đức",
-    category: "Lập trình",
+    category: "Programming",
     students: 205,
     rating: 4.9,
-    revenue: "135.000.000 đ",
+    revenue: "$135.000",
     publishDate: "12/01/2026",
-    status: "Đang mở",
+    status: "Published",
   },
   {
     id: "KH007",
-    title: "Figma và thiết kế sản phẩm",
+    title: "Figma and Product Design",
     instructor: "Bùi Thị Thảo",
-    category: "Thiết kế",
+    category: "Design",
     students: 88,
     rating: 4.6,
-    revenue: "72.000.000 đ",
+    revenue: "$72.000",
     publishDate: "04/12/2025",
-    status: "Đang mở",
+    status: "Published",
   },
   {
     id: "KH008",
-    title: "Phân tích dữ liệu với SQL",
+    title: "Data Analysis with SQL",
     instructor: "Lê Ngọc Nam",
-    category: "Kinh doanh",
+    category: "Business",
     students: 127,
     rating: 4.7,
-    revenue: "81.000.000 đ",
+    revenue: "$81.000",
     publishDate: "14/11/2025",
-    status: "Tạm khóa",
+    status: "Suspended",
   },
   {
     id: "KH009",
-    title: "Kỹ năng thuyết trình chuyên nghiệp",
+    title: "Professional Presentation Skills",
     instructor: "Bùi Thị Thảo",
-    category: "Kinh doanh",
+    category: "Business",
     students: 72,
     rating: 4.5,
-    revenue: "0 đ",
+    revenue: "$0",
     publishDate: "08/10/2025",
-    status: "Đang mở",
+    status: "Published",
   },
   {
     id: "KH010",
-    title: "Học phát triển sản phẩm số",
+    title: "Digital Product Development",
     instructor: "Phạm Hoài An",
-    category: "Kinh doanh",
+    category: "Business",
     students: 158,
     rating: 4.8,
-    revenue: "107.000.000 đ",
+    revenue: "$107.000",
     publishDate: "25/09/2025",
-    status: "Đang mở",
+    status: "Published",
   },
   {
     id: "KH011",
-    title: "Phát triển ứng dụng di động",
+    title: "Mobile Application Development",
     instructor: "Nguyễn Lê",
-    category: "Lập trình",
+    category: "Programming",
     students: 134,
     rating: 4.6,
-    revenue: "98.000.000 đ",
+    revenue: "$98.000",
     publishDate: "28/08/2025",
-    status: "Đang mở",
+    status: "Published",
   },
   {
     id: "KH012",
-    title: "Chiến lược truyền thông mạng xã hội",
+    title: "Social Media Marketing Strategy",
     instructor: "Trần Thị Minh Thư",
     category: "Marketing",
     students: 98,
     rating: 4.4,
-    revenue: "0 đ",
+    revenue: "$0",
     publishDate: "13/07/2025",
-    status: "Đã khóa",
+    status: "Locked",
   },
 ];
 
@@ -147,19 +147,22 @@ const CourseTable = () => {
   );
 
   return (
-    <section className="courseTableSection" aria-label="Bảng quản lý khóa học">
+    <section
+      className="courseTableSection"
+      aria-label="Course Management Table"
+    >
       <div className="courseTableCard">
-        <table className="courseTable" aria-label="Danh sách khóa học">
+        <table className="courseTable" aria-label="Course List">
           <thead>
             <tr>
-              <th>Khóa học</th>
-              <th>Giảng viên</th>
-              <th>Danh mục</th>
-              <th>Học viên</th>
-              <th>Đánh giá</th>
-              <th>Doanh thu</th>
-              <th>Trạng thái</th>
-              <th>Hành động</th>
+              <th>Course</th>
+              <th>Instructor</th>
+              <th>Category</th>
+              <th>Students</th>
+              <th>Rating</th>
+              <th>Revenue</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -181,16 +184,13 @@ const CourseTable = () => {
                 <td>{course.status}</td>
                 <td>
                   <div className="courseTableActions">
-                    <button className="actionButton" aria-label="Xem khóa học">
+                    <button className="actionButton" aria-label="View Course">
                       <Eye className="actionIcon" />
                     </button>
-                    <button
-                      className="actionButton"
-                      aria-label="Chỉnh sửa khóa học"
-                    >
+                    <button className="actionButton" aria-label="Edit Course">
                       <Edit3 className="actionIcon" />
                     </button>
-                    <button className="actionButton" aria-label="Xóa khóa học">
+                    <button className="actionButton" aria-label="Delete Course">
                       <Trash2 className="actionIcon" />
                     </button>
                   </div>
@@ -207,7 +207,7 @@ const CourseTable = () => {
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
           >
-            Trước
+            Previous
           </button>
 
           {Array.from({ length: totalPages }, (_, i) => (
@@ -227,7 +227,7 @@ const CourseTable = () => {
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
           >
-            Sau
+            Next
           </button>
         </div>
       </div>

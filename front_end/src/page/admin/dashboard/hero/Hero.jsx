@@ -4,27 +4,12 @@ import "./Hero.css";
 
 const heroContent = {
   badgeLabel: "Active AI Engine",
-  title: "Tổng quan",
+  title: "Overview",
   highlight: "LearnOva",
   description:
-    "Theo dõi tổng thể hoạt động của người dùng, giảng viên và nền tảng trong thời gian thực. LearnOva cung cấp dữ liệu phân tích chuyên sâu.",
+    "Track the overall activities of users, instructors, and the platform in real time. LearnOva provides comprehensive data and advanced analytical insights.",
   heroImage: dashboardHeroImage,
 };
-
-const heroActions = [
-  {
-    id: "exportReport",
-    label: "Xuất báo cáo",
-    icon: Download,
-    variant: "secondary",
-  },
-  {
-    id: "createReport",
-    label: "Tạo thống kê mới",
-    icon: Plus,
-    variant: "primary",
-  },
-];
 
 const HeroVideo = () => {
   return (
@@ -62,32 +47,11 @@ const HeroVideo = () => {
           </div>
 
           <h2 className="adminHeroVideoTitle">
-            {heroContent.title} <br />
-            <span>{heroContent.highlight}</span>
+            {heroContent.highlight} <br />
+            <span>{heroContent.title}</span>
           </h2>
 
           <p className="adminHeroVideoDescription">{heroContent.description}</p>
-        </div>
-
-        <div className="adminHeroVideoActions">
-          {heroActions.map((action) => {
-            const ActionIcon = action.icon;
-
-            return (
-              <button
-                key={action.id}
-                type="button"
-                className={`adminHeroVideoButton ${
-                  action.variant === "primary"
-                    ? "adminHeroVideoButtonPrimary"
-                    : "adminHeroVideoButtonSecondary"
-                }`}
-              >
-                <ActionIcon size={18} aria-hidden="true" />
-                <span>{action.label}</span>
-              </button>
-            );
-          })}
         </div>
       </div>
     </section>

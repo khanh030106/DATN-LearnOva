@@ -1,36 +1,38 @@
 import "./InstructorApprovalAlert.css";
 
 const alertContent = {
-  title: "Thông báo hướng dẫn nghiệp vụ",
-  actionLabel: "Xử lý đơn duyệt",
+  title: "Instructor Application Notice",
+  actionLabel: "Review Applications",
 };
 
 const descriptionParts = [
   {
     id: "prefix",
     type: "text",
-    value: "Người dùng muốn trở thành giảng viên phải nộp đơn tại mục ",
+    value:
+      "Users who want to become instructors must submit an application at the ",
   },
   {
     id: "highlight",
     type: "highlight",
-    value: "Đơn xin trở thành giảng viên",
+    value: "Instructor Application",
   },
   {
     id: "suffix",
     type: "text",
-    value: ". Admin duyệt mới được nâng cấp vai trò hệ thống tương ứng.",
+    value:
+      ". Admin must review and approve applications to upgrade user roles.",
   },
 ];
 
 const applications = [
-  { id: 1, name: "Nguyễn Minh Anh", status: "Chờ duyệt" },
-  { id: 2, name: "Trần Quốc Huy", status: "Chờ duyệt" },
-  { id: 3, name: "Phạm Gia Hân", status: "Đã xử lý" },
+  { id: 1, name: "Nguyễn Minh Anh", status: "Pending Review" },
+  { id: 2, name: "Trần Quốc Huy", status: "Pending Review" },
+  { id: 3, name: "Phạm Gia Hân", status: "Processed" },
 ];
 
 const pendingApplications = applications.filter(
-  (application) => application.status === "Chờ duyệt",
+  (application) => application.status === "Pending Review",
 );
 
 const pendingApplicantNames = pendingApplications.map(
@@ -61,7 +63,7 @@ const InstructorApprovalAlert = () => {
         <h4 className="instructorApprovalAlertTitle">{alertContent.title}</h4>
 
         <p className="instructorApprovalAlertDescription">
-          <strong>Lưu ý:</strong>{" "}
+          <strong>Note:</strong>{" "}
           {descriptionParts.map((part) => {
             if (part.type === "highlight") {
               return (
@@ -90,11 +92,11 @@ const InstructorApprovalAlert = () => {
           ))}
 
           <p className="instructorApprovalAlertSummary">
-            Nhân sự ứng tuyển:{" "}
+            Pending Applicants:{" "}
             <span className="instructorApprovalAlertSummaryNames">
               {pendingApplicantNames.length > 0
                 ? pendingApplicantNames.join(", ")
-                : "Không còn đơn nào chờ duyệt"}
+                : "No pending applications"}
             </span>
           </p>
         </div>

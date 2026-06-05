@@ -3,29 +3,29 @@ import "./UserRow.css";
 const recentUsers = [
   {
     id: 1,
-    name: "Nguyễn Minh Anh",
-    email: "minhanh@learnoa.com",
-    role: "Học viên",
+    name: "Michael Anderson",
+    email: "michael@learnoa.com",
+    role: "Student",
     avatar: "https://i.pravatar.cc/120?img=32",
   },
   {
     id: 2,
-    name: "Trần Quốc Huy",
-    email: "quochuy@learnoa.com",
-    role: "Giảng viên",
+    name: "Daniel Wilson",
+    email: "daniel@learnoa.com",
+    role: "Instructor",
     avatar: "https://i.pravatar.cc/120?img=12",
   },
   {
     id: 3,
-    name: "Phạm Gia Hân",
-    email: "giahann@learnoa.com",
-    role: "Học viên",
+    name: "Sophia Johnson",
+    email: "sophia@learnoa.com",
+    role: "Student",
     avatar: "https://i.pravatar.cc/120?img=44",
   },
   {
     id: 4,
-    name: "Lê Thanh Tùng",
-    email: "thanhtung@learnoa.com",
+    name: "James Brown",
+    email: "james@learnoa.com",
     role: "Admin",
     avatar: "https://i.pravatar.cc/120?img=56",
   },
@@ -56,20 +56,20 @@ const UserRow = () => {
       <div className="userRowCard userRowRecentUsersCard">
         <div className="userRowCardHeader">
           <div>
-            <h3 className="userRowCardTitle">Người dùng gần đây</h3>
+            <h3 className="userRowCardTitle">Recent Users</h3>
             <p className="userRowCardSubtitle">
-              Danh sách người dùng vừa hoạt động trên hệ thống
+              List of users who have recently been active on the system
             </p>
           </div>
 
           <button type="button" className="userRowLinkButton">
-            Xem tất cả
+            View All
           </button>
         </div>
 
         <div className="userRowTableHeader" aria-hidden="true">
-          <span className="userRowTableHeaderName">Người dùng</span>
-          <span className="userRowTableHeaderRole">Vai trò</span>
+          <span className="userRowTableHeaderName">User</span>
+          <span className="userRowTableHeaderRole">Role</span>
         </div>
 
         <div className="userRowList">

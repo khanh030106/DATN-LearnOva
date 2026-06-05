@@ -22,7 +22,7 @@ const VoucherCreate = () => {
 
   const [form, setForm] = useState({
     code: "LEARNOVA10",
-    name: "Ưu đãi học tập mùa hè",
+    name: "Summer Learning Promotion",
     originalPrice: "2500",
     discountPercent: "10",
     useLimit: "100",
@@ -52,10 +52,10 @@ const VoucherCreate = () => {
         <div>
           <div className="voucherCreateTitleRow">
             <span className="voucherCreateIcon">🎟️</span>
-            <h2 className="voucherCreateTitle">Thiết Lập Khuyến Mãi</h2>
+            <h2 className="voucherCreateTitle">Promotion Setup</h2>
           </div>
           <p className="voucherCreateSubtitle">
-            Cung cấp chi tiết để khởi tạo mã giảm giá mới.
+            Enter details to create a new discount code.
           </p>
         </div>
       </div>
@@ -64,7 +64,7 @@ const VoucherCreate = () => {
         <div className="voucherCreateFormCard">
           <div className="voucherCreateFormRow">
             <label className="voucherCreateLabel">
-              Mã giảm giá
+              Discount Code
               <input
                 type="text"
                 value={form.code}
@@ -73,7 +73,7 @@ const VoucherCreate = () => {
               />
             </label>
             <label className="voucherCreateLabel">
-              Tên chương trình
+              Program Name
               <input
                 type="text"
                 value={form.name}
@@ -85,7 +85,7 @@ const VoucherCreate = () => {
 
           <div className="voucherCreateFormRow">
             <label className="voucherCreateLabel">
-              Đơn giá gốc
+              Original Price
               <div className="voucherInputGroup">
                 <span className="voucherInputPrefix">$</span>
                 <input
@@ -101,7 +101,7 @@ const VoucherCreate = () => {
               </div>
             </label>
             <label className="voucherCreateLabel">
-              Giảm (%)
+              Discount (%)
               <input
                 type="number"
                 min="0"
@@ -115,7 +115,7 @@ const VoucherCreate = () => {
 
           <div className="voucherCreateFormRow">
             <label className="voucherCreateLabel">
-              Số lượt sử dụng
+              Usage Limit
               <input
                 type="number"
                 min="1"
@@ -125,7 +125,7 @@ const VoucherCreate = () => {
               />
             </label>
             <label className="voucherCreateLabel">
-              Ngày hết hạn
+              Expiry Date
               <input
                 type="date"
                 value={form.expiryDate}
@@ -137,37 +137,37 @@ const VoucherCreate = () => {
 
           <div className="voucherCreateActions">
             <button type="button" className="voucherCreateSubmitBtn">
-              Lưu voucher
+              Save Voucher
             </button>
             <button
               type="button"
               className="voucherCreateCancelBtn"
               onClick={() => navigate("/learnova/admin/vouchers")}
             >
-              Hủy bỏ
+              Cancel
             </button>
           </div>
         </div>
 
         <aside className="voucherCreateSummaryCard">
           <div className="voucherCreateSummaryHeader">
-            <p className="voucherCreateSummaryLabel">Tóm tắt</p>
+            <p className="voucherCreateSummaryLabel">Summary</p>
             <span className="voucherCreateSummaryCode">{form.code}</span>
           </div>
           <div className="voucherCreateSummaryItem">
-            <span>Giảm (%)</span>
+            <span>Discount (%)</span>
             <strong>{form.discountPercent}%</strong>
           </div>
           <div className="voucherCreateSummaryItem">
-            <span>Số tiền giảm</span>
+            <span>Discount Amount</span>
             <strong>{formatCurrency(discountAmount)}</strong>
           </div>
           <div className="voucherCreateSummaryItem">
-            <span>Giá sau giảm</span>
+            <span>Price After Discount</span>
             <strong>{formatCurrency(finalPrice)}</strong>
           </div>
           <div className="voucherCreateSummaryItem">
-            <span>Ngày hết hạn</span>
+            <span>Expiry Date</span>
             <strong>{form.expiryDate}</strong>
           </div>
         </aside>

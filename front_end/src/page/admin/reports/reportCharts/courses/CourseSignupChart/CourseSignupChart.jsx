@@ -4,10 +4,10 @@ import "./CourseSignupChart.css";
 
 const CourseSignupChart = () => {
   const data = {
-    labels: ["Tháng 12", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"],
+    labels: ["Dec", "Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
       {
-        label: "Đăng ký mới",
+        label: "New Signups",
         data: [9800, 11300, 10750, 12100, 13700, 15500],
         borderColor: "#2563eb",
         backgroundColor: "rgba(37, 99, 235, 0.12)",
@@ -56,8 +56,8 @@ const CourseSignupChart = () => {
     <div className="chartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">LƯỢNG ĐĂNG KÝ TỰ NHIÊN</div>
-          <div className="chartCardTitle">Đăng nhập học mới hàng tháng</div>
+          <div className="chartCardLabel">ORGANIC SIGNUPS</div>
+          <div className="chartCardTitle">Monthly New Enrollments</div>
         </div>
         <div className="chartCardBadge chartCardBadgeBlue">+28%</div>
       </div>

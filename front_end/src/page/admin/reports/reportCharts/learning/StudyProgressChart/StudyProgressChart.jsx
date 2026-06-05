@@ -4,10 +4,10 @@ import "./StudyProgressChart.css";
 
 const StudyProgressChart = () => {
   const data = {
-    labels: ["Tuần 1", "Tuần 2", "Tuần 3", "Tuần 4", "Tuần 5"],
+    labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"],
     datasets: [
       {
-        label: "Điểm trung bình",
+        label: "Average Score",
         data: [42, 45, 48, 52, 55],
         borderColor: "#3b82f6",
         backgroundColor: "rgba(59, 130, 246, 0.12)",
@@ -57,9 +57,9 @@ const StudyProgressChart = () => {
     <div className="learningChartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">TIẾN TRÌNH HỌC TẬP</div>
+          <div className="chartCardLabel">STUDY PROGRESS</div>
           <div className="chartCardTitle">
-            Lấy kẻ điểm số trung bình đạt được (%)
+            Average earned score over time (%)
           </div>
         </div>
         <div className="chartCardBadge chartCardBadgeBlue">55%</div>

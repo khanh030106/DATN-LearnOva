@@ -4,10 +4,10 @@ import "./ConversionChart.css";
 
 const ConversionChart = () => {
   const data = {
-    labels: ["Tháng 12", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"],
+    labels: ["Dec", "Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
       {
-        label: "Tỷ lệ chuyển đổi",
+        label: "Conversion Rate",
         data: [4, 5, 6, 7, 8, 10],
         backgroundColor: "#10b981",
         borderRadius: 4,
@@ -74,10 +74,9 @@ const ConversionChart = () => {
     <div className="conversionChartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">CHỈ SỐ CHUYỂN ĐỔI</div>
+          <div className="chartCardLabel">CONVERSION METRIC</div>
           <div className="chartCardTitle">
-            Ti lệ học viên ứng tuyển thành giảng viên (Student to Instructor
-            Conversion Rate)
+            Student to Instructor Conversion Rate
           </div>
         </div>
         <div className="chartCardBadge chartCardBadgeGreen">12%</div>

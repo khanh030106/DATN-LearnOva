@@ -58,14 +58,14 @@
   }
 
   .actionButton:hover {
-    background: rgba(232, 190, 116, 0.12);
+    background: rgba(37, 99, 235, 0.12);
     transform: translateY(-1px);
   }
 
   .actionIcon {
     width: 16px;
     height: 16px;
-    color: #e8be74;
+    color: var(--blue-primary);
   }
 
   /* Slight spacing and visual balance for the actions column */
@@ -84,7 +84,7 @@
   .courseTableRatingIcon {
     width: 16px;
     height: 16px;
-    color: #e8be74;
+    color: var(--blue-primary);
     flex-shrink: 0;
   }
 
@@ -130,10 +130,10 @@
 .paginationButton {
   min-width: 42px;
   padding: 10px 14px;
-  border: 1px solid rgba(232, 190, 116, 0.22);
+  border: 1px solid rgba(37, 99, 235, 0.22);
   border-radius: 9999px;
-  background-color: #fffdf8;
-  color: #7a6b52;
+  background-color: #f8fafc;
+  color: var(--text-secondary);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -143,14 +143,14 @@
 }
 
 .paginationButton:hover:not(:disabled) {
-  border-color: #e8be74;
-  background-color: rgba(232, 190, 116, 0.12);
+  border-color: var(--blue-primary);
+  background-color: rgba(37, 99, 235, 0.12);
 }
 
 .paginationButton--active {
-  background-color: #e8be74;
+  background-color: var(--blue-primary);
   color: #1b140c;
-  border-color: #e8be74;
+  border-color: var(--blue-primary);
 }
 
 .paginationButton:disabled {

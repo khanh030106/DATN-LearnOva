@@ -2,53 +2,48 @@ import "./VoucherTable.css";
 import { useNavigate } from "react-router-dom";
 import { FiEye, FiEdit, FiTrash2 } from "react-icons/fi";
 
-// ===== DỮ LIỆU CÁC VOUCHER =====
+// ===== VOUCHER DATA =====
 const vouchers = [
   {
     code: "WELCOME2026",
-    name: "Chào mừng đầu năm",
+    name: "New Year Welcome",
     discount: "20%",
-    used: "812 / 1.000",
+    used: "812 / 1,000",
     expires: "30/09/2026",
-    status: "Đang hoạt động",
+    status: "Active",
     statusClass: "active",
   },
   {
     code: "LEARNOVA50",
-    name: "Khuyến mãi học tập",
+    name: "Learning Promotion",
     discount: "50%",
     used: "234 / 500",
     expires: "15/08/2026",
-    status: "Đang hoạt động",
+    status: "Active",
     statusClass: "active",
   },
   {
     code: "WEBDEV30",
-    name: "Khóa lập trình web",
+    name: "Web Development Course",
     discount: "$30",
     used: "142 / 200",
     expires: "10/07/2026",
-    status: "Đang hoạt động",
+    status: "Active",
     statusClass: "active",
   },
   {
     code: "FIX500FF",
-    name: "Giảm 500k",
+    name: "$500 Off",
     discount: "$500",
     used: "89 / 100",
     expires: "05/06/2026",
-    status: "Sắp hết hạn",
+    status: "Expiring Soon",
     statusClass: "expired",
   },
 ];
 
-// ===== LỰA CHỌN BỘ LỌC =====
-const statusOptions = [
-  "Mọi trạng thái",
-  "Đang hoạt động",
-  "Sắp hết hạn",
-  "Hết hạn",
-];
+// ===== FILTER OPTIONS =====
+const statusOptions = ["All statuses", "Active", "Expiring Soon", "Expired"];
 
 const VoucherTable = () => {
   const navigate = useNavigate();
@@ -58,21 +53,21 @@ const VoucherTable = () => {
       {/* HEADER SECTION */}
       <div className="voucherTableHeader">
         <div>
-          <h2 className="voucherTableTitle">
-            Kho Lưu Trữ Chương Trình Giảm Giá
-          </h2>
+          <h2 className="voucherTableTitle">Discount Program Archive</h2>
           <p className="voucherTableSubtitle">
-            Quản lý chương trình giảm giá đã tạo và trạng thái hoạt động.
+            Manage created discount programs and activity status.
           </p>
         </div>
-        <span className="voucherTableCount">Đếm: {vouchers.length} mục</span>
+        <span className="voucherTableCount">
+          Count: {vouchers.length} items
+        </span>
       </div>
 
       {/* SEARCH & FILTER SECTION */}
       <div className="voucherTableControls">
         <input
           type="text"
-          placeholder="Tìm kiếm mã hoặc chiến dịch..."
+          placeholder="Search code or campaign..."
           className="voucherSearchInput"
         />
         <select className="voucherStatusSelect">
@@ -87,7 +82,7 @@ const VoucherTable = () => {
           className="voucherCreateBtn"
           onClick={() => navigate("/learnova/admin/vouchers/create")}
         >
-          Tạo Voucher Mới
+          Create New Voucher
         </button>
       </div>
 
@@ -96,17 +91,17 @@ const VoucherTable = () => {
         <table className="voucherTable">
           <thead>
             <tr>
-              <th>MÃ CODE</th>
-              <th>TÊN CHƯƠNG TRÌNH</th>
-              <th>MỨC ƯU ĐÃI</th>
-              <th>ĐÃ DÙNG / SỨC CHỨA</th>
-              <th>KỲ HẠN SỬ DỤNG</th>
-              <th>TRẠNG THÁI</th>
-              <th>HÀNH VI</th>
+              <th>CODE</th>
+              <th>CAMPAIGN NAME</th>
+              <th>DISCOUNT</th>
+              <th>USED / CAPACITY</th>
+              <th>EXPIRY DATE</th>
+              <th>STATUS</th>
+              <th>ACTIONS</th>
             </tr>
           </thead>
           <tbody>
-            {/* MAPPING DỮ LIỆU CÁC VOUCHER */}
+            {/* MAPPING VOUCHER DATA */}
             {vouchers.map((v) => (
               <tr key={v.code}>
                 <td>{v.code}</td>

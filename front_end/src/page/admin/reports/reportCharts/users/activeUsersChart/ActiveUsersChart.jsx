@@ -4,10 +4,10 @@ import "./ActiveUsersChart.css";
 
 const ActiveUsersChart = () => {
   const data = {
-    labels: ["Tháng 12", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"],
+    labels: ["Dec", "Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
       {
-        label: "Người dùng hoạt động",
+        label: "Active Users",
         data: [14300, 15200, 14800, 16500, 19200, 21400],
         borderColor: "#2563eb",
         backgroundColor: "rgba(37, 99, 235, 0.1)",
@@ -75,10 +75,8 @@ const ActiveUsersChart = () => {
     <div className="activeUsersChartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">HỌC VIÊN HOẠT ĐỘNG</div>
-          <div className="chartCardTitle">
-            Monthly Active Users (Học viên hoạt động hàng tháng)
-          </div>
+          <div className="chartCardLabel">ACTIVE LEARNERS</div>
+          <div className="chartCardTitle">Monthly Active Users</div>
         </div>
         <div className="chartCardBadge chartCardBadgeBlue">MAU</div>
       </div>

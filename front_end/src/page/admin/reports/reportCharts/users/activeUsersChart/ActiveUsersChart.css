@@ -1,6 +1,6 @@
 .activeUsersChartCard {
-  background: #fff8f0;
-  border: 1px solid rgba(232, 190, 116, 0.35);
+  background: #ffffff;
+  border: 1px solid rgba(37, 99, 235, 0.35);
   border-radius: 6px;
   padding: 20px 24px;
   display: grid;
@@ -29,7 +29,7 @@
 }
 
 .chartCardBadge {
-  background: #fde5cc;
+  background: rgba(37, 99, 235, 0.08);
   color: #d87f12;
   padding: 4px 10px;
   border-radius: 4px;

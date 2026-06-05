@@ -4,10 +4,10 @@ import "./InstructorApprovalChart.css";
 
 const InstructorApprovalChart = () => {
   const data = {
-    labels: ["Tháng 12", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"],
+    labels: ["Dec", "Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
       {
-        label: "Tỉ lệ duyệt",
+        label: "Approval Rate",
         data: [62, 65, 63, 67, 69, 71],
         backgroundColor: "#3b82f6",
         borderRadius: 8,
@@ -53,8 +53,8 @@ const InstructorApprovalChart = () => {
     <div className="chartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">TỈ LỆ PHÊ DUYỆT</div>
-          <div className="chartCardTitle">Duyệt hồ sơ ứng tuyển giảng viên</div>
+          <div className="chartCardLabel">APPROVAL RATE</div>
+          <div className="chartCardTitle">Instructor Application Review</div>
         </div>
         <div className="chartCardBadge chartCardBadgeBlue">71%</div>
       </div>

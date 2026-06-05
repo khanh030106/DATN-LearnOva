@@ -4,10 +4,10 @@ import "./CourseCategoryChart.css";
 
 const CourseCategoryChart = () => {
   const data = {
-    labels: ["Lập trình", "Thiết kế", "Kinh doanh", "Ngoại ngữ", "Phổ thông"],
+    labels: ["Programming", "Design", "Business", "Languages", "General"],
     datasets: [
       {
-        label: "Khóa học",
+        label: "Courses",
         data: [1450, 820, 740, 620, 220],
         backgroundColor: [
           "#f97316",
@@ -54,8 +54,8 @@ const CourseCategoryChart = () => {
     <div className="chartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">TỈ TRỌNG DANH MỤC</div>
-          <div className="chartCardTitle">Sự phân bố chủ đề khóa học</div>
+          <div className="chartCardLabel">CATEGORY SHARE</div>
+          <div className="chartCardTitle">Course Topic Distribution</div>
         </div>
         <div className="chartCardBadge chartCardBadgeBlue">37.7%</div>
       </div>

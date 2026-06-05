@@ -8,12 +8,12 @@ import RevenueTab from "./revenue/RevenueTab.jsx";
 import "./ReportCharts.css";
 
 const tabs = [
-  { id: "dashboard", label: "Bảng Tổng Hợp" },
-  { id: "users", label: "Người Dùng" },
-  { id: "instructors", label: "Giảng Viên" },
-  { id: "courses", label: "Khóa Học" },
-  { id: "learning", label: "Chi Số Học Tập" },
-  { id: "revenue", label: "Doanh Thu & Voucher" },
+  { id: "dashboard", label: "Summary" },
+  { id: "users", label: "Users" },
+  { id: "instructors", label: "Instructors" },
+  { id: "courses", label: "Courses" },
+  { id: "learning", label: "Learning Metrics" },
+  { id: "revenue", label: "Revenue & Vouchers" },
 ];
 
 const ReportCharts = () => {
@@ -41,7 +41,7 @@ const ReportCharts = () => {
   return (
     <section className="reportChartsSection">
       <div className="reportChartsHeader">
-        <h2>CHI TIẾT TỪNG PHÂN TÍCH</h2>
+        <h2>ANALYTICS DETAILS</h2>
       </div>
 
       <div className="reportChartsTabNav">

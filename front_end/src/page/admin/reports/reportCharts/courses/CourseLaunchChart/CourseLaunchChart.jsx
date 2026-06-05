@@ -4,10 +4,10 @@ import "./CourseLaunchChart.css";
 
 const CourseLaunchChart = () => {
   const data = {
-    labels: ["Tháng 12", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"],
+    labels: ["Dec", "Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
       {
-        label: "Khóa học mới",
+        label: "New Courses",
         data: [180, 210, 195, 235, 260, 285],
         backgroundColor: "#f59e0b",
         borderRadius: 8,
@@ -48,8 +48,8 @@ const CourseLaunchChart = () => {
     <div className="chartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">GIA TĂNG THƯ VIỆN</div>
-          <div className="chartCardTitle">Khóa học khởi tạo theo tháng</div>
+          <div className="chartCardLabel">LIBRARY GROWTH</div>
+          <div className="chartCardTitle">Monthly Course Launches</div>
         </div>
         <div className="chartCardBadge chartCardBadgeOrange">+18%</div>
       </div>

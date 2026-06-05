@@ -3,9 +3,24 @@ import Chart from "chart.js/auto";
 import "./RoleDistribution.css";
 
 const roleData = [
-  { name: "Học viên", value: 75, color: "#ffad19", amount: "18.7k" },
-  { name: "Giảng viên", value: 15, color: "#e8be74", amount: "3.8k" },
-  { name: "Admin", value: 10, color: "#1a2e6e", amount: "2.5k" },
+  {
+    name: "Students",
+    value: 75,
+    color: "#2563EB",
+    amount: "18.7k",
+  },
+  {
+    name: "Instructors",
+    value: 15,
+    color: "#93C5FD",
+    amount: "3.8k",
+  },
+  {
+    name: "Administrators",
+    value: 10,
+    color: "#1D4ED8",
+    amount: "2.5k",
+  },
 ];
 
 const totalUsers = "25k+";
@@ -30,7 +45,7 @@ const RoleDistribution = () => {
           {
             data: chartValues,
             backgroundColor: chartColors,
-            borderColor: "#ffffff",
+            borderColor: "#F8FAFC",
             borderWidth: 4,
             hoverOffset: 4,
           },
@@ -49,10 +64,10 @@ const RoleDistribution = () => {
             enabled: true,
             displayColors: false,
             padding: 12,
-            backgroundColor: "#ffffff",
-            titleColor: "#1b140c",
-            bodyColor: "#1f2937",
-            borderColor: "rgba(232, 190, 116, 0.45)",
+            backgroundColor: "#FFFFFF",
+            titleColor: "#0F172A",
+            bodyColor: "#475569",
+            borderColor: "#CBD5E1",
             borderWidth: 1,
             cornerRadius: 6,
             callbacks: {
@@ -71,10 +86,10 @@ const RoleDistribution = () => {
   }, []);
 
   return (
-    <section className="roleDistributionCard" aria-label="Phân bổ vai trò">
+    <section className="roleDistributionCard" aria-label="Role Distribution">
       <div className="roleDistributionHeader">
-        <h3 className="roleDistributionTitle">Phân bổ vai trò</h3>
-        <p className="roleDistributionSubtitle">Chi tiết tỷ lệ người dùng</p>
+        <h3 className="roleDistributionTitle">Role Distribution</h3>
+        <p className="roleDistributionSubtitle">Detailed role distribution</p>
       </div>
 
       <div className="roleDistributionChartWrap">
@@ -84,7 +99,7 @@ const RoleDistribution = () => {
 
         <div className="roleDistributionCenterLabel" aria-hidden="true">
           <span className="roleDistributionCenterValue">{totalUsers}</span>
-          <span className="roleDistributionCenterText">Tổng User</span>
+          <span className="roleDistributionCenterText">Total Users</span>
         </div>
       </div>
 

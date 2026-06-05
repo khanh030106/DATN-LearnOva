@@ -4,10 +4,10 @@ import "./InstructorActivityChart.css";
 
 const InstructorActivityChart = () => {
   const data = {
-    labels: ["Tuần 1", "Tuần 2", "Tuần 3", "Tuần 4", "Tuần 5"],
+    labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"],
     datasets: [
       {
-        label: "Buổi tương tác",
+        label: "Interactions",
         data: [520, 590, 610, 670, 715],
         borderColor: "#10b981",
         backgroundColor: "rgba(16, 185, 129, 0.12)",
@@ -52,8 +52,8 @@ const InstructorActivityChart = () => {
     <div className="chartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">TƯƠNG TÁC CỦA GIẢNG VIÊN</div>
-          <div className="chartCardTitle">Buổi giải đáp thắc mắc trực tiếp</div>
+          <div className="chartCardLabel">INSTRUCTOR INTERACTION</div>
+          <div className="chartCardTitle">Live Q&A Session Trend</div>
         </div>
         <div className="chartCardBadge chartCardBadgeGreen">+22%</div>
       </div>

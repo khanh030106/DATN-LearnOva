@@ -10,36 +10,26 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 28px 32px 30px;
-  border-radius: 6px;
-  border: 1px solid rgba(232, 190, 116, 0.28);
-  background:
-    radial-gradient(
-      circle at 90% 8%,
-      rgba(232, 190, 116, 0.16),
-      transparent 24%
-    ),
-    linear-gradient(180deg, #fffaf0 0%, #ffffff 60%, #fbfdff 100%);
-  box-shadow: 0 14px 34px rgba(120, 86, 24, 0.08);
+  padding: 24px 24px 24px;
   box-sizing: border-box;
 }
 
 .activityRowCardHeader {
-  margin-bottom: 22px;
+  margin-bottom: 16px;
 }
 
 .activityRowCardTitle {
   margin: 0;
   color: #1b140c;
-  font-size: 20px;
-  line-height: 1.25;
+  font-size: 18px;
+  line-height: 1.3;
   font-weight: 800;
   letter-spacing: -0.02em;
 }
 
 .activityRowCardSubtitle {
   margin: 6px 0 0;
-  color: #7a6b52;
+  color: var(--text-secondary);
   font-size: 12px;
   line-height: 1.5;
   font-weight: 500;
@@ -48,7 +38,7 @@
 .activityRowList {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 12px;
 }
 
 .activityRowItem {
@@ -56,12 +46,8 @@
   grid-template-columns: 10px minmax(0, 1fr) auto;
   gap: 10px;
   align-items: start;
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(232, 190, 116, 0.16);
-}
-
-.activityRowItem:last-child {
-  border-bottom: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(37, 99, 235, 0.16);
 }
 
 .activityRowDot {
@@ -69,19 +55,17 @@
   height: 10px;
   margin-top: 4px;
   border-radius: 50%;
-  background: linear-gradient(180deg, #ffb000 0%, #e8be74 100%);
-  box-shadow: 0 0 0 4px rgba(232, 190, 116, 0.14);
-}
-
-.activityRowContent {
-  min-width: 0;
+  background: linear-gradient(
+    180deg,
+    var(--blue-primary) 0%,
+    var(--blue-strong) 100%
+  );
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
 }
 
 .activityRowLabel {
   margin: 0;
-  color: #b46a00;
-  font-size: 10px;
-  font-weight: 800;
+  color: var(--blue-dark);
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }

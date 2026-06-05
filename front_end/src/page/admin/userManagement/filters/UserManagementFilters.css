@@ -2,16 +2,8 @@
   width: 100%;
   min-width: 0;
   padding: 16px 18px;
-  border: 1px solid rgba(232, 190, 116, 0.28);
+  border: 1px solid rgba(37, 99, 235, 0.28);
   border-radius: 6px;
-  background:
-    radial-gradient(
-      circle at 94% 10%,
-      rgba(232, 190, 116, 0.12),
-      transparent 20%
-    ),
-    linear-gradient(180deg, #fffaf0 0%, #ffffff 72%, #fffdf8 100%);
-  box-shadow: 0 10px 24px rgba(120, 86, 24, 0.08);
   box-sizing: border-box;
 }
 
@@ -30,10 +22,10 @@
 }
 
 .userManagementFilterChip {
-  border: 1px solid rgba(232, 190, 116, 0.28);
+  border: 1px solid rgba(37, 99, 235, 0.28);
   border-radius: 6px;
-  background: #fffdf8;
-  color: #7a6b52;
+  background: #f8fafc;
+  color: var(--text-secondary);
   font-size: 13px;
   font-weight: 700;
   line-height: 1;
@@ -46,10 +38,14 @@
 }
 
 .userManagementFilterChipActive {
-  background: linear-gradient(135deg, #e8be74 0%, #d9a95f 100%);
+  background: linear-gradient(
+    135deg,
+    var(--blue-primary) 0%,
+    var(--blue-strong) 100%
+  );
   color: #1b140c;
-  border-color: rgba(232, 190, 116, 0.48);
-  box-shadow: 0 10px 18px rgba(120, 86, 24, 0.12);
+  border-color: rgba(37, 99, 235, 0.48);
+  box-shadow: 0 10px 18px rgba(37, 99, 235, 0.12);
 }
 
 .userManagementFiltersControls {
@@ -65,7 +61,7 @@
   min-width: 0;
   height: 42px;
   padding: 0 14px;
-  border: 1px solid rgba(232, 190, 116, 0.26);
+  border: 1px solid rgba(37, 99, 235, 0.26);
   border-radius: 6px;
   background: #ffffff;
   color: #1b140c;
@@ -85,13 +81,13 @@
 }
 
 .userManagementFilterSearch::placeholder {
-  color: #8a7650;
+  color: var(--text-secondary);
 }
 
 .userManagementFilterSearch:focus,
 .userManagementFilterSelect:focus {
-  border-color: rgba(232, 190, 116, 0.62);
-  box-shadow: 0 0 0 3px rgba(232, 190, 116, 0.16);
+  border-color: rgba(37, 99, 235, 0.62);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
 }
 
 @media (max-width: 960px) {

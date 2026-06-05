@@ -4,10 +4,10 @@ import "./RevenueCategoryChart.css";
 
 const RevenueCategoryChart = () => {
   const data = {
-    labels: ["Khóa học", "Đăng ký mới", "Nâng cấp", "Gia hạn"],
+    labels: ["Courses", "New Subscriptions", "Upgrades", "Renewals"],
     datasets: [
       {
-        label: "Doanh thu",
+        label: "Revenue",
         data: [220, 135, 190, 160],
         backgroundColor: "#2563eb",
         borderRadius: 12,
@@ -52,8 +52,8 @@ const RevenueCategoryChart = () => {
     <div className="revenueChartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">DOANH THU</div>
-          <div className="chartCardTitle">Phân bổ doanh thu theo nguồn</div>
+          <div className="chartCardLabel">REVENUE</div>
+          <div className="chartCardTitle">Revenue distribution by source</div>
         </div>
         <div className="chartCardBadge chartCardBadgeBlue">720M</div>
       </div>

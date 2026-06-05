@@ -10,25 +10,25 @@ const ReportCards = () => {
       id: "total-users",
       component: TotalUsersCard,
       count: "45,280",
-      note: "Tăng 14.2% so với tháng trước",
+      note: "Up 14.2% from last month",
     },
     {
       id: "active-users",
       component: ActiveUsersCard,
       count: "21,840",
-      note: "Đang học trực tuyến ngay bây giờ",
+      note: "Currently online learners",
     },
     {
       id: "total-teachers",
       component: TotalTeachersCard,
       count: "1,260",
-      note: "Giảng viên chất lượng cao",
+      note: "Top quality instructors",
     },
     {
       id: "published-courses",
       component: PublishedCoursesCard,
       count: "320",
-      note: "Khóa học mới ra mắt trong tháng",
+      note: "New courses released this month",
     },
   ];
 

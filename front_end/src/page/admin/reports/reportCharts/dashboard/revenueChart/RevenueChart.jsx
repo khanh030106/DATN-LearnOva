@@ -4,10 +4,10 @@ import "./RevenueChart.css";
 
 const RevenueChart = () => {
   const data = {
-    labels: ["Tháng 12", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"],
+    labels: ["Dec", "Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
       {
-        label: "Doanh thu",
+        label: "Revenue",
         data: [850.7, 900.5, 920.3, 950.8, 980.2, 1050.5],
         borderColor: "#10b981",
         backgroundColor: "rgba(16, 185, 129, 0.1)",
@@ -75,12 +75,12 @@ const RevenueChart = () => {
     <div className="revenueChartCard">
       <div className="chartCardHeader">
         <div>
-          <div className="chartCardLabel">LỰ KỲ DOANH THU GẮN DẬY</div>
+          <div className="chartCardLabel">REVENUE TREND</div>
           <div className="chartCardTitle">
-            Biểu độ Doanh thu đối soát bán khóa học
+            Course Sales Reconciliation Trend
           </div>
         </div>
-        <div className="chartCardBadge chartCardBadgeGreen">Doanh thu</div>
+        <div className="chartCardBadge chartCardBadgeGreen">Revenue</div>
       </div>
       <div className="chartContainer">
         <Line data={data} options={options} />

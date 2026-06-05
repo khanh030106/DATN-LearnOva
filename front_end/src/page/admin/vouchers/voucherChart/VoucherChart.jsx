@@ -20,7 +20,7 @@ const voucherChartData = {
   series: [
     {
       id: "activation",
-      name: "Số lượt kích hoạt voucher",
+      name: "Voucher Activations",
       values: [12, 18, 17, 22, 28, 24, 30, 35, 37, 42, 47, 52],
       borderColor: "#f97316",
       pointBackgroundColor: "#f97316",
@@ -86,7 +86,7 @@ const VoucherChart = () => {
             displayColors: false,
             callbacks: {
               label(context) {
-                return `Lượt: ${context.parsed.y}`;
+                return `Uses: ${context.parsed.y}`;
               },
             },
           },
@@ -133,13 +133,14 @@ const VoucherChart = () => {
   return (
     <section
       className="voucherChartSection"
-      aria-label="Biểu đồ tần suất voucher"
+      aria-label="Voucher usage frequency chart"
     >
       <div className="voucherChartHeader">
         <div>
-          <h2 className="voucherChartTitle">Tần suất sử dụng Voucher</h2>
+          <h2 className="voucherChartTitle">Voucher Usage Frequency</h2>
           <p className="voucherChartSubtitle">
-            Thống kê số lượng lượt nhập mã mua khóa học thành công.
+            Statistics of successful voucher code redemptions for course
+            purchases.
           </p>
         </div>
         <div className="voucherChartLegend">
@@ -155,7 +156,7 @@ const VoucherChart = () => {
         </div>
       </div>
       <div className="voucherChartCanvasWrapper">
-        <canvas ref={canvasRef} aria-label="Biểu đồ tần suất voucher" />
+        <canvas ref={canvasRef} aria-label="Voucher usage frequency chart" />
       </div>
     </section>
   );

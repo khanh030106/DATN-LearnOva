@@ -9,48 +9,51 @@ const statisticsCards = [
   {
     id: "total-users",
     component: TotalUsersCard,
-    title: "Tổng người dùng",
+    title: "Total Users",
     value: "18,520",
-    trend: "+ 12% so với tháng trước",
+    trend: "+ 12% vs last month",
     trendTone: "success",
   },
   {
     id: "students",
     component: StudentsCard,
-    title: "Học viên",
+    title: "Students",
     value: "15,230",
-    trend: "+ 10% so với tháng trước",
+    trend: "+ 10% vs last month",
     trendTone: "success",
   },
   {
     id: "teachers",
     component: TeachersCard,
-    title: "Giảng viên",
+    title: "Instructors",
     value: "2,280",
-    trend: "+ 8% so với tháng trước",
+    trend: "+ 8% vs last month",
     trendTone: "info",
   },
   {
     id: "admins",
     component: AdminsCard,
-    title: "Admin",
+    title: "Admins",
     value: "10",
-    trend: "Không đổi",
+    trend: "No change",
     trendTone: "neutral",
   },
   {
     id: "locked-accounts",
     component: LockedAccountsCard,
-    title: "Tài khoản bị khóa",
+    title: "Locked Accounts",
     value: "440",
-    trend: "↓ 5% so với tháng trước",
+    trend: "↓ 5% vs last month",
     trendTone: "danger",
   },
 ];
 
 const UserManagementStats = () => {
   return (
-    <section className="userManagementStats" aria-label="Thống kê người dùng">
+    <section
+      className="userManagementStats"
+      aria-label="User Management Statistics"
+    >
       {statisticsCards.map((card) => {
         const StatCard = card.component;
 

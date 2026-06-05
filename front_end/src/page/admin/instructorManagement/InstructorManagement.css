@@ -20,10 +20,10 @@
   flex-direction: column;
   gap: 8px;
   padding: 18px 20px;
-  border: 1px solid rgba(232, 190, 116, 0.24);
+  border: 1px solid rgba(37, 99, 235, 0.24);
   border-radius: 14px;
-  background: linear-gradient(135deg, #fffaf0 0%, #fffdf8 48%, #ffffff 100%);
-  box-shadow: 0 12px 28px rgba(120, 86, 24, 0.08);
+  background: linear-gradient(135deg, var(--blue-pale) 0%, #f8fafc 48%, #ffffff 100%);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.08);
 }
 
 .instructorManagementEyebrow {

@@ -8,7 +8,7 @@ const TotalTeachersCard = ({ count, note }) => {
         <div className="reportCardIcon reportCardIconAccentGold">
           <FiAward size={18} />
         </div>
-        <span className="reportCardLabel">Giảng viên</span>
+        <span className="reportCardLabel">Instructors</span>
       </div>
       <div className="reportCardValue">{count}</div>
       <div className="reportCardNote">{note}</div>

@@ -2,24 +2,24 @@ import { Bell, Search, Settings } from "lucide-react";
 import "./Header.css";
 
 const headerData = {
-  searchPlaceholder: "Tìm kiếm dữ liệu, người dùng...",
+  searchPlaceholder: "Search data, users...",
   organizationName: "ADMIN LEARNOVA",
-  roleName: "Quản trị viên",
+  roleName: "Administrator",
   avatarUrl:
     "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop",
-  avatarAlt: "Ảnh đại diện quản trị viên",
+  avatarAlt: "Administrator avatar",
 };
 
 const actionItems = [
   {
     id: "notifications",
-    label: "Thông báo",
+    label: "Notifications",
     iconName: "bell",
     hasBadge: true,
   },
   {
     id: "settings",
-    label: "Cài đặt",
+    label: "Settings",
     iconName: "settings",
     hasBadge: false,
   },

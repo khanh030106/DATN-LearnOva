@@ -18,60 +18,60 @@ const revenueBlocks = [
   {
     id: "totalRevenue",
     component: TotalRevenueCard,
-    title: "TỔNG DOANH THU",
-    value: "$ 2.450.000",
+    title: "TOTAL REVENUE",
+    value: "$ 2,450,000",
     delta: "+12.4%",
-    subtitle: "Quý này",
+    subtitle: "This Quarter",
     icon: DollarSign,
   },
   {
     id: "monthlyRevenue",
     component: MonthlyRevenueCard,
-    title: "DOANH THU THÁNG",
-    value: "$ 185.300",
+    title: "MONTHLY REVENUE",
+    value: "$ 185,300",
     delta: "+8.5%",
-    subtitle: "đầu tháng",
+    subtitle: "Since Month Start",
     icon: Calendar,
   },
   {
     id: "transactions",
     component: TransactionsCard,
-    title: "SỐ GIAO DỊCH",
-    value: "15.820",
+    title: "TOTAL TRANSACTIONS",
+    value: "15,820",
     delta: "+15.2%",
-    subtitle: "so cùng kỳ",
+    subtitle: "Compared to Previous Period",
     icon: CreditCard,
   },
   {
     id: "pendingPayment",
     component: PendingPaymentCard,
-    title: "THANH TOÁN CHỜ",
+    title: "PENDING PAYMENTS",
     value: "$ 0",
-    note: "0 GV chờ đối soát",
+    note: "0 Instructors Awaiting Settlement",
     icon: Clock,
   },
   {
     id: "refundRequest",
     component: RefundRequestCard,
-    title: "YÊU CẦU HOÀN TRẢ",
+    title: "REFUND REQUESTS",
     value: "2",
     delta: "-4.2%",
-    label: "Tỉ lệ thấp",
+    label: "Low Rate",
     icon: RefreshCcw,
   },
   {
     id: "growthRate",
     component: GrowthRateCard,
-    title: "TỶ LỆ TĂNG TRƯỞNG",
+    title: "GROWTH RATE",
     value: "+12.4%",
-    detail: "Vượt mức 2.4% mục tiêu",
+    detail: "Exceeded Target by 2.4%",
     icon: TrendingUp,
   },
 ];
 
 const RevenueCard = () => {
   return (
-    <section className="revenueSection" aria-label="Bảng doanh thu">
+    <section className="revenueSection" aria-label="Revenue Dashboard">
       <div className="revenueContainer">
         <div className="revenueGrid">
           {revenueBlocks.map((block) => {

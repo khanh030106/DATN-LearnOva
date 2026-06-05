@@ -12,16 +12,6 @@
   gap: 14px;
   min-width: 0;
   padding: 16px 18px;
-  border: 1px solid rgba(232, 190, 116, 0.28);
-  border-radius: 16px;
-  background:
-    radial-gradient(
-      circle at 92% 10%,
-      rgba(232, 190, 116, 0.12),
-      transparent 22%
-    ),
-    linear-gradient(180deg, #fffaf0 0%, #ffffff 72%, #fffdf8 100%);
-  box-shadow: 0 10px 24px rgba(120, 86, 24, 0.08);
   box-sizing: border-box;
 }
 
@@ -43,18 +33,18 @@
 }
 
 .userManagementStatIcon--green {
-  color: #8a7650;
-  background: rgba(232, 190, 116, 0.14);
+  color: var(--text-secondary);
+  background: rgba(37, 99, 235, 0.14);
 }
 
 .userManagementStatIcon--orange {
   color: #b46a00;
-  background: rgba(232, 190, 116, 0.16);
+  background: rgba(37, 99, 235, 0.16);
 }
 
 .userManagementStatIcon--amber {
   color: #8f5a00;
-  background: rgba(232, 190, 116, 0.18);
+  background: rgba(37, 99, 235, 0.18);
 }
 
 .userManagementStatIcon--red {
@@ -75,7 +65,7 @@
 
 .userManagementStatTitle {
   margin: 0;
-  color: #8a7650;
+  color: var(--text-secondary);
   font-size: 12px;
   line-height: 1.35;
   font-weight: 800;
@@ -152,16 +142,8 @@
   gap: 14px;
   min-width: 0;
   padding: 16px 18px;
-  border-radius: 16px;
-  border: 1px solid rgba(232, 190, 116, 0.24);
-  background:
-    radial-gradient(
-      circle at 92% 10%,
-      rgba(232, 190, 116, 0.08),
-      transparent 22%
-    ),
-    linear-gradient(180deg, #fffaf0 0%, #ffffff 72%, #fffdf8 100%);
-  box-shadow: 0 10px 24px rgba(120, 86, 24, 0.08);
+  border-radius: 6px;
+  border: 1px solid rgba(37, 99, 235, 0.24);
   box-sizing: border-box;
 }
 
@@ -189,7 +171,7 @@
 
 .userManagementStatIcon--orange {
   color: #b46a00;
-  background: rgba(232, 190, 116, 0.16);
+  background: rgba(37, 99, 235, 0.16);
 }
 
 .userManagementStatIcon--amber {
@@ -224,16 +206,21 @@
     gap: 14px;
     min-width: 0;
     padding: 16px 18px;
-    border: 1px solid rgba(232, 190, 116, 0.28);
+    border: 1px solid rgba(37, 99, 235, 0.18);
     border-radius: 16px;
     background:
       radial-gradient(
         circle at 92% 10%,
-        rgba(232, 190, 116, 0.12),
+        rgba(37, 99, 235, 0.08),
         transparent 22%
       ),
-      linear-gradient(180deg, #fffaf0 0%, #ffffff 72%, #fffdf8 100%);
-    box-shadow: 0 10px 24px rgba(120, 86, 24, 0.08);
+      linear-gradient(
+        180deg,
+        var(--blue-pale) 0%,
+        #ffffff 72%,
+        var(--bg-secondary) 100%
+      );
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.06);
     box-sizing: border-box;
   }
 
@@ -255,18 +242,18 @@
   }
 
   .userManagementStatIcon--green {
-    color: #8a7650;
-    background: rgba(232, 190, 116, 0.14);
+    color: var(--blue-dark);
+    background: rgba(37, 99, 235, 0.08);
   }
 
   .userManagementStatIcon--orange {
-    color: #b46a00;
-    background: rgba(232, 190, 116, 0.16);
+    color: var(--blue-strong);
+    background: rgba(37, 99, 235, 0.12);
   }
 
   .userManagementStatIcon--amber {
-    color: #8f5a00;
-    background: rgba(232, 190, 116, 0.18);
+    color: var(--blue-primary);
+    background: rgba(37, 99, 235, 0.14);
   }
 
   .userManagementStatIcon--red {
@@ -287,7 +274,7 @@
 
   .userManagementStatTitle {
     margin: 0;
-    color: #8a7650;
+    color: var(--text-secondary);
     font-size: 12px;
     line-height: 1.35;
     font-weight: 800;
