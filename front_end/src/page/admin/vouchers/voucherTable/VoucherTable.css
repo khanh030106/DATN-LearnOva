@@ -1,0 +1,253 @@
+.voucherTableSection {
+  padding: 22px;
+  margin-top: 22px;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid rgba(37, 99, 235, 0.08);
+  border-radius: 6px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+.voucherTableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.voucherTableTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.voucherTableSubtitle {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.voucherTableCount {
+  color: #475569;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* ===== SEARCH & FILTER ===== */
+.voucherTableControls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.voucherSearchInput {
+  flex: 0 0 300px;
+  width: 100%;
+  max-width: 300px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  border-radius: 24px;
+  background: #ffffff;
+}
+
+.voucherSearchInput:focus {
+  outline: none;
+  border-color: #7a3efa;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.voucherStatusSelect {
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  min-width: 130px;
+  margin-left: auto;
+}
+
+.voucherStatusSelect:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.voucherCreateBtn {
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #047857;
+  background: #ecfdf5;
+  border: 1px solid #10b981;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.voucherCreateBtn:hover {
+  background: #d1fae5;
+  border-color: #059669;
+}
+
+/* ===== TABLE ===== */
+.voucherTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 0;
+  border-radius: 10px;
+  background: transparent;
+}
+
+.voucherTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 900px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.voucherTable th,
+.voucherTable td {
+  padding: 14px 14px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.voucherTable th {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: #ffffff;
+}
+
+.voucherTable td {
+  font-size: 13px;
+  color: #475569;
+}
+
+.voucherTable tbody tr {
+  background: #ffffff;
+}
+
+.voucherTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ===== STATUS BADGE ===== */
+.voucherBadge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.voucherBadge.active {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.voucherBadge.expired {
+  background: #fef3c7;
+  color: var(--blue-strong);
+}
+
+/* ===== ACTIONS (ICONS) ===== */
+.voucherActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.voucherActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  border-radius: 10px;
+  background: #ffffff;
+  cursor: pointer;
+  color: var(--blue-dark);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.voucherActionBtn:hover {
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.22);
+  transform: translateY(-1px);
+}
+
+.paginationButton {
+  min-width: 42px;
+  padding: 10px 14px;
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  border-radius: 10px;
+  background-color: #f8fafc;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.paginationButton:hover:not(:disabled) {
+  border-color: var(--blue-primary);
+  background-color: rgba(37, 99, 235, 0.12);
+}
+
+.paginationButton--active {
+  background-color: var(--blue-primary);
+  color: #1b140c;
+  border-color: var(--blue-primary);
+}
+
+.paginationButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .voucherTableControls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .voucherSearchInput {
+    width: 100%;
+  }
+
+  .voucherStatusSelect,
+  .voucherCreateBtn {
+    width: 100%;
+  }
+
+  .voucherTable {
+    min-width: 100%;
+  }
+}

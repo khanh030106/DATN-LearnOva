@@ -1,0 +1,57 @@
+.refundRequestCard {
+  background: #ffffff;
+  border: 1px solid rgba(37, 99, 235, 0.16);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 170px;
+}
+
+.refundRequestCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.refundRequestCardTitle {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.refundRequestCardIcon {
+  width: 26px;
+  height: 26px;
+  color: #ef4444;
+}
+
+.refundRequestCardBody {
+  margin-top: 18px;
+}
+
+.refundRequestCardValue {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.refundRequestCardMeta {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.refundRequestCardLabel {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.revenueDelta.negative {
+  color: #dc2626;
+}

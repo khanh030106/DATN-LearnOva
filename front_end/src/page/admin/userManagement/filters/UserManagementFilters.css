@@ -1,0 +1,128 @@
+.userManagementFilters {
+  background: #ffffff;
+  width: 100%;
+  min-width: 0;
+  padding: 9px 18px;
+  border: 1px solid rgba(37, 99, 235, 0.28);
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.userManagementFiltersRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.userManagementFiltersChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.userManagementFilterChip {
+  border: 1px solid rgba(37, 99, 235, 0.28);
+  border-radius: 6px;
+  background: #f8fafc;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.userManagementFilterChipActive {
+  background: linear-gradient(
+    135deg,
+    var(--blue-primary) 0%,
+    var(--blue-strong) 100%
+  );
+  color: #1b140c;
+  border-color: rgba(37, 99, 235, 0.48);
+  box-shadow: 0 10px 18px rgba(37, 99, 235, 0.12);
+}
+
+.userManagementFiltersControls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.userManagementFilterSearch,
+.userManagementFilterSelect {
+  min-width: 0;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid rgba(37, 99, 235, 0.26);
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1b140c;
+  font-size: 13px;
+  font-weight: 600;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.userManagementFilterSearch {
+  width: 240px;
+  border-radius: 999px;
+}
+
+.userManagementFilterSelect {
+  width: 180px;
+}
+
+.userManagementFilterSearch::placeholder {
+  color: var(--text-secondary);
+}
+
+.userManagementFilterSearch:focus,
+.userManagementFilterSelect:focus {
+  border-color: rgba(37, 99, 235, 0.62);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
+}
+
+@media (max-width: 960px) {
+  .userManagementFiltersRow {
+    align-items: stretch;
+  }
+
+  .userManagementFiltersControls {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .userManagementFilterSearch {
+    width: min(100%, 320px);
+  }
+
+  .userManagementFilterSelect {
+    width: min(100%, 220px);
+  }
+}
+
+@media (max-width: 640px) {
+  .userManagementFilters {
+    padding: 14px;
+  }
+
+  .userManagementFilterChip,
+  .userManagementFilterSearch,
+  .userManagementFilterSelect {
+    width: 100%;
+  }
+
+  .userManagementFiltersChips,
+  .userManagementFiltersControls {
+    width: 100%;
+  }
+}

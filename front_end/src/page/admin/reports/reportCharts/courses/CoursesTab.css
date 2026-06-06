@@ -1,0 +1,21 @@
+.coursesTabContent {
+  width: 100%;
+}
+
+.coursesChartsGrid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 1200px) {
+  .coursesChartsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .coursesChartsGrid {
+    grid-template-columns: 1fr;
+  }
+}

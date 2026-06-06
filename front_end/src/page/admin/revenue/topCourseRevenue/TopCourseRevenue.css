@@ -1,0 +1,189 @@
+.topRevenueBlockCard {
+  width: 100%;
+  padding: 18px;
+  border-radius: 6px;
+
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.topRevenueBlockHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.topRevenueBlockTitle {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #1b140c;
+}
+
+.topRevenueBlockSubtitle {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.topRevenueBlockBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #3f4d67;
+  background: rgba(241, 245, 249, 0.9);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.topRevenueBlockTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 0;
+  border-radius: 10px;
+  background: transparent;
+}
+
+.topRevenueBlockTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 0;
+  table-layout: auto;
+  overflow: hidden;
+}
+
+.topRevenueBlockTable th,
+.topRevenueBlockTable td {
+  text-align: left;
+  padding: 14px 14px;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.topRevenueBlockTable td {
+  white-space: normal;
+}
+
+.topRevenueBlockTable th:first-child,
+.topRevenueBlockTable td:first-child {
+  width: 56px;
+}
+
+.topRevenueBlockTable th:nth-child(3),
+.topRevenueBlockTable td:nth-child(3),
+.topRevenueBlockTable th:nth-child(4),
+.topRevenueBlockTable td:nth-child(4) {
+  text-align: right;
+}
+
+.topRevenueBlockTable th:nth-child(3),
+.topRevenueBlockTable td:nth-child(3) {
+  width: 110px;
+}
+
+.topRevenueBlockTable th:nth-child(4),
+.topRevenueBlockTable td:nth-child(4) {
+  width: 130px;
+}
+
+.topRevenueBlockTable th:last-child,
+.topRevenueBlockTable td:last-child {
+  width: 120px;
+}
+
+.topRevenueBlockTable th {
+  color: var(--text-muted);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 12px;
+  background: #ffffff;
+}
+
+.topRevenueBlockTable tbody tr {
+  background: #ffffff;
+}
+
+.topRevenueBlockTable td,
+.topRevenueBlockTable th {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.topRevenueBlockTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.topRevenueBlockRank {
+  display: inline-flex;
+  min-width: 34px;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1b140c;
+  background: rgba(239, 242, 255, 1);
+}
+
+.topRevenueBlockCourseInfo {
+  display: grid;
+  gap: 4px;
+}
+
+.topRevenueBlockCourseName {
+  display: block;
+  color: #1b140c;
+  font-weight: 700;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.topRevenueBlockCourseMeta {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.topRevenueBlockRevenueCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topRevenueBlockTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(248, 239, 212, 0.95);
+  color: #8a6b20;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .topRevenueBlockHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 760px) {
+  .topRevenueBlockTable {
+    min-width: 100%;
+  }
+}

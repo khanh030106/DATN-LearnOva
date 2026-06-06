@@ -1,0 +1,95 @@
+.instructorsTabContent {
+  width: 100%;
+}
+
+.instructorsChartsGrid,
+.instructorsCardsGrid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.instructorsCardsGrid {
+  margin-top: 24px;
+}
+
+.instructorInfoCard {
+  padding: 20px;
+}
+
+.instructorCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.instructorCardIcon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: #fff;
+}
+
+.iconOrange {
+  background: #f97316;
+}
+
+.iconGreen {
+  background: #10b981;
+}
+
+.iconPurple {
+  background: #818cf8;
+}
+
+.instructorCardTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.instructorCardList {
+  display: grid;
+  gap: 18px;
+}
+
+.instructorCardRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.instructorCardName {
+  font-weight: 700;
+  color: #111827;
+}
+
+.instructorCardMeta {
+  color: #9c8c76;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.instructorCardValue {
+  white-space: nowrap;
+  font-weight: 700;
+  color: #111827;
+}
+
+@media (max-width: 1200px) {
+  .instructorsChartsGrid,
+  .instructorsCardsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .instructorsChartsGrid,
+  .instructorsCardsGrid {
+    grid-template-columns: 1fr;
+  }
+}

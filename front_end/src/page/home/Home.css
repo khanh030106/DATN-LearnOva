@@ -1,5 +1,5 @@
 .home-content {
-    padding: 0 clamp(24px, 7vw, 150px);
-    background: #f8fafc;
-    color: #0f172a;
+  padding: 0 clamp(24px, 7vw, 150px);
+  background: #f8fafc;
+  color: #0f172a;
 }

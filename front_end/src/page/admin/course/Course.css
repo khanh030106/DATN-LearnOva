@@ -1,0 +1,28 @@
+.coursePage {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+  padding: 4px 0 10px;
+  box-sizing: border-box;
+}
+
+.courseContent {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 12px 24px;
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .coursePage {
+    padding: 0;
+  }
+
+  .courseContent {
+    gap: 12px;
+  }
+}

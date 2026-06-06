@@ -1,0 +1,83 @@
+.reportChartsSection {
+  display: grid;
+  gap: 20px;
+}
+
+.reportChartsHeader h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.reportChartsTabNav {
+  padding: 0;
+}
+
+.tabNavContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.tabNavButton {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #6f553f;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.tabNavButton:hover {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--blue-dark);
+}
+
+.tabNavButton.active {
+  color: var(--blue-strong);
+  border-bottom-color: var(--blue-strong);
+}
+
+.reportChartsContent {
+  display: grid;
+  gap: 20px;
+}
+
+.tabContent {
+  padding: 40px;
+  text-align: center;
+  color: #8b7355;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 960px) {
+  .tabNavButton {
+    min-width: 110px;
+    padding: 10px 12px;
+    font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .tabNavContainer {
+    flex-direction: column;
+  }
+
+  .tabNavButton {
+    min-width: unset;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.2);
+    border-left: 2px solid transparent;
+  }
+
+  .tabNavButton.active {
+    border-bottom-color: transparent;
+    border-left-color: var(--blue-strong);
+  }
+}

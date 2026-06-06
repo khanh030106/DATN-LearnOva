@@ -1,0 +1,30 @@
+.courseStatistics {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.courseStatisticsGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+@media (max-width: 1400px) {
+  .courseStatisticsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1000px) {
+  .courseStatisticsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .courseStatisticsGrid {
+    grid-template-columns: 1fr;
+  }
+}

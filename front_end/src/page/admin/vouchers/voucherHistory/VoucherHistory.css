@@ -1,0 +1,158 @@
+.voucherHistorySection {
+  padding: 22px;
+  margin-top: 22px;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid rgba(37, 99, 235, 0.08);
+  border-radius: 6px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+.voucherHistoryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.voucherHistoryTitleIcon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.voucherHistoryIcon {
+  font-size: 24px;
+  color: #f97316;
+}
+
+.voucherHistoryTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.voucherHistorySubtitle {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.voucherHistoryCount {
+  color: #475569;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* ===== SEARCH ===== */
+.voucherHistoryControls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.voucherHistorySearchInput {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.voucherHistorySearchInput:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+/* ===== TABLE ===== */
+.voucherHistoryTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 0;
+  border-radius: 10px;
+  background: transparent;
+}
+
+.voucherHistoryTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 1000px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.voucherHistoryTable th,
+.voucherHistoryTable td {
+  padding: 14px 14px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.voucherHistoryTable th {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: #ffffff;
+}
+
+.voucherHistoryTable td {
+  font-size: 13px;
+  color: #475569;
+}
+
+.voucherHistoryTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.voucherHistoryCode {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #fef3c7;
+  color: var(--blue-strong);
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.voucherHistoryDiscount {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.voucherHistoryFinal {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .voucherHistoryHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .voucherHistoryControls {
+    width: 100%;
+  }
+
+  .voucherHistorySearchInput {
+    width: 100%;
+  }
+
+  .voucherHistoryTable {
+    min-width: 100%;
+  }
+}

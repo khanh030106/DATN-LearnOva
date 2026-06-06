@@ -1,0 +1,39 @@
+.vouchersPage {
+  padding: 12px 24px;
+  border-radius: 6px;
+}
+
+.voucherChartsRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+  margin-top: 18px;
+}
+
+.voucherChartColumn {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .voucherChartsRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.voucherChartsRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 18px;
+}
+
+.voucherChartColumn {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .voucherChartsRow {
+    grid-template-columns: 1fr;
+  }
+}

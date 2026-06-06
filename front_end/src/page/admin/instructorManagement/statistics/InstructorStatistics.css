@@ -1,0 +1,25 @@
+.instructorStatistics {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-top: 12px;
+}
+
+.instructorStatisticsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+@media (max-width: 1200px) {
+  .instructorStatisticsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .instructorStatisticsGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,49 @@
+.revenueSection {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.revenueContainer {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.revenueGrid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 18px;
+}
+
+@media (max-width: 1400px) {
+  .revenueGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1024px) {
+  .revenueGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .revenueGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 540px) {
+  .revenueGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.revenueDelta {
+  font-size: 13px;
+  font-weight: 700;
+  color: #16a34a;
+}
+
+.revenueDelta.negative {
+  color: #dc2626;
+}

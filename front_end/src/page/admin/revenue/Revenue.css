@@ -1,0 +1,100 @@
+.revenuePage {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 12px 32px;
+}
+
+.revenuePageInner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+}
+
+.revenueTopBlocksRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.revenueTwoColumn {
+  display: grid;
+  grid-template-columns: 8fr 4fr;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.leftColumn {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rightColumn {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  min-height: 0;
+}
+
+.rightColumn > * {
+  background: #ffffff;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.revenueOverviewRow {
+  display: grid;
+  grid-template-columns: 9fr 4fr;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.revenueOverviewRow > section {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+  min-width: 0;
+}
+
+.revenueTopBlocksRow > section {
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+.revenuePageInner > * {
+  width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .revenueOverviewRow,
+  .revenueTopBlocksRow {
+    grid-template-columns: 1fr;
+  }
+  .revenueTwoColumn {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 840px) {
+  .revenueTopBlocksRow,
+  .revenueOverviewRow {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .revenuePage {
+    padding: 20px 18px 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .revenuePage {
+    padding: 16px 14px 0;
+  }
+}

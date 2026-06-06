@@ -1,0 +1,19 @@
+.courseStatCard--published {
+  border-color: rgba(15, 143, 82, 0.28);
+}
+
+.courseStatIcon--published {
+  color: #0f8f52;
+}
+
+.courseStatBar--published {
+  background: #0f8f52;
+}
+
+.courseStatTrend--published {
+  color: #0f8f52;
+}
+
+.courseStatTrend--published .courseStatTrendPercent {
+  color: #0f8f52;
+}
