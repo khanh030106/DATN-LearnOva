@@ -1,11 +1,5 @@
 import { Pencil, Plus } from "lucide-react";
-
-const formatPrice = (price) =>
-  new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-    maximumFractionDigits: 0,
-  }).format(price);
+import { formatPromotionCurrency } from "../promotionPageConfig.js";
 
 const PromotionCard = ({ course, promotion, onSetPromotion }) => {
   const basePrice = course.basePrice * 24000;
@@ -29,10 +23,10 @@ const PromotionCard = ({ course, promotion, onSetPromotion }) => {
         </p>
 
         <div className="teacher-promotion-card__price-row">
-          <strong>{formatPrice(discountPrice)}</strong>
+          <strong>{formatPromotionCurrency(discountPrice)}</strong>
           {promotion && (
             <>
-              <del>{formatPrice(basePrice)}</del>
+              <del>{formatPromotionCurrency(basePrice)}</del>
               <span>{promotion.percent}% OFF</span>
             </>
           )}

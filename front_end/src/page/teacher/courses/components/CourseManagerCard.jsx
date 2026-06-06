@@ -8,6 +8,10 @@ const statusLabels = {
 
 const CourseManagerCard = ({ course, onDelete, onUpdate }) => {
   const status = statusLabels[course.courseStatus] || "Review";
+  const isPublished = course.courseStatus === "PUBLISHED";
+  const studentCount = isPublished ? course.students.replace(" students", "") : "-";
+  const revenue = isPublished ? course.displayRevenue : "-";
+  const rating = isPublished ? course.rating : "-";
 
   return (
     <article className="teacher-course-row">
@@ -31,17 +35,17 @@ const CourseManagerCard = ({ course, onDelete, onUpdate }) => {
         {status}
       </span>
 
-      <strong>{course.courseStatus === "PUBLISHED" ? course.students.replace(" students", "") : "-"}</strong>
-      <strong>{course.courseStatus === "PUBLISHED" ? course.displayRevenue : "-"}</strong>
+      <strong>{studentCount}</strong>
+      <strong>{revenue}</strong>
 
       <strong className="teacher-course-row__rating">
-        {course.courseStatus === "PUBLISHED" ? (
+        {isPublished ? (
           <>
-            {course.rating}
+            {rating}
             <Star size={14} fill="currentColor" />
           </>
         ) : (
-          "-"
+          rating
         )}
       </strong>
 

@@ -1,14 +1,11 @@
 import { PieChart } from "lucide-react";
+import AnalyticsPanelHeader from "./AnalyticsPanelHeader.jsx";
+import AnalyticsProgressBar from "./AnalyticsProgressBar.jsx";
 
 const DemographicsPanel = ({ demographicItems }) => {
   return (
     <article className="teacher-analytics-panel teacher-analytics-panel--demographics">
-      <header>
-        <span className="teacher-analytics-panel__icon teacher-analytics-panel__icon--gold">
-          <PieChart size={28} />
-        </span>
-        <h2>Chi tiet nhan khau hoc</h2>
-      </header>
+      <AnalyticsPanelHeader icon={PieChart} iconTone="gold" title="Chi tiet nhan khau hoc" />
 
       <div className="teacher-analytics-demographic-list">
         {demographicItems.map((item) => (
@@ -18,9 +15,10 @@ const DemographicsPanel = ({ demographicItems }) => {
               <span>{item.value}%</span>
             </div>
             <em>
-              <i
+              <AnalyticsProgressBar
+                as="i"
                 className={`teacher-analytics-demographic-item__bar teacher-analytics-demographic-item__bar--${item.tone}`}
-                style={{ width: `${item.value}%` }}
+                value={item.value}
               />
             </em>
           </div>
