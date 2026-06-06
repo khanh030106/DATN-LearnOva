@@ -5,15 +5,39 @@ export default function CourseFilter() {
     return (
         <aside className="course-filter">
             <h4>Bộ lọc</h4>
-            <div className="filter-group">
+            <div className="filter-group categories-list">
                 <b>Danh mục</b>
-                <div><input type="checkbox" /> Công nghệ</div>
-                <div><input type="checkbox" /> Kinh doanh</div>
-                <div><input type="checkbox" /> Thiết kế</div>
-                <div><input type="checkbox" /> Marketing</div>
-                <div><input type="checkbox" /> Ngoại ngữ</div>
-                <div><input type="checkbox" /> Kỹ năng mềm</div>
-                <a href="#">Xem thêm</a>
+                <label>
+                    <input type="checkbox" /> Công nghệ
+                </label>
+                <label>
+                    <input type="checkbox" /> Kinh doanh
+                </label>
+                <label>
+                    <input type="checkbox" /> Thiết kế
+                </label>
+                <label>
+                    <input type="checkbox" /> Marketing
+                </label>
+                <label>
+                    <input type="checkbox" /> Ngoại ngữ
+                </label>
+                <label>
+                    <input type="checkbox" /> Kỹ năng mềm
+                </label>
+                <label>
+                    <input type="checkbox" /> Kỹ năng mềm
+                </label>
+                <label>
+                    <input type="checkbox" /> Kỹ năng mềm
+                </label>
+                <label>
+                    <input type="checkbox" /> Kỹ năng mềm
+                </label>
+                <label>
+                    <input type="checkbox" /> Kỹ năng mềm
+                </label>
+
             </div>
             <div className="filter-group">
                 <b>Trình độ</b>

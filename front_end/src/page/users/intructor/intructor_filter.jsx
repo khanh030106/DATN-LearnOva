@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./intructor_filter.css";
+import "./InstructorsPage.css";
 import teacherVideo from "../../../assets/instructors/video/teacher.mp4";
 
 const categories = [

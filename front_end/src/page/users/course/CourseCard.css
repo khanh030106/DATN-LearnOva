@@ -1,15 +1,26 @@
-.course-card {
+.course-card-course {
     background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border-radius: 6px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     transition: box-shadow 0.2s;
     position: relative;
 }
-.course-card:hover {
-    box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+.course-card-course:hover {
+    transform: translateY(-8px);  /* Nổi lên 8px */
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.15);  /* Shadow lớn khi hover */
+    border-color: rgba(255, 152, 0, 0.2);  /* Border vàng cam khi hover */
+}
+.course-card-course:hover .course-card-img img {
+    transform: scale(1.05);  /* Ảnh zoom 5% */
+}
+.course-card-course {
+    transition: all 0.3s ease;
+}
+
+.course-card-course:hover {
+    transform: scale(1.05);
 }
 .course-card-img {
     position: relative;
