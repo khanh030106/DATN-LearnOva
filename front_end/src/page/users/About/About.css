@@ -1,0 +1,530 @@
+/* AboutView.css */
+
+:root {
+    --about-bg-cream: #fffdf8;
+    --about-bg-card: #ffffff;
+    --about-bg-navy: #00236f;
+    --about-bg-dark-navy: #001030;
+    --about-text-dark: #1a1a2e;
+    --about-text-muted: #60708c;
+    --about-gold: #e8be74;
+    --about-orange: #ffa107;
+    --about-orange-hover: #f69800;
+    --about-border-light: rgba(250, 228, 170, 0.3);
+}
+
+/* Ép toàn bộ container của trang không phát sinh thanh cuộn ngang */
+.about-main-container {
+    background-color: var(--about-bg-cream);
+    color: var(--about-text-dark);
+    font-family: 'Inter', sans-serif;
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    margin-top: -85px;
+}
+
+/* Định dạng font chữ có chân cao cấp */
+.about-font-serif-premium {
+    font-family: 'Playfair Display', 'Georgia', serif;
+}
+
+/* ================= ABOUT HERO SECTION ================= */
+.about-hero-section {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.about-hero-video-wrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: #020617;
+}
+
+.about-hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+}
+
+.about-hero-overlay-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 16, 48, 0.85) 0%, rgba(0, 16, 48, 0.6) 60%, var(--about-bg-cream) 100%);
+}
+
+.about-hero-overlay-multiply {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 16, 48, 0.3);
+    mix-blend-mode: multiply;
+}
+
+/* Khối chữ nằm chính giữa màn hình */
+.about-hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    width: 100%;
+    max-width: 54rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+    font-family: "Playfair Display", Georgia, serif;
+}
+
+/* 1. Badge: Xuất hiện đầu tiên */
+.about-badge-gold {
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(232, 190, 116, 0.3);
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--about-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 2rem;
+
+    /* KÍCH HOẠT ANIMATION */
+    opacity: 0;
+    animation: aboutFadeInUp 1s ease forwards;
+    animation-delay: 0.1s;
+}
+
+/* 2. DÒNG CHỮ TO (Tiêu đề): Xuất hiện sau badge một chút */
+.about-hero-title {
+    color: #ffffff;
+    font-size: 2.75rem;
+    line-height: 1.2;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 0 auto 2rem auto;
+
+    /* KÍCH HOẠT ANIMATION */
+    opacity: 0;
+    animation: aboutFadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.2s;
+}
+
+@media (min-width: 768px) {
+    .about-hero-title {
+        font-size: 4.8rem;
+        line-height: 1.1;
+    }
+}
+
+.about-text-italic-gold {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--about-gold);
+}
+
+/* 3. DÒNG CHỮ NHỎ (Mô tả): Xuất hiện SAU dòng chữ to đúng 0.5 giây */
+.about-hero-desc {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.1rem;
+    max-width: 40rem;
+    margin: 0 auto;
+    font-weight: 300;
+    line-height: 1.65;
+
+    /* KÍCH HOẠT ANIMATION (0.2s tiêu đề + 0.5s trễ = 0.7s) */
+    opacity: 0;
+    animation: aboutFadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.7s;
+}
+
+/* Chuột cuộn hiệu ứng cuộn xuống */
+.about-scroll-indicator {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: aboutBounceCustom 2s infinite;
+}
+
+.about-mouse-border {
+    width: 1.5rem;
+    height: 2.5rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 9999px;
+    display: flex;
+    justify-content: center;
+    padding: 0.25rem;
+}
+
+.about-mouse-wheel {
+    width: 0.25rem;
+    height: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 9999px;
+}
+
+/* ================= ABOUT CONTENT SECTIONS ================= */
+.about-section-padding {
+    padding: 6rem 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .about-section-padding {
+        padding: 8rem 1.5rem;
+    }
+}
+
+.about-grid-layout {
+    max-width: 80rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+@media (min-width: 1024px) {
+    .about-grid-layout {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 5rem;
+    }
+}
+
+.about-content-side {
+    text-align: left;
+}
+
+.about-section-title {
+    font-size: 2.25rem;
+    color: var(--about-navy);
+    margin-top: 0;
+    margin-bottom: 2rem;
+    line-height: 1.25;
+}
+
+@media (min-width: 768px) {
+    .about-section-title {
+        font-size: 3rem;
+    }
+}
+
+.about-text-orange {
+    color: #ffa522;
+}
+
+.about-text-body-light {
+    color: var(--about-text-muted);
+    font-size: 1.05rem;
+    line-height: 1.75;
+    font-weight: 300;
+}
+
+.about-content-space > p {
+    margin-bottom: 1.5rem;
+}
+.about-content-space > p:last-child {
+    margin-bottom: 0;
+}
+
+/* Layout hình ảnh cao cấp */
+.about-image-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+    .about-image-wrapper {
+        max-width: 100%;
+    }
+}
+
+.about-blur-bg-effect {
+    position: absolute;
+    inset: -1.5rem;
+    background-color: rgba(250, 228, 170, 0.15);
+    border-radius: 50%;
+    filter: blur(50px);
+    z-index: -10;
+}
+
+.about-premium-img {
+    border-radius: 28px;
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12);
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: 1px solid var(--about-border-light);
+}
+
+.about-floating-badge {
+    position: absolute;
+    bottom: -1.5rem;
+    right: -1.5rem;
+
+    border: 1px solid rgba(232, 190, 116, 0.3);
+    color: #ffffff;
+    padding: 1.5rem 2rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
+    z-index: 20;
+    background-color: #ffa107;
+}
+
+.about-badge-num {
+    font-size: 2.25rem;
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    line-height: 1;
+}
+
+.about-badge-text {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+    color: #ffffff;
+}
+
+/* ================= ABOUT CORE VALUES ================= */
+.about-values-section {
+    background: linear-gradient(to bottom, var(--about-bg-cream), #fffaf0);
+    border-top: 1px solid rgba(250, 228, 170, 0.15);
+    border-bottom: 1px solid rgba(250, 228, 170, 0.15);
+}
+
+.about-section-header-center {
+    max-width: 80rem;
+    margin: 0 auto 4rem auto;
+    text-align: center;
+}
+
+.about-section-subtitle-tag {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--about-orange);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+
+.about-values-grid {
+    max-width: 80rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .about-values-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.about-value-card {
+    background-color: var(--about-bg-card);
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid var(--about-border-light);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.01);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+}
+
+.about-value-card:hover {
+    box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.06);
+    border-color: rgba(232, 190, 116, 0.5);
+    transform: translateY(-5px);
+}
+
+.about-icon-box {
+    width: 3.5rem;
+    height: 3.5rem;
+    background-color: #fffaf0;
+    border: 1px solid rgba(250, 228, 170, 0.3);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    transition: all 0.4s ease;
+}
+
+.about-value-card:hover .about-icon-box {
+    background: linear-gradient(to bottom right, var(--about-gold), #d9a95f);
+}
+
+.about-value-card:hover .about-icon-box svg {
+    color: #ffffff !important;
+}
+
+.about-value-card-title {
+    font-size: 1.35rem;
+    color: var(--about-navy);
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+/* ================= ABOUT MISSION SECTION ================= */
+.about-mission-section {
+    background: linear-gradient(to bottom right, var(--about-navy), #0f1e4a, var(--about-bg-dark-navy));
+    color: #ffffff;
+}
+
+.about-mission-globe-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    opacity: 0.08;
+    pointer-events: none;
+}
+
+.about-mission-globe-bg svg {
+    margin-right: -24rem;
+    margin-top: -6rem;
+    transform: rotate(12deg);
+}
+
+.about-mission-content-side {
+    text-align: left;
+    position: relative;
+    z-index: 10;
+}
+
+.about-stats-row {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.about-premium-img-wrapper {
+    overflow: hidden;
+    border: 4px solid rgba(232, 190, 116, 0.25);
+    border-radius: 24px;
+    aspect-ratio: 1 / 1;
+}
+
+.about-mission-img-raw {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ================= ABOUT CTA BOX ================= */
+.about-cta-box {
+    max-width: 60rem;
+    margin: 0 auto;
+    background: linear-gradient(to bottom right, #ffffff, #fffaf0);
+    border: 1px solid rgba(250, 228, 170, 0.35);
+    border-radius: 28px;
+    padding: 4rem 2rem;
+    text-align: center;
+    box-shadow: 0 15px 35px -5px rgba(120, 86, 24, 0.03);
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.about-cta-desc {
+    margin: 0 auto 2.5rem auto;
+    max-width: 38rem;
+}
+
+.about-btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 640px) {
+    .about-btn-container {
+        flex-direction: row;
+        gap: 1.5rem;
+    }
+}
+
+.about-btn-primary {
+    padding: 1.1rem 2.25rem;
+    background: linear-gradient(to right, var(--about-orange), var(--about-orange-hover));
+    color: #ffffff;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 16px rgba(255, 161, 7, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.about-btn-primary:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+}
+
+.about-btn-secondary {
+    padding: 1.1rem 2.25rem;
+    background-color: #ffffff;
+    color: var(--about-navy);
+    border: 1px solid rgba(0, 35, 111, 0.18);
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.about-btn-secondary:hover {
+    background-color: #fff9f0;
+    border-color: rgba(232, 190, 116, 0.4);
+    transform: translateY(-2px);
+}
+
+/* ================= ANIMATION KEYFRAMES ================= */
+@keyframes aboutBounceCustom {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, -8px); }
+}
+
+/* Hiệu ứng trượt nhẹ từ dưới lên và mờ dần sang rõ */
+@keyframes aboutFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
