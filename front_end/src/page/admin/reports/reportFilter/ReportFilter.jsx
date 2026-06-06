@@ -1,26 +1,51 @@
 import { useState } from "react";
+import {
+  initialReportFilters,
+  reportFilterFields,
+} from "./reportFilterData.js";
 import "./ReportFilter.css";
 
+const FilterField = ({ field, value, onChange }) => {
+  const inputClassName = field.className ?? "filterInput filterSelect";
+
+  return (
+    <div className="filterField">
+      <label htmlFor={field.id}>{field.label}</label>
+      {field.type === "select" ? (
+        <select
+          id={field.id}
+          name={field.id}
+          value={value}
+          onChange={onChange}
+          className={inputClassName}
+        >
+          {field.options.map((option) => (
+            <option key={option}>{option}</option>
+          ))}
+        </select>
+      ) : (
+        <input
+          id={field.id}
+          type={field.type}
+          name={field.id}
+          value={value}
+          onChange={onChange}
+          className={inputClassName}
+        />
+      )}
+    </div>
+  );
+};
+
 const ReportFilter = () => {
-  const [filters, setFilters] = useState({
-    startDate: "2026-05-01",
-    endDate: "2026-06-04",
-    reportType: "All Reports",
-    category: "All Categories",
-    instructor: "All Instructors",
-    course: "All Courses",
-    userRole: "All Roles",
-  });
+  const [filters, setFilters] = useState(initialReportFilters);
 
-  const handleDateChange = (e) => {
+  const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
-  };
+  const getFilterValue = (fieldId) => filters[fieldId] ?? "";
 
   return (
     <section className="reportFilterSection">
@@ -34,111 +59,14 @@ const ReportFilter = () => {
         </div>
 
         <div className="reportFilterGrid">
-          {/* Start Date */}
-          <div className="filterField">
-            <label>Start Date</label>
-            <input
-              type="date"
-              name="startDate"
-              value={filters.startDate}
-              onChange={handleDateChange}
-              className="filterInput filterDateInput"
+          {reportFilterFields.map((field) => (
+            <FilterField
+              key={field.id}
+              field={field}
+              value={getFilterValue(field.id)}
+              onChange={handleFilterChange}
             />
-          </div>
-
-          {/* End Date */}
-          <div className="filterField">
-            <label>End Date</label>
-            <input
-              type="date"
-              name="endDate"
-              value={filters.endDate}
-              onChange={handleDateChange}
-              className="filterInput filterDateInput"
-            />
-          </div>
-
-          {/* Report Type */}
-          <div className="filterField">
-            <label>Report Type</label>
-            <select
-              name="reportType"
-              value={filters.reportType}
-              onChange={handleSelectChange}
-              className="filterInput filterSelect"
-            >
-              <option>All Reports</option>
-              <option>Revenue Report</option>
-              <option>User Report</option>
-              <option>Course Report</option>
-              <option>Instructor Report</option>
-            </select>
-          </div>
-
-          {/* Category */}
-          <div className="filterField">
-            <label>Category</label>
-            <select
-              name="category"
-              value={filters.category}
-              onChange={handleSelectChange}
-              className="filterInput filterSelect"
-            >
-              <option>All Categories</option>
-              <option>Technology</option>
-              <option>Business</option>
-              <option>Design</option>
-              <option>Language</option>
-            </select>
-          </div>
-
-          {/* Instructor */}
-          <div className="filterField">
-            <label>Instructor</label>
-            <select
-              name="instructor"
-              value={filters.instructor}
-              onChange={handleSelectChange}
-              className="filterInput filterSelect"
-            >
-              <option>All Instructors</option>
-              <option>Instructor A</option>
-              <option>Instructor B</option>
-              <option>Instructor C</option>
-            </select>
-          </div>
-
-          {/* Course */}
-          <div className="filterField">
-            <label>Specific Course</label>
-            <select
-              name="course"
-              value={filters.course}
-              onChange={handleSelectChange}
-              className="filterInput filterSelect"
-            >
-              <option>All Courses</option>
-              <option>Course 1</option>
-              <option>Course 2</option>
-              <option>Course 3</option>
-            </select>
-          </div>
-
-          {/* User Role */}
-          <div className="filterField">
-            <label>User Role</label>
-            <select
-              name="userRole"
-              value={filters.userRole}
-              onChange={handleSelectChange}
-              className="filterInput filterSelect"
-            >
-              <option>All Roles</option>
-              <option>Administrator</option>
-              <option>Instructor</option>
-              <option>Student</option>
-            </select>
-          </div>
+          ))}
         </div>
       </div>
     </section>

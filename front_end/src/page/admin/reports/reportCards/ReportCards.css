@@ -10,6 +10,62 @@
   gap: 16px;
 }
 
+.reportCard {
+  background: #ffffff;
+  border: 1px solid rgba(37, 99, 235, 0.35);
+  border-radius: 6px;
+  padding: 12px 24px;
+}
+
+.reportCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.reportCardIcon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--blue-strong);
+}
+
+.reportCardIconAccent {
+  background: #f8e3ca;
+  color: #d87f12;
+}
+
+.reportCardIconAccentBlue {
+  background: #fbe8d2;
+  color: #e06a26;
+}
+
+.reportCardIconAccentGold,
+.reportCardIconAccentPeach {
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.reportCardLabel {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.reportCardValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2f1f14;
+  margin-bottom: 10px;
+}
+
+.reportCardNote {
+  font-size: 0.92rem;
+  color: #7a5b43;
+}
+
 @media (max-width: 960px) {
   .reportCardsGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

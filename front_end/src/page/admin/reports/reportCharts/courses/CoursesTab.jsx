@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import CourseLaunchChart from "./CourseLaunchChart/CourseLaunchChart.jsx";
 import CourseCategoryChart from "./CourseCategoryChart/CourseCategoryChart.jsx";
 import CourseSignupChart from "./CourseSignupChart/CourseSignupChart.jsx";
@@ -14,7 +15,7 @@ const CoursesTab = () => {
     <div className="coursesTabContent">
       <div className="coursesChartsGrid">
         {charts.map(({ id, component: ChartComponent }) => (
-          <ChartComponent key={id} />
+          createElement(ChartComponent, { key: id })
         ))}
       </div>
     </div>

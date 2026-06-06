@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import RevenueCategoryChart from "./RevenueCategoryChart/RevenueCategoryChart.jsx";
 import VoucherStructureChart from "./VoucherStructureChart/VoucherStructureChart.jsx";
 import "./RevenueTab.css";
@@ -12,7 +13,7 @@ const RevenueTab = () => {
     <div className="revenueTabContent">
       <div className="revenueChartsGrid">
         {charts.map(({ id, component: ChartComponent }) => (
-          <ChartComponent key={id} />
+          createElement(ChartComponent, { key: id })
         ))}
       </div>
     </div>

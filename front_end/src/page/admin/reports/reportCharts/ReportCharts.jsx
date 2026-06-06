@@ -1,42 +1,15 @@
 import { useState } from "react";
-import DashboardTab from "./dashboard/DashboardTab.jsx";
-import UsersTab from "./users/UsersTab.jsx";
-import InstructorsTab from "./instructors/InstructorsTab.jsx";
-import CoursesTab from "./courses/CoursesTab.jsx";
-import LearningTab from "./learning/LearningTab.jsx";
-import RevenueTab from "./revenue/RevenueTab.jsx";
+import { reportChartTabs } from "./reportChartTabs.js";
 import "./ReportCharts.css";
 
-const tabs = [
-  { id: "dashboard", label: "Summary" },
-  { id: "users", label: "Users" },
-  { id: "instructors", label: "Instructors" },
-  { id: "courses", label: "Courses" },
-  { id: "learning", label: "Learning Metrics" },
-  { id: "revenue", label: "Revenue & Vouchers" },
-];
+const DEFAULT_TAB_ID = "dashboard";
 
 const ReportCharts = () => {
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState(DEFAULT_TAB_ID);
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case "dashboard":
-        return <DashboardTab />;
-      case "users":
-        return <UsersTab />;
-      case "instructors":
-        return <InstructorsTab />;
-      case "courses":
-        return <CoursesTab />;
-      case "learning":
-        return <LearningTab />;
-      case "revenue":
-        return <RevenueTab />;
-      default:
-        return <DashboardTab />;
-    }
-  };
+  const activeTabConfig =
+    reportChartTabs.find((tab) => tab.id === activeTab) ?? reportChartTabs[0];
+  const ActiveTabContent = activeTabConfig.Component;
 
   return (
     <section className="reportChartsSection">
@@ -46,7 +19,7 @@ const ReportCharts = () => {
 
       <div className="reportChartsTabNav">
         <div className="tabNavContainer">
-          {tabs.map((tab) => (
+          {reportChartTabs.map((tab) => (
             <button
               key={tab.id}
               className={`tabNavButton ${activeTab === tab.id ? "active" : ""}`}
@@ -58,7 +31,9 @@ const ReportCharts = () => {
         </div>
       </div>
 
-      <div className="reportChartsContent">{renderTabContent()}</div>
+      <div className="reportChartsContent">
+        <ActiveTabContent />
+      </div>
     </section>
   );
 };

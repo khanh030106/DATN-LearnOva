@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import GraduationRateChart from "./GraduationRateChart/GraduationRateChart.jsx";
 import StudyProgressChart from "./StudyProgressChart/StudyProgressChart.jsx";
 import EngagementChart from "./EngagementChart/EngagementChart.jsx";
@@ -14,7 +15,7 @@ const LearningTab = () => {
     <div className="learningTabContent">
       <div className="learningChartsGrid">
         {charts.map(({ id, component: ChartComponent }) => (
-          <ChartComponent key={id} />
+          createElement(ChartComponent, { key: id })
         ))}
       </div>
     </div>
