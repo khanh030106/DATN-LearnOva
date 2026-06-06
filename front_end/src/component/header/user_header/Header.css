@@ -3,10 +3,8 @@
 }
 
 .main-header {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
   z-index: 1000;
   padding: 8px 24px;
   border-bottom: 1px solid rgba(226, 232, 240, 0.18);
@@ -80,15 +78,10 @@
   left: 0;
   bottom: 3px;
   width: 0;
-  height: 2px;
+  height: 1px;
   border-radius: 999px;
   background: #93c5fd;
   transition: width 0.25s ease;
-}
-
-.nav-menu-link:hover {
-  color: #ffd98a;
-  transform: translateY(-1px);
 }
 
 .nav-menu-link:hover::after,
@@ -111,18 +104,6 @@
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition:
-    background-color 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease,
-    opacity 0.3s ease;
-}
-
-.main-header.scrolled .header-search {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(232, 190, 116, 0.2);
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
 }
 
 .header-search-icon {
@@ -144,6 +125,19 @@
   color: rgba(255, 255, 255, 0.72);
 }
 
+@media (max-width: 1024px) {
+  .header-search {
+    width: 200px;
+  }
+}
+
+@media (max-width: 860px) {
+  .header-search {
+    order: 4;
+    width: min(100%, 420px);
+  }
+}
+
 .header-section {
   display: flex;
   align-items: center;
@@ -160,22 +154,17 @@
   border-radius: 14px;
   text-decoration: none;
   transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    background 0.25s ease,
-    color 0.25s ease,
-    border-color 0.25s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .header-action-cart {
   width: 42px;
   color: #ffffff;
   border-radius: 0;
-}
-
-.header-action-cart:hover {
-  color: #ffd98a;
-  transform: translateY(-1px);
 }
 
 .header-action-login {
@@ -194,11 +183,7 @@
 @media (max-width: 1024px) {
   .header-container {
     gap: 20px;
-    padding: 0 18px;
-  }
-
-  .header-search {
-    width: 200px;
+    padding: 12px 18px;
   }
 
   .nav-list {
@@ -207,11 +192,13 @@
 }
 
 @media (max-width: 860px) {
+  .main-header {
+    padding: 12px 14px;
+  }
+
   .header-container {
     flex-wrap: wrap;
     justify-content: center;
-    min-height: auto;
-    padding: 12px 14px;
   }
 
   .nav-menu {
@@ -224,14 +211,14 @@
     justify-content: center;
     gap: 14px 20px;
   }
-
-  .header-search {
-    order: 4;
-    width: min(100%, 420px);
-  }
 }
 
 @media (max-width: 520px) {
+  .header-container {
+    border-radius: 18px;
+    padding: 12px 14px;
+  }
+
   .logo img {
     height: 40px;
   }
