@@ -2,8 +2,8 @@
   width: 100%;
   padding: 18px;
   border-radius: 6px;
-  border: 1px solid rgba(226, 221, 214, 0.8);
-  background: transparent;
+
+  background: #ffffff;
   box-sizing: border-box;
 }
 
@@ -43,23 +43,27 @@
 }
 
 .topRevenueBlockTableWrapper {
+  width: 100%;
   overflow-x: auto;
+  margin-bottom: 0;
 }
 
 .topRevenueBlockTable {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   min-width: 0;
   table-layout: auto;
+  overflow: hidden;
 }
 
 .topRevenueBlockTable th,
 .topRevenueBlockTable td {
   text-align: left;
-  padding: 8px 10px;
-  color: #5a4d34;
-  font-size: 12px;
-  line-height: 1.4;
+  padding: 14px 14px;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.6;
   word-break: break-word;
 }
 
@@ -102,18 +106,24 @@
 }
 
 .topRevenueBlockTable th {
-  color: #9c8f75;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  font-size: 11px;
+  font-size: 12px;
+  background: #ffffff;
 }
 
 .topRevenueBlockTable tbody tr {
-  border-bottom: 1px solid rgba(226, 221, 214, 0.5);
+  background: #ffffff;
 }
 
-.topRevenueBlockTable tbody tr:last-child {
+.topRevenueBlockTable td,
+.topRevenueBlockTable th {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.topRevenueBlockTable tbody tr:last-child td {
   border-bottom: none;
 }
 

@@ -28,16 +28,18 @@ const InstructorFilters = () => {
         </div>
 
         <div className="instructorFiltersTabs">
-          {filterTabs.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              className={`instructorFiltersTab ${activeTab === tab.id ? "instructorFiltersTab--active" : ""}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.label}
-            </button>
-          ))}
+          <select
+            className="instructorFiltersSelect"
+            value={activeTab}
+            onChange={(e) => setActiveTab(e.target.value)}
+            aria-label="Filter instructors"
+          >
+            {filterTabs.map((tab) => (
+              <option key={tab.id} value={tab.id}>
+                {tab.label}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
     </div>

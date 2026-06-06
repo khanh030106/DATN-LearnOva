@@ -46,7 +46,6 @@
   border-radius: 6px;
   background: linear-gradient(180deg, var(--bg-main) 0%, #ffffff 100%);
   border: 1px solid var(--border-light);
-  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.08);
 }
 
 .dashboardStatisticsCardIcon {

@@ -1,4 +1,3 @@
-import Hero from "./hero/Hero";
 import Statistics from "./statistics/Statistics";
 import "./Dashboard.css";
 import GrowthChart from "./growthChart/GrowthChart";
@@ -11,8 +10,6 @@ const Dashboard = () => {
   return (
     <div className="adminDashboard">
       <div className="adminDashboardContent">
-        <Hero />
-
         <Statistics />
 
         <div className="dashboardCharts">
@@ -30,9 +27,13 @@ const Dashboard = () => {
             <UserRow />
           </div>
 
+          <hr className="dashboardRowSeparator" />
+
           <div className="dashboardRowItem">
             <TeacherRow />
           </div>
+
+          <hr className="dashboardRowSeparator" />
 
           <div className="dashboardRowItem">
             <ActivityRow />

@@ -1,4 +1,4 @@
-import { Bell, Search, Settings } from "lucide-react";
+import { Bell, Settings, Search } from "lucide-react";
 import "./Header.css";
 
 const headerData = {
@@ -15,13 +15,13 @@ const actionItems = [
     id: "notifications",
     label: "Notifications",
     iconName: "bell",
-    hasBadge: true,
+    badge: "3",
   },
   {
     id: "settings",
     label: "Settings",
     iconName: "settings",
-    hasBadge: false,
+    badge: null,
   },
 ];
 
@@ -30,59 +30,36 @@ const iconMap = {
   settings: Settings,
 };
 
-export const Header = () => {
+const Header = () => {
   return (
-    <header className="adminHeader">
-      <div className="adminHeaderSearchBox">
-        <Search
-          className="adminHeaderSearchIcon"
-          size={20}
-          aria-hidden="true"
-        />
+    <header className="admin-topbar">
+      <label className="admin-search">
+        <Search size={20} />
         <input
-          type="text"
-          className="adminHeaderSearchInput"
+          type="search"
           placeholder={headerData.searchPlaceholder}
           aria-label={headerData.searchPlaceholder}
         />
-      </div>
+      </label>
 
-      <div className="adminHeaderActions">
-        <div className="adminHeaderIconGroup">
-          {actionItems.map((item) => {
-            const ActionIcon = iconMap[item.iconName];
+      <div className="admin-topbar__actions">
+        {actionItems.map((item) => {
+          const ActionIcon = iconMap[item.iconName];
+          return (
+            <button key={item.id} aria-label={item.label}>
+              <ActionIcon size={20} />
+              {item.badge ? <span>{item.badge}</span> : null}
+            </button>
+          );
+        })}
 
-            return (
-              <button
-                key={item.id}
-                type="button"
-                className="adminHeaderIconButton"
-                aria-label={item.label}
-              >
-                <ActionIcon size={20} aria-hidden="true" />
-                {item.hasBadge ? <span className="adminHeaderBadge" /> : null}
-              </button>
-            );
-          })}
+        <div className="admin-profile">
+          <div>
+            <strong>{headerData.organizationName}</strong>
+            <small>{headerData.roleName}</small>
+          </div>
+          <img src={headerData.avatarUrl} alt={headerData.avatarAlt} />
         </div>
-
-        <button type="button" className="adminHeaderProfileButton">
-          <div className="adminHeaderProfileText">
-            <span className="adminHeaderOrganizationName">
-              {headerData.organizationName}
-            </span>
-            <span className="adminHeaderRoleName">{headerData.roleName}</span>
-          </div>
-
-          <div className="adminHeaderAvatarWrap">
-            <img
-              src={headerData.avatarUrl}
-              alt={headerData.avatarAlt}
-              className="adminHeaderAvatar"
-            />
-            <span className="adminHeaderOnlineStatus" />
-          </div>
-        </button>
       </div>
     </header>
   );

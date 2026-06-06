@@ -5,154 +5,175 @@
 
 .courseTableCard {
   width: 100%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 20px;
+  border-radius: 6px;
+  border: 1px solid rgba(37, 99, 235, 0.28);
+  box-sizing: border-box;
+}
 
-  .courseTableSection {
-    padding: 12px;
-  }
+.courseTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
 
-  .courseTableCard {
-    background: transparent;
-    padding: 0;
-  }
+.courseTable thead th {
+  text-align: left;
+  padding: 12px 14px;
+  font-weight: 800;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(37, 99, 235, 0.12);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  background: transparent;
+}
 
-  .courseTable {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
+.courseTable tbody tr {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
 
-  .courseTable thead th {
-    text-align: left;
-    padding: 10px 8px;
-    font-weight: 600;
-    color: #111827;
-    border-bottom: 1px solid #e6eef6;
-  }
+.courseTable tbody tr:last-child {
+  border-bottom: 0;
+}
 
-  .courseTable tbody td {
-    padding: 10px 8px;
-    border-bottom: 1px solid #eef2f6;
-    vertical-align: middle;
-    color: #111827;
-  }
+.courseTable tbody td {
+  padding: 14px 14px;
+  vertical-align: middle;
+  color: #111827;
+}
 
-  /* Action icons styling */
-  .courseTableActions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
+/* Action icons styling */
+.courseTableActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
 
-  .actionButton {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    padding: 0;
-    border-radius: 10px;
-    background: #ffffff;
-    border: 1px solid rgba(37, 99, 235, 0.12);
-    color: var(--blue-dark);
-    cursor: pointer;
-    transition:
-      background-color 0.2s ease,
-      transform 0.2s ease,
-      border-color 0.2s ease;
-  }
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  color: var(--blue-dark);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
 
-  .actionButton:hover {
-    background: rgba(37, 99, 235, 0.12);
-    border-color: rgba(37, 99, 235, 0.22);
-    transform: translateY(-1px);
-  }
+.actionButton:hover {
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.22);
+  transform: translateY(-1px);
+}
 
-  .actionIcon {
-    width: 16px;
-    height: 16px;
-    color: var(--blue-dark);
-  }
+.actionIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--blue-dark);
+}
 
-  /* Slight spacing and visual balance for the actions column */
-  .courseTable td:last-child {
-    text-align: left;
-    width: 120px;
-  }
+/* Slight spacing and visual balance for the actions column */
+.courseTable td:last-child {
+  text-align: right;
+  width: 140px;
+}
 
-  /* Rating star + value */
-  .courseTableRating {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
+/* Rating star + value */
+.courseTableRating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
 
-  .courseTableRatingIcon {
-    width: 16px;
-    height: 16px;
-    color: var(--blue-primary);
-    flex-shrink: 0;
-  }
+.courseTableRatingIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--blue-primary);
+  flex-shrink: 0;
+}
 
-  .courseTableRatingValue {
-    color: #111827;
-    font-weight: 600;
-  }
+.courseTableRatingValue {
+  color: #111827;
+  font-weight: 600;
+}
 
-  /* Remove row hover highlight */
-  .courseTable tbody tr:hover {
-    background: transparent;
-  }
+/* Remove row hover highlight */
+.courseTable tbody tr:hover {
+  background: transparent;
+}
 
-  /* Flattened/plain table: no chips, no rounded badges */
-  /* Any specialized classes were removed from JSX; keep styles minimal */
+.courseTablePagination {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(37, 99, 235, 0.16);
+  background: transparent;
+  flex-wrap: wrap;
+}
 
-  .courseTablePagination {
-    margin-top: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 8px;
-    padding: 16px 0 0;
-    border-top: 1px solid rgba(37, 99, 235, 0.14);
-    background: transparent;
-  }
+.paginationButton {
+  min-width: 38px;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: var(--text-main);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
 
-  .paginationButton {
-    min-width: 42px;
-    padding: 10px 14px;
-    border: 1px solid rgba(37, 99, 235, 0.22);
-    border-radius: 10px;
-    background-color: #f8fafc;
-    color: var(--text-secondary);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition:
-      border-color 0.2s ease,
-      background-color 0.2s ease,
-      transform 0.2s ease;
-  }
+.paginationButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(37, 99, 235, 0.42);
+  background: rgba(37, 99, 235, 0.06);
+}
 
-  .paginationButton:hover:not(:disabled) {
-    border-color: var(--blue-primary);
-    background-color: rgba(37, 99, 235, 0.12);
-  }
+.paginationButton--active {
+  background: linear-gradient(
+    135deg,
+    var(--blue-primary) 0%,
+    var(--blue-strong) 100%
+  );
+  color: #050505;
+  border-color: rgba(37, 99, 235, 0.52);
+}
 
-  .paginationButton--active {
-    background-color: var(--blue-primary);
-    color: #1b140c;
-    border-color: var(--blue-primary);
-  }
-
-  .paginationButton:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-  }
+.paginationButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 @media (max-width: 1100px) {
   .courseTable {
     min-width: 760px;
+  }
+
+  .courseTable thead th,
+  .courseTable tbody td {
+    padding: 12px 12px;
+    font-size: 13px;
   }
 }
 
@@ -161,9 +182,10 @@
     min-width: 620px;
   }
 
-  .courseTableInfo,
-  .courseTablePrice {
-    gap: 4px;
+  .courseTable thead th,
+  .courseTable tbody td {
+    padding: 10px 10px;
+    font-size: 12px;
   }
 }
 
@@ -175,12 +197,21 @@
   .courseTable th,
   .courseTable td {
     padding: 12px 10px;
-    font-size: 13px;
+    font-size: 12px;
   }
 
-  .courseTableCategory,
-  .courseTableStudents,
-  .courseStatus {
-    font-size: 12px;
+  .actionButton {
+    width: 34px;
+    height: 34px;
+  }
+
+  .actionIcon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .paginationButton {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 }

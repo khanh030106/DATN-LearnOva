@@ -119,7 +119,7 @@ const statusClasses = {
   Failed: "statusFailed",
 };
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 7;
 
 const TransactionLog = () => {
   const [currentPage, setCurrentPage] = useState(1);

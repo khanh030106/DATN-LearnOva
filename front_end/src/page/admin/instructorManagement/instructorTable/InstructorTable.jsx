@@ -12,9 +12,7 @@ const instructorsData = [
     classes: 3,
     students: "1.250",
     rating: 4.8,
-    ratingText: "Good",
     revenue: "$145,000",
-    payment: "Paid",
     status: "Active",
   },
   {
@@ -26,9 +24,7 @@ const instructorsData = [
     classes: 3,
     students: "940",
     rating: 4.9,
-    ratingText: "Good",
     revenue: "$98,000",
-    payment: "Paid",
     status: "Active",
   },
   {
@@ -40,9 +36,7 @@ const instructorsData = [
     classes: 2,
     students: "765",
     rating: 4.7,
-    ratingText: "Fair",
     revenue: "$82,500",
-    payment: "Outstanding",
     status: "Paused",
   },
   {
@@ -54,9 +48,7 @@ const instructorsData = [
     classes: 4,
     students: "1.120",
     rating: 4.6,
-    ratingText: "Good",
     revenue: "$112,000",
-    payment: "Paid",
     status: "Active",
   },
   {
@@ -68,9 +60,7 @@ const instructorsData = [
     classes: 2,
     students: "630",
     rating: 4.5,
-    ratingText: "Fair",
     revenue: "$67,900",
-    payment: "Paid",
     status: "Active",
   },
   {
@@ -82,9 +72,7 @@ const instructorsData = [
     classes: 5,
     students: "1.420",
     rating: 4.9,
-    ratingText: "Excellent",
     revenue: "$162,500",
-    payment: "Paid",
     status: "Active",
   },
   {
@@ -96,9 +84,7 @@ const instructorsData = [
     classes: 3,
     students: "790",
     rating: 4.4,
-    ratingText: "Fair",
     revenue: "$89,400",
-    payment: "Paid",
     status: "Paused",
   },
   {
@@ -110,9 +96,7 @@ const instructorsData = [
     classes: 2,
     students: "520",
     rating: 4.7,
-    ratingText: "Good",
     revenue: "$56,800",
-    payment: "Paid",
     status: "Active",
   },
   {
@@ -124,9 +108,7 @@ const instructorsData = [
     classes: 4,
     students: "1.010",
     rating: 4.8,
-    ratingText: "Good",
     revenue: "$130,000",
-    payment: "Paid",
     status: "Active",
   },
   {
@@ -138,9 +120,7 @@ const instructorsData = [
     classes: 3,
     students: "880",
     rating: 4.6,
-    ratingText: "Good",
     revenue: "$95,300",
-    payment: "Outstanding",
     status: "Active",
   },
   {
@@ -152,9 +132,7 @@ const instructorsData = [
     classes: 2,
     students: "610",
     rating: 4.3,
-    ratingText: "Fair",
     revenue: "$58,200",
-    payment: "Paid",
     status: "Locked",
   },
   {
@@ -166,9 +144,7 @@ const instructorsData = [
     classes: 3,
     students: "700",
     rating: 4.5,
-    ratingText: "Fair",
     revenue: "$79,500",
-    payment: "Paid",
     status: "Active",
   },
 ];
@@ -222,26 +198,22 @@ const InstructorTable = () => {
                 <td>
                   <div className="instructorTableStat">
                     <strong>{instructor.classes}</strong>
-                    <span>Classes</span>
                   </div>
                 </td>
                 <td>
                   <div className="instructorTableStat">
                     <strong>{instructor.students}</strong>
-                    <span>Students</span>
                   </div>
                 </td>
                 <td>
                   <div className="instructorTableRate">
                     <Star size={16} className="instructorTableStar" />
                     <strong>{instructor.rating}</strong>
-                    <span>{instructor.ratingText}</span>
                   </div>
                 </td>
                 <td>
                   <div className="instructorTableRevenue">
                     <strong>{instructor.revenue}</strong>
-                    <span>{instructor.payment}</span>
                   </div>
                 </td>
                 <td>

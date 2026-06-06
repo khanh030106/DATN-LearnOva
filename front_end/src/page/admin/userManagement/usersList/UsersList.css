@@ -4,10 +4,11 @@
 }
 
 .userManagementUsersCard {
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   min-width: 0;
-  padding: 28px 32px 30px;
+  padding: 20px;
   border-radius: 6px;
   border: 1px solid rgba(37, 99, 235, 0.28);
   box-sizing: border-box;
@@ -70,13 +71,19 @@
     minmax(0, 1.6fr) minmax(120px, 0.75fr) minmax(120px, 0.75fr)
     minmax(120px, 0.75fr) minmax(160px, 0.9fr);
   gap: 16px;
-  padding: 0 10px 14px 2px;
-  margin-bottom: 4px;
+  padding: 0 14px 12px 14px;
+  border-bottom: 1px solid rgba(37, 99, 235, 0.12);
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
+  width: 100%;
+}
+
+.userManagementUsersTableHeader > span {
+  display: inline-flex;
+  align-items: center;
 }
 
 .userManagementUsersColumn--actions {
@@ -97,8 +104,9 @@
     minmax(120px, 0.75fr) minmax(160px, 0.9fr);
   gap: 16px;
   align-items: center;
-  padding: 14px 10px 14px 2px;
-  border-bottom: 1px solid rgba(37, 99, 235, 0.16);
+  padding: 14px 14px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  width: 100%;
 }
 
 .userManagementUserRow:last-child {
@@ -129,7 +137,7 @@
 .userManagementUserName {
   margin: 0;
   color: var(--text-main);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.35;
   font-weight: 800;
 }

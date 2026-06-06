@@ -221,12 +221,6 @@ const UsersList = () => {
   return (
     <section className="userManagementUsersSection" aria-label="User List">
       <div className="userManagementUsersCard">
-        <div className="userManagementUsersHeader">
-          <div>
-            <h3 className="userManagementUsersTitle">User List</h3>
-          </div>
-        </div>
-
         <div className="userManagementUsersTableHeader" aria-hidden="true">
           {tableColumns.map((column) => (
             <span
@@ -267,7 +261,6 @@ const UsersList = () => {
                   <span
                     className={`userManagementUserRole userManagementUserRole--${user.roleTone}`}
                   >
-                    <roleInfo.icon size={12} aria-hidden="true" />
                     <span>{roleInfo.label}</span>
                   </span>
                 </div>
@@ -280,7 +273,6 @@ const UsersList = () => {
 
                 <div className="userManagementUserJoinedWrap">
                   <span className="userManagementUserJoined">
-                    <CalendarDays size={12} aria-hidden="true" />
                     <span>{user.joinedAt}</span>
                   </span>
                 </div>

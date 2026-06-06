@@ -4,10 +4,11 @@
   justify-content: space-between;
   gap: 16px;
   width: 100%;
-  padding: 16px 20px;
-  border-radius: 14px;
+  padding: 9px;
+  border-radius: 6px;
   border: 1px solid rgba(37, 99, 235, 0.26);
   box-sizing: border-box;
+  background-color: #ffffff;
 }
 
 .instructorFiltersMain {
@@ -18,6 +19,11 @@
   min-width: 0;
 }
 
+/* Place search at left and dropdown at right */
+.instructorFiltersMain {
+  justify-content: space-between;
+}
+
 .instructorFiltersSearch {
   display: flex;
   align-items: center;
@@ -85,8 +91,9 @@
   align-items: center;
   gap: 10px;
   padding: 8px 14px;
-  min-width: 280px;
-  flex: 1 1 320px;
+  min-width: 0;
+  width: 420px;
+  max-width: 72%;
   border-radius: 9999px;
   background: #ffffff;
   border: 1px solid rgba(157, 129, 88, 0.18);
@@ -107,6 +114,9 @@
   color: #2f2419;
   font-size: 14px;
   line-height: 1.6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .instructorFiltersInput::placeholder {
@@ -118,6 +128,7 @@
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+  flex: 0 0 auto; /* keep tabs/dropdown compact on right */
 }
 
 .instructorFiltersTab {
@@ -141,6 +152,24 @@
 .instructorFiltersTab--active {
   background: rgba(37, 99, 235, 0.18);
   border-color: rgba(37, 99, 235, 0.35);
+}
+
+/* Dropdown replacement for tabs */
+.instructorFiltersSelect {
+  padding: 9px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  background: #fffdf7;
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.instructorFiltersSelect:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
 }
 
 @media (max-width: 1024px) {
@@ -158,10 +187,11 @@
 
   .instructorFiltersSearch {
     min-width: 100%;
+    flex: 1 1 auto;
   }
 
   .instructorFiltersTabs {
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-end;
   }
 }

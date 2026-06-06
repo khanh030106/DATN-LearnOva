@@ -1,8 +1,7 @@
-.adminHeader {
-  position: sticky;
-  top: 0;
+.admin-topbar {
+  flex: 0 0 auto;
   z-index: 20;
-  width: 100%;
+  min-height: 65px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -10,64 +9,53 @@
   padding: 10px 20px;
   background: #ffffff;
   border-bottom: 1px solid #e2e8f0;
-  box-shadow: none;
-  box-sizing: border-box;
 }
 
-.adminHeaderSearchBox {
+.admin-search {
+  width: min(520px, 100%);
+  height: 40px;
   display: flex;
   align-items: center;
   gap: 14px;
-  width: min(520px, 100%);
-  height: 40px;
   padding: 0 22px;
-  background: #ffffff;
   border: 1px solid #00398530;
   border-radius: 10px;
-  box-sizing: border-box;
-}
-
-.adminHeaderSearchIcon {
-  flex-shrink: 0;
+  background: #ffffff;
   color: #94a3b8;
 }
 
-.adminHeaderSearchInput {
+.admin-search:focus-within {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+.admin-search input {
   width: 100%;
-  border: none;
-  outline: none;
-  background: transparent;
+  border: 0;
+  outline: 0;
   color: #0f172a;
-  font-size: 15px;
-  font-family: inherit;
+  font: inherit;
+  font-size: 0.5rem;
   font-weight: 700;
 }
 
-.adminHeaderSearchInput::placeholder {
+.admin-search input::placeholder {
   color: #64748b;
 }
 
-.adminHeaderActions {
+.admin-topbar__actions {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.adminHeaderIconGroup {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-right: 18px;
-  border-right: 1px solid rgba(232, 190, 116, 0.22);
-}
-
-.adminHeaderIconButton {
+.admin-topbar__actions button {
   position: relative;
+  width: 40px;
+  height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
   background: #ffffff;
@@ -77,185 +65,98 @@
     border-color 0.2s ease,
     background 0.2s ease,
     color 0.2s ease;
-  cursor: pointer;
 }
 
-.adminHeaderIconButton:hover {
+.admin-topbar__actions button:hover {
   border-color: #93c5fd;
   background: #eff6ff;
   color: #1d4ed8;
 }
 
-.adminHeaderBadge {
+.admin-topbar__actions button span {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #ef4444;
-  border: 2px solid #ffffff;
-}
-
-.adminHeaderLanguageButton {
+  top: -8px;
+  right: -7px;
+  min-width: 20px;
+  height: 20px;
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
-  padding: 0 18px;
-  border: none;
-  border-right: 1px solid rgba(232, 190, 116, 0.22);
-  background: transparent;
-  cursor: pointer;
+  justify-content: center;
+  border-radius: 999px;
+  background: #1d4ed8;
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 900;
 }
 
-.adminHeaderLanguageText {
-  color: #8a7650;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.adminHeaderLanguageButton:hover .adminHeaderLanguageText {
-  color: #1a2e6e;
-}
-
-.adminHeaderProfileButton {
+.admin-profile {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 4px 6px 4px 14px;
-  border: none;
-  background: transparent;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.adminHeaderProfileButton:hover {
-  background: var(--surface-hover);
-}
-
-.adminHeaderProfileText {
+  padding-left: 20px;
+  border-left: 1px solid #e2e8f0;
   text-align: right;
 }
 
-.adminHeaderOrganizationName {
-  display: block;
-  margin-bottom: 3px;
-  color: #8a7650;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.adminHeaderRoleName {
-  display: block;
-  color: #1a2e6e;
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.adminHeaderAvatarWrap {
-  position: relative;
-  flex-shrink: 0;
-}
-
-.adminHeaderAvatar {
-  display: block;
+.admin-profile img {
   width: 45px;
   height: 45px;
   border-radius: 50%;
   object-fit: cover;
-  border: none;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
 }
 
-.adminHeaderOnlineStatus {
-  position: absolute;
-  right: -2px;
-  bottom: -2px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #22c55e;
-  border: 2px solid #ffffff;
+.admin-profile strong {
+  display: block;
+  color: #0f172a;
+  font-size: 0.64rem;
+  font-weight: 900;
+  line-height: 1.25;
 }
 
-.adminHeader {
-  width: 100%;
+.admin-profile small {
+  display: block;
+  margin-top: 4px;
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: none;
 }
 
-@media (max-width: 1100px) {
-  .adminHeader {
-    flex-wrap: wrap;
+@media (max-width: 760px) {
+  .admin-topbar {
+    align-items: stretch;
+    flex-direction: column;
+    padding-inline: 16px;
   }
 
-  .adminHeaderSearchBox {
-    width: 100%;
-    order: 1;
-  }
-
-  .adminHeaderActions {
+  .admin-topbar__actions {
     width: 100%;
     justify-content: space-between;
-    order: 2;
+  }
+
+  .admin-profile {
+    gap: 10px;
+    margin-left: 0;
+    padding-left: 12px;
+  }
+
+  .admin-profile div {
+    display: none;
   }
 }
 
-@media (max-width: 720px) {
-  .adminHeader {
-    padding: 16px;
+@media (max-width: 460px) {
+  .admin-topbar {
     gap: 16px;
   }
 
-  .adminHeaderActions {
-    flex-wrap: wrap;
-    gap: 12px;
+  .admin-search {
+    height: 48px;
+    padding-inline: 18px;
   }
 
-  .adminHeaderIconGroup {
-    padding-right: 0;
-    border-right: none;
-  }
-
-  .adminHeaderLanguageButton {
-    border-right: none;
+  .admin-profile {
     padding-left: 0;
+    border-left: 0;
   }
-
-  .adminHeaderProfileButton {
-    width: 100%;
-    justify-content: space-between;
-    padding-left: 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .adminHeaderSearchInput {
-    font-size: 14px;
-  }
-
-  .adminHeaderRoleName {
-    font-size: 14px;
-  }
-}
-
-.adminLayout {
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
-  background: #fffaf0;
-}
-
-.adminLayoutContent {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  padding: 0;
-}
-
-.adminLayoutMain {
-  flex: 1;
-  min-width: 0;
-  padding: 12px;
 }

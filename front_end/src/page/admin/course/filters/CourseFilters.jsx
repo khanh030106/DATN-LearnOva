@@ -40,6 +40,7 @@ const CourseFilters = () => {
   const [isCategoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
   const [isInstructorDropdownOpen, setInstructorDropdownOpen] = useState(false);
   const [isSortDropdownOpen, setSortDropdownOpen] = useState(false);
+  const [isPriceDropdownOpen, setIsPriceDropdownOpen] = useState(false);
   const filtersContainerRef = useRef(null);
 
   useEffect(() => {
@@ -51,6 +52,7 @@ const CourseFilters = () => {
         setCategoryDropdownOpen(false);
         setInstructorDropdownOpen(false);
         setSortDropdownOpen(false);
+        setIsPriceDropdownOpen(false);
       }
     };
 
@@ -72,6 +74,10 @@ const CourseFilters = () => {
     publishSortOptions.find((item) => item.id === selectedPublishSort)?.label ||
     "Mới nhất";
 
+  const getSelectedPriceTypeLabel = () =>
+    priceTypeOptions.find((item) => item.id === selectedPriceType)?.label ||
+    "Tất cả";
+
   const openCategoryDropdown = () => {
     setCategoryDropdownOpen((prev) => !prev);
     setInstructorDropdownOpen(false);
@@ -88,6 +94,14 @@ const CourseFilters = () => {
     setSortDropdownOpen((prev) => !prev);
     setCategoryDropdownOpen(false);
     setInstructorDropdownOpen(false);
+    setIsPriceDropdownOpen(false);
+  };
+
+  const openPriceDropdown = () => {
+    setIsPriceDropdownOpen((prev) => !prev);
+    setCategoryDropdownOpen(false);
+    setInstructorDropdownOpen(false);
+    setSortDropdownOpen(false);
   };
 
   return (
@@ -115,7 +129,6 @@ const CourseFilters = () => {
               aria-label="Filter by Category"
             >
               <span className="filterButtonLabel">
-                <Layers size={16} color="#e8be74" />
                 <span>{getSelectedCategoryLabel()}</span>
               </span>
               <ChevronDown
@@ -157,7 +170,6 @@ const CourseFilters = () => {
               aria-label="Filter by Instructor"
             >
               <span className="filterButtonLabel">
-                <Users size={16} color="#7a6b52" />
                 <span>Instructor ({getSelectedInstructorLabel()})</span>
               </span>
               <ChevronDown
@@ -201,7 +213,6 @@ const CourseFilters = () => {
               aria-label="Sort Courses"
             >
               <span className="filterButtonLabel">
-                <CalendarDays size={16} color="#7a6b52" />
                 <span>Published: {getSelectedPublishSortLabel()}</span>
               </span>
               <ChevronDown
@@ -233,21 +244,47 @@ const CourseFilters = () => {
               </div>
             )}
           </div>
-        </div>
 
-        <div className="priceFilterTabs">
-          <span className="priceFilterLabel">Price Type:</span>
-          {priceTypeOptions.map((option) => (
+          <div className="filterDropdownWrapper">
             <button
-              key={option.id}
-              className={`priceFilterTab ${
-                selectedPriceType === option.id ? "active" : ""
+              className={`filterDropdownButton ${
+                isPriceDropdownOpen ? "active" : ""
               }`}
-              onClick={() => setSelectedPriceType(option.id)}
+              onClick={openPriceDropdown}
+              aria-label="Filter by Price Type"
             >
-              {option.label}
+              <span className="filterButtonLabel">
+                <span>Price: {getSelectedPriceTypeLabel()}</span>
+              </span>
+              <ChevronDown
+                size={18}
+                color="#7a6b52"
+                strokeWidth={2.5}
+                style={{
+                  transition: "transform 0.2s ease",
+                  transform: isPriceDropdownOpen ? "rotate(180deg)" : "none",
+                }}
+              />
             </button>
-          ))}
+            {isPriceDropdownOpen && (
+              <div className="filterDropdownMenu">
+                {priceTypeOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    className={`filterDropdownItem ${
+                      selectedPriceType === option.id ? "active" : ""
+                    }`}
+                    onClick={() => {
+                      setSelectedPriceType(option.id);
+                      setIsPriceDropdownOpen(false);
+                    }}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>

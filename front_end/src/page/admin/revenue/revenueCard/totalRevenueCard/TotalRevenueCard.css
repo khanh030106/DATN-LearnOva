@@ -7,7 +7,6 @@
   flex-direction: column;
   justify-content: space-between;
   min-height: 170px;
-  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
 }
 
 .totalRevenueCardHeader {

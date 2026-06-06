@@ -1,6 +1,11 @@
 .voucherHistorySection {
   padding: 22px;
   margin-top: 22px;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid rgba(37, 99, 235, 0.08);
+  border-radius: 6px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
 }
 
 .voucherHistoryHeader {
@@ -69,36 +74,43 @@
 
 /* ===== TABLE ===== */
 .voucherHistoryTableWrapper {
+  width: 100%;
   overflow-x: auto;
+  margin-bottom: 0;
+  border-radius: 10px;
+  background: transparent;
 }
 
 .voucherHistoryTable {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   min-width: 1000px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.voucherHistoryTable th,
+.voucherHistoryTable td {
+  padding: 14px 14px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
 }
 
 .voucherHistoryTable th {
-  padding: 12px 14px;
-  text-align: left;
   font-size: 12px;
-  font-weight: 700;
-  color: #475569;
-  letter-spacing: 0.02em;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.voucherHistoryTable tbody tr:hover {
-  background: #f3f4f6;
+  background: #ffffff;
 }
 
 .voucherHistoryTable td {
-  padding: 12px 14px;
-  text-align: left;
   font-size: 13px;
   color: #475569;
-  border-bottom: 1px solid #e5e7eb;
 }
 
 .voucherHistoryTable tbody tr:last-child td {

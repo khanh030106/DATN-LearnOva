@@ -7,6 +7,7 @@
 }
 
 .userManagementStatCard {
+  background: #ffffff;
   display: flex;
   align-items: flex-start;
   gap: 14px;

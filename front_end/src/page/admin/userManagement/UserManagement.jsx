@@ -8,7 +8,7 @@ const UserManagement = () => {
   return (
     <section className="userManagementPage" aria-label="User management">
       <div className="userManagementContent">
-        <InstructorApprovalAlert />
+        {/* <InstructorApprovalAlert /> */}
         <UserManagementStats />
         <UserManagementFilters />
         <UsersList />

@@ -35,10 +35,10 @@
 
 .sidebarAdminBrandSubtitle {
   margin: 8px auto 0;
-  color: rgba(255, 255, 255, 0.88);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  color: #ffffff;
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
 }
 
@@ -58,14 +58,15 @@
   padding: 0 18px 0 22px;
   border: 1px solid transparent;
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.94);
+  color: rgba(255, 255, 255, 0.88);
   text-decoration: none;
-  font-size: 1.02rem;
-  font-weight: 700;
+  font-size: 0.96rem;
+  font-weight: 800;
   transition:
     background 0.25s ease,
     color 0.25s ease,
     box-shadow 0.25s ease;
+  font-family: math, sans-serif;
 }
 
 .sidebarAdminNavItem::before {
@@ -80,7 +81,7 @@
 .sidebarAdminNavItem:hover,
 .sidebarAdminNavItemActive {
   color: #ffffff;
-  background: rgba(0, 46, 162, 0.8);
+  background: #002ea2c9;
 }
 
 .sidebarAdminNavItem:hover::before,
@@ -104,7 +105,13 @@
 }
 
 .sidebarAdminNavLabel {
-  line-height: 1.2;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 17px;
+  font-family: math, sans-serif;
+  letter-spacing: 1.1px;
 }
 
 .sidebarAdminFooterActions {
@@ -126,8 +133,9 @@
   background: transparent;
   color: rgba(255, 255, 255, 0.72);
   text-align: left;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 0.95rem;
+  font-weight: 900;
+  font-family: math, sans-serif;
   text-decoration: none;
   cursor: pointer;
   transition:

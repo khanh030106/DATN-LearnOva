@@ -39,6 +39,7 @@
 }
 
 .rightColumn > * {
+  background: #ffffff;
   min-height: 0;
   overflow: hidden;
 }
@@ -58,6 +59,7 @@
 }
 
 .revenueTopBlocksRow > section {
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   min-height: 0;
