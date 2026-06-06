@@ -83,10 +83,6 @@ const RevenuePage = () => {
   return (
     <section className="teacher-page teacher-revenue-page">
       <div className="teacher-revenue-header">
-        <div>
-          <h1>Thu nhap</h1>
-          <p>Toan canh tinh hinh tai chinh va loi nhuan tu tri thuc cua ban.</p>
-        </div>
 
         <div className="teacher-revenue-actions">
           <div className="teacher-revenue-periods" aria-label="Filter revenue by period">
@@ -151,12 +147,12 @@ const RevenuePage = () => {
             <svg viewBox="0 0 400 170" role="img" aria-hidden="true">
               <defs>
                 <linearGradient id="revenueChartFill" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stopColor="#003f98" stopOpacity="0.18" />
-                  <stop offset="100%" stopColor="#003f98" stopOpacity="0" />
+                  <stop offset="0%" stopColor="#1d4ed8" stopOpacity="0.18" />
+                  <stop offset="100%" stopColor="#1d4ed8" stopOpacity="0" />
                 </linearGradient>
               </defs>
               <path d={`M20,150 L${buildChartPoints(activeData.chart)} L380,150 Z`} fill="url(#revenueChartFill)" />
-              <polyline points={buildChartPoints(activeData.chart)} fill="none" stroke="#003f98" strokeWidth="4" />
+              <polyline points={buildChartPoints(activeData.chart)} fill="none" stroke="#1d4ed8" strokeWidth="4" />
             </svg>
           </div>
         </article>

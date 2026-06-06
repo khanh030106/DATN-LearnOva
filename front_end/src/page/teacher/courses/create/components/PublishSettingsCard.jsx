@@ -42,7 +42,6 @@ const PublishSettingsCard = ({ status, visibility, onStatusChange, onVisibilityC
         <Rocket size={17} />
         Publish Course
       </button>
-      <p className="teacher-publish-note">Your course will be reviewed and published.</p>
     </section>
   );
 };

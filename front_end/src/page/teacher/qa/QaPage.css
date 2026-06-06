@@ -10,10 +10,10 @@
   grid-template-columns: auto minmax(0, 1fr);
   gap: 14px;
   padding: 15px;
-  border: 1px solid rgba(232, 190, 116, 0.22);
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   background: #ffffff;
-  box-shadow: 0 10px 20px rgb(15 23 42 / 10%);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
 }
 
 .teacher-qa-item img {
@@ -30,18 +30,18 @@
 }
 
 .teacher-qa-item strong {
-  color: #003f98;
+  color: #071a33;
 }
 
 .teacher-qa-item time,
 .teacher-qa-item span {
-  color: #8aa0bf;
+  color: #64748b;
   font-size: 0.86rem;
 }
 
 .teacher-qa-item p {
   margin-top: 12px;
-  color: #60708c;
+  color: #475569;
   font-size: 0.92rem;
   font-style: italic;
   line-height: 1.65;
@@ -56,14 +56,69 @@
 .teacher-qa-item button {
   min-height: 38px;
   padding: 0 16px;
-  border: 1px solid rgba(232, 190, 116, 0.26);
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   background: #ffffff;
-  color: #003f98;
+  color: #1d4ed8;
   font-weight: 900;
 }
 
-.teacher-qa-item button:first-child {
-  background: #003f98;
+.teacher-qa-item footer > button:first-child {
+  background: #1d4ed8;
   color: #ffffff;
+}
+
+.teacher-qa-reply {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  background: #eff6ff;
+}
+
+.teacher-qa-reply textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 92px;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.5;
+  outline: 0;
+}
+
+.teacher-qa-reply textarea:focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+.teacher-qa-reply textarea::placeholder {
+  color: #94a3b8;
+}
+
+.teacher-qa-reply div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.teacher-qa-reply button {
+  min-height: 34px;
+}
+
+.teacher-qa-reply button[type="submit"] {
+  background: #1d4ed8;
+  color: #ffffff;
+}
+
+.teacher-qa-reply button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }

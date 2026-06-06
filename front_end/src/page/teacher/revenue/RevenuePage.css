@@ -13,7 +13,7 @@
 }
 
 .teacher-revenue-header h1 {
-  color: #003f98;
+  color: #071a33;
   font-family: math;
   font-size: clamp(1.35rem, 1.7vw, 1.65rem);
   font-weight: 800;
@@ -22,8 +22,8 @@
 
 .teacher-revenue-header p {
   margin-top: 8px;
-  color: #60708c;
-  font-size: 0.92rem;
+  color: #475569;
+  font-size: 0.86rem;
   font-weight: 700;
 }
 
@@ -37,7 +37,7 @@
 .teacher-revenue-periods {
   display: inline-flex;
   overflow: hidden;
-  border: 1px solid rgba(232, 190, 116, 0.22);
+  border: 1px solid #e2e8f0;
   border-radius: 7px;
   background: #ffffff;
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
@@ -48,7 +48,7 @@
   padding: 0 14px;
   border: 0;
   background: transparent;
-  color: #8aa0bf;
+  color: #64748b;
   font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.06em;
@@ -57,8 +57,8 @@
 }
 
 .teacher-revenue-periods__item--active {
-  background: #fff4df !important;
-  color: #003f98 !important;
+  background: #dbeafe !important;
+  color: #1d4ed8 !important;
 }
 
 .teacher-revenue-export {
@@ -68,10 +68,10 @@
   justify-content: center;
   gap: 7px;
   padding: 0 14px;
-  border: 1px solid #dfe7f2;
+  border: 1px solid #e2e8f0;
   border-radius: 7px;
   background: #ffffff;
-  color: #52637d;
+  color: #475569;
   font-size: 0.78rem;
   font-weight: 900;
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
@@ -84,8 +84,8 @@
 }
 
 .teacher-revenue-export:hover {
-  border-color: rgba(232, 190, 116, 0.72);
-  color: #003f98;
+  border-color: #93c5fd;
+  color: #1d4ed8;
   transform: translateY(-1px);
 }
 
@@ -96,15 +96,15 @@
 }
 
 .teacher-revenue-card {
-  min-height: 172px;
+  min-height: 134px;
   display: grid;
   align-content: center;
-  gap: 12px;
+  gap: 8px;
   padding: 15px;
-  border: 1px solid rgba(232, 190, 116, 0.18);
-  border-radius: 9px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
   background: #ffffff;
-  box-shadow: 0 10px 20px rgb(15 23 42 / 10%);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
 }
 
 .teacher-revenue-card__icon {
@@ -117,23 +117,23 @@
 }
 
 .teacher-revenue-card__icon--blue {
-  background: #eef6ff;
-  color: #003f98;
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 
 .teacher-revenue-card__icon--green {
-  background: #eafbf2;
-  color: #00a76f;
+  background: #dcfce7;
+  color: #22c55e;
 }
 
 .teacher-revenue-card__icon--gold {
-  background: #fff7e2;
-  color: #f69800;
+  background: #dbeafe;
+  color: #2563eb;
 }
 
 .teacher-revenue-card small {
-  margin-top: 14px;
-  color: #9aa8bd;
+  margin-top: 6px;
+  color: #475569;
   font-size: 0.76rem;
   font-weight: 900;
   letter-spacing: 0.13em;
@@ -141,15 +141,16 @@
 }
 
 .teacher-revenue-card strong {
-  color: #003f98;
-  font-size: clamp(1.45rem, 2.4vw, 1.9rem);
+  color: #071a33;
+  font-family: math;
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
   font-weight: 900;
   line-height: 1.1;
 }
 
 .teacher-revenue-card p {
-  color: #7a8aa6;
-  font-size: 0.95rem;
+  color: #475569;
+  font-size: 0.82rem;
   font-weight: 700;
 }
 
@@ -162,10 +163,10 @@
 .teacher-revenue-chart-card,
 .teacher-revenue-history-card {
   min-width: 0;
-  border: 1px solid rgba(232, 190, 116, 0.18);
-  border-radius: 9px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
   background: #ffffff;
-  box-shadow: 0 10px 20px rgb(15 23 42 / 10%);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
 }
 
 .teacher-revenue-chart-card {
@@ -181,40 +182,40 @@
 
 .teacher-revenue-chart-card h2,
 .teacher-revenue-history-card h2 {
-  color: #003f98;
+  color: #071a33;
   font-family: math;
-  font-size: clamp(1.35rem, 1.7vw, 1.65rem);
+  font-size: clamp(1.2rem, 1.55vw, 1.45rem);
   font-weight: 800;
   line-height: 1.2;
 }
 
 .teacher-revenue-chart-card header span {
-  min-height: 40px;
+  min-height: 34px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 0 14px;
-  border-radius: 12px;
+  border-radius: 8px;
   background: #f8fafc;
-  color: #8aa0bf;
-  font-size: 0.86rem;
+  color: #475569;
+  font-size: 0.8rem;
   font-weight: 900;
 }
 
 .teacher-revenue-chart {
-  min-height: 220px;
+  min-height: 200px;
   display: grid;
   align-items: end;
   margin-top: 22px;
   background:
-    linear-gradient(#eef2f7 1px, transparent 1px) 0 24px / 100% 76px,
+    linear-gradient(#e2e8f0 1px, transparent 1px) 0 24px / 100% 76px,
     #ffffff;
 }
 
 .teacher-revenue-chart svg {
   width: 100%;
   height: 100%;
-  min-height: 220px;
+  min-height: 200px;
 }
 
 .teacher-revenue-history-card {
@@ -244,26 +245,27 @@
 }
 
 .teacher-revenue-history-item__icon--green {
-  background: #eafbf2;
-  color: #00a76f;
+  background: #dcfce7;
+  color: #22c55e;
 }
 
 .teacher-revenue-history-item__icon--blue {
-  background: #eef6ff;
-  color: #8aa0bf;
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 
 .teacher-revenue-history-item strong {
   display: block;
-  color: #003f98;
+  color: #071a33;
+  font-family: math;
   font-size: 0.92rem;
-  font-weight: 900;
-  text-transform: uppercase;
+  font-weight: 800;
+  text-transform: none;
 }
 
 .teacher-revenue-history-item p {
   margin-top: 4px;
-  color: #8aa0bf;
+  color: #475569;
   font-size: 0.8rem;
   font-weight: 700;
 }
@@ -273,18 +275,18 @@
 }
 
 .teacher-revenue-history-item__amount strong {
-  color: #00a76f;
+  color: #22c55e;
   font-size: 1rem;
 }
 
 .teacher-revenue-history-item:nth-child(2) .teacher-revenue-history-item__amount strong {
-  color: #52637d;
+  color: #475569;
 }
 
 .teacher-revenue-history-item time {
   display: block;
   margin-top: 4px;
-  color: #9aa8bd;
+  color: #94a3b8;
   font-size: 0.72rem;
   font-weight: 900;
   text-transform: uppercase;

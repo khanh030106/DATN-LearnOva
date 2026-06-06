@@ -1,7 +1,7 @@
 .roles-section {
     max-width: 1200px;
     margin: auto;
-    padding: 50px 24px;
+    padding: 30px 24px;
 }
 
 .roles-header {
@@ -11,7 +11,7 @@
 
 .roles-header h2 {
     font-size: 42px;
-    color: #ffaa16;
+    color: #00306e;
     font-family: serif;
     margin-bottom: 0;
 }
@@ -36,10 +36,10 @@
 }
 
 .role-card {
-    background: #ff7d000a;
+    background: #ffffff;
     border-radius: 15px;
     padding: 40px;
-    border: 1px solid #ffca5278;
+    border: 1px solid #e2e8f0;
     cursor: pointer;
     transition: 0.3s;
     box-shadow: 0 15px 45px rgb(0 0 0 / 7%);
@@ -58,14 +58,14 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 24px;
-    background: #fff4df;
-    color: #c98a2e;
+    background: #dbeafe;
+    color: #1d4ed8;
 }
 
 .role-card h3 {
     font-size: 28px;
     margin: 0;
-    color: #00206d;
+    color: #071a33;
 }
 
 .role-card p {
@@ -80,7 +80,7 @@
     gap: 6px;
     background: transparent;
     border: none;
-    color: #00236f;
+    color: #1d4ed8;
     font-weight: bold;
     cursor: pointer;
     margin-left: -5px;
