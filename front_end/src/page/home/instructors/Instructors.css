@@ -1,6 +1,6 @@
 .instructors-section {
     padding: 64px 0 48px;
-    background: #ffffff;
+    background: #f8fafc;
 }
 
 .instructors-section__header {
@@ -10,7 +10,7 @@
 }
 
 .instructors-section__header h2 {
-    color: #ffad19;
+    color: #003983;
     font-size: 40px;
     font-weight: 600;
     line-height: 1.2;
@@ -19,7 +19,7 @@
 
 .instructors-section__header p {
     margin: 0;
-    color: #6B7280;
+    color: #475569;
     font-size: 18px;
     font-weight: 600;
 }

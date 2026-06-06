@@ -16,18 +16,18 @@
 
 .testimonials-title {
   margin: 0;
-  color: #fe9d00;
+  color: #003983;
   font-size: clamp(2rem, 3vw, 2.8rem);
   line-height: 1.15;
   font-weight: 800;
   font-style: italic;
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
 }
 
 .testimonials-subtitle {
   margin: 0 auto;
   max-width: 720px;
-  color: #8a7650;
+  color: #475569;
   font-size: 19px;
   font-weight: 500;
   line-height: 1.7;
@@ -60,8 +60,8 @@
   padding: 32px;
   border-radius: 20px;
   background: #ffffff;
-  border: 1px solid rgb(255 227 189);
-  box-shadow: 0 10px 20px rgb(0 0 0 / 15%);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
@@ -71,7 +71,7 @@
 .testimonial-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 20px rgb(0 0 0 / 15%);
-  border-color: rgb(255 175 37 / 0.57);
+  border-color: #93c5fd;
 }
 
 .testimonial-top {
@@ -79,13 +79,13 @@
 }
 
 .testimonial-quote {
-  color: #101010;
+  color: #1d4ed8;
   margin-bottom: 16px;
 }
 
 .testimonial-text {
   margin: 0;
-  color: #5f6675;
+  color: #475569;
   font-size: 0.95rem;
   line-height: 1.8;
   font-weight: 500;
@@ -115,7 +115,7 @@
 
 .testimonial-name {
   margin: 0 0 4px;
-  color: #1f2937;
+  color: #071a33;
   font-size: 0.78rem;
   line-height: 1.2;
   font-weight: 800;
@@ -125,7 +125,7 @@
 
 .testimonial-role {
   margin: 0;
-  color: #9ca3af;
+  color: #64748b;
   font-size: 0.62rem;
   line-height: 1.2;
   font-weight: 800;

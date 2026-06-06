@@ -1,15 +1,15 @@
 .course-card {
     overflow: hidden;
     border-radius: 10px;
-    border: 1px solid #ffc4414f;
+    border: 1px solid #e2e8f0;
     background: #ffffff;
-    box-shadow: 0 10px 20px rgb(15 23 42 / 13%);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .course-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.16);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.12);
 }
 
 .course-card__image {
@@ -31,7 +31,7 @@
     min-height: 56px;
     margin: 0;
     font-family: math;
-    color: #061733;
+    color: #071a33;
     font-size: 22px;
     line-height: 1.25;
     font-weight: 800;
@@ -39,7 +39,7 @@
 
 .course-card__teacher {
     margin: 21px 0 0 0;
-    color: #60708c;
+    color: #475569;
     font-size: 17px;
 }
 
@@ -47,7 +47,6 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    padding-bottom: 15px;
     border-bottom: 1px solid #edf0f5;
 }
 
@@ -56,18 +55,18 @@
 }
 
 .course-card__rating strong {
-    color: #ff9800;
+    color: #f59e0b;
     font-size: 16px;
 }
 
 .course-card__rating span {
-    color: #ffb300;
+    color: #f59e0b;
     font-size: 17px;
     letter-spacing: 1px;
 }
 
 .course-card__rating small {
-    color: #8492ad;
+    color: #64748b;
     font-size: 14px;
 }
 
@@ -81,7 +80,7 @@
 .course-card__price {
     margin: 0;
     display: flex;
-    color: #bf9000;
+    color: #003983;
     font-size: 24px;
     font-weight: 900;
 }
@@ -93,15 +92,15 @@
 .course-card__cart {
     width: 45px;
     height: 45px;
-    border: 1px solid #5c6a8233;
+    border: 1px solid #e2e8f0;
     border-radius: 10px;
-    background: #ffdb000a;
+    background: #eff6ff;
     cursor: pointer;
     font-size: 22px;
     transition: all 0.25s ease;
 }
 
 .course-card__cart:hover {
-    background: #e0af5b;
+    background: #003983;
     color: #ffffff;
 }

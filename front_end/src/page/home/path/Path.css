@@ -1,6 +1,6 @@
 .learning-section {
     padding-top: 50px;
-    background: white;
+    background: #f8fafc;
 }
 
 .learning-container {
@@ -15,14 +15,14 @@
 
 .learning-header h2 {
     font-size: 42px;
-    color: #e5a600;
+    color: #003983;
     margin-bottom: 5px;
 }
 
 .learning-header p {
     max-width: 800px;
     margin: auto;
-    color: #6b7280;
+    color: #475569;
     font-size: 17px;
     line-height: 1.7;
 }
@@ -42,8 +42,8 @@
 .learning-card {
     padding: 15px 40px 40px;
     border-radius: 20px;
-    border: 1px solid #fae4aa;
-    background: #fffcea;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
     transition: 0.4s;
     cursor: pointer;
 }
@@ -64,8 +64,8 @@
     width: 70px;
     height: 70px;
     border-radius: 20px;
-    background: white;
-    color: #c98a2e;
+    background: #dbeafe;
+    color: #1d4ed8;
 
     display: flex;
     align-items: center;
@@ -82,7 +82,7 @@
     font-size: 14px;
     font-weight: 700;
     text-transform: uppercase;
-    color: #9a641f;
+    color: #0034c6;
 }
 
 .learning-steps {
@@ -106,7 +106,7 @@
     align-items: center;
     justify-content: center;
 
-    background: #ffa522;
+    background: #00299c;
     color: white;
     font-weight: bold;
     flex-shrink: 0;
@@ -142,7 +142,7 @@
     border: none;
     border-radius: 14px;
 
-    background: #ffa522;
+    background: #2400ac;
     color: white;
     font-size: 16px;
     font-weight: 700;
@@ -152,7 +152,7 @@
 }
 
 .learning-btn:hover {
-    background: #ee9823;
+    background: #2563eb;
 }
 
 @media (max-width: 992px) {

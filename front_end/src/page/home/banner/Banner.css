@@ -1,7 +1,7 @@
 .home-banner {
   position: relative;
   width: 100%;
-  min-height: 780px;
+  min-height: 760px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -42,12 +42,18 @@
 }
 
 .home-banner__overlay {
-  background: linear-gradient(
-    to bottom,
-    rgba(10, 20, 50, 0.65) 0%,
-    rgba(10, 20, 50, 0.55) 60%,
-    rgba(10, 20, 50, 0.1) 100%
-  );
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      rgba(37, 99, 235, 0.22),
+      transparent 34%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(7, 26, 51, 0.88) 0%,
+      rgba(15, 23, 42, 0.68) 60%,
+      rgba(248, 250, 252, 0.12) 100%
+    );
 }
 
 .home-banner__bottom-fade {
@@ -55,7 +61,7 @@
   right: 0;
   bottom: 0;
   height: 220px;
-  background: linear-gradient(to bottom, #ffffff00, rgb(255 255 255));
+  background: linear-gradient(to bottom, rgba(248, 250, 252, 0), #f8fafc);
 }
 
 .home-banner__content {
@@ -67,7 +73,7 @@
 }
 
 .home-banner__content h1 em {
-  color: #e8be74;
+  color: #93c5fd;
 }
 
 .home-banner__title {
@@ -76,7 +82,7 @@
   font-size: clamp(2.4rem, 5vw, 4rem);
   font-weight: 700;
   line-height: 1.25;
-  letter-spacing: -0.5px;
+  letter-spacing: 0;
   color: #ffffff;
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
 }
@@ -86,7 +92,7 @@
   font-family: "Lora", Georgia, serif;
   font-size: clamp(0.95rem, 1.5vw, 1.1rem);
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.88);
+  color: #dbeafe;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
 }
 
@@ -101,9 +107,8 @@
   padding: 14px 36px;
   border: none;
   border-radius: 999px;
-  background: #e8be74;
-  color: #292929;
-  font-family: "Lora", Georgia, serif;
+  background: #4929d2;
+  color: #ffffff;
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -115,7 +120,7 @@
 
 .home-banner__btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 12px 30px rgba(29, 78, 216, 0.32);
 }
 
 /* ============================================
