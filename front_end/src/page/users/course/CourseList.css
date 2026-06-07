@@ -1,0 +1,207 @@
+.course-list-page {
+    font-family: 'Segoe UI', sans-serif;
+    background: #faf8f5;
+    min-height: 100vh;
+
+    margin-top: -90px;
+}
+.course-list-header {
+    background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover;
+    color: #fff;
+    padding: 48px 0 32px 0;
+    text-align: center;
+}
+.header-content {
+    background: rgba(0,0,0,0.45);
+    display: inline-block;
+    padding: 32px 48px;
+    border-radius: 16px;
+}
+.course-list-header .highlight {
+    color: #f5b041;
+}
+.search-bar {
+    margin: 24px auto 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+.search-bar input {
+    width: 350px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.search-bar button {
+    background: #f5b041;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+.course-list-content {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 32px;
+    padding: 32px 0;
+}
+.course-list-main {
+    flex: 1;
+}
+.course-list-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    font-size: 16px;
+}
+.course-list-info .sort {
+    font-size: 15px;
+    font-weight: 500;
+    color: #1a2e6e;
+
+    margin-left: 760px;
+
+    padding: 8px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+}
+.sort-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 740px;
+}
+
+.sort-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #6b7280;
+    display: block;
+}
+
+.sort-select {
+    width: 220px;
+    padding: 10px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    color: #1a2e6e;
+    cursor: pointer;
+}
+.course-list-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+.pagination {
+    margin: 32px 0 0 0;
+    text-align: center;
+}
+.pagination button,
+.pagination span {
+    margin: 0 4px;
+    padding: 6px 14px;
+    border: none;
+    background: #eee;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.pagination button.active {
+    background: #f5b041;
+    color: #fff;
+}
+.course-list-footer {
+    background: #f8f6f2;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 32px 80px;
+    margin-top: 48px;
+    font-size: 15px;
+    color: #333;
+}
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.footer-links li {
+    margin-bottom: 6px;
+}
+.footer-newsletter input {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-right: 6px;
+}
+.footer-newsletter button {
+    background: #f5b041;
+    border: none;
+    padding: 6px 18px;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+/* của video*/
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+}
+
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    /* Phía trên phủ đen nhẹ (0.4), ở giữa trong suốt, phía dưới tiệp dần vào màu nền #faf8f5 */
+    background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.4) 0%,
+            rgba(0, 0, 0, 0) 70%,
+            #faf8f5 100%
+    );
+}
+.hero-content {
+    position: relative;
+    z-index: 2;
+
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    color: white;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    font-family: "Playfair Display", Georgia, serif;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    font-family: "Playfair Display", Georgia, serif;
+}

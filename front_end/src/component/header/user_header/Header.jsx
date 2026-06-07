@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import logo from "../../../assets/LogoText.png";
 import NavMenu from "./NavMenu.jsx";
 import HeaderAction from "./HeaderAction.jsx";
@@ -7,6 +8,12 @@ import "./Header.css";
 
 const Header = () => {
   const headerRef = useRef(null);
+  const { pathname } = useLocation();
+  const useSolidHeader =
+    pathname.startsWith("/learnova/courses") ||
+    pathname.startsWith("/learnova/intructors") ||
+    pathname.startsWith("/learnova/instructors") ||
+    pathname.startsWith("/learnova/user");
 
   useEffect(() => {
     const header = headerRef.current;
@@ -15,7 +22,10 @@ const Header = () => {
     let ticking = false;
 
     const updateHeaderState = () => {
-      header.classList.toggle("scrolled", window.scrollY > 20);
+      header.classList.toggle(
+        "scrolled",
+        useSolidHeader || window.scrollY > 20,
+      );
       ticking = false;
     };
 
@@ -31,7 +41,7 @@ const Header = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, []);
+  }, [useSolidHeader]);
 
   return (
     <header ref={headerRef} className="main-header">

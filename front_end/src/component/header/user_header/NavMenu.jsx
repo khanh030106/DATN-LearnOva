@@ -2,9 +2,9 @@ import { NavLink } from "react-router-dom";
 
 const NavItems = [
   { name: "Home", path: "/learnova/home" },
-  { name: "Courses", path: "/courses" },
-  { name: "Instructors", path: "/instructors" },
-  { name: "About us", path: "/aboutus" },
+  { name: "Courses", path: "/learnova/courses" },
+  { name: "Instructors", path: "/learnova/intructors" },
+  { name: "About us", path: "/learnova/about" },
 ];
 
 const NavMenu = () => {
