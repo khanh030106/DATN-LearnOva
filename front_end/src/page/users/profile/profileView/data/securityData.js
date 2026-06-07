@@ -1,32 +1,28 @@
 export const SECURITY_OVERVIEW = {
-  title: "Tài khoản của bạn đang được bảo vệ tốt",
-  description: "Bạn đã bật các tính năng bảo mật quan trọng.",
-  levelLabel: "Mức độ bảo mật:",
-  levelValue: "Cao",
+  title: "Your account is well protected",
+  description: "You have enabled important security features.",
+  levelLabel: "Security Level:",
+  levelValue: "High",
   progressSegments: [true, true, true, false],
-  checks: [
-    "Mật khẩu mạnh",
-    "Email đã được xác minh",
-    "Số điện thoại đã được xác minh",
-  ],
+  checks: ["Strong Password", "Verified Email", "Verified Phone Number"],
 };
 
 export const PASSWORD_FIELDS = [
   {
     id: "currentPassword",
-    label: "Mật khẩu hiện tại",
+    label: "Current Password",
     placeholder: "••••••••••••",
   },
   {
     id: "newPassword",
-    label: "Mật khẩu mới",
+    label: "New Password",
     placeholder: "••••••••••••",
-    strength: "Mạnh",
-    hint: "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt",
+    strength: "Strong",
+    hint: "Password must be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and special characters.",
   },
   {
     id: "confirmPassword",
-    label: "Xác nhận mật khẩu mới",
+    label: "Confirm New Password",
     placeholder: "••••••••••••",
   },
 ];
@@ -36,42 +32,42 @@ export const CONTACT_ROWS = [
     id: "email",
     label: "Email",
     profileKey: "email",
-    fallback: "nguyenvana@example.com",
+    fallback: "johndoe@example.com",
   },
   {
     id: "phone",
-    label: "Số điện thoại",
+    label: "Phone Number",
     profileKey: "phone",
-    fallback: "0123 456 789",
+    fallback: "+1 (123) 456-7890",
   },
   {
     id: "changeContact",
-    label: "Đổi email hoặc số điện thoại",
+    label: "Change Email or Phone Number",
   },
 ];
 
 export const SECURITY_ACTIONS = [
   {
     id: "deleteAccount",
-    title: "Xóa tài khoản",
-    description: "Xóa vĩnh viễn tài khoản và tất cả dữ liệu",
-    buttonLabel: "Xóa tài khoản",
+    title: "Delete Account",
+    description: "Permanently delete your account and all associated data",
+    buttonLabel: "Delete Account",
     danger: true,
   },
 ];
 
 export const SECURITY_CARD_TITLES = {
   password: {
-    title: "Đổi mật khẩu",
-    description: "Cập nhật mật khẩu để bảo vệ tài khoản",
-    submitLabel: "Cập nhật mật khẩu",
+    title: "Change Password",
+    description: "Update your password to keep your account secure",
+    submitLabel: "Update Password",
   },
   contact: {
-    title: "Email và số điện thoại",
-    description: "Quản lý email và số điện thoại liên kết với tài khoản",
+    title: "Email & Phone Number",
+    description: "Manage the email and phone number linked to your account",
   },
   options: {
-    title: "Các tùy chọn bảo mật khác",
+    title: "Other Security Options",
   },
 };
 

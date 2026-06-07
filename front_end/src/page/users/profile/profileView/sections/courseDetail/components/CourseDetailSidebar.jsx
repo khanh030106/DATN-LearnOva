@@ -16,18 +16,19 @@ const CourseDetailSidebar = ({ course }) => {
   const offset = circumference - (course.progress / 100) * circumference;
 
   const infoRows = [
-    { icon: User, label: "Giảng viên", value: course.instructor.name },
-    { icon: Clock, label: "Thời lượng", value: course.duration },
-    { icon: Users, label: "Học viên", value: course.students },
-    { icon: BookOpen, label: "Bài học", value: course.lessonsTotal },
-    { icon: Calendar, label: "Cập nhật", value: course.updatedAt },
-    { icon: BarChart3, label: "Cấp độ", value: course.level },
+    { icon: User, label: "Instructor", value: course.instructor.name },
+    { icon: Clock, label: "Duration", value: course.duration },
+    { icon: Users, label: "Students", value: course.students },
+    { icon: BookOpen, label: "Lessons", value: course.lessonsTotal },
+    { icon: Calendar, label: "Last Updated", value: course.updatedAt },
+    { icon: BarChart3, label: "Level", value: course.level },
   ];
 
   return (
     <aside className="learning-detail-sidebar">
       <section className="learning-side-card">
-        <h3>Tiến độ học tập</h3>
+        <h3>Learning Progress</h3>
+
         <div className="learning-progress-ring">
           <svg viewBox="0 0 132 132" aria-hidden="true">
             <circle cx="66" cy="66" r={radius} />
@@ -39,33 +40,39 @@ const CourseDetailSidebar = ({ course }) => {
               strokeDashoffset={offset}
             />
           </svg>
+
           <div>
             <strong>{course.progress}%</strong>
-            <span>Hoàn thành</span>
+            <span>Completed</span>
           </div>
         </div>
 
-        <p>Bạn đã hoàn thành</p>
+        <p>You have completed</p>
+
         <strong className="learning-finished">
-          {course.lessonsDone} / {course.lessonsTotal} bài học
+          {course.lessonsDone} / {course.lessonsTotal} lessons
         </strong>
+
         <div className="learning-linear-progress">
           <span style={{ width: `${course.progress}%` }} />
         </div>
-        <small>Cố lên! Bạn đang học rất tốt.</small>
+
+        <small>Keep it up! You're making great progress.</small>
 
         <button className="learning-primary-button" type="button">
           <Play size={16} fill="currentColor" />
-          Tiếp tục học
+          Continue Learning
         </button>
+
         <button className="learning-secondary-button" type="button">
           <RotateCcw size={16} />
-          Học lại từ đầu
+          Restart Course
         </button>
       </section>
 
       <section className="learning-side-card">
-        <h3>Thông tin khóa học</h3>
+        <h3>Course Information</h3>
+
         <div className="learning-info-list">
           {infoRows.map((row) => {
             const Icon = row.icon;
@@ -84,11 +91,16 @@ const CourseDetailSidebar = ({ course }) => {
       </section>
 
       <section className="learning-support-card">
-        <h3>Bạn cần hỗ trợ?</h3>
-        <p>Đặt câu hỏi và nhận hỗ trợ từ giảng viên cùng cộng đồng học viên.</p>
+        <h3>Need Help?</h3>
+
+        <p>
+          Ask questions and get support from the instructor and learning
+          community.
+        </p>
+
         <button type="button">
           <HelpCircle size={18} />
-          Đặt câu hỏi
+          Ask a Question
         </button>
       </section>
     </aside>

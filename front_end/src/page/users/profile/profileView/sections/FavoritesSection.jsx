@@ -16,10 +16,12 @@ import { useMemo, useState } from "react";
 
 const FavoritesSection = ({ favoriteCourses = [], onOpenCourse }) => {
   const [activeTab, setActiveTab] = useState(FAVORITE_COURSE_TABS[0].id);
+
   const favoriteCourseItems = useMemo(
     () => buildFavoriteCourses(favoriteCourses),
     [favoriteCourses],
   );
+
   const courses = useMemo(() => {
     if (activeTab === FAVORITE_COURSE_STATUS.purchased) {
       return favoriteCourseItems.filter(
@@ -45,7 +47,7 @@ const FavoritesSection = ({ favoriteCourses = [], onOpenCourse }) => {
     <div className="courses-dashboard">
       <div className="courses-topbar">
         <div>
-          <h2>Khóa học yêu thích</h2>
+          <h2>Favorite Courses</h2>
           <div className="course-tabs">
             {FAVORITE_COURSE_TABS.map((tab) => (
               <button
@@ -62,12 +64,14 @@ const FavoritesSection = ({ favoriteCourses = [], onOpenCourse }) => {
 
         <div className="course-tools">
           <label className="course-search">
-            <input type="text" placeholder="Tìm kiếm khóa học yêu thích..." />
+            <input type="text" placeholder="Search favorite courses..." />
             <Search size={15} />
           </label>
+
           <button className="course-sort" type="button">
-            Mới nhất <ChevronDown size={14} />
+            Newest <ChevronDown size={14} />
           </button>
+
           <button
             className="course-view active"
             type="button"
@@ -75,6 +79,7 @@ const FavoritesSection = ({ favoriteCourses = [], onOpenCourse }) => {
           >
             <Grid2X2 size={16} />
           </button>
+
           <button className="course-view" type="button" aria-label="List view">
             <List size={16} />
           </button>
@@ -86,17 +91,23 @@ const FavoritesSection = ({ favoriteCourses = [], onOpenCourse }) => {
         onOpenCourse={openCourse}
         variant="favorite"
       />
+
       <div className="course-pagination">
         <button type="button">
           <ChevronLeft size={14} />
         </button>
+
         <button className="active" type="button">
           1
         </button>
+
         <button type="button">2</button>
         <button type="button">3</button>
+
         <span>...</span>
+
         <button type="button">5</button>
+
         <button type="button">
           <ChevronRight size={14} />
         </button>

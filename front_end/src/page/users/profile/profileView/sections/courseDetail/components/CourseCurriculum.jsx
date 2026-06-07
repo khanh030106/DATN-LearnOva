@@ -1,12 +1,18 @@
-import { CheckCircle, ChevronDown, ChevronUp, Play, Unlock } from "lucide-react";
+import {
+  CheckCircle,
+  ChevronDown,
+  ChevronUp,
+  Play,
+  Unlock,
+} from "lucide-react";
 
 const CourseCurriculum = ({ course }) => (
   <section className="learning-content-panel">
     <div className="learning-panel-heading">
       <span>
-        {course.chaptersTotal} chương - {course.lessonsTotal} bài học
+        {course.chaptersTotal} Chapters - {course.lessonsTotal} Lessons
       </span>
-      <button type="button">Mở tất cả</button>
+      <button type="button">Expand All</button>
     </div>
 
     <div className="learning-chapter-list">
@@ -18,7 +24,11 @@ const CourseCurriculum = ({ course }) => (
           <div className="learning-chapter-header">
             <div>
               <span className="learning-chapter-toggle">
-                {chapter.expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                {chapter.expanded ? (
+                  <ChevronUp size={16} />
+                ) : (
+                  <ChevronDown size={16} />
+                )}
               </span>
               <strong>
                 {String(chapter.id).padStart(2, "0")}. {chapter.title}
@@ -46,7 +56,11 @@ const CourseCurriculum = ({ course }) => (
                   </div>
                   <span>{lesson.duration}</span>
                   {lesson.completed ? (
-                    <CheckCircle className="done" size={18} fill="currentColor" />
+                    <CheckCircle
+                      className="done"
+                      size={18}
+                      fill="currentColor"
+                    />
                   ) : (
                     <Unlock className="pending" size={17} />
                   )}

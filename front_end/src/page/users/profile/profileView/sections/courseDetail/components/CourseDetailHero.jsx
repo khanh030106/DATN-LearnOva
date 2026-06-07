@@ -13,14 +13,15 @@ const CourseDetailHero = ({ course, onBack }) => (
     <div className="learning-detail-actions">
       <button className="learning-back-button" type="button" onClick={onBack}>
         <ArrowLeft size={16} />
-        Quay lại
+        Back
       </button>
 
       <div className="learning-hero-tools">
-        <button type="button" aria-label="Lưu khóa học">
+        <button type="button" aria-label="Save Course">
           <Bookmark size={18} />
         </button>
-        <button type="button" aria-label="Thêm lựa chọn">
+
+        <button type="button" aria-label="More Options">
           <MoreHorizontal size={18} />
         </button>
       </div>
@@ -29,8 +30,10 @@ const CourseDetailHero = ({ course, onBack }) => (
     <div className="learning-hero-grid">
       <div className="learning-video-cover">
         <img src={course.image} alt={course.title} />
+
         <span>{course.category}</span>
-        <button type="button" aria-label="Xem bài học">
+
+        <button type="button" aria-label="Watch Lesson">
           <Play size={32} fill="currentColor" />
         </button>
       </div>
@@ -43,17 +46,20 @@ const CourseDetailHero = ({ course, onBack }) => (
             <Star size={18} fill="currentColor" />
             <strong>{course.rating}</strong>
           </span>
-          <span>({course.reviews} đánh giá)</span>
+
+          <span>({course.reviews} reviews)</span>
+
           <span className="learning-dot" />
+
           <span>
             <Users size={17} />
-            {course.students} học viên
+            {course.students} students
           </span>
         </div>
 
         <div className="learning-instructor-line">
           <img src={course.instructor.avatar} alt={course.instructor.name} />
-          <span>Giảng viên: </span>
+          <span>Instructor: </span>
           <strong>{course.instructor.name}</strong>
           <CheckCircle size={17} fill="currentColor" />
         </div>

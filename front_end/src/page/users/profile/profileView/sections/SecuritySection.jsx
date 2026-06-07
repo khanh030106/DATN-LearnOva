@@ -37,14 +37,17 @@ const SecuritySection = ({ profileData = {} }) => {
     );
 
     if (hasEmptyField) {
-      setStatus({ type: "error", message: "Vui lòng nhập đầy đủ thông tin." });
+      setStatus({
+        type: "error",
+        message: "Please fill in all required fields.",
+      });
       return;
     }
 
     if (passwordValues.newPassword.length < 8) {
       setStatus({
         type: "error",
-        message: "Mật khẩu mới phải có ít nhất 8 ký tự.",
+        message: "The new password must be at least 8 characters long.",
       });
       return;
     }
@@ -52,12 +55,16 @@ const SecuritySection = ({ profileData = {} }) => {
     if (passwordValues.newPassword !== passwordValues.confirmPassword) {
       setStatus({
         type: "error",
-        message: "Mật khẩu mới và xác nhận mật khẩu không trùng khớp.",
+        message: "The new password and confirmation password do not match.",
       });
       return;
     }
 
-    setStatus({ type: "success", message: "Cập nhật mật khẩu thành công." });
+    setStatus({
+      type: "success",
+      message: "Password updated successfully.",
+    });
+
     setPasswordValues(initialPasswordValues);
   };
 

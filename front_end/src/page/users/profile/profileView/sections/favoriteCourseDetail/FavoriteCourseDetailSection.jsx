@@ -38,14 +38,18 @@ const FavoriteCourseDetailSection = ({ course }) => {
   const detail = useMemo(() => buildFavoriteCourseDetail(course), [course]);
 
   const courseInfo = [
-    { icon: Users, label: "Cấp độ", value: detail.level, badge: true },
-    { icon: BookOpen, label: "Số bài học", value: `${detail.lessonsTotal} bài` },
-    { icon: Clock, label: "Thời lượng", value: detail.duration },
-    { icon: Calendar, label: "Cập nhật lần cuối", value: detail.updatedAt },
-    { icon: Globe, label: "Ngôn ngữ", value: detail.language },
-    { icon: MessageCircle, label: "Phụ đề", value: detail.topic },
-    { icon: FileText, label: "Bài tập", value: detail.exercise },
-    { icon: Award, label: "Chứng chỉ", value: detail.certificate },
+    { icon: Users, label: "Level", value: detail.level, badge: true },
+    {
+      icon: BookOpen,
+      label: "Number of Lessons",
+      value: `${detail.lessonsTotal} lessons`,
+    },
+    { icon: Clock, label: "Duration", value: detail.duration },
+    { icon: Calendar, label: "Last Updated", value: detail.updatedAt },
+    { icon: Globe, label: "Language", value: detail.language },
+    { icon: MessageCircle, label: "Subtitles", value: detail.topic },
+    { icon: FileText, label: "Exercises", value: detail.exercise },
+    { icon: Award, label: "Certificate", value: detail.certificate },
   ];
 
   const renderTabContent = () => {
@@ -53,15 +57,19 @@ const FavoriteCourseDetailSection = ({ course }) => {
       return (
         <section className="favorite-flow-card favorite-flow-curriculum">
           <div className="favorite-flow-section-title">
-            <h3>Nội dung khóa học</h3>
-            <span>32 / 48 bài học - 5h 30m</span>
+            <h3>Course Content</h3>
+            <span>32 / 48 lessons - 5h 30m</span>
           </div>
 
           {detail.curriculum.map((chapter) => (
             <article className="favorite-flow-chapter" key={chapter.id}>
               <div className="favorite-flow-chapter-head">
                 <div>
-                  {chapter.open ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                  {chapter.open ? (
+                    <ChevronDown size={16} />
+                  ) : (
+                    <ChevronRight size={16} />
+                  )}
                   <strong>
                     {chapter.id}. {chapter.title}
                   </strong>
@@ -75,8 +83,14 @@ const FavoriteCourseDetailSection = ({ course }) => {
                     <div className="favorite-flow-lesson" key={lesson.number}>
                       <span>{lesson.number}</span>
                       <p>{lesson.title}</p>
-                      <small>{lesson.type} - {lesson.duration}</small>
-                      {lesson.done ? <Check size={15} /> : <HelpCircle size={15} />}
+                      <small>
+                        {lesson.type} - {lesson.duration}
+                      </small>
+                      {lesson.done ? (
+                        <Check size={15} />
+                      ) : (
+                        <HelpCircle size={15} />
+                      )}
                     </div>
                   ))}
                 </div>
@@ -114,7 +128,7 @@ const FavoriteCourseDetailSection = ({ course }) => {
               {[1, 2, 3, 4, 5].map((item) => (
                 <Star key={item} size={16} fill="currentColor" />
               ))}
-              <p>{detail.reviews} học viên đã đánh giá khóa học này.</p>
+              <p>{detail.reviews} students have rated this course.</p>
             </div>
           </div>
 
@@ -134,7 +148,7 @@ const FavoriteCourseDetailSection = ({ course }) => {
     if (activeTab === "qa") {
       return (
         <section className="favorite-flow-card favorite-flow-qa">
-          <h3>Hỏi đáp khóa học</h3>
+          <h3>Course Q&A</h3>
           {detail.questions.map((question) => (
             <article key={question.title}>
               <strong>{question.title}</strong>
@@ -143,7 +157,7 @@ const FavoriteCourseDetailSection = ({ course }) => {
           ))}
           <button type="button">
             <MessageCircle size={16} />
-            Gửi câu hỏi mới
+            Send New Question
           </button>
         </section>
       );
@@ -152,7 +166,7 @@ const FavoriteCourseDetailSection = ({ course }) => {
     return (
       <>
         <section className="favorite-flow-card favorite-flow-outcomes">
-          <h3>Bạn sẽ học được gì</h3>
+          <h3>What You Will Learn</h3>
           <div>
             {detail.outcomes.map((item) => (
               <p key={item}>
@@ -164,7 +178,7 @@ const FavoriteCourseDetailSection = ({ course }) => {
         </section>
 
         <section className="favorite-flow-card favorite-flow-about">
-          <h3>Giới thiệu khóa học</h3>
+          <h3>Course Description</h3>
           {detail.about.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
@@ -180,12 +194,12 @@ const FavoriteCourseDetailSection = ({ course }) => {
       <section className="favorite-flow-hero">
         <div className="favorite-flow-preview">
           <img src={detail.image} alt={detail.title} />
-          <button type="button" aria-label="Xem trước khóa học">
+          <button type="button" aria-label="Preview course">
             <Play size={30} fill="currentColor" />
           </button>
           <span>
             <Play size={14} />
-            Xem trước khóa học
+            Preview Course
           </span>
         </div>
 
@@ -199,7 +213,7 @@ const FavoriteCourseDetailSection = ({ course }) => {
             </span>
             <span>
               <Star size={14} fill="currentColor" />
-              {detail.rating} ({detail.reviews} đánh giá)
+              {detail.rating} ({detail.reviews} reviews)
             </span>
             <span>{detail.progressText}</span>
             <span>{detail.remaining}</span>
@@ -208,41 +222,41 @@ const FavoriteCourseDetailSection = ({ course }) => {
 
           <div className="favorite-flow-buy-row">
             <article>
-              <mark>Đã mua</mark>
-              <strong>0đ</strong>
+              <mark>Purchased</mark>
+              <strong>$0</strong>
               <div>
                 <button className="favorite-flow-primary" type="button">
                   <Play size={15} fill="currentColor" />
-                  Tiếp tục học
+                  Continue Learning
                 </button>
                 <button className="favorite-flow-secondary" type="button">
                   <Heart size={15} />
-                  Bỏ yêu thích
+                  Remove from Favorites
                 </button>
               </div>
             </article>
 
             <article>
-              <mark className="orange">Chưa mua</mark>
+              <mark className="orange">Not Purchased</mark>
               <strong className="orange-text">{detail.price}</strong>
               <del>{detail.originalPrice}</del>
               <div>
                 <button className="favorite-flow-cart" type="button">
                   <ShoppingCart size={15} />
-                  Mua ngay
+                  Buy Now
                 </button>
                 <button className="favorite-flow-secondary" type="button">
                   <Heart size={15} />
-                  Bỏ yêu thích
+                  Remove from Favorites
                 </button>
               </div>
               <small>
                 <Check size={13} />
-                Học mọi lúc, mọi nơi
+                Learn anytime, anywhere
               </small>
               <small>
                 <Check size={13} />
-                Hoàn tiền trong 7 ngày nếu không hài lòng
+                Money-back guarantee within 7 days
               </small>
             </article>
           </div>
@@ -252,7 +266,10 @@ const FavoriteCourseDetailSection = ({ course }) => {
       <nav className="favorite-flow-tabs">
         {FAVORITE_DETAIL_TABS.map((tab) => {
           const Icon = tabIcons[tab.id];
-          const label = tab.id === "reviews" ? `${tab.label} (${detail.reviews})` : tab.label;
+          const label =
+            tab.id === "reviews"
+              ? `${tab.label} (${detail.reviews})`
+              : tab.label;
 
           return (
             <button
@@ -273,7 +290,7 @@ const FavoriteCourseDetailSection = ({ course }) => {
 
         <aside>
           <section className="favorite-flow-card favorite-flow-info">
-            <h3>Thông tin khóa học</h3>
+            <h3>Course Information</h3>
             {courseInfo.map((item) => {
               const Icon = item.icon;
 
@@ -283,26 +300,28 @@ const FavoriteCourseDetailSection = ({ course }) => {
                     <Icon size={15} />
                     {item.label}
                   </span>
-                  <strong className={item.badge ? "badge" : ""}>{item.value}</strong>
+                  <strong className={item.badge ? "badge" : ""}>
+                    {item.value}
+                  </strong>
                 </div>
               );
             })}
           </section>
 
           <section className="favorite-flow-card favorite-flow-share">
-            <h3>Chia sẻ khóa học</h3>
-            <p>Chia sẻ khóa học này với bạn bè của bạn</p>
+            <h3>Share Course</h3>
+            <p>Share this course with your friends</p>
             <div>
-              <button type="button" aria-label="Sao chép liên kết">
+              <button type="button" aria-label="Copy link">
                 <LinkIcon size={16} />
               </button>
-              <button type="button" aria-label="Chia sẻ Facebook">
+              <button type="button" aria-label="Share on Facebook">
                 <FaFacebookF size={16} />
               </button>
-              <button type="button" aria-label="Chia sẻ Twitter">
+              <button type="button" aria-label="Share on Twitter">
                 <FaTwitter size={16} />
               </button>
-              <button type="button" aria-label="Chia sẻ LinkedIn">
+              <button type="button" aria-label="Share on LinkedIn">
                 <FaLinkedinIn size={16} />
               </button>
             </div>
@@ -316,15 +335,19 @@ const FavoriteCourseDetailSection = ({ course }) => {
 const renderTabContentForCurriculumPreview = (detail) => (
   <section className="favorite-flow-card favorite-flow-curriculum">
     <div className="favorite-flow-section-title">
-      <h3>Nội dung khóa học</h3>
-      <span>32 / 48 bài học - 5h 30m</span>
+      <h3>Course Content</h3>
+      <span>32 / 48 lessons - 5h 30m</span>
     </div>
 
     {detail.curriculum.map((chapter) => (
       <article className="favorite-flow-chapter" key={chapter.id}>
         <div className="favorite-flow-chapter-head">
           <div>
-            {chapter.open ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+            {chapter.open ? (
+              <ChevronDown size={16} />
+            ) : (
+              <ChevronRight size={16} />
+            )}
             <strong>
               {chapter.id}. {chapter.title}
             </strong>
@@ -338,7 +361,9 @@ const renderTabContentForCurriculumPreview = (detail) => (
               <div className="favorite-flow-lesson" key={lesson.number}>
                 <span>{lesson.number}</span>
                 <p>{lesson.title}</p>
-                <small>{lesson.type} - {lesson.duration}</small>
+                <small>
+                  {lesson.type} - {lesson.duration}
+                </small>
                 {lesson.done ? <Check size={15} /> : <HelpCircle size={15} />}
               </div>
             ))}

@@ -10,12 +10,12 @@ export const PRESET_AVATARS = [
 ];
 
 export const DEFAULT_PROFILE = {
-  fullName: "Nguyễn Minh Anh",
-  email: "minhanh.nguyen@gmail.com",
-  phone: "090 123 4567",
-  address: "Quận 1, TP. Hồ Chí Minh",
-  bio: "Tôi là một nhà thiết kế đồ họa trẻ với niềm đam mê học hỏi về UI/UX và AI.",
-  goal: "Lập trình viên Fullstack & thiết kế UI/UX",
+  fullName: "Michael Nguyen",
+  email: "michael.nguyen@gmail.com",
+  phone: "+84 90 123 4567",
+  address: "District 1, Ho Chi Minh City",
+  bio: "I am a young graphic designer passionate about learning UI/UX and AI.",
+  goal: "Fullstack Developer & UI/UX Designer",
   avatar: PRESET_AVATARS[0],
   streakDays: 15,
   studyHours: 42,
@@ -26,86 +26,86 @@ export const DEFAULT_ACTIVITIES = [
   {
     id: 1,
     type: "course",
-    text: 'Bắt đầu học chương 3 khóa "Thiết kế Đồ họa chuyên nghiệp"',
-    date: "Hôm nay, 10:15",
+    text: 'Started Chapter 3 of the "Professional Graphic Design" course',
+    date: "Today, 10:15 AM",
   },
   {
     id: 2,
     type: "achievement",
-    text: 'Nhận được huy hiệu "Học viên siêng năng" hạng Vàng',
-    date: "Hôm qua, 18:30",
+    text: 'Earned the "Dedicated Learner" Gold Badge',
+    date: "Yesterday, 6:30 PM",
   },
   {
     id: 3,
     type: "quiz",
-    text: "Hoàn thành bài trắc nghiệm chương 1 đạt điểm tối đa",
-    date: "3 ngày trước",
+    text: "Completed Chapter 1 quiz with a perfect score",
+    date: "3 days ago",
   },
   {
     id: 4,
     type: "streak",
-    text: "Đạt chuỗi streak học tập liên tục 15 ngày.",
-    date: "4 ngày trước",
+    text: "Reached a 15-day learning streak.",
+    date: "4 days ago",
   },
   {
     id: 5,
     type: "login",
-    text: "Đăng nhập vào hệ thống học trực tuyến LearnOva",
-    date: "1 tuần trước",
+    text: "Logged into the LearnOva online learning platform",
+    date: "1 week ago",
   },
 ];
 
 export const sidebarItems = [
-  { id: "profile", label: "Hồ sơ cá nhân", icon: User },
-  { id: "courses", label: "Khóa học của tôi", icon: BookOpen },
-  { id: "favorites", label: "Khóa học yêu thích", icon: Star },
-  { id: "security", label: "Bảo mật", icon: ShieldCheck },
+  { id: "profile", label: "Profile", icon: User },
+  { id: "courses", label: "My Courses", icon: BookOpen },
+  { id: "favorites", label: "Favorite Courses", icon: Star },
+  { id: "security", label: "Security", icon: ShieldCheck },
 ];
 
 export const DEFAULT_ENROLLED_COURSES = [
   {
-    title: "React.js Từ Cơ Bản Đến Nâng Cao",
-    instructor: "Nguyễn Văn A",
+    title: "React.js From Beginner to Advanced",
+    instructor: "John Nguyen",
     progress: 65,
     lessonsDone: 32,
     lessonsTotal: 48,
-    remaining: "Còn 5h 30m",
+    remaining: "5h 30m remaining",
     rating: 4.8,
     reviews: "1.2k",
     image:
       "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=900",
   },
   {
-    title: "JavaScript Nâng Cao Cho Lập Trình Viên",
-    instructor: "Trần Hoàng B",
+    title: "Advanced JavaScript for Developers",
+    instructor: "Henry Tran",
     progress: 40,
     lessonsDone: 16,
     lessonsTotal: 40,
-    remaining: "Còn 3h 15m",
+    remaining: "3h 15m remaining",
     rating: 4.7,
     reviews: "856",
     image:
       "https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&q=80&w=900",
   },
   {
-    title: "Node.js & Express.js Xây Dựng Backend",
-    instructor: "Lê Thanh C",
+    title: "Node.js & Express.js Backend Development",
+    instructor: "Chris Le",
     progress: 20,
     lessonsDone: 8,
     lessonsTotal: 40,
-    remaining: "Còn 6h 45m",
+    remaining: "6h 45m remaining",
     rating: 4.9,
     reviews: "732",
     image:
       "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=900",
   },
   {
-    title: "SQL Cơ Bản Đến Nâng Cao",
-    instructor: "Phạm Minh D",
+    title: "SQL From Beginner to Advanced",
+    instructor: "David Pham",
     progress: 10,
     lessonsDone: 4,
     lessonsTotal: 36,
-    remaining: "Còn 4h 20m",
+    remaining: "4h 20m remaining",
     rating: 4.6,
     reviews: "512",
     image:
@@ -114,9 +114,9 @@ export const DEFAULT_ENROLLED_COURSES = [
 ];
 
 export const FAVORITE_COURSE_TABS = [
-  { id: "all", label: "Tất cả" },
-  { id: "purchased", label: "Đã mua" },
-  { id: "unpurchased", label: "Chưa mua" },
+  { id: "all", label: "All" },
+  { id: "purchased", label: "Purchased" },
+  { id: "unpurchased", label: "Not Purchased" },
 ];
 
 export const FAVORITE_COURSE_STATUS = {
@@ -126,8 +126,8 @@ export const FAVORITE_COURSE_STATUS = {
 
 export const DEFAULT_UNPURCHASED_FAVORITE_COURSES = [
   {
-    title: "UI/UX Design Thực Chiến Cho Sản Phẩm Số",
-    instructor: "Đỗ Hà My",
+    title: "Practical UI/UX Design for Digital Products",
+    instructor: "Emily Do",
     progress: 0,
     lessonsDone: 0,
     lessonsTotal: 42,
@@ -139,8 +139,8 @@ export const DEFAULT_UNPURCHASED_FAVORITE_COURSES = [
       "https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&q=80&w=900",
   },
   {
-    title: "Python Data Analysis Cho Người Mới",
-    instructor: "Vũ Quốc Huy",
+    title: "Python Data Analysis for Beginners",
+    instructor: "Alex Vu",
     progress: 0,
     lessonsDone: 0,
     lessonsTotal: 38,
@@ -162,7 +162,7 @@ export const mapFavoriteCourse = (
   progress: course.progress || 0,
   lessonsDone: course.lessonsDone || 0,
   lessonsTotal: course.lessonsTotal || 0,
-  remaining: course.remaining || "Chưa bắt đầu",
+  remaining: course.remaining || "Not started yet",
   rating: course.rating || 4.8,
   reviews: course.reviews || "0",
 });
@@ -184,34 +184,35 @@ export const buildFavoriteCourses = (favoriteCourses = []) => {
 export const buildAchievements = (profileData, purchasedCourses) => [
   {
     id: "stellar",
-    title: "Học viên Ưu tú",
-    description: "Học tập liên tục tích lũy hơn 30 giờ học đầy cảm hứng.",
+    title: "Outstanding Learner",
+    description: "Accumulate more than 30 hours of inspiring learning time.",
     icon: Award,
     threshold: profileData.studyHours >= 30,
-    detail: `${profileData.studyHours}/30 Giờ`,
+    detail: `${profileData.studyHours}/30 Hours`,
   },
   {
     id: "streak",
-    title: "Chiến binh Kỷ luật",
-    description: "Đạt chuỗi streak học liên tục trên 10 ngày.",
+    title: "Discipline Warrior",
+    description: "Maintain a learning streak of more than 10 days.",
     icon: Flame,
     threshold: profileData.streakDays >= 10,
-    detail: `${profileData.streakDays}/10 Ngày`,
+    detail: `${profileData.streakDays}/10 Days`,
   },
   {
     id: "investor",
-    title: "Nhà Kiến tạo Tương lai",
-    description: "Đã đầu tư học tập và sở hữu ít nhất một khóa học chuyên môn.",
+    title: "Future Builder",
+    description:
+      "Invest in your education and own at least one professional course.",
     icon: Star,
     threshold: purchasedCourses.length >= 1,
-    detail: `${purchasedCourses.length}/1 Khóa`,
+    detail: `${purchasedCourses.length}/1 Course`,
   },
   {
     id: "contributor",
-    title: "Tự hào Chia sẻ",
-    description: "Viết lời giới thiệu bản thân truyền cảm hứng trong hồ sơ.",
+    title: "Proud Storyteller",
+    description: "Write an inspiring personal introduction in your profile.",
     icon: User,
     threshold: profileData.bio && profileData.bio.length > 20,
-    detail: "Đã hoàn thành",
+    detail: "Completed",
   },
 ];

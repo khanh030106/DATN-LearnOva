@@ -10,7 +10,7 @@ const CourseReviews = ({ course }) => (
             <Star key={item} size={18} fill="currentColor" />
           ))}
         </div>
-        <p>Dựa trên {course.reviews} đánh giá từ học viên đã tham gia.</p>
+        <p>Based on {course.reviews} reviews from enrolled students..</p>
       </div>
     </div>
 

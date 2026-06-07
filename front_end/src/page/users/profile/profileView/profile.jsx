@@ -88,8 +88,8 @@ const ProfileView = ({
     const nextActivity = {
       id: Date.now(),
       type: "system",
-      text: "Đã cập nhật thông tin cài đặt tài khoản cá nhân",
-      date: "Vừa xong",
+      text: "Updated personal account settings",
+      date: "Just now",
     };
     const nextActivities = [nextActivity, ...activities];
     setActivities(nextActivities);
@@ -123,7 +123,7 @@ const ProfileView = ({
       id: Date.now(),
       type: "custom",
       text: newLogText.trim(),
-      date: "Vừa xong",
+      date: "Just now",
     };
     const nextActivities = [nextActivity, ...activities];
     setActivities(nextActivities);
@@ -137,7 +137,7 @@ const ProfileView = ({
   const handleClearActivities = () => {
     if (
       !window.confirm(
-        "Bạn có chắc chắn muốn xóa toàn bộ lịch sử hoạt động không?",
+        "Are you sure you want to delete your entire activity history?",
       )
     )
       return;

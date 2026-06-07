@@ -5,17 +5,17 @@ const AchievementsSection = ({ achievements = [], points = 0, onBack }) => {
     <div className="profile-section achievements-section">
       <div className="section-header">
         <div>
-          <p className="section-label">Thành tích</p>
-          <h2>Hành trình học tập của bạn</h2>
+          <p className="section-label">Achievements</p>
+          <h2>Your Learning Journey</h2>
         </div>
         <button type="button" className="btn btn-secondary" onClick={onBack}>
-          Quay lại
+          Back
         </button>
       </div>
 
       <div className="achievement-summary-card">
         <div>
-          <p className="summary-label">Điểm hiện tại</p>
+          <p className="summary-label">Current Points</p>
           <h3>{points.toLocaleString()}</h3>
         </div>
       </div>
@@ -34,7 +34,7 @@ const AchievementsSection = ({ achievements = [], points = 0, onBack }) => {
                 <span
                   className={`achievement-status ${achievement.threshold ? "active" : "locked"}`}
                 >
-                  {achievement.threshold ? "Đã đạt" : "Chưa đạt"}
+                  {achievement.threshold ? "Achieved" : "Locked"}
                 </span>
               </div>
             </div>

@@ -12,15 +12,15 @@ const ActivitiesSection = ({
     <div className="profile-section activities-section">
       <div className="section-header">
         <div>
-          <p className="section-label">Hoạt động</p>
-          <h2>Lịch sử hoạt động gần đây</h2>
+          <p className="section-label">Activities</p>
+          <h2>Recent Activity History</h2>
         </div>
         <button
           type="button"
           className="btn btn-secondary"
           onClick={onClearActivities}
         >
-          Xóa tất cả
+          Clear All
         </button>
       </div>
 
@@ -30,18 +30,18 @@ const ActivitiesSection = ({
             type="text"
             value={newLogText}
             onChange={(event) => setNewLogText(event.target.value)}
-            placeholder="Ghi chú hoạt động mới..."
+            placeholder="Add a new activity note..."
             className="form-input"
           />
           <button type="submit" className="btn btn-primary">
-            <Plus size={16} /> Thêm
+            <Plus size={16} /> Add
           </button>
         </form>
       </div>
 
       <div className="activity-list">
         {activities.length === 0 ? (
-          <div className="empty-state">Bạn chưa có hoạt động nào.</div>
+          <div className="empty-state">You don't have any activities yet.</div>
         ) : (
           activities.map((activity) => (
             <div key={activity.id} className="activity-item">

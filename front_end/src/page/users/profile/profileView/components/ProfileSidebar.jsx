@@ -5,7 +5,7 @@ const ProfileSidebar = ({ activeTab, setActiveTab }) => (
   <aside className="profile-sidebar">
     <div className="sidebar-content">
       <div className="sidebar-header">
-        <h2>Tài khoản</h2>
+        <h2>Account</h2>
         <Sparkles size={18} />
       </div>
 

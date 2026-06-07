@@ -18,13 +18,13 @@ const CourseCardGrid = ({ courses = [], onOpenCourse, variant = "mine" }) => {
             <img src={course.image} alt={course.title} />
             {!isFavorite && (
               <span className="course-progress-badge">
-                Tiến độ: {course.progress}%
+                Progress: {course.progress}%
               </span>
             )}
             <button
               className={`course-bookmark ${isFavorite ? "favorite" : ""}`}
               type="button"
-              aria-label={isFavorite ? "Yêu thích" : "Lưu khóa học"}
+              aria-label={isFavorite ? "Remove from favorites" : "Save course"}
               onClick={(e) => e.stopPropagation()}
             >
               {isFavorite ? <Heart size={14} /> : <Bookmark size={15} />}
@@ -52,7 +52,7 @@ const CourseCardGrid = ({ courses = [], onOpenCourse, variant = "mine" }) => {
 
             <div className="course-card-meta">
               <span>
-                {course.lessonsDone} / {course.lessonsTotal} bài học
+                {course.lessonsDone} / {course.lessonsTotal} lessons
               </span>
               <span>{course.remaining}</span>
             </div>
@@ -66,7 +66,7 @@ const CourseCardGrid = ({ courses = [], onOpenCourse, variant = "mine" }) => {
               type="button"
             >
               <Play size={13} />
-              {isFavorite ? "Xem khóa học" : "Tiếp tục học"}
+              {isFavorite ? "View Course" : "Continue Learning"}
             </button>
           </div>
         </article>

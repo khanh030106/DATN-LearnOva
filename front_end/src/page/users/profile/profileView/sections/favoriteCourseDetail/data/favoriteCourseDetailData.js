@@ -1,112 +1,143 @@
 export const FAVORITE_DETAIL_TABS = [
-  { id: "overview", label: "Tổng quan" },
-  { id: "curriculum", label: "Nội dung khóa học" },
-  { id: "instructor", label: "Giảng viên" },
-  { id: "reviews", label: "Đánh giá" },
-  { id: "qa", label: "Hỏi đáp" },
+  { id: "overview", label: "Overview" },
+  { id: "curriculum", label: "Course Content" },
+  { id: "instructor", label: "Instructor" },
+  { id: "reviews", label: "Reviews" },
+  { id: "qa", label: "Q&A" },
 ];
 
 export const DEFAULT_FAVORITE_DETAIL = {
-  category: "Lập trình Web",
-  title: "React.js Từ Cơ Bản Đến Nâng Cao",
+  category: "Web Development",
+  title: "React.js From Beginner to Advanced",
   instructor: {
-    name: "Nguyễn Văn A",
+    name: "John Nguyen",
     role: "Senior Frontend Developer",
     avatar:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=160&h=160",
-    bio: "Giảng viên tập trung vào cách học thực chiến: hiểu tư duy component, viết code rõ ràng và biết kết nối dữ liệu vào giao diện.",
-    stats: ["8 năm kinh nghiệm", "32 khóa học", "18.4k học viên", "4.9 điểm đánh giá"],
+    bio: "The instructor focuses on practical learning: understanding component thinking, writing clear code, and connecting data to real interfaces.",
+    stats: ["8 years of experience", "32 courses", "18.4k students", "4.9 instructor rating"],
   },
   rating: 4.8,
   reviews: "1.2k",
   students: "12.5k",
-  progressText: "32 / 48 bài học",
-  remaining: "Còn 5h 30m",
+  progressText: "32 / 48 lessons",
+  remaining: "5h 30m remaining",
   duration: "8h 30m",
-  level: "Tất cả",
-  language: "Tiếng Việt",
-  topic: "Có",
-  exercise: "Có",
-  certificate: "Có",
+  level: "All Levels",
+  language: "English",
+  topic: "Yes",
+  exercise: "Yes",
+  certificate: "Yes",
   updatedAt: "15/05/2024",
   lessonsTotal: 48,
-  price: "299.000đ",
-  originalPrice: "499.000đ",
+  price: "$299.00",
+  originalPrice: "$499.00",
   summary:
-    "Khóa học giúp bạn nắm vững React.js từ cơ bản đến nâng cao, bao gồm hooks, context, router, state management và triển khai dự án thực tế.",
+    "This course helps you master React.js from beginner to advanced concepts, including hooks, context, routing, state management, and real project delivery.",
   outcomes: [
-    "Hiểu rõ về React.js và cách hoạt động của nó",
-    "Sử dụng React Router để xây dựng ứng dụng đa trang",
-    "Xây dựng ứng dụng React với Hooks và Functional Components",
-    "Quản lý state nâng cao với Context API và Redux",
-    "Quản lý state và side effects hiệu quả",
-    "Triển khai dự án thực tế và tối ưu hiệu suất",
+    "Understand React.js and how it works",
+    "Use React Router to build multi-page applications",
+    "Build React apps with Hooks and Functional Components",
+    "Manage advanced state with Context API and Redux",
+    "Handle state and side effects effectively",
+    "Deliver real projects and optimize performance",
   ],
   about: [
-    "Phần giới thiệu mới được viết theo hướng dễ học hơn: bạn bắt đầu từ cấu trúc component, sau đó đi qua props, state, hooks và cách tổ chức một màn hình thật.",
-    "Nội dung không chỉ dừng ở lý thuyết. Mỗi chương đều có ví dụ nhỏ để bạn luyện cách đọc dữ liệu, chia layout và xử lý trạng thái trong giao diện.",
-    "Sau khóa học, bạn có thể tự dựng một page React hoàn chỉnh, chuẩn bị sẵn cấu trúc để nối API khi backend sẵn sàng.",
+    "The introduction is designed to be easy to follow: you start with component structure, then move through props, state, hooks, and how to organize a real screen.",
+    "The course goes beyond theory. Each chapter includes small examples so you can practice reading data, splitting layouts, and handling interface state.",
+    "After the course, you can build a complete React page and prepare a clean structure for API integration when the backend is ready.",
   ],
   curriculum: [
     {
       id: 1,
-      title: "Giới thiệu về React",
-      meta: "4 / 4 bài học - 30 phút",
+      title: "Introduction to React",
+      meta: "4 / 4 lessons - 30 minutes",
       open: true,
       lessons: [
-        { number: "1.1", title: "React là gì?", type: "Video", duration: "05:30", done: true },
-        { number: "1.2", title: "Cài đặt môi trường", type: "Video", duration: "08:15", done: true },
-        { number: "1.3", title: "JSX và Render", type: "Video", duration: "10:45", done: true },
-        { number: "1.4", title: "Bài tập: Tạo ứng dụng đầu tiên", type: "Bài tập", duration: "05:30", done: false },
+        { number: "1.1", title: "What is React?", type: "Video", duration: "05:30", done: true },
+        { number: "1.2", title: "Environment Setup", type: "Video", duration: "08:15", done: true },
+        { number: "1.3", title: "JSX and Rendering", type: "Video", duration: "10:45", done: true },
+        { number: "1.4", title: "Exercise: Create Your First App", type: "Exercise", duration: "05:30", done: false },
       ],
     },
-    { id: 2, title: "Components & Props", meta: "6 bài học - 1h 10m", open: false, lessons: [] },
-    { id: 3, title: "State & Events", meta: "6 bài học - 1h 20m", open: false, lessons: [] },
+    { id: 2, title: "Components & Props", meta: "6 lessons - 1h 10m", open: false, lessons: [] },
+    { id: 3, title: "State & Events", meta: "6 lessons - 1h 20m", open: false, lessons: [] },
   ],
   reviewsList: [
     {
-      name: "Hoàng Minh",
+      name: "Michael Hoang",
       score: 5,
-      text: "Khóa học rõ ràng, phần ví dụ giúp mình hiểu nhanh cách chia component và xử lý state.",
+      text: "The course is clear, and the examples helped me quickly understand how to split components and handle state.",
     },
     {
-      name: "Lan Anh",
+      name: "Anna Le",
       score: 4.8,
-      text: "Giảng viên nói dễ hiểu, nội dung thực tế hơn nhiều so với các khóa nhập môn mình từng học.",
+      text: "The instructor explains things clearly, and the content feels much more practical than other beginner courses I have taken.",
     },
     {
-      name: "Tuấn Kiệt",
+      name: "Kevin Tran",
       score: 4.7,
-      text: "Mình thích phần bài tập cuối chương vì có thể tự kiểm tra lại ngay.",
+      text: "I like the end-of-chapter exercises because I can check my understanding right away.",
     },
   ],
   questions: [
     {
-      title: "Học xong khóa này có đủ để làm dự án cá nhân không?",
-      answer: "Có. Bạn sẽ có nền tảng để dựng page, tách component, xử lý state và chuẩn bị nối API.",
+      title: "Is this course enough to build a personal project?",
+      answer: "Yes. You will have the foundation to build pages, split components, handle state, and prepare API integration.",
     },
     {
-      title: "Người mới học JavaScript có theo được không?",
-      answer: "Theo được nếu bạn đã biết biến, hàm, array và object cơ bản. Các phần React được giải thích từng bước.",
+      title: "Can a JavaScript beginner follow this course?",
+      answer: "Yes, if you already know basic variables, functions, arrays, and objects. The React sections are explained step by step.",
     },
   ],
+};
+
+const COURSE_TITLE_TRANSLATIONS = {
+  "React.js Từ Cơ Bản Đến Nâng Cao": "React.js From Beginner to Advanced",
+  "JavaScript Nâng Cao Cho Lập Trình Viên": "Advanced JavaScript for Developers",
+  "Node.js & Express.js Xây Dựng Backend": "Build Backends with Node.js & Express.js",
+  "SQL Cơ Bản Đến Nâng Cao": "SQL From Beginner to Advanced",
+  "UI/UX Design Thực Chiến Cho Sản Phẩm Số": "Practical UI/UX Design for Digital Products",
+  "Python Data Analysis Cho Người Mới": "Python Data Analysis for Beginners",
+};
+
+const INSTRUCTOR_NAME_TRANSLATIONS = {
+  "Nguyễn Văn A": "John Nguyen",
+  "Trần Hoàng B": "Henry Tran",
+  "Lê Thanh C": "Chris Le",
+  "Phạm Minh D": "David Pham",
+  "Đỗ Hà My": "Mia Do",
+  "Vũ Quốc Huy": "Harry Vu",
+};
+
+const formatRemainingText = (remaining) => {
+  if (!remaining) return DEFAULT_FAVORITE_DETAIL.remaining;
+  if (/remaining/i.test(remaining)) return remaining;
+
+  return `${remaining.replace(/^Còn\s*/i, "")} remaining`;
 };
 
 export const buildFavoriteCourseDetail = (course = {}) => ({
   ...DEFAULT_FAVORITE_DETAIL,
   ...course,
-  title: course.title || DEFAULT_FAVORITE_DETAIL.title,
+  title:
+    COURSE_TITLE_TRANSLATIONS[course.title] ||
+    course.title ||
+    DEFAULT_FAVORITE_DETAIL.title,
   image: course.image || DEFAULT_FAVORITE_DETAIL.image,
   rating: course.rating || DEFAULT_FAVORITE_DETAIL.rating,
   reviews: course.reviews || DEFAULT_FAVORITE_DETAIL.reviews,
   lessonsTotal: course.lessonsTotal || DEFAULT_FAVORITE_DETAIL.lessonsTotal,
   progressText:
     course.lessonsDone && course.lessonsTotal
-      ? `${course.lessonsDone} / ${course.lessonsTotal} bài học`
+      ? `${course.lessonsDone} / ${course.lessonsTotal} lessons`
       : DEFAULT_FAVORITE_DETAIL.progressText,
-  remaining: course.remaining || DEFAULT_FAVORITE_DETAIL.remaining,
+  remaining: formatRemainingText(course.remaining),
   instructor: {
     ...DEFAULT_FAVORITE_DETAIL.instructor,
-    name: course.instructor || DEFAULT_FAVORITE_DETAIL.instructor.name,
+    name:
+      INSTRUCTOR_NAME_TRANSLATIONS[course.instructor] ||
+      course.instructor ||
+      DEFAULT_FAVORITE_DETAIL.instructor.name,
   },
 });

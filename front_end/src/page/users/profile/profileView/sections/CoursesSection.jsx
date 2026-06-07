@@ -17,7 +17,7 @@ const CoursesSection = ({ purchasedCourses = [], onBack, onOpenCourse }) => {
           progress: course.progress || (index % 2 === 0 ? 65 : 40),
           lessonsDone: course.lessonsDone || 12 + index * 4,
           lessonsTotal: course.lessonsTotal || 40,
-          remaining: course.remaining || "Còn 3h 15m",
+          remaining: course.remaining || "3h 15m Remaining",
           rating: course.rating || 4.8,
           reviews: course.reviews || "856",
         }))
@@ -27,24 +27,24 @@ const CoursesSection = ({ purchasedCourses = [], onBack, onOpenCourse }) => {
     <>
       <div className="courses-topbar">
         <div>
-          <h2>Khóa học tham gia</h2>
+          <h2>Enrolled Courses</h2>
           <div className="course-tabs">
             <button className="course-tab active" type="button">
-              Đang học
+              In Progress
             </button>
             <button className="course-tab" type="button">
-              Hoàn thành
+              Completed
             </button>
           </div>
         </div>
 
         <div className="course-tools">
           <label className="course-search">
-            <input type="text" placeholder="Tìm kiếm khóa học..." />
+            <input type="text" placeholder="Search courses..." />
             <Search size={15} />
           </label>
           <button className="course-sort" type="button">
-            Mới nhất <ChevronDown size={14} />
+            Newest <ChevronDown size={14} />
           </button>
           <button
             className="course-view active"
@@ -85,13 +85,13 @@ const CoursesSection = ({ purchasedCourses = [], onBack, onOpenCourse }) => {
         </>
       ) : (
         <div className="empty-state">
-          <h4>Bạn chưa sở hữu khóa học nào</h4>
+          <h4>You Don't Own Any Courses Yet</h4>
           <p>
-            Hãy khởi đầu hành trình nâng cao trình độ bằng việc chọn các khóa
-            học phù hợp.
+            Start your learning journey by choosing courses that match your
+            goals and interests.
           </p>
           <button onClick={onBack} className="btn btn-primary" type="button">
-            Xem danh sách khóa học
+            View Course Catalog
           </button>
         </div>
       )}
