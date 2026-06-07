@@ -13,9 +13,10 @@ import {
   Languages,
   Palette,
   Settings,
-  ShieldCheck,
-  Smartphone,
-  Users,
+    ShieldCheck,
+    Smartphone,
+    Users,
+    Video,
 } from "lucide-react";
 import { MessageCircle } from "lucide-react";
 
@@ -264,6 +265,51 @@ function InstructorsPage() {
 
   return (
     <div className="instructors-page">
+      <section className="instructors-overview">
+        <div className="instructors-overview-copy">
+          <h1>1,254 instructors</h1>
+          <p>Learn from the world's best professionals</p>
+        </div>
+        <div className="instructors-overview-stats">
+          <div className="overview-stat">
+            <span className="overview-stat-icon">
+              <Users size={20} />
+            </span>
+            <div>
+              <strong>5.2M+</strong>
+              <small>Students taught</small>
+            </div>
+          </div>
+          <div className="overview-stat">
+            <span className="overview-stat-icon overview-stat-icon-warm">
+              <FaStar />
+            </span>
+            <div>
+              <strong>4.8</strong>
+              <small>Average rating</small>
+            </div>
+          </div>
+          <div className="overview-stat">
+            <span className="overview-stat-icon">
+              <Video size={20} />
+            </span>
+            <div>
+              <strong>12.6K</strong>
+              <small>Courses published</small>
+            </div>
+          </div>
+          <div className="overview-stat">
+            <span className="overview-stat-icon">
+              <Globe size={20} />
+            </span>
+            <div>
+              <strong>120+</strong>
+              <small>Countries</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div className="page-container">
         <aside className="sidebar">
           <div className="sidebar-header">
@@ -390,6 +436,15 @@ function InstructorsPage() {
                 </button>
               ))}
             </div>
+            <label className="sort-control">
+              <span>Sort by:</span>
+              <select>
+                <option>Most Popular</option>
+                <option>Top Rated</option>
+                <option>Most Students</option>
+                <option>Newest</option>
+              </select>
+            </label>
           </div>
 
           {/* INSTRUCTORS GRID */}

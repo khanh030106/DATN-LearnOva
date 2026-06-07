@@ -2931,7 +2931,6 @@ body {
   height: 28px;
   border: 0;
   border-radius: 10px;
-  background: #ffffff;
   color: var(--blue-dark);
   display: grid;
   place-items: center;
