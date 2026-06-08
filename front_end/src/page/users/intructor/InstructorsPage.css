@@ -718,6 +718,10 @@ body {
 }
 
 .instructor-name-new {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
   width: 100%;
   font-size: 22px;
   font-weight: 700;
