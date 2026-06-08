@@ -4,11 +4,11 @@ import {ShoppingCart} from "lucide-react";
 const HeaderAction = () => {
     return (
         <div className="header-section">
-            <Link to="/cart" className="header-action-cart">
-                <ShoppingCart size={22}/>
+            <Link to="/learnova/cart" className="header-action-cart">
+                <ShoppingCart size={25}/>
             </Link>
 
-            <Link to={"/login"} className="header-action-login">
+            <Link to={"/learnova/auth/login"} className="header-action-login">
                 Login
             </Link>
         </div>
