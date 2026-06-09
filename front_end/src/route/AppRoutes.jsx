@@ -29,6 +29,7 @@ import QaPage from "../page/teacher/qa/QaPage.jsx";
 // User
 import UserLayout from "../layout/user/UserLayout.jsx";
 import IntructorsPage from "../page/users/intructor.jsx";
+import InstructorDetail from "../page/users/intructor/intructorDetail/intructorDetail.jsx";
 import AboutView from "../page/users/About/About.jsx";
 import ProfileViewProps from "../page/users/profile/profileView/profile.jsx";
 import CoursePage from "../page/users/course/CourseNew.jsx";
@@ -99,6 +100,8 @@ const App = () => {
           <Route path="/learnova/intructors" element={<IntructorsPage />} />
           <Route path="/learnova/about" element={<AboutView />} />
           <Route path="/learnova/user/profile" element={<ProfileViewProps />} />
+        {/*   intructorDetail*/}
+          <Route path="/learnova/intructorDetail" element={<InstructorDetail />} />
         </Route>
       </Routes>
     </BrowserRouter>
