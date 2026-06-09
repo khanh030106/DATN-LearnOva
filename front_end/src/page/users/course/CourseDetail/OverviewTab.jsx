@@ -84,13 +84,13 @@ function OverviewTab({ courseDescription, instructor, expandedDescription, setEx
               {/* INSTRUCTOR SECTION */}
               <div className="instructor-section">
                   <h4 className="section-header-title">
-                      <FaUserGraduate className="section-icon" />
+                      <FaUserGraduate className="OV-section-icon" />
                       Instructor
                   </h4>
 
                   <div className="instructor-container">
                       <div className="instructor-header-box">
-                          <div className="instructor-avatar-wrapper">
+                          <div className="OV-instructor-avatar-wrapper">
                               <img
                                   src={instructor.avatar}
                                   alt={instructor.name}

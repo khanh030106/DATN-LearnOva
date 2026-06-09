@@ -1,0 +1,89 @@
+.cart-page {
+  min-height: 80vh;
+  padding: 40px 24px;
+  background: transparent;
+}
+
+.cart-panel {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+}
+
+.cart-left h1 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  color: #0f172a;
+}
+
+.cart-sub {
+  margin: 0 0 20px 0;
+  color: #64748b;
+}
+
+.cart-list {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 18px;
+  border: 1px solid #eef2f7;
+  box-shadow: 0 10px 30px rgba(15,23,42,0.04);
+}
+
+.cart-list-header {
+  display: grid;
+  grid-template-columns: 1fr 120px 160px 100px;
+  gap: 12px;
+  color: #64748b;
+  padding: 12px 8px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 1fr 120px 160px 100px 40px;
+  gap: 12px;
+  align-items: center;
+  padding: 18px 8px;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.cart-item-course { display: flex; gap: 12px; align-items: center; }
+.cart-item-course img { width: 92px; height: 64px; object-fit: cover; border-radius: 8px; }
+.cart-item-title { color: #071a33; font-weight: 700; text-decoration: none; }
+.cart-item-teacher { color: #64748b; font-size: 0.9rem; }
+
+.cart-item-price, .cart-item-total { color: #0f172a; font-weight: 700; }
+
+.cart-item-qty { display:flex; align-items:center; gap:8px; }
+.qty-btn { width:32px; height:32px; border-radius:8px; border:1px solid #e6eefc; background:#fff; cursor:pointer; }
+.qty-num { min-width:20px; text-align:center; }
+
+.cart-item-remove { background:transparent; border:none; cursor:pointer; }
+
+.cart-actions { display:flex; gap:12px; padding: 16px 8px; }
+.btn-clear { background:transparent; border:1px solid #e2e8f0; padding:10px 14px; border-radius:8px; cursor:pointer; }
+.btn-wishlist { background:#fff; border:1px solid #e2e8f0; padding:10px 14px; border-radius:8px; cursor:pointer; }
+
+.promo-row { display:flex; justify-content:space-between; gap:12px; margin-top:18px; align-items:center; }
+.promo-left h3 { margin:0; }
+.promo-right { display:flex; gap:8px; }
+.promo-right input { padding:10px 12px; border-radius:8px; border:1px solid #e6eefc; }
+.btn-apply { padding:10px 14px; border-radius:8px; background:#fff; border:1px solid #e2e8f0; cursor:pointer; }
+
+.cart-right .order-card { background:#ffffff; padding:20px; border-radius:12px; border:1px solid #eef2f7; box-shadow:0 10px 30px rgba(15,23,42,0.04); }
+.order-card h3 { margin:0 0 12px 0; }
+.order-row { display:flex; justify-content:space-between; color:#64748b; padding:6px 0; }
+.order-total { display:flex; justify-content:space-between; font-weight:800; font-size:1.25rem; padding:12px 0; }
+.checkout { width:100%; padding:12px 14px; background:#1d4ed8; color:#fff; border:none; border-radius:10px; cursor:pointer; margin-top:8px; }
+.continue { width:100%; padding:10px 14px; background:#fff; border:1px solid #e2e8f0; border-radius:10px; cursor:pointer; margin-top:10px; }
+
+.benefits { margin-top:18px; }
+.benefit { background:#fff; border-radius:10px; padding:12px; border:1px solid #eef2f7; margin-top:10px; }
+.benefit p { margin:6px 0 0 0; color:#64748b; }
+
+@media (max-width: 1024px) {
+  .cart-panel { grid-template-columns: 1fr; }
+  .cart-right { order: 2; }
+}

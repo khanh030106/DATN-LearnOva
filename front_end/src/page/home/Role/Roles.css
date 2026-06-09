@@ -37,7 +37,7 @@
 
 .role-card {
     background: #ffffff;
-    border-radius: 15px;
+    border-radius: 6px;
     padding: 40px;
     border: 1px solid #e2e8f0;
     cursor: pointer;
@@ -53,7 +53,7 @@
 .role-icon {
     width: 56px;
     height: 56px;
-    border-radius: 14px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;

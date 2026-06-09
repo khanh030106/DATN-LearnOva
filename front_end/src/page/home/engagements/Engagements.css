@@ -23,8 +23,8 @@
   color: #003983;
   font-size: clamp(2rem, 3vw, 2.8rem);
   line-height: 1.15;
-  font-weight: 800;
-  font-style: italic;
+  font-weight: 700;
+  font-style: normal;
   letter-spacing: 0;
 }
 
@@ -156,8 +156,8 @@
   color: #ffffff;
   font-size: clamp(2rem, 4vw, 3.4rem);
   line-height: 1.14;
-  font-weight: 800;
-  font-style: italic;
+  font-weight: 700;
+  font-style: normal;
   letter-spacing: 0;
 }
 

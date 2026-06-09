@@ -24,7 +24,7 @@ body {
     display: flex;
     flex-direction: column;
     background: #fff;
-    margin-top: 86px;
+    /*margin-top: 86px;*/
 }
 
 /* ==================== HEADER ==================== */
@@ -219,6 +219,7 @@ body {
     display: flex;
     gap: 0;
     padding: 0 2rem;
+    margin-top: 10px;
 }
 
 .tab-btn {
@@ -461,7 +462,7 @@ body {
     font-weight: 600;
 }
 
-.section-icon {
+.OV-section-icon {
     color: #2563eb;
     font-size: 22px;
 }
@@ -502,7 +503,7 @@ hr {
     align-items: flex-start;
 }
 
-.instructor-avatar-wrapper {
+.OV-instructor-avatar-wrapper {
     flex-shrink: 0;
 }
 

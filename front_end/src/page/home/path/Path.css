@@ -20,7 +20,7 @@
 }
 
 .learning-header p {
-    max-width: 800px;
+    max-width: 1200px;
     margin: auto;
     color: #475569;
     font-size: 17px;
@@ -41,7 +41,7 @@
 
 .learning-card {
     padding: 15px 40px 40px;
-    border-radius: 20px;
+    border-radius: 6px;
     border: 1px solid #e2e8f0;
     background: #ffffff;
     transition: 0.4s;
@@ -63,7 +63,7 @@
 .learning-icon {
     width: 70px;
     height: 70px;
-    border-radius: 20px;
+    border-radius: 6px;
     background: #dbeafe;
     color: #1d4ed8;
 
@@ -140,7 +140,7 @@
     margin-top: 45px;
     padding: 15px;
     border: none;
-    border-radius: 14px;
+    border-radius: 6px;
 
     background: #2400ac;
     color: white;

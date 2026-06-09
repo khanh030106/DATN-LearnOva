@@ -1,17 +1,16 @@
-import {Outlet} from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Footer from "../../component/footer/footer.jsx";
 
-
 const HomeLayout = () => {
-    return (
-        <div>
-            <main>
-                <Outlet/>
-            </main>
+  return (
+    <div>
+      <main>
+        <Outlet />
+      </main>
 
-            <Footer/>
-        </div>
-    );
-}
+      <Footer />
+    </div>
+  );
+};
 
 export default HomeLayout;
