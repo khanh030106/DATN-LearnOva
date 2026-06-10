@@ -37,7 +37,7 @@ function HeaderIntructor({ instructor, isFollowing, setIsFollowing, introText })
             </div>
         </div>
 
-        <p className="instructor-bio">{introText}</p>
+        <p className="instructor-bio-in">{introText}</p>
 
         <div className="social-links-in">
             {instructor.socials.map((social, idx) => (

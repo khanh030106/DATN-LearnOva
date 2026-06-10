@@ -34,6 +34,7 @@ import AboutView from "../page/users/About/About.jsx";
 import ProfileViewProps from "../page/users/profile/profileView/profile.jsx";
 import CoursePage from "../page/users/course/CourseNew.jsx";
 import CourseDetail from "../page/users/course/CourseDetail/CourseDetail.jsx";
+import CourseDetaill from "../page/home/courses/CourseDetail.jsx";
 
 // Home Features
 // import CourseDetail from "../page/home/courses/CourseDetail.jsx";
@@ -41,6 +42,7 @@ import Cart from "../page/home/cart/Cart.jsx";
 
 // Cart
 import CartLayout from "../layout/cart/CartLayout.jsx";
+import RegisterPage from "../page/register/Register.jsx";
 
 const App = () => {
   return (
@@ -48,11 +50,14 @@ const App = () => {
       <Routes>
         {/* Login */}
         <Route path="/learnova/auth/login" element={<LoginPage />} />
+        <Route path="/learnova/auth/register" element={<RegisterPage />} />
 
         {/* Home */}
         <Route element={<HomeLayout />}>
           <Route path="/learnova/home" element={<Home />} />
-          <Route path="/learnova/home/course/:id" element={<CourseDetail />} />
+          {/*<Route path="/learnova/home/course/:id" element={<CourseDetail />} />*/}
+
+
         </Route>
 
         {/* Cart */}
@@ -79,7 +84,7 @@ const App = () => {
                     <Route path="/learnova/user/profile" element={<ProfileViewProps/>}/>
 
                 </Route>
-          <Route path="/learnova/user/CouresDetail" element={<CourseDetail/>}/>
+          <Route path="/learnova/user/CoursesDetail" element={<CourseDetail/>}/>
 
 
         {/* Teacher */}
@@ -98,6 +103,7 @@ const App = () => {
         <Route element={<UserLayout />}>
           <Route path="/learnova/courses" element={<CoursePage />} />
           <Route path="/learnova/intructors" element={<IntructorsPage />} />
+          <Route path="/learnova/CoursesDetail/:id" element={<CourseDetaill />}/>
           <Route path="/learnova/about" element={<AboutView />} />
           <Route path="/learnova/user/profile" element={<ProfileViewProps />} />
         {/*   intructorDetail*/}

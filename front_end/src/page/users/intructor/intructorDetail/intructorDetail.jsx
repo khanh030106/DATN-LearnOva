@@ -18,6 +18,7 @@ import {MdMessage} from "react-icons/md";
 import {instructor, introText, introDetails, achievements, courses, reviews} from "./intructorData.js";
 import HeaderIntructor from "./headerIntructor.jsx";
 import MainIntructor from "./MainIntructor.jsx";
+import LearnovaAI from "../../../home/AI/AI.jsx";
 
 function InstructorDetail() {
     const [isFollowing, setIsFollowing] = useState(false);
@@ -82,6 +83,9 @@ function InstructorDetail() {
                         </button>
                     </div>
                 </aside>
+            </div>
+            <div className="chatbot-fixed">
+                <LearnovaAI />
             </div>
         </div>
     );

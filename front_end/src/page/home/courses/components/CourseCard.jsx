@@ -8,7 +8,7 @@ const CourseCard = ({ course }) => {
 
   return (
     <article className="course-card">
-      <Link to={`/learnova/home/course/${course.id}`}>
+      <Link to={`/learnova/coursesDetail/${course.id}`}>
         <img
           src={course.image}
           alt={course.title}
@@ -18,7 +18,7 @@ const CourseCard = ({ course }) => {
 
       <div className="course-card__body">
         <Link
-          to={`/learnova/home/course/${course.id}`}
+          to={`/learnova/coursesDetail/${course.id}`}
           className="course-title"
         >
           <h3>{course.title}</h3>

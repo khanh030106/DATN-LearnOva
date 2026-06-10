@@ -90,7 +90,7 @@ function OverviewTab({ courseDescription, instructor, expandedDescription, setEx
 
                   <div className="instructor-container">
                       <div className="instructor-header-box">
-                          <div className="OV-instructor-avatar-wrapper">
+                          <div className="OV-instructor-avatar-wrapper-co">
                               <img
                                   src={instructor.avatar}
                                   alt={instructor.name}
@@ -100,7 +100,7 @@ function OverviewTab({ courseDescription, instructor, expandedDescription, setEx
 
                           <div className="instructor-details">
                               <h3 className="instructor-name-large">{instructor.name}</h3>
-                              <p className="instructor-subtitle">{instructor.title}</p>
+                              <p className="instructor-subtitle-co">{instructor.title}</p>
 
                               <div className="instructor-social-links">
                                   <a href="#" className="social-link" title="Twitter">

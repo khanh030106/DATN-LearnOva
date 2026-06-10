@@ -44,7 +44,7 @@ const LoginForm = () => {
             <div className="login">
 
                 <div className="login-inner">
-                    <h2 className="login-inner-title">Log in</h2>
+                    <h2 className="login-inner-title">Login</h2>
                     <p className="login-inner-sub">Welcome back to LearnOva!</p>
 
                     <form className="login-form" onSubmit={handleSubmit}>

@@ -4,6 +4,8 @@ import "./Course.css";
 import { BiCart, BiHeart } from "react-icons/bi";
 import { MdStar } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
+import { BiCartAdd } from "react-icons/bi";
+import LearnovaAI from "../../home/AI/AI.jsx";
 
 import { GraduationCap, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -13,13 +15,13 @@ function CoursesPage() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const categories = [
-    { id: "all", name: "TẤT CẢ", count: "120" },
-    { id: "tech", name: "Công nghệ", count: "136" },
-    { id: "business", name: "Kinh doanh", count: "96" },
-    { id: "design", name: "Thiết kế", count: "72" },
+    { id: "all", name: "ALL", count: "120" },
+    { id: "tech", name: "Technology", count: "136" },
+    { id: "business", name: "Business", count: "96" },
+    { id: "design", name: "Design", count: "72" },
     { id: "marketing", name: "Marketing", count: "86" },
-    { id: "language", name: "Ngoại ngữ", count: "64" },
-    { id: "skills", name: "Kỹ năng mềm", count: "58" },
+    { id: "language", name: "Languages", count: "64" },
+    { id: "skills", name: "Soft Skills", count: "58" }
   ];
 
   const courses = [
@@ -27,11 +29,11 @@ function CoursesPage() {
       id: 1,
       title: "Lập trình Fullstack Master Node.js",
       instructor: "Nguyễn Văn A",
-      category: "Công nghệ",
+      category: "Technology",
       rating: 4.9,
       reviews: 2400,
       price: "1,290,000đ",
-      image: "https://via.placeholder.com/280x160/1a1a2e/ffffff?text=Fullstack",
+      image: "https://vtiacademy.edu.vn/upload/images/khoa-hoc-tester-tp-hcm-1.jpg",
       badge: "Bestseller",
       level: "Intermediate",
     },
@@ -44,7 +46,7 @@ function CoursesPage() {
       reviews: 1600,
       price: "990,000đ",
       image:
-        "https://via.placeholder.com/280x160/0a3d62/ffffff?text=Data+Analysis",
+          "https://vtiacademy.edu.vn/upload/images/khoa-hoc-tester-tp-hcm-1.jpg",
       badge: "Hot",
       level: "Beginner",
     },
@@ -52,11 +54,11 @@ function CoursesPage() {
       id: 3,
       title: "Thiết kế UI/UX Chuyên sâu",
       instructor: "Lê Hoàng C",
-      category: "Thiết kế",
+      category: "Design",
       rating: 4.7,
       reviews: 1800,
       price: "1,590,000đ",
-      image: "https://via.placeholder.com/280x160/3c6382/ffffff?text=UI+UX",
+      image: "https://vtiacademy.edu.vn/upload/images/khoa-hoc-tester-tp-hcm-1.jpg",
       badge: "Popular",
       level: "Intermediate",
     },
@@ -69,7 +71,7 @@ function CoursesPage() {
       reviews: 1200,
       price: "690,000đ",
       image:
-        "https://via.placeholder.com/280x160/f39c12/ffffff?text=Digital+Marketing",
+          "https://vtiacademy.edu.vn/upload/images/khoa-hoc-tester-tp-hcm-1.jpg",
       badge: "New",
       level: "Beginner",
     },
@@ -77,12 +79,12 @@ function CoursesPage() {
       id: 5,
       title: "Quản lý nhân sự hiện đại",
       instructor: "Phạm Văn E",
-      category: "Kinh doanh",
+      category: "Business",
       rating: 4.6,
       reviews: 980,
       price: "890,000đ",
       image:
-        "https://via.placeholder.com/280x160/27ae60/ffffff?text=HR+Management",
+          "https://vtiacademy.edu.vn/upload/images/khoa-hoc-tester-tp-hcm-1.jpg",
       badge: "Trending",
       level: "Intermediate",
     },
@@ -90,11 +92,11 @@ function CoursesPage() {
       id: 6,
       title: "Python for Data Science",
       instructor: "Bùi Thị F",
-      category: "Công nghệ",
+      category: "Technology",
       rating: 4.8,
       reviews: 2100,
       price: "1,350,000đ",
-      image: "https://via.placeholder.com/280x160/8e44ad/ffffff?text=Python",
+      image: "https://vtiacademy.edu.vn/upload/images/khoa-hoc-tester-tp-hcm-1.jpg",
       badge: "Bestseller",
       level: "Intermediate",
     },
@@ -102,11 +104,11 @@ function CoursesPage() {
       id: 7,
       title: "Nâng thuật lực Trình",
       instructor: "Đặng Thị G",
-      category: "Kỹ năng mềm",
+      category: "Soft Skills",
       rating: 4.7,
       reviews: 1260,
       price: "690,000đ",
-      image: "https://via.placeholder.com/280x160/2980b9/ffffff?text=Speaking",
+      image: "https://vtiacademy.edu.vn/upload/images/khoa-hoc-tester-tp-hcm-1.jpg",
       badge: "Hot",
       level: "Beginner",
     },
@@ -114,11 +116,11 @@ function CoursesPage() {
       id: 8,
       title: "Tiếng Anh giao tiếp",
       instructor: "Dương H",
-      category: "Ngoại ngữ",
+      category: "Languages",
       rating: 4.6,
       reviews: 1100,
       price: "490,000đ",
-      image: "https://via.placeholder.com/280x160/16a085/ffffff?text=English",
+      image: "https://vtiacademy.edu.vn/upload/images/khoa-hoc-tester-tp-hcm-1.jpg",
       badge: "Popular",
       level: "Beginner",
     },
@@ -189,7 +191,7 @@ function CoursesPage() {
       name: "Nguyễn Mạnh",
       skill: "C# programming languages, Python",
       rating: 4.8,
-      avatar: "https://via.placeholder.com/80/2563EB/ffffff?text=NM",
+      avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
       stats: { students: "1,530", courses: "18", hours: "240" },
     },
     {
@@ -197,7 +199,7 @@ function CoursesPage() {
       name: "JMaster IO",
       skill: "Java, Spring Boot",
       rating: 4.6,
-      avatar: "https://via.placeholder.com/80/3B82F6/ffffff?text=JM",
+      avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
       stats: { students: "5,261", courses: "11", hours: "160" },
     },
     {
@@ -205,7 +207,7 @@ function CoursesPage() {
       name: "Khoa Nguyễn",
       skill: "C++, programming languages, Game Development",
       rating: 4.6,
-      avatar: "https://via.placeholder.com/80/1D4ED8/ffffff?text=KN",
+      avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
       stats: { students: "15,951", courses: "8", hours: "320" },
     },
   ];
@@ -218,214 +220,219 @@ function CoursesPage() {
     );
   };
 
-  if (selectedCourse) {
-    return (
-      <div className="course-detail-page">
-        <div className="course-detail-wrapper">
-          <div className="course-hero-card">
-            <div className="course-hero-image">
-              <img src={selectedCourse.image} alt={selectedCourse.title} />
-            </div>
-            <div className="course-hero-content">
-              <span className="course-badge">{selectedCourse.badge}</span>
-              <h1>{selectedCourse.title}</h1>
-              <p className="course-instructor">
-                Giảng viên: {selectedCourse.instructor}
-              </p>
-              <p className="course-summary">
-                Khóa học giúp bạn nắm vững React.js từ những kiến thức cơ bản
-                nhất đến các kỹ thuật nâng cao và xây dựng dự án thực tế.
-              </p>
-              <div className="course-tags">
-                <span>React</span>
-                <span>Frontend</span>
-                <span>UI/UX</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="course-detail-grid">
-            <section className="course-detail-main">
-              <div className="course-section-card">
-                <div className="course-section-header">
-                  <div>
-                    <p className="section-label">Nội dung khóa học</p>
-                    <h2>Chi tiết bài học</h2>
-                  </div>
-                  <span>{courseProgress}% hoàn thành</span>
-                </div>
-
-                <div className="course-progress-block">
-                  <div className="course-progress-bar">
-                    <div
-                      className="course-progress-fill"
-                      style={{ width: `${courseProgress}%` }}
-                    />
-                  </div>
-                  <div className="course-progress-meta">
-                    <span>{courseProgress}% hoàn thành</span>
-                    <span>8 / 12 bài học hoàn thành</span>
-                  </div>
-                </div>
-
-                <div className="course-lessons-list">
-                  {courseOutline.map((group) => (
-                    <div key={group.section} className="lesson-group">
-                      <div className="lesson-group-title">{group.section}</div>
-                      <ul>
-                        {group.lessons.map((lesson) => (
-                          <li
-                            key={lesson.title}
-                            className={
-                              lesson.completed ? "completed" : "pending"
-                            }
-                          >
-                            <span>{lesson.title}</span>
-                            <div>
-                              <small>{lesson.duration}</small>
-                              {lesson.completed ? (
-                                <span className="status-dot completed-dot">
-                                  Hoàn thành
-                                </span>
-                              ) : (
-                                <span className="status-dot pending-dot">
-                                  Chưa học
-                                </span>
-                              )}
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            <aside className="course-detail-sidebar">
-              <div className="course-info-card">
-                <div className="course-info-top">
-                  <p className="label">Tiến độ học tập</p>
-                  <strong>{courseProgress}%</strong>
-                </div>
-                <div className="course-info-stat">
-                  <span>8 / 12 bài học</span>
-                  <span>12 giờ 45 phút</span>
-                </div>
-                <button className="btn btn-primary btn-full">
-                  Tiếp tục học
-                </button>
-                <button className="btn btn-secondary btn-full">
-                  Xem chứng chỉ
-                </button>
-              </div>
-
-              <div className="course-info-card course-detail-meta">
-                <p className="label">Thông tin khóa học</p>
-                <div className="meta-row">
-                  <strong>Giảng viên</strong>
-                  <span>{selectedCourse.instructor}</span>
-                </div>
-                <div className="meta-row">
-                  <strong>Trình độ</strong>
-                  <span>{selectedCourse.level || "Cơ bản"}</span>
-                </div>
-                <div className="meta-row">
-                  <strong>Thời lượng</strong>
-                  <span>12 giờ 45 phút</span>
-                </div>
-                <div className="meta-row">
-                  <strong>Số bài học</strong>
-                  <span>12 bài</span>
-                </div>
-                <div className="meta-row">
-                  <strong>Cập nhật</strong>
-                  <span>12/05/2024</span>
-                </div>
-              </div>
-            </aside>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // if (selectedCourse) {
+  //   return (
+  //     <div className="course-detail-page">
+  //       <div className="course-detail-wrapper">
+  //         <div className="course-hero-card">
+  //           <div className="course-hero-image">
+  //             <img src={selectedCourse.image} alt={selectedCourse.title} />
+  //           </div>
+  //           <div className="course-hero-content">
+  //             <span className="course-badge">{selectedCourse.badge}</span>
+  //             <h1>{selectedCourse.title}</h1>
+  //             <p className="course-instructor">
+  //               Giảng viên: {selectedCourse.instructor}
+  //             </p>
+  //             <p className="course-summary">
+  //               Khóa học giúp bạn nắm vững React.js từ những kiến thức cơ bản
+  //               nhất đến các kỹ thuật nâng cao và xây dựng dự án thực tế.
+  //             </p>
+  //             <div className="course-tags">
+  //               <span>React</span>
+  //               <span>Frontend</span>
+  //               <span>UI/UX</span>
+  //             </div>
+  //           </div>
+  //         </div>
+  //
+  //
+  //         <div className="course-detail-grid">
+  //           <section className="course-detail-main">
+  //             <div className="course-section-card">
+  //               <div className="course-section-header">
+  //                 <div>
+  //                   <p className="section-label">Nội dung khóa học</p>
+  //                   <h2>Chi tiết bài học</h2>
+  //                 </div>
+  //                 <span>{courseProgress}% hoàn thành</span>
+  //               </div>
+  //
+  //               <div className="course-progress-block">
+  //                 <div className="course-progress-bar">
+  //                   <div
+  //                     className="course-progress-fill"
+  //                     style={{ width: `${courseProgress}%` }}
+  //                   />
+  //                 </div>
+  //                 <div className="course-progress-meta">
+  //                   <span>{courseProgress}% hoàn thành</span>
+  //                   <span>8 / 12 bài học hoàn thành</span>
+  //                 </div>
+  //               </div>
+  //
+  //               <div className="course-lessons-list">
+  //                 {courseOutline.map((group) => (
+  //                   <div key={group.section} className="lesson-group">
+  //                     <div className="lesson-group-title">{group.section}</div>
+  //                     <ul>
+  //                       {group.lessons.map((lesson) => (
+  //                         <li
+  //                           key={lesson.title}
+  //                           className={
+  //                             lesson.completed ? "completed" : "pending"
+  //                           }
+  //                         >
+  //                           <span>{lesson.title}</span>
+  //                           <div>
+  //                             <small>{lesson.duration}</small>
+  //                             {lesson.completed ? (
+  //                               <span className="status-dot completed-dot">
+  //                                 Hoàn thành
+  //                               </span>
+  //                             ) : (
+  //                               <span className="status-dot pending-dot">
+  //                                 Chưa học
+  //                               </span>
+  //                             )}
+  //                           </div>
+  //                         </li>
+  //                       ))}
+  //                     </ul>
+  //                   </div>
+  //                 ))}
+  //               </div>
+  //             </div>
+  //           </section>
+  //
+  //
+  //           <aside className="course-detail-sidebar">
+  //             <div className="course-info-card">
+  //               <div className="course-info-top">
+  //                 <p className="label">Tiến độ học tập</p>
+  //                 <strong>{courseProgress}%</strong>
+  //               </div>
+  //               <div className="course-info-stat">
+  //                 <span>8 / 12 bài học</span>
+  //                 <span>12 giờ 45 phút</span>
+  //               </div>
+  //               <button className="btn btn-primary btn-full">
+  //                 Tiếp tục học
+  //               </button>
+  //               <button className="btn btn-secondary btn-full">
+  //                 Xem chứng chỉ
+  //               </button>
+  //             </div>
+  //
+  //             <div className="course-info-card course-detail-meta">
+  //               <p className="label">Thông tin khóa học</p>
+  //               <div className="meta-row">
+  //                 <strong>Giảng viên</strong>
+  //                 <span>{selectedCourse.instructor}</span>
+  //               </div>
+  //               <div className="meta-row">
+  //                 <strong>Trình độ</strong>
+  //                 <span>{selectedCourse.level || "Cơ bản"}</span>
+  //               </div>
+  //               <div className="meta-row">
+  //                 <strong>Thời lượng</strong>
+  //                 <span>12 giờ 45 phút</span>
+  //               </div>
+  //               <div className="meta-row">
+  //                 <strong>Số bài học</strong>
+  //                 <span>12 bài</span>
+  //               </div>
+  //               <div className="meta-row">
+  //                 <strong>Cập nhật</strong>
+  //                 <span>12/05/2024</span>
+  //               </div>
+  //             </div>
+  //           </aside>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="courses-page">
       <div className="courses-container">
         {/* SIDEBAR FILTER */}
         <aside className="sidebar-filter">
-          <h4>🔽 Bộ lọc</h4>
+          <h4>Filters</h4>
 
-          {/* DANH MỤC */}
+          {/* CATEGORIES */}
           <div className="filter-group categories-list">
-            <b>Danh mục</b>
+            <b>Categories</b>
+
             {categories.map((cat) => (
-              <label key={cat.id}>
-                <input type="checkbox" defaultChecked={cat.id === "tech"} />
-                {cat.name} <span className="category-count">{cat.count}</span>
-              </label>
+                <label key={cat.id}>
+                  <input type="checkbox" defaultChecked={cat.id === "tech"} />
+                  {cat.name} <span className="category-count">{cat.count}</span>
+                </label>
             ))}
           </div>
 
-          {/* TRÌNH ĐỘ */}
+          {/* LEVEL */}
           <div className="filter-group">
-            <b>Trình độ</b>
+            <b>Level</b>
+
             <label>
               <input type="checkbox" />
-              Cơ bản <span className="category-count">124</span>
+              Beginner <span className="category-count">124</span>
             </label>
+
             <label>
               <input type="checkbox" defaultChecked />
-              Trung bình <span className="category-count">156</span>
+              Intermediate <span className="category-count">156</span>
             </label>
+
             <label>
               <input type="checkbox" />
-              Nâng cao <span className="category-count">96</span>
+              Advanced <span className="category-count">96</span>
             </label>
           </div>
 
-          {/* KHOẢNG GIÁ */}
+          {/* PRICE RANGE */}
           <div className="filter-group">
-            <b>Khoảng giá</b>
+            <b>Price Range</b>
+
             <input type="range" min="0" max="3000000" defaultValue="1500000" />
-            <div className="range-value">0đ - 3,000,000đ</div>
+
+            <div className="range-value">0₫ - 3,000,000₫</div>
           </div>
 
-          {/* ĐÁNH GIÁ */}
+          {/* RATING */}
           <div className="filter-group">
-            <b>Đánh giá</b>
+            <b>Rating</b>
+
             <label>
-              <input type="checkbox" />5 sao
+              <input type="checkbox" /> 5 stars
             </label>
+
             <label>
-              <input type="checkbox" />4 sao trở lên
+              <input type="checkbox" /> 4 stars & up
             </label>
           </div>
 
-          {/* PROMO BOX */}
-          <div className="promo-box">
-            <div className="promo-icon">👑</div>
-            <h5>Nâng cấp để học bất hạn</h5>
-            <p>Truy cập hàng nghìn khóa học chất lượng cao</p>
-            <button>Khám phá ngay →</button>
-          </div>
+          {/* PROMO BOX (optional đẹp hơn UI) */}
+
         </aside>
 
         {/* MAIN CONTENT */}
         <main className="main-content">
           {/* CATEGORY TABS */}
-          <div className="category-tabs">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                className={`tab-item ${activeTab === cat.id ? "active" : ""}`}
-                onClick={() => setActiveTab(cat.id)}
-              >
-                {cat.name}
-              </button>
-            ))}
-          </div>
+          {/*<div className="category-tabs">*/}
+          {/*  {categories.map((cat) => (*/}
+          {/*    <button*/}
+          {/*      key={cat.id}*/}
+          {/*      className={`tab-item ${activeTab === cat.id ? "active" : ""}`}*/}
+          {/*      onClick={() => setActiveTab(cat.id)}*/}
+          {/*    >*/}
+          {/*      {cat.name}*/}
+          {/*    </button>*/}
+          {/*  ))}*/}
+          {/*</div>*/}
 
           {/* COURSES GRID */}
           <div className="courses-grid">
@@ -435,7 +442,9 @@ function CoursesPage() {
                 <div className="course-card-img">
                   <img src={course.image} alt={course.title} />
                   {/* BADGE */}
-                  <span className="course-tag">{course.badge}</span>
+                  <span className={`course-tag ${course.badge?.toLowerCase()}`}>
+  {course.badge}
+</span>
                   {/* WISHLIST */}
                   <button
                     className={`course-wishlist ${wishlist.includes(course.id) ? "active" : ""}`}
@@ -444,7 +453,7 @@ function CoursesPage() {
                     <BiHeart />
                   </button>
                   {/* LEVEL */}
-                  <span className="course-level">{course.level}</span>
+                  {/*<span className="course-level">{course.level}</span>*/}
                 </div>
 
                 {/* BODY */}
@@ -465,7 +474,7 @@ function CoursesPage() {
                   <div className="course-card-bottom">
                     <span className="course-price">{course.price}</span>
                     <button className="add-to-cart">
-                      <BiCart />
+                      <BiCartAdd />
                     </button>
                   </div>
                 </div>
@@ -490,20 +499,19 @@ function CoursesPage() {
             <div className="instructors-section-header">
               <div className="section-title">
                 <GraduationCap size={32} />
-                <h3>Các giảng viên nổi tiếng</h3>
+                <h3>Featured Instructors</h3>
               </div>
 
               <p>
-                Các chuyên gia trong ngành được đánh giá cao bởi những học viên
-                như bạn.
+                Top industry experts highly rated by learners like you.
               </p>
 
               <a href="#" className="view-all-link">
-                Xem tất cả giảng viên →
+                View all instructors →
               </a>
             </div>
 
-            {/* THÊM ĐOẠN NÀY */}
+
             <div className="instructors-slider-wrapper">
               <button className="nav-btn prev-btn">
                 <ChevronLeft size={22} />
@@ -511,7 +519,7 @@ function CoursesPage() {
 
               <div className="instructors-grid">
                 {instructors.map((instructor) => (
-                  <div key={instructor.id} className="instructor-card">
+                  <div key={instructor.id} className="instructor-card-co">
                     <div className="instructor-header">
                       <img
                         src={instructor.avatar}
@@ -526,10 +534,10 @@ function CoursesPage() {
                       </div>
                     </div>
 
-                    <div className="instructor-rating">
+                    <div className="instructor-rating-co">
                       <MdStar />
                       {instructor.rating}
-                      <span className="rating-label">Xếp hạng Giảng viên</span>
+                      <span className="rating-label-co">Instructor Rankings</span>
                     </div>
 
                     <div className="instructor-stats">
@@ -538,7 +546,7 @@ function CoursesPage() {
                         <div className="stat-value">
                           {instructor.stats.students}
                         </div>
-                        <div className="stat-label">học viên</div>
+                        <div className="stat-label">Learners</div>
                       </div>
 
                       <div className="stat-item">
@@ -546,7 +554,7 @@ function CoursesPage() {
                         <div className="stat-value">
                           {instructor.stats.courses}
                         </div>
-                        <div className="stat-label">khóa học</div>
+                        <div className="stat-label">Courses</div>
                       </div>
                     </div>
                   </div>
@@ -559,6 +567,9 @@ function CoursesPage() {
             </div>
           </div>
         </main>
+      </div>
+      <div className="chatbot-fixed">
+        <LearnovaAI />
       </div>
     </div>
   );
