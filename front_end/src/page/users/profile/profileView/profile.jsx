@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./ProfileView.css";
 import AvatarModal from "./components/AvatarModal";
-import ProfileSidebar from "./components/ProfileSidebar";
 import {
   buildAchievements,
   DEFAULT_ACTIVITIES,
@@ -31,10 +30,9 @@ const ProfileView = ({
   purchasedCourses = [],
   onStartCourse,
   onBack,
-  onLogout,
   initialTab = "profile",
 }) => {
-  const [activeTab, setActiveTab] = useState(initialTab);
+  const activeTab = initialTab;
   const [profileData, setProfileData] = useState(() =>
     readStorage("learnova_user_profile", DEFAULT_PROFILE),
   );
@@ -156,12 +154,6 @@ const ProfileView = ({
     scrollToPageTop();
   };
 
-  const handleChangeTab = (tabId) => {
-    setActiveTab(tabId);
-    setSelectedCourse(null);
-    scrollToPageTop();
-  };
-
   const renderContent = () => {
     if (activeTab === "courses") {
       if (selectedCourse) {
@@ -252,13 +244,6 @@ const ProfileView = ({
       )}
 
       <div className="profile-wrapper">
-        <ProfileSidebar
-          activeTab={activeTab}
-          setActiveTab={handleChangeTab}
-          profileData={profileData}
-          onLogout={onLogout}
-        />
-
         <main className="profile-main">
           <div className="content-area">{renderContent()}</div>
         </main>

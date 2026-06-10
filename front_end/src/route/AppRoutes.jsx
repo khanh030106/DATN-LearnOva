@@ -75,7 +75,10 @@ const App = () => {
                        <Route path="/learnova/courses" element={<CoursePage/>}/>
                         <Route path="/learnova/intructors" element={<IntructorsPage/>}/>
                         <Route path="/learnova/about" element={<AboutView/>}/>
-                    <Route path="/learnova/user/profile" element={<ProfileViewProps/>}/>
+                    <Route path="/learnova/user/profile" element={<ProfileViewProps key="profile" initialTab="profile"/>}/>
+                    <Route path="/learnova/user/profile/courses" element={<ProfileViewProps key="courses" initialTab="courses"/>}/>
+                    <Route path="/learnova/user/profile/favorites" element={<ProfileViewProps key="favorites" initialTab="favorites"/>}/>
+                    <Route path="/learnova/user/profile/security" element={<ProfileViewProps key="security" initialTab="security"/>}/>
 
                 </Route>
           <Route path="/learnova/user/CouresDetail" element={<CourseDetail/>}/>
@@ -98,7 +101,10 @@ const App = () => {
           <Route path="/learnova/courses" element={<CoursePage />} />
           <Route path="/learnova/intructors" element={<IntructorsPage />} />
           <Route path="/learnova/about" element={<AboutView />} />
-          <Route path="/learnova/user/profile" element={<ProfileViewProps />} />
+          <Route path="/learnova/user/profile" element={<ProfileViewProps key="profile" initialTab="profile" />} />
+          <Route path="/learnova/user/profile/courses" element={<ProfileViewProps key="courses" initialTab="courses" />} />
+          <Route path="/learnova/user/profile/favorites" element={<ProfileViewProps key="favorites" initialTab="favorites" />} />
+          <Route path="/learnova/user/profile/security" element={<ProfileViewProps key="security" initialTab="security" />} />
         </Route>
       </Routes>
     </BrowserRouter>

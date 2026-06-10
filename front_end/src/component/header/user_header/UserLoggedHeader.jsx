@@ -38,7 +38,7 @@ const UserLoggedHeader = () => {
       instructorItems,
       subscriptionPlans,
     }),
-    []
+    [],
   );
 
   return (

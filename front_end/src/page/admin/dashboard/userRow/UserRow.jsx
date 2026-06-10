@@ -57,14 +57,7 @@ const UserRow = () => {
         <div className="userRowCardHeader">
           <div>
             <h3 className="userRowCardTitle">Recent Users</h3>
-            <p className="userRowCardSubtitle">
-              List of users who have recently been active on the system
-            </p>
           </div>
-
-          <button type="button" className="userRowLinkButton">
-            View All
-          </button>
         </div>
 
         <div className="userRowTableHeader" aria-hidden="true">

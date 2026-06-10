@@ -1,7 +1,8 @@
-import { ChevronRight, LogOut, Sparkles } from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { Sparkles } from "lucide-react";
 import { sidebarItems } from "../data/profileData";
 
-const ProfileSidebar = ({ activeTab, setActiveTab }) => (
+const ProfileSidebar = () => (
   <aside className="profile-sidebar">
     <div className="sidebar-content">
       <div className="sidebar-header">
@@ -13,15 +14,16 @@ const ProfileSidebar = ({ activeTab, setActiveTab }) => (
         {sidebarItems.map((item) => {
           const Icon = item.icon;
           return (
-            <button
+            <NavLink
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`nav-item ${activeTab === item.id ? "active" : ""}`}
-              type="button"
+              to={item.path}
+              className={({ isActive }) =>
+                `nav-item ${isActive ? "active" : ""}`
+              }
             >
               <Icon size={16} />
               <span>{item.label}</span>
-            </button>
+            </NavLink>
           );
         })}
       </nav>

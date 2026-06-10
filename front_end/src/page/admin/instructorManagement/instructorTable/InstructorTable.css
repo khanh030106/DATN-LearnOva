@@ -7,8 +7,8 @@
   width: 100%;
   border-radius: 6px;
   overflow: hidden;
-  border: 1px solid rgba(37, 99, 235, 0.08);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  box-shadow: none;
   background: #ffffff;
 }
 
@@ -17,6 +17,27 @@
   border-collapse: separate;
   border-spacing: 0;
   min-width: 920px;
+  table-layout: fixed;
+}
+
+.instructorTableCol--id {
+  width: 13%;
+}
+
+.instructorTableCol--profile {
+  width: 34%;
+}
+
+.instructorTableCol--classes {
+  width: 17%;
+}
+
+.instructorTableCol--students {
+  width: 14%;
+}
+
+.instructorTableCol--actions {
+  width: 22%;
 }
 
 .instructorTable thead {
@@ -25,18 +46,23 @@
 
 .instructorTable th,
 .instructorTable td {
-  padding: 14px 14px;
-  text-align: left;
+  padding: 14px 12px;
+  text-align: center;
   vertical-align: middle;
   border-bottom: 1px solid rgba(15, 23, 42, 0.06);
 }
 
+.instructorTable th:nth-child(2),
+.instructorTable td:nth-child(2) {
+  text-align: left;
+}
+
 .instructorTable th {
-  padding: 20px;
+  padding: 18px 12px;
   color: var(--text-muted);
   font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  font-weight: 500;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
@@ -53,7 +79,7 @@
   background: rgba(81, 88, 200, 0.06);
   color: #2e2c60;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .instructorTableProfile {
@@ -81,7 +107,7 @@
   margin: 0;
   color: var(--text-main);
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .instructorTableEmail {
@@ -99,19 +125,20 @@
   background: rgba(37, 99, 235, 0.1);
   color: var(--blue-dark);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .instructorTableStat {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 4px;
 }
 
 .instructorTableStat strong {
   color: #1b140c;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .instructorTableStat span {
@@ -122,6 +149,7 @@
 .instructorTableRate {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   min-width: 0;
 }
@@ -133,6 +161,7 @@
 .instructorTableRate strong {
   color: #1b140c;
   font-size: 16px;
+  font-weight: 600;
 }
 
 .instructorTableRate span {
@@ -144,7 +173,7 @@
   display: block;
   color: #1b140c;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .instructorTableRevenue span {
@@ -158,7 +187,7 @@
   padding: 8px 12px;
   border-radius: 9999px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .instructorTableStatus--active {
@@ -179,7 +208,8 @@
 .instructorTableActions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
@@ -196,14 +226,12 @@
   cursor: pointer;
   transition:
     background-color 0.2s ease,
-    transform 0.2s ease,
     border-color 0.2s ease;
 }
 
 .instructorActionButton:hover {
   background: rgba(37, 99, 235, 0.12);
   border-color: rgba(37, 99, 235, 0.22);
-  transform: translateY(-1px);
 }
 
 .instructorTablePagination {

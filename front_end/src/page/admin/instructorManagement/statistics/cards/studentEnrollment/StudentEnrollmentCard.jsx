@@ -1,7 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import "./StudentEnrollmentCard.css";
 
-const StudentEnrollmentCard = ({ title, value, note }) => {
+const StudentEnrollmentCard = ({ title, value }) => {
   return (
     <article className="instructorStatCard instructorStatCard--gold">
       <div
@@ -14,7 +14,6 @@ const StudentEnrollmentCard = ({ title, value, note }) => {
       <div className="instructorStatContent">
         <p className="instructorStatTitle">{title}</p>
         <p className="instructorStatValue">{value}</p>
-        <p className="instructorStatNote">{note}</p>
       </div>
     </article>
   );

@@ -35,17 +35,17 @@ export const durationFilters = [
 export const ratingFilters = ["4 Stars+", "4.5 Stars+", "5 Stars"];
 
 export const myLearningItems = [
-  { id: "continue", label: "Continue Learning", path: "/learnova/my-learning/continue" },
-  { id: "courses", label: "My Courses", path: "/learnova/my-learning/courses" },
-  { id: "completed", label: "Completed Courses", path: "/learnova/my-learning/completed" },
-  { id: "certificates", label: "Certificates", path: "/learnova/my-learning/certificates" },
-  { id: "wishlist", label: "Wishlist", path: "/learnova/my-learning/wishlist" },
+  { id: "continue", label: "Continue Learning", path: "/learnova/user/profile/courses" },
+  { id: "courses", label: "My Courses", path: "/learnova/user/profile/courses" },
+  { id: "completed", label: "Completed Courses", path: "/learnova/user/profile/courses" },
+  { id: "certificates", label: "Certificates", path: "/learnova/user/profile/courses" },
+  { id: "wishlist", label: "Wishlist", path: "/learnova/user/profile/favorites" },
 ];
 
 export const instructorItems = [
-  { id: "all", label: "All Instructors", path: "/learnova/instructors" },
-  { id: "top", label: "Top Rated Instructors", path: "/learnova/instructors?filter=top-rated" },
-  { id: "new", label: "New Instructors", path: "/learnova/instructors?filter=new" },
+  { id: "all", label: "All Instructors", path: "/learnova/intructors" },
+  { id: "top", label: "Top Rated Instructors", path: "/learnova/intructors?filter=top-rated" },
+  { id: "new", label: "New Instructors", path: "/learnova/intructors?filter=new" },
   { id: "become", label: "Become Instructor", path: "/learnova/teacher" },
 ];
 
@@ -98,9 +98,9 @@ export const userData = {
 };
 
 export const userMenuItems = [
-  { id: "profile", label: "My Profile", path: "/learnova/profile" },
-  { id: "settings", label: "Account Settings", path: "/learnova/account/settings" },
-  { id: "certificates", label: "My Certificates", path: "/learnova/my-learning/certificates" },
-  { id: "history", label: "Purchase History", path: "/learnova/purchase-history" },
+  { id: "profile", label: "My Profile", path: "/learnova/user/profile" },
+  { id: "courses", label: "My Courses", path: "/learnova/user/profile/courses" },
+  { id: "favorites", label: "Favorite Courses", path: "/learnova/user/profile/favorites" },
+  { id: "security", label: "Security", path: "/learnova/user/profile/security" },
   { id: "logout", label: "Logout", path: "/learnova/auth/login", danger: true },
 ];

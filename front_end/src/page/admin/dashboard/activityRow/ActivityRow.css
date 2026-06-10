@@ -16,6 +16,8 @@
 
 .activityRowCardHeader {
   margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .activityRowCardTitle {
@@ -23,37 +25,29 @@
   color: #1b140c;
   font-size: 18px;
   line-height: 1.3;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-
-.activityRowCardSubtitle {
-  margin: 6px 0 0;
-  color: var(--text-secondary);
-  font-size: 12px;
-  line-height: 1.5;
   font-weight: 500;
+  letter-spacing: 0;
 }
 
 .activityRowList {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .activityRowItem {
   display: grid;
-  grid-template-columns: 10px minmax(0, 1fr) auto;
+  grid-template-columns: 8px minmax(0, 1fr) auto;
   gap: 10px;
   align-items: start;
-  padding: 12px 0;
+  padding: 11px 0;
   border-bottom: 1px solid rgba(37, 99, 235, 0.16);
 }
 
 .activityRowDot {
-  width: 10px;
-  height: 10px;
-  margin-top: 4px;
+  width: 8px;
+  height: 8px;
+  margin-top: 5px;
   border-radius: 50%;
   background: linear-gradient(
     180deg,
@@ -66,6 +60,9 @@
 .activityRowLabel {
   margin: 0;
   color: var(--blue-dark);
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 400;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -75,14 +72,14 @@
   color: #1b140c;
   font-size: 12px;
   line-height: 1.45;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .activityRowTime {
   color: #9ca3af;
   font-size: 10px;
   line-height: 1.35;
-  font-weight: 600;
+  font-weight: 400;
   white-space: nowrap;
 }
 

@@ -2,14 +2,11 @@ import { Camera, Check, CheckCircle2, Clock, Flame, Star } from "lucide-react";
 
 const ProfileFormSection = ({
   profileData,
-  saveSuccess,
   onInputChange,
   onSaveProfile,
   onOpenAvatarModal,
 }) => (
   <form onSubmit={onSaveProfile} className="profile-form">
-    <div className="profile-form-header" />
-
     <div className="avatar-section">
       <div className="avatar-container">
         <div className="avatar-wrapper">
@@ -35,14 +32,6 @@ const ProfileFormSection = ({
       <h2 className="profile-name">{profileData.fullName}</h2>
 
       <p className="profile-subtitle">Honor Student • Joined in 2023</p>
-
-      <button
-        type="button"
-        onClick={onOpenAvatarModal}
-        className="btn btn-secondary"
-      >
-        Choose a Preset Avatar
-      </button>
     </div>
 
     <div className="form-grid">
@@ -105,7 +94,7 @@ const ProfileFormSection = ({
         rows="4"
         value={profileData.bio}
         onChange={(event) => onInputChange("bio", event.target.value)}
-        className="form-textarea"
+        className="form-textarea about-me-textarea"
       />
     </div>
 
@@ -154,31 +143,6 @@ const ProfileFormSection = ({
           className="form-input-small"
         />
       </div>
-    </div>
-
-    <div className="form-actions">
-      {saveSuccess && (
-        <span className="save-success">
-          <CheckCircle2 size={16} /> Profile updated successfully!
-        </span>
-      )}
-
-      <button
-        type="button"
-        onClick={() => {
-          if (window.confirm("Restore default profile information?")) {
-            localStorage.removeItem("learnova_user_profile");
-            window.location.reload();
-          }
-        }}
-        className="btn btn-secondary"
-      >
-        Reset to Default
-      </button>
-
-      <button type="submit" className="btn btn-primary">
-        <Check size={16} /> Save Changes
-      </button>
     </div>
   </form>
 );

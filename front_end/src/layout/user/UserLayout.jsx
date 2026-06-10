@@ -1,13 +1,13 @@
 import {Outlet} from "react-router-dom";
 import Footer from "../../component/footer/footer.jsx";
-import Header from "../../component/header/user_header/Header.jsx"
+import UserLoggedHeader from "../../component/header/user_header/UserLoggedHeader.jsx"
 
 
 const UserLayout = () =>{
     return (
         <div>
 
-            <Header/>
+            <UserLoggedHeader/>
 
             <main>
                 <Outlet/>

@@ -51,7 +51,7 @@ const Header = () => {
       className={`main-header${isCartHeader ? " cart-header" : ""}`}
     >
       <div className="header-container">
-        <a href="/learnova/homex" className="logo">
+        <a href="/learnova/home" className="logo">
           <img src={logo} alt="logo" />
         </a>
 

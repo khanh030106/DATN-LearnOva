@@ -2,12 +2,10 @@ import { useMemo, useState } from "react";
 import {
   getSecurityContactRows,
   PASSWORD_FIELDS,
-  SECURITY_ACTIONS,
   SECURITY_CARD_TITLES,
   SECURITY_OVERVIEW,
 } from "../data/securityData";
 import SecurityContactCard from "./security/SecurityContactCard";
-import SecurityOptionsCard from "./security/SecurityOptionsCard";
 import SecurityOverviewCard from "./security/SecurityOverviewCard";
 import SecurityPasswordCard from "./security/SecurityPasswordCard";
 
@@ -88,10 +86,6 @@ const SecuritySection = ({ profileData = {} }) => {
         />
       </div>
 
-      <SecurityOptionsCard
-        card={SECURITY_CARD_TITLES.options}
-        actions={SECURITY_ACTIONS}
-      />
     </div>
   );
 };

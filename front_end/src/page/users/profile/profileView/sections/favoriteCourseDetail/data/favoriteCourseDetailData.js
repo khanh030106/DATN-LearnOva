@@ -3,7 +3,7 @@ export const FAVORITE_DETAIL_TABS = [
   { id: "curriculum", label: "Course Content" },
   { id: "instructor", label: "Instructor" },
   { id: "reviews", label: "Reviews" },
-  { id: "qa", label: "Q&A" },
+  { id: "qa", label: "Chat" },
 ];
 
 export const DEFAULT_FAVORITE_DETAIL = {
@@ -15,7 +15,12 @@ export const DEFAULT_FAVORITE_DETAIL = {
     avatar:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=160&h=160",
     bio: "The instructor focuses on practical learning: understanding component thinking, writing clear code, and connecting data to real interfaces.",
-    stats: ["8 years of experience", "32 courses", "18.4k students", "4.9 instructor rating"],
+    stats: [
+      { icon: "Clock", label: "8 years of experience" },
+      { icon: "BookOpen", label: "32 courses" },
+      { icon: "Users", label: "18.4k students" },
+      { icon: "Star", label: "4.9 instructor rating" },
+    ],
   },
   rating: 4.8,
   reviews: "1.2k",

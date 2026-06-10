@@ -1,7 +1,7 @@
 import { BadgeDollarSign } from "lucide-react";
 import "./RevenueSummaryCard.css";
 
-const RevenueSummaryCard = ({ title, value, note }) => {
+const RevenueSummaryCard = ({ title, value }) => {
   return (
     <article className="instructorStatCard instructorStatCard--violet">
       <div
@@ -14,7 +14,6 @@ const RevenueSummaryCard = ({ title, value, note }) => {
       <div className="instructorStatContent">
         <p className="instructorStatTitle">{title}</p>
         <p className="instructorStatValue">{value}</p>
-        <p className="instructorStatNote">{note}</p>
       </div>
     </article>
   );

@@ -4,6 +4,7 @@ import {
   BookOpen,
   Calendar,
   Check,
+  CheckCircle2,
   ChevronDown,
   ChevronRight,
   Clock,
@@ -31,6 +32,13 @@ const tabIcons = {
   instructor: Users,
   reviews: Star,
   qa: MessageCircle,
+};
+
+const instructorStatIcons = {
+  BookOpen,
+  Clock,
+  Star,
+  Users,
 };
 
 const FavoriteCourseDetailSection = ({ course }) => {
@@ -87,7 +95,7 @@ const FavoriteCourseDetailSection = ({ course }) => {
                         {lesson.type} - {lesson.duration}
                       </small>
                       {lesson.done ? (
-                        <Check size={15} />
+                        <CheckCircle2 className="done" size={17} />
                       ) : (
                         <HelpCircle size={15} />
                       )}
@@ -110,9 +118,24 @@ const FavoriteCourseDetailSection = ({ course }) => {
             <strong>{detail.instructor.role}</strong>
             <p>{detail.instructor.bio}</p>
             <div className="favorite-flow-stat-grid">
-              {detail.instructor.stats.map((item) => (
-                <span key={item}>{item}</span>
-              ))}
+              {detail.instructor.stats.map((item) => {
+                const stat =
+                  typeof item === "string"
+                    ? { icon: "Star", label: item }
+                    : item;
+                const Icon = instructorStatIcons[stat.icon] || Star;
+
+                return (
+                  <span key={stat.label}>
+                    <Icon
+                      className={stat.icon === "Star" ? "rating-star" : ""}
+                      size={16}
+                      fill={stat.icon === "Star" ? "currentColor" : "none"}
+                    />
+                    {stat.label}
+                  </span>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -148,7 +171,7 @@ const FavoriteCourseDetailSection = ({ course }) => {
     if (activeTab === "qa") {
       return (
         <section className="favorite-flow-card favorite-flow-qa">
-          <h3>Course Q&A</h3>
+          <h3>Course Chat</h3>
           {detail.questions.map((question) => (
             <article key={question.title}>
               <strong>{question.title}</strong>
@@ -157,7 +180,7 @@ const FavoriteCourseDetailSection = ({ course }) => {
           ))}
           <button type="button">
             <MessageCircle size={16} />
-            Send New Question
+            Send New Message
           </button>
         </section>
       );
@@ -364,7 +387,11 @@ const renderTabContentForCurriculumPreview = (detail) => (
                 <small>
                   {lesson.type} - {lesson.duration}
                 </small>
-                {lesson.done ? <Check size={15} /> : <HelpCircle size={15} />}
+                {lesson.done ? (
+                  <CheckCircle2 className="done" size={17} />
+                ) : (
+                  <HelpCircle size={15} />
+                )}
               </div>
             ))}
           </div>

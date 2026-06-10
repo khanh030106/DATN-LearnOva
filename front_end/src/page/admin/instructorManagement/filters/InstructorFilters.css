@@ -1,119 +1,51 @@
 .instructorFilters {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgba(37, 99, 235, 0.28);
+  border-radius: 6px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.instructorFiltersMain {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   width: 100%;
-  padding: 9px;
-  border-radius: 6px;
-  border: 1px solid rgba(37, 99, 235, 0.26);
-  box-sizing: border-box;
-  background-color: #ffffff;
-}
-
-.instructorFiltersMain {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
   min-width: 0;
-}
-
-/* Place search at left and dropdown at right */
-.instructorFiltersMain {
-  justify-content: space-between;
 }
 
 .instructorFiltersSearch {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 14px;
-  min-width: 280px;
-  border-radius: 9999px;
-  background: #ffffff;
-  border: 1px solid rgba(157, 129, 88, 0.18);
-  box-shadow: inset 0 1px 2px rgba(109, 88, 56, 0.08);
-}
-
-.instructorFiltersSearch svg {
-  color: #b46a00;
-  flex-shrink: 0;
-}
-
-.instructorFiltersInput {
-  flex: 1;
-  min-width: 0;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #2f2419;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.instructorFiltersInput::placeholder {
-  color: var(--text-secondary);
-}
-
-.instructorFiltersTabs {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.instructorFiltersTab {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 9px 14px;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  background: #fffdf7;
-  color: var(--text-secondary);
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.instructorFiltersTab:hover,
-.instructorFiltersTab--active {
-  background: rgba(37, 99, 235, 0.18);
-  border-color: rgba(37, 99, 235, 0.35);
-}
-
-.instructorFiltersSearch {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 14px;
-  min-width: 0;
   width: 420px;
   max-width: 72%;
-  border-radius: 9999px;
+  min-width: 0;
+  padding: 8px 14px;
+  border: 1px solid rgba(37, 99, 235, 0.32);
+  border-radius: 6px;
   background: #ffffff;
-  border: 1px solid rgba(157, 129, 88, 0.18);
-  box-shadow: inset 0 1px 2px rgba(109, 88, 56, 0.08);
+  box-shadow: none;
+  box-sizing: border-box;
 }
 
 .instructorFiltersSearch svg {
-  color: #b46a00;
   flex-shrink: 0;
+  color: var(--blue-primary);
 }
 
 .instructorFiltersInput {
   flex: 1;
   min-width: 0;
-  border: none;
-  outline: none;
+  border: 0;
+  outline: 0;
   background: transparent;
-  color: #2f2419;
+  color: var(--text-main);
   font-size: 14px;
   line-height: 1.6;
+  font-weight: 400;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -123,75 +55,53 @@
   color: var(--text-secondary);
 }
 
+.instructorFiltersSearch:focus-within {
+  border-color: var(--blue-primary);
+}
+
 .instructorFiltersTabs {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  flex: 0 0 auto; /* keep tabs/dropdown compact on right */
+  flex: 0 0 auto;
 }
 
-.instructorFiltersTab {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 9px 14px;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  background: #fffdf7;
-  color: var(--text-secondary);
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.instructorFiltersTab:hover,
-.instructorFiltersTab--active {
-  background: rgba(37, 99, 235, 0.18);
-  border-color: rgba(37, 99, 235, 0.35);
-}
-
-/* Dropdown replacement for tabs */
 .instructorFiltersSelect {
-  padding: 9px 12px;
+  min-width: 120px;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid rgba(37, 99, 235, 0.32);
   border-radius: 6px;
-  border: 1px solid rgba(37, 99, 235, 0.12);
-  background: #fffdf7;
+  background: #ffffff;
   color: var(--text-main);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 500;
   cursor: pointer;
-  min-width: 120px;
+  outline: none;
 }
 
 .instructorFiltersSelect:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+  border-color: var(--blue-primary);
 }
 
 @media (max-width: 1024px) {
-  .instructorFilters {
+  .instructorFiltersMain {
     flex-wrap: wrap;
-    justify-content: flex-start;
+  }
+
+  .instructorFiltersSearch {
+    width: min(100%, 420px);
+    max-width: 100%;
   }
 }
 
 @media (max-width: 680px) {
   .instructorFilters {
-    gap: 12px;
     padding: 14px;
   }
 
-  .instructorFiltersSearch {
-    min-width: 100%;
-    flex: 1 1 auto;
-  }
-
-  .instructorFiltersTabs {
+  .instructorFiltersSearch,
+  .instructorFiltersTabs,
+  .instructorFiltersSelect {
     width: 100%;
-    justify-content: flex-end;
   }
 }

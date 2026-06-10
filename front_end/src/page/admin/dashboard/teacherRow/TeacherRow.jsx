@@ -35,9 +35,6 @@ const TeacherRow = () => {
         <div className="teacherRowCardHeader">
           <div>
             <h3 className="teacherRowCardTitle">Featured Instructors</h3>
-            <p className="teacherRowCardSubtitle">
-              Instructors leading in teaching quality
-            </p>
           </div>
         </div>
 

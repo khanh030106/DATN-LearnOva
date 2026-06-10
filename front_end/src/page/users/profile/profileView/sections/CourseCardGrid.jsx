@@ -27,7 +27,11 @@ const CourseCardGrid = ({ courses = [], onOpenCourse, variant = "mine" }) => {
               aria-label={isFavorite ? "Remove from favorites" : "Save course"}
               onClick={(e) => e.stopPropagation()}
             >
-              {isFavorite ? <Heart size={14} /> : <Bookmark size={15} />}
+              {isFavorite ? (
+                <Heart size={20} fill="currentColor" />
+              ) : (
+                <Bookmark size={18} />
+              )}
             </button>
           </div>
 

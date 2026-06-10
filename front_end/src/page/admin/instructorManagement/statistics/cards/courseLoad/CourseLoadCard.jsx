@@ -1,7 +1,7 @@
 import { BookOpen } from "lucide-react";
 import "./CourseLoadCard.css";
 
-const CourseLoadCard = ({ title, value, note }) => {
+const CourseLoadCard = ({ title, value }) => {
   return (
     <article className="instructorStatCard instructorStatCard--green">
       <div
@@ -14,7 +14,6 @@ const CourseLoadCard = ({ title, value, note }) => {
       <div className="instructorStatContent">
         <p className="instructorStatTitle">{title}</p>
         <p className="instructorStatValue">{value}</p>
-        <p className="instructorStatNote">{note}</p>
       </div>
     </article>
   );

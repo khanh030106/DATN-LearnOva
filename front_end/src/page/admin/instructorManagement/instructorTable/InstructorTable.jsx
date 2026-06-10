@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, Edit3, Trash2, Star } from "lucide-react";
+import { Eye, Edit3, Trash2 } from "lucide-react";
 import "./InstructorTable.css";
 
 const instructorsData = [
@@ -165,15 +165,20 @@ const InstructorTable = () => {
     >
       <div className="instructorTableCard">
         <table className="instructorTable" aria-label="Instructor List">
+          <colgroup>
+            <col className="instructorTableCol instructorTableCol--id" />
+            <col className="instructorTableCol instructorTableCol--profile" />
+            <col className="instructorTableCol instructorTableCol--classes" />
+            <col className="instructorTableCol instructorTableCol--students" />
+            <col className="instructorTableCol instructorTableCol--actions" />
+          </colgroup>
+
           <thead>
             <tr>
               <th>Instructor ID</th>
               <th>Instructor / Specialization</th>
               <th>Number of Classes</th>
               <th>Students</th>
-              <th>Rating</th>
-              <th>Revenue</th>
-              <th>Status</th>
               <th>Management Actions</th>
             </tr>
           </thead>
@@ -204,30 +209,6 @@ const InstructorTable = () => {
                   <div className="instructorTableStat">
                     <strong>{instructor.students}</strong>
                   </div>
-                </td>
-                <td>
-                  <div className="instructorTableRate">
-                    <Star size={16} className="instructorTableStar" />
-                    <strong>{instructor.rating}</strong>
-                  </div>
-                </td>
-                <td>
-                  <div className="instructorTableRevenue">
-                    <strong>{instructor.revenue}</strong>
-                  </div>
-                </td>
-                <td>
-                  <span
-                    className={`instructorTableStatus instructorTableStatus--${
-                      instructor.status === "Active"
-                        ? "active"
-                        : instructor.status === "Paused"
-                          ? "paused"
-                          : "locked"
-                    }`}
-                  >
-                    {instructor.status}
-                  </span>
                 </td>
                 <td>
                   <div className="instructorTableActions">

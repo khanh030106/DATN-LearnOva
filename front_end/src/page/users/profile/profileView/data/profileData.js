@@ -56,10 +56,10 @@ export const DEFAULT_ACTIVITIES = [
 ];
 
 export const sidebarItems = [
-  { id: "profile", label: "Profile", icon: User },
-  { id: "courses", label: "My Courses", icon: BookOpen },
-  { id: "favorites", label: "Favorite Courses", icon: Star },
-  { id: "security", label: "Security", icon: ShieldCheck },
+  { id: "profile", label: "Profile", icon: User, path: "/learnova/user/profile" },
+  { id: "courses", label: "My Courses", icon: BookOpen, path: "/learnova/user/profile/courses" },
+  { id: "favorites", label: "Favorite Courses", icon: Star, path: "/learnova/user/profile/favorites" },
+  { id: "security", label: "Security", icon: ShieldCheck, path: "/learnova/user/profile/security" },
 ];
 
 export const DEFAULT_ENROLLED_COURSES = [

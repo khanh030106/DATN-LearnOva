@@ -89,7 +89,6 @@ const RoleDistribution = () => {
     <section className="roleDistributionCard" aria-label="Role Distribution">
       <div className="roleDistributionHeader">
         <h3 className="roleDistributionTitle">Role Distribution</h3>
-        <p className="roleDistributionSubtitle">Detailed role distribution</p>
       </div>
 
       <div className="roleDistributionChartWrap">

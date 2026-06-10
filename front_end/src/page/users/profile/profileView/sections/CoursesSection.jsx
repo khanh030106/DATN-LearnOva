@@ -1,15 +1,10 @@
-import {
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  Grid2X2,
-  List,
-  Search,
-} from "lucide-react";
+import { useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { DEFAULT_ENROLLED_COURSES } from "../data/profileData";
 import CourseCardGrid from "./CourseCardGrid";
 
 const CoursesSection = ({ purchasedCourses = [], onBack, onOpenCourse }) => {
+  const [sortBy, setSortBy] = useState("newest");
   const courses =
     purchasedCourses.length > 0
       ? purchasedCourses.map((course, index) => ({
@@ -22,6 +17,23 @@ const CoursesSection = ({ purchasedCourses = [], onBack, onOpenCourse }) => {
           reviews: course.reviews || "856",
         }))
       : DEFAULT_ENROLLED_COURSES;
+  const sortedCourses = useMemo(() => {
+    const nextCourses = [...courses];
+
+    if (sortBy === "oldest") {
+      return nextCourses.reverse();
+    }
+
+    if (sortBy === "az") {
+      return nextCourses.sort((a, b) => a.title.localeCompare(b.title));
+    }
+
+    if (sortBy === "progress") {
+      return nextCourses.sort((a, b) => b.progress - a.progress);
+    }
+
+    return nextCourses;
+  }, [courses, sortBy]);
 
   return (
     <>
@@ -43,26 +55,24 @@ const CoursesSection = ({ purchasedCourses = [], onBack, onOpenCourse }) => {
             <input type="text" placeholder="Search courses..." />
             <Search size={15} />
           </label>
-          <button className="course-sort" type="button">
-            Newest <ChevronDown size={14} />
-          </button>
-          <button
-            className="course-view active"
-            type="button"
-            aria-label="Grid view"
+          <select
+            className="course-sort"
+            value={sortBy}
+            onChange={(event) => setSortBy(event.target.value)}
+            aria-label="Sort courses"
           >
-            <Grid2X2 size={16} />
-          </button>
-          <button className="course-view" type="button" aria-label="List view">
-            <List size={16} />
-          </button>
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="az">A-Z</option>
+            <option value="progress">Highest progress</option>
+          </select>
         </div>
       </div>
 
-      {courses.length > 0 ? (
+      {sortedCourses.length > 0 ? (
         <>
           <CourseCardGrid
-            courses={courses}
+            courses={sortedCourses}
             onOpenCourse={onOpenCourse}
             variant="mine"
           />

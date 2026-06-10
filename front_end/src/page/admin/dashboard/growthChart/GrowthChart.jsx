@@ -39,7 +39,7 @@ const GrowthChart = () => {
             data: chartData,
             backgroundColor: "#2563EB",
             hoverBackgroundColor: "#1D4ED8",
-            borderRadius: 6,
+            borderRadius: 0,
             borderSkipped: false,
             barThickness: 80,
             maxBarThickness: 44,
@@ -125,19 +125,10 @@ const GrowthChart = () => {
     <section className="growthChartCard" aria-label="User Growth Chart">
       <div className="growthChartCardHeader">
         <div className="growthChartCardTitleGroup">
-          <div className="growthChartCardBadge">DATA ANALYTICS</div>
           <h3 className="growthChartCardTitle">User Growth</h3>
-          <p className="growthChartCardSubtitle">Data from the last 6 months</p>
         </div>
 
         <div className="growthChartCardFilter">
-          <label
-            className="growthChartCardFilterLabel"
-            htmlFor="growthChartYear"
-          >
-            Cycle
-          </label>
-
           <select
             id="growthChartYear"
             className="growthChartCardSelect"

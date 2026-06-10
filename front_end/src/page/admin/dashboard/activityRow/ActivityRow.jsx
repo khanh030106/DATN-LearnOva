@@ -34,9 +34,6 @@ const ActivityRow = () => {
         <div className="activityRowCardHeader">
           <div>
             <h3 className="activityRowCardTitle">Recent Activity</h3>
-            <p className="activityRowCardSubtitle">
-              The latest changes on the platform
-            </p>
           </div>
         </div>
 

@@ -14,7 +14,7 @@
 .recordsTitle {
   margin: 0 0 14px 0;
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 500;
   color: #1b140c;
 }
 
@@ -75,7 +75,7 @@
 
 .recordMain {
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 500;
   color: #1b140c;
   line-height: 1.3;
 }
@@ -100,7 +100,7 @@
 
 .recordValue {
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 500;
   color: #1b140c;
   white-space: nowrap;
 }

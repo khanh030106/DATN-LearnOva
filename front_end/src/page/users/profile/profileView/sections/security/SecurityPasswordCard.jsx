@@ -1,4 +1,5 @@
-import { Eye, Lock } from "lucide-react";
+import { useState } from "react";
+import { Eye, EyeOff, Lock } from "lucide-react";
 
 const SecurityPasswordCard = ({
   card,
@@ -7,52 +8,75 @@ const SecurityPasswordCard = ({
   status,
   onChange,
   onSubmit,
-}) => (
-  <section className="security-card security-password-card">
-    <div className="security-card-heading">
-      <span>
-        <Lock size={22} />
-      </span>
-      <div>
-        <h3>{card.title}</h3>
-        <p>{card.description}</p>
+}) => {
+  const [visibleFields, setVisibleFields] = useState({});
+
+  const togglePasswordVisibility = (fieldId) => {
+    setVisibleFields((current) => ({
+      ...current,
+      [fieldId]: !current[fieldId],
+    }));
+  };
+
+  return (
+    <section className="security-card security-password-card">
+      <div className="security-card-heading">
+        <span>
+          <Lock size={22} />
+        </span>
+        <div>
+          <h3>{card.title}</h3>
+          <p>{card.description}</p>
+        </div>
       </div>
-    </div>
 
-    <form onSubmit={onSubmit} className="security-password-form">
-      {fields.map((field) => (
-        <label key={field.id}>
-          <span>{field.label}</span>
-          <div className="security-input-wrap">
-            <input
-              type="password"
-              value={values[field.id] || ""}
-              onChange={(event) => onChange(field.id, event.target.value)}
-              placeholder={field.placeholder}
-            />
-            <button type="button" aria-label={`Hiển thị ${field.label}`}>
-              <Eye size={16} />
-            </button>
-          </div>
+      <form onSubmit={onSubmit} className="security-password-form">
+        {fields.map((field) => {
+          const isVisible = Boolean(visibleFields[field.id]);
 
-          {field.strength && (
-            <div className="security-password-strength">
-              <span />
-              <strong>{field.strength}</strong>
-            </div>
-          )}
+          return (
+            <label key={field.id}>
+              <span>{field.label}</span>
+              <div className="security-input-wrap">
+                <input
+                  type={isVisible ? "text" : "password"}
+                  value={values[field.id] || ""}
+                  onChange={(event) => onChange(field.id, event.target.value)}
+                  placeholder={field.placeholder}
+                />
+                <button
+                  type="button"
+                  aria-label={`${isVisible ? "Hide" : "Show"} ${field.label}`}
+                  onClick={() => togglePasswordVisibility(field.id)}
+                >
+                  {isVisible ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
 
-          {field.hint && <small>{field.hint}</small>}
-        </label>
-      ))}
+              {field.strength && (
+                <div className="security-password-strength">
+                  <span />
+                  <strong>{field.strength}</strong>
+                </div>
+              )}
 
-      {status && <p className={`security-form-status ${status.type}`}>{status.message}</p>}
+              {field.hint && <small>{field.hint}</small>}
+            </label>
+          );
+        })}
 
-      <button className="security-primary-button" type="submit">
-        {card.submitLabel}
-      </button>
-    </form>
-  </section>
-);
+        {status && (
+          <p className={`security-form-status ${status.type}`}>
+            {status.message}
+          </p>
+        )}
+
+        <button className="security-primary-button" type="submit">
+          {card.submitLabel}
+        </button>
+      </form>
+    </section>
+  );
+};
 
 export default SecurityPasswordCard;

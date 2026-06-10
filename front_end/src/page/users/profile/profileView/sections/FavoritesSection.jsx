@@ -2,8 +2,6 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Grid2X2,
-  List,
   Search,
 } from "lucide-react";
 import {
@@ -16,6 +14,7 @@ import { useMemo, useState } from "react";
 
 const FavoritesSection = ({ favoriteCourses = [], onOpenCourse }) => {
   const [activeTab, setActiveTab] = useState(FAVORITE_COURSE_TABS[0].id);
+  const [sortBy, setSortBy] = useState("newest");
 
   const favoriteCourseItems = useMemo(
     () => buildFavoriteCourses(favoriteCourses),
@@ -38,6 +37,24 @@ const FavoritesSection = ({ favoriteCourses = [], onOpenCourse }) => {
 
     return favoriteCourseItems;
   }, [activeTab, favoriteCourseItems]);
+
+  const sortedCourses = useMemo(() => {
+    const nextCourses = [...courses];
+
+    if (sortBy === "oldest") {
+      return nextCourses.reverse();
+    }
+
+    if (sortBy === "az") {
+      return nextCourses.sort((a, b) => a.title.localeCompare(b.title));
+    }
+
+    if (sortBy === "rating") {
+      return nextCourses.sort((a, b) => b.rating - a.rating);
+    }
+
+    return nextCourses;
+  }, [courses, sortBy]);
 
   const openCourse = (course) => {
     onOpenCourse?.(course);
@@ -68,26 +85,25 @@ const FavoritesSection = ({ favoriteCourses = [], onOpenCourse }) => {
             <Search size={15} />
           </label>
 
-          <button className="course-sort" type="button">
-            Newest <ChevronDown size={14} />
-          </button>
-
-          <button
-            className="course-view active"
-            type="button"
-            aria-label="Grid view"
-          >
-            <Grid2X2 size={16} />
-          </button>
-
-          <button className="course-view" type="button" aria-label="List view">
-            <List size={16} />
-          </button>
+          <label className="course-sort-field">
+            <select
+              className="course-sort"
+              value={sortBy}
+              onChange={(event) => setSortBy(event.target.value)}
+              aria-label="Sort favorite courses"
+            >
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+              <option value="az">A-Z</option>
+              <option value="rating">Highest rating</option>
+            </select>
+            <ChevronDown size={15} />
+          </label>
         </div>
       </div>
 
       <CourseCardGrid
-        courses={courses}
+        courses={sortedCourses}
         onOpenCourse={openCourse}
         variant="favorite"
       />

@@ -1,5 +1,5 @@
 import {
-  CheckCircle,
+  CheckCircle2,
   ChevronDown,
   ChevronUp,
   Play,
@@ -56,11 +56,7 @@ const CourseCurriculum = ({ course }) => (
                   </div>
                   <span>{lesson.duration}</span>
                   {lesson.completed ? (
-                    <CheckCircle
-                      className="done"
-                      size={18}
-                      fill="currentColor"
-                    />
+                    <CheckCircle2 className="done" size={18} />
                   ) : (
                     <Unlock className="pending" size={17} />
                   )}

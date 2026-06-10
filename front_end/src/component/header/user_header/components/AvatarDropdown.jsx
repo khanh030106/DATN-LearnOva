@@ -19,7 +19,10 @@ const AvatarDropdown = ({ user, menuItems }) => {
 
         <ul className="user-logged-menu-list">
           {menuItems.map((item) => (
-            <li key={item.id}>
+            <li
+              key={item.id}
+              className={item.danger ? "user-logged-menu-separator" : ""}
+            >
               <Link
                 to={item.path}
                 className={`user-logged-menu-link ${item.danger ? "is-danger" : ""}`}

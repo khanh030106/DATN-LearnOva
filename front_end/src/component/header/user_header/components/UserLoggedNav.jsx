@@ -1,5 +1,4 @@
 import { useCallback, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import CoursesMegaMenu from "./CoursesMegaMenu.jsx";
 import SimpleMenuDropdown from "./SimpleMenuDropdown.jsx";
@@ -29,7 +28,7 @@ const UserLoggedNav = ({
       clearCloseTimer();
       setOpenMenu(menuName);
     },
-    [clearCloseTimer]
+    [clearCloseTimer],
   );
 
   const handleClose = useCallback(() => {
