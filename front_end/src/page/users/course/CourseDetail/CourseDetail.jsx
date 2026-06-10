@@ -27,6 +27,7 @@ import CourseVideoPlayer from "./VideoPlayer.jsx";
 import OverviewTab from "./OverviewTab.jsx";
 import QATab from "./QATab.jsx";
 import ReviewsTab from "./Review.jsx";
+import LearnovaAI from "../../../home/AI/AI.jsx";
 
 
 function CourseDetail() {
@@ -212,7 +213,9 @@ function CourseDetail() {
                     </div>
                 </aside>
             </div>
-
+            <div className="chatbot-fixed">
+                <LearnovaAI />
+            </div>
         </div>
     );
 

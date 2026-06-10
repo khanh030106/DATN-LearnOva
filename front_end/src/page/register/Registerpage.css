@@ -1,0 +1,384 @@
+:root {
+    color-scheme: dark;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: "Inter", sans-serif;
+    background: #050816;
+}
+
+#root {
+    height: 100%;
+}
+
+.register-page-in {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ================= LEFT ================= */
+
+
+.register-panel {
+    width: 50%;
+    height: 100vh;
+}
+
+.register-banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px;
+
+    background-image: url("../../assets/login/BannerImage.jpg");
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    width: 50%;
+    height: 100vh;
+}
+
+.register-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            90deg,
+            rgba(4, 15, 29, 0.94) 0%,
+            rgba(6, 23, 42, 0.84) 38%,
+            rgba(15, 23, 42, 0.66) 66%,
+            rgba(13, 17, 28, 0.58) 100%
+    );
+}
+
+.register-banner-content {
+    position: relative;
+    z-index: 2;
+    max-width: 520px;
+    color: #f8fafc;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.brand-mark {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: rgba(66, 153, 225, 0.2);
+    color: #a5b4fc;
+    font-weight: 700;
+}
+
+.brand-name {
+    font-size: 1.05rem;
+}
+
+.register-banner-title {
+    margin: 0;
+    font-size: clamp(2.2rem, 3vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.register-banner-title span {
+    display: block;
+    margin-top: 10px;
+
+    color: #c7d2fe;
+    font-style: italic;
+    font-size: clamp(2.5rem, 4vw, 4.2rem);
+}
+
+.register-banner-text {
+    margin-top: 18px;
+
+    color: rgba(241, 245, 249, 0.82);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+/* ================= RIGHT ================= */
+
+.register-panel {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-image: url("../../assets/login/LoginBackground.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.register-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(3, 11, 22, 0.78);
+}
+
+.register-card {
+    position: relative;
+    z-index: 2;
+
+    width: min(500px, 90%);
+
+    padding: 22px 24px;
+
+    border-radius: 22px;
+
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(15,25,52,.78);
+
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(0,0,0,.3);
+
+    overflow: hidden;
+    height: 98vh;
+}
+
+/* ================= HEADER ================= */
+
+.register-header h2 {
+    margin: 0;
+    font-size: 1.7rem;
+    color: #f8fafc;
+}
+
+.register-header p {
+    margin: 6px 0 14px;
+    color: rgba(226,232,240,.75);
+    font-size: .9rem;
+}
+
+/* ================= FORM ================= */
+
+.register-form {
+    display: grid;
+    gap: 12px;
+}
+
+.register-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.form-field {
+    display: grid;
+    gap: 6px;
+
+    color: rgba(226,232,240,.88);
+    font-size: .92rem;
+}
+
+.form-field span {
+    font-weight: 500;
+}
+
+.form-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    min-height: 42px;
+
+    padding: 0 14px;
+
+    border-radius: 12px;
+
+    border: 1px solid rgba(148,163,184,.18);
+    background: rgba(255,255,255,.08);
+}
+
+.form-input input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #f8fafc;
+    font-size: .95rem;
+}
+
+.form-input input::placeholder {
+    color: rgba(148,163,184,.72);
+}
+
+.password-toggle {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: rgba(241,245,249,.8);
+}
+
+/* ================= CHECKBOX ================= */
+
+.terms-checkbox {
+    display: flex;
+    gap: 8px;
+
+    font-size: .85rem;
+    line-height: 1.4;
+
+    color: rgba(226,232,240,.8);
+}
+
+.terms-checkbox input {
+    width: 16px;
+    height: 16px;
+
+    accent-color: #2563eb;
+}
+
+.terms-checkbox a {
+    color: #93c5fd;
+    text-decoration: none;
+}
+
+/* ================= BUTTON ================= */
+
+.register-button {
+    width: 100%;
+
+    padding: 12px 0;
+
+    border: none;
+    border-radius: 12px;
+
+    background: linear-gradient(
+            135deg,
+            #2563eb,
+            #1e40af
+    );
+
+    color: white;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.register-button:hover {
+    transform: translateY(-2px);
+}
+
+/* ================= DIVIDER ================= */
+
+.register-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin: 14px 0;
+
+    color: rgba(226,232,240,.76);
+    font-size: .9rem;
+}
+
+.register-divider::before,
+.register-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,.15);
+}
+
+/* ================= SOCIAL ================= */
+
+.social-login {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 10px 0;
+
+    border-radius: 12px;
+
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.05);
+
+    color: white;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.social-btn:hover {
+    background: rgba(255,255,255,.1);
+}
+
+/* ================= FOOTER ================= */
+
+.register-footer {
+    margin-top: 12px;
+
+    text-align: center;
+    font-size: .9rem;
+
+    color: rgba(226,232,240,.72);
+}
+
+.register-footer a {
+    color: #93c5fd;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 900px) {
+    .register-page-in {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .register-banner,
+    .register-panel {
+        width: 100%;
+    }
+
+    .register-banner {
+        min-height: 40vh;
+    }
+
+    .register-panel {
+        min-height: 60vh;
+    }
+
+    .register-row {
+        grid-template-columns: 1fr;
+    }
+}

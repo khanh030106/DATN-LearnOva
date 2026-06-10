@@ -18,10 +18,13 @@ import {
     Users,
     Video,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom"
 import { MessageCircle } from "lucide-react";
+import LearnovaAI from "../home/AI/AI.jsx";
 
 function InstructorsPage() {
   const [viewMode, setViewMode] = useState("grid");
+  const navigate = useNavigate();
 
   const categories = [
     "Popular",
@@ -454,13 +457,11 @@ function InstructorsPage() {
               return (
                 <div key={instructor.id} className="instructor-card">
                   {/* Card Header */}
-                  <div className="card-header">
-                    <div className={`badge ${badgeInfo.class}`}>
+                  <div className="card-header-in">
+                    <div className={`badge-in ${badgeInfo.class}`}>
                       {badgeInfo.text}
                     </div>
-                    <button className="wishlist-btn">
-                      <FaBookmark />
-                    </button>
+
                   </div>
 
                   {/* Avatar */}
@@ -477,10 +478,10 @@ function InstructorsPage() {
                     {instructor.name}
                     <FaCheckCircle className="check-icon" />
                   </h3>
-                  <p className="instructor-title-new">{instructor.title}</p>
+                  <p className="instructor-title-new-in">{instructor.title}</p>
 
                   {/* Skills */}
-                  <div className="skills-row">
+                  <div className="skills-row-in">
                     {instructor.skills.map((skill, idx) => (
                       <span key={idx} className="skill-tag">
                         {skill}
@@ -497,20 +498,8 @@ function InstructorsPage() {
                         ({instructor.reviews.toLocaleString()})
                       </span>
                     </div>
-                    <div className="stats-row">
-                      <div className="stat">
-                        <Users size={16} className="stat-icon" />
-                        <span className="stat-value">
-                          {instructor.stats.students}
-                        </span>
-                      </div>
-                      <div className="stat">
-                        <BookOpen size={16} className="stat-icon" />
-                        <span className="stat-value">
-                          {instructor.stats.courses}
-                        </span>
-                      </div>
-                    </div>
+
+
                   </div>
 
                   {/* Bio */}
@@ -539,7 +528,12 @@ function InstructorsPage() {
 
                   {/* Buttons */}
                   <div className="card-actions">
-                    <button className="view-profile-btn">View Profile</button>
+                    <button
+                        className="view-profile-btn"
+                        onClick={() => navigate("/learnova/intructorDetail")}
+                    >
+                      View Profile
+                    </button>
                     <button className="message-btn">
                       <MessageCircle size={18} />
                     </button>
@@ -549,6 +543,9 @@ function InstructorsPage() {
             })}
           </div>
         </main>
+        <div className="chatbot-fixed">
+          <LearnovaAI />
+        </div>
       </div>
     </div>
   );

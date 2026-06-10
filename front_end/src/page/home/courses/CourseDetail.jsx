@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./CourseDetail.css";
+import LearnovaAI from "../AI/AI.jsx";
 
 const courses = [
   {
@@ -44,7 +45,7 @@ const courses = [
   },
 ];
 
-const CourseDetail = () => {
+const CourseDetaill = () => {
   const Curriculum = () => {
     const highlights = [
       { icon: '⌨️', title: 'Build responsive web interfaces', subtitle: 'with HTML, CSS and JavaScript' },
@@ -397,8 +398,11 @@ const CourseDetail = () => {
           </aside>
         </div>
       </div>
+      <div className="chatbot-fixed">
+        <LearnovaAI />
+      </div>
     </div>
   );
 };
 
-export default CourseDetail;
+export default CourseDetaill;

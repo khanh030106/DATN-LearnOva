@@ -159,7 +159,8 @@ body{
     color: var(--login-text);
     font-size: 42px;
     font-weight: 700;
-    margin: 15px 0 -10px 0;
+    /*margin: 15px 0 -10px 0;*/
+    margin-bottom: 10px;
 }
 
 .login-inner-sub {

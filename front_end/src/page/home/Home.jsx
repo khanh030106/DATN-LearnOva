@@ -7,8 +7,10 @@ import Testimonials from "./testimonials/Testimonials.jsx";
 import Engagements from "./engagements/Engagements.jsx";
 import Features from "./features/Features.jsx";
 import Newsletter from "./newsletter/Newsletter.jsx";
+import LearnovaAI from "./AI/AI.jsx";
 
 import './Home.css'
+
 
 
 const Home = () => {
@@ -33,6 +35,9 @@ const Home = () => {
                     <Features/>
 
                     <Newsletter/>
+                <div className="chatbot-fixed">
+                    <LearnovaAI />
+                </div>
 
             </div>
         </div>
