@@ -1,31 +1,29 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-    Mail,
-    Lock,
-    User,
-    Eye,
-    EyeOff,
-} from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff, Rocket } from "lucide-react";
+import {FaGoogle, FaFacebookF, FaApple, FaTwitter} from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
-import { FaGoogle, FaFacebookF } from "react-icons/fa";
+
 import "./Registerpage.css";
 
 const RegisterPage = () => {
     const navigate = useNavigate();
+
     const [form, setForm] = useState({
         fullName: "",
-        username: "",
         email: "",
         password: "",
         confirmPassword: "",
         agree: false,
     });
+
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirm, setShowConfirm] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+
         setForm((prev) => ({
             ...prev,
             [name]: type === "checkbox" ? checked : value,
@@ -34,174 +32,103 @@ const RegisterPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // TODO: Thay bằng logic đăng ký thật
-        if (!form.agree) {
+
+        // Kiểm tra xác nhận mật khẩu
+        if (form.password !== form.confirmPassword) {
+            alert("Passwords do not match!");
             return;
         }
+
+        // Kiểm tra điều khoản
+        if (!form.agree) {
+            alert("Please agree to the Terms & Conditions.");
+            return;
+        }
+
+        console.log(form);
+
+        // Chuyển sang trang đăng nhập
         navigate("/learnova/auth/login");
     };
 
     return (
-        <div className="register-page-in">
-            <section className="register-banner">
-                <div className="register-banner-overlay" />
-                <div className="register-banner-content">
-                    <div className="brand">
-                        <span className="brand-mark">L</span>
-                        <span className="brand-name">LearnOva</span>
-                    </div>
+        <div className="register-page">
+            <aside className="register-side register-side--image">
+                <div className="register-side__overlay" />
 
-                    <h1 className="register-banner-title">
-                        Start your journey of
-                        <span>knowledge discovery</span>
-                    </h1>
+            </aside>
 
-                    <p className="register-banner-text">
-                        Create your account and unlock access to thousands of courses,
-                        expert instructors, and a world of learning opportunities.
-                    </p>
-                </div>
-            </section>
-
-            <section className="register-panel">
+            <main className="register-side register-side--form">
                 <div className="register-card">
-                    <div className="register-header">
-                        <h2>Create account</h2>
-                        <p>Join LearnOva and start learning today!</p>
+                    <div className="register-card__header">
+                        <div className="register-card__icon">
+                            <Rocket size={28} />
+                        </div>
+                        <h2>Create an account</h2>
                     </div>
+                    <button type="button" className="register-google">
+                        <FcGoogle className="google-icon" />
+                        Create account with Google
+                    </button>
+
+                    <div className="register-divider"><span>Or</span></div>
 
                     <form className="register-form" onSubmit={handleSubmit}>
-                        <div className="register-row">
-                            <label className="form-field">
-                                <span>Full name</span>
-                                <div className="form-input">
-                                    <User size={18} />
-                                    <input
-                                        type="text"
-                                        name="fullName"
-                                        value={form.fullName}
-                                        onChange={handleChange}
-                                        placeholder="Enter your full name"
-                                        required
-                                    />
-                                </div>
-                            </label>
-
-                            <label className="form-field">
-                                <span>Username</span>
-                                <div className="form-input">
-                                    <User size={18} />
-                                    <input
-                                        type="text"
-                                        name="username"
-                                        value={form.username}
-                                        onChange={handleChange}
-                                        placeholder="Choose a username"
-                                        required
-                                    />
-                                </div>
-                            </label>
-                        </div>
-
-                        <label className="form-field">
-                            <span>Email</span>
-                            <div className="form-input">
-                                <Mail size={18} />
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={form.email}
-                                    onChange={handleChange}
-                                    placeholder="youremail@gmail.com"
-                                    required
-                                />
+                        <label className="register-field">
+                            <span>Full Name</span>
+                            <div className="register-input">
+                                <User size={18} />
+                                <input name="fullName" value={form.fullName} onChange={handleChange} placeholder="Enter your full name" required />
                             </div>
                         </label>
 
-                        <label className="form-field">
+                        <label className="register-field">
+                            <span>Email Address</span>
+                            <div className="register-input">
+                                <Mail size={18} />
+                                <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="Enter your email address" required />
+                            </div>
+                        </label>
+
+                        <label className="register-field">
                             <span>Password</span>
-                            <div className="form-input">
+                            <div className="register-input">
                                 <Lock size={18} />
-                                <input
-                                    type={showPassword ? "text" : "password"}
-                                    name="password"
-                                    value={form.password}
-                                    onChange={handleChange}
-                                    placeholder="Create a password"
-                                    required
-                                />
-                                <button
-                                    type="button"
-                                    className="password-toggle"
-                                    onClick={() => setShowPassword((prev) => !prev)}
-                                >
+                                <input type={showPassword ? "text" : "password"} name="password" value={form.password} onChange={handleChange} placeholder="Create your password" required />
+                                <button type="button" className="password-toggle" onClick={() => setShowPassword(prev => !prev)}>
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
                             </div>
                         </label>
 
-                        <label className="form-field">
-                            <span>Confirm password</span>
-                            <div className="form-input">
-                                <Lock size={18} />
-                                <input
-                                    type={showConfirm ? "text" : "password"}
-                                    name="confirmPassword"
-                                    value={form.confirmPassword}
-                                    onChange={handleChange}
-                                    placeholder="Confirm your password"
-                                    required
-                                />
-                                <button
-                                    type="button"
-                                    className="password-toggle"
-                                    onClick={() => setShowConfirm((prev) => !prev)}
-                                >
-                                    {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
-                                </button>
-                            </div>
-                        </label>
 
                         <label className="terms-checkbox">
-                            <input
-                                type="checkbox"
-                                name="agree"
-                                checked={form.agree}
-                                onChange={handleChange}
-                            />
-                            <span>
-                I agree to the <Link to="/terms">Terms of Service</Link> and{" "}
-                                <Link to="/privacy">Privacy Policy</Link>
-              </span>
+                            <input type="checkbox" name="agree" checked={form.agree} onChange={handleChange} />
+                            <span>I agree to the Terms of Service and Privacy Policy</span>
                         </label>
 
-                        <button type="submit" className="register-button">
-                            Sign up
-                        </button>
+                        <button type="submit" className="register-submit">Create an account</button>
                     </form>
 
-                    <div className="register-divider">
-                        <span>Or sign up with</span>
-                    </div>
-
-                    <div className="social-login">
-                        <button type="button" className="social-btn google">
-                            <FaGoogle />
-                            Google
-                        </button>
-
-                        <button type="button" className="social-btn facebook">
-                            <FaFacebookF />
-                            Facebook
-                        </button>
-                    </div>
-
-                    <p className="register-footer">
-                        Already have an account?{" "}
-                        <Link to="/learnova/auth/login">Log in</Link>
+                    <p className="register-login-text">
+                        Already have an account? <Link to="/learnova/auth/login">Login</Link>
                     </p>
+                    <div className="register-socials">
+
+                        <button className="social-icon apple">
+                            <FaApple />
+                        </button>
+
+                        <button className="social-icon facebook">
+                            <FaFacebookF />
+                        </button>
+
+                        <button className="social-icon twitter">
+                            <FaTwitter />
+                        </button>
+                    </div>
                 </div>
-            </section>
+            </main>
         </div>
     );
 };
