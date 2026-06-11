@@ -26,6 +26,7 @@ const VoucherCreate = () => {
     originalPrice: "2500",
     discountPercent: "10",
     useLimit: "100",
+    startDate: "2026-06-01",
     expiryDate: "2026-12-31",
   });
 
@@ -115,12 +116,11 @@ const VoucherCreate = () => {
 
           <div className="voucherCreateFormRow">
             <label className="voucherCreateLabel">
-              Usage Limit
+              Start Date
               <input
-                type="number"
-                min="1"
-                value={form.useLimit}
-                onChange={handleChange("useLimit")}
+                type="date"
+                value={form.startDate}
+                onChange={handleChange("startDate")}
                 className="voucherCreateInput"
               />
             </label>
@@ -130,6 +130,19 @@ const VoucherCreate = () => {
                 type="date"
                 value={form.expiryDate}
                 onChange={handleChange("expiryDate")}
+                className="voucherCreateInput"
+              />
+            </label>
+          </div>
+
+          <div className="voucherCreateFormRow voucherCreateFormRow--single">
+            <label className="voucherCreateLabel">
+              Usage Limit
+              <input
+                type="number"
+                min="1"
+                value={form.useLimit}
+                onChange={handleChange("useLimit")}
                 className="voucherCreateInput"
               />
             </label>
@@ -165,6 +178,10 @@ const VoucherCreate = () => {
           <div className="voucherCreateSummaryItem">
             <span>Price After Discount</span>
             <strong>{formatCurrency(finalPrice)}</strong>
+          </div>
+          <div className="voucherCreateSummaryItem">
+            <span>Start Date</span>
+            <strong>{form.startDate}</strong>
           </div>
           <div className="voucherCreateSummaryItem">
             <span>Expiry Date</span>

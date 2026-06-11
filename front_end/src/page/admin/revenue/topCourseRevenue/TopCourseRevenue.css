@@ -1,6 +1,6 @@
 .topRevenueBlockCard {
   width: 100%;
-  padding: 18px;
+  padding: 22px;
   border-radius: 6px;
 
   background: #ffffff;
@@ -54,15 +54,15 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  min-width: 0;
-  table-layout: auto;
+  min-width: 980px;
+  table-layout: fixed;
   overflow: hidden;
 }
 
 .topRevenueBlockTable th,
 .topRevenueBlockTable td {
-  text-align: left;
-  padding: 14px 14px;
+  text-align: center;
+  padding: 16px 14px;
   color: #475569;
   font-size: 13px;
   line-height: 1.6;
@@ -75,24 +75,28 @@
 
 .topRevenueBlockTable th:first-child,
 .topRevenueBlockTable td:first-child {
-  width: 56px;
+  width: 8%;
+  text-align: center;
+}
+
+.topRevenueBlockTable th:nth-child(2),
+.topRevenueBlockTable td:nth-child(2) {
+  width: 26%;
+  text-align: left;
 }
 
 .topRevenueBlockTable th:nth-child(3),
 .topRevenueBlockTable td:nth-child(3),
 .topRevenueBlockTable th:nth-child(4),
-.topRevenueBlockTable td:nth-child(4) {
-  text-align: right;
-}
-
-.topRevenueBlockTable th:nth-child(3),
-.topRevenueBlockTable td:nth-child(3) {
-  width: 110px;
-}
-
-.topRevenueBlockTable th:nth-child(4),
-.topRevenueBlockTable td:nth-child(4) {
-  width: 130px;
+.topRevenueBlockTable td:nth-child(4),
+.topRevenueBlockTable th:nth-child(5),
+.topRevenueBlockTable td:nth-child(5),
+.topRevenueBlockTable th:nth-child(6),
+.topRevenueBlockTable td:nth-child(6),
+.topRevenueBlockTable th:nth-child(7),
+.topRevenueBlockTable td:nth-child(7) {
+  width: 13%;
+  text-align: center;
 }
 
 .topRevenueBlockTable th:last-child,
@@ -159,6 +163,7 @@
 .topRevenueBlockRevenueCell {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
 }
 
@@ -186,4 +191,23 @@
   .topRevenueBlockTable {
     min-width: 100%;
   }
+}
+
+.topCourseRevenueCard .topRevenueBlockTitle {
+  font-weight: 800;
+}
+
+.topCourseRevenueCard .topRevenueBlockTable {
+  min-width: 980px;
+  table-layout: fixed;
+}
+
+.topCourseRevenueCard .topRevenueBlockTable th,
+.topCourseRevenueCard .topRevenueBlockTable td {
+  text-align: center;
+}
+
+.topCourseRevenueCard .topRevenueBlockTable th:nth-child(2),
+.topCourseRevenueCard .topRevenueBlockTable td:nth-child(2) {
+  text-align: left;
 }

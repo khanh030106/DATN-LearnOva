@@ -18,12 +18,13 @@
 .courseTable {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
   font-size: 14px;
 }
 
 .courseTable thead th {
-  text-align: left;
-  padding: 12px 14px;
+  text-align: center;
+  padding: 14px 12px;
   font-weight: 800;
   color: var(--text-muted);
   border-bottom: 1px solid rgba(37, 99, 235, 0.12);
@@ -42,9 +43,39 @@
 }
 
 .courseTable tbody td {
-  padding: 14px 14px;
+  height: 74px;
+  padding: 16px 12px;
   vertical-align: middle;
+  text-align: center;
   color: #111827;
+  line-height: 1.45;
+}
+
+.courseTable thead th:first-child,
+.courseTable tbody td:first-child {
+  width: 27%;
+  text-align: left;
+}
+
+.courseTable thead th:nth-child(2),
+.courseTable tbody td:nth-child(2) {
+  width: 12%;
+}
+
+.courseTable thead th:nth-child(3),
+.courseTable tbody td:nth-child(3) {
+  width: 15%;
+}
+
+.courseTable thead th:nth-child(4),
+.courseTable tbody td:nth-child(4),
+.courseTable thead th:nth-child(5),
+.courseTable tbody td:nth-child(5),
+.courseTable thead th:nth-child(6),
+.courseTable tbody td:nth-child(6),
+.courseTable thead th:nth-child(7),
+.courseTable tbody td:nth-child(7) {
+  width: 8%;
 }
 
 /* Action icons styling */
@@ -52,7 +83,7 @@
   display: flex;
   gap: 8px;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .actionButton {
@@ -87,21 +118,22 @@
 
 /* Slight spacing and visual balance for the actions column */
 .courseTable td:last-child {
-  text-align: right;
-  width: 140px;
+  text-align: center;
+  width: 12%;
 }
 
 /* Rating star + value */
 .courseTableRating {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
 }
 
 .courseTableRatingIcon {
   width: 16px;
   height: 16px;
-  color: var(--blue-primary);
+  color: #f5b301;
   flex-shrink: 0;
 }
 

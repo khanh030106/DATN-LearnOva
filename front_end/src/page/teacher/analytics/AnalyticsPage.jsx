@@ -1,4 +1,3 @@
-import AnalyticsHeader from "./components/AnalyticsHeader.jsx";
 import AnalyticsStatCard from "./components/AnalyticsStatCard.jsx";
 import CoursePerformancePanel from "./components/CoursePerformancePanel.jsx";
 import LearningPerformancePanel from "./components/LearningPerformancePanel.jsx";
@@ -17,8 +16,6 @@ import "./AnalyticsPage.css";
 const AnalyticsPage = () => {
   return (
     <section className="teacher-page teacher-analytics-page">
-      <AnalyticsHeader />
-
       <div className="teacher-analytics-stat-grid">
         {analyticsStats.map((item) => (
           <AnalyticsStatCard key={item.label} item={item} />

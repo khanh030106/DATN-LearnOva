@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Eye, Edit3, Trash2, Star } from "lucide-react";
+import { Eye, Edit3, Trash2 } from "lucide-react";
+import { FaStar } from "react-icons/fa";
 import "./CourseTable.css";
 
 const courseTableData = [
@@ -174,7 +175,7 @@ const CourseTable = () => {
                 <td>{course.students}</td>
                 <td>
                   <div className="courseTableRating">
-                    <Star className="courseTableRatingIcon" />
+                    <FaStar className="courseTableRatingIcon" />
                     <span className="courseTableRatingValue">
                       {course.rating}
                     </span>

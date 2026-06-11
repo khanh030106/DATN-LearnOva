@@ -64,6 +64,14 @@
   margin-bottom: 18px;
 }
 
+.voucherCreateFormRow--single {
+  grid-template-columns: 1fr 1fr;
+}
+
+.voucherCreateFormRow--single .voucherCreateLabel {
+  grid-column: 1 / 2;
+}
+
 .voucherCreateLabel {
   display: flex;
   flex-direction: column;

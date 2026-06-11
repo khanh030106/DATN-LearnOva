@@ -1021,27 +1021,3 @@
         margin: 0 auto;
     }
 }
-.main-header {
-    background: rgba(255, 255, 255, 0.96) !important;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.28) !important;
-    box-shadow: 0 12px 34px rgba(15, 23, 42, 0.12) !important;
-    backdrop-filter: blur(14px) !important;
-}
-
-/* ép luôn màu chữ giống trạng thái scrolled */
-.main-header .nav-menu-link {
-    color: #0f172a !important;
-}
-
-.main-header .header-search-input {
-    color: #0f172a !important;
-}
-
-.main-header .header-search-input::placeholder {
-    color: #64748b !important;
-}
-
-.main-header .header-action-login {
-    color: #1d4ed8 !important;
-    border-color: rgba(29, 78, 216, 0.18) !important;
-}

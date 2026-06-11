@@ -94,8 +94,8 @@
   border-radius: 0;
   color: #0f172a;
   background: transparent;
-  font: inherit;
-  font-size: 16px;
+  font-family: math;
+  font-size: 20px;
   font-weight: 500;
   white-space: nowrap;
   cursor: pointer;
@@ -160,7 +160,8 @@
   top: calc(100% + 15px);
 }
 
-.user-logged-nav-item > .user-logged-dropdown:not(.user-logged-mega-menu)::before {
+.user-logged-nav-item
+  > .user-logged-dropdown:not(.user-logged-mega-menu)::before {
   height: 18px;
 }
 
@@ -352,7 +353,7 @@
   gap: 8px;
   padding: 0 12px;
   border: 1px solid rgba(147, 197, 253, 0.58);
-  border-radius: 10px;
+  border-radius: 999px;
   background: rgba(239, 246, 255, 0.98);
   box-shadow: none;
   transition:

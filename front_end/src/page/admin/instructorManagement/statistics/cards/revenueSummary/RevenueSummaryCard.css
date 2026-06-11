@@ -1,11 +1,11 @@
 .instructorStatCard {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 14px;
+  justify-content: flex-start;
+  gap: 16px;
   min-width: 0;
-  min-height: 118px;
-  padding: 18px 20px;
+  min-height: 124px;
+  padding: 24px 28px;
   border-radius: 6px;
   border: 1px solid rgba(15, 23, 42, 0.08);
   background: #ffffff;
@@ -29,24 +29,29 @@
 
 .instructorStatContent {
   min-width: 0;
-  flex: 0 1 auto;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .instructorStatTitle {
   margin: 0;
-  color: var(--text-secondary);
-  font-size: 12px;
-  line-height: 1.4;
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  color: #475467;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 400;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
 .instructorStatValue {
-  margin: 8px 0 0;
+  margin: 10px 0 0;
   color: #101828;
-  font-size: 26px;
-  line-height: 1.05;
-  font-weight: 600;
+  font-family: inherit;
+  font-size: 25px;
+  line-height: 1.15;
+  font-weight: 500;
   letter-spacing: 0;
 }

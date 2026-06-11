@@ -1,4 +1,5 @@
 import "./VoucherHistory.css";
+import { FiClipboard } from "react-icons/fi";
 
 // ===== VOUCHER USAGE HISTORY DATA =====
 const voucherHistories = [
@@ -71,7 +72,7 @@ const VoucherHistory = () => {
       <div className="voucherHistoryHeader">
         <div>
           <div className="voucherHistoryTitleIcon">
-            <span className="voucherHistoryIcon">📋</span>
+            <FiClipboard className="voucherHistoryIcon" aria-hidden="true" />
             <h2 className="voucherHistoryTitle">Voucher Usage History</h2>
           </div>
           <p className="voucherHistorySubtitle">

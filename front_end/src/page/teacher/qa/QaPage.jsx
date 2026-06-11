@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import QaInbox from "./components/QaInbox.jsx";
-import QaStudentDetails from "./components/QaStudentDetails.jsx";
 import QaThread from "./components/QaThread.jsx";
 import { conversationsSeed } from "./qaPageData.js";
 import { addTeacherReply, filterConversations, getUnansweredCount } from "./qaPageUtils.js";
@@ -60,8 +59,6 @@ const QaPage = () => {
         onReplyChange={setReply}
         onSendReply={handleSendReply}
       />
-
-      <QaStudentDetails conversation={activeConversation} />
     </section>
   );
 };

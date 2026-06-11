@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import LoginPage from "../page/login/LoginPage.jsx";
+import LoginPage from "../page/login/login.jsx";
 import Home from "../page/home/Home.jsx";
 import HomeLayout from "../layout/home/HomeLayout.jsx";
 
@@ -11,6 +11,8 @@ import UserManagement from "../page/admin/userManagement/UserManagement.jsx";
 import InstructorManagement from "../page/admin/instructorManagement/InstructorManagement.jsx";
 import Course from "../page/admin/course/Course.jsx";
 import Revenue from "../page/admin/revenue/Revenue.jsx";
+import RevenueTopRankings from "../page/admin/revenue/RevenueTopRankings.jsx";
+import RevenueTransactions from "../page/admin/revenue/RevenueTransactions.jsx";
 import Reports from "../page/admin/reports/Reports.jsx";
 import Vouchers from "../page/admin/vouchers/Vouchers.jsx";
 import VoucherCreate from "../page/admin/vouchers/voucherCreate/VoucherCreate.jsx";
@@ -69,6 +71,8 @@ const App = () => {
           <Route path="teachers" element={<InstructorManagement />} />
           <Route path="courses" element={<Course />} />
           <Route path="revenue" element={<Revenue />} />
+          <Route path="revenue/top-rankings" element={<RevenueTopRankings />} />
+          <Route path="revenue/transactions" element={<RevenueTransactions />} />
           <Route path="reports" element={<Reports />} />
           <Route path="vouchers" element={<Vouchers />} />
           <Route path="vouchers/create" element={<VoucherCreate />} />

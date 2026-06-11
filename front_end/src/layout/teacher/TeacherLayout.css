@@ -274,3 +274,34 @@
     grid-template-columns: repeat(3, minmax(54px, 1fr));
   }
 }
+
+.teacher-main :where(
+  p,
+  span,
+  small,
+  em,
+  label,
+  input,
+  textarea,
+  select,
+  td,
+  th,
+  li
+) {
+  font-weight: 400 !important;
+}
+
+.teacher-main :where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  strong,
+  b,
+  button,
+  a
+) {
+  font-weight: 500 !important;
+}

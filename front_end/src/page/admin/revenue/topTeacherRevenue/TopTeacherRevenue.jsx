@@ -8,6 +8,8 @@ const topTeachers = [
     courses: 8,
     students: "16,400",
     revenue: "$385,000",
+    avgRevenue: "$48,125",
+    share: "21%",
   },
   {
     rank: 2,
@@ -16,6 +18,8 @@ const topTeachers = [
     courses: 12,
     students: "14,200",
     revenue: "$312,000",
+    avgRevenue: "$26,000",
+    share: "17%",
   },
   {
     rank: 3,
@@ -24,6 +28,8 @@ const topTeachers = [
     courses: 6,
     students: "11,800",
     revenue: "$245,000",
+    avgRevenue: "$40,833",
+    share: "13%",
   },
   {
     rank: 4,
@@ -32,6 +38,8 @@ const topTeachers = [
     courses: 5,
     students: "9,400",
     revenue: "$189,000",
+    avgRevenue: "$37,800",
+    share: "10%",
   },
   {
     rank: 5,
@@ -40,13 +48,15 @@ const topTeachers = [
     courses: 7,
     students: "8,100",
     revenue: "$164,000",
+    avgRevenue: "$23,429",
+    share: "9%",
   },
 ];
 
 const TopTeacherRevenue = () => {
   return (
     <section
-      className="topRevenueBlockCard"
+      className="topRevenueBlockCard topTeacherRevenueCard"
       aria-label="Top earning instructor partners"
     >
       <div className="topRevenueBlockHeader">
@@ -70,6 +80,8 @@ const TopTeacherRevenue = () => {
               <th>COURSES</th>
               <th>TOTAL STUDENTS</th>
               <th>REVENUE EARNED</th>
+              <th>AVG / COURSE</th>
+              <th>SHARE</th>
             </tr>
           </thead>
           <tbody>
@@ -86,6 +98,8 @@ const TopTeacherRevenue = () => {
                 <td>{teacher.courses}</td>
                 <td>{teacher.students}</td>
                 <td className="topTeacherRevenue">{teacher.revenue}</td>
+                <td>{teacher.avgRevenue}</td>
+                <td>{teacher.share}</td>
               </tr>
             ))}
           </tbody>

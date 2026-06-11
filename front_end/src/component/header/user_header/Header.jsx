@@ -10,10 +10,14 @@ const Header = () => {
   const headerRef = useRef(null);
   const { pathname } = useLocation();
   const isCartHeader = pathname.startsWith("/learnova/cart");
+  const isHeroHeader =
+    pathname.startsWith("/learnova/home") ||
+    pathname.startsWith("/learnova/about");
   const useSolidHeader =
     pathname.startsWith("/learnova/courses") ||
     pathname.startsWith("/learnova/intructors") ||
     pathname.startsWith("/learnova/instructors") ||
+    pathname.startsWith("/learnova/intructorDetail") ||
     pathname.startsWith("/learnova/user") ||
     isCartHeader;
 
@@ -24,9 +28,13 @@ const Header = () => {
     let ticking = false;
 
     const updateHeaderState = () => {
+      const shouldUseScrolledHeader =
+        useSolidHeader || window.scrollY > (isHeroHeader ? 120 : 20);
+
+      header.classList.toggle("scrolled", shouldUseScrolledHeader);
       header.classList.toggle(
-        "scrolled",
-        useSolidHeader || window.scrollY > 20,
+        "hero-header-top",
+        isHeroHeader && !shouldUseScrolledHeader,
       );
       ticking = false;
     };
@@ -43,12 +51,12 @@ const Header = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [useSolidHeader]);
+  }, [isHeroHeader, useSolidHeader]);
 
   return (
     <header
       ref={headerRef}
-      className={`main-header${isCartHeader ? " cart-header" : ""}`}
+      className={`main-header${isHeroHeader ? " hero-header" : ""}${isCartHeader ? " cart-header" : ""}`}
     >
       <div className="header-container">
         <a href="/learnova/home" className="logo">

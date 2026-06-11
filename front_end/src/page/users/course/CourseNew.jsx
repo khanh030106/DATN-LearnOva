@@ -358,7 +358,7 @@ function CoursesPage() {
     <div className="courses-page">
       <div className="courses-container">
         {/* SIDEBAR FILTER */}
-        <aside className="sidebar-filter">
+        <aside className="sidebar-filter-co">
           <h4>Filters</h4>
 
           {/* CATEGORIES */}
@@ -421,18 +421,6 @@ function CoursesPage() {
 
         {/* MAIN CONTENT */}
         <main className="main-content">
-          {/* CATEGORY TABS */}
-          {/*<div className="category-tabs">*/}
-          {/*  {categories.map((cat) => (*/}
-          {/*    <button*/}
-          {/*      key={cat.id}*/}
-          {/*      className={`tab-item ${activeTab === cat.id ? "active" : ""}`}*/}
-          {/*      onClick={() => setActiveTab(cat.id)}*/}
-          {/*    >*/}
-          {/*      {cat.name}*/}
-          {/*    </button>*/}
-          {/*  ))}*/}
-          {/*</div>*/}
 
           {/* COURSES GRID */}
           <div className="courses-grid">

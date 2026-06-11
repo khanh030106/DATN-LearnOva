@@ -18,10 +18,7 @@
 }
 
 .teacher-revenue-topbar {
-  display: grid;
-  grid-template-columns: minmax(220px, 1fr) auto;
-  align-items: start;
-  gap: 16px;
+  display: none;
 }
 
 .teacher-revenue-topbar h1 {
@@ -46,7 +43,6 @@
   gap: 8px;
 }
 
-.teacher-revenue-date,
 .teacher-revenue-export,
 .teacher-revenue-periods button,
 .teacher-revenue-panel__header select,
@@ -61,7 +57,6 @@
   font-weight: 800;
 }
 
-.teacher-revenue-date,
 .teacher-revenue-export {
   display: inline-flex;
   align-items: center;
@@ -525,7 +520,6 @@
 }
 
 @media (max-width: 1320px) {
-  .teacher-revenue-topbar,
   .teacher-revenue-dashboard-grid {
     grid-template-columns: 1fr;
   }
@@ -544,7 +538,6 @@
 
 @media (max-width: 760px) {
   .teacher-revenue-actions,
-  .teacher-revenue-date,
   .teacher-revenue-export {
     width: 100%;
   }

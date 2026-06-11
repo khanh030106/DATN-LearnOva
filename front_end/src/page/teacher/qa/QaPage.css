@@ -10,7 +10,7 @@
   --qa-blue-soft: #dbeafe;
   --qa-green: #22c55e;
   display: grid;
-  grid-template-columns: minmax(270px, 0.9fr) minmax(430px, 1.6fr) minmax(250px, 0.7fr);
+  grid-template-columns: minmax(270px, 0.85fr) minmax(520px, 1.75fr);
   gap: 10px;
   min-height: calc(100vh - 118px);
   color: var(--qa-text);
@@ -254,7 +254,7 @@
 
 .teacher-qa-thread__header {
   display: grid;
-  grid-template-columns: 48px minmax(0, 1fr) auto auto auto;
+  grid-template-columns: 48px minmax(0, 1fr);
   align-items: center;
   gap: 14px;
   padding: 14px 16px;
@@ -280,6 +280,12 @@
 
 .teacher-qa-thread__header p {
   margin: 2px 0 7px;
+}
+
+.teacher-qa-thread__header h2 {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
 }
 
 .teacher-qa-thread__header div:first-of-type > span,
@@ -664,11 +670,6 @@
 @media (max-width: 1320px) {
   .teacher-qa-page {
     grid-template-columns: minmax(250px, 0.8fr) minmax(420px, 1.3fr);
-  }
-
-  .teacher-qa-details {
-    grid-column: 1 / -1;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 

@@ -7,7 +7,7 @@ const PendingQuestionPanel = ({ qaUrl, question }) => {
 
   return (
     <div className="teacher-panel">
-      <PanelHeader actionLabel="View all" href={qaUrl} title="Pending Q&A" />
+      <PanelHeader actionLabel="View all" href={qaUrl} title="Pending Chat" />
       <article className="teacher-question-card">
         <img src={question.avatar} alt={question.student} />
         <div>

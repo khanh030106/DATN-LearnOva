@@ -18,7 +18,7 @@ const teacherNavItems = [
   { label: "Overview", path: "/learnova/teacher", icon: Grid2X2, end: true },
   { label: "My Courses", path: "/learnova/teacher/courses", icon: BookOpen },
   { label: "Students", path: "/learnova/teacher/students", icon: Users },
-  { label: "Q&A", path: "/learnova/teacher/qa", icon: MessageSquare },
+  { label: "Chat", path: "/learnova/teacher/qa", icon: MessageSquare },
   { label: "Promotions", path: "/learnova/teacher/promotions", icon: Gift },
   { label: "Revenue", path: "/learnova/teacher/revenue", icon: WalletCards },
   { label: "Analytics", path: "/learnova/teacher/analytics", icon: BarChart3 },

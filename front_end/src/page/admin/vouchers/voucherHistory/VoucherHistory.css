@@ -24,8 +24,10 @@
 }
 
 .voucherHistoryIcon {
-  font-size: 24px;
+  width: 22px;
+  height: 22px;
   color: #f97316;
+  flex-shrink: 0;
 }
 
 .voucherHistoryTitle {
@@ -85,6 +87,7 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  table-layout: fixed;
   min-width: 1000px;
   border: 1px solid rgba(15, 23, 42, 0.06);
   border-radius: 10px;
@@ -93,10 +96,49 @@
 
 .voucherHistoryTable th,
 .voucherHistoryTable td {
-  padding: 14px 14px;
-  text-align: left;
+  height: 62px;
+  padding: 14px 12px;
+  text-align: center;
   vertical-align: middle;
   border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  line-height: 1.45;
+}
+
+.voucherHistoryTable th:first-child,
+.voucherHistoryTable td:first-child,
+.voucherHistoryTable th:nth-child(2),
+.voucherHistoryTable td:nth-child(2) {
+  text-align: left;
+}
+
+.voucherHistoryTable th:first-child,
+.voucherHistoryTable td:first-child {
+  width: 13%;
+  padding-left: 18px;
+}
+
+.voucherHistoryTable th:nth-child(2),
+.voucherHistoryTable td:nth-child(2) {
+  width: 22%;
+}
+
+.voucherHistoryTable th:nth-child(3),
+.voucherHistoryTable td:nth-child(3) {
+  width: 16%;
+}
+
+.voucherHistoryTable th:nth-child(4),
+.voucherHistoryTable td:nth-child(4),
+.voucherHistoryTable th:nth-child(5),
+.voucherHistoryTable td:nth-child(5),
+.voucherHistoryTable th:nth-child(6),
+.voucherHistoryTable td:nth-child(6) {
+  width: 12%;
+}
+
+.voucherHistoryTable th:last-child,
+.voucherHistoryTable td:last-child {
+  width: 17%;
 }
 
 .voucherHistoryTable th {

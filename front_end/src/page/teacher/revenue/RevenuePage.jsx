@@ -1,4 +1,3 @@
-import { useState } from "react";
 import PayoutPanel from "./components/PayoutPanel.jsx";
 import RevenueChartPanel from "./components/RevenueChartPanel.jsx";
 import RevenueMetricCard from "./components/RevenueMetricCard.jsx";
@@ -18,11 +17,9 @@ import {
 import "./RevenuePage.css";
 
 const RevenuePage = () => {
-  const [period, setPeriod] = useState("30d");
-
   return (
     <section className="teacher-page teacher-revenue-page">
-      <RevenueTopbar activePeriod={period} onSelectPeriod={setPeriod} />
+      <RevenueTopbar />
 
       <div className="teacher-revenue-metrics-grid">
         {metricCards.map((metric) => (

@@ -14,8 +14,8 @@ const QaInbox = ({
   <aside className="teacher-qa-inbox">
     <header className="teacher-qa-inbox__header">
       <div>
-        <h1>Student Q&A</h1>
-        <p>{unansweredCount} unanswered questions</p>
+        <h1>Student Chat</h1>
+        <p>{unansweredCount} unread chats</p>
       </div>
       <button type="button" aria-label="Compose answer">
         <MessageSquare size={18} />

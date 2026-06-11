@@ -112,6 +112,7 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  table-layout: fixed;
   min-width: 900px;
   border: 1px solid rgba(15, 23, 42, 0.06);
   border-radius: 10px;
@@ -120,10 +121,46 @@
 
 .voucherTable th,
 .voucherTable td {
-  padding: 14px 14px;
-  text-align: left;
+  height: 64px;
+  padding: 14px 12px;
+  text-align: center;
   vertical-align: middle;
   border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  line-height: 1.45;
+}
+
+.voucherTable th:first-child,
+.voucherTable td:first-child,
+.voucherTable th:nth-child(2),
+.voucherTable td:nth-child(2) {
+  text-align: left;
+}
+
+.voucherTable th:first-child,
+.voucherTable td:first-child {
+  width: 13%;
+  padding-left: 18px;
+}
+
+.voucherTable th:nth-child(2),
+.voucherTable td:nth-child(2) {
+  width: 18%;
+}
+
+.voucherTable th:nth-child(3),
+.voucherTable td:nth-child(3),
+.voucherTable th:nth-child(4),
+.voucherTable td:nth-child(4),
+.voucherTable th:nth-child(5),
+.voucherTable td:nth-child(5),
+.voucherTable th:nth-child(6),
+.voucherTable td:nth-child(6) {
+  width: 14%;
+}
+
+.voucherTable th:last-child,
+.voucherTable td:last-child {
+  width: 13%;
 }
 
 .voucherTable th {

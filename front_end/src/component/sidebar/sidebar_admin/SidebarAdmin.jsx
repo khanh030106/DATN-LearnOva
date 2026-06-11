@@ -45,12 +45,18 @@ const menuItems = [
     icon: CircleDollarSign,
     path: "/learnova/admin/revenue",
   },
-  {
-    id: "reports",
-    label: "Reports",
-    icon: BarChart3,
-    path: "/learnova/admin/reports",
-  },
+  // {
+  //   id: "reports",
+  //   label: "Reports",
+  //   icon: BarChart3,
+  //   path: "/learnova/admin/reports",
+  // },
+  // {
+  //   id: "reports",
+  //   label: "Reports",
+  //   icon: BarChart3,
+  //   path: "/learnova/admin/reports",
+  // },
   {
     id: "vouchers",
     label: "Vouchers",

@@ -268,159 +268,115 @@ function InstructorsPage() {
 
   return (
     <div className="instructors-page">
-      <section className="instructors-overview">
-        <div className="instructors-overview-copy">
-          <h1>1,254 instructors</h1>
-          <p>Learn from the world's best professionals</p>
-        </div>
-        <div className="instructors-overview-stats">
-          <div className="overview-stat">
-            <span className="overview-stat-icon">
-              <Users size={20} />
-            </span>
-            <div>
-              <strong>5.2M+</strong>
-              <small>Students taught</small>
-            </div>
-          </div>
-          <div className="overview-stat">
-            <span className="overview-stat-icon overview-stat-icon-warm">
-              <FaStar />
-            </span>
-            <div>
-              <strong>4.8</strong>
-              <small>Average rating</small>
-            </div>
-          </div>
-          <div className="overview-stat">
-            <span className="overview-stat-icon">
-              <Video size={20} />
-            </span>
-            <div>
-              <strong>12.6K</strong>
-              <small>Courses published</small>
-            </div>
-          </div>
-          <div className="overview-stat">
-            <span className="overview-stat-icon">
-              <Globe size={20} />
-            </span>
-            <div>
-              <strong>120+</strong>
-              <small>Countries</small>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       <div className="page-container">
-        <aside className="sidebar">
-          <div className="sidebar-header">
-            <h3>Filter instructors</h3>
-            <button className="clear-all">Clear all</button>
-          </div>
+        <div className="sidebar-wrapper">
+          <aside className="sidebar-in">
+            <div className="sidebar-header">
+              <h3>Filter instructors</h3>
+              <button className="clear-all">Clear all</button>
+            </div>
 
-          <div className="filter-group">
-            <div className="filter-title">
-              <span>Expertise</span>
-              <small>{filterData.expertise.length} topics</small>
+            <div className="filter-group">
+              <div className="filter-title">
+                <span>Expertise</span>
+                <small>{filterData.expertise.length} topics</small>
+              </div>
+              <div className="filter-chip-grid">
+                {filterData.expertise.map((item) => (
+                    <label key={item.id} className="filter-chip">
+                      <input type="checkbox" />
+                      <span className="filter-chip-name">
+                {React.createElement(item.icon, {
+                  className: "item-icon",
+                  size: 16,
+                  strokeWidth: 2,
+                })}
+                        {item.name}
+              </span>
+                      <span className="item-count">{item.count}</span>
+                    </label>
+                ))}
+              </div>
             </div>
-            <div className="filter-chip-grid">
-              {filterData.expertise.map((item) => (
-                <label key={item.id} className="filter-chip">
-                  <input type="checkbox" />
-                  <span className="filter-chip-name">
-                    {React.createElement(item.icon, {
-                      className: "item-icon",
-                      size: 16,
-                      strokeWidth: 2,
-                    })}
-                    {item.name}
-                  </span>
-                  <span className="item-count">{item.count}</span>
-                </label>
-              ))}
-            </div>
-          </div>
 
-          <div className="filter-group">
-            <div className="filter-title">
-              <span>Rating</span>
-              <small>Minimum score</small>
-            </div>
-            <div className="filter-list">
-              {filterData.rating.map((item, index) => (
-                <label key={index} className="filter-row">
-                  <input type="radio" name="rating" />
-                  <span className="filter-row-main">
-                    <span className="rating-stars">
-                      {Array.from({ length: Math.floor(item.stars) }).map(
-                        (_, starIndex) => (
+            <div className="filter-group">
+              <div className="filter-title">
+                <span>Rating</span>
+                <small>Minimum score</small>
+              </div>
+              <div className="filter-list">
+                {filterData.rating.map((item, index) => (
+                    <label key={index} className="filter-row">
+                      <input type="radio" name="rating" />
+                      <span className="filter-row-main">
+                <span className="rating-stars">
+                  {Array.from({ length: Math.floor(item.stars) }).map(
+                      (_, starIndex) => (
                           <FaStar key={starIndex} />
-                        ),
-                      )}
-                    </span>
-                    {item.label}
-                  </span>
-                  <span className="item-count">{item.count}</span>
-                </label>
-              ))}
+                      ),
+                  )}
+                </span>
+                        {item.label}
+              </span>
+                      <span className="item-count">{item.count}</span>
+                    </label>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className="filter-group">
-            <div className="filter-title">
-              <span>Experience</span>
-              <small>Teaching years</small>
+            <div className="filter-group">
+              <div className="filter-title">
+                <span>Experience</span>
+                <small>Teaching years</small>
+              </div>
+              <div className="filter-pill-row">
+                {filterData.experience.map((item) => (
+                    <label key={item.id} className="filter-pill">
+                      <input type="checkbox" />
+                      <span>{item.name}</span>
+                      <em>{item.count}</em>
+                    </label>
+                ))}
+              </div>
             </div>
-            <div className="filter-pill-row">
-              {filterData.experience.map((item) => (
-                <label key={item.id} className="filter-pill">
-                  <input type="checkbox" />
-                  <span>{item.name}</span>
-                  <em>{item.count}</em>
-                </label>
-              ))}
-            </div>
-          </div>
 
-          <div className="filter-group">
-            <div className="filter-title">
-              <span>Students</span>
-              <small>Learner range</small>
+            <div className="filter-group">
+              <div className="filter-title">
+                <span>Students</span>
+                <small>Learner range</small>
+              </div>
+              <div className="filter-pill-row">
+                {filterData.students.map((item) => (
+                    <label key={item.id} className="filter-pill">
+                      <input type="checkbox" />
+                      <span>{item.name}</span>
+                      <em>{item.count}</em>
+                    </label>
+                ))}
+              </div>
             </div>
-            <div className="filter-pill-row">
-              {filterData.students.map((item) => (
-                <label key={item.id} className="filter-pill">
-                  <input type="checkbox" />
-                  <span>{item.name}</span>
-                  <em>{item.count}</em>
-                </label>
-              ))}
-            </div>
-          </div>
 
-          <div className="filter-group">
-            <div className="filter-title">
-              <span>Language</span>
-              <small>{filterData.language.length} options</small>
+            <div className="filter-group">
+              <div className="filter-title">
+                <span>Language</span>
+                <small>{filterData.language.length} options</small>
+              </div>
+              <div className="filter-language-grid">
+                {filterData.language.map((item) => (
+                    <label key={item.id} className="filter-language">
+                      <input type="checkbox" />
+                      <Languages className="item-icon" size={16} strokeWidth={2} />
+                      <span>{item.name}</span>
+                      <em>{item.count}</em>
+                    </label>
+                ))}
+              </div>
             </div>
-            <div className="filter-language-grid">
-              {filterData.language.map((item) => (
-                <label key={item.id} className="filter-language">
-                  <input type="checkbox" />
-                  <Languages className="item-icon" size={16} strokeWidth={2} />
-                  <span>{item.name}</span>
-                  <em>{item.count}</em>
-                </label>
-              ))}
-            </div>
-          </div>
 
-          <div className="sidebar-footer">
-            <button className="apply-btn">Apply Filters</button>
-          </div>
-        </aside>
+          </aside>
+        </div>
 
         {/* MAIN CONTENT */}
         <main className="main-content">
@@ -455,10 +411,10 @@ function InstructorsPage() {
             {instructors.map((instructor) => {
               const badgeInfo = getBadgeInfo(instructor.badge);
               return (
-                <div key={instructor.id} className="instructor-card">
+                <div key={instructor.id} className="instructor-card-in">
                   {/* Card Header */}
-                  <div className="card-header-in">
-                    <div className={`badge-in ${badgeInfo.class}`}>
+                  <div className="card-header-in-in">
+                    <div className={`badge-in-in ${badgeInfo.class}`}>
                       {badgeInfo.text}
                     </div>
 
