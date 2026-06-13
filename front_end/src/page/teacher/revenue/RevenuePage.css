@@ -233,7 +233,7 @@
 .teacher-revenue-panel-title h2 {
   margin: 0;
   color: var(--revenue-text);
-  font-family: math;
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 900;
   line-height: 1.2;

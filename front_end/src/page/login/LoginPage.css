@@ -166,7 +166,7 @@ body{
 .login-inner-sub {
     color: rgba(203, 213, 225, 0.82);
     font-size: 16px;
-    font-family: math;
+    font-family: var(--font-sans);
     margin-bottom: 34px;
 }
 
@@ -177,7 +177,7 @@ body{
 .form-field-label {
     display: block;
     color: rgba(219, 234, 254, 0.86);
-    font-family: math;
+    font-family: var(--font-sans);
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 5px;
@@ -254,7 +254,7 @@ body{
 .register-link {
     color: var(--login-blue-soft);
     text-decoration: none;
-    font-family: math;
+    font-family: var(--font-sans);
     font-weight: 500;
 }
 

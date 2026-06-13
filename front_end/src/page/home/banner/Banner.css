@@ -78,7 +78,7 @@
 
 .home-banner__title {
   margin: 0 0 24px;
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: var(--font-sans);
   font-size: clamp(2.4rem, 5vw, 4rem);
   font-weight: 700;
   line-height: 1.25;
@@ -89,7 +89,7 @@
 
 .home-banner__subtitle {
   margin: 0 0 40px;
-  font-family: "Lora", Georgia, serif;
+  font-family: var(--font-sans);
   font-size: clamp(0.95rem, 1.5vw, 1.1rem);
   line-height: 1.7;
   color: #dbeafe;

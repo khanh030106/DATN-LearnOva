@@ -50,7 +50,7 @@ const UserTrendChart = () => {
       y: {
         beginAtZero: true,
         ticks: {
-          font: { size: 12, family: "system-ui" },
+          font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
           color: "#a89a85",
           callback: (value) => (value / 1000).toFixed(1) + "k Users",
         },
@@ -61,7 +61,7 @@ const UserTrendChart = () => {
       },
       x: {
         ticks: {
-          font: { size: 12, family: "system-ui" },
+          font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
           color: "#8b7355",
         },
         grid: {

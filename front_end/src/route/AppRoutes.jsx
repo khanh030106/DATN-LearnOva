@@ -36,7 +36,7 @@ import AboutView from "../page/users/About/About.jsx";
 import ProfileViewProps from "../page/users/profile/profileView/profile.jsx";
 import CoursePage from "../page/users/course/CourseNew.jsx";
 import CourseDetail from "../page/users/course/CourseDetail/CourseDetail.jsx";
-import CourseDetaill from "../page/home/courses/CourseDetail.jsx";
+import CourseDetailHome from "../page/home/courses/CourseDetail.jsx";
 
 // Home Features
 import Cart from "../page/home/cart/Cart.jsx";
@@ -72,7 +72,10 @@ const App = () => {
           <Route path="courses" element={<Course />} />
           <Route path="revenue" element={<Revenue />} />
           <Route path="revenue/top-rankings" element={<RevenueTopRankings />} />
-          <Route path="revenue/transactions" element={<RevenueTransactions />} />
+          <Route
+            path="revenue/transactions"
+            element={<RevenueTransactions />}
+          />
           <Route path="reports" element={<Reports />} />
           <Route path="vouchers" element={<Vouchers />} />
           <Route path="vouchers/create" element={<VoucherCreate />} />
@@ -101,7 +104,7 @@ const App = () => {
 
           <Route
             path="/learnova/CoursesDetail/:id"
-            element={<CourseDetaill />}
+            element={<CourseDetailHome />}
           />
 
           <Route path="/learnova/intructors" element={<IntructorsPage />} />

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
 /* ── Reset ─────────────────────────── */
 *,
 *::before,
@@ -48,7 +50,7 @@
   --status-danger-soft: #fee2e2;
   --info-blue: #3b82f6;
 
-  --font-sans: "Inter", sans-serif;
+  --font-sans: poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-size-sm: 0.8rem;
   --font-size-base: 1rem;
 
@@ -64,6 +66,7 @@
 }
 
 /* ── Base typography ────────────────── */
+html,
 body {
   font-family: var(--font-sans);
   font-size: var(--font-size-base);
@@ -71,6 +74,18 @@ body {
   background: var(--color-bg);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+#root,
+#root *,
+#root *::before,
+#root *::after,
+button,
+input,
+textarea,
+select,
+option {
+  font-family: var(--font-sans) !important;
 }
 
 a {
@@ -82,5 +97,5 @@ img {
 }
 button {
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-sans);
 }

@@ -12,7 +12,7 @@
 .roles-header h2 {
     font-size: 42px;
     color: #00306e;
-    font-family: serif;
+    font-family: var(--font-sans);
     margin-bottom: 0;
 }
 

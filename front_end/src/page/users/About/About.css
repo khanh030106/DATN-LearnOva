@@ -18,7 +18,7 @@
 .about-main-container {
   background-color: var(--about-bg-cream);
   color: var(--about-text-dark);
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-sans);
   width: 100%;
   overflow-x: hidden;
   position: relative;
@@ -27,7 +27,7 @@
 
 /* Định dạng font chữ có chân cao cấp */
 .about-font-serif-premium {
-  font-family: "Playfair Display", "Georgia", serif;
+  font-family: var(--font-sans);
 }
 
 /* ================= ABOUT HERO SECTION ================= */
@@ -91,7 +91,7 @@
   margin: 0 auto;
   padding: 0 1.5rem;
   box-sizing: border-box;
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: var(--font-sans);
 }
 
 /* 1. Badge: Xuất hiện đầu tiên */
@@ -546,7 +546,7 @@
 .about-cta-box .about-text-italic-gold,
 .about-section-title .about-text-italic-gold {
   display: inline;
-  font-family: inherit;
+  font-family: var(--font-sans);
   font-style: normal;
   font-weight: 700;
   color: #1d4ed8 !important;

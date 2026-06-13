@@ -1,5 +1,5 @@
 .course-list-page {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     background: #faf8f5;
     min-height: 100vh;
 
@@ -198,10 +198,10 @@
 .hero-content h1 {
     font-size: 3rem;
     margin-bottom: 16px;
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: var(--font-sans);
 }
 
 .hero-content p {
     font-size: 1.2rem;
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: var(--font-sans);
 }

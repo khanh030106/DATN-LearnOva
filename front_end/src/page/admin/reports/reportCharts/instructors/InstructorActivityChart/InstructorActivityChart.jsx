@@ -38,11 +38,11 @@ const InstructorActivityChart = () => {
     scales: {
       y: {
         beginAtZero: true,
-        ticks: { color: "#8b7355", font: { size: 12, family: "system-ui" } },
+        ticks: { color: "#8b7355", font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } },
         grid: { color: "rgba(232, 190, 116, 0.15)", drawBorder: false },
       },
       x: {
-        ticks: { color: "#8b7355", font: { size: 12, family: "system-ui" } },
+        ticks: { color: "#8b7355", font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } },
         grid: { display: false },
       },
     },

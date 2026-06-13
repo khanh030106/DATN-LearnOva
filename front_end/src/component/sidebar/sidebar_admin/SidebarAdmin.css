@@ -66,7 +66,7 @@
     background 0.25s ease,
     color 0.25s ease,
     box-shadow 0.25s ease;
-  font-family: math, sans-serif;
+  font-family: var(--font-sans);
 }
 
 .sidebarAdminNavItem::before {
@@ -118,7 +118,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 17px;
-  font-family: math, sans-serif;
+  font-family: var(--font-sans);
   letter-spacing: 1.1px;
 }
 
@@ -143,7 +143,7 @@
   text-align: left;
   font-size: 0.95rem;
   font-weight: 900;
-  font-family: math, sans-serif;
+  font-family: var(--font-sans);
   text-decoration: none;
   cursor: pointer;
   transition:

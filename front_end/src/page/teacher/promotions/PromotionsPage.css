@@ -120,7 +120,7 @@
   margin: 0;
   overflow: hidden;
   color: #071a33;
-  font-family: math;
+  font-family: var(--font-sans);
   font-size: 1.05rem;
   font-weight: 800;
   line-height: 1.18;
@@ -223,7 +223,7 @@
 
 .teacher-promotion-modal__header h2 {
   color: #071a33;
-  font-family: math;
+  font-family: var(--font-sans);
   font-size: 1.35rem;
   font-weight: 800;
   line-height: 1.2;

@@ -106,7 +106,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 17px;
-  font-family: math;
+  font-family: var(--font-sans);
   letter-spacing: 1.1px;
 }
 
@@ -152,7 +152,7 @@
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 900;
-  font-family: math, sans-serif;
+  font-family: var(--font-sans);
 }
 
 .teacher-create svg {
@@ -200,7 +200,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-family: math;
+  font-family: var(--font-sans);
   font-size: 16px;
 }
 
@@ -210,7 +210,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 10px;
-  font-family: math;
+  font-family: var(--font-sans);
 }
 
 .teacher-workspace :where(
@@ -236,7 +236,7 @@
   button,
   a
 ) {
-  font-family: math;
+  font-family: var(--font-sans);
 }
 
 @media (max-width: 1080px) {
@@ -405,7 +405,7 @@
   .teacher-analytics-stat small
 ) {
   color: #0000ad !important;
-  font-family: math !important;
+  font-family: var(--font-sans);
   font-size: 21px !important;
   font-weight: 900 !important;
   line-height: 1.15;
@@ -469,7 +469,7 @@
   .teacher-revenue-metric strong,
   .teacher-analytics-stat strong
 ) {
-  font-family: math !important;
+  font-family: var(--font-sans);
   font-weight: 900 !important;
 }
 
