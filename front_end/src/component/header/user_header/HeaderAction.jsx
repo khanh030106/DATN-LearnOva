@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ShoppingCart } from "lucide-react";
+import { Globe2, ShoppingCart } from "lucide-react";
 
 const HeaderAction = () => {
   return (
@@ -11,6 +11,10 @@ const HeaderAction = () => {
       <Link to={"/learnova/auth/login"} className="header-action-login">
         Login
       </Link>
+
+      <button type="button" className="header-action-language" aria-label="Change language">
+        <Globe2 size={23} />
+      </button>
     </div>
   );
 };

@@ -7,11 +7,11 @@ const NavItems = [
   { name: "About us", path: "/learnova/about" },
 ];
 
-const NavMenu = () => {
+const NavMenu = ({ items = NavItems, className = "" }) => {
   return (
-    <nav className="nav-menu">
+    <nav className={`nav-menu ${className}`.trim()}>
       <ul className="nav-list">
-        {NavItems.map((item, index) => (
+        {items.map((item, index) => (
           <li key={index}>
             <NavLink
               to={item.path}
@@ -30,3 +30,4 @@ const NavMenu = () => {
 };
 
 export default NavMenu;
+export { NavItems };

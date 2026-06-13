@@ -16,7 +16,7 @@
   margin: 0 auto;
   padding: 0;
   display: grid;
-  grid-template-columns: auto auto minmax(360px, 460px) minmax(560px, 1fr) auto;
+  grid-template-columns: auto auto auto minmax(360px, 460px) minmax(430px, 1fr) auto;
   align-items: center;
   gap: 22px;
 }
@@ -25,6 +25,7 @@
 .user-logged-actions,
 .user-logged-search-area,
 .user-logged-home-shell,
+.user-logged-learning-shell,
 .user-logged-nav-list,
 .user-logged-avatar-button,
 .user-logged-nav-button,
@@ -67,7 +68,12 @@
 
 .user-logged-navigation-shell {
   min-width: 0;
-  order: 4;
+  order: 5;
+}
+
+.user-logged-learning-shell {
+  min-width: 0;
+  order: 3;
 }
 
 .user-logged-nav-list {
@@ -659,7 +665,7 @@
 @media (max-width: 1220px) {
   .user-logged-header-container {
     grid-template-columns:
-      auto auto minmax(280px, 420px) minmax(330px, auto)
+      auto auto auto minmax(260px, 380px) minmax(260px, auto)
       auto;
     gap: 14px;
     padding: 0 18px;
@@ -692,7 +698,7 @@
 
   .user-logged-navigation-shell {
     display: none;
-    order: 3;
+    order: 4;
     width: 100%;
     flex-basis: 100%;
   }
@@ -741,12 +747,16 @@
   }
 
   .user-logged-search-area {
-    order: 2;
+    order: 3;
     flex: 1;
     justify-content: stretch;
   }
 
   .user-logged-home-shell {
+    order: 2;
+  }
+
+  .user-logged-learning-shell {
     order: 2;
   }
 
@@ -776,7 +786,13 @@
     flex-basis: 100%;
   }
 
-  .user-logged-home-link {
+  .user-logged-learning-shell {
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .user-logged-home-link,
+  .user-logged-nav--learning .user-logged-nav-button {
     width: 100%;
     justify-content: center;
     border: 1px solid #bfdbfe;

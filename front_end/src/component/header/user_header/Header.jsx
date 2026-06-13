@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import logo from "../../../assets/LogoText.png";
-import NavMenu from "./NavMenu.jsx";
+import NavMenu, { NavItems } from "./NavMenu.jsx";
 import HeaderAction from "./HeaderAction.jsx";
 import { Search } from "lucide-react";
 import "./Header.css";
@@ -63,7 +63,7 @@ const Header = () => {
           <img src={logo} alt="logo" />
         </a>
 
-        <NavMenu />
+        <NavMenu items={NavItems.slice(0, 1)} className="nav-menu-home" />
 
         <form className="header-search">
           <Search size={18} className="header-search-icon" />
@@ -73,6 +73,8 @@ const Header = () => {
             className="header-search-input"
           />
         </form>
+
+        <NavMenu items={NavItems.slice(1)} className="nav-menu-secondary" />
 
         <HeaderAction />
       </div>

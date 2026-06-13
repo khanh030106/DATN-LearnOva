@@ -66,12 +66,16 @@ const UserLoggedHeader = () => {
           </Link>
         </div>
 
+        <div className="user-logged-learning-shell">
+          <UserLoggedNav onlyLearning learningItems={myLearningItems} />
+        </div>
+
         <div className="user-logged-search-area">
           <HeaderSearch suggestions={searchSuggestions} />
         </div>
 
         <div className={`user-logged-navigation-shell ${isMobileMenuOpen ? "is-open" : ""}`}>
-          <UserLoggedNav {...navigationData} />
+          <UserLoggedNav {...navigationData} showLearning={false} />
         </div>
 
         <div className="user-logged-actions">
