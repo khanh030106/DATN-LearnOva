@@ -4,7 +4,7 @@ import {Eye, EyeOff, Lock, Mail} from "lucide-react";
 import SocialLogin from "./SocialLogin.jsx";
 import {useAuth} from "../../../hook/UseAuth.jsx"
 
-const LoginForm = () => {
+const LoginForm = ({ onSwitchToRegister }) => {
     const navigate = useNavigate();
     const [form, setForm] = useState({email: '', password: '', remember: false});
     const [showPassword, setShowPassword] = useState(false);
@@ -40,18 +40,18 @@ const LoginForm = () => {
     }
 
     return (
-        <div className="login-form-container">
-            <div className="login">
+        <div className="auth-form-container">
+            <div className="auth-form-inner">
 
-                <div className="login-inner">
-                    <h2 className="login-inner-title">Login</h2>
-                    <p className="login-inner-sub">Welcome back to LearnOva!</p>
+                <div>
+                    <h2 className="auth-form-title">Welcome to LearnOva</h2>
+                    <p className="auth-form-subtitle">Kindly fill in your details below to create an account</p>
 
-                    <form className="login-form" onSubmit={handleSubmit}>
-                        <div className="form-field">
+                    <form className="auth-form" onSubmit={handleSubmit}>
+                        <div className="form-field form-field-large" style={{marginBottom: '40px'}}>
                             <label className="form-field-label">Email</label>
                             <div className="form-field-input">
-                                <Mail size={18} className="mail-icon"/>
+                                <Mail size={15} className="mail-icon"/>
                                 <input
                                     type="email" name="email"
                                     placeholder="youremail@gmail.com"
@@ -61,10 +61,10 @@ const LoginForm = () => {
                             </div>
                         </div>
 
-                        <div className="form-field">
+                        <div className="form-field" style={{marginBottom: '10px'}}>
                             <label className="form-field-label">Password</label>
                             <div className="form-field-input">
-                                <Lock size={18} className="mail-icon"/>
+                                <Lock size={15} className="mail-icon"/>
                                 <input
                                     type={showPassword ? 'text' : 'password'} name="password"
                                     placeholder="your password"
@@ -73,14 +73,14 @@ const LoginForm = () => {
                                 />
 
                                 <button type="button" className="show-password-button"
-                                    onClick={() => setShowPassword((show) => !show)}>
-                                    {showPassword ? <EyeOff size={18}/> : <Eye size={18}/> }
+                                        onClick={() => setShowPassword((show) => !show)}>
+                                    {showPassword ? <EyeOff size={18}/> : <Eye size={18}/>}
                                 </button>
                             </div>
                         </div>
 
                         {error && (
-                            <p className="login-error">
+                            <p className="auth-error">
                                 {error}
                             </p>
                         )}
@@ -97,15 +97,22 @@ const LoginForm = () => {
                             <Link to="/forgot-password" className="form-option-forgot">Forgot password?</Link>
                         </div>
 
-                        <button type="submit" className="btn-login">Log in</button>
+                        <button type="submit" className="auth-submit-button">Login</button>
+                        <p className="auth-switch-text">
+                            Don't have an account yet?{''}
+                            <button
+                                type="button"
+                                className="auth-switch-link auth-switch-button"
+                                onClick={onSwitchToRegister}
+                            >
+                                Sign up
+                            </button>
+                        </p>
                     </form>
 
                     <SocialLogin/>
 
-                    <p className="login-form-panel-register">
-                        Don't have an account yet?{''}
-                        <Link to="/register" className="register-link"> Sign up</Link>
-                    </p>
+
 
                 </div>
             </div>

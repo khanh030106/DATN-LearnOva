@@ -1,10 +1,10 @@
 .teacher-shell {
   height: 100vh;
   display: grid;
-  grid-template-columns: 250px minmax(0, 1fr);
+  grid-template-columns: 286px minmax(0, 1fr);
   overflow: hidden;
-  background: #f8fafc;
-  color: #0f172a;
+  background: #f6f8fc;
+  color: #26354f;
 }
 
 .teacher-sidebar {
@@ -13,30 +13,34 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 26px 14px 18px;
-  background: linear-gradient(180deg, #071a33 0%, #0b2545 100%);
-  border-right: 1px solid rgba(147, 197, 253, 0.14);
+  gap: 28px;
+  padding: 30px 22px 24px;
+  background: #ffffff;
+  border-right: 1px solid #edf2fa;
+  box-shadow: 16px 0 40px rgba(31, 49, 82, 0.04);
 }
 
 .teacher-brand {
-  display: block;
-  padding: 0 20px 18px;
-  border-bottom: 1px solid #ffffff4a;
+  display: flex;
+  align-items: center;
+  min-height: 58px;
+  padding: 0 10px 10px;
+  border-bottom: 0;
 }
 
 .teacher-brand img {
   display: block;
-  width: 178px;
+  width: 168px;
   max-width: 100%;
 }
 
 .teacher-brand small {
   display: block;
-  color: #ffffff;
-  font-size: 0.6rem;
-  font-weight: 900;
-  letter-spacing: 0.24em;
+  margin-top: 4px;
+  color: #8794a8;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
@@ -61,24 +65,25 @@
 
 .teacher-nav {
   display: grid;
-  gap: 10px;
+  gap: 16px;
 }
 
 .teacher-nav__link {
   position: relative;
-  min-height: 50px;
+  min-height: 54px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 18px;
   overflow: hidden;
-  padding: 0 18px 0 22px;
+  padding: 0 17px;
   border: 1px solid transparent;
-  border-radius: 8px;
-  color: rgba(255, 255, 255, 0.88);
+  border-radius: 6px;
+  color: #43536d;
   text-decoration: none;
-  font-size: 0.96rem;
-  font-weight: 800;
-  transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
 .teacher-nav__link::before {
@@ -97,7 +102,11 @@
 }
 
 .teacher-nav__link svg {
-  color: rgba(255, 255, 255, 0.82);
+  width: 21px;
+  height: 21px;
+  color: #8292a8;
+  stroke-width: 2.2;
+  flex: 0 0 auto;
 }
 
 .teacher-nav__link span {
@@ -105,20 +114,21 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 17px;
-  font-family: math;
-  letter-spacing: 1.1px;
+  font-size: 1.02rem;
+  font-family: inherit;
+  letter-spacing: 0;
 }
 
 .teacher-nav__link:hover,
 .teacher-nav__link--active {
-  color: #ffffff;
-  background: #002ea2c9;
+  color: #386cff;
+  background: #eef5ff;
+  box-shadow: 0 10px 24px rgba(56, 108, 255, 0.08);
 }
 
 .teacher-nav__link:hover svg,
 .teacher-nav__link--active svg {
-  color: #ffffff;
+  color: #386cff;
 }
 
 .teacher-nav__link--active::before {
@@ -132,19 +142,27 @@
 }
 
 .teacher-create {
-  min-height: 50px;
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
   margin-top: auto;
-  border-radius: 10px;
-  background: #5440ec;
+  border-radius: 8px;
+  background: #386cff;
   color: #ffffff;
   text-decoration: none;
   font-size: 0.95rem;
-  font-weight: 900;
-  font-family: math, sans-serif;
+  font-weight: 800;
+  font-family: inherit;
+  box-shadow: 0 12px 28px rgba(56, 108, 255, 0.22);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.teacher-create:hover {
+  background: #2459ef;
+  box-shadow: 0 14px 30px rgba(56, 108, 255, 0.28);
+  transform: translateY(-1px);
 }
 
 .teacher-create svg {
@@ -157,27 +175,29 @@
   align-items: center;
   gap: 12px;
   padding: 18px 10px 0;
-  border-top: 1px solid rgba(147, 197, 253, 0.22);
+  border-top: 1px solid #eef2f8;
 }
 
 .teacher-sidebar__profile img {
-  width: 48px;
-  height: 48px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   object-fit: cover;
+  box-shadow: 0 0 0 3px #eef5ff;
 }
 
 .teacher-sidebar__profile strong {
   display: block;
-  color: #ffffff;
+  color: #26354f;
   font-size: 0.92rem;
   line-height: 1.2;
+  font-weight: 800;
 }
 
 .teacher-sidebar__profile small {
   display: block;
   margin-top: 3px;
-  color: #dbeafe;
+  color: #8292a8;
   font-size: 0.78rem;
   font-weight: 700;
 }
@@ -208,7 +228,7 @@
   }
 
   .teacher-sidebar {
-    padding-inline: 14px;
+    padding-inline: 16px;
   }
 
   .teacher-brand div,
@@ -249,6 +269,7 @@
 
   .teacher-nav {
     grid-template-columns: repeat(4, minmax(54px, 1fr));
+    gap: 10px;
   }
 
   .teacher-main {
