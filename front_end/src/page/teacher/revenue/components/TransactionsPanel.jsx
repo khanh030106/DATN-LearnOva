@@ -1,9 +1,10 @@
 const TransactionsPanel = ({ transactions }) => (
-  <article className="teacher-revenue-panel teacher-revenue-transactions">
-    <header className="teacher-revenue-panel__header">
+  <section className="teacher-revenue-panel-wrap">
+    <header className="teacher-revenue-panel-title">
       <h2>Latest transactions</h2>
     </header>
 
+    <article className="teacher-revenue-panel teacher-revenue-transactions">
     <table>
       <thead>
         <tr>
@@ -31,7 +32,8 @@ const TransactionsPanel = ({ transactions }) => (
       </tbody>
     </table>
     <button type="button">View all transactions</button>
-  </article>
+    </article>
+  </section>
 );
 
 export default TransactionsPanel;

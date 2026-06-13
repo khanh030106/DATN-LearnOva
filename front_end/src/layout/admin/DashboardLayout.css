@@ -19,6 +19,30 @@
   padding: 0;
 }
 
+.adminLayoutMain table thead,
+.adminLayoutMain table thead tr,
+.adminLayoutMain :where(
+  .userManagementUsersTableHeader,
+  .userRowTableHeader
+) {
+  background: #eff6ff !important;
+}
+
+.adminLayoutMain table thead th {
+  background: #eff6ff !important;
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+.adminLayoutMain :where(
+  .userManagementUsersTableHeader > span,
+  .userRowTableHeader > span
+) {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+
 @media (max-width: 768px) {
   .adminLayout {
     flex-direction: column;

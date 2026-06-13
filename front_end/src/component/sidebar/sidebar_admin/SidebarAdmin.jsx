@@ -1,10 +1,8 @@
 import { NavLink } from "react-router-dom";
 import {
-  BarChart3,
   BookOpen,
   CircleDollarSign,
   GraduationCap,
-  HelpCircle,
   LayoutDashboard,
   LogOut,
   Ticket,
@@ -66,12 +64,6 @@ const menuItems = [
 ];
 
 const footerActions = [
-  {
-    id: "help",
-    label: "Help",
-    icon: HelpCircle,
-    path: "/learnova/admin/help",
-  },
   {
     id: "logout",
     label: "Logout",

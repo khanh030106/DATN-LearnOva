@@ -78,10 +78,18 @@
   transition: width 0.25s ease;
 }
 
-.sidebarAdminNavItem:hover,
+.sidebarAdminNavItem:hover {
+  color: #ffffff;
+  margin-right: -14px;
+  border-radius: 8px 0 0 8px;
+  background: rgba(30, 64, 175, 0.72);
+}
+
 .sidebarAdminNavItemActive {
   color: #ffffff;
-  background: #002ea2c9;
+  margin-right: -14px;
+  border-radius: 8px 0 0 8px;
+  background: #1239a8;
 }
 
 .sidebarAdminNavItem:hover::before,

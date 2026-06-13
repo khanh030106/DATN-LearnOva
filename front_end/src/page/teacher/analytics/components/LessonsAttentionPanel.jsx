@@ -1,14 +1,16 @@
 import { Info, TriangleAlert } from "lucide-react";
 
 const LessonsAttentionPanel = ({ items }) => (
-  <article className="teacher-analytics-panel teacher-analytics-attention">
-    <header className="teacher-analytics-panel__header">
+  <section className="teacher-analytics-panel-wrap">
+    <header className="teacher-analytics-panel-title">
       <h2>
         Lessons Need Attention
         <Info size={15} />
       </h2>
       <button type="button">View all</button>
     </header>
+
+    <article className="teacher-analytics-panel teacher-analytics-attention">
     <div className="teacher-analytics-attention-list">
       {items.map((item) => (
         <button key={item.title} type="button" className={`teacher-analytics-attention-item teacher-analytics-attention-item--${item.tone}`}>
@@ -27,7 +29,8 @@ const LessonsAttentionPanel = ({ items }) => (
         </button>
       ))}
     </div>
-  </article>
+    </article>
+  </section>
 );
 
 export default LessonsAttentionPanel;

@@ -12,8 +12,8 @@ const RevenueChartPanel = ({ chartLabels, currentChart, previousChart, highlight
   const previousLine = buildLinePoints(previousChart);
 
   return (
-    <article className="teacher-revenue-panel teacher-revenue-chart-panel">
-      <header className="teacher-revenue-panel__header">
+    <section className="teacher-revenue-panel-wrap">
+      <header className="teacher-revenue-panel-title">
         <h2>Revenue in the last 30 days</h2>
         <select aria-label="Chart grouping" defaultValue="day">
           <option value="day">Daily</option>
@@ -21,6 +21,7 @@ const RevenueChartPanel = ({ chartLabels, currentChart, previousChart, highlight
         </select>
       </header>
 
+      <article className="teacher-revenue-panel teacher-revenue-chart-panel">
       <div className="teacher-revenue-chart-shell">
         <div className="teacher-revenue-y-axis" aria-hidden="true">
           <span>50M</span>
@@ -68,7 +69,8 @@ const RevenueChartPanel = ({ chartLabels, currentChart, previousChart, highlight
           );
         })}
       </footer>
-    </article>
+      </article>
+    </section>
   );
 };
 

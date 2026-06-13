@@ -1,13 +1,15 @@
 import { Info } from "lucide-react";
 
 const StudentEngagementPanel = ({ items }) => (
-  <article className="teacher-analytics-panel teacher-analytics-engagement">
-    <header className="teacher-analytics-panel__header">
+  <section className="teacher-analytics-panel-wrap">
+    <header className="teacher-analytics-panel-title">
       <h2>
         Student Engagement
         <Info size={15} />
       </h2>
     </header>
+
+    <article className="teacher-analytics-panel teacher-analytics-engagement">
     <div className="teacher-analytics-engagement-list">
       {items.map((item) => {
         const Icon = item.icon;
@@ -30,7 +32,8 @@ const StudentEngagementPanel = ({ items }) => (
         );
       })}
     </div>
-  </article>
+    </article>
+  </section>
 );
 
 export default StudentEngagementPanel;

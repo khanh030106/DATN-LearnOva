@@ -1,10 +1,11 @@
 const TopRevenueCoursesPanel = ({ courses }) => (
-  <article className="teacher-revenue-panel teacher-revenue-top-courses">
-    <header className="teacher-revenue-panel__header">
+  <section className="teacher-revenue-panel-wrap">
+    <header className="teacher-revenue-panel-title">
       <h2>Top revenue courses</h2>
       <button type="button">View all</button>
     </header>
 
+    <article className="teacher-revenue-panel teacher-revenue-top-courses">
     <div className="teacher-revenue-course-list">
       {courses.map((course) => (
         <div key={course.title} className="teacher-revenue-course-row">
@@ -25,7 +26,8 @@ const TopRevenueCoursesPanel = ({ courses }) => (
         </div>
       ))}
     </div>
-  </article>
+    </article>
+  </section>
 );
 
 export default TopRevenueCoursesPanel;
