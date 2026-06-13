@@ -46,7 +46,7 @@
 }
 
 .user-logged-logo img {
-  height: 42px;
+  height: 38px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -158,11 +158,20 @@
 
 .user-logged-nav-item > .user-logged-dropdown:not(.user-logged-mega-menu) {
   top: calc(100% + 15px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px) scale(0.98);
 }
 
 .user-logged-nav-item
   > .user-logged-dropdown:not(.user-logged-mega-menu)::before {
   height: 18px;
+}
+
+.user-logged-nav-item:hover > .user-logged-dropdown:not(.user-logged-mega-menu),
+.user-logged-nav-item:focus-within
+  > .user-logged-dropdown:not(.user-logged-mega-menu),
+.user-logged-nav-item.is-open > .user-logged-dropdown:not(.user-logged-mega-menu) {
+  transform: translateX(-50%) translateY(0) scale(1);
 }
 
 .user-logged-nav-item:hover > .user-logged-dropdown,
@@ -435,6 +444,7 @@
   color: #0f172a;
   background: #ffffff;
   cursor: pointer;
+  text-decoration: none;
   transition:
     color 0.2s ease,
     border-color 0.2s ease,
