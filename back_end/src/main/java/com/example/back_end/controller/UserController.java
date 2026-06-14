@@ -23,11 +23,7 @@ public class UserController {
             Authentication authentication
     ) {
 
-        System.out.println("ME ENDPOINT HIT");
-
-
         String email = authentication.getName();
-
         return ResponseEntity.ok(
                 authService.getCurrentUser(email)
         );
