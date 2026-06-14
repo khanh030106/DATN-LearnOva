@@ -110,9 +110,9 @@
 
 .teacher-courses-summary-card small {
   display: block;
-  color: #475569;
-  font-size: 0.82rem;
-  font-weight: 800;
+  color: #424242;
+  font-size: 18px;
+  font-weight: 600 !important;
 }
 
 .teacher-courses-summary-card strong {
@@ -120,8 +120,7 @@
   margin-top: 7px;
   color: #071a33;
   font-family: math;
-  font-size: clamp(1.45rem, 2vw, 1.85rem);
-  font-weight: 800;
+  font-size: 32px;
   line-height: 1;
 }
 
@@ -258,6 +257,7 @@
   min-height: 44px;
   padding: 0 15px;
   color: #475569;
+  background: #f1f7ff;
   font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.08em;
