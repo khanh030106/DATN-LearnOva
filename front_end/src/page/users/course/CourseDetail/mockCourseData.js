@@ -169,3 +169,217 @@ export const qaData = [
         ]
     }
 ];
+export const quizData = {
+    id: 1,
+    title: "Spring Boot Quiz",
+
+    duration: 20 * 60,
+
+    questions: [
+        {
+            id: 1,
+            question: "Trong Spring Boot, annotation nào được dùng để đánh dấu một class là Controller?",
+            options: ["@Service", "@Repository", "@RestController", "@Component"],
+            correctAnswer: 2
+        },
+        {
+            id: 2,
+            question: "Annotation nào dùng để inject dependency?",
+            options: ["@Autowired", "@Bean", "@SpringBootApplication", "@RequestBody"],
+            correctAnswer: 0
+        },
+        {
+            id: 3,
+            question: "Spring Boot chạy mặc định trên port nào?",
+            options: ["3000", "3306", "8080", "5000"],
+            correctAnswer: 2
+        },
+        {
+            id: 4,
+            question: "File cấu hình mặc định của Spring Boot là gì?",
+            options: [
+                "application.properties",
+                "config.xml",
+                "spring.json",
+                "application.js"
+            ],
+            correctAnswer: 0
+        },
+        {
+            id: 5,
+            question: "Annotation nào dùng để đánh dấu một Service?",
+            options: [
+                "@Repository",
+                "@Controller",
+                "@Service",
+                "@Bean"
+            ],
+            correctAnswer: 2
+        },
+        {
+            id: 6,
+            question: "Spring Data JPA được sử dụng để làm gì?",
+            options: [
+                "Quản lý giao diện",
+                "Truy cập cơ sở dữ liệu",
+                "Xử lý API",
+                "Xác thực người dùng"
+            ],
+            correctAnswer: 1
+        },
+        {
+            id: 7,
+            question: "Annotation nào dùng để ánh xạ HTTP GET?",
+            options: [
+                "@PostMapping",
+                "@RequestMapping",
+                "@GetMapping",
+                "@PutMapping"
+            ],
+            correctAnswer: 2
+        },
+        {
+            id: 8,
+            question: "Annotation nào dùng để lấy dữ liệu từ URL Path?",
+            options: [
+                "@RequestParam",
+                "@PathVariable",
+                "@RequestBody",
+                "@Param"
+            ],
+            correctAnswer: 1
+        },
+        {
+            id: 9,
+            question: "Dependency quản lý project phổ biến nhất trong Spring Boot là?",
+            options: [
+                "Gradle",
+                "Maven",
+                "NPM",
+                "Composer"
+            ],
+            correctAnswer: 1
+        },
+        {
+            id: 10,
+            question: "Annotation nào đánh dấu class là Entity?",
+            options: [
+                "@Table",
+                "@Entity",
+                "@Model",
+                "@Data"
+            ],
+            correctAnswer: 1
+        },
+        {
+            id: 11,
+            question: "Annotation nào dùng để ánh xạ HTTP POST?",
+            options: [
+                "@PostMapping",
+                "@GetMapping",
+                "@RequestBody",
+                "@Controller"
+            ],
+            correctAnswer: 0
+        },
+        {
+            id: 12,
+            question: "Spring Boot được xây dựng dựa trên framework nào?",
+            options: [
+                "Hibernate",
+                "Java EE",
+                "Spring Framework",
+                "Struts"
+            ],
+            correctAnswer: 2
+        },
+        {
+            id: 13,
+            question: "Annotation nào dùng để nhận dữ liệu JSON từ client?",
+            options: [
+                "@RequestParam",
+                "@PathVariable",
+                "@RequestBody",
+                "@ResponseBody"
+            ],
+            correctAnswer: 2
+        },
+        {
+            id: 14,
+            question: "Annotation nào dùng để trả về JSON trực tiếp?",
+            options: [
+                "@Controller",
+                "@Repository",
+                "@RestController",
+                "@Configuration"
+            ],
+            correctAnswer: 2
+        },
+        {
+            id: 15,
+            question: "Spring Boot Starter giúp gì?",
+            options: [
+                "Quản lý dependency dễ dàng",
+                "Tăng tốc CPU",
+                "Tạo Database",
+                "Thiết kế UI"
+            ],
+            correctAnswer: 0
+        },
+        {
+            id: 16,
+            question: "Annotation nào dùng để đánh dấu Repository?",
+            options: [
+                "@Controller",
+                "@Service",
+                "@Repository",
+                "@Bean"
+            ],
+            correctAnswer: 2
+        },
+        {
+            id: 17,
+            question: "Spring Security dùng để làm gì?",
+            options: [
+                "Quản lý giao diện",
+                "Bảo mật và xác thực",
+                "Truy vấn Database",
+                "Gửi Email"
+            ],
+            correctAnswer: 1
+        },
+        {
+            id: 18,
+            question: "Annotation nào dùng để định nghĩa Bean thủ công?",
+            options: [
+                "@Autowired",
+                "@Bean",
+                "@Entity",
+                "@RestController"
+            ],
+            correctAnswer: 1
+        },
+        {
+            id: 19,
+            question: "Annotation nào dùng để cấu hình Spring?",
+            options: [
+                "@Configuration",
+                "@Entity",
+                "@PathVariable",
+                "@GetMapping"
+            ],
+            correctAnswer: 0
+        },
+        {
+            id: 20,
+            question: "Annotation nào là điểm khởi chạy của Spring Boot Application?",
+            options: [
+                "@SpringBootApplication",
+                "@EnableBoot",
+                "@RunApplication",
+                "@SpringMain"
+            ],
+            correctAnswer: 0
+        }
+    ]
+};

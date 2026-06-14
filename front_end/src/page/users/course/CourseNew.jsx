@@ -622,7 +622,7 @@ function CoursesPage() {
                                             <span className="rating-label-co">Instructor Rankings</span>
                                         </div>
 
-                                        <div className="instructor-stats">
+                                        <div className="instructor-stats-co">
                                             <div className="stat-item">
                                                 <div className="stat-icon">👥</div>
                                                 <div className="stat-value">

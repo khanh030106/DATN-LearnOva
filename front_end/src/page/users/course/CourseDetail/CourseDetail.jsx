@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './CourseDetail.css';
-import { MdStar } from 'react-icons/md';
-import { FaPlay, FaVolumeUp, FaClosedCaptioning } from 'react-icons/fa';
-import { IoSettings, IoExpand } from 'react-icons/io5';
-import { ChevronDown } from 'lucide-react';
+import {MdStar} from 'react-icons/md';
+import {FaClipboardCheck} from "react-icons/fa";
+import {FaPlay, FaVolumeUp, FaClosedCaptioning} from 'react-icons/fa';
+import {IoSettings, IoExpand} from 'react-icons/io5';
+import {ChevronDown} from 'lucide-react';
 import Header from "../../../../component/header/user_header/Header.jsx";
 import Footer from "../../../../component/footer/footer-courseDetail/footer-courseDetail.jsx";
-import { FaCheckCircle } from "react-icons/fa";
-import { FaGraduationCap } from "react-icons/fa";
-import { FaSearch } from "react-icons/fa";
-import { FaRegThumbsUp } from "react-icons/fa";
-import { FaRegCommentDots } from "react-icons/fa";
-import { FaThumbsUp, FaThumbsDown } from "react-icons/fa";
+import {FaCheckCircle} from "react-icons/fa";
+import {FaGraduationCap} from "react-icons/fa";
+import {FaSearch} from "react-icons/fa";
+import {FaRegThumbsUp} from "react-icons/fa";
+import {FaRegCommentDots} from "react-icons/fa";
+import {FaThumbsUp, FaThumbsDown} from "react-icons/fa";
 
-import { FaUserGraduate } from "react-icons/fa";
-import { FiSearch } from "react-icons/fi";
+import {FaUserGraduate} from "react-icons/fa";
+import {FiSearch} from "react-icons/fi";
 import {
     qaData,
     course,
@@ -28,11 +29,14 @@ import OverviewTab from "./OverviewTab.jsx";
 import QATab from "./QATab.jsx";
 import ReviewsTab from "./Review.jsx";
 import LearnovaAI from "../../../home/AI/AI.jsx";
+import {FaPlayCircle, FaClock} from "react-icons/fa";
+import QuizTab from "./QuizPage.jsx";
+import QuizPage from "./QuizPage.jsx";
 
 
 function CourseDetail() {
     const [activeTab, setActiveTab] = useState('overview');
-    const [expandedSection, setExpandedSection] = useState(1);
+    const [expandedSections, setExpandedSections] = useState([1]);
     const [activeVideo, setActiveVideo] = useState(1);
     const [expandedDescription, setExpandedDescription] = useState(false);
 
@@ -55,7 +59,7 @@ function CourseDetail() {
     };
 
     const toggleHelpful = (id) => {
-        setHelpfulMap(prev => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
+        setHelpfulMap(prev => ({...prev, [id]: (prev[id] || 0) + 1}));
     };
     const [selectedQuestion, setSelectedQuestion] = useState(null);
     const [replyText, setReplyText] = useState('');
@@ -73,6 +77,13 @@ function CourseDetail() {
         setReplyText('');
     };
     const [showQuestionForm, setShowQuestionForm] = useState(false);
+    const toggleSection = (sectionId) => {
+        setExpandedSections((prev) =>
+            prev.includes(sectionId)
+                ? prev.filter((id) => id !== sectionId)
+                : [...prev, sectionId]
+        );
+    };
 
 
     return (
@@ -86,7 +97,7 @@ function CourseDetail() {
                 {/* LEFT SIDE - 70% */}
                 <div className="left-side">
                     {/* VIDEO PLAYER */}
-                      <CourseVideoPlayer/>
+                    <CourseVideoPlayer/>
 
                     {/* TABS */}
                     <div className="tabs-container">
@@ -109,6 +120,12 @@ function CourseDetail() {
                                 onClick={() => setActiveTab('reviews')}
                             >
                                 Reviews
+                            </button>
+                            <button
+                                className={`tab-btn ${activeTab === 'quiz' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('quiz')}
+                            >
+                                Quiz
                             </button>
 
                         </div>
@@ -159,11 +176,13 @@ function CourseDetail() {
                             />
                         )}
                     </div>
-
+                    {activeTab === "quiz" && (
+                        <QuizPage/>
+                    )}
 
 
                     <div className="footer-wrapper">
-                        <Footer />
+                        <Footer/>
                     </div>
                 </div>
 
@@ -176,36 +195,90 @@ function CourseDetail() {
                             <div key={section.id} className="curriculum-section">
                                 <div
                                     className="section-header-qa"
-                                    onClick={() => setExpandedSection(expandedSection === section.id ? null : section.id)}
+                                    onClick={() => toggleSection(section.id)}
                                 >
                                     <ChevronDown
                                         size={18}
-                                        className={`chevron ${expandedSection === section.id ? 'open' : ''}`}
+                                        className={`chevron ${
+                                            expandedSections.includes(section.id) ? 'open' : ''
+                                        }`}
                                     />
-                                    <div className="section-title">
+                                    <div className="section-title-co">
                                         <strong>{section.id}. {section.title}</strong>
-                                        <p>{section.lectures} lectures • {section.duration}</p>
+                                        <div className="section-meta">
+                                        <span>
+                                            <FaPlayCircle/>
+                                            {section.lectures} Lessons
+                                        </span>
+
+                                            <span>
+                                            <FaClock/>{section.duration}
+                                        </span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                {expandedSection === section.id && (
+                                {expandedSections.includes(section.id) && (
                                     <div className="lessons-sidebar">
-                                        {section.lessons.map(lesson => (
+                                        {section.lessons.map((lesson) => (
                                             <div
                                                 key={lesson.id}
-                                                className={`lesson-item ${activeVideo === lesson.id ? 'active' : ''}`}
+                                                className={`lesson-item ${
+                                                    activeVideo === lesson.id ? "active" : ""
+                                                }`}
                                                 onClick={() => setActiveVideo(lesson.id)}
                                             >
                                                 <div className="lesson-check">
-                                                    <input type="checkbox" checked={lesson.watched} readOnly />
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={lesson.watched}
+                                                        readOnly
+                                                    />
                                                 </div>
+
                                                 <div className="lesson-info">
-                                                    <FaPlay className="lesson-icon" />
-                                                    <span className="lesson-name">{lesson.title}</span>
+                                                    <FaPlay className="lesson-icon"/>
+                                                    <span className="lesson-name">
+                                                        {lesson.title}
+                                                    </span>
                                                 </div>
-                                                <span className="lesson-time">{lesson.duration}</span>
+
+                                                <span className="lesson-time">
+                                                    {lesson.duration}
+                                                </span>
                                             </div>
                                         ))}
+
+                                        {/* Quiz cuối chương */}
+                                        <div
+                                            className="quiz-item"
+                                            onClick={() => {
+                                                setActiveTab("quiz");
+
+                                                setTimeout(() => {
+                                                    document
+                                                        .querySelector(".tabs-container")
+                                                        ?.scrollIntoView({
+                                                            behavior: "smooth",
+                                                            block: "start"
+                                                        });
+                                                }, 100);
+                                            }}
+                                        >
+                                            <div className="quiz-icon-wrapper">
+                                                <FaClipboardCheck className="quiz-icon"/>
+                                            </div>
+
+                                            <div className="quiz-content">
+                                                <span className="quiz-title">
+                                                    Quiz
+                                                </span>
+
+                                                <span className="quiz-subtitle-co">
+                                                    10 Questions
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 )}
                             </div>
@@ -214,7 +287,7 @@ function CourseDetail() {
                 </aside>
             </div>
             <div className="chatbot-fixed">
-                <LearnovaAI />
+                <LearnovaAI/>
             </div>
         </div>
     );
