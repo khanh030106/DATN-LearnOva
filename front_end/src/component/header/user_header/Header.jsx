@@ -65,14 +65,7 @@ const Header = () => {
 
         <NavMenu />
 
-        <form className="header-search">
-          <Search size={18} className="header-search-icon" />
-          <input
-            type="text"
-            placeholder="Search courses..."
-            className="header-search-input"
-          />
-        </form>
+
 
         <HeaderAction />
       </div>

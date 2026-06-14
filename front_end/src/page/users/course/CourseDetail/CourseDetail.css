@@ -11,6 +11,84 @@
     padding: 0;
     box-sizing: border-box;
 }
+/* Quiz cuối chương */
+.quiz-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-top: 12px;
+    padding: 12px 14px;
+
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.quiz-item:hover {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    /*transform: translateY(-2px);*/
+}
+
+.quiz-icon-wrapper {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #dbeafe;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.quiz-icon {
+    font-size: 18px;
+    color: #cfdcec;
+}
+
+.quiz-content {
+    display: flex;
+    /*flex-direction: column;*/
+    flex: 1;
+}
+
+.quiz-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.quiz-subtitle-co {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 2px;
+    margin-left: 230px;
+}
+.section-meta {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+
+    font-size: 12px;
+    color: #64748b;
+}
+
+.section-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.section-meta svg {
+    font-size: 12px;
+    color: #9bb9e3;
+}
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
@@ -128,13 +206,12 @@ body {
     flex: 3;
     display: flex;
     flex-direction: column;
+
     background: #f9fafb;
     border-left: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    max-height: 100vh;
+
+    height: calc(100vh - 70px);
     overflow-y: auto;
-    align-self: flex-start;
 }
 
 /* ==================== VIDEO PLAYER ==================== */
@@ -1785,9 +1862,9 @@ hr {
     gap: 0;
 }
 
-.curriculum-section {
-    border-bottom: 1px solid var(--border-color);
-}
+/*.curriculum-section {*/
+/*    border-bottom: 1px solid var(--border-color);*/
+/*}*/
 
 .section-header-qa {
     padding: 0.75rem 1rem; /* Thu nhỏ padding dọc từ 1rem xuống 0.75rem cho khít */
@@ -1818,15 +1895,16 @@ hr {
     flex: 1;
 }
 
-.section-title strong {
+.section-title-co strong {
     display: block;
     font-size: 0.9rem;
     color: var(--primary-dark);
     margin-bottom: 0.15rem;
     word-break: break-word;
+    font-weight: 100;
 }
 
-.section-title p {
+.section-title-co p {
     font-size: 0.8rem;
     color: var(--text-light);
     margin: 0;
@@ -1838,6 +1916,7 @@ hr {
     display: flex;
     flex-direction: column;
     /*margin-top: -25px;*/
+    margin-left: 30px;
 }
 
 .lesson-item {
@@ -1886,7 +1965,7 @@ hr {
 }
 
 .lesson-name {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--primary-dark);
     word-break: break-word;
     white-space: normal;
@@ -1978,4 +2057,24 @@ hr {
     .footer-content {
         grid-template-columns: 1fr;
     }
+}
+.quiz-item {
+    background: #f8faff;
+    border: 1px solid #dbe7ff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quiz-item:hover {
+    background: #eef4ff;
+}
+
+.quiz-item.active {
+    background: #e8f0ff;
+    border-left: 4px solid #2563eb;
+}
+
+.quiz-icon {
+    color: #2563eb;
+    font-size: 16px;
 }

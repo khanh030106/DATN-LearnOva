@@ -329,13 +329,18 @@ body {
 /* Forms */
 .profile-form {
   background: var(--bg-white);
-  border-radius: 6px;
+  border-radius: 56px;
   padding: 32px 48px;
   border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-sm);
+  box-shadow:
+          0 10px 25px rgba(0, 0, 0, 0.08),
+          0 20px 48px rgba(0, 0, 0, 0.12);
+
   overflow: hidden;
   position: relative;
   animation: slideInFromRight 0.3s ease-out;
+  width: 70%;
+  margin-left: 200px;
 }
 
 .form-grid {

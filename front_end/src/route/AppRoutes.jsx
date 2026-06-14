@@ -38,6 +38,7 @@ const App = () => {
             <Routes>
 
                 <Route path="/learnova/auth/login" element={<AuthPage/>}/>
+                <Route path="/learnova/user/CoursesDetail" element={<CourseDetail/>}/>
 
                 <Route element={<HomeLayout/>}>
                     <Route path="/learnova/home" element={<Home/>}/>
@@ -73,7 +74,7 @@ const App = () => {
                 <Route element={<UserLayout/>}>
                     <Route path="/learnova/courses" element={<CoursePage/>}/>
                     <Route path="/learnova/cart" element={<Cart/>}/>
-                    <Route path="/learnova/user/CoursesDetail" element={<CourseDetail/>}/>
+
                     <Route path="/learnova/CoursesDetail/:id" element={<CourseDetaill/>}/>
                     <Route path="/learnova/intructors" element={<InstructorsPage/>}/>
                     <Route path="/learnova/intructorDetail" element={<InstructorDetail/>}/>

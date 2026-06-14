@@ -22,10 +22,13 @@ import CartDropdown from "./components/CartDropdown.jsx";
 import HeaderSearch from "./components/HeaderSearch.jsx";
 import NotificationDropdown from "./components/NotificationDropdown.jsx";
 import UserLoggedNav from "./components/UserLoggedNav.jsx";
+import { ChevronDown } from "lucide-react";
+import CoursesMegaMenu from "./components/CoursesMegaMenu";
 import "./UserLoggedHeader.css";
 
 const UserLoggedHeader = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showCourses, setShowCourses] = useState(false);
 
   const navigationData = useMemo(
     () => ({
@@ -64,6 +67,29 @@ const UserLoggedHeader = () => {
           <Link to="/learnova/home" className="user-logged-home-link">
             Home
           </Link>
+
+          <div
+              className={`user-logged-nav-item user-logged-nav-item--mega ${
+                  showCourses ? "is-open" : ""
+              }`}
+              onMouseEnter={() => setShowCourses(true)}
+              onMouseLeave={() => setShowCourses(false)}
+          >
+            <button
+                type="button"
+                className="user-logged-nav-button"
+            >
+              Courses
+            </button>
+
+            <CoursesMegaMenu
+                categories={courseCategories}
+                levels={levelFilters}
+                prices={priceFilters}
+                durations={durationFilters}
+                ratings={ratingFilters}
+            />
+          </div>
         </div>
 
         <div className="user-logged-search-area">

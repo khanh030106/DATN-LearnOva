@@ -2,11 +2,18 @@ import React, { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./CourseDetail.css";
 import LearnovaAI from "../AI/AI.jsx";
-
+import { FaStar, FaRegStar } from "react-icons/fa";
 import { FaBookmark, FaLink } from "react-icons/fa";
-import { FaCode, FaReact, FaCloud, FaDatabase, FaLock, FaRocket } from "react-icons/fa";
+import { FaPhoneAlt } from "react-icons/fa";
 import {
-  FaStar,
+  FaCode,
+  FaReact,
+  FaCloud,
+  FaDatabase,
+  FaLock,
+  FaRocket,
+} from "react-icons/fa";
+import {
   FaUsers,
   FaBook,
   FaClock,
@@ -20,6 +27,7 @@ import {
   FaInfinity,
   FaMobileAlt,
 } from "react-icons/fa";
+import { FaLightbulb, FaBullseye } from "react-icons/fa";
 
 const courses = [
   {
@@ -48,12 +56,12 @@ const courses = [
       "Real-world Projects",
     ],
     includes: [
-  { icon: <FaReact />, text: "32 hours on-demand video" },
-  { icon: <FaReact />, text: "128 downloadable resources" },
-  { icon: <FaReact />, text: "Full lifetime access" },
-  { icon: <FaReact />, text: "Access on mobile and TV" },
-  { icon: <FaReact />, text: "Certificate of completion" },
-],
+      { icon: <FaReact />, text: "32 hours on-demand video" },
+      { icon: <FaReact />, text: "128 downloadable resources" },
+      { icon: <FaReact />, text: "Full lifetime access" },
+      { icon: <FaReact />, text: "Access on mobile and TV" },
+      { icon: <FaReact />, text: "Certificate of completion" },
+    ],
     gallery: [
       "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
@@ -65,12 +73,36 @@ const courses = [
 
 const Curriculum = () => {
   const highlights = [
-    { icon: <FaCode />, title: "Build responsive web interfaces", subtitle: "with HTML, CSS and JavaScript" },
-    { icon: <FaReact />, title: "Create modern UIs with React", subtitle: "components and hooks" },
-    { icon: <FaCloud />, title: "Work with RESTful APIs", subtitle: "and handle data effectively" },
-    { icon: <FaDatabase />, title: "Design and manage databases", subtitle: "using PostgreSQL" },
-    { icon: <FaLock />, title: "Implement authentication", subtitle: "and authorization (JWT)" },
-    { icon: <FaRocket />, title: "Deploy applications", subtitle: "to cloud platforms with confidence" },
+    {
+      icon: <FaCode />,
+      title: "Build responsive web interfaces",
+      subtitle: "with HTML, CSS and JavaScript",
+    },
+    {
+      icon: <FaReact />,
+      title: "Create modern UIs with React",
+      subtitle: "components and hooks",
+    },
+    {
+      icon: <FaCloud />,
+      title: "Work with RESTful APIs",
+      subtitle: "and handle data effectively",
+    },
+    {
+      icon: <FaDatabase />,
+      title: "Design and manage databases",
+      subtitle: "using PostgreSQL",
+    },
+    {
+      icon: <FaLock />,
+      title: "Implement authentication",
+      subtitle: "and authorization (JWT)",
+    },
+    {
+      icon: <FaRocket />,
+      title: "Deploy applications",
+      subtitle: "to cloud platforms with confidence",
+    },
   ];
 
   const roadmap = [
@@ -84,7 +116,18 @@ const Curriculum = () => {
     { title: "Real-world Project", lessons: 3, duration: "2h 00m" },
   ];
 
-  const skills = ["HTML", "CSS", "JavaScript", "React", "REST API", "PostgreSQL", "JWT", "Git", "Docker", "AWS"];
+  const skills = [
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "React",
+    "REST API",
+    "PostgreSQL",
+    "JWT",
+    "Git",
+    "Docker",
+    "AWS",
+  ];
 
   return (
     <div className="curriculum-page">
@@ -109,7 +152,9 @@ const Curriculum = () => {
             <p className="roadmap-label">Course roadmap</p>
             <h3>8 sections · 68 lessons · ~18 hours total</h3>
           </div>
-          <button className="roadmap-expand" type="button">Expand all</button>
+          <button className="roadmap-expand" type="button">
+            Expand all
+          </button>
         </div>
 
         <div className="roadmap-table">
@@ -134,7 +179,9 @@ const Curriculum = () => {
           <p className="skills-heading">Skills you'll gain</p>
           <div className="skills-list">
             {skills.map((skill, idx) => (
-              <span key={idx} className="skill-chip">{skill}</span>
+              <span key={idx} className="skill-chip">
+                {skill}
+              </span>
             ))}
           </div>
         </div>
@@ -150,7 +197,7 @@ const CourseDetail = () => {
 
   const course = useMemo(
     () => courses.find((item) => String(item.id) === String(id)),
-    [id]
+    [id],
   );
 
   if (!course) {
@@ -158,7 +205,10 @@ const CourseDetail = () => {
       <div className="course-detail-page">
         <div className="course-detail-panel">
           <p>Course not found.</p>
-          <button onClick={() => navigate("/learnova/home")} className="course-detail-back">
+          <button
+            onClick={() => navigate("/learnova/home")}
+            className="course-detail-back"
+          >
             Back to home
           </button>
         </div>
@@ -233,19 +283,46 @@ const CourseDetail = () => {
                 </div>
 
                 <div className="course-highlight-box">
-                  <p><strong>✓ Giảng viên chuyên nghiệp</strong> với 15+ năm kinh nghiệm</p>
-                  <p><strong>✓ Chứng chỉ hoàn thành</strong> được công nhận</p>
-                  <p><strong>✓ Truy cập suốt đời</strong> vào toàn bộ nội dung</p>
+                  <p>
+                    <strong>✓ Giảng viên chuyên nghiệp</strong> với 15+ năm kinh
+                    nghiệm
+                  </p>
+                  <p>
+                    <strong>✓ Chứng chỉ hoàn thành</strong> được công nhận
+                  </p>
+                  <p>
+                    <strong>✓ Truy cập suốt đời</strong> vào toàn bộ nội dung
+                  </p>
                 </div>
               </div>
             </div>
 
             <div className="course-detail-tabs">
               <div className="tabs-row">
-                <button className={`tab-button ${activeTab === "Overview" ? "active" : ""}`} onClick={() => setActiveTab("Overview")}>Overview</button>
-                <button className={`tab-button ${activeTab === "Curriculum" ? "active" : ""}`} onClick={() => setActiveTab("Curriculum")}>Curriculum</button>
-                <button className={`tab-button ${activeTab === "Instructor" ? "active" : ""}`} onClick={() => setActiveTab("Instructor")}>Instructor</button>
-                <button className={`tab-button ${activeTab === "Reviews" ? "active" : ""}`} onClick={() => setActiveTab("Reviews")}>Reviews</button>
+                <button
+                  className={`tab-button ${activeTab === "Overview" ? "active" : ""}`}
+                  onClick={() => setActiveTab("Overview")}
+                >
+                  Overview
+                </button>
+                <button
+                  className={`tab-button ${activeTab === "Curriculum" ? "active" : ""}`}
+                  onClick={() => setActiveTab("Curriculum")}
+                >
+                  Curriculum
+                </button>
+                <button
+                  className={`tab-button ${activeTab === "Instructor" ? "active" : ""}`}
+                  onClick={() => setActiveTab("Instructor")}
+                >
+                  Instructor
+                </button>
+                <button
+                  className={`tab-button ${activeTab === "Reviews" ? "active" : ""}`}
+                  onClick={() => setActiveTab("Reviews")}
+                >
+                  Reviews
+                </button>
               </div>
 
               <div className="tab-content">
@@ -254,7 +331,11 @@ const CourseDetail = () => {
                     <h2>About this course</h2>
                     <p>{course.description}</p>
                     <h2>What you'll learn</h2>
-                    <p>By the end of this course, you'll be able to build full-stack web applications using modern tools and industry best practices.</p>
+                    <p>
+                      By the end of this course, you'll be able to build
+                      full-stack web applications using modern tools and
+                      industry best practices.
+                    </p>
                   </>
                 )}
 
@@ -264,7 +345,10 @@ const CourseDetail = () => {
                   <div className="instructor-section">
                     <div className="instructor-card">
                       <div className="instructor-avatar">
-                        <img src="https://i.pravatar.cc/200" alt={course.teacher} />
+                        <img
+                          src="https://i.pravatar.cc/200"
+                          alt={course.teacher}
+                        />
                       </div>
                       <div className="instructor-info">
                         <h3>{course.teacher}</h3>
@@ -289,41 +373,61 @@ const CourseDetail = () => {
                     <div className="instructor-bio">
                       <h4>About the Instructor</h4>
                       <p>
-                        With 15+ years of experience in full-stack web development, {course.teacher} has trained over 50,000 students worldwide.
-                        Passionate about making complex concepts simple and accessible, helping thousands transition into tech careers.
+                        With 15+ years of experience in full-stack web
+                        development, {course.teacher} has trained over 50,000
+                        students worldwide. Passionate about making complex
+                        concepts simple and accessible, helping thousands
+                        transition into tech careers.
                       </p>
                       <p>
-                        Specializing in React, Node.js, and modern web technologies, brings real-world industry experience into every lesson,
-                        ensuring students learn practical skills used in production environments.
+                        Specializing in React, Node.js, and modern web
+                        technologies, brings real-world industry experience into
+                        every lesson, ensuring students learn practical skills
+                        used in production environments.
                       </p>
                     </div>
 
                     <div className="instructor-teaching">
                       <h4>Teaching Approach</h4>
+
                       <div className="teaching-list">
                         <div className="teaching-item">
-                          <span className="teaching-icon">📚</span>
+                          <span className="teaching-icon">
+                            <FaBook />
+                          </span>
                           <div>
                             <h5>Project-Based Learning</h5>
-                            <p>Learn by building real-world applications from scratch</p>
+                            <p>
+                              Learn by building real-world applications from
+                              scratch
+                            </p>
                           </div>
                         </div>
+
                         <div className="teaching-item">
-                          <span className="teaching-icon">💡</span>
+                          <span className="teaching-icon">
+                            <FaLightbulb />
+                          </span>
                           <div>
                             <h5>Best Practices</h5>
                             <p>Industry standards and clean code principles</p>
                           </div>
                         </div>
+
                         <div className="teaching-item">
-                          <span className="teaching-icon">🎯</span>
+                          <span className="teaching-icon">
+                            <FaBullseye />
+                          </span>
                           <div>
                             <h5>Career Focused</h5>
                             <p>Structured content designed for job readiness</p>
                           </div>
                         </div>
+
                         <div className="teaching-item">
-                          <span className="teaching-icon">🤝</span>
+                          <span className="teaching-icon">
+                            <FaUsers />
+                          </span>
                           <div>
                             <h5>Community Support</h5>
                             <p>Active Q&A and continuous student support</p>
@@ -336,9 +440,6 @@ const CourseDetail = () => {
 
                 {activeTab === "Reviews" && (
                   <div className="review-section">
-                    <h2>Student Reviews</h2>
-                    <p className="review-summary">Trusted by learners worldwide — see what they say about this course.</p>
-
                     <div className="review-grid">
                       {[
                         {
@@ -355,8 +456,18 @@ const CourseDetail = () => {
                         },
                       ].map((review, index) => (
                         <article key={index} className="review-card">
-                          <div className="review-stars">{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</div>
+                          <div className="review-stars">
+                            {[...Array(5)].map((_, i) =>
+                              i < review.rating ? (
+                                <FaStar key={i} />
+                              ) : (
+                                <FaRegStar key={i} />
+                              ),
+                            )}
+                          </div>
+
                           <p className="review-text">{review.text}</p>
+
                           <div className="review-author">
                             <strong>{review.name}</strong>
                             <span>{review.role}</span>
@@ -393,9 +504,6 @@ const CourseDetail = () => {
               <div className="includes-list">
                 {course.includes.map((item, index) => (
                   <div key={index} className="include-item">
-                    <span className="include-icon">
-  {item.icon}
-</span>
                     <span className="include-text">{item.text}</span>
                   </div>
                 ))}
@@ -405,10 +513,17 @@ const CourseDetail = () => {
             <div className="course-support-card">
               <h3>Have questions?</h3>
               <p>Our support team is here to help you.</p>
-              <button className="support-button">📞 Contact support</button>
+
+              <button className="support-button">
+                <FaPhoneAlt />
+                <span>Contact Support</span>
+              </button>
             </div>
 
-            <button onClick={() => navigate("/learnova/home")} className="course-detail-back">
+            <button
+              onClick={() => navigate("/learnova/home")}
+              className="course-detail-back"
+            >
               Back to home
             </button>
           </aside>

@@ -5,11 +5,7 @@ import SimpleMenuDropdown from "./SimpleMenuDropdown.jsx";
 import SubscribeDropdown from "./SubscribeDropdown.jsx";
 
 const UserLoggedNav = ({
-  categories,
-  levels,
-  prices,
-  durations,
-  ratings,
+
   learningItems,
   instructorItems,
   subscriptionPlans,
@@ -45,26 +41,26 @@ const UserLoggedNav = ({
   return (
     <nav className="user-logged-nav" aria-label="Logged user navigation">
       <ul className="user-logged-nav-list">
-        <li
-          className={`user-logged-nav-item user-logged-nav-item--mega ${openMenu === "courses" ? "is-open" : ""}`}
-          onMouseEnter={() => handleOpen("courses")}
-          onMouseLeave={handleClose}
-        >
-          <button
-            type="button"
-            className="user-logged-nav-button"
-            onClick={() => toggleMenu("courses")}
-          >
-            Courses <ChevronDown size={15} />
-          </button>
-          <CoursesMegaMenu
-            categories={categories}
-            levels={levels}
-            prices={prices}
-            durations={durations}
-            ratings={ratings}
-          />
-        </li>
+        {/*<li*/}
+        {/*  className={`user-logged-nav-item user-logged-nav-item--mega ${openMenu === "courses" ? "is-open" : ""}`}*/}
+        {/*  onMouseEnter={() => handleOpen("courses")}*/}
+        {/*  onMouseLeave={handleClose}*/}
+        {/*>*/}
+        {/*  <button*/}
+        {/*    type="button"*/}
+        {/*    className="user-logged-nav-button"*/}
+        {/*    onClick={() => toggleMenu("courses")}*/}
+        {/*  >*/}
+        {/*    Courses <ChevronDown size={15} />*/}
+        {/*  </button>*/}
+        {/*  <CoursesMegaMenu*/}
+        {/*    categories={categories}*/}
+        {/*    levels={levels}*/}
+        {/*    prices={prices}*/}
+        {/*    durations={durations}*/}
+        {/*    ratings={ratings}*/}
+        {/*  />*/}
+        {/*</li>*/}
 
         <li
           className={`user-logged-nav-item ${openMenu === "learning" ? "is-open" : ""}`}
@@ -76,7 +72,7 @@ const UserLoggedNav = ({
             className="user-logged-nav-button"
             onClick={() => toggleMenu("learning")}
           >
-            My Learning <ChevronDown size={15} />
+            My Learning
           </button>
           <SimpleMenuDropdown items={learningItems} />
         </li>
@@ -91,7 +87,7 @@ const UserLoggedNav = ({
             className="user-logged-nav-button"
             onClick={() => toggleMenu("instructors")}
           >
-            Instructors <ChevronDown size={15} />
+            Instructors
           </button>
           <SimpleMenuDropdown items={instructorItems} />
         </li>
@@ -106,7 +102,7 @@ const UserLoggedNav = ({
             className="user-logged-nav-button"
             onClick={() => toggleMenu("subscribe")}
           >
-            Subscribe <ChevronDown size={15} />
+            Subscribe
           </button>
           <SubscribeDropdown plans={subscriptionPlans} />
         </li>
