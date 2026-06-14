@@ -1,9 +1,13 @@
-.revenueCategoryCard {
+.revenueCategorySection {
   width: 100%;
+  box-sizing: border-box;
+}
+
+.revenueCategoryCard {
   padding: 22px;
   border-radius: 6px;
   border: none;
-  background: transparent;
+  background: #ffffff;
   box-sizing: border-box;
 }
 
@@ -12,7 +16,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
 .revenueCategoryHeader h3 {

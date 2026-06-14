@@ -1,5 +1,9 @@
-.transactionLogCard {
+.transactionLogSection {
   width: 100%;
+  box-sizing: border-box;
+}
+
+.transactionLogCard {
   padding: 28px 32px;
   border-radius: 6px;
   border: 2px solid rgba(37, 99, 235, 0.26);
@@ -10,7 +14,7 @@
 
 /* Header Section */
 .transactionLogHeader {
-  margin-bottom: 24px;
+  margin-bottom: 14px;
 }
 
 .transactionLogTitle {

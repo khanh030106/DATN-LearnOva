@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
 import "./VoucherCreate.css";
 
 const formatCurrency = (value) => {
@@ -17,7 +18,7 @@ const formatNumberInput = (value) => {
   return new Intl.NumberFormat("en-US").format(Number(digits));
 };
 
-const VoucherCreate = () => {
+const VoucherCreate = ({ onClose }) => {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -47,18 +48,37 @@ const VoucherCreate = () => {
     }));
   };
 
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+      return;
+    }
+
+    navigate("/learnova/admin/vouchers");
+  };
+
   return (
-    <section className="voucherCreateSection">
+    <section className={`voucherCreateSection ${onClose ? "voucherCreateSection--modal" : ""}`}>
       <div className="voucherCreateHeader">
         <div>
           <div className="voucherCreateTitleRow">
             <span className="voucherCreateIcon">🎟️</span>
-            <h2 className="voucherCreateTitle">Promotion Setup</h2>
+            <h2 className="voucherCreateTitle" id="voucher-create-title">Promotion Setup</h2>
           </div>
           <p className="voucherCreateSubtitle">
             Enter details to create a new discount code.
           </p>
         </div>
+        {onClose && (
+          <button
+            type="button"
+            className="voucherCreateCloseBtn"
+            onClick={handleClose}
+            aria-label="Close voucher form"
+          >
+            <X size={20} />
+          </button>
+        )}
       </div>
 
       <div className="voucherCreateContent">
@@ -149,13 +169,13 @@ const VoucherCreate = () => {
           </div>
 
           <div className="voucherCreateActions">
-            <button type="button" className="voucherCreateSubmitBtn">
+            <button type="button" className="voucherCreateSubmitBtn" onClick={handleClose}>
               Save Voucher
             </button>
             <button
               type="button"
               className="voucherCreateCancelBtn"
-              onClick={() => navigate("/learnova/admin/vouchers")}
+              onClick={handleClose}
             >
               Cancel
             </button>

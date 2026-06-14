@@ -94,7 +94,7 @@
 }
 
 .revenueDetailSide > section {
-  background: #ffffff;
+  background: transparent;
   border-radius: 6px;
   min-width: 0;
 }

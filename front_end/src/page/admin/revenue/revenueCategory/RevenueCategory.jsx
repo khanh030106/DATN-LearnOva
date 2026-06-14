@@ -42,7 +42,7 @@ const categories = [
 const RevenueCategory = () => {
   return (
     <section
-      className="revenueCategoryCard"
+      className="revenueCategorySection"
       aria-label="Revenue Category Metrics"
     >
       <div className="revenueCategoryHeader">
@@ -50,27 +50,29 @@ const RevenueCategory = () => {
         <span className="revenueCategoryBadge">Percentage Share</span>
       </div>
 
-      <div className="revenueCategoryList">
-        {categories.map((item) => (
-          <div key={item.label} className="revenueCategoryItem">
-            <div className="revenueCategoryLabel">
-              <span>{item.label}</span>
-              <strong>{item.percent}%</strong>
-            </div>
+      <div className="revenueCategoryCard">
+        <div className="revenueCategoryList">
+          {categories.map((item) => (
+            <div key={item.label} className="revenueCategoryItem">
+              <div className="revenueCategoryLabel">
+                <span>{item.label}</span>
+                <strong>{item.percent}%</strong>
+              </div>
 
-            <div className="revenueCategoryAmount">({item.amount})</div>
+              <div className="revenueCategoryAmount">({item.amount})</div>
 
-            <div className="revenueCategoryBarWrapper">
-              <div
-                className="revenueCategoryBar"
-                style={{
-                  width: `${item.percent}%`,
-                  backgroundColor: item.color,
-                }}
-              />
+              <div className="revenueCategoryBarWrapper">
+                <div
+                  className="revenueCategoryBar"
+                  style={{
+                    width: `${item.percent}%`,
+                    backgroundColor: item.color,
+                  }}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -139,7 +139,7 @@ const TransactionLog = () => {
 
   return (
     <section
-      className="transactionLogCard"
+      className="transactionLogSection"
       aria-label="Revenue transaction log"
     >
       <div className="transactionLogHeader">
@@ -152,99 +152,101 @@ const TransactionLog = () => {
         </div>
       </div>
 
-      <div className="transactionLogControls">
-        <label className="transactionSearch">
-          <Search size={16} />
-          <input placeholder="Search by transaction ID, student name, course" />
-        </label>
-        <div className="transactionFilters">
-          <button type="button">
-            All Categories <ChevronDown size={14} />
-          </button>
-          <button type="button">
-            All Payment Gateways <ChevronDown size={14} />
-          </button>
-          <button type="button">
-            All Statuses <ChevronDown size={14} />
-          </button>
-        </div>
-      </div>
-
-      <div className="transactionLogTableWrapper">
-        <table className="transactionLogTable">
-          <thead>
-            <tr>
-              <th>TRANSACTION ID</th>
-              <th>STUDENT</th>
-              <th>COURSE NAME</th>
-              <th>PAYMENT GATEWAY</th>
-              <th>TRANSACTION VALUE</th>
-              <th>STATUS</th>
-              <th>ACTION</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentTransactions.map((transaction) => (
-              <tr key={transaction.id}>
-                <td>{transaction.id}</td>
-                <td>{transaction.student}</td>
-                <td>{transaction.course}</td>
-                <td>{transaction.gateway}</td>
-                <td className="textRight">{transaction.amount}</td>
-                <td>
-                  <span
-                    className={`transactionStatus ${statusClasses[transaction.status]}`}
-                  >
-                    {transaction.status}
-                  </span>
-                </td>
-                <td className="textCenter">
-                  <button
-                    type="button"
-                    className="transactionActionButton"
-                    aria-label={`View invoice ${transaction.id}`}
-                  >
-                    <FileText size={16} />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {totalPages > 1 ? (
-        <div className="transactionLogPagination">
-          <button
-            type="button"
-            className="paginationButton"
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-          >
-            Previous
-          </button>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index + 1}
-              type="button"
-              className={`paginationButton ${
-                currentPage === index + 1 ? "active" : ""
-              }`}
-              onClick={() => handlePageChange(index + 1)}
-            >
-              {index + 1}
+      <div className="transactionLogCard">
+        <div className="transactionLogControls">
+          <label className="transactionSearch">
+            <Search size={16} />
+            <input placeholder="Search by transaction ID, student name, course" />
+          </label>
+          <div className="transactionFilters">
+            <button type="button">
+              All Categories <ChevronDown size={14} />
             </button>
-          ))}
-          <button
-            type="button"
-            className="paginationButton"
-            disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(currentPage + 1)}
-          >
-            Next
-          </button>
+            <button type="button">
+              All Payment Gateways <ChevronDown size={14} />
+            </button>
+            <button type="button">
+              All Statuses <ChevronDown size={14} />
+            </button>
+          </div>
         </div>
-      ) : null}
+
+        <div className="transactionLogTableWrapper">
+          <table className="transactionLogTable">
+            <thead>
+              <tr>
+                <th>TRANSACTION ID</th>
+                <th>STUDENT</th>
+                <th>COURSE NAME</th>
+                <th>PAYMENT GATEWAY</th>
+                <th>TRANSACTION VALUE</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentTransactions.map((transaction) => (
+                <tr key={transaction.id}>
+                  <td>{transaction.id}</td>
+                  <td>{transaction.student}</td>
+                  <td>{transaction.course}</td>
+                  <td>{transaction.gateway}</td>
+                  <td className="textRight">{transaction.amount}</td>
+                  <td>
+                    <span
+                      className={`transactionStatus ${statusClasses[transaction.status]}`}
+                    >
+                      {transaction.status}
+                    </span>
+                  </td>
+                  <td className="textCenter">
+                    <button
+                      type="button"
+                      className="transactionActionButton"
+                      aria-label={`View invoice ${transaction.id}`}
+                    >
+                      <FileText size={16} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {totalPages > 1 ? (
+          <div className="transactionLogPagination">
+            <button
+              type="button"
+              className="paginationButton"
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              Previous
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                type="button"
+                className={`paginationButton ${
+                  currentPage === index + 1 ? "active" : ""
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              type="button"
+              className="paginationButton"
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              Next
+            </button>
+          </div>
+        ) : null}
+      </div>
     </section>
   );
 };

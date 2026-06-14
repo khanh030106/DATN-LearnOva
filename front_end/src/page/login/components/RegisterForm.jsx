@@ -87,7 +87,7 @@ const RegisterForm = ({ onSwitchToLogin }) => {
                             </div>
                         </div>
 
-                        <div className="form-field" style={{marginBottom: '55px'}}>
+                        <div className="form-field" style={{marginBottom: '30px'}}>
                             <label className="form-field-label">Confirm password</label>
                             <div className="form-field-input">
                                 <Lock size={15} className="mail-icon"/>

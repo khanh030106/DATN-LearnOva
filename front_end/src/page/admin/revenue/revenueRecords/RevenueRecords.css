@@ -1,12 +1,17 @@
-.revenueRecordsCard {
+.revenueRecordsSection {
   width: 100%;
   height: auto;
   align-self: start;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+}
+
+.revenueRecordsCard {
+  width: 100%;
   padding: 10px;
   border-radius: 6px;
-  background: transparent;
+  background: #ffffff;
   border: none;
   box-shadow: none;
   box-sizing: border-box;

@@ -7,17 +7,19 @@
   display: flex;
   flex-direction: column;
   width: 250px;
-  padding: 26px 14px 18px;
-  background: linear-gradient(180deg, #071a33 0%, #0b2545 100%);
-  border-right: 1px solid rgba(147, 197, 253, 0.14);
-  color: #ffffff;
+  padding: 20px 22px 24px;
+  background: #ffffff;
+  border-right: 1px solid #dcdcdc;
+  box-shadow: 16px 0 40px rgba(31, 49, 82, 0.04);
+  color: #353535;
 }
 
 .sidebarAdminBrand {
-  display: block;
-  padding: 0 0 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-  text-align: center;
+  display: flex;
+  align-items: center;
+  min-height: 58px;
+  padding: 0 10px 10px;
+  border-bottom: 1px solid #e1e1e1;
 }
 
 .sidebarAdminBrandText {
@@ -26,46 +28,37 @@
 
 .sidebarAdminBrandWordmark {
   display: block;
-  width: 178px;
+  width: 168px;
   max-width: 100%;
   height: auto;
   object-fit: contain;
-  margin: 0 auto;
-}
-
-.sidebarAdminBrandSubtitle {
-  margin: 8px auto 0;
-  color: #ffffff;
-  font-size: 0.6rem;
-  font-weight: 900;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
 }
 
 .sidebarAdminNav {
   display: grid;
-  gap: 14px;
-  margin-top: 18px;
+  gap: 12px;
+  margin-top: 28px;
 }
 
 .sidebarAdminNavItem {
   position: relative;
-  min-height: 50px;
+  min-height: 52px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   overflow: hidden;
-  padding: 0 18px 0 22px;
+  padding: 0 17px;
   border: 1px solid transparent;
-  border-radius: 8px;
-  color: rgba(255, 255, 255, 0.88);
+  border-radius: 6px;
+  color: #353535;
   text-decoration: none;
-  font-size: 0.96rem;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 600;
   transition:
-    background 0.25s ease,
-    color 0.25s ease,
-    box-shadow 0.25s ease;
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
   font-family: var(--font-sans);
 }
 
@@ -79,17 +72,14 @@
 }
 
 .sidebarAdminNavItem:hover {
-  color: #ffffff;
-  margin-right: -14px;
-  border-radius: 8px 0 0 8px;
-  background: rgba(30, 64, 175, 0.72);
+  color: #386cff;
+  background: #eef5ff;
 }
 
 .sidebarAdminNavItemActive {
-  color: #ffffff;
-  margin-right: -14px;
-  border-radius: 8px 0 0 8px;
-  background: #1239a8;
+  color: #386cff;
+  background: #eef5ff;
+  border-left: 4px solid #386cff;
 }
 
 .sidebarAdminNavItem:hover::before,
@@ -99,17 +89,23 @@
 
 .sidebarAdminNavItem:hover .sidebarAdminNavIcon,
 .sidebarAdminNavItemActive .sidebarAdminNavIcon {
-  color: #ffffff;
+  color: #386cff;
 }
 
 .sidebarAdminNavIcon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 21px;
+  height: 21px;
   flex-shrink: 0;
   color: inherit;
+}
+
+.sidebarAdminNavIcon svg {
+  width: 21px;
+  height: 21px;
+  stroke-width: 2.2;
 }
 
 .sidebarAdminNavLabel {
@@ -117,14 +113,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 17px;
-  font-family: var(--font-sans);
-  letter-spacing: 1.1px;
+  font-size: 1.02rem;
+  font-family: inherit;
+  letter-spacing: 0;
 }
 
 .sidebarAdminFooterActions {
   margin-top: auto;
   padding-top: 18px;
+  border-top: 1px solid #eef2f8;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -139,10 +136,10 @@
   border: none;
   border-radius: 8px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.72);
+  color: #64748b;
   text-align: left;
   font-size: 0.95rem;
-  font-weight: 900;
+  font-weight: 700;
   font-family: var(--font-sans);
   text-decoration: none;
   cursor: pointer;
@@ -152,8 +149,8 @@
 }
 
 .sidebarAdminFooterAction:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
+  background: #eef5ff;
+  color: #386cff;
 }
 
 .sidebarAdminFooterActionDanger {
@@ -161,7 +158,7 @@
 }
 
 .sidebarAdminFooterActionDanger:hover {
-  background: rgba(248, 113, 113, 0.12);
+  background: #fff1f2;
   color: #f87171;
 }
 

@@ -89,7 +89,6 @@ const SidebarAdmin = ({
             alt="LearnOva"
             className="sidebarAdminBrandWordmark"
           />
-          <p className="sidebarAdminBrandSubtitle">Admin System</p>
         </div>
       </div>
 

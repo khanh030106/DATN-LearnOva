@@ -1,11 +1,15 @@
+import { useState } from "react";
 import "./Vouchers.css";
 import VoucherCards from "./voucherCard/VoucherCards.jsx";
 import VoucherChart from "./voucherChart/VoucherChart.jsx";
 import VoucherCampaignChart from "./voucherCampaignChart/VoucherCampaignChart.jsx";
 import VoucherTable from "./voucherTable/VoucherTable.jsx";
 import VoucherHistory from "./voucherHistory/VoucherHistory.jsx";
+import VoucherCreate from "./voucherCreate/VoucherCreate.jsx";
 
 const Vouchers = () => {
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+
   return (
     <section className="vouchersPage">
       <VoucherCards />
@@ -17,8 +21,26 @@ const Vouchers = () => {
           <VoucherCampaignChart />
         </div>
       </div>
-      <VoucherTable />
+      <VoucherTable onCreateVoucher={() => setIsCreateOpen(true)} />
       <VoucherHistory />
+
+      {isCreateOpen && (
+        <div
+          className="voucherModalBackdrop"
+          role="presentation"
+          onClick={() => setIsCreateOpen(false)}
+        >
+          <div
+            className="voucherModal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="voucher-create-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <VoucherCreate onClose={() => setIsCreateOpen(false)} />
+          </div>
+        </div>
+      )}
     </section>
   );
 };
