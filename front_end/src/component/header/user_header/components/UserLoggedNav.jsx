@@ -45,26 +45,26 @@ const UserLoggedNav = ({
   return (
     <nav className="user-logged-nav" aria-label="Logged user navigation">
       <ul className="user-logged-nav-list">
-        <li
-          className={`user-logged-nav-item user-logged-nav-item--mega ${openMenu === "courses" ? "is-open" : ""}`}
-          onMouseEnter={() => handleOpen("courses")}
-          onMouseLeave={handleClose}
-        >
-          <button
-            type="button"
-            className="user-logged-nav-button"
-            onClick={() => toggleMenu("courses")}
-          >
-            Courses <ChevronDown size={15} />
-          </button>
-          <CoursesMegaMenu
-            categories={categories}
-            levels={levels}
-            prices={prices}
-            durations={durations}
-            ratings={ratings}
-          />
-        </li>
+        {/*<li*/}
+        {/*  className={`user-logged-nav-item user-logged-nav-item--mega ${openMenu === "courses" ? "is-open" : ""}`}*/}
+        {/*  onMouseEnter={() => handleOpen("courses")}*/}
+        {/*  onMouseLeave={handleClose}*/}
+        {/*>*/}
+        {/*  <button*/}
+        {/*    type="button"*/}
+        {/*    className="user-logged-nav-button"*/}
+        {/*    onClick={() => toggleMenu("courses")}*/}
+        {/*  >*/}
+        {/*    Courses <ChevronDown size={15} />*/}
+        {/*  </button>*/}
+        {/*  <CoursesMegaMenu*/}
+        {/*    categories={categories}*/}
+        {/*    levels={levels}*/}
+        {/*    prices={prices}*/}
+        {/*    durations={durations}*/}
+        {/*    ratings={ratings}*/}
+        {/*  />*/}
+        {/*</li>*/}
 
         <li
           className={`user-logged-nav-item ${openMenu === "learning" ? "is-open" : ""}`}

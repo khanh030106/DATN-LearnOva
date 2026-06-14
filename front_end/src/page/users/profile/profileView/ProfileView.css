@@ -336,6 +336,8 @@ body {
   overflow: hidden;
   position: relative;
   animation: slideInFromRight 0.3s ease-out;
+  width: 70%;
+  margin-left: 200px;
 }
 
 .form-grid {

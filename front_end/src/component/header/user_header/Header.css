@@ -133,11 +133,11 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  padding: 10px 4px;
+  padding: 10px 4px 4px;
   text-decoration: none;
   font-family: math;
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 16px;
+  /*font-weight: 150;*/
   transition:
     color 0.2s ease,
     transform 0.2s ease;
@@ -179,7 +179,7 @@
 }
 
 .header-search {
-  width: 230px;
+  width: 340px;
   height: 38px;
   display: flex;
   align-items: center;

@@ -1,11 +1,11 @@
 .course-detail-page {
   min-height: 100vh;
   background: #f8fafc;
-  padding: 32px 16px;
+  padding: 16px 16px;
 }
 
 .course-detail-panel {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
@@ -37,17 +37,15 @@
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-  padding: 32px;
+  padding:12px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   align-items: start;
 }
 
-.course-detail-media-section {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.course-detail-media {
+  padding: 12px;
 }
 
 .course-detail-media img {
@@ -55,6 +53,7 @@
   height: 350px;
   object-fit: cover;
   border-radius: 10px;
+  display: block;
 }
 
 .course-detail-gallery {
@@ -122,22 +121,22 @@
 .course-detail-instructor-card {
   display: grid;
   grid-template-columns: 120px minmax(0, 1fr);
-  gap: 20px;
+  gap: 16px;
   align-items: center;
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 12px;
   border: 1px solid #eef2f7;
-  padding: 20px;
+  padding: 12px;
 }
 
 .instructor-card {
   width: 100%;
   display: grid;
   grid-template-columns: 180px 1fr;
-  gap: 24px;
+  gap: 10px;
   align-items: center;
   background: #ffffff;
-  border-radius: 20px;
+  border-radius: 12px;
   border: 1px solid #eef2f7;
   padding: 24px;
   overflow: hidden;
@@ -153,6 +152,8 @@
   border-radius: 20px;
   object-fit: cover;
   display: block;
+  margin-left: 70px;
+  margin-bottom: 45px;
 }
 
 .course-detail-instructor-info,
@@ -196,26 +197,38 @@
 }
 
 .course-detail-info {
-  margin-bottom: 20px;
-  display: grid;
-  gap: 12px;
-  color: #334155;
-  font-size: 0.95rem;
+  column-count: 2;
+  column-gap: 24px;
+  margin: 0;
+  padding: 0;
 }
 
 .course-detail-info > div {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: 12px;
+  padding: 8px 0;
   color: #0f172a;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
 }
 
 .course-detail-info > div svg {
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
+  padding: 6px;
+  border-radius: 8px;
+  background: rgba(29, 78, 216, 0.06);
   color: #1d4ed8;
+}
+
+@media (max-width: 768px) {
+  .course-detail-info {
+    column-count: 1;
+    column-gap: 0;
+  }
 }
 
 .course-detail-actions {
@@ -240,31 +253,71 @@
   transition: all 0.2s ease;
 }
 
-/* Nút Wishlist - icon trái tim màu đỏ */
-.course-detail-actions button:first-child {
+/* Wishlist (trái tim) — đỏ nhẹ giống nút */
+.course-detail-actions button:first-child,
+.course-detail-actions button:first-child svg,
+.course-detail-actions button:first-child svg * {
   color: #ef4444;
-  border-color: #fecaca;
+  fill: #ef4444;
+  stroke: #ef4444;
 }
 
-.course-detail-actions button:first-child:hover {
-  background: #fef2f2;
-  border-color: #ef4444;
-}
-
-/* Nút Share - icon xanh */
-.course-detail-actions button:last-child {
+/* Share — xanh nhẹ giống nút */
+.course-detail-actions button:last-child,
+.course-detail-actions button:last-child svg,
+.course-detail-actions button:last-child svg * {
   color: #1d4ed8;
-  border-color: #bfdbfe;
-}
-
-.course-detail-actions button:last-child:hover {
-  background: #eff6ff;
-  border-color: #1d4ed8;
+  fill: #1d4ed8;
+  stroke: #1d4ed8;
 }
 
 .course-detail-actions button svg {
   width: 18px;
   height: 18px;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+/* Smooth transition for buttons */
+.course-detail-actions button {
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+/* Wishlist (trái tim) - trạng thái mặc định */
+.course-detail-actions button:first-child {
+  color: #ef4444;
+  border-color: #fecaca;
+  background: transparent;
+}
+
+/* Wishlist hover: nền đỏ nhẹ */
+.course-detail-actions button:first-child:hover,
+.course-detail-actions button:first-child:focus {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* Share - trạng thái mặc định */
+.course-detail-actions button:last-child {
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+  background: transparent;
+}
+
+/* Share hover: nền xanh nhẹ */
+.course-detail-actions button:last-child:hover,
+.course-detail-actions button:last-child:focus {
+  background: rgba(29, 78, 216, 0.06);
+  border-color: #1d4ed8;
+  color: #1d4ed8;
+}
+
+/* Ensure SVG icons follow text color */
+.course-detail-actions button svg,
+.course-detail-actions button svg * {
+  fill: currentColor;
+  stroke: currentColor;
 }
 
 /* TABS */
@@ -300,21 +353,29 @@
 }
 
 .tab-content {
-  padding: 32px;
+  padding: 32px 32px 24px;
 }
 
 .tab-content h2 {
-  font-size: 1.5rem;
-  margin-bottom: 16px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 18px;
   color: #0f172a;
+  letter-spacing: -0.02em;
 }
 
-.learning-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  color: #334155;
-  margin-top: 16px;
+.tab-content p {
+  margin: 0 0 18px;
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.75;
+  max-width: 760px;
+  letter-spacing: 0.01em;
+}
+
+.tab-content > h2 + p {
+  margin-top: 0;
 }
 
 /* SIDEBAR */
@@ -507,8 +568,12 @@
   font-weight: 600;
   cursor: pointer;
   font-size: 0.95rem;
-}
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
 .support-button:hover {
   background: #e0f2fe;
 }
@@ -1219,7 +1284,7 @@
 .course-detail-instructor-card {
   background: #f8fafc;
   border-radius: 14px;
-  padding: 20px;
+  padding: 8px;
   display: flex;
   gap: 16px;
   align-items: flex-start;
@@ -1303,4 +1368,266 @@
 .course-highlight-box strong {
   color: #1d4ed8;
   font-weight: 700;
+}
+
+/* Icon màu theo nút */
+.course-detail-actions button:first-child svg {
+  color: #ef4444;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.course-detail-actions button:last-child svg {
+  color: #1d4ed8;
+  fill: currentColor;
+  stroke: currentColor;
+}
+.review-form-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid #eef2f7;
+  box-shadow: 0 8px 20px rgba(15,23,42,.05);
+}
+
+.review-form-card h3 {
+  margin-bottom: 16px;
+}
+
+.review-rating-picker {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.review-star {
+  font-size: 24px;
+  color: #cbd5e1;
+  cursor: pointer;
+}
+
+.review-star.active {
+  color: #f59e0b;
+}
+
+.review-form-card textarea {
+  width: 400px;
+  min-height: 10px;
+  resize: vertical;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  padding: 12px;
+  font-family: inherit;
+}
+
+.review-submit-btn {
+  margin-top: 16px;
+  padding: 12px 20px;
+
+  background: #1d4ed8;
+  color: white;
+
+  border: none;
+  border-radius: 12px;
+
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.review-submit-btn:hover {
+  background: #1e40af;
+}
+/* ===== REVIEW OVERVIEW ===== */
+.review-overview {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.review-score {
+  text-align: center;
+  padding: 30px 50px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1px solid #bfdbfe;
+}
+
+.score-number {
+  display: block;
+  font-size: 4rem;
+  font-weight: 800;
+  color: #1d4ed8;
+  line-height: 1;
+}
+
+.score-stars {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  color: #f59e0b;
+  font-size: 1.4rem;
+  margin: 12px 0;
+}
+
+.review-score p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+.review-form-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 10px;
+  margin-bottom: 32px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+  width: 790px;
+}
+
+.review-form-card h3 {
+  margin-bottom: 18px;
+  color: #0f172a;
+  font-size: 1.4rem;
+}
+
+.review-rating-picker {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.review-star {
+  font-size: 32px;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.review-star:hover {
+  transform: scale(1.15);
+}
+
+.review-star.active {
+  color: #f59e0b;
+}
+
+/* Textarea dài hơn */
+.review-form-card textarea {
+  width: 770px;
+  min-height: 100px;
+  resize: vertical;
+
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #dbe2ea;
+
+  font-size: 15px;
+  line-height: 1.7;
+  font-family: inherit;
+
+  transition: all 0.2s ease;
+}
+
+.review-form-card textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.review-submit-btn {
+  margin-top: 18px;
+  padding: 14px 28px;
+
+  background: #2563eb;
+  color: white;
+
+  border: none;
+  border-radius: 14px;
+
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.review-submit-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+.review-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.review-card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 24px;
+
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(15,23,42,.05);
+
+  transition: all .25s ease;
+}
+
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.review-user {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.review-avatar {
+  width: 60px;
+  height: 60px;
+
+  border-radius: 50%;
+  background: #0f172a;
+  color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.review-user h4 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.review-user span {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.review-stars {
+  color: #f59e0b;
+  font-size: 1.2rem;
+}
+
+.review-text {
+  margin-top: 18px;
+  color: #475569;
+  line-height: 1.9;
+  font-size: 1rem;
+}
+
+.review-footer {
+  margin-top: 16px;
+  color: #64748b;
+  font-size: 0.92rem;
 }
