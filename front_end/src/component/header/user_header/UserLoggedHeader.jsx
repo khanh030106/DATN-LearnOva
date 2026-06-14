@@ -79,7 +79,7 @@ const UserLoggedHeader = () => {
                 type="button"
                 className="user-logged-nav-button"
             >
-              Courses <ChevronDown size={15} />
+              Courses
             </button>
 
             <CoursesMegaMenu

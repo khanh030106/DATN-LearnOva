@@ -5,11 +5,7 @@ import SimpleMenuDropdown from "./SimpleMenuDropdown.jsx";
 import SubscribeDropdown from "./SubscribeDropdown.jsx";
 
 const UserLoggedNav = ({
-  categories,
-  levels,
-  prices,
-  durations,
-  ratings,
+
   learningItems,
   instructorItems,
   subscriptionPlans,
@@ -76,7 +72,7 @@ const UserLoggedNav = ({
             className="user-logged-nav-button"
             onClick={() => toggleMenu("learning")}
           >
-            My Learning <ChevronDown size={15} />
+            My Learning
           </button>
           <SimpleMenuDropdown items={learningItems} />
         </li>
@@ -91,7 +87,7 @@ const UserLoggedNav = ({
             className="user-logged-nav-button"
             onClick={() => toggleMenu("instructors")}
           >
-            Instructors <ChevronDown size={15} />
+            Instructors
           </button>
           <SimpleMenuDropdown items={instructorItems} />
         </li>
@@ -106,7 +102,7 @@ const UserLoggedNav = ({
             className="user-logged-nav-button"
             onClick={() => toggleMenu("subscribe")}
           >
-            Subscribe <ChevronDown size={15} />
+            Subscribe
           </button>
           <SubscribeDropdown plans={subscriptionPlans} />
         </li>
