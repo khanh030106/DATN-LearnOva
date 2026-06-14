@@ -55,13 +55,13 @@ const UserLoggedHeader = () => {
             {isMobileMenuOpen ? <X size={21} /> : <Menu size={21} />}
           </button>
 
-          <Link to="/learnova/home" className="user-logged-logo">
+          <Link to="/learnova/user/home" className="user-logged-logo">
             <img src={logo} alt="Learnova" />
           </Link>
         </div>
 
         <div className="user-logged-home-shell">
-          <Link to="/learnova/home" className="user-logged-home-link">
+          <Link to="/learnova/user/home" className="user-logged-home-link">
             Home
           </Link>
         </div>

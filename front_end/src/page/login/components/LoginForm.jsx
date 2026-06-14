@@ -29,7 +29,7 @@ const LoginForm = ({ onSwitchToRegister }) => {
             if (!data?.accessToken) {
                 throw new Error("No access token returned");
             }
-            navigate('/learnova/home');
+            navigate('/learnova/user/home');
         }catch (err) {
             const message =
                 err.response?.data?.message ||

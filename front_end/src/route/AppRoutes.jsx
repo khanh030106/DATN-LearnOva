@@ -40,7 +40,7 @@ const App = () => {
                 <Route path="/learnova/auth/login" element={<AuthPage/>}/>
 
                 <Route element={<HomeLayout/>}>
-                    <Route path="/learnova/home" element={<Home/>}/>
+                    <Route path="/learnova/user/home" element={<Home/>}/>
                 </Route>
 
                 {/* Admin */}
@@ -71,13 +71,13 @@ const App = () => {
 
                 {/* User */}
                 <Route element={<UserLayout/>}>
-                    <Route path="/learnova/courses" element={<CoursePage/>}/>
-                    <Route path="/learnova/cart" element={<Cart/>}/>
+                    <Route path="/learnova/user/courses" element={<CoursePage/>}/>
+                    <Route path="/learnova/user/cart" element={<Cart/>}/>
                     <Route path="/learnova/user/CoursesDetail" element={<CourseDetail/>}/>
-                    <Route path="/learnova/CoursesDetail/:id" element={<CourseDetaill/>}/>
-                    <Route path="/learnova/intructors" element={<InstructorsPage/>}/>
-                    <Route path="/learnova/intructorDetail" element={<InstructorDetail/>}/>
-                    <Route path="/learnova/about" element={<AboutView/>}/>
+                    <Route path="/learnova/user/CoursesDetail/:id" element={<CourseDetaill/>}/>
+                    <Route path="/learnova/user/intructors" element={<InstructorsPage/>}/>
+                    <Route path="/learnova/user/intructorDetail" element={<InstructorDetail/>}/>
+                    <Route path="/learnova/user/about" element={<AboutView/>}/>
                     <Route path="/learnova/user/profile" element={<ProfileViewProps key="profile" initialTab="profile"/>}/>
                     <Route path="/learnova/user/profile/courses" element={<ProfileViewProps key="courses" initialTab="courses"/>}/>
                     <Route path="/learnova/user/profile/favorites" element={<ProfileViewProps key="favorites" initialTab="favorites"/>}/>

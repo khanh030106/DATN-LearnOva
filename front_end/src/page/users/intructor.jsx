@@ -486,7 +486,7 @@ function InstructorsPage() {
                   <div className="card-actions">
                     <button
                         className="view-profile-btn"
-                        onClick={() => navigate("/learnova/intructorDetail")}
+                        onClick={() => navigate("/learnova/user/intructorDetail")}
                     >
                       View Profile
                     </button>

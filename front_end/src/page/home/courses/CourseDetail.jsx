@@ -158,7 +158,7 @@ const CourseDetail = () => {
       <div className="course-detail-page">
         <div className="course-detail-panel">
           <p>Course not found.</p>
-          <button onClick={() => navigate("/learnova/home")} className="course-detail-back">
+          <button onClick={() => navigate("/learnova/user/home")} className="course-detail-back">
             Back to home
           </button>
         </div>
@@ -408,7 +408,7 @@ const CourseDetail = () => {
               <button className="support-button">📞 Contact support</button>
             </div>
 
-            <button onClick={() => navigate("/learnova/home")} className="course-detail-back">
+            <button onClick={() => navigate("/learnova/user/home")} className="course-detail-back">
               Back to home
             </button>
           </aside>

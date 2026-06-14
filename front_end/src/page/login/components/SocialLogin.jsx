@@ -11,7 +11,7 @@ const SocialLogin = () => {
             </div>
 
             <div className="social-login-buttons">
-                <Link to={"/learnova/home"} className="back-home-button" aria-label="Back to home">
+                <Link to={"/learnova/user/home"} className="back-home-button" aria-label="Back to home">
                     <Home/>
                 </Link>
 

@@ -6,7 +6,7 @@ const CartDropdown = ({ initialItems }) => {
 
   return (
     <div className="user-logged-icon-menu">
-      <Link to="/learnova/cart" className="user-logged-icon-button" aria-label="Open cart">
+      <Link to="/learnova/user/cart" className="user-logged-icon-button" aria-label="Open cart">
         <ShoppingCart size={21} />
         {totalItems > 0 && <span className="user-logged-badge">{totalItems}</span>}
       </Link>

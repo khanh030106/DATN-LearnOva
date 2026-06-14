@@ -9,17 +9,17 @@ import "./Header.css";
 const Header = () => {
   const headerRef = useRef(null);
   const { pathname } = useLocation();
-  const isCartHeader = pathname.startsWith("/learnova/cart");
+  const isCartHeader = pathname.startsWith("/learnova/user/cart");
   const isHeroHeader =
-    pathname.startsWith("/learnova/home") ||
-    pathname.startsWith("/learnova/about");
+    pathname.startsWith("/learnova/user/home") ||
+    pathname.startsWith("/learnova/user/about");
   const useSolidHeader =
-    pathname.startsWith("/learnova/courses") ||
-    pathname.startsWith("/learnova/intructors") ||
-    pathname.startsWith("/learnova/instructors") ||
-    pathname.startsWith("/learnova/intructorDetail") ||
-    pathname.startsWith("/learnova/user") ||
-    isCartHeader;
+    !isHeroHeader &&
+    (pathname.startsWith("/learnova/user/courses") ||
+      pathname.startsWith("/learnova/user/intructors") ||
+      pathname.startsWith("/learnova/user/instructors") ||
+      pathname.startsWith("/learnova/user/intructorDetail") ||
+      isCartHeader);
 
   useEffect(() => {
     const header = headerRef.current;
@@ -59,7 +59,7 @@ const Header = () => {
       className={`main-header${isHeroHeader ? " hero-header" : ""}${isCartHeader ? " cart-header" : ""}`}
     >
       <div className="header-container">
-        <a href="/learnova/home" className="logo">
+        <a href="/learnova/user/home" className="logo">
           <img src={logo} alt="logo" />
         </a>
 
