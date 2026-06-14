@@ -9,7 +9,7 @@ LearnOva currently feels like a warm, polished online learning platform. The dom
 The most important existing visual references are:
 
 - `page/home/banner/Banner.jsx` and `Banner.css`: full-screen photographic hero with dark navy overlay, white text, gold emphasis, pill CTA, and fade-up text animation.
-- `page/login/LoginPage.css`: split login screen with image backgrounds, dark overlays, glass panel, gold CTA, and cream text.
+- `page/login/AuthPage.css`: split login screen with image backgrounds, dark overlays, glass panel, gold CTA, and cream text.
 - `page/home/courses/components/CourseCard.css`: white course cards with warm border, image top, strong title, rating row, price, and icon button.
 - `page/home/Role/Roles.css`, `page/home/path/Path.css`, `page/home/engagements/Engagements.css`, `page/home/newsletter/Newsletter.css`: warm cards, rounded corners, gold/orange headings, slate/gray body text, and hover lift.
 - `component/footer/footer.css`: ivory/gold footer with structured columns, gold link bullets, subscription input, and circular social buttons.
@@ -70,7 +70,7 @@ These tokens exist, but many current components still use direct hex values. Pre
 - Dark text: `#1f2937`, `#1e293b`, `#111827`, `#222222`, `#292929`, `#1B140C`
 - Muted text: `#64748b`, `#6b7280`, `#60708c`, `#7a8aa6`, `#8492ad`, `#8a7650`, `#7a6b52`, `#9ca3af`
 - Warm borders: `rgba(232, 190, 116, 0.22)`, `rgba(232, 190, 116, 0.28)`, `rgba(232, 190, 116, 0.32)`, `#fae4aa`, `#ffc4414f`, `#ffca5278`, `#ffd34f`, `rgb(255 227 189)`, `#ffe5b8`
-- Error red: `#ff3434` in `LoginPage.css`.
+- Error red: `#ff3434` in `AuthPage.css`.
 
 ### Standardization Note
 
@@ -254,7 +254,7 @@ Use this style only on dark/image headers.
 
 ### Login Forms
 
-`LoginPage.css`:
+`AuthPage.css`:
 
 - `.login` is a glass card with `background: rgba(255, 255, 255, 0.10)`, `backdrop-filter: blur(18px)`, border `rgba(255, 255, 255, 0.16)`.
 - `.form-field-input` uses height `50px`, radius `8px`, translucent white background, white text.
@@ -349,7 +349,7 @@ Rules:
 
 ### Hero Sections
 
-Follow `Banner.css` and `LoginPage.css`:
+Follow `Banner.css` and `AuthPage.css`:
 
 - Use real images from `assets` or suitable image URLs.
 - Add dark overlay gradients for legibility.
@@ -518,7 +518,7 @@ Pattern:
 
 ### Split Auth Page
 
-Files: `page/login/LoginPage.jsx`, `page/login/LoginPage.css`, `page/login/conponents/LoginBanner.jsx`, `LoginForm.jsx`, `SocialLogin.jsx`
+Files: `page/login/AuthPage.jsx`, `page/login/AuthPage.css`, `page/login/components/AuthBanner.jsx`, `LoginForm.jsx`, `SocialLogin.jsx`
 
 Pattern:
 
