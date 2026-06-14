@@ -1,4 +1,5 @@
-import {useSearchParams} from "react-router-dom";
+import {Link, useSearchParams} from "react-router-dom";
+import {ArrowLeft} from "lucide-react";
 import AuthBanner from "./components/AuthBanner.jsx";
 import LoginForm from "./components/LoginForm.jsx";
 import RegisterForm from "./components/RegisterForm.jsx";
@@ -19,6 +20,11 @@ const AuthPage = () => {
 
     return (
         <div className={`auth-page ${isRegisterMode ? "register-mode" : ""}`}>
+            <Link to="/learnova/home" className="auth-back-home">
+                <ArrowLeft size={20}/>
+                <span>Back to home</span>
+            </Link>
+
             <div className="auth-form-panel login-panel">
                 <LoginForm onSwitchToRegister={switchToRegister} />
             </div>
