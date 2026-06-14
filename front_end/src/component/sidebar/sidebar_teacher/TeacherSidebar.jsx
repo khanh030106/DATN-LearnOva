@@ -3,7 +3,7 @@ import {
   BarChart3,
   BookOpen,
   Gift,
-  Grid2X2,
+  Grid2X2, Home,
   MessageSquare,
   Plus,
   Users,
@@ -17,10 +17,10 @@ const teacherNavSections = [
   {
     title: "Main",
     items: [
-      { label: "Dashboard", path: "/learnova/teacher", icon: Grid2X2, end: true },
+      { label: "Dashboard", path: "/learnova/teacher", icon: Home, end: true },
       { label: "Courses", path: "/learnova/teacher/courses", icon: BookOpen },
       { label: "Students", path: "/learnova/teacher/students", icon: Users },
-      { label: "Chat", path: "/learnova/teacher/qa", icon: MessageSquare },
+      { label: "Messages", path: "/learnova/teacher/qa", icon: MessageSquare },
     ],
   },
   {
