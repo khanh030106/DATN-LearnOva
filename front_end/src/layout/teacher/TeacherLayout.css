@@ -1,7 +1,7 @@
 .teacher-shell {
   height: 100vh;
   display: grid;
-  grid-template-columns: 286px minmax(0, 1fr);
+  grid-template-columns: 250px minmax(0, 1fr);
   overflow: hidden;
   background: #f6f8fc;
   color: #26354f;

@@ -7,7 +7,7 @@
   gap: 28px;
   padding: 30px 22px 24px;
   background: #ffffff;
-  border-right: 1px solid #edf2fa;
+  border-right: 1px solid #dcdcdc;
   box-shadow: 16px 0 40px rgba(31, 49, 82, 0.04);
 }
 
@@ -64,15 +64,15 @@
   min-height: 54px;
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 12px;
   overflow: hidden;
   padding: 0 17px;
   border: 1px solid transparent;
   border-radius: 6px;
-  color: #43536d;
+  color: #353535;
   text-decoration: none;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
     transform 0.2s ease;
 }
@@ -95,7 +95,7 @@
 .teacher-nav__link svg {
   width: 21px;
   height: 21px;
-  color: #8292a8;
+  color: #575757;
   stroke-width: 2.2;
   flex: 0 0 auto;
 }
@@ -110,11 +110,15 @@
   letter-spacing: 0;
 }
 
-.teacher-nav__link:hover,
+.teacher-nav__link:hover{
+  color: #386cff;
+  background: #eef5ff;
+}
+
 .teacher-nav__link--active {
   color: #386cff;
   background: #eef5ff;
-  box-shadow: 0 10px 24px rgba(56, 108, 255, 0.08);
+  border-left: 4px solid #386cff;
 }
 
 .teacher-nav__link:hover svg,
