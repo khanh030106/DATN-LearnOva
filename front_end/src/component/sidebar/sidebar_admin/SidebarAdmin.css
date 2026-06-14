@@ -1,76 +1,110 @@
 .adminSidebar {
   overflow: hidden;
-  gap: 22px;
-  padding: 22px 10px 24px;
-  border-right: 1px solid #eef2f7;
-  box-shadow: 18px 0 40px rgba(15, 23, 42, 0.04);
+  gap: 28px;
+  padding: 20px 10px 24px;
+  border-right: 1px solid #dcdcdc;
+  box-shadow: 16px 0 40px rgba(31, 49, 82, 0.04);
 }
 
 .adminSidebar .teacher-nav {
-  gap: 24px;
-  padding-bottom: 16px;
+  display: grid;
+  gap: 20px;
 }
 
 .adminSidebar .teacher-brand {
-  min-height: 56px;
-  padding: 0 14px 14px;
-  border-bottom: 1px solid #eef2f7;
+  display: flex;
+  align-items: center;
+  min-height: 58px;
+  padding: 0 10px 10px;
+  border-bottom: 1px solid #e1e1e1;
 }
 
 .adminSidebar .teacher-brand img {
-  width: 138px;
+  display: block;
+  width: 168px;
+  max-width: 100%;
 }
 
 .adminSidebar .teacher-nav__section {
-  gap: 8px;
+  display: grid;
+  gap: 12px;
 }
 
 .adminSidebar .teacher-nav__section + .teacher-nav__section {
-  padding-top: 14px;
-  border-top: 1px solid #f1f5f9;
+  padding-top: 18px;
+  border-top: 1px solid #e8e8e8;
 }
 
 .adminSidebar .teacher-nav__subtitle {
-  padding: 0 14px 4px;
-  color: #94a3b8;
-  font-size: 9px;
-  font-weight: 900;
-  letter-spacing: 0.18em;
+  margin: 0;
+  padding: 0 17px;
+  color: #7a7a7a;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .adminSidebar .teacher-nav__link {
-  min-height: 42px;
-  gap: 11px;
-  padding: 0 14px;
-  border-radius: 7px;
-  color: #111827;
-  font-size: 12px;
+  position: relative;
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
+  padding: 0 17px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #353535;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
 .adminSidebar .teacher-nav__link::before {
-  width: 3px;
-  opacity: 0;
-  background: #386cff;
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  content: "";
+  background: #2563eb;
+  transition: width 0.25s ease;
+}
+
+.adminSidebar .teacher-nav__link svg,
+.adminSidebar .teacher-nav__link span {
+  position: relative;
+  z-index: 1;
 }
 
 .adminSidebar .teacher-nav__link svg {
-  width: 17px;
-  height: 17px;
-  color: #334155;
-  stroke-width: 2;
+  width: 21px;
+  height: 21px;
+  color: #3d3d3d;
+  stroke-width: 2.2;
+  flex: 0 0 auto;
 }
 
 .adminSidebar .teacher-nav__link span {
-  font-size: 13px;
-  font-weight: 800;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1rem;
+  font-family: inherit;
+  letter-spacing: 0;
 }
 
 .adminSidebar .teacher-nav__link:hover,
 .adminSidebar .teacher-nav__link--active {
   color: #386cff;
   background: #eef5ff;
-  border-color: transparent;
-  border-left: 0;
+}
+
+.adminSidebar .teacher-nav__link--active {
+  border-left: 4px solid #386cff;
 }
 
 .adminSidebar .teacher-nav__link:hover::before,

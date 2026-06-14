@@ -8,24 +8,24 @@
 }
 
 .adminLayoutContent {
-  position: relative;
   min-width: 0;
   height: 100vh;
-  display: block;
-  overflow-y: auto;
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   font-family: var(--font-sans);
   font-size: 16px;
-  padding: 0;
 }
 
 .adminLayoutMain {
+  flex: 1 1 auto;
   min-height: 0;
-  min-width: 0;
-  overflow: visible;
+  overflow-y: auto;
   overflow-x: hidden;
-  padding: 4px 18px 18px;
+  padding: 0 24px 24px 24px;
   font-family: var(--font-sans);
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
 .adminLayout :where(select) {
@@ -63,7 +63,6 @@
   font-weight: 900 !important;
 }
 
-
 @media (max-width: 1080px) {
   .adminLayout {
     grid-template-columns: 96px minmax(0, 1fr);
@@ -81,7 +80,6 @@
   .adminLayoutContent {
     height: auto;
     overflow: visible;
-    padding: 0;
   }
 
   .adminLayoutMain {

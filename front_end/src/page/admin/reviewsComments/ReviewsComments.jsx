@@ -1,5 +1,4 @@
-import { Eye, EyeOff, MessageSquareText, ShieldCheck, Star, Trash2, TriangleAlert } from "lucide-react";
-import reviewsOverviewImage from "../../../assets/dashboard/reviews_comments.png";
+import { Eye, EyeOff, MessageSquareText, Star, Trash2, TriangleAlert } from "lucide-react";
 import "../shared/AdminDataPage.css";
 import "./ReviewsComments.css";
 
@@ -53,25 +52,6 @@ const ReviewsComments = () => {
   return (
     <section className="adminDataPage" aria-label="Reviews and comments moderation">
       <div className="adminDataContent">
-        <div className="reviewsCommentsHero">
-          <div className="reviewsCommentsHeroImageWrap">
-            <img
-              className="reviewsCommentsHeroImage"
-              src={reviewsOverviewImage}
-              alt="Reviews and comments overview"
-            />
-          </div>
-
-          <div className="reviewsCommentsHeroText">
-            <h1>Reviews & Comments</h1>
-            <p>Moderate course reviews, lesson comments and reported feedback.</p>
-            <span>
-              <ShieldCheck size={16} aria-hidden="true" />
-              Keep learner discussions helpful and respectful
-            </span>
-          </div>
-        </div>
-
         <div className="adminDataStats">
           {stats.map((item) => {
             const Icon = item.icon;

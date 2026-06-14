@@ -72,7 +72,7 @@
     minmax(300px, 1.25fr) minmax(140px, 0.78fr) minmax(140px, 0.78fr)
     minmax(160px, 0.88fr) minmax(170px, 0.88fr);
   gap: 16px;
-  padding: 18px 18px;
+  padding: 18px 24px;
   border-bottom: 1px solid rgba(37, 99, 235, 0.12);
   color: var(--text-muted);
   font-size: 12px;
@@ -113,7 +113,7 @@
     minmax(160px, 0.88fr) minmax(170px, 0.88fr);
   gap: 16px;
   align-items: center;
-  padding: 14px 18px;
+  padding: 14px 24px;
   border-bottom: 1px solid rgba(15, 23, 42, 0.06);
   width: 100%;
 }
@@ -490,7 +490,7 @@
 
 @media (max-width: 960px) {
   .userManagementUsersCard {
-    padding: 24px 20px 22px;
+    padding: 24px 24px 22px;
   }
 
   .userManagementUsersHeader {

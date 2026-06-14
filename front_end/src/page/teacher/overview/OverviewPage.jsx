@@ -92,36 +92,6 @@ const MetricCard = ({ metric, index }) => {
   );
 };
 
-const DashboardHeader = () => (
-  <header className="overview-hero">
-    <div className="overview-hero__content">
-      <div>
-        <h1>Good morning, Khanh <span aria-hidden="true">👋</span></h1>
-        <p>Here's what's happening with your academy today.</p>
-      </div>
-      <div className="overview-hero__insights" aria-label="Dashboard insights">
-        {headerInsights.map((insight) => (
-          <span key={insight}>{insight}</span>
-        ))}
-      </div>
-    </div>
-
-    <div className="overview-header-actions" aria-label="Dashboard actions">
-      <button type="button" aria-label="Notifications">
-        <Bell size={20} />
-        <span>3</span>
-      </button>
-      <button type="button" aria-label="Settings">
-        <Settings size={20} />
-      </button>
-      <button className="overview-profile-menu" type="button" aria-label="Open user menu">
-        <img src={teacherProfile.avatar} alt={teacherProfile.name} />
-        <strong>Khanh</strong>
-        <ChevronDown size={16} />
-      </button>
-    </div>
-  </header>
-);
 
 const RevenueChart = () => {
   const points = "M0,102 C34,88 54,102 86,72 C124,36 160,92 198,72 C236,52 252,8 294,34 C336,62 360,78 408,46 C446,20 480,56 524,18";
@@ -218,7 +188,6 @@ const ImportantNotices = () => {
                 <strong>{notice.title}</strong>
                 <p>{notice.detail}</p>
               </div>
-              <time>{notice.time}</time>
             </article>
           );
         })}
@@ -299,7 +268,6 @@ const RecentEnrollments = () => (
 const OverviewPage = () => {
   return (
     <div className="teacher-overview">
-      <DashboardHeader />
 
       <section className="overview-metrics" aria-label="Teacher metrics">
         {metrics.map((metric, index) => (

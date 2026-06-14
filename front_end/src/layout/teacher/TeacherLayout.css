@@ -22,34 +22,7 @@
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 10px;
-  font-family: var(--font-sans);
-}
-
-.teacher-workspace :where(
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  span,
-  small,
-  em,
-  label,
-  input,
-  textarea,
-  select,
-  td,
-  th,
-  li,
-  strong,
-  b,
-  button,
-  a
-) {
-  font-family: var(--font-sans);
+  padding: 0 24px 24px 24px;
 }
 
 @media (max-width: 1080px) {

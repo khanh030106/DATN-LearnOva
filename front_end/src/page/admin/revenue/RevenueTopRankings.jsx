@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import TopCourseRevenue from "./topCourseRevenue/TopCourseRevenue.jsx";
 import TopTeacherRevenue from "./topTeacherRevenue/TopTeacherRevenue.jsx";
 import "./Revenue.css";
@@ -12,7 +11,7 @@ const RevenueTopRankings = () => {
             <h2>Revenue Ranking Tables</h2>
             <p>Review course and instructor earning performance in full-width tables.</p>
           </div>
-          <Link to="/learnova/admin/revenue">Back to overview</Link>
+          <span className="revenueDetailBack">Back to overview</span>
         </div>
 
         <div className="revenueDetailStack">
