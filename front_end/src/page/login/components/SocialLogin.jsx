@@ -11,10 +11,6 @@ const SocialLogin = () => {
             </div>
 
             <div className="social-login-buttons">
-                <Link to={"/learnova/home"} className="back-home-button" aria-label="Back to home">
-                    <Home/>
-                </Link>
-
                 <button type="button" className="social-login-btn-gg" aria-label="Continue with Google">
                     <img src={gg_svg} alt="google" width={20}/>
                 </button>
