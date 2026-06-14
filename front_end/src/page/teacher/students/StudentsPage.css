@@ -100,6 +100,7 @@
   padding: 0 15px;
   color: #475569;
   font-size: 0.72rem;
+  background: #f1f7ff;
   font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -107,6 +108,7 @@
 
 .teacher-students-table-head span {
   justify-self: center;
+  font-weight: 700 !important;
   text-align: center;
 }
 
@@ -188,13 +190,13 @@
   background: #eff6ff;
   color: #1d4ed8;
   font-size: 0.72rem;
-  font-weight: 900;
+  font-weight: 600 !important;
 }
 
 .teacher-student-row__date {
   color: #0f172a;
   font-size: 0.86rem;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .teacher-student-row__progress {
