@@ -1,22 +1,43 @@
 .adminLayout {
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
-  background: var(--bg-secondary);
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  overflow: hidden;
+  background: #f6f8fc;
+  color: #26354f;
 }
 
 .adminLayoutContent {
-  flex: 1;
+  min-width: 0;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: 16px;
   padding: 0;
 }
 
 .adminLayoutMain {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   min-width: 0;
-  padding: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  font-family: var(--font-sans);
+}
+
+.adminLayout :where(select) {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: none !important;
+  padding-right: 14px !important;
+}
+
+.adminLayout :where(select::-ms-expand) {
+  display: none;
 }
 
 .adminLayoutMain table thead,
@@ -43,16 +64,28 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 1080px) {
   .adminLayout {
-    flex-direction: column;
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .adminLayout {
+    height: auto;
+    min-height: 100vh;
+    display: block;
+    overflow: visible;
   }
 
   .adminLayoutContent {
+    height: auto;
+    overflow: visible;
     padding: 0;
   }
 
   .adminLayoutMain {
-    padding: 0;
+    overflow: visible;
+    padding-inline: 16px;
   }
 }

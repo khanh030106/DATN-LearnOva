@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, RefreshCcw, ChevronDown, FileText } from "lucide-react";
+import { Search, FileText } from "lucide-react";
 import "./TransactionLog.css";
 
 const transactions = [
@@ -159,15 +159,9 @@ const TransactionLog = () => {
             <input placeholder="Search by transaction ID, student name, course" />
           </label>
           <div className="transactionFilters">
-            <button type="button">
-              All Categories <ChevronDown size={14} />
-            </button>
-            <button type="button">
-              All Payment Gateways <ChevronDown size={14} />
-            </button>
-            <button type="button">
-              All Statuses <ChevronDown size={14} />
-            </button>
+            <button type="button">All Categories</button>
+            <button type="button">All Payment Gateways</button>
+            <button type="button">All Statuses</button>
           </div>
         </div>
 

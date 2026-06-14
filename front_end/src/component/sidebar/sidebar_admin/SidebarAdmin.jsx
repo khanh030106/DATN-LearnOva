@@ -2,141 +2,129 @@ import { NavLink } from "react-router-dom";
 import {
   BookOpen,
   CircleDollarSign,
+  Flag,
   GraduationCap,
   LayoutDashboard,
-  LogOut,
+  MessageSquareText,
+  Tags,
   Ticket,
   Users,
 } from "lucide-react";
 import logoText from "../../../assets/LogoText.png";
+import "../sidebar_teacher/TeacherSidebar.css";
 import "./SidebarAdmin.css";
 
-const menuItems = [
+const adminNavSections = [
   {
-    id: "dashboard",
-    label: "Overview",
-    icon: LayoutDashboard,
-    path: "/learnova/admin",
-    end: true,
+    title: "Main",
+    items: [
+      {
+        id: "dashboard",
+        label: "Overview",
+        icon: LayoutDashboard,
+        path: "/learnova/admin",
+        end: true,
+      },
+      {
+        id: "users",
+        label: "Users",
+        icon: Users,
+        path: "/learnova/admin/users",
+      },
+      {
+        id: "teachers",
+        label: "Instructors",
+        icon: GraduationCap,
+        path: "/learnova/admin/teachers",
+      },
+      {
+        id: "courses",
+        label: "Courses",
+        icon: BookOpen,
+        path: "/learnova/admin/courses",
+      },
+      {
+        id: "categories",
+        label: "Categories",
+        icon: Tags,
+        path: "/learnova/admin/categories",
+      },
+    ],
   },
   {
-    id: "users",
-    label: "Users",
-    icon: Users,
-    path: "/learnova/admin/users",
+    title: "Business",
+    items: [
+      {
+        id: "revenue",
+        label: "Revenue",
+        icon: CircleDollarSign,
+        path: "/learnova/admin/revenue",
+      },
+      {
+        id: "vouchers",
+        label: "Vouchers",
+        icon: Ticket,
+        path: "/learnova/admin/vouchers",
+      },
+    ],
   },
   {
-    id: "teachers",
-    label: "Instructors",
-    icon: GraduationCap,
-    path: "/learnova/admin/teachers",
-  },
-  {
-    id: "courses",
-    label: "Courses",
-    icon: BookOpen,
-    path: "/learnova/admin/courses",
-  },
-  {
-    id: "revenue",
-    label: "Revenue",
-    icon: CircleDollarSign,
-    path: "/learnova/admin/revenue",
-  },
-  // {
-  //   id: "reports",
-  //   label: "Reports",
-  //   icon: BarChart3,
-  //   path: "/learnova/admin/reports",
-  // },
-  // {
-  //   id: "reports",
-  //   label: "Reports",
-  //   icon: BarChart3,
-  //   path: "/learnova/admin/reports",
-  // },
-  {
-    id: "vouchers",
-    label: "Vouchers",
-    icon: Ticket,
-    path: "/learnova/admin/vouchers",
-  },
-];
-
-const footerActions = [
-  {
-    id: "logout",
-    label: "Logout",
-    icon: LogOut,
-    path: "/learnova/auth/login",
-    variant: "danger",
+    title: "Moderation",
+    items: [
+      {
+        id: "reviews-comments",
+        label: "Reviews & Comments",
+        icon: MessageSquareText,
+        path: "/learnova/admin/reviews-comments",
+      },
+      {
+        id: "violation-reports",
+        label: "Violation Reports",
+        icon: Flag,
+        path: "/learnova/admin/violation-reports",
+      },
+    ],
   },
 ];
 
 const SidebarAdmin = ({
-  menuItems: menuItemsProp = menuItems,
-  footerActions: footerActionsProp = footerActions,
+  navSections = adminNavSections,
 }) => {
   const getNavLinkClassName = ({ isActive }) =>
-    `sidebarAdminNavItem ${isActive ? "sidebarAdminNavItemActive" : ""}`;
+    `teacher-nav__link ${isActive ? "teacher-nav__link--active" : ""}`;
 
   return (
-    <aside className="sidebarAdmin">
-      <div className="sidebarAdminBrand">
-        <div className="sidebarAdminBrandText">
-          <img
-            src={logoText}
-            alt="LearnOva"
-            className="sidebarAdminBrandWordmark"
-          />
+    <aside className="teacher-sidebar adminSidebar" aria-label="Admin dashboard navigation">
+      <div className="teacher-brand">
+        <div>
+          <img src={logoText} alt="LearnOva" />
         </div>
       </div>
 
-      <nav className="sidebarAdminNav" aria-label="Sidebar navigation">
-        {menuItemsProp.map((item) => {
-          if (!item?.icon || !item?.path) return null;
+      <nav className="teacher-nav" aria-label="Sidebar navigation">
+        {navSections.map((section) => (
+          <div className="teacher-nav__section" key={section.title}>
+            <p className="teacher-nav__subtitle">{section.title}</p>
+            {section.items.map((item) => {
+              if (!item?.icon || !item?.path) return null;
 
-          const Icon = item.icon;
+              const Icon = item.icon;
 
-          return (
-            <NavLink
-              key={item.id}
-              to={item.path}
-              end={item.end === true}
-              className={getNavLinkClassName}
-            >
-              <span className="sidebarAdminNavIcon" aria-hidden="true">
-                <Icon size={18} />
-              </span>
-              <span className="sidebarAdminNavLabel">{item.label}</span>
-            </NavLink>
-          );
-        })}
+              return (
+                <NavLink
+                  key={item.id}
+                  to={item.path}
+                  end={item.end === true}
+                  className={getNavLinkClassName}
+                >
+                  <Icon size={20} />
+                  <span>{item.label}</span>
+                </NavLink>
+              );
+            })}
+          </div>
+        ))}
       </nav>
-
-      <div className="sidebarAdminFooterActions">
-        {footerActionsProp.map((item) => {
-          if (!item?.icon || !item?.path) return null;
-
-          const Icon = item.icon;
-          const isDanger = item.variant === "danger";
-
-          return (
-            <NavLink
-              key={item.id}
-              to={item.path}
-              className={`sidebarAdminFooterAction ${
-                isDanger ? "sidebarAdminFooterActionDanger" : ""
-              }`}
-            >
-              <span className="sidebarAdminFooterActionIcon" aria-hidden="true">
-                <Icon size={18} />
-              </span>
-              <span>{item.label}</span>
-            </NavLink>
-          );
-        })}
-      </div>
     </aside>
   );
 };

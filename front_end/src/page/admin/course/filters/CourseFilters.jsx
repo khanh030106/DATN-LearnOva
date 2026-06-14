@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ChevronDown, Search, Layers, Users, CalendarDays } from "lucide-react";
+import { Search } from "lucide-react";
 import "./CourseFilters.css";
 
 const categoryFilterOptions = [
@@ -131,15 +131,6 @@ const CourseFilters = () => {
               <span className="filterButtonLabel">
                 <span>{getSelectedCategoryLabel()}</span>
               </span>
-              <ChevronDown
-                size={18}
-                color="#e8be74"
-                strokeWidth={2.5}
-                style={{
-                  transition: "transform 0.2s ease",
-                  transform: isCategoryDropdownOpen ? "rotate(180deg)" : "none",
-                }}
-              />
             </button>
             {isCategoryDropdownOpen && (
               <div className="filterDropdownMenu">
@@ -172,17 +163,6 @@ const CourseFilters = () => {
               <span className="filterButtonLabel">
                 <span>Instructor ({getSelectedInstructorLabel()})</span>
               </span>
-              <ChevronDown
-                size={18}
-                color="#7a6b52"
-                strokeWidth={2.5}
-                style={{
-                  transition: "transform 0.2s ease",
-                  transform: isInstructorDropdownOpen
-                    ? "rotate(180deg)"
-                    : "none",
-                }}
-              />
             </button>
             {isInstructorDropdownOpen && (
               <div className="filterDropdownMenu">
@@ -215,15 +195,6 @@ const CourseFilters = () => {
               <span className="filterButtonLabel">
                 <span>Published: {getSelectedPublishSortLabel()}</span>
               </span>
-              <ChevronDown
-                size={18}
-                color="#7a6b52"
-                strokeWidth={2.5}
-                style={{
-                  transition: "transform 0.2s ease",
-                  transform: isSortDropdownOpen ? "rotate(180deg)" : "none",
-                }}
-              />
             </button>
             {isSortDropdownOpen && (
               <div className="filterDropdownMenu">
@@ -256,15 +227,6 @@ const CourseFilters = () => {
               <span className="filterButtonLabel">
                 <span>Price: {getSelectedPriceTypeLabel()}</span>
               </span>
-              <ChevronDown
-                size={18}
-                color="#7a6b52"
-                strokeWidth={2.5}
-                style={{
-                  transition: "transform 0.2s ease",
-                  transform: isPriceDropdownOpen ? "rotate(180deg)" : "none",
-                }}
-              />
             </button>
             {isPriceDropdownOpen && (
               <div className="filterDropdownMenu">

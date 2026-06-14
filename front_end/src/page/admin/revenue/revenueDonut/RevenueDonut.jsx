@@ -28,8 +28,9 @@ const RevenueDonut = () => {
           {
             data: revenueDonutValues,
             backgroundColor: revenueDonutColors,
-            borderWidth: 0,
-            hoverOffset: 8,
+            borderColor: "#f8fafc",
+            borderWidth: 4,
+            hoverOffset: 4,
           },
         ],
       },
@@ -43,18 +44,17 @@ const RevenueDonut = () => {
           },
           tooltip: {
             enabled: true,
-            backgroundColor: "#ffffff",
-            titleColor: "#1f2937",
-            bodyColor: "#1f2937",
-            borderColor: "rgba(148, 163, 184, 0.2)",
-            borderWidth: 1,
-            padding: 10,
-            cornerRadius: 10,
             displayColors: false,
+            padding: 12,
+            backgroundColor: "#ffffff",
+            titleColor: "#0f172a",
+            bodyColor: "#475569",
+            borderColor: "#cbd5e1",
+            borderWidth: 1,
+            cornerRadius: 6,
             callbacks: {
               label(context) {
-                const value = context.parsed;
-                return `${context.label}: ${value}%`;
+                return `${context.label}: ${context.parsed}%`;
               },
             },
           },
