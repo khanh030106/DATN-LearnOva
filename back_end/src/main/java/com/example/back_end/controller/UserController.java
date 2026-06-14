@@ -2,30 +2,34 @@ package com.example.back_end.controller;
 
 import com.example.back_end.dto.response.CurrentUserResponse;
 import com.example.back_end.security.CustomUserDetails;
+import com.example.back_end.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/learnova")
 public class UserController {
 
-    @GetMapping("/users/me")
-    public ResponseEntity<CurrentUserResponse> getCurrentUser(
-            @AuthenticationPrincipal CustomUserDetails currentUser
+    private final AuthService authService;
+
+    @GetMapping("/user/me")
+    public ResponseEntity<CurrentUserResponse> me(
+            Authentication authentication
     ) {
-        var user = currentUser.getUser();
+
+        System.out.println("ME ENDPOINT HIT");
+
+
+        String email = authentication.getName();
 
         return ResponseEntity.ok(
-                new CurrentUserResponse(
-                        user.getId(),
-                        user.getFullName(),
-                        user.getEmail(),
-                        user.getAvatar(),
-                        user.getDateOfBirth()
-                )
+                authService.getCurrentUser(email)
         );
     }
 }

@@ -9,7 +9,6 @@ const LoginForm = ({ onSwitchToRegister }) => {
     const [form, setForm] = useState({email: '', password: '', remember: false});
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
-
     const {login} = useAuth();
 
     const handleChange = (e) => {
@@ -116,8 +115,6 @@ const LoginForm = ({ onSwitchToRegister }) => {
                     </form>
 
                     <SocialLogin/>
-
-
 
                 </div>
             </div>
