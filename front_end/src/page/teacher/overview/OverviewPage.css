@@ -37,8 +37,8 @@
 
 .teacher-metric__heading p {
   margin: 0;
-  font-size: 20px;
-  color: #0000ad;
+  font-size: 26px;
+  color: #0034d0;
 }
 
 .teacher-metric__heading span {
@@ -162,7 +162,7 @@
 .teacher-panel h1,
 .teacher-panel h2 {
   margin: 0;
-  color: #0015a8;
+  color: #0034d0;
   font-weight: 900;
   line-height: 1.15;
   font-size: 27px;

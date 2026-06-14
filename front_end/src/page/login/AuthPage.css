@@ -397,6 +397,26 @@ body {
     transform: translateY(0);
 }
 
+.login-submit-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-submit-icon {
+    position: absolute;
+    right: 18px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--auth-blue);
+    background: #ffffff;
+}
+
 .auth-switch-text {
     margin: 26px 0 0;
     color: #3f454e;
