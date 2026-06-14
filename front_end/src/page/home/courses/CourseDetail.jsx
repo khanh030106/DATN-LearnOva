@@ -592,13 +592,6 @@ const CourseDetail = () => {
                 <span>Contact Support</span>
               </button>
             </div>
-
-            <button
-              onClick={() => navigate("/learnova/home")}
-              className="course-detail-back"
-            >
-              Back to home
-            </button>
           </aside>
         </div>
       </div>
