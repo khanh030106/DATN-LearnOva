@@ -5,12 +5,6 @@ import SubscribeDropdown from "./SubscribeDropdown.jsx";
 
 const UserLoggedNav = ({
   onlyLearning = false,
-  showLearning = true,
-  categories,
-  levels,
-  prices,
-  durations,
-  ratings,
   learningItems,
   instructorItems,
   subscriptionPlans,
@@ -71,28 +65,26 @@ const UserLoggedNav = ({
   return (
     <nav className="user-logged-nav" aria-label="Logged user navigation">
       <ul className="user-logged-nav-list">
-        {showLearning ? learningNavItem : null}
-
-        <li
-          className={`user-logged-nav-item user-logged-nav-item--mega ${openMenu === "courses" ? "is-open" : ""}`}
-          onMouseEnter={() => handleOpen("courses")}
-          onMouseLeave={handleClose}
-        >
-          <button
-            type="button"
-            className="user-logged-nav-button"
-            onClick={() => toggleMenu("courses")}
-          >
-            Courses
-          </button>
-          <CoursesMegaMenu
-            categories={categories}
-            levels={levels}
-            prices={prices}
-            durations={durations}
-            ratings={ratings}
-          />
-        </li>
+        {/*<li*/}
+        {/*  className={`user-logged-nav-item user-logged-nav-item--mega ${openMenu === "courses" ? "is-open" : ""}`}*/}
+        {/*  onMouseEnter={() => handleOpen("courses")}*/}
+        {/*  onMouseLeave={handleClose}*/}
+        {/*>*/}
+        {/*  <button*/}
+        {/*    type="button"*/}
+        {/*    className="user-logged-nav-button"*/}
+        {/*    onClick={() => toggleMenu("courses")}*/}
+        {/*  >*/}
+        {/*    Courses <ChevronDown size={15} />*/}
+        {/*  </button>*/}
+        {/*  <CoursesMegaMenu*/}
+        {/*    categories={categories}*/}
+        {/*    levels={levels}*/}
+        {/*    prices={prices}*/}
+        {/*    durations={durations}*/}
+        {/*    ratings={ratings}*/}
+        {/*  />*/}
+        {/*</li>*/}
 
         <li
           className={`user-logged-nav-item ${openMenu === "instructors" ? "is-open" : ""}`}

@@ -1,5 +1,6 @@
-import { Edit3, Eye, FolderTree, Plus, Trash2, X } from "lucide-react";
+import { Edit3, Eye, FolderTree, Plus, ShieldCheck, Trash2, X } from "lucide-react";
 import { useMemo, useState } from "react";
+import categoryOverviewImage from "../../../assets/dashboard/category.png";
 import "./Category.css";
 
 const categoryStats = [
@@ -65,19 +66,23 @@ const Category = () => {
   return (
     <section className="adminCategoryPage" aria-label="Category management">
       <div className="adminCategoryContent">
-        <div className="adminCategoryHeader">
-          <div>
-            <h1>Category Management</h1>
-            <p>Manage course topic groups, parent categories, and visibility.</p>
+        <div className="adminCategoryHero">
+          <div className="adminCategoryHeroImageWrap">
+            <img
+              className="adminCategoryHeroImage"
+              src={categoryOverviewImage}
+              alt="Categories overview"
+            />
           </div>
-          <button
-            type="button"
-            className="adminCategoryCreateButton"
-            onClick={() => setIsCreateOpen(true)}
-          >
-            <Plus size={18} />
-            New Category
-          </button>
+
+          <div className="adminCategoryHeroBody">
+            <h1>Categories</h1>
+            <p>Organize your courses with categories and subcategories.</p>
+            <span>
+              <ShieldCheck size={16} aria-hidden="true" />
+              Keep the learning catalog clear and easy to browse
+            </span>
+          </div>
         </div>
 
         <div className="adminCategoryStats">
@@ -99,6 +104,14 @@ const Category = () => {
           <input type="search" placeholder="Search category name or parent..." />
           <button type="button">All Statuses</button>
           <button type="button">All Parents</button>
+          <button
+            type="button"
+            className="adminCategoryCreateButton"
+            onClick={() => setIsCreateOpen(true)}
+          >
+            <Plus size={18} />
+            New Category
+          </button>
         </div>
 
         <div className="adminCategoryTableCard">

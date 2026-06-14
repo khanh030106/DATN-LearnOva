@@ -1,9 +1,86 @@
 .adminSidebar {
   overflow: hidden;
+  gap: 22px;
+  padding: 22px 10px 24px;
+  border-right: 1px solid #eef2f7;
+  box-shadow: 18px 0 40px rgba(15, 23, 42, 0.04);
 }
 
 .adminSidebar .teacher-nav {
+  gap: 24px;
   padding-bottom: 16px;
+}
+
+.adminSidebar .teacher-brand {
+  min-height: 56px;
+  padding: 0 14px 14px;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.adminSidebar .teacher-brand img {
+  width: 138px;
+}
+
+.adminSidebar .teacher-nav__section {
+  gap: 8px;
+}
+
+.adminSidebar .teacher-nav__section + .teacher-nav__section {
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.adminSidebar .teacher-nav__subtitle {
+  padding: 0 14px 4px;
+  color: #94a3b8;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+}
+
+.adminSidebar .teacher-nav__link {
+  min-height: 42px;
+  gap: 11px;
+  padding: 0 14px;
+  border-radius: 7px;
+  color: #111827;
+  font-size: 12px;
+}
+
+.adminSidebar .teacher-nav__link::before {
+  width: 3px;
+  opacity: 0;
+  background: #386cff;
+}
+
+.adminSidebar .teacher-nav__link svg {
+  width: 17px;
+  height: 17px;
+  color: #334155;
+  stroke-width: 2;
+}
+
+.adminSidebar .teacher-nav__link span {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.adminSidebar .teacher-nav__link:hover,
+.adminSidebar .teacher-nav__link--active {
+  color: #386cff;
+  background: #eef5ff;
+  border-color: transparent;
+  border-left: 0;
+}
+
+.adminSidebar .teacher-nav__link:hover::before,
+.adminSidebar .teacher-nav__link--active::before {
+  opacity: 1;
+}
+
+.adminSidebar .teacher-nav__link:hover svg,
+.adminSidebar .teacher-nav__link--active svg {
+  color: #386cff;
 }
 
 .sidebarAdmin {

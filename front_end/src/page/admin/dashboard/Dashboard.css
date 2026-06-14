@@ -6,11 +6,13 @@
 
 .adminDashboardContent {
   width: 100%;
+  max-width: 1480px;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 18px 14px 14px;
+  gap: 18px;
+  margin: 0 auto;
+  padding: 0 0 18px;
   box-sizing: border-box;
 }
 
@@ -25,6 +27,51 @@
   margin: 0;
 }
 
+.adminDashboardOverview {
+  display: grid;
+  grid-template-columns: 252px minmax(0, 1fr);
+  align-items: center;
+  gap: 26px;
+  min-height: 150px;
+  padding: 0 270px 0 0;
+}
+
+.adminDashboardIllustration {
+  min-height: 132px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: transparent;
+}
+
+.adminDashboardIllustration img {
+  display: block;
+  width: 100%;
+  height: 132px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.adminDashboardIntro {
+  min-width: 0;
+}
+
+.adminDashboardIntro h1 {
+  margin: 0;
+  color: #071a33;
+  font-size: 32px;
+  line-height: 1.12;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.adminDashboardIntro p {
+  margin: 10px 0 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .adminDashboardContent {
     padding: 0 16px 12px;
@@ -34,9 +81,13 @@
 
 .dashboardCharts {
   display: flex;
-  gap: 20px;
-  margin-top: 20px;
+  gap: 18px;
+  margin-top: 0;
   align-items: stretch;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.04);
 }
 
 .growthChartWrapper {
@@ -61,7 +112,7 @@
   grid-auto-rows: minmax(0, 1fr);
   column-gap: 20px;
   row-gap: 16px;
-  margin-top: 16px;
+  margin-top: 0;
   align-items: stretch;
 }
 
@@ -89,6 +140,11 @@
 }
 
 @media (max-width: 1200px) {
+  .adminDashboardOverview {
+    grid-template-columns: 230px minmax(0, 1fr);
+    padding-right: 220px;
+  }
+
   .dashboardRows {
     display: grid;
     grid-template-columns: 1fr;
@@ -100,5 +156,21 @@
     height: 2px;
     min-height: auto;
     background: rgba(15, 23, 42, 0.14);
+  }
+}
+
+@media (max-width: 900px) {
+  .adminDashboardOverview {
+    grid-template-columns: 1fr;
+    padding-right: 0;
+    gap: 16px;
+  }
+
+  .adminDashboardIntro {
+    order: -1;
+  }
+
+  .dashboardCharts {
+    flex-direction: column;
   }
 }

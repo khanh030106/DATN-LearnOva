@@ -153,6 +153,8 @@
   border-radius: 20px;
   object-fit: cover;
   display: block;
+  margin-left: 70px;
+  margin-bottom: 45px;
 }
 
 .course-detail-instructor-info,

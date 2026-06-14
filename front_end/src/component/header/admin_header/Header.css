@@ -1,12 +1,13 @@
 .admin-topbar {
-  position: static;
+  position: absolute;
+  top: 10px;
+  right: 28px;
   z-index: 20;
-  flex: 0 0 auto;
-  min-height: 78px;
+  min-height: 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 18px 34px 10px;
+  padding: 0;
   background: transparent;
   border-bottom: 0;
 }
@@ -14,7 +15,7 @@
 .admin-topbar__actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   justify-content: flex-end;
 }
 
@@ -31,7 +32,7 @@
   background: #ffffff;
   color: #071a33;
   text-decoration: none;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
   transition:
     border-color 0.2s ease,
     background 0.2s ease,
