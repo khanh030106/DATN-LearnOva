@@ -3,8 +3,7 @@
 }
 
 .testimonials-section {
-  padding: 96px 0;
-  background: linear-gradient(180deg, #f8f9ff 0%, #fffaf1 100%);
+  padding: 30px 0;
   overflow: hidden;
 }
 
@@ -16,20 +15,20 @@
 }
 
 .testimonials-title {
-  margin: 0 0 14px;
-  color: #7b520f;
+  margin: 0;
+  color: #003983;
   font-size: clamp(2rem, 3vw, 2.8rem);
   line-height: 1.15;
-  font-weight: 800;
-  font-style: italic;
-  letter-spacing: -0.03em;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0;
 }
 
 .testimonials-subtitle {
   margin: 0 auto;
   max-width: 720px;
-  color: #8a7650;
-  font-size: 0.95rem;
+  color: #475569;
+  font-size: 19px;
   font-weight: 500;
   line-height: 1.7;
 }
@@ -44,7 +43,7 @@
   display: flex;
   gap: 32px;
   width: max-content;
-  padding: 12px 24px;
+  padding: 40px 0;
   animation: testimonials-scroll 50s linear infinite;
 }
 
@@ -61,8 +60,8 @@
   padding: 32px;
   border-radius: 20px;
   background: #ffffff;
-  border: 1px solid rgba(232, 190, 116, 0.14);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
@@ -71,8 +70,8 @@
 
 .testimonial-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 18px 40px rgba(120, 86, 24, 0.12);
-  border-color: rgba(232, 190, 116, 0.24);
+  box-shadow: 0 10px 20px rgb(0 0 0 / 15%);
+  border-color: #93c5fd;
 }
 
 .testimonial-top {
@@ -80,13 +79,13 @@
 }
 
 .testimonial-quote {
-  color: #d7dbe8;
+  color: #1d4ed8;
   margin-bottom: 16px;
 }
 
 .testimonial-text {
   margin: 0;
-  color: #5f6675;
+  color: #475569;
   font-size: 0.95rem;
   line-height: 1.8;
   font-weight: 500;
@@ -116,7 +115,7 @@
 
 .testimonial-name {
   margin: 0 0 4px;
-  color: #1f2937;
+  color: #071a33;
   font-size: 0.78rem;
   line-height: 1.2;
   font-weight: 800;
@@ -126,7 +125,7 @@
 
 .testimonial-role {
   margin: 0;
-  color: #9ca3af;
+  color: #64748b;
   font-size: 0.62rem;
   line-height: 1.2;
   font-weight: 800;
@@ -169,7 +168,7 @@
 
   .testimonials-track {
     gap: 20px;
-    padding: 12px 16px;
+    padding: 40px 0;
     animation-duration: 42s;
   }
 
@@ -186,3 +185,4 @@
     font-size: 0.9rem;
   }
 }
+

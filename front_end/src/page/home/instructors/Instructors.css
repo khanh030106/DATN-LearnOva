@@ -1,0 +1,67 @@
+.instructors-section {
+    padding: 64px 0 48px;
+    background: #f8fafc;
+}
+
+.instructors-section__header {
+    max-width: 900px;
+    margin: 0 auto 90px;
+    text-align: center;
+}
+
+.instructors-section__header h2 {
+    color: #003983;
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 3px;
+}
+
+.instructors-section__header p {
+    margin: 0;
+    color: #475569;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.instructors-section__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 48px;
+    /* START HOME REVEAL ANIMATION FIX - PREVENT CARD CLIPPING */
+    /* Ensure grid doesn't clip cards when they transform on hover */
+    overflow: visible;
+    /* Add padding-bottom for card hover effect (translateY: -6px + box-shadow) */
+    padding-bottom: 48px;
+    /* END HOME REVEAL ANIMATION FIX - PREVENT CARD CLIPPING */
+}
+
+@media (max-width: 1200px) {
+    .instructors-section__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        row-gap: 64px;
+    }
+}
+
+@media (max-width: 768px) {
+    .instructors-section {
+        padding: 48px 20px;
+    }
+
+    .instructors-section__header {
+        margin-bottom: 56px;
+    }
+
+    .instructors-section__header h2 {
+        font-size: 32px;
+    }
+
+    .instructors-section__header p {
+        font-size: 16px;
+    }
+
+    .instructors-section__grid {
+        grid-template-columns: 1fr;
+        gap: 56px;
+    }
+}

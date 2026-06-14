@@ -1,0 +1,128 @@
+.growthChartCard {
+  width: 100%;
+  min-width: 0;
+  padding: 28px 32px 30px;
+  box-sizing: border-box;
+}
+
+.growthChartCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.growthChartCardTitleGroup {
+  min-width: 0;
+}
+
+.growthChartCardTitle {
+  margin: 0;
+  color: var(--text-main);
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.growthChartCardFilter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.growthChartCardSelect {
+  min-width: 154px;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  box-shadow: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.growthChartCardSelect:hover {
+  border-color: var(--blue-soft);
+  background: var(--blue-hover);
+}
+
+.growthChartCardSelect:focus {
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  background: #ffffff;
+}
+
+.growthChartCardBody {
+  width: 100%;
+  padding-top: 8px;
+}
+
+.growthChartChartArea {
+  width: 100%;
+  height: 360px;
+}
+
+.growthChartChartArea canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .growthChartCard {
+    padding: 22px 18px 24px;
+  }
+
+  .growthChartCardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+
+  .growthChartCardFilter {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .growthChartCardSelect {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .growthChartCardBody {
+    padding-top: 0;
+  }
+
+  .growthChartChartArea {
+    height: 320px;
+  }
+}
+
+@media (max-width: 520px) {
+  .growthChartCard {
+    padding: 18px 16px 20px;
+  }
+
+  .growthChartCardTitle {
+    font-size: 18px;
+  }
+  .growthChartCardBody {
+    padding-top: 0;
+  }
+
+  .growthChartChartArea {
+    height: 280px;
+  }
+}

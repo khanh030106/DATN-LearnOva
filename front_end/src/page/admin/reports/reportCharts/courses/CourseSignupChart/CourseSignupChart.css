@@ -1,0 +1,39 @@
+.chartCard {
+  padding: 20px;
+}
+
+.chartCardHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.chartCardLabel {
+  color: #9c8c76;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.chartCardTitle {
+  color: #111827;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.chartCardBadge {
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.chartCardBadgeBlue {
+  background: #2563eb;
+}
+
+.chartContainer {
+  min-height: 240px;
+}

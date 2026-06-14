@@ -1,0 +1,160 @@
+.roleDistributionCard {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 32px 30px;
+
+  box-sizing: border-box;
+}
+
+.roleDistributionHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 22px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-light);
+  text-align: center;
+}
+
+.roleDistributionTitle {
+  margin: 0;
+  color: var(--text-main);
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.roleDistributionChartWrap {
+  position: relative;
+  width: 100%;
+  max-width: 260px;
+  height: 250px;
+  margin: 0 auto;
+}
+
+.roleDistributionChart {
+  width: 100%;
+  height: 100%;
+}
+
+.roleDistributionChart canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.roleDistributionCenterLabel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  text-align: center;
+}
+
+.roleDistributionCenterValue {
+  color: var(--blue-primary);
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.roleDistributionCenterText {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.roleDistributionLegend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+  margin-top: 24px;
+}
+
+.roleDistributionLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.roleDistributionLegendDot {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+}
+
+.roleDistributionLegendContent {
+  min-width: 0;
+}
+
+.roleDistributionLegendName {
+  margin: 0;
+  color: var(--text-main);
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+.roleDistributionLegendValue {
+  margin: 2px 0 0;
+  color: var(--text-secondary);
+  font-size: 10px;
+  line-height: 1.35;
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .roleDistributionCard {
+    padding: 22px 18px 24px;
+  }
+
+  .roleDistributionHeader {
+    margin-bottom: 18px;
+  }
+
+  .roleDistributionChartWrap {
+    max-width: 240px;
+    height: 220px;
+  }
+
+  .roleDistributionLegend {
+    gap: 12px;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 520px) {
+  .roleDistributionCard {
+    padding: 18px 16px 20px;
+  }
+
+  .roleDistributionTitle {
+    font-size: 18px;
+  }
+
+  .roleDistributionChartWrap {
+    max-width: 220px;
+    height: 200px;
+  }
+
+  .roleDistributionLegend {
+    grid-template-columns: 1fr;
+  }
+
+  .roleDistributionCenterValue {
+    font-size: 28px;
+  }
+}

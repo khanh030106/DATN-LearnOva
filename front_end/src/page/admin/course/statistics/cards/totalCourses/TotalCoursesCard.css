@@ -1,0 +1,84 @@
+.courseStatCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 6px;
+  border: 2px solid;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.courseStatCard--total {
+  border-color: rgba(37, 99, 235, 0.28);
+}
+
+.courseStatHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.courseStatLabel {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.courseStatIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.courseStatIcon--total {
+  color: #d4a574;
+}
+
+.courseStatValue {
+  margin: 0;
+  color: #1b140c;
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.courseStatBar {
+  width: 100%;
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(37, 99, 235, 0.12);
+  overflow: hidden;
+}
+
+.courseStatBar--fill {
+  height: 100%;
+  width: 60%;
+}
+
+.courseStatBar--total {
+  background: #d4a574;
+}
+
+.courseStatTrend {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #0f8f52;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.courseStatTrendIcon {
+  font-size: 12px;
+}
+
+.courseStatTrendPercent {
+  color: #0f8f52;
+}

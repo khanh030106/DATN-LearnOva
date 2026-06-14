@@ -1,0 +1,324 @@
+.instructorTableSection {
+  width: 100%;
+  min-width: 0;
+}
+
+.instructorTableCard {
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  box-shadow: none;
+  background: #ffffff;
+}
+
+.instructorTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 920px;
+  table-layout: fixed;
+}
+
+.instructorTableCol--id {
+  width: 13%;
+}
+
+.instructorTableCol--profile {
+  width: 34%;
+}
+
+.instructorTableCol--classes {
+  width: 17%;
+}
+
+.instructorTableCol--students {
+  width: 14%;
+}
+
+.instructorTableCol--actions {
+  width: 22%;
+}
+
+.instructorTable thead {
+  background: #ffffff;
+}
+
+.instructorTable th,
+.instructorTable td {
+  padding: 14px 12px;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.instructorTable th:nth-child(2),
+.instructorTable td:nth-child(2) {
+  text-align: left;
+}
+
+.instructorTable th {
+  padding: 18px 12px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.instructorTable tbody tr {
+  background: #ffffff; /* ensure rows are white */
+}
+
+.instructorTableBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: rgba(81, 88, 200, 0.06);
+  color: #2e2c60;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.instructorTableProfile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.instructorTableAvatar {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.instructorTableProfileText {
+  min-width: 0;
+}
+
+.instructorTableName {
+  margin: 0;
+  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.instructorTableEmail {
+  margin: 4px 0 0;
+  color: var(--text-placeholder);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.instructorTableTag {
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--blue-dark);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.instructorTableStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.instructorTableStat strong {
+  color: #1b140c;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.instructorTableStat span {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.instructorTableRate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.instructorTableStar {
+  color: var(--blue-strong);
+}
+
+.instructorTableRate strong {
+  color: #1b140c;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.instructorTableRate span {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.instructorTableRevenue strong {
+  display: block;
+  color: #1b140c;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.instructorTableRevenue span {
+  color: #0f7f3c;
+  font-size: 12px;
+}
+
+.instructorTableStatus {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.instructorTableStatus--active {
+  background: rgba(26, 133, 92, 0.14);
+  color: #166a45;
+}
+
+.instructorTableStatus--paused {
+  background: rgba(247, 159, 6, 0.12);
+  color: #8a5d16;
+}
+
+.instructorTableStatus--locked {
+  background: rgba(255, 60, 60, 0.12);
+  color: #b02b2b;
+}
+
+.instructorTableActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.instructorActionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  background: #ffffff;
+  color: var(--blue-dark);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.instructorActionButton:hover {
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.22);
+}
+
+.instructorTablePagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px;
+}
+
+.instructorPaginationButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  padding: 10px 14px;
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  border-radius: 10px;
+  background: #f8fafc;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.instructorPaginationButton:hover:not(:disabled) {
+  border-color: var(--blue-primary);
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.instructorPaginationButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.instructorPaginationButton--active {
+  background-color: var(--blue-primary);
+  color: #1b140c;
+  border-color: var(--blue-primary);
+}
+
+@media (max-width: 1100px) {
+  .instructorTable {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 960px) {
+  .instructorTableCard {
+    overflow-x: auto;
+  }
+
+  .instructorTable {
+    min-width: 860px;
+  }
+}
+
+@media (max-width: 700px) {
+  .instructorTable thead {
+    display: none;
+  }
+
+  .instructorTable,
+  .instructorTable tbody,
+  .instructorTable tr,
+  .instructorTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .instructorTable td {
+    padding: 12px 14px;
+  }
+
+  .instructorTableRow {
+    margin-bottom: 16px;
+  }
+
+  .instructorTableProfile {
+    flex-wrap: wrap;
+  }
+
+  .instructorTableActions {
+    justify-content: flex-start;
+  }
+}

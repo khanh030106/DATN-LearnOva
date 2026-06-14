@@ -1,25 +1,75 @@
  package com.example.back_end.controller;
 
- import com.example.back_end.dto.response.AuthResponse;
- import com.example.back_end.dto.resquest.LoginRequest;
- import com.example.back_end.service.AuthService;
- import lombok.RequiredArgsConstructor;
- import org.springframework.http.ResponseEntity;
- import org.springframework.web.bind.annotation.PostMapping;
- import org.springframework.web.bind.annotation.RequestBody;
- import org.springframework.web.bind.annotation.RequestMapping;
- import org.springframework.web.bind.annotation.RestController;
+import com.example.back_end.dto.response.AuthTokenResponse;
+import com.example.back_end.dto.response.ErrorResponse;
+import com.example.back_end.dto.response.LoginResponse;
+import com.example.back_end.dto.resquest.LoginRequest;
+import com.example.back_end.service.AuthService;
+import com.example.back_end.service.RefreshCookieService;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.annotation.*;
 
 
- @RestController
- @RequiredArgsConstructor
- @RequestMapping("/api/learnova/auth")
- public class AuthController {
-
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/learnova/auth")
+public class AuthController {
      private final AuthService authService;
+     private final RefreshCookieService refreshCookieService;
 
-      @PostMapping("/login")
-      public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
-            return ResponseEntity.ok(authService.login(request));
-      }
+
+     @ExceptionHandler(BadCredentialsException.class)
+     public ResponseEntity<ErrorResponse> handleBadCredentials() {
+          return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                  .body(new ErrorResponse("Login failed. Please check your email and password."));
+     }
+
+
+     @PostMapping("/login")
+     public ResponseEntity<LoginResponse> login(
+           @RequestBody LoginRequest request,
+           HttpServletResponse response
+     ) {
+         AuthTokenResponse result = authService.login(request);
+
+         response.addHeader(
+                 HttpHeaders.SET_COOKIE,
+                 refreshCookieService.createRefreshTokenCookie(result.refreshToken(), request.rememberMe()).toString()
+     );
+
+     return ResponseEntity.ok(new LoginResponse(result.accessToken()));
+     }
+
+
+     @PostMapping("/refresh")
+     public ResponseEntity<LoginResponse> refresh(
+           @CookieValue("refreshToken") String refreshToken
+     ) {
+     LoginResponse response = authService.refreshAccessToken(refreshToken);
+
+     return ResponseEntity.ok(response);
+     }
+
+
+     @PostMapping("/logout")
+     public ResponseEntity<Void> logout(
+             @CookieValue(value = "refreshToken", required = false) String refreshToken,
+             HttpServletResponse response
+     ) {
+     authService.logout(refreshToken);
+
+     response.addHeader(
+             HttpHeaders.SET_COOKIE,
+             refreshCookieService.clearRefreshTokenCookie().toString()
+     );
+
+     return ResponseEntity.noContent().build();
+    }
+
+
  }

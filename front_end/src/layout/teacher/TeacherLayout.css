@@ -1,0 +1,83 @@
+.teacher-shell {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  overflow: hidden;
+  background: #f6f8fc;
+  color: #26354f;
+}
+
+.teacher-workspace {
+  min-width: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.teacher-main {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+}
+
+@media (max-width: 1080px) {
+  .teacher-shell {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .teacher-shell {
+    height: auto;
+    min-height: 100vh;
+    display: block;
+    overflow: visible;
+  }
+
+  .teacher-main {
+    padding-inline: 16px;
+  }
+
+  .teacher-workspace {
+    height: auto;
+    overflow: visible;
+  }
+
+  .teacher-main {
+    overflow: visible;
+  }
+}
+
+.teacher-main :where(
+  p,
+  span,
+  small,
+  em,
+  label,
+  input,
+  textarea,
+  select,
+  td,
+  th,
+  li
+) {
+  font-weight: 400 !important;
+}
+
+.teacher-main :where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  strong,
+  b,
+  button,
+  a
+) {
+  font-weight: 500 !important;
+}

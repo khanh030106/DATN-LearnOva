@@ -1,6 +1,25 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./CourseDetail.css";
+import LearnovaAI from "../AI/AI.jsx";
+
+import { FaBookmark, FaLink } from "react-icons/fa";
+import { FaCode, FaReact, FaCloud, FaDatabase, FaLock, FaRocket } from "react-icons/fa";
+import {
+  FaStar,
+  FaUsers,
+  FaBook,
+  FaClock,
+  FaGraduationCap,
+  FaCertificate,
+  FaGlobe,
+  FaHeart,
+  FaShareAlt,
+  FaVideo,
+  FaFileDownload,
+  FaInfinity,
+  FaMobileAlt,
+} from "react-icons/fa";
 
 const courses = [
   {
@@ -29,12 +48,12 @@ const courses = [
       "Real-world Projects",
     ],
     includes: [
-      { icon: "📹", text: "32 hours on-demand video" },
-      { icon: "📄", text: "128 downloadable resources" },
-      { icon: "♾️", text: "Full lifetime access" },
-      { icon: "📱", text: "Access on mobile and TV" },
-      { icon: "🎓", text: "Certificate of completion" },
-    ],
+  { icon: <FaReact />, text: "32 hours on-demand video" },
+  { icon: <FaReact />, text: "128 downloadable resources" },
+  { icon: <FaReact />, text: "Full lifetime access" },
+  { icon: <FaReact />, text: "Access on mobile and TV" },
+  { icon: <FaReact />, text: "Certificate of completion" },
+],
     gallery: [
       "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
@@ -44,87 +63,88 @@ const courses = [
   },
 ];
 
-const CourseDetail = () => {
-  const Curriculum = () => {
-    const highlights = [
-      { icon: '⌨️', title: 'Build responsive web interfaces', subtitle: 'with HTML, CSS and JavaScript' },
-      { icon: '⚛️', title: 'Create modern UIs with React', subtitle: 'components and hooks' },
-      { icon: '☁️', title: 'Work with RESTful APIs', subtitle: 'and handle data effectively' },
-      { icon: '🗄️', title: 'Design and manage databases', subtitle: 'using PostgreSQL' },
-      { icon: '🔒', title: 'Implement authentication', subtitle: 'and authorization (JWT)' },
-      { icon: '🚀', title: 'Deploy applications', subtitle: 'to cloud platforms with confidence' }
-    ];
+const Curriculum = () => {
+  const highlights = [
+    { icon: <FaCode />, title: "Build responsive web interfaces", subtitle: "with HTML, CSS and JavaScript" },
+    { icon: <FaReact />, title: "Create modern UIs with React", subtitle: "components and hooks" },
+    { icon: <FaCloud />, title: "Work with RESTful APIs", subtitle: "and handle data effectively" },
+    { icon: <FaDatabase />, title: "Design and manage databases", subtitle: "using PostgreSQL" },
+    { icon: <FaLock />, title: "Implement authentication", subtitle: "and authorization (JWT)" },
+    { icon: <FaRocket />, title: "Deploy applications", subtitle: "to cloud platforms with confidence" },
+  ];
 
-    const roadmap = [
-      { title: 'Web Fundamentals', lessons: 8, duration: '1h 24m' },
-      { title: 'JavaScript Essentials', lessons: 12, duration: '2h 10m' },
-      { title: 'React Core', lessons: 15, duration: '4h 30m' },
-      { title: 'Working with APIs', lessons: 10, duration: '2h 20m' },
-      { title: 'Databases with PostgreSQL', lessons: 8, duration: '2h 00m' },
-      { title: 'Authentication & Security', lessons: 6, duration: '1h 40m' },
-      { title: 'Deployment & DevOps', lessons: 6, duration: '2h 10m' },
-      { title: 'Real-world Project', lessons: 3, duration: '2h 00m' }
-    ];
+  const roadmap = [
+    { title: "Web Fundamentals", lessons: 8, duration: "1h 24m" },
+    { title: "JavaScript Essentials", lessons: 12, duration: "2h 10m" },
+    { title: "React Core", lessons: 15, duration: "4h 30m" },
+    { title: "Working with APIs", lessons: 10, duration: "2h 20m" },
+    { title: "Databases with PostgreSQL", lessons: 8, duration: "2h 00m" },
+    { title: "Authentication & Security", lessons: 6, duration: "1h 40m" },
+    { title: "Deployment & DevOps", lessons: 6, duration: "2h 10m" },
+    { title: "Real-world Project", lessons: 3, duration: "2h 00m" },
+  ];
 
-    const skills = ['HTML', 'CSS', 'JavaScript', 'React', 'REST API', 'PostgreSQL', 'JWT', 'Git', 'Docker', 'AWS'];
+  const skills = ["HTML", "CSS", "JavaScript", "React", "REST API", "PostgreSQL", "JWT", "Git", "Docker", "AWS"];
 
-    return (
-      <div className="curriculum-page">
-        <div className="curriculum-top">
-          <div className="learn-card-grid">
-            {highlights.map((item, idx) => (
-              <div key={idx} className="learn-card">
-                <div className="learn-card-head">
-                  <span className="learn-card-icon">{item.icon}</span>
-                  <span className="learn-card-check">✓</span>
-                </div>
-                <h3>{item.title}</h3>
-                <p>{item.subtitle}</p>
+  return (
+    <div className="curriculum-page">
+      <div className="curriculum-top">
+        <div className="learn-card-grid">
+          {highlights.map((item, idx) => (
+            <div key={idx} className="learn-card">
+              <div className="learn-card-head">
+                <span className="learn-card-icon">{item.icon}</span>
+                <span className="learn-card-check">✓</span>
               </div>
-            ))}
+              <h3>{item.title}</h3>
+              <p>{item.subtitle}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="curriculum-roadmap">
+        <div className="roadmap-header">
+          <div>
+            <p className="roadmap-label">Course roadmap</p>
+            <h3>8 sections · 68 lessons · ~18 hours total</h3>
           </div>
+          <button className="roadmap-expand" type="button">Expand all</button>
         </div>
 
-        <div className="curriculum-roadmap">
-          <div className="roadmap-header">
-            <div>
-              <p className="roadmap-label">Course roadmap</p>
-              <h3>8 sections · 68 lessons · ~18 hours total</h3>
-            </div>
-            <button className="roadmap-expand" type="button">Expand all</button>
-          </div>
-
-          <div className="roadmap-table">
-            {roadmap.map((item, idx) => (
-              <div key={idx} className="roadmap-row">
-                <div className="roadmap-index">{idx + 1}</div>
-                <div className="roadmap-info">
-                  <p className="roadmap-section">
-                    <span className="roadmap-toggle">›</span>
-                    {item.title}
-                  </p>
-                </div>
-                <div className="roadmap-meta">
-                  <span>{item.lessons} lessons</span>
-                  <span>{item.duration}</span>
-                </div>
+        <div className="roadmap-table">
+          {roadmap.map((item, idx) => (
+            <div key={idx} className="roadmap-row">
+              <div className="roadmap-index">{idx + 1}</div>
+              <div className="roadmap-info">
+                <p className="roadmap-section">
+                  <span className="roadmap-toggle">›</span>
+                  {item.title}
+                </p>
               </div>
-            ))}
-          </div>
-
-          <div className="skills-gain">
-            <p className="skills-heading">Skills you'll gain</p>
-            <div className="skills-list">
-              {skills.map((skill, idx) => (
-                <span key={idx} className="skill-chip">{skill}</span>
-              ))}
+              <div className="roadmap-meta">
+                <span>{item.lessons} lessons</span>
+                <span>{item.duration}</span>
+              </div>
             </div>
+          ))}
+        </div>
+
+        <div className="skills-gain">
+          <p className="skills-heading">Skills you'll gain</p>
+          <div className="skills-list">
+            {skills.map((skill, idx) => (
+              <span key={idx} className="skill-chip">{skill}</span>
+            ))}
           </div>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
+};
 
+const CourseDetail = () => {
+  const [activeTab, setActiveTab] = useState("Overview");
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -146,78 +166,90 @@ const CourseDetail = () => {
     );
   }
 
-  const [activeTab, setActiveTab] = useState('Overview');
-
   return (
     <div className="course-detail-page">
       <div className="course-detail-panel">
-
         <div className="course-detail-grid">
           <div className="course-detail-left">
             <div className="course-detail-card">
-              
-              {/* LEFT: Media + Gallery */}
               <div className="course-detail-media-section">
                 <div className="course-detail-media">
                   <img src={course.gallery[0]} alt={course.title} />
                 </div>
 
-                <div className="course-detail-gallery">
-                  {course.gallery.map((photo, index) => (
-                    <img key={index} src={photo} alt={`${course.title} ${index + 1}`} />
-                  ))}
+                <div className="course-detail-info">
+                  <div>
+                    <FaBook /> {course.lessons} Lessons
+                  </div>
+                  <div>
+                    <FaClock /> {course.duration}
+                  </div>
+                  <div>
+                    <FaGraduationCap /> {course.level}
+                  </div>
+                  <div>
+                    <FaCertificate /> {course.certificate}
+                  </div>
+                  <div>
+                    <FaGlobe /> {course.language}
+                  </div>
+                </div>
+
+                <div className="course-detail-actions">
+                  <button type="button">
+                    <FaHeart /> Wishlist
+                  </button>
+                  <button type="button">
+                    <FaLink /> Share
+                  </button>
                 </div>
               </div>
 
-              {/* RIGHT: Metadata */}
               <div className="course-detail-meta">
-                <span className="course-detail-badge">BEST SELLER</span>
-
                 <h1>{course.title}</h1>
                 <p>{course.description}</p>
 
-                <div className="course-detail-author">
-                  <img
-                    src="https://i.pravatar.cc/100"
-                    alt={course.teacher}
-                  />
-                  <div>
+                <div className="course-detail-instructor-card">
+                  <img src="https://i.pravatar.cc/100" alt={course.teacher} />
+                  <div className="course-detail-instructor-info">
                     <h4>{course.teacher}</h4>
                     <p>{course.subtitle}</p>
                   </div>
                 </div>
 
-                <div className="course-detail-stats">
-                  <span>⭐ {course.rating} ({course.reviews} reviews)</span>
-                  <span>{course.students} students</span>
+                <div className="course-detail-stats-grid">
+                  <div className="stat-card">
+                    <div className="stat-card-value">{course.rating}★</div>
+                    <div className="stat-card-label">Rating</div>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-card-value">{course.reviews}</div>
+                    <div className="stat-card-label">Reviews</div>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-card-value">{course.students}</div>
+                    <div className="stat-card-label">Students</div>
+                  </div>
                 </div>
 
-                <div className="course-detail-info">
-                  <div>📚 {course.lessons} Lessons</div>
-                  <div>⏱ {course.duration}</div>
-                  <div>🎓 {course.level}</div>
-                  <div>📜 {course.certificate}</div>
-                  <div>🌎 {course.language}</div>
-                </div>
-
-                <div className="course-detail-actions">
-                  <button type="button">❤️ Wishlist</button>
-                  <button type="button">🔗 Share</button>
+                <div className="course-highlight-box">
+                  <p><strong>✓ Giảng viên chuyên nghiệp</strong> với 15+ năm kinh nghiệm</p>
+                  <p><strong>✓ Chứng chỉ hoàn thành</strong> được công nhận</p>
+                  <p><strong>✓ Truy cập suốt đời</strong> vào toàn bộ nội dung</p>
                 </div>
               </div>
             </div>
 
             <div className="course-detail-tabs">
               <div className="tabs-row">
-                <button className={`tab-button ${activeTab === 'Overview' ? 'active' : ''}`} onClick={() => setActiveTab('Overview')}>Overview</button>
-                <button className={`tab-button ${activeTab === 'Curriculum' ? 'active' : ''}`} onClick={() => setActiveTab('Curriculum')}>Curriculum</button>
-                <button className={`tab-button ${activeTab === 'Instructor' ? 'active' : ''}`} onClick={() => setActiveTab('Instructor')}>Instructor</button>
-                <button className={`tab-button ${activeTab === 'Reviews' ? 'active' : ''}`} onClick={() => setActiveTab('Reviews')}>Reviews</button>
-                
+                <button className={`tab-button ${activeTab === "Overview" ? "active" : ""}`} onClick={() => setActiveTab("Overview")}>Overview</button>
+                <button className={`tab-button ${activeTab === "Curriculum" ? "active" : ""}`} onClick={() => setActiveTab("Curriculum")}>Curriculum</button>
+                <button className={`tab-button ${activeTab === "Instructor" ? "active" : ""}`} onClick={() => setActiveTab("Instructor")}>Instructor</button>
+                <button className={`tab-button ${activeTab === "Reviews" ? "active" : ""}`} onClick={() => setActiveTab("Reviews")}>Reviews</button>
               </div>
 
               <div className="tab-content">
-                {activeTab === 'Overview' && (
+                {activeTab === "Overview" && (
                   <>
                     <h2>About this course</h2>
                     <p>{course.description}</p>
@@ -226,14 +258,10 @@ const CourseDetail = () => {
                   </>
                 )}
 
-                {activeTab === 'Curriculum' && (
-                  <Curriculum />
-                )}
+                {activeTab === "Curriculum" && <Curriculum />}
 
-                {activeTab === 'Instructor' && (
+                {activeTab === "Instructor" && (
                   <div className="instructor-section">
-                    <h2>Meet Your Instructor</h2>
-                    
                     <div className="instructor-card">
                       <div className="instructor-avatar">
                         <img src="https://i.pravatar.cc/200" alt={course.teacher} />
@@ -261,11 +289,11 @@ const CourseDetail = () => {
                     <div className="instructor-bio">
                       <h4>About the Instructor</h4>
                       <p>
-                        With 15+ years of experience in full-stack web development, {course.teacher} has trained over 50,000 students worldwide. 
+                        With 15+ years of experience in full-stack web development, {course.teacher} has trained over 50,000 students worldwide.
                         Passionate about making complex concepts simple and accessible, helping thousands transition into tech careers.
                       </p>
                       <p>
-                        Specializing in React, Node.js, and modern web technologies, brings real-world industry experience into every lesson, 
+                        Specializing in React, Node.js, and modern web technologies, brings real-world industry experience into every lesson,
                         ensuring students learn practical skills used in production environments.
                       </p>
                     </div>
@@ -306,32 +334,28 @@ const CourseDetail = () => {
                   </div>
                 )}
 
-                {activeTab === 'Reviews' && (
+                {activeTab === "Reviews" && (
                   <div className="review-section">
                     <h2>Student Reviews</h2>
-                    <p className="review-summary">
-                      Trusted by learners worldwide — see what they say about this course.
-                    </p>
+                    <p className="review-summary">Trusted by learners worldwide — see what they say about this course.</p>
 
                     <div className="review-grid">
                       {[
                         {
-                          name: 'Nguyen An',
-                          role: 'Software Engineer',
+                          name: "Nguyen An",
+                          role: "Software Engineer",
                           rating: 5,
-                          text: 'This course helped me build real-world applications and land my first developer job.'
+                          text: "This course helped me build real-world applications and land my first developer job.",
                         },
                         {
-                          name: 'Le Thi Mai',
-                          role: 'Frontend Developer',
+                          name: "Le Thi Mai",
+                          role: "Frontend Developer",
                           rating: 4,
-                          text: 'The lessons are clear, practical, and the instructor explains difficult topics well.'
-                        }
+                          text: "The lessons are clear, practical, and the instructor explains difficult topics well.",
+                        },
                       ].map((review, index) => (
                         <article key={index} className="review-card">
-                          <div className="review-stars">
-                            {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
-                          </div>
+                          <div className="review-stars">{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</div>
                           <p className="review-text">{review.text}</p>
                           <div className="review-author">
                             <strong>{review.name}</strong>
@@ -341,13 +365,6 @@ const CourseDetail = () => {
                       ))}
                     </div>
                   </div>
-                )}
-
-                {activeTab === 'FAQ' && (
-                  <>
-                    <h2>FAQ</h2>
-                    <p>Frequently asked questions will appear here.</p>
-                  </>
                 )}
               </div>
             </div>
@@ -371,20 +388,20 @@ const CourseDetail = () => {
               </div>
             </div>
 
-            {/* This course includes */}
             <div className="course-includes-card">
               <h3>This course includes:</h3>
               <div className="includes-list">
                 {course.includes.map((item, index) => (
                   <div key={index} className="include-item">
-                    <span className="include-icon">{item.icon}</span>
+                    <span className="include-icon">
+  {item.icon}
+</span>
                     <span className="include-text">{item.text}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Have questions */}
             <div className="course-support-card">
               <h3>Have questions?</h3>
               <p>Our support team is here to help you.</p>
@@ -396,6 +413,9 @@ const CourseDetail = () => {
             </button>
           </aside>
         </div>
+      </div>
+      <div className="chatbot-fixed">
+        <LearnovaAI />
       </div>
     </div>
   );

@@ -1,0 +1,55 @@
+.totalRevenueCard {
+  background: var(--blue-pale);
+  border: 1px solid rgba(37, 99, 235, 0.28);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 170px;
+}
+
+.totalRevenueCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.totalRevenueCardTitle {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.totalRevenueCardIcon {
+  width: 28px;
+  height: 28px;
+  color: var(--blue-primary);
+}
+
+.totalRevenueCardBody {
+  margin-top: 18px;
+}
+
+.totalRevenueCardValue {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.totalRevenueCardMeta {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.totalRevenueCardSubtitle {
+  color: #64748b;
+  font-size: 13px;
+}

@@ -1,0 +1,47 @@
+.growthRateCard {
+  background: #ffffff;
+  border: 1px solid rgba(37, 99, 235, 0.16);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 170px;
+}
+
+.growthRateCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.growthRateCardTitle {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.growthRateCardIcon {
+  width: 26px;
+  height: 26px;
+  color: #16a34a;
+}
+
+.growthRateCardBody {
+  margin-top: 18px;
+}
+
+.growthRateCardValue {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 500;
+  color: #16a34a;
+}
+
+.growthRateCardDetail {
+  margin-top: 10px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
