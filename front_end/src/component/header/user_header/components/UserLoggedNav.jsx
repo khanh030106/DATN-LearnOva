@@ -1,10 +1,9 @@
 import { useCallback, useRef, useState } from "react";
-import CoursesMegaMenu from "./CoursesMegaMenu.jsx";
 import SimpleMenuDropdown from "./SimpleMenuDropdown.jsx";
 import SubscribeDropdown from "./SubscribeDropdown.jsx";
 
 const UserLoggedNav = ({
-  onlyLearning = false,
+
   learningItems,
   instructorItems,
   subscriptionPlans,
@@ -37,31 +36,6 @@ const UserLoggedNav = ({
     setOpenMenu((currentMenu) => (currentMenu === menuName ? null : menuName));
   }, []);
 
-  const learningNavItem = (
-    <li
-      className={`user-logged-nav-item ${openMenu === "learning" ? "is-open" : ""}`}
-      onMouseEnter={() => handleOpen("learning")}
-      onMouseLeave={handleClose}
-    >
-      <button
-        type="button"
-        className="user-logged-nav-button"
-        onClick={() => toggleMenu("learning")}
-      >
-        My Learning
-      </button>
-      <SimpleMenuDropdown items={learningItems} />
-    </li>
-  );
-
-  if (onlyLearning) {
-    return (
-      <nav className="user-logged-nav user-logged-nav--learning" aria-label="My learning navigation">
-        <ul className="user-logged-nav-list">{learningNavItem}</ul>
-      </nav>
-    );
-  }
-
   return (
     <nav className="user-logged-nav" aria-label="Logged user navigation">
       <ul className="user-logged-nav-list">
@@ -85,6 +59,21 @@ const UserLoggedNav = ({
         {/*    ratings={ratings}*/}
         {/*  />*/}
         {/*</li>*/}
+
+        <li
+          className={`user-logged-nav-item ${openMenu === "learning" ? "is-open" : ""}`}
+          onMouseEnter={() => handleOpen("learning")}
+          onMouseLeave={handleClose}
+        >
+          <button
+            type="button"
+            className="user-logged-nav-button"
+            onClick={() => toggleMenu("learning")}
+          >
+            My Learning
+          </button>
+          <SimpleMenuDropdown items={learningItems} />
+        </li>
 
         <li
           className={`user-logged-nav-item ${openMenu === "instructors" ? "is-open" : ""}`}

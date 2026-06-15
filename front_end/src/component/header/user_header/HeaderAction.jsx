@@ -1,19 +1,23 @@
 import { Link } from "react-router-dom";
-import { Globe2, ShoppingCart } from "lucide-react";
+import { ShoppingCart, Globe } from "lucide-react";
 
 const HeaderAction = () => {
   return (
     <div className="header-section">
-      <Link to="/learnova/user/cart" className="header-action-cart">
-        <ShoppingCart size={25} />
+      <Link to="/learnova/cart" className="header-action-cart">
+        <ShoppingCart size={22} />
       </Link>
 
-      <Link to={"/learnova/auth/login"} className="header-action-login">
-        Login
+      <Link to="/learnova/auth/login" className="header-action-login">
+        Log in
       </Link>
 
-      <button type="button" className="header-action-language" aria-label="Change language">
-        <Globe2 size={23} />
+      <Link to="/learnova/auth/register" className="header-action-signup">
+        Sign up
+      </Link>
+
+      <button className="header-action-language">
+        <Globe size={22} />
       </button>
     </div>
   );

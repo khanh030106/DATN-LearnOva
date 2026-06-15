@@ -628,8 +628,10 @@
 /* Footer */
 .course-card-bottom {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 12px;
   margin-top: auto;
 }
 
@@ -641,7 +643,7 @@
 }
 
 .course-card-bottom .course-price {
-  color: #0039c1;
+  color: #111827;
   font-size: 20px;
   font-weight: 700;
 }
@@ -667,22 +669,27 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
+  width: 100%;
+  min-height: 38px;
   padding: 8px 14px;
   border-radius: 8px;
   background: var(--bg-white);
-  border: 1.5px solid var(--blue-primary);
-  color: var(--blue-primary);
+  border: 1px solid #bfdbfe;
+  color: #2563eb;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.25s ease;
+  box-shadow: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   white-space: nowrap;
-  flex-shrink: 0;
 }
 
 .add-to-cart-btn:hover {
-  background: var(--blue-primary);
-  color: var(--text-white);
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+  box-shadow: none;
+  transform: none;
 }
 
 /* ===== PAGINATION ===== */
@@ -708,6 +715,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.pagination-item:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 
 .pagination-item:hover:not(.active) {

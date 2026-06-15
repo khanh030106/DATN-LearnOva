@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Course.css";
-import { BiHeart, BiCartAdd } from "react-icons/bi";
+import { BiHeart, BiCart } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
 import { LayoutGrid, List, RotateCcw, Users, X } from "lucide-react";
 import LearnovaAI from "../../home/AI/AI.jsx";
@@ -183,6 +183,11 @@ function CoursesPage() {
   const [sortBy, setSortBy] = useState("popular");
   const [selectedCategories, setSelectedCategories] = useState(["tech"]);
   const [selectedLevels, setSelectedLevels] = useState(["intermediate"]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const coursesPerPage = 8;
+  const totalPages = Math.ceil(courses.length / coursesPerPage);
+  const startIndex = (currentPage - 1) * coursesPerPage;
+  const visibleCourses = courses.slice(startIndex, startIndex + coursesPerPage);
 
   const activeFilters = [
     ...selectedCategories
@@ -292,7 +297,7 @@ function CoursesPage() {
           </div>
 
           <div className={`courses-grid ${viewMode === "list" ? "courses-grid--list" : ""}`}>
-            {courses.map((course) => (
+            {visibleCourses.map((course) => (
               <div key={course.id} className="course-card-course">
                 <div className="course-card-img">
                   <img src={course.image} alt={course.title} />
@@ -353,12 +358,44 @@ function CoursesPage() {
                       )}
                     </div>
                     <button type="button" className="add-to-cart-btn">
-                      <BiCartAdd size={18} />
+                      <BiCart size={18} />
+                      <span>Add to Cart</span>
                     </button>
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="pagination-section" aria-label="Courses pagination">
+            <button
+              type="button"
+              className="pagination-item"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}
+            >
+              ‹
+            </button>
+
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+              <button
+                key={page}
+                type="button"
+                className={`pagination-item ${currentPage === page ? "active" : ""}`}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              type="button"
+              className="pagination-item"
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}
+            >
+              ›
+            </button>
           </div>
         </main>
       </div>
