@@ -21,36 +21,37 @@ const Header = () => {
     isCartHeader;
 
   useEffect(() => {
-    const header = headerRef.current;
-    if (!header) return;
+  const header = headerRef.current;
+  if (!header) return;
 
-    let ticking = false;
+  let ticking = false;
 
-    const updateHeaderState = () => {
-      const shouldUseScrolledHeader =
-        useSolidHeader || window.scrollY > (isHeroHeader ? 120 : 20);
+  const updateHeaderState = () => {
+    const shouldUseScrolledHeader =
+      useSolidHeader || window.scrollY > (isHeroHeader ? 120 : 20);
 
-      header.classList.toggle("scrolled", shouldUseScrolledHeader);
-      header.classList.toggle(
-        "hero-header-top",
-        isHeroHeader && !shouldUseScrolledHeader,
-      );
-      ticking = false;
-    };
+    header.classList.toggle("scrolled", shouldUseScrolledHeader);
+    header.classList.toggle(
+      "hero-header-top",
+      isHeroHeader && !shouldUseScrolledHeader
+    );
+    ticking = false;
+  };
 
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(updateHeaderState);
-    };
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(updateHeaderState);
+  };
 
-    updateHeaderState();
-    window.addEventListener("scroll", onScroll, { passive: true });
+  updateHeaderState();
 
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, [isHeroHeader, useSolidHeader]);
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  return () => {
+    window.removeEventListener("scroll", onScroll);
+  };
+}, [isHeroHeader, useSolidHeader, pathname]);
 
   return (
     <header
