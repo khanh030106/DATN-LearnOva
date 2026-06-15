@@ -273,19 +273,19 @@ function InstructorsPage() {
       <div className="page-container">
         <div className="sidebar-wrapper">
           <aside className="sidebar-in">
-            <div className="sidebar-header">
-              <h3>Filter instructors</h3>
-              <button className="clear-all">Clear all</button>
-            </div>
+            {/*<div className="sidebar-header">*/}
+            {/*  <h3>Filter instructors</h3>*/}
+            {/*  <button className="clear-all">Clear all</button>*/}
+            {/*</div>*/}
 
-            <div className="filter-group">
+            <div className="filter-group-in">
               <div className="filter-title">
                 <span>Expertise</span>
                 <small>{filterData.expertise.length} topics</small>
               </div>
               <div className="filter-chip-grid">
                 {filterData.expertise.map((item) => (
-                    <label key={item.id} className="filter-chip">
+                    <label key={item.id} className="filter-chip-in">
                       <input type="checkbox" />
                       <span className="filter-chip-name">
                 {React.createElement(item.icon, {
@@ -301,14 +301,14 @@ function InstructorsPage() {
               </div>
             </div>
 
-            <div className="filter-group">
+            <div className="filter-group-in">
               <div className="filter-title">
                 <span>Rating</span>
                 <small>Minimum score</small>
               </div>
               <div className="filter-list">
                 {filterData.rating.map((item, index) => (
-                    <label key={index} className="filter-row">
+                    <label key={index} className="filter-row-in">
                       <input type="radio" name="rating" />
                       <span className="filter-row-main">
                 <span className="rating-stars">
@@ -326,14 +326,14 @@ function InstructorsPage() {
               </div>
             </div>
 
-            <div className="filter-group">
+            <div className="filter-group-in">
               <div className="filter-title">
                 <span>Experience</span>
                 <small>Teaching years</small>
               </div>
               <div className="filter-pill-row">
                 {filterData.experience.map((item) => (
-                    <label key={item.id} className="filter-pill">
+                    <label key={item.id} className="filter-pill-in">
                       <input type="checkbox" />
                       <span>{item.name}</span>
                       <em>{item.count}</em>
@@ -342,14 +342,14 @@ function InstructorsPage() {
               </div>
             </div>
 
-            <div className="filter-group">
+            <div className="filter-group-in">
               <div className="filter-title">
                 <span>Students</span>
                 <small>Learner range</small>
               </div>
               <div className="filter-pill-row">
                 {filterData.students.map((item) => (
-                    <label key={item.id} className="filter-pill">
+                    <label key={item.id} className="filter-pill-in">
                       <input type="checkbox" />
                       <span>{item.name}</span>
                       <em>{item.count}</em>
@@ -358,7 +358,7 @@ function InstructorsPage() {
               </div>
             </div>
 
-            <div className="filter-group">
+            <div className="filter-group-in">
               <div className="filter-title">
                 <span>Language</span>
                 <small>{filterData.language.length} options</small>

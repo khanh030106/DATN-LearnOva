@@ -72,7 +72,7 @@ function InstructorDetail() {
                     </div>
 
                     {/* Message Card */}
-                    <div className="sidebar-card contact-card">
+                    <div className="sidebar-card-contact-card">
                         <h3>
                             Receive updates from the instructor</h3>
                         <p>Do you have any questions? Please contact the instructor directly</p>
