@@ -857,28 +857,31 @@
     gap: 20px;
     height: fit-content;
     position: sticky;
-    top: 75px;
+    top: 85px;
 }
 
-.sidebar-card {
+.sidebar-card-contract-card {
     background: white;
     padding: 20px;
     border-radius: 8px;
 
 }
 
-.sidebar-card h3 {
+.sidebar-card-contract-card h3 {
     font-size: 16px;
     font-weight: 700;
     color: #1f2937;
     margin-bottom: 16px;
 }
 
-.sidebar-card p {
+.sidebar-card-contract-card p {
     font-size: 13px;
     color: #6b7280;
     line-height: 1.6;
     margin-bottom: 12px;
+}
+.sidebar-card h3{
+    margin-bottom: 20px;
 }
 
 /* Contact Items */
@@ -945,7 +948,7 @@
 .chat-btn {
     width: 100%;
     padding: 12px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(102, 86, 225, 0.68);
     color: white;
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 6px;
@@ -961,7 +964,7 @@
 }
 
 .chat-btn:hover {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(68, 126, 227, 0.53);
     border-color: rgba(255, 255, 255, 0.5);
 }
 
