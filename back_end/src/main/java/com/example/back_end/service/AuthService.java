@@ -1,10 +1,12 @@
 package com.example.back_end.service;
 
 import com.example.back_end.dto.response.AuthTokenResponse;
+import com.example.back_end.dto.response.CurrentUserResponse;
 import com.example.back_end.dto.response.LoginResponse;
 import com.example.back_end.dto.resquest.LoginRequest;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.Verificationtoken;
+import com.example.back_end.repository.UserRepository;
 import com.example.back_end.security.CustomUserDetailsService;
 import com.example.back_end.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,8 @@ public class AuthService {
     private final JwtService jwtService;
     private final VerificationTokenService verificationTokenService;
     private final CustomUserDetailsService customUserDetailsService;
-    
+    private final UserRepository userRepository;
+
 
     @Transactional
     public AuthTokenResponse login(LoginRequest request) {
@@ -63,5 +66,21 @@ public class AuthService {
 
         Verificationtoken validRefreshToken = verificationTokenService.verifyRefreshToken(refreshToken);
         verificationTokenService.deleteRefreshTokenByUser(validRefreshToken.getUser());
+    }
+
+    public CurrentUserResponse getCurrentUser(String email) {
+
+        User user = userRepository
+                .findByEmailAndIsDeletedFalse(email, false)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+
+        return new CurrentUserResponse(
+                user.getId(),
+                user.getFullName(),
+                user.getEmail(),
+                user.getAvatar(),
+                user.getDateOfBirth()
+        );
     }
 }
