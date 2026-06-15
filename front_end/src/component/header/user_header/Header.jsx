@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import logo from "../../../assets/LogoText.png";
 import NavMenu from "./NavMenu.jsx";
 import HeaderAction from "./HeaderAction.jsx";
-import { Search } from "lucide-react";
 import "./Header.css";
 
 const Header = () => {
@@ -64,8 +63,6 @@ const Header = () => {
         </a>
 
         <NavMenu />
-
-
 
         <HeaderAction />
       </div>

@@ -16,13 +16,12 @@ import {
   subscriptionPlans,
   userData,
   userMenuItems,
-} from "./headerData.js";
+} from "./components/headerData.js";
 import AvatarDropdown from "./components/AvatarDropdown.jsx";
 import CartDropdown from "./components/CartDropdown.jsx";
 import HeaderSearch from "./components/HeaderSearch.jsx";
 import NotificationDropdown from "./components/NotificationDropdown.jsx";
 import UserLoggedNav from "./components/UserLoggedNav.jsx";
-import { ChevronDown } from "lucide-react";
 import CoursesMegaMenu from "./components/CoursesMegaMenu";
 import "./UserLoggedHeader.css";
 

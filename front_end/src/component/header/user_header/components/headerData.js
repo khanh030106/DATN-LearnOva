@@ -1,6 +1,6 @@
-import courseOne from "../../../assets/course/course-1.jpg";
-import courseTwo from "../../../assets/course/course-2.jpg";
-import courseThree from "../../../assets/course/course-3.jpg";
+import courseOne from "../../../../assets/course/course-1.jpg";
+import courseTwo from "../../../../assets/course/course-2.jpg";
+import courseThree from "../../../../assets/course/course-3.jpg";
 
 export const homeMenuItems = [
   { id: "featured", label: "Featured Courses", path: "/learnova/courses?sort=featured" },
