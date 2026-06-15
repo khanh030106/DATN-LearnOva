@@ -120,7 +120,7 @@ function LearnovaAI() {
 
                     {/* Header */}
                     <div className="chat-header">
-                        <div className="header-left">
+                        <div className="header-left-AI">
                             <div className="avatar-ai">
                                 <img src={AIImage} alt="Learnova AI" />
                             </div>
