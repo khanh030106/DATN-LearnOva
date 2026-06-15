@@ -1,5 +1,4 @@
 import "./VoucherTable.css";
-import { useNavigate } from "react-router-dom";
 import { FiEye, FiEdit, FiTrash2 } from "react-icons/fi";
 
 // ===== VOUCHER DATA =====
@@ -45,9 +44,7 @@ const vouchers = [
 // ===== FILTER OPTIONS =====
 const statusOptions = ["All statuses", "Active", "Expiring Soon", "Expired"];
 
-const VoucherTable = () => {
-  const navigate = useNavigate();
-
+const VoucherTable = ({ onCreateVoucher }) => {
   return (
     <section className="voucherTableSection">
       {/* HEADER SECTION */}
@@ -63,74 +60,76 @@ const VoucherTable = () => {
         </span>
       </div>
 
-      {/* SEARCH & FILTER SECTION */}
-      <div className="voucherTableControls">
-        <input
-          type="text"
-          placeholder="Search code or campaign..."
-          className="voucherSearchInput"
-        />
-        <select className="voucherStatusSelect">
-          {statusOptions.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-        <button
-          type="button"
-          className="voucherCreateBtn"
-          onClick={() => navigate("/learnova/admin/vouchers/create")}
-        >
-          Create New Voucher
-        </button>
-      </div>
-
-      {/* TABLE SECTION */}
-      <div className="voucherTableWrapper">
-        <table className="voucherTable">
-          <thead>
-            <tr>
-              <th>CODE</th>
-              <th>CAMPAIGN NAME</th>
-              <th>DISCOUNT</th>
-              <th>USED / CAPACITY</th>
-              <th>EXPIRY DATE</th>
-              <th>STATUS</th>
-              <th>ACTIONS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* MAPPING VOUCHER DATA */}
-            {vouchers.map((v) => (
-              <tr key={v.code}>
-                <td>{v.code}</td>
-                <td>{v.name}</td>
-                <td>{v.discount}</td>
-                <td>{v.used}</td>
-                <td>{v.expires}</td>
-                <td>
-                  <span className={`voucherBadge ${v.statusClass}`}>
-                    {v.status}
-                  </span>
-                </td>
-                <td>
-                  <div className="voucherActions">
-                    <button className="voucherActionBtn" title="Xem">
-                      <FiEye size={16} />
-                    </button>
-                    <button className="voucherActionBtn" title="Sửa">
-                      <FiEdit size={16} />
-                    </button>
-                    <button className="voucherActionBtn" title="Xóa">
-                      <FiTrash2 size={16} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
+      <div className="voucherTableCard">
+        {/* SEARCH & FILTER SECTION */}
+        <div className="voucherTableControls">
+          <input
+            type="text"
+            placeholder="Search code or campaign..."
+            className="voucherSearchInput"
+          />
+          <select className="voucherStatusSelect">
+            {statusOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
             ))}
-          </tbody>
-        </table>
+          </select>
+          <button
+            type="button"
+            className="voucherCreateBtn"
+            onClick={onCreateVoucher}
+          >
+            Create New Voucher
+          </button>
+        </div>
+
+        {/* TABLE SECTION */}
+        <div className="voucherTableWrapper">
+          <table className="voucherTable">
+            <thead>
+              <tr>
+                <th>CODE</th>
+                <th>CAMPAIGN NAME</th>
+                <th>DISCOUNT</th>
+                <th>USED / CAPACITY</th>
+                <th>EXPIRY DATE</th>
+                <th>STATUS</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* MAPPING VOUCHER DATA */}
+              {vouchers.map((v) => (
+                <tr key={v.code}>
+                  <td>{v.code}</td>
+                  <td>{v.name}</td>
+                  <td>{v.discount}</td>
+                  <td>{v.used}</td>
+                  <td>{v.expires}</td>
+                  <td>
+                    <span className={`voucherBadge ${v.statusClass}`}>
+                      {v.status}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="voucherActions">
+                      <button className="voucherActionBtn" title="Xem">
+                        <FiEye size={16} />
+                      </button>
+                      <button className="voucherActionBtn" title="Sửa">
+                        <FiEdit size={16} />
+                      </button>
+                      <button className="voucherActionBtn" title="Xóa">
+                        <FiTrash2 size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );

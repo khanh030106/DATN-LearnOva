@@ -96,7 +96,7 @@
 
 .teacher-create-step__heading h1 {
   color: #071a33;
-  font-family: math;
+  font-family: var(--font-sans);
   font-size: clamp(1.35rem, 1.7vw, 1.65rem);
   font-weight: 800;
   line-height: 1.2;
@@ -522,7 +522,7 @@
 
 .teacher-student-preview__body h2 {
   color: #071a33;
-  font-family: math;
+  font-family: var(--font-sans);
   font-size: 1.2rem;
 }
 
@@ -577,7 +577,7 @@
 
 .teacher-preview-curriculum h2 {
   color: #071a33;
-  font-family: math;
+  font-family: var(--font-sans);
   font-size: 1.1rem;
 }
 
@@ -671,7 +671,7 @@
 .teacher-course-summary strong {
   display: block;
   color: #071a33;
-  font-family: math;
+  font-family: var(--font-sans);
   font-size: 1rem;
 }
 

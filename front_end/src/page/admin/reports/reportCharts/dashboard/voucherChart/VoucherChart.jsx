@@ -44,7 +44,7 @@ const VoucherChart = () => {
       y: {
         beginAtZero: true,
         ticks: {
-          font: { size: 12, family: "system-ui" },
+          font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
           color: "#a89a85",
           callback: (value) => value + " uses",
         },
@@ -55,7 +55,7 @@ const VoucherChart = () => {
       },
       x: {
         ticks: {
-          font: { size: 12, family: "system-ui" },
+          font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
           color: "#8b7355",
         },
         grid: {

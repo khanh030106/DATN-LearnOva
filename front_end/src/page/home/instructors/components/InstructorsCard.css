@@ -39,7 +39,7 @@
 .home-instructor-card h3 {
     margin: 0 0 10px;
     color: #071a33;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-sans);
     font-size: 26px;
     font-weight: 500;
 }

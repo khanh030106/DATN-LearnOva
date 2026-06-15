@@ -31,7 +31,7 @@ const RoleDistributionChart = () => {
       legend: {
         position: "right",
         labels: {
-          font: { size: 13, family: "system-ui" },
+          font: { size: 13, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
           color: "#5e4734",
           padding: 16,
           usePointStyle: true,

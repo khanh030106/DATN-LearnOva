@@ -56,7 +56,7 @@ const topTeachers = [
 const TopTeacherRevenue = () => {
   return (
     <section
-      className="topRevenueBlockCard topTeacherRevenueCard"
+      className="topRevenueBlockSection topTeacherRevenueCard"
       aria-label="Top earning instructor partners"
     >
       <div className="topRevenueBlockHeader">
@@ -71,39 +71,41 @@ const TopTeacherRevenue = () => {
         <span className="topRevenueBlockBadge">Summary</span>
       </div>
 
-      <div className="topRevenueBlockTableWrapper">
-        <table className="topRevenueBlockTable topTeacherTable">
-          <thead>
-            <tr>
-              <th>RANK</th>
-              <th>INSTRUCTOR</th>
-              <th>COURSES</th>
-              <th>TOTAL STUDENTS</th>
-              <th>REVENUE EARNED</th>
-              <th>AVG / COURSE</th>
-              <th>SHARE</th>
-            </tr>
-          </thead>
-          <tbody>
-            {topTeachers.map((teacher) => (
-              <tr key={teacher.rank}>
-                <td>
-                  <span className="topRevenueBlockRank">{teacher.rank}</span>
-                </td>
-                <td>
-                  <div className="topTeacherCell">
-                    <span className="topTeacherName">{teacher.name}</span>
-                  </div>
-                </td>
-                <td>{teacher.courses}</td>
-                <td>{teacher.students}</td>
-                <td className="topTeacherRevenue">{teacher.revenue}</td>
-                <td>{teacher.avgRevenue}</td>
-                <td>{teacher.share}</td>
+      <div className="topRevenueBlockCard">
+        <div className="topRevenueBlockTableWrapper">
+          <table className="topRevenueBlockTable topTeacherTable">
+            <thead>
+              <tr>
+                <th>RANK</th>
+                <th>INSTRUCTOR</th>
+                <th>COURSES</th>
+                <th>TOTAL STUDENTS</th>
+                <th>REVENUE EARNED</th>
+                <th>AVG / COURSE</th>
+                <th>SHARE</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {topTeachers.map((teacher) => (
+                <tr key={teacher.rank}>
+                  <td>
+                    <span className="topRevenueBlockRank">{teacher.rank}</span>
+                  </td>
+                  <td>
+                    <div className="topTeacherCell">
+                      <span className="topTeacherName">{teacher.name}</span>
+                    </div>
+                  </td>
+                  <td>{teacher.courses}</td>
+                  <td>{teacher.students}</td>
+                  <td className="topTeacherRevenue">{teacher.revenue}</td>
+                  <td>{teacher.avgRevenue}</td>
+                  <td>{teacher.share}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );

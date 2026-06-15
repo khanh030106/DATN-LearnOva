@@ -30,7 +30,7 @@
 .course-title h3 {
     min-height: 56px;
     margin: 0;
-    font-family: math;
+    font-family: var(--font-sans);
     color: #071a33;
     font-size: 22px;
     line-height: 1.25;

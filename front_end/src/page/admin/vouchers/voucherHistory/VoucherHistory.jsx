@@ -81,46 +81,48 @@ const VoucherHistory = () => {
         </div>
       </div>
 
-      {/* SEARCH SECTION */}
-      <div className="voucherHistoryControls">
-        <input
-          type="text"
-          placeholder="Search student name, code..."
-          className="voucherHistorySearchInput"
-        />
-      </div>
+      <div className="voucherHistoryCard">
+        {/* SEARCH SECTION */}
+        <div className="voucherHistoryControls">
+          <input
+            type="text"
+            placeholder="Search student name, code..."
+            className="voucherHistorySearchInput"
+          />
+        </div>
 
-      {/* TABLE SECTION */}
-      <div className="voucherHistoryTableWrapper">
-        <table className="voucherHistoryTable">
-          <thead>
-            <tr>
-              <th>STUDENT</th>
-              <th>REGISTERED COURSE</th>
-              <th>APPLIED CODE</th>
-              <th>ORIGINAL PRICE</th>
-              <th>DISCOUNT</th>
-              <th>PAID</th>
-              <th>USED AT</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* MAPPING VOUCHER HISTORY DATA */}
-            {voucherHistories.map((h) => (
-              <tr key={h.id}>
-                <td>{h.student}</td>
-                <td>{h.course}</td>
-                <td>
-                  <span className="voucherHistoryCode">{h.code}</span>
-                </td>
-                <td>{h.originalPrice}</td>
-                <td className="voucherHistoryDiscount">{h.discount}</td>
-                <td className="voucherHistoryFinal">{h.finalPrice}</td>
-                <td>{h.date}</td>
+        {/* TABLE SECTION */}
+        <div className="voucherHistoryTableWrapper">
+          <table className="voucherHistoryTable">
+            <thead>
+              <tr>
+                <th>STUDENT</th>
+                <th>REGISTERED COURSE</th>
+                <th>APPLIED CODE</th>
+                <th>ORIGINAL PRICE</th>
+                <th>DISCOUNT</th>
+                <th>PAID</th>
+                <th>USED AT</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {/* MAPPING VOUCHER HISTORY DATA */}
+              {voucherHistories.map((h) => (
+                <tr key={h.id}>
+                  <td>{h.student}</td>
+                  <td>{h.course}</td>
+                  <td>
+                    <span className="voucherHistoryCode">{h.code}</span>
+                  </td>
+                  <td>{h.originalPrice}</td>
+                  <td className="voucherHistoryDiscount">{h.discount}</td>
+                  <td className="voucherHistoryFinal">{h.finalPrice}</td>
+                  <td>{h.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );

@@ -1,34 +1,89 @@
 .adminLayout {
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
-  background: var(--bg-secondary);
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  overflow: hidden;
+  background: #f6f8fc;
+  color: #26354f;
 }
 
 .adminLayoutContent {
-  flex: 1;
+  min-width: 0;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  min-width: 0;
-  padding: 0;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: 16px;
 }
 
 .adminLayoutMain {
-  flex: 1;
-  min-width: 0;
-  padding: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 24px 24px 24px;
+  font-family: var(--font-sans);
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
-@media (max-width: 768px) {
+.adminLayout :where(select) {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: none !important;
+  padding-right: 14px !important;
+}
+
+.adminLayout :where(select::-ms-expand) {
+  display: none;
+}
+
+.adminLayoutMain table thead,
+.adminLayoutMain table thead tr,
+.adminLayoutMain :where(
+  .userManagementUsersTableHeader,
+  .userRowTableHeader
+) {
+  background: #eff6ff !important;
+}
+
+.adminLayoutMain table thead th {
+  background: #eff6ff !important;
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+.adminLayoutMain :where(
+  .userManagementUsersTableHeader > span,
+  .userRowTableHeader > span
+) {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+@media (max-width: 1080px) {
   .adminLayout {
-    flex-direction: column;
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .adminLayout {
+    height: auto;
+    min-height: 100vh;
+    display: block;
+    overflow: visible;
   }
 
   .adminLayoutContent {
-    padding: 0;
+    height: auto;
+    overflow: visible;
   }
 
   .adminLayoutMain {
-    padding: 0;
+    overflow: visible;
+    padding-inline: 16px;
   }
 }

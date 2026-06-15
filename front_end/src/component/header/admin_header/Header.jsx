@@ -1,64 +1,67 @@
-import { Bell, Settings, Search } from "lucide-react";
+import { Bell, Settings, ChevronDown } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import "./Header.css";
 
 const headerData = {
-  searchPlaceholder: "Search data, users...",
-  organizationName: "ADMIN LEARNOVA",
+  adminName: "Hiếu",
   roleName: "Administrator",
   avatarUrl:
     "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop",
   avatarAlt: "Administrator avatar",
 };
 
-const actionItems = [
-  {
-    id: "notifications",
-    label: "Notifications",
-    iconName: "bell",
-    badge: "3",
-  },
-  {
-    id: "settings",
-    label: "Settings",
-    iconName: "settings",
-    badge: null,
-  },
-];
-
-const iconMap = {
-  bell: Bell,
-  settings: Settings,
-};
-
 const Header = () => {
+  const location = useLocation();
+  const pathname = location.pathname;
+
+  let title = "";
+
+  const normPath = pathname.replace(/\/$/, "");
+
+  if (normPath === "/learnova/admin") {
+    title = "Overview";
+  } else if (normPath === "/learnova/admin/users") {
+    title = "User Management";
+  } else if (normPath === "/learnova/admin/teachers") {
+    title = "Instructors";
+  } else if (normPath === "/learnova/admin/courses") {
+    title = "Courses";
+  } else if (normPath === "/learnova/admin/categories") {
+    title = "Categories";
+  } else if (normPath === "/learnova/admin/revenue") {
+    title = "Revenue";
+  } else if (normPath === "/learnova/admin/vouchers") {
+    title = "Vouchers";
+  } else if (normPath === "/learnova/admin/reviews-comments") {
+    title = "Reviews & Comments";
+  } else if (normPath === "/learnova/admin/violation-reports") {
+    title = "Violation Reports";
+  } else if (normPath === "/learnova/admin/settings") {
+    title = "Settings";
+  } else if (normPath === "/learnova/admin/notifications") {
+    title = "Notifications";
+  } else {
+    title = "Dashboard";
+  }
+
   return (
     <header className="admin-topbar">
-      <label className="admin-search">
-        <Search size={20} />
-        <input
-          type="search"
-          placeholder={headerData.searchPlaceholder}
-          aria-label={headerData.searchPlaceholder}
-        />
-      </label>
+      <div className="admin-topbar__intro">
+        <h1>{title}</h1>
+      </div>
 
       <div className="admin-topbar__actions">
-        {actionItems.map((item) => {
-          const ActionIcon = iconMap[item.iconName];
-          return (
-            <button key={item.id} aria-label={item.label}>
-              <ActionIcon size={20} />
-              {item.badge ? <span>{item.badge}</span> : null}
-            </button>
-          );
-        })}
-
+        <button aria-label="Notifications" className="admin-topbar__btn">
+          <Bell size={20} />
+          <span className="admin-topbar__badge admin-topbar__badge--red">3</span>
+        </button>
+        <button aria-label="Settings" className="admin-topbar__btn">
+          <Settings size={20} />
+        </button>
         <div className="admin-profile">
-          <div>
-            <strong>{headerData.organizationName}</strong>
-            <small>{headerData.roleName}</small>
-          </div>
           <img src={headerData.avatarUrl} alt={headerData.avatarAlt} />
+          <span>{headerData.adminName}</span>
+          <ChevronDown size={16} />
         </div>
       </div>
     </header>

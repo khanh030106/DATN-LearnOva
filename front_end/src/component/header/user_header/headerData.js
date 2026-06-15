@@ -1,12 +1,12 @@
-import courseOne from "../../../../assets/course/course-1.jpg";
-import courseTwo from "../../../../assets/course/course-2.jpg";
-import courseThree from "../../../../assets/course/course-3.jpg";
+import courseOne from "../../../assets/course/course-1.jpg";
+import courseTwo from "../../../assets/course/course-2.jpg";
+import courseThree from "../../../assets/course/course-3.jpg";
 
 export const homeMenuItems = [
-  { id: "featured", label: "Featured Courses", path: "/learnova/courses?sort=featured" },
-  { id: "new", label: "New Courses", path: "/learnova/courses?sort=new" },
-  { id: "popular", label: "Popular Courses", path: "/learnova/courses?sort=popular" },
-  { id: "trending", label: "Trending Courses", path: "/learnova/courses?sort=trending" },
+  { id: "featured", label: "Featured Courses", path: "/learnova/user/courses?sort=featured" },
+  { id: "new", label: "New Courses", path: "/learnova/user/courses?sort=new" },
+  { id: "popular", label: "Popular Courses", path: "/learnova/user/courses?sort=popular" },
+  { id: "trending", label: "Trending Courses", path: "/learnova/user/courses?sort=trending" },
 ];
 
 export const courseCategories = [
@@ -43,9 +43,9 @@ export const myLearningItems = [
 ];
 
 export const instructorItems = [
-  { id: "all", label: "All Instructors", path: "/learnova/intructors" },
-  { id: "top", label: "Top Rated Instructors", path: "/learnova/intructors?filter=top-rated" },
-  { id: "new", label: "New Instructors", path: "/learnova/intructors?filter=new" },
+  { id: "all", label: "All Instructors", path: "/learnova/user/intructors" },
+  { id: "top", label: "Top Rated Instructors", path: "/learnova/user/intructors?filter=top-rated" },
+  { id: "new", label: "New Instructors", path: "/learnova/user/intructors?filter=new" },
   { id: "become", label: "Become Instructor", path: "/learnova/teacher" },
 ];
 

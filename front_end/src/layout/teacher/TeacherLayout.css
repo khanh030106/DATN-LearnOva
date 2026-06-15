@@ -13,6 +13,8 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: 16px;
 }
 
 .teacher-main {
@@ -80,4 +82,152 @@
   a
 ) {
   font-weight: 500 !important;
+}
+
+.teacher-main :where(
+  .teacher-page__header,
+  .teacher-courses-summary-card,
+  .teacher-course-table,
+  .teacher-students-panel,
+  .teacher-analytics-header,
+  .teacher-analytics-stat,
+  .teacher-analytics-panel,
+  .teacher-revenue-metric,
+  .teacher-revenue-panel,
+  .teacher-revenue-summary,
+  .teacher-revenue-payout-card,
+  .teacher-promotion-card,
+  .teacher-promotion-modal__panel,
+  .teacher-qa-inbox,
+  .teacher-qa-thread,
+  .teacher-qa-detail-card,
+  .teacher-qa-progress-card
+) {
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 6px !important;
+  background: #ffffff !important;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07) !important;
+}
+
+.teacher-main :where(
+  .teacher-course-table__head,
+  .teacher-students-table-head,
+  .teacher-revenue-transactions thead tr
+) {
+  background: #eff6ff !important;
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+.teacher-main :where(
+  .teacher-course-table__head span,
+  .teacher-students-table-head span,
+  .teacher-revenue-transactions th
+) {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+.teacher-main :where(
+  .teacher-course-row,
+  .teacher-student-row,
+  .teacher-analytics-course-row,
+  .teacher-revenue-transactions td
+) {
+  background: #ffffff;
+  color: #334155;
+  font-weight: 500 !important;
+}
+
+.teacher-main :where(
+  .teacher-metric__heading p,
+  .teacher-courses-summary-card small,
+  .teacher-revenue-metric span,
+  .teacher-analytics-stat small
+) {
+  color: #0000ad !important;
+  font-family: var(--font-sans);
+  font-size: 21px !important;
+  font-weight: 900 !important;
+  line-height: 1.15;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.teacher-main :where(.teacher-revenue-metric) {
+  grid-template-columns: 46px minmax(210px, 1fr) minmax(82px, 0.65fr) !important;
+}
+
+.teacher-main :where(
+  .teacher-revenue-metric .teacher-revenue-sparkline,
+  .teacher-revenue-metric .teacher-revenue-mini-bars
+) {
+  display: none !important;
+}
+
+.teacher-main :where(.teacher-revenue-metric) {
+  grid-template-columns: 46px minmax(0, 1fr) !important;
+}
+
+.teacher-main :where(.teacher-analytics-stat) {
+  grid-template-columns: auto minmax(0, 1fr) !important;
+}
+
+.teacher-main :where(.teacher-courses-summary) {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+}
+
+.teacher-main :where(.teacher-courses-summary-card) {
+  grid-template-columns: 58px minmax(0, 1fr) !important;
+  min-width: 0;
+  overflow: hidden;
+  align-items: center;
+}
+
+.teacher-main :where(.teacher-courses-summary-card > div:last-child) {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.teacher-main :where(.teacher-courses-summary-card small) {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: clip;
+  font-size: clamp(18px, 1.2vw, 21px) !important;
+}
+
+.teacher-main :where(.teacher-courses-summary-card strong) {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.teacher-main :where(
+  .teacher-metric strong,
+  .teacher-courses-summary-card strong,
+  .teacher-revenue-metric strong,
+  .teacher-analytics-stat strong
+) {
+  font-family: var(--font-sans);
+  font-weight: 900 !important;
+}
+
+.teacher-main :where(
+  .teacher-analytics-panel__header,
+  .teacher-analytics-course-head
+) {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.teacher-main :where(.teacher-analytics-course-head span) {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+.teacher-main :where(.teacher-analytics-stat small) {
+  font-size: 19px !important;
+  line-height: 1.12;
 }

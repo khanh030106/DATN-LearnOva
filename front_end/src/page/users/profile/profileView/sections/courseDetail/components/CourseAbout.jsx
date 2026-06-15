@@ -1,4 +1,4 @@
-import { CheckCircle } from "lucide-react";
+import { Check } from "lucide-react";
 
 const CourseAbout = ({ course }) => (
   <section className="learning-content-panel learning-about-panel">
@@ -11,7 +11,7 @@ const CourseAbout = ({ course }) => (
     <div className="learning-outcome-grid">
       {course.outcomes.map((item) => (
         <div key={item}>
-          <CheckCircle size={18} fill="currentColor" />
+          <Check size={18} />
           <span>{item}</span>
         </div>
       ))}

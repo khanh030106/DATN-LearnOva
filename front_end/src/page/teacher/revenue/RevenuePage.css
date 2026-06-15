@@ -45,6 +45,8 @@
 
 .teacher-revenue-export,
 .teacher-revenue-periods button,
+.teacher-revenue-panel-title select,
+.teacher-revenue-panel-title button,
 .teacher-revenue-panel__header select,
 .teacher-revenue-panel__header button {
   min-height: 34px;
@@ -210,6 +212,42 @@
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(380px, 0.95fr);
   gap: 12px;
+}
+
+.teacher-revenue-panel-wrap {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.teacher-revenue-panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  padding: 0 2px;
+}
+
+.teacher-revenue-panel-title h2 {
+  margin: 0;
+  color: var(--revenue-text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.teacher-revenue-panel-title button,
+.teacher-revenue-panel-title select {
+  min-height: 30px;
+  padding: 0 12px;
+  color: var(--revenue-blue-dark);
+}
+
+.teacher-revenue-panel-wrap > .teacher-revenue-panel {
+  min-height: 100%;
 }
 
 .teacher-revenue-panel {

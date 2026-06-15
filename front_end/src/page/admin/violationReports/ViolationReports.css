@@ -1,0 +1,36 @@
+.violationReportsTable {
+  min-width: 760px;
+}
+
+.violationReportsTable th,
+.violationReportsTable td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.violationReportsTable th:nth-child(1),
+.violationReportsTable td:nth-child(1) {
+  width: 20%;
+}
+
+.violationReportsTable th:nth-child(2),
+.violationReportsTable td:nth-child(2) {
+  width: 32%;
+}
+
+.violationReportsTable th:nth-child(3),
+.violationReportsTable td:nth-child(3),
+.violationReportsTable th:nth-child(4),
+.violationReportsTable td:nth-child(4) {
+  width: 16%;
+}
+
+.violationReportsTable th:nth-child(5),
+.violationReportsTable td:nth-child(5) {
+  width: 16%;
+}
+
+.violationReportsTable .adminDataActions {
+  flex-wrap: nowrap;
+  gap: 8px;
+}

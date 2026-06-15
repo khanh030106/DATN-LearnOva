@@ -16,12 +16,13 @@ import {
   subscriptionPlans,
   userData,
   userMenuItems,
-} from "./components/headerData.js";
+} from "./headerData.js";
 import AvatarDropdown from "./components/AvatarDropdown.jsx";
 import CartDropdown from "./components/CartDropdown.jsx";
 import HeaderSearch from "./components/HeaderSearch.jsx";
 import NotificationDropdown from "./components/NotificationDropdown.jsx";
 import UserLoggedNav from "./components/UserLoggedNav.jsx";
+import { ChevronDown } from "lucide-react";
 import CoursesMegaMenu from "./components/CoursesMegaMenu";
 import "./UserLoggedHeader.css";
 
@@ -57,13 +58,13 @@ const UserLoggedHeader = () => {
             {isMobileMenuOpen ? <X size={21} /> : <Menu size={21} />}
           </button>
 
-          <Link to="/learnova/home" className="user-logged-logo">
+          <Link to="/learnova/user/home" className="user-logged-logo">
             <img src={logo} alt="Learnova" />
           </Link>
         </div>
 
         <div className="user-logged-home-shell">
-          <Link to="/learnova/home" className="user-logged-home-link">
+          <Link to="/learnova/user/home" className="user-logged-home-link">
             Home
           </Link>
 
@@ -78,7 +79,7 @@ const UserLoggedHeader = () => {
                 type="button"
                 className="user-logged-nav-button"
             >
-              Courses
+              Courses <ChevronDown size={15} />
             </button>
 
             <CoursesMegaMenu
@@ -91,12 +92,16 @@ const UserLoggedHeader = () => {
           </div>
         </div>
 
+        <div className="user-logged-learning-shell">
+          <UserLoggedNav onlyLearning learningItems={myLearningItems} />
+        </div>
+
         <div className="user-logged-search-area">
           <HeaderSearch suggestions={searchSuggestions} />
         </div>
 
         <div className={`user-logged-navigation-shell ${isMobileMenuOpen ? "is-open" : ""}`}>
-          <UserLoggedNav {...navigationData} />
+          <UserLoggedNav {...navigationData} showLearning={false} />
         </div>
 
         <div className="user-logged-actions">

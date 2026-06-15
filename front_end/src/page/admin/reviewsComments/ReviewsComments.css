@@ -1,0 +1,70 @@
+.reviewsCommentsTable {
+  min-width: 1080px;
+}
+
+.reviewsCommentsTable th,
+.reviewsCommentsTable td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.reviewsCommentsTable th:nth-child(1),
+.reviewsCommentsTable td:nth-child(1) {
+  width: 12%;
+}
+
+.reviewsCommentsTable th:nth-child(2),
+.reviewsCommentsTable td:nth-child(2) {
+  width: 11%;
+}
+
+.reviewsCommentsTable th:nth-child(3),
+.reviewsCommentsTable td:nth-child(3) {
+  width: 15%;
+}
+
+.reviewsCommentsTable th:nth-child(4),
+.reviewsCommentsTable td:nth-child(4) {
+  width: 17%;
+}
+
+.reviewsCommentsTable th:nth-child(5),
+.reviewsCommentsTable td:nth-child(5) {
+  width: 22%;
+}
+
+.reviewsCommentsTable th:nth-child(6),
+.reviewsCommentsTable td:nth-child(6) {
+  width: 8%;
+}
+
+.reviewsCommentsTable th:nth-child(7),
+.reviewsCommentsTable td:nth-child(7) {
+  width: 10%;
+}
+
+.reviewsCommentsTable th:nth-child(8),
+.reviewsCommentsTable td:nth-child(8) {
+  width: 15%;
+}
+
+.reviewsCommentsClamp {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  text-overflow: ellipsis;
+  line-height: 1.45;
+}
+
+.reviewsCommentsTable .adminDataActions {
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+  .reviewsCommentsHeroText h1 {
+    font-size: 26px;
+  }
+}

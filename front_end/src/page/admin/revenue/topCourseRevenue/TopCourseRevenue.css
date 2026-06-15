@@ -1,8 +1,11 @@
-.topRevenueBlockCard {
+.topRevenueBlockSection {
   width: 100%;
+  box-sizing: border-box;
+}
+
+.topRevenueBlockCard {
   padding: 22px;
   border-radius: 6px;
-
   background: #ffffff;
   box-sizing: border-box;
 }

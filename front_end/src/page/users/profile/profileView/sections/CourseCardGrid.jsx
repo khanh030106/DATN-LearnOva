@@ -1,4 +1,4 @@
-import { Bookmark, Heart, Play, Star } from "lucide-react";
+import { Heart, Play, Star } from "lucide-react";
 
 const CourseCardGrid = ({ courses = [], onOpenCourse, variant = "mine" }) => {
   const isFavorite = variant === "favorite";
@@ -21,18 +21,16 @@ const CourseCardGrid = ({ courses = [], onOpenCourse, variant = "mine" }) => {
                 Progress: {course.progress}%
               </span>
             )}
-            <button
-              className={`course-bookmark ${isFavorite ? "favorite" : ""}`}
-              type="button"
-              aria-label={isFavorite ? "Remove from favorites" : "Save course"}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {isFavorite ? (
+            {isFavorite && (
+              <button
+                className="course-bookmark favorite"
+                type="button"
+                aria-label="Remove from favorites"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <Heart size={20} fill="currentColor" />
-              ) : (
-                <Bookmark size={18} />
-              )}
-            </button>
+              </button>
+            )}
           </div>
 
           <div className="course-content">

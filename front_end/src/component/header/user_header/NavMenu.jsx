@@ -1,23 +1,18 @@
 import { NavLink } from "react-router-dom";
-import { Search } from "lucide-react";
 
-const leftNav = [
-    { name: "Home", path: "/learnova/home" },
-    { name: "Courses", path: "/learnova/courses" },
+export const NavItems = [
+    { name: "Home", path: "/learnova/user/home" },
+    { name: "Courses", path: "/learnova/user/courses" },
+    { name: "Instructors", path: "/learnova/user/intructors" },
+    { name: "About us", path: "/learnova/user/about" },
 ];
 
-const rightNav = [
-    { name: "Instructors", path: "/learnova/intructors" },
-    { name: "About us", path: "/learnova/about" },
-];
-
-const NavMenu = () => {
+const NavMenu = ({ items = NavItems, className = "" }) => {
     return (
-        <nav className="nav-menu">
+        <nav className={`nav-menu ${className}`.trim()}>
             <ul className="nav-list">
-
-                {leftNav.map((item, index) => (
-                    <li key={index}>
+                {items.map((item) => (
+                    <li key={item.path}>
                         <NavLink
                             to={item.path}
                             end
@@ -29,32 +24,6 @@ const NavMenu = () => {
                         </NavLink>
                     </li>
                 ))}
-
-                <li className="nav-search-item">
-                    <form className="header-search">
-                        <Search size={18} className="header-search-icon" />
-                        <input
-                            type="text"
-                            placeholder="Search courses..."
-                            className="header-search-input"
-                        />
-                    </form>
-                </li>
-
-                {rightNav.map((item, index) => (
-                    <li key={index}>
-                        <NavLink
-                            to={item.path}
-                            end
-                            className={({ isActive }) =>
-                                `nav-menu-link ${isActive ? "nav-menu-link-active" : ""}`
-                            }
-                        >
-                            {item.name}
-                        </NavLink>
-                    </li>
-                ))}
-
             </ul>
         </nav>
     );

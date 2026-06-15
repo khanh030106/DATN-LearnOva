@@ -12,14 +12,16 @@ import {
   FaDatabase,
   FaLock,
   FaRocket,
+} from "react-icons/fa";
+import {
   FaUsers,
   FaBook,
   FaClock,
   FaGraduationCap,
   FaCertificate,
   FaGlobe,
-  FaRegHeart,
-  FaShareSquare,
+  FaHeart,
+  FaShareAlt,
   FaVideo,
   FaFileDownload,
   FaInfinity,
@@ -190,44 +192,6 @@ const Curriculum = () => {
 
 const CourseDetail = () => {
   const [activeTab, setActiveTab] = useState("Overview");
-  const [reviews, setReviews] = useState([
-    {
-      name: "Nguyen An",
-      role: "Software Engineer",
-      rating: 5,
-      likes: 24,
-      avatar: "NA",
-      text: "Khóa học giúp tôi xây dựng các dự án thực tế và tìm được công việc lập trình đầu tiên.",
-    },
-    {
-      name: "Le Thi Mai",
-      role: "Frontend Developer",
-      rating: 4,
-      likes: 12,
-      avatar: "LM",
-      text: "Bài giảng rõ ràng, dễ hiểu. Giảng viên giải thích các chủ đề khó rất tốt.",
-    },
-  ]);
-
-  const [newComment, setNewComment] = useState("");
-  const [newRating, setNewRating] = useState(5);
-  const handleSubmitReview = () => {
-    if (!newComment.trim()) return;
-
-    const review = {
-      name: "You",
-      role: "Student",
-      rating: newRating,
-      likes: 0,
-      avatar: "YO",
-      text: newComment,
-    };
-
-    setReviews([review, ...reviews]);
-
-    setNewComment("");
-    setNewRating(5);
-  };
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -242,7 +206,7 @@ const CourseDetail = () => {
         <div className="course-detail-panel">
           <p>Course not found.</p>
           <button
-            onClick={() => navigate("/learnova/home")}
+            onClick={() => navigate("/learnova/user/home")}
             className="course-detail-back"
           >
             Back to home
@@ -283,10 +247,10 @@ const CourseDetail = () => {
 
                 <div className="course-detail-actions">
                   <button type="button">
-                    <FaRegHeart /> Wishlist
+                    <FaHeart /> Wishlist
                   </button>
                   <button type="button">
-                    <FaShareSquare /> Share
+                    <FaLink /> Share
                   </button>
                 </div>
               </div>
@@ -320,7 +284,8 @@ const CourseDetail = () => {
 
                 <div className="course-highlight-box">
                   <p>
-                    <strong>✓ Giảng viên chuyên nghiệp</strong> với 15+ năm kinh nghiệm
+                    <strong>✓ Giảng viên chuyên nghiệp</strong> với 15+ năm kinh
+                    nghiệm
                   </p>
                   <p>
                     <strong>✓ Chứng chỉ hoàn thành</strong> được công nhận
@@ -365,7 +330,6 @@ const CourseDetail = () => {
                   <>
                     <h2>About this course</h2>
                     <p>{course.description}</p>
-
                     <h2>What you'll learn</h2>
                     <p>
                       By the end of this course, you'll be able to build
@@ -473,83 +437,46 @@ const CourseDetail = () => {
                     </div>
                   </div>
                 )}
+
                 {activeTab === "Reviews" && (
-  <div className="review-section">
+                  <div className="review-section">
+                    <div className="review-grid">
+                      {[
+                        {
+                          name: "Nguyen An",
+                          role: "Software Engineer",
+                          rating: 5,
+                          text: "This course helped me build real-world applications and land my first developer job.",
+                        },
+                        {
+                          name: "Le Thi Mai",
+                          role: "Frontend Developer",
+                          rating: 4,
+                          text: "The lessons are clear, practical, and the instructor explains difficult topics well.",
+                        },
+                      ].map((review, index) => (
+                        <article key={index} className="review-card">
+                          <div className="review-stars">
+                            {[...Array(5)].map((_, i) =>
+                              i < review.rating ? (
+                                <FaStar key={i} />
+                              ) : (
+                                <FaRegStar key={i} />
+                              ),
+                            )}
+                          </div>
 
-    {/* FORM COMMENT */}
+                          <p className="review-text">{review.text}</p>
 
-    <div className="review-form-card">
-      <h3>Viết đánh giá của bạn</h3>
-
-      <div className="review-rating-picker">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <FaStar
-            key={star}
-            className={
-              star <= newRating
-                ? "review-star active"
-                : "review-star"
-            }
-            onClick={() => setNewRating(star)}
-          />
-        ))}
-      </div>
-
-      <textarea
-        placeholder="Chia sẻ trải nghiệm học tập..."
-        value={newComment}
-        onChange={(e) =>
-          setNewComment(e.target.value)
-        }
-      />
-    </div>
-
-    {/* REVIEW LIST */}
-
-    <div className="review-grid">
-      {reviews.map((review, index) => (
-        <article
-          key={index}
-          className="review-card"
-        >
-          <div className="review-header">
-
-            <div className="review-user">
-              <div className="review-avatar">
-                {review.avatar}
-              </div>
-
-              <div>
-                <h4>{review.name}</h4>
-                <span>{review.role}</span>
-              </div>
-            </div>
-
-            <div className="review-stars">
-              {[...Array(5)].map((_, i) =>
-                i < review.rating ? (
-                  <FaStar key={i} />
-                ) : (
-                  <FaRegStar key={i} />
-                )
-              )}
-            </div>
-
-          </div>
-
-          <p className="review-text">
-            {review.text}
-          </p>
-
-          <div className="review-footer">
-            👍 {review.likes} người thấy hữu ích
-          </div>
-        </article>
-      ))}
-    </div>
-
-  </div>
-)}
+                          <div className="review-author">
+                            <strong>{review.name}</strong>
+                            <span>{review.role}</span>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -565,10 +492,10 @@ const CourseDetail = () => {
               <button className="summary-button secondary">Buy Now</button>
 
               <div className="summary-features">
-                <p>✓ Full lifetime access</p>
-                <p>✓ Mobile & TV access</p>
-                <p>✓ Certificate of completion</p>
-                <p>✓ 30-day money-back guarantee</p>
+                <p>✔ Full lifetime access</p>
+                <p>✔ Mobile & TV access</p>
+                <p>✔ Certificate of completion</p>
+                <p>✔ 30-day money-back guarantee</p>
               </div>
             </div>
 
@@ -592,6 +519,13 @@ const CourseDetail = () => {
                 <span>Contact Support</span>
               </button>
             </div>
+
+            <button
+              onClick={() => navigate("/learnova/user/home")}
+              className="course-detail-back"
+            >
+              Back to home
+            </button>
           </aside>
         </div>
       </div>

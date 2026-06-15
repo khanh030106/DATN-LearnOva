@@ -1,5 +1,4 @@
 .vouchersPage {
-  padding: 12px 24px;
   border-radius: 6px;
 }
 
@@ -15,21 +14,25 @@
   min-width: 0;
 }
 
-@media (max-width: 900px) {
-  .voucherChartsRow {
-    grid-template-columns: 1fr;
-  }
+.voucherModalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(6px);
 }
 
-.voucherChartsRow {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
-  margin-top: 18px;
-}
-
-.voucherChartColumn {
-  min-width: 0;
+.voucherModal {
+  width: min(980px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
 }
 
 @media (max-width: 900px) {
