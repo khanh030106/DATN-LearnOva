@@ -1,6 +1,4 @@
 import { useCallback, useRef, useState } from "react";
-import { ChevronDown } from "lucide-react";
-import CoursesMegaMenu from "./CoursesMegaMenu.jsx";
 import SimpleMenuDropdown from "./SimpleMenuDropdown.jsx";
 import SubscribeDropdown from "./SubscribeDropdown.jsx";
 

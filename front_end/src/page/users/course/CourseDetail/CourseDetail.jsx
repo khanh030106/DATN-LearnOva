@@ -1,21 +1,10 @@
 import React, {useState} from 'react';
 import './CourseDetail.css';
-import {MdStar} from 'react-icons/md';
 import {FaClipboardCheck} from "react-icons/fa";
-import {FaPlay, FaVolumeUp, FaClosedCaptioning} from 'react-icons/fa';
-import {IoSettings, IoExpand} from 'react-icons/io5';
+import {FaPlay } from 'react-icons/fa';
 import {ChevronDown} from 'lucide-react';
 import Header from "../../../../component/header/user_header/Header.jsx";
 import Footer from "../../../../component/footer/footer-courseDetail/footer-courseDetail.jsx";
-import {FaCheckCircle} from "react-icons/fa";
-import {FaGraduationCap} from "react-icons/fa";
-import {FaSearch} from "react-icons/fa";
-import {FaRegThumbsUp} from "react-icons/fa";
-import {FaRegCommentDots} from "react-icons/fa";
-import {FaThumbsUp, FaThumbsDown} from "react-icons/fa";
-
-import {FaUserGraduate} from "react-icons/fa";
-import {FiSearch} from "react-icons/fi";
 import {
     qaData,
     course,

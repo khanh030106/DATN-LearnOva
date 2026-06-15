@@ -11,7 +11,6 @@ export const useAxiosPrivate = () => {
                 if (accessToken && !config.headers.Authorization) {
                     config.headers.Authorization = `Bearer ${accessToken}`;
                 }
-
                 return config;
             },
             (error) => Promise.reject(error)

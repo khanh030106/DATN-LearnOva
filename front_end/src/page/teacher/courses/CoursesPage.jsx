@@ -3,12 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { courses } from "../data/teacherDashboardData.js";
 import {
   buildCategoryOptions,
-  buildCourseSummary,
   getFilteredCourses,
   sortCourses,
 } from "./coursePageConfig.js";
 import CoursesTable from "./components/CoursesTable.jsx";
-import CourseSummaryGrid from "./components/CourseSummaryGrid.jsx";
 import CoursesToolbar from "./components/CoursesToolbar.jsx";
 import "./CoursesPage.css";
 
@@ -21,12 +19,8 @@ const CoursesPage = () => {
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [sortOption, setSortOption] = useState("NEWEST");
   const [searchTerm, setSearchTerm] = useState("");
-
   const visibleCourses = useMemo(() => teacherCourses.filter((course) => !course.isDeleted), [teacherCourses]);
-
   const categoryOptions = useMemo(() => buildCategoryOptions(visibleCourses), [visibleCourses]);
-
-  const courseSummary = useMemo(() => buildCourseSummary(visibleCourses), [visibleCourses]);
 
   const activeCourses = useMemo(() => {
     const filteredCourses = getFilteredCourses({
@@ -59,7 +53,6 @@ const CoursesPage = () => {
 
   return (
     <section className="teacher-courses-page">
-      <CourseSummaryGrid summaryItems={courseSummary} />
 
       <CoursesToolbar
         activeCategory={activeCategory}

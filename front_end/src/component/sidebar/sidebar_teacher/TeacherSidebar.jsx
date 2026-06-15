@@ -3,7 +3,7 @@ import {
   BarChart3,
   BookOpen,
   Gift,
-  Grid2X2,
+  Grid2X2, Home,
   MessageSquare,
   Plus,
   Users,
@@ -13,14 +13,24 @@ import { teacherProfile } from "../../../page/teacher/data/teacherDashboardData.
 import LogoText from "../../../assets/LogoText.png";
 import "./TeacherSidebar.css";
 
-const teacherNavItems = [
-  { label: "Overview", path: "/learnova/teacher", icon: Grid2X2, end: true },
-  { label: "My Courses", path: "/learnova/teacher/courses", icon: BookOpen },
-  { label: "Students", path: "/learnova/teacher/students", icon: Users },
-  { label: "Chat", path: "/learnova/teacher/qa", icon: MessageSquare },
-  { label: "Promotions", path: "/learnova/teacher/promotions", icon: Gift },
-  { label: "Revenue", path: "/learnova/teacher/revenue", icon: WalletCards },
-  { label: "Analytics", path: "/learnova/teacher/analytics", icon: BarChart3 },
+const teacherNavSections = [
+  {
+    title: "Main",
+    items: [
+      { label: "Dashboard", path: "/learnova/teacher", icon: Home, end: true },
+      { label: "Courses", path: "/learnova/teacher/courses", icon: BookOpen },
+      { label: "Students", path: "/learnova/teacher/students", icon: Users },
+      { label: "Messages", path: "/learnova/teacher/qa", icon: MessageSquare },
+    ],
+  },
+  {
+    title: "Business",
+    items: [
+      { label: "Promotions", path: "/learnova/teacher/promotions", icon: Gift },
+      { label: "Revenue", path: "/learnova/teacher/revenue", icon: WalletCards },
+      { label: "Analytics", path: "/learnova/teacher/analytics", icon: BarChart3 },
+    ],
+  },
 ];
 
 const TeacherSidebar = () => {
@@ -29,32 +39,36 @@ const TeacherSidebar = () => {
       <div className="teacher-brand">
         <div>
           <img src={LogoText} alt="LearnOva" />
-          <small>Instructor Portal</small>
         </div>
       </div>
 
       <nav className="teacher-nav">
-        {teacherNavItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              end={item.end}
-              className={({ isActive }) =>
-                `teacher-nav__link ${isActive ? "teacher-nav__link--active" : ""}`
-              }
-            >
-              <Icon size={20} />
-              <span>{item.label}</span>
-            </NavLink>
-          );
-        })}
+        {teacherNavSections.map((section) => (
+          <div className="teacher-nav__section" key={section.title}>
+            <p className="teacher-nav__subtitle">{section.title}</p>
+            {section.items.map((item) => {
+              const Icon = item.icon;
+              return (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  end={item.end}
+                  className={({ isActive }) =>
+                    `teacher-nav__link ${isActive ? "teacher-nav__link--active" : ""}`
+                  }
+                >
+                  <Icon size={20} />
+                  <span>{item.label}</span>
+                </NavLink>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
       <NavLink className="teacher-create" to="/learnova/teacher/courses/create">
         <Plus size={20} />
-        <span>Create New Course</span>
+        <span style={{marginBottom: '3px'}}>Create new course</span>
       </NavLink>
 
       <div className="teacher-sidebar__profile">

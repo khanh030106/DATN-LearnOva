@@ -119,10 +119,10 @@
   min-height: calc(1.05rem * 1.18 * 2);
   margin: 0;
   overflow: hidden;
-  color: #071a33;
+  color: #0a144f;
   font-family: math;
-  font-size: 1.05rem;
-  font-weight: 800;
+  font-size: 1.2rem;
+  font-weight: 700 !important;
   line-height: 1.18;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -134,9 +134,9 @@
   align-items: center;
   gap: 8px;
   margin: 0;
-  color: #475569;
+  color: #272727;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 600 !important;
 }
 
 .teacher-promotion-card__price-row {
@@ -149,15 +149,15 @@
 }
 
 .teacher-promotion-card__price-row strong {
-  color: #071a33;
-  font-size: 0.92rem;
-  font-weight: 900;
+  color: #0030c2;
+  font-size: 20px;
+  font-weight: 650 !important;
 }
 
 .teacher-promotion-card__price-row del {
   color: #94a3b8;
-  font-size: 0.78rem;
-  font-weight: 800;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .teacher-promotion-card__price-row span {
