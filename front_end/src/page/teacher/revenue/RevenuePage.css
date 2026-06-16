@@ -157,8 +157,8 @@
 .teacher-revenue-metric span {
   display: block;
   margin-bottom: 7px;
-  font-size: 0.72rem;
-  font-weight: 900;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -166,14 +166,13 @@
 .teacher-revenue-metric strong {
   display: block;
   color: var(--revenue-text);
-  font-size: 1.15rem;
-  font-weight: 900;
+  font-size: 1.4rem;
+  font-weight: 700 !important;
   line-height: 1.1;
 }
 
 .teacher-revenue-metric small {
   display: block;
-  margin-top: 11px;
   color: #059669;
   font-size: 0.72rem;
   font-weight: 800;
@@ -210,7 +209,7 @@
 
 .teacher-revenue-dashboard-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(380px, 0.95fr);
+  grid-template-columns: minmax(0, 1.3fr) minmax(380px, 0.95fr);
   gap: 12px;
 }
 
@@ -218,7 +217,7 @@
   min-width: 0;
   display: grid;
   align-content: start;
-  gap: 10px;
+  gap: 5px;
 }
 
 .teacher-revenue-panel-title {
@@ -233,8 +232,8 @@
 .teacher-revenue-panel-title h2 {
   margin: 0;
   color: var(--revenue-text);
-  font-family: var(--font-sans);
-  font-size: 1rem;
+  font-family: var(--font-sans), serif;
+  font-size: 1.3rem;
   font-weight: 900;
   line-height: 1.2;
 }
@@ -401,6 +400,7 @@
   grid-template-columns: 48px minmax(0, 1.3fr) minmax(100px, 0.8fr) 70px 58px;
   align-items: center;
   gap: 12px;
+  margin: 7px;
   min-height: 58px;
   border-bottom: 1px solid var(--revenue-border);
 }

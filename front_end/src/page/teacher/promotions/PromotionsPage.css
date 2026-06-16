@@ -75,6 +75,12 @@
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
 }
 
+.teacher-promotion-card h2{
+  color: #00295e !important;
+  font-size: 1.2rem;
+  font-weight: 700 !important;
+}
+
 .teacher-promotion-card__media {
   position: relative;
   height: 156px;
@@ -135,8 +141,7 @@
   gap: 8px;
   margin: 0;
   color: #475569;
-  font-size: 0.82rem;
-  font-weight: 700;
+  font-size: 0.85rem;
 }
 
 .teacher-promotion-card__price-row {
@@ -149,15 +154,14 @@
 }
 
 .teacher-promotion-card__price-row strong {
-  color: #071a33;
-  font-size: 0.92rem;
-  font-weight: 900;
+  color: #313131;
+  font-size: 1.2rem;
+  font-weight: 700 !important;
 }
 
 .teacher-promotion-card__price-row del {
-  color: #94a3b8;
+  color: #8b8b8b;
   font-size: 0.78rem;
-  font-weight: 800;
 }
 
 .teacher-promotion-card__price-row span {

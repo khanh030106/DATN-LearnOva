@@ -114,25 +114,26 @@
 
 .teacher-analytics-stat small {
   display: block;
-  color: #334155;
-  font-size: 0.78rem;
-  font-weight: 850;
+  margin-bottom: 7px;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .teacher-analytics-stat strong {
   display: block;
-  margin-top: 7px;
-  color: var(--analytics-text);
-  font-size: 1.35rem;
-  font-weight: 900;
-  line-height: 1.05;
+  color: var(--revenue-text);
+  font-size: 1.4rem;
+  font-weight: 700 !important;
+  line-height: 1.1;
 }
 
 .teacher-analytics-stat p {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 15px;
+  margin-top: 3px;
   color: #475569;
   font-size: 0.72rem;
   font-weight: 800;
@@ -170,12 +171,10 @@
 }
 
 .teacher-analytics-panel-title h2 {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
   margin: 0;
-  color: var(--analytics-text);
-  font-size: 1rem;
+  color: var(--revenue-text);
+  font-family: var(--font-sans), serif;
+  font-size: 1.3rem;
   font-weight: 900;
   line-height: 1.2;
 }
