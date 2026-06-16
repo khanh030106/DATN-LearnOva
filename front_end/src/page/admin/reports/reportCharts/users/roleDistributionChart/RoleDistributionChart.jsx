@@ -8,7 +8,7 @@ const RoleDistributionChart = () => {
     datasets: [
       {
         data: [43240, 1240, 200, 600],
-        backgroundColor: ["#ff8c00", "#2563eb", "#10b981", "#8b5cf6"],
+        backgroundColor: ["#2563eb", "#2563eb", "#10b981", "#8b5cf6"],
         borderColor: "#fff8f0",
         borderWidth: 3,
       },

@@ -5,9 +5,6 @@
 
 .topRevenueBlockCard {
   padding: 22px;
-  border-radius: 6px;
-  background: #ffffff;
-  box-sizing: border-box;
 }
 
 .topRevenueBlockHeader {
@@ -22,7 +19,7 @@
   margin: 0 0 4px;
   font-size: 18px;
   font-weight: 800;
-  color: #1b140c;
+  color: #0f172a;
 }
 
 .topRevenueBlockSubtitle {
@@ -138,7 +135,7 @@
   border-radius: 50%;
   font-size: 13px;
   font-weight: 700;
-  color: #1b140c;
+  color: #0f172a;
   background: rgba(239, 242, 255, 1);
 }
 
@@ -149,7 +146,7 @@
 
 .topRevenueBlockCourseName {
   display: block;
-  color: #1b140c;
+  color: #0f172a;
   font-weight: 700;
   white-space: normal;
   overflow: hidden;

@@ -36,14 +36,14 @@ const InstructorApprovalChart = () => {
         beginAtZero: true,
         max: 100,
         ticks: {
-          color: "#8b7355",
+          color: "#64748b",
           font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
           callback: (value) => `${value}%`,
         },
-        grid: { color: "rgba(232, 190, 116, 0.15)", drawBorder: false },
+        grid: { color: "rgba(226, 232, 240, 0.9)", drawBorder: false },
       },
       x: {
-        ticks: { color: "#8b7355", font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } },
+        ticks: { color: "#64748b", font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } },
         grid: { display: false },
       },
     },

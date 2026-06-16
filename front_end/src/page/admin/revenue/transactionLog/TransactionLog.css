@@ -8,7 +8,6 @@
   border-radius: 6px;
   border: 2px solid rgba(37, 99, 235, 0.26);
   border: none;
-  background: #ffffff;
   box-sizing: border-box;
 }
 
@@ -22,7 +21,7 @@
   padding: 0;
   font-size: 22px;
   font-weight: 500;
-  color: #1b140c;
+  color: #0f172a;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -66,7 +65,7 @@
   background: transparent;
   outline: none;
   font-size: 13px;
-  color: #1b140c;
+  color: #0f172a;
   font-family: var(--font-sans);
 }
 
@@ -147,8 +146,8 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  table-layout: fixed;
-  min-width: 1180px;
+  table-layout: auto;
+  min-width: 0;
   overflow: hidden;
 }
 
@@ -328,7 +327,7 @@
 .paginationButton.active {
   background: rgba(37, 99, 235, 0.14);
   border-color: rgba(37, 99, 235, 0.5);
-  color: #1b140c;
+  color: #0f172a;
 }
 
 .paginationButton:disabled {

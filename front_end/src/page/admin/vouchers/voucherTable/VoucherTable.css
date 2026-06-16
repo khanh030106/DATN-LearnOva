@@ -81,7 +81,7 @@
 
 .voucherStatusSelect:focus {
   outline: none;
-  border-color: #f97316;
+  border-color: #93c5fd;
   box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
 }
 
@@ -262,7 +262,7 @@
 
 .paginationButton--active {
   background-color: var(--blue-primary);
-  color: #1b140c;
+  color: #0f172a;
   border-color: var(--blue-primary);
 }
 

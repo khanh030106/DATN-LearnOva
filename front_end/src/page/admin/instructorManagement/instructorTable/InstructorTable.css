@@ -136,7 +136,7 @@
 }
 
 .instructorTableStat strong {
-  color: #1b140c;
+  color: #0f172a;
   font-size: 16px;
   font-weight: 500;
 }
@@ -159,7 +159,7 @@
 }
 
 .instructorTableRate strong {
-  color: #1b140c;
+  color: #0f172a;
   font-size: 16px;
   font-weight: 600;
 }
@@ -171,7 +171,7 @@
 
 .instructorTableRevenue strong {
   display: block;
-  color: #1b140c;
+  color: #0f172a;
   font-size: 16px;
   font-weight: 600;
 }
@@ -273,7 +273,7 @@
 
 .instructorPaginationButton--active {
   background-color: var(--blue-primary);
-  color: #1b140c;
+  color: #0f172a;
   border-color: var(--blue-primary);
 }
 

@@ -8,7 +8,7 @@ const VoucherStructureChart = () => {
     datasets: [
       {
         data: [45, 28, 15, 12],
-        backgroundColor: ["#f97316", "#2563eb", "#22c55e", "#c084fc"],
+        backgroundColor: ["#f59e0b", "#2563eb", "#22c55e", "#c084fc"],
         borderWidth: 0,
       },
     ],

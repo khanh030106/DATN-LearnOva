@@ -22,7 +22,7 @@
 .chartCardTitle {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #2f1f14;
+  color: #0f172a;
 }
 
 .doughnutChartContainer {
@@ -66,7 +66,7 @@
 .statValue {
   font-size: 2.2rem;
   font-weight: 700;
-  color: #2f1f14;
+  color: #0f172a;
 }
 
 @media (max-width: 768px) {

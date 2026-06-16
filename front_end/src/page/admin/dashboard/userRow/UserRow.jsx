@@ -6,28 +6,24 @@ const recentUsers = [
     name: "Michael Anderson",
     email: "michael@learnoa.com",
     role: "Student",
-    avatar: "https://i.pravatar.cc/120?img=32",
   },
   {
     id: 2,
     name: "Daniel Wilson",
     email: "daniel@learnoa.com",
     role: "Instructor",
-    avatar: "https://i.pravatar.cc/120?img=12",
   },
   {
     id: 3,
     name: "Sophia Johnson",
     email: "sophia@learnoa.com",
     role: "Student",
-    avatar: "https://i.pravatar.cc/120?img=44",
   },
   {
     id: 4,
     name: "James Brown",
     email: "james@learnoa.com",
     role: "Admin",
-    avatar: "https://i.pravatar.cc/120?img=56",
   },
 ];
 
@@ -35,7 +31,6 @@ const UserRowItem = ({ user }) => {
   return (
     <div className="userRowItem">
       <div className="userRowItemUser">
-        <img className="userRowAvatar" src={user.avatar} alt={user.name} />
 
         <div className="userRowItemMeta">
           <p className="userRowItemName">{user.name}</p>

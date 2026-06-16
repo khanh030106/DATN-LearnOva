@@ -41,9 +41,9 @@
   justify-content: center;
   gap: 8px;
   padding: 0 16px;
-  border: 1px solid rgba(37, 99, 235, 0.38);
+  border: 1px solid #1d4ed8;
   border-radius: 8px;
-  background: #386cff;
+  background: #1d4ed8;
   color: #ffffff;
   font-size: 14px;
   font-weight: 700;
@@ -76,8 +76,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  background: #eef5ff;
-  color: #386cff;
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 
 .adminCategoryStatCard strong {
@@ -109,18 +109,18 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px;
-  border: 1px solid rgba(37, 99, 235, 0.28);
-  border-radius: 6px;
-  background: #ffffff;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .adminCategoryFilters input,
 .adminCategoryFilters button {
   height: 40px;
-  border: 1px solid rgba(37, 99, 235, 0.22);
-  border-radius: 6px;
-  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #ffffff;
   color: #334155;
   font-size: 13px;
   font-weight: 600;
@@ -141,8 +141,8 @@
 .adminCategoryFilters .adminCategoryCreateButton {
   margin-left: auto;
   flex: 0 0 auto;
-  border-color: rgba(37, 99, 235, 0.38);
-  background: #386cff;
+  border-color: #1d4ed8;
+  background: #1d4ed8;
   color: #ffffff;
   white-space: nowrap;
 }
@@ -259,7 +259,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(37, 99, 235, 0.12);
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   background: #ffffff;
   color: #0f172a;
@@ -273,7 +273,7 @@
   gap: 12px;
   margin-top: 14px;
   padding: 14px 18px;
-  border: 1px solid rgba(37, 99, 235, 0.18);
+  border: 1px solid #e2e8f0;
   border-radius: 6px;
   background: #ffffff;
   flex-wrap: wrap;
@@ -294,8 +294,8 @@
 }
 
 .adminCategoryPageButton:hover:not(:disabled) {
-  border-color: rgba(37, 99, 235, 0.42);
-  background: rgba(37, 99, 235, 0.06);
+  border-color: #93c5fd;
+  background: #eff6ff;
 }
 
 .adminCategoryPageButton:disabled {
@@ -310,7 +310,7 @@
     var(--blue-strong) 100%
   );
   color: #050505;
-  border-color: rgba(37, 99, 235, 0.52);
+  border-color: #93c5fd;
 }
 
 .adminCategoryModalBackdrop {
@@ -389,9 +389,9 @@
 .adminCategoryModalForm input,
 .adminCategoryModalForm textarea {
   width: 100%;
-  border: 1px solid rgba(37, 99, 235, 0.22);
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
-  background: #f8fafc;
+  background: #ffffff;
   color: #0f172a;
   font-family: inherit;
   font-size: 13px;
@@ -437,8 +437,8 @@
 }
 
 .adminCategoryModalSubmit {
-  border: 1px solid rgba(37, 99, 235, 0.38);
-  background: #386cff;
+  border: 1px solid #1d4ed8;
+  background: #1d4ed8;
   color: #ffffff;
 }
 

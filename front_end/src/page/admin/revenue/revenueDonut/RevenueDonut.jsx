@@ -10,7 +10,7 @@ const revenueDonutLabels = [
 ];
 
 const revenueDonutValues = [42, 28, 18, 12];
-const revenueDonutColors = ["#b78e34", "#4f4f7d", "#9ca3af", "#e5d6ba"];
+const revenueDonutColors = ["#2563eb", "#60a5fa", "#22c55e", "#8b5cf6"];
 
 const RevenueDonut = () => {
   const donutRef = useRef(null);

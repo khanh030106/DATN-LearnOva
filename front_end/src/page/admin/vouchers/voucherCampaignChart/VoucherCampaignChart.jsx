@@ -41,8 +41,8 @@ const VoucherCampaignChart = () => {
     const dataValues = campaignData.map((item) => item.used);
     const ctx = canvasRef.current.getContext("2d");
     const gradient = ctx.createLinearGradient(0, 0, 300, 0);
-    gradient.addColorStop(0, "rgba(249, 115, 22, 0.9)");
-    gradient.addColorStop(1, "rgba(249, 115, 22, 0.4)");
+    gradient.addColorStop(0, "rgba(37, 99, 235, 0.95)");
+    gradient.addColorStop(1, "rgba(96, 165, 250, 0.45)");
 
     const chart = new Chart(canvasRef.current, {
       type: "bar",

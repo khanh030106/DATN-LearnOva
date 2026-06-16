@@ -132,24 +132,22 @@ const CourseFilters = () => {
                 <span>{getSelectedCategoryLabel()}</span>
               </span>
             </button>
-            {isCategoryDropdownOpen && (
-              <div className="filterDropdownMenu">
-                {categoryFilterOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    className={`filterDropdownItem ${
-                      selectedCategory === option.id ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedCategory(option.id);
-                      setCategoryDropdownOpen(false);
-                    }}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="filterDropdownMenu">
+              {categoryFilterOptions.map((option) => (
+                <button
+                  key={option.id}
+                  className={`filterDropdownItem ${
+                    selectedCategory === option.id ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedCategory(option.id);
+                    setCategoryDropdownOpen(false);
+                  }}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="filterDropdownWrapper">
@@ -164,24 +162,22 @@ const CourseFilters = () => {
                 <span>Instructor ({getSelectedInstructorLabel()})</span>
               </span>
             </button>
-            {isInstructorDropdownOpen && (
-              <div className="filterDropdownMenu">
-                {instructorFilterOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    className={`filterDropdownItem ${
-                      selectedInstructor === option.id ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedInstructor(option.id);
-                      setInstructorDropdownOpen(false);
-                    }}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="filterDropdownMenu">
+              {instructorFilterOptions.map((option) => (
+                <button
+                  key={option.id}
+                  className={`filterDropdownItem ${
+                    selectedInstructor === option.id ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedInstructor(option.id);
+                    setInstructorDropdownOpen(false);
+                  }}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="filterDropdownWrapper">
@@ -196,24 +192,22 @@ const CourseFilters = () => {
                 <span>Published: {getSelectedPublishSortLabel()}</span>
               </span>
             </button>
-            {isSortDropdownOpen && (
-              <div className="filterDropdownMenu">
-                {publishSortOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    className={`filterDropdownItem ${
-                      selectedPublishSort === option.id ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedPublishSort(option.id);
-                      setSortDropdownOpen(false);
-                    }}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="filterDropdownMenu">
+              {publishSortOptions.map((option) => (
+                <button
+                  key={option.id}
+                  className={`filterDropdownItem ${
+                    selectedPublishSort === option.id ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedPublishSort(option.id);
+                    setSortDropdownOpen(false);
+                  }}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="filterDropdownWrapper">
@@ -228,24 +222,22 @@ const CourseFilters = () => {
                 <span>Price: {getSelectedPriceTypeLabel()}</span>
               </span>
             </button>
-            {isPriceDropdownOpen && (
-              <div className="filterDropdownMenu">
-                {priceTypeOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    className={`filterDropdownItem ${
-                      selectedPriceType === option.id ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedPriceType(option.id);
-                      setIsPriceDropdownOpen(false);
-                    }}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="filterDropdownMenu">
+              {priceTypeOptions.map((option) => (
+                <button
+                  key={option.id}
+                  className={`filterDropdownItem ${
+                    selectedPriceType === option.id ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedPriceType(option.id);
+                    setIsPriceDropdownOpen(false);
+                  }}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
