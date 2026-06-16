@@ -22,6 +22,7 @@ import LearnovaAI from "../../../home/AI/AI.jsx";
 
 function InstructorDetail() {
     const [isFollowing, setIsFollowing] = useState(false);
+    const [activeTab, setActiveTab] = useState("overview");
 
 
     return (
@@ -32,12 +33,14 @@ function InstructorDetail() {
                 isFollowing={isFollowing}
                 setIsFollowing={setIsFollowing}
                 introText={introText}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
             />
 
 
             {/* Main Content */}
             <div className="profile-content">
-                <MainIntructor/>
+                <MainIntructor activeTab={activeTab} />
 
 
                 {/* Sidebar */}
@@ -74,7 +77,7 @@ function InstructorDetail() {
                     {/* Message Card */}
                     <div className="sidebar-card-contact-card">
                         <h3>
-                            Receive updates from the instructor</h3>
+                            Have questions ?</h3>
                         <p>Do you have any questions? Please contact the instructor directly</p>
                         <button className="chat-btn">
                             <BiMessageDots size={18}/>
