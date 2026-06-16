@@ -22,8 +22,8 @@ const voucherChartData = {
       id: "activation",
       name: "Voucher Activations",
       values: [12, 18, 17, 22, 28, 24, 30, 35, 37, 42, 47, 52],
-      borderColor: "#f97316",
-      pointBackgroundColor: "#f97316",
+      borderColor: "#2563eb",
+      pointBackgroundColor: "#2563eb",
       pointBorderColor: "#ffffff",
     },
   ],
@@ -39,8 +39,8 @@ const VoucherChart = () => {
 
     const ctx = canvasRef.current.getContext("2d");
     const gradient = ctx.createLinearGradient(0, 0, 0, 240);
-    gradient.addColorStop(0, "rgba(249, 115, 22, 0.28)");
-    gradient.addColorStop(1, "rgba(249, 115, 22, 0.04)");
+    gradient.addColorStop(0, "rgba(37, 99, 235, 0.22)");
+    gradient.addColorStop(1, "rgba(37, 99, 235, 0.04)");
 
     const chart = new Chart(canvasRef.current, {
       type: "line",

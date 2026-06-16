@@ -45,18 +45,18 @@ const VoucherChart = () => {
         beginAtZero: true,
         ticks: {
           font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
-          color: "#a89a85",
+          color: "#64748b",
           callback: (value) => value + " uses",
         },
         grid: {
-          color: "rgba(232, 190, 116, 0.15)",
+          color: "rgba(226, 232, 240, 0.9)",
           drawBorder: false,
         },
       },
       x: {
         ticks: {
           font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
-          color: "#8b7355",
+          color: "#64748b",
         },
         grid: {
           display: false,

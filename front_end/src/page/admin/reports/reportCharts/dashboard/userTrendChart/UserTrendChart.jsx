@@ -9,12 +9,12 @@ const UserTrendChart = () => {
       {
         label: "Users",
         data: [3000, 4000, 3500, 4500, 5000, 5500],
-        borderColor: "#ff8c00",
+        borderColor: "#2563eb",
         backgroundColor: "rgba(255, 140, 0, 0.1)",
         fill: true,
         tension: 0.4,
         pointRadius: 5,
-        pointBackgroundColor: "#ff8c00",
+        pointBackgroundColor: "#2563eb",
         pointBorderColor: "#fff",
         pointBorderWidth: 2,
       },
@@ -51,18 +51,18 @@ const UserTrendChart = () => {
         beginAtZero: true,
         ticks: {
           font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
-          color: "#a89a85",
+          color: "#64748b",
           callback: (value) => (value / 1000).toFixed(1) + "k Users",
         },
         grid: {
-          color: "rgba(232, 190, 116, 0.15)",
+          color: "rgba(226, 232, 240, 0.9)",
           drawBorder: false,
         },
       },
       x: {
         ticks: {
           font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
-          color: "#8b7355",
+          color: "#64748b",
         },
         grid: {
           display: false,

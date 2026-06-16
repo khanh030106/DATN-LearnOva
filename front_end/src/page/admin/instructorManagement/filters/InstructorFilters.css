@@ -1,9 +1,9 @@
 .instructorFilters {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid rgba(37, 99, 235, 0.28);
-  border-radius: 6px;
-  background: #ffffff;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   box-sizing: border-box;
 }
 
@@ -24,8 +24,8 @@
   max-width: 72%;
   min-width: 0;
   padding: 8px 14px;
-  border: 1px solid rgba(37, 99, 235, 0.32);
-  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
   background: #ffffff;
   box-shadow: none;
   box-sizing: border-box;
@@ -33,7 +33,7 @@
 
 .instructorFiltersSearch svg {
   flex-shrink: 0;
-  color: var(--blue-primary);
+  color: #94a3b8;
 }
 
 .instructorFiltersInput {
@@ -42,8 +42,8 @@
   border: 0;
   outline: 0;
   background: transparent;
-  color: var(--text-main);
-  font-size: 14px;
+  color: #0f172a;
+  font-size: 13px;
   line-height: 1.6;
   font-weight: 400;
   white-space: nowrap;
@@ -52,11 +52,12 @@
 }
 
 .instructorFiltersInput::placeholder {
-  color: var(--text-secondary);
+  color: #94a3b8;
 }
 
 .instructorFiltersSearch:focus-within {
-  border-color: var(--blue-primary);
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
 }
 
 .instructorFiltersTabs {
@@ -69,10 +70,10 @@
   min-width: 120px;
   height: 38px;
   padding: 0 12px;
-  border: 1px solid rgba(37, 99, 235, 0.32);
-  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
   background: #ffffff;
-  color: var(--text-main);
+  color: #0f172a;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -80,7 +81,8 @@
 }
 
 .instructorFiltersSelect:focus {
-  border-color: var(--blue-primary);
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
 }
 
 @media (max-width: 1024px) {

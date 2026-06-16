@@ -41,9 +41,9 @@
   justify-content: center;
   gap: 8px;
   padding: 0 16px;
-  border: 1px solid rgba(37, 99, 235, 0.38);
+  border: 1px solid #1d4ed8;
   border-radius: 8px;
-  background: #386cff;
+  background: #1d4ed8;
   color: #ffffff;
   font-size: 14px;
   font-weight: 800;
@@ -75,9 +75,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
-  background: #eef5ff;
-  color: #386cff;
+  border-radius: 10px;
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 
 .adminDataStatCard strong {
@@ -109,18 +109,18 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px;
-  border: 1px solid rgba(37, 99, 235, 0.28);
-  border-radius: 6px;
-  background: #ffffff;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .adminDataFilters input,
 .adminDataFilters button {
   height: 40px;
-  border: 1px solid rgba(37, 99, 235, 0.22);
-  border-radius: 6px;
-  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #ffffff;
   color: #334155;
   font-size: 13px;
   font-weight: 700;
@@ -271,8 +271,8 @@
 }
 
 .adminDataTextButton--primary {
-  border-color: rgba(37, 99, 235, 0.38);
-  background: #386cff;
+  border-color: #1d4ed8;
+  background: #1d4ed8;
   color: #ffffff;
 }
 

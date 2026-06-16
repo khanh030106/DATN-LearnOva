@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import RevenueCategory from "./revenueCategory/RevenueCategory.jsx";
 import RevenueRecords from "./revenueRecords/RevenueRecords.jsx";
 import TransactionLog from "./transactionLog/TransactionLog.jsx";
@@ -12,7 +13,9 @@ const RevenueTransactions = () => {
             <h2>Revenue Transaction Details</h2>
             <p>Inspect transaction logs, category metrics, and system revenue records.</p>
           </div>
-          <span className="revenueDetailBack">Back to overview</span>
+          <Link className="revenueDetailBack" to="/learnova/admin/revenue">
+            Back to overview
+          </Link>
         </div>
 
         <div className="revenueDetailGrid">

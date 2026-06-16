@@ -73,15 +73,23 @@
 .courseTable thead th:nth-child(5),
 .courseTable tbody td:nth-child(5),
 .courseTable thead th:nth-child(6),
-.courseTable tbody td:nth-child(6),
+.courseTable tbody td:nth-child(6) {
+  width: 8%;
+}
+
 .courseTable thead th:nth-child(7),
 .courseTable tbody td:nth-child(7) {
-  width: 8%;
+  width: 10%;
 }
 
 .courseTable thead th:nth-child(8),
 .courseTable tbody td:nth-child(8) {
   width: 9%;
+}
+
+.courseTable thead th:nth-child(9),
+.courseTable tbody td:nth-child(9) {
+  width: 12%;
 }
 
 /* Action icons styling */
@@ -96,8 +104,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
   padding: 0;
   border-radius: 10px;
   background: #ffffff;
@@ -152,8 +162,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 58px;
-  padding: 6px 10px;
+  width: 70px;
+  min-width: 70px;
+  height: 30px;
+  padding: 0 10px;
   border-radius: 999px;
   background: #eff6ff;
   color: #1d4ed8;

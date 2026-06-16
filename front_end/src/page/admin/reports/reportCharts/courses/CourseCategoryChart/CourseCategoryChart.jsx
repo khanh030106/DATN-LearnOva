@@ -10,7 +10,7 @@ const CourseCategoryChart = () => {
         label: "Courses",
         data: [1450, 820, 740, 620, 220],
         backgroundColor: [
-          "#f97316",
+          "#f59e0b",
           "#38bdf8",
           "#22c55e",
           "#818cf8",
@@ -40,11 +40,11 @@ const CourseCategoryChart = () => {
     scales: {
       y: {
         beginAtZero: true,
-        ticks: { color: "#8b7355", font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } },
-        grid: { color: "rgba(232, 190, 116, 0.15)", drawBorder: false },
+        ticks: { color: "#64748b", font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } },
+        grid: { color: "rgba(226, 232, 240, 0.9)", drawBorder: false },
       },
       x: {
-        ticks: { color: "#8b7355", font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } },
+        ticks: { color: "#64748b", font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } },
         grid: { display: false },
       },
     },
