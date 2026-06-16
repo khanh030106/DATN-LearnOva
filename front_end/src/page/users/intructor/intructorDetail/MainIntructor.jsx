@@ -1,11 +1,19 @@
 import {courses, introDetails, reviews} from "./intructorData.js";
-import {FaStar} from "react-icons/fa";
+// import {FaStar} from "react-icons/fa";
 import React from "react";
-function MainIntructor() {
+import { FaRegCommentDots } from "react-icons/fa";
+import {
+    FaStar,
+    FaRegHeart,
+    FaEye
+} from "react-icons/fa";
+import { FiClock } from "react-icons/fi";
+function MainIntructor({ activeTab }) {
     return (
 
         <div className="content-left">
             {/* Introduction Section */}
+            {(activeTab === "overview" || activeTab === "about") && (
             <section className="section">
                 <h2 className="section-title">Introduce</h2>
                 <p className="section-text">{introDetails}</p>
@@ -17,156 +25,299 @@ function MainIntructor() {
                     <a href="#css" className="tag-link">Tailwind CSS</a>
                 </div>
 
-            </section>
+            </section>)}
 
             {/* Courses Section */}
-            <section className="section">
-                <div className="section-header">
-                    <h2 className="section-title">Instructor's courses</h2>
-                    <a href="#" className="view-more">See all</a>
-                </div>
-                <div className="courses-grid">
-                    {courses.map(course => (
-                        <div key={course.id} className="course-card-in">
-                            <div className="course-image-wrapper">
-                                <img src={course.image} alt={course.title} className="course-image"/>
-                            </div>
-                            <div className="course-info">
-                                <h3 className="course-title">{course.title}</h3>
-                                <div className="course-rating">
-                                    <div className="rating-info">
-                                        <FaStar className="rating-star"/>
-                                        <span className="rating-score">
-                                                {course.rating.toFixed(1)}
-                                            </span>
 
-                                    </div>
-                                    <span className="rating-number-in">({course.reviews})</span>
-                                    <span className="student-number-in">{course.student} học viên</span>
-                                </div>
-                                <div className="course-price-in">
-                                    <span className="price-in">{course.price}</span>
+            {(activeTab === "overview" || activeTab === "courses") && (
+                <section className="section">
 
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </section>
+                    <div className="section-header-course">
 
-            {/* Reviews Section */}
-            {/* Reviews Section */}
-            <section className="section">
-                <h2 className="section-title-ina">Student reviews</h2>
+                        <h2 className="section-title">
+                            Instructor's Courses
+                        </h2>
 
-                <div className="reviews-wrapper-ina">
-                    {/* Rating Summary */}
-                    <div className="rating-summary-ina">
-                        <div className="rating-left-ina">
-                            <div className="rating-score-ina">4.8</div>
-                            <div className="rating-stars-ina">
-                                {Array.from({length: 5}).map((_, i) => (
-                                    <FaStar key={i} size={16} color="#ffc107"/>
-                                ))}
-                            </div>
-                            <div className="rating-label-ina">Great</div>
-                            <div className="rating-count-ina">1.245 Review</div>
-                        </div>
+                        <a href="#" className="view-more">
+                            View All
+                        </a>
 
-                        {/* Rating Bars */}
-                        <div className="rating-bars-ina">
-                            {[
-                                {stars: 5, percent: 80},
-                                {stars: 4, percent: 15},
-                                {stars: 3, percent: 3},
-                                {stars: 2, percent: 1},
-                                {stars: 1, percent: 1}
-                            ].map(item => (
-                                <div className="rating-bar-item-ina">
-                                            <span className="bar-stars-ina">
-                                                {item.stars}
-                                                <FaStar className="mini-star"/>
-                                            </span>
-
-                                    <div className="bar-container-ina">
-                                        <div
-                                            className="bar-fill-ina"
-                                            style={{width: `${item.percent}%`}}
-                                        />
-                                    </div>
-
-                                    <span className="bar-percent-ina">
-                                            {item.percent}%
-                                        </span>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Satisfaction Box */}
-                        <div className="satisfaction-box-ina">
-                            <div className="satisfaction-title-ina">Satisfied Students</div>
-                            <div className="satisfaction-percent-ina">95%</div>
-                            <div className="satisfaction-text-ina">of students are satisfied with this course
-                            </div>
-
-                        </div>
                     </div>
 
-                    {/* Reviews List */}
-                    <div className="reviews-list-container">
-                        <div className="reviews-filter">
+                    <div className="courses-grid-new">
 
-                            <span className="reviews-pagination-info">Showing 1–3 of 1,245 reviews</span>
-                        </div>
+                        {courses.map(course => (
 
-                        <div className="reviews-list">
-                            {reviews.map(review => (
-                                <div key={review.id} className="review-card-ina">
-                                    <div className="review-header">
-                                        <div className="review-user-info-ina">
-                                            <img src={review.avatar} alt={review.name}
-                                                 className="review-avatar"/>
-                                            <div className="user-details">
-                                                <h4 className="review-name">{review.name}</h4>
-                                                <span className="review-time">2 ngày trước</span>
-                                            </div>
+                            <div
+                                key={course.id}
+                                className="course-card-new"
+                            >
+
+                                <div className="course-image-box">
+
+                                    <img
+                                        src={course.image}
+                                        alt={course.title}
+                                        className="course-image-new"
+                                    />
+
+
+
+                                    <button className="wishlist-btn">
+                                        <FaRegHeart />
+                                    </button>
+
+
+
+                                </div>
+
+                                <div className="course-content-new">
+
+                                    <h3 className="course-title-new">
+                                        {course.title}
+                                    </h3>
+
+                                    <div className="course-meta-new">
+
+                                        <div className="meta-item">
+                                            <FaStar />
+                                            <span>
+                                {course.rating}
+                            </span>
+                                        </div>
+
+                                        <div className="meta-divider"></div>
+
+                                        <div className="meta-item">
+                            <span>
+                                {course.student}
+                            </span>
+                                        </div>
+
+                                        <div className="meta-divider"></div>
+
+                                        <div className="meta-item">
+                                            <FiClock />
+                                            <span>
+                                42 Hours
+                            </span>
                                         </div>
 
                                     </div>
 
-                                    <div className="review-rating">
-                                        {Array.from({length: 5}).map((_, i) => (
+                                    <div className="course-footer-new">
+
+                                        <div className="price-new">
+                                            {course.price}
+                                        </div>
+
+                                        <div className="course-actions-new">
+
+                                            <button className="buy-btn-new">
+                                                Buy Now
+                                            </button>
+
+
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        ))}
+
+                    </div>
+
+                </section>
+            )}
+
+            {/* Reviews Section */}
+            {/* Reviews Section */}
+            {(activeTab === "overview" || activeTab === "reviews") && (
+                <section className="review-section-new">
+
+                    {/* Header Review */}
+                    <div className="review-overview-card">
+
+                        <div className="review-overview-left">
+                            <h2>Student Reviews</h2>
+
+                            <p>
+                                Genuine feedback from students who have successfully
+                                completed Tùng's courses.
+                            </p>
+
+                            <div className="overall-rating">
+                                <div className="overall-stars">
+                                    {Array.from({ length: 5 }).map((_, i) => (
+                                        <FaStar key={i} />
+                                    ))}
+                                </div>
+
+                                <span className="overall-score">
+                                    4.7
+                                </span>
+
+                                <span className="overall-count">
+                                    (3 verified reviews)
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="review-overview-right">
+
+                            {[
+                                { star: 5, count: 2, width: 80 },
+                                { star: 4, count: 1, width: 40 },
+                                { star: 3, count: 0, width: 0 },
+                                { star: 2, count: 0, width: 0 },
+                                { star: 1, count: 0, width: 0 }
+                            ].map((item) => (
+                                <div className="rating-row" key={item.star}>
+
+                                    <span>{item.star}</span>
+
+                                    <FaStar className="mini-star-review" />
+
+                                    <div className="rating-progress">
+
+                                        <div
+                                            className="rating-progress-fill"
+                                            style={{
+                                                width: `${item.width}%`
+                                            }}
+                                        />
+                                    </div>
+
+                                    <span>{item.count}</span>
+
+                                </div>
+                            ))}
+
+                        </div>
+
+                    </div>
+
+                    {/* Content */}
+                    <div className="review-content-wrapper">
+
+                        {/* Left */}
+                        <div className="review-list-new">
+
+                            {reviews.map((review) => (
+
+                                <div
+                                    key={review.id}
+                                    className="review-card-new"
+                                >
+
+                                    <div className="review-card-header">
+
+                                        <div className="review-user">
+
+                                            <img
+                                                src={review.avatar}
+                                                alt={review.name}
+                                                className="review-avatar-new"
+                                            />
+
+                                            <div>
+
+                                                <h4>{review.name}</h4>
+
+                                                <span>
+                                    Frontend Developer
+                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div className="review-time-new">
+                                            2 weeks ago
+                                        </div>
+
+                                    </div>
+
+                                    <div className="review-stars-new">
+                                        {Array.from({ length: 5 }).map((_, i) => (
                                             <FaStar
                                                 key={i}
-                                                size={14}
-                                                color={i < review.rating ? '#ffc107' : '#e5e7eb'}
+                                                color="#fbbf24"
                                             />
                                         ))}
                                     </div>
 
-                                    <p className="review-text">{review.text}</p>
-
+                                    <p className="review-text-new">
+                                        {review.text}
+                                    </p>
 
                                 </div>
+
                             ))}
+
                         </div>
 
-                        {/* Pagination */}
-                        <div className="reviews-pagination">
-                            <button className="page-btn prev">‹</button>
-                            {[1, 2, 3, '...', 15].map((page, idx) => (
-                                <button
-                                    key={idx}
-                                    className={`page-btn ${page === 1 ? 'active' : ''}`}
-                                >
-                                    {page}
-                                </button>
-                            ))}
-                            <button className="page-btn next">›</button>
-                        </div>
+                        {/* Right */}
+                        <div className="review-form-card">
+
+                            <h3 className="feedback-title">
+                                <FaRegCommentDots className="feedback-icon" />
+                                Leave Your Feedback
+                            </h3>
+
+                            <div className="form-group-review">
+
+                                <label>Star Rating:</label>
+
+                                <div className="review-form-stars">
+
+                                    {Array.from({ length: 5 }).map((_, i) => (
+                                        <FaStar
+                                            key={i}
+                                            className="active-star"
+                                        />
+                                    ))}
+
+                                    <span>(5/5 Stars)</span>
+
+                                </div>
+
+                            </div>
+
+                            <div className="form-group-review">
+
+                                <label>Your Full Name</label>
+
+                                <input
+                                    type="text"
+                                    placeholder="e.g. John Smith"
+                                />
+
+                            </div>
+
+                            <div className="form-group-review">
+
+                                <label>Your Review</label>
+
+                                <textarea
+                                    rows="5"
+                                    placeholder="Share your learning experience with this instructor..."
+                                />
+
+                            </div>
+
+                            <button className="send-review-btn">
+                                Submit Review
+                            </button>
+                            </div>
+
                     </div>
-                </div>
-            </section>
+
+                </section>)}
         </div>
     );
 }

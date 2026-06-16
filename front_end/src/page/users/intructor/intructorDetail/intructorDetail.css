@@ -7,29 +7,38 @@
 
 .instructor-detail {
     /*max-width: 1200px;*/
-    margin-top: 100px;
+    margin-top: -70px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 110px;
     background-color: #f9fafb;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    margin-top: -70px;
 }
 
 /* ============= Profile Header ============= */
 /* ============= Profile Header ============= */
 .profile-header-in {
-    display: flex;
-    gap: 30px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+    margin-bottom: 40px;
+    position: relative;
+}
+.header-img {
+    height: 200px;
+
     background-image: url("../../../../assets/instructors/header-intructor.png");
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
-    padding:  60px 30px;
-    border-radius: 6px;
-    margin-bottom: 40px;
+}
+.profile-header-under {
+    display: flex;
+    gap: 30px;
 
-    align-items: center;
+    padding: 100px 30px 30px;
+
+    background: white;
     position: relative;
-    overflow: hidden;
 }
 .section-title {
     position: relative;
@@ -103,16 +112,18 @@
 }
 
 .profile-left {
+    width: 180px;
     flex-shrink: 0;
-    margin-left: 60px;
 }
 
 .profile-image-container {
-    position: relative;
-    width: 220px;
-    height: 220px;
-    margin-top: -60px;
+    position: absolute;
 
+    top: -60px;
+    left: 30px;
+
+    width: 180px;
+    height: 180px;
 }
 
 
@@ -152,6 +163,7 @@
     align-items: center;
     gap: 8px;
     margin-bottom: 4px;
+    margin-top: -60px;
 }
 
 .instructor-name-in {
@@ -194,7 +206,7 @@
 
 .profile-info {
     display: flex;
-    flex-direction: column;
+
     gap: 6px;
     margin-bottom: 12px;
     font-size: 13px;
@@ -257,7 +269,7 @@
     flex-direction: column;
     gap: 12px;
     margin-top: -50px;
-    margin-right: 500px;
+    margin-right: 60px;
 }
 
 .profile-actions-vertical {
@@ -265,8 +277,15 @@
     flex-direction: column;
     gap: 12px;
     min-width: 140px;
-}
 
+
+}
+hr.hr-in {
+    /*margin: 20px 0;*/
+    border: 0;
+    height: 1px;
+    background: #e5e7eb;
+}
 .follow-btn,
 .message-btn {
     padding: 10px 16px;
@@ -1022,5 +1041,443 @@
 
     .profile-image-container {
         margin: 0 auto;
+    }
+}
+.sidebar-card-contact-card {
+    background: rgba(166, 206, 244, 0.63);
+    border-radius: 24px;
+    padding: 28px;
+    margin-top: 24px;
+    border: 1px solid #eef2ff;
+    box-shadow: 0 10px 40px rgba(15, 23, 42, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-card-contact-card::before {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(
+            circle,
+            rgba(99, 102, 241, 0.12),
+            transparent 70%
+    );
+    right: -80px;
+    bottom: -80px;
+    border-radius: 50%;
+}
+
+.sidebar-card-contact-card h3 {
+    /*font-size: 28px;*/
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+}
+
+.sidebar-card-contact-card p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #64748b;
+    margin-bottom: 24px;
+}
+
+.contact-btn {
+    width: 100%;
+    height: 56px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(
+            135deg,
+            #4f46e5,
+            #6366f1
+    );
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.contact-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
+}
+
+.robot-image {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+}
+.review-section-new {
+    margin-top: 30px;
+}
+
+.review-overview-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    border: 1px solid #edf2f7;
+    margin-bottom: 30px;
+}
+
+.review-overview-left {
+    flex: 1;
+}
+
+.review-overview-left h2 {
+    font-size: 23px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.review-overview-left p {
+    color: #64748b;
+    margin-bottom: 20px;
+}
+
+.overall-rating {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.overall-stars {
+    display: flex;
+    gap: 3px;
+    color: #fbbf24;
+}
+
+.overall-score {
+    font-size: 22px;
+    font-weight: 300;
+    color: #fbbf24;
+}
+
+.overall-count {
+    color: #94a3b8;
+}
+
+.review-overview-right {
+    width: 350px;
+}
+
+.rating-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.mini-star-review {
+    color: #fbbf24;
+}
+
+.rating-progress {
+    flex: 1;
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.rating-progress-fill {
+    height: 100%;
+    background: #fbbf24;
+    border-radius: 999px;
+}
+
+.review-content-wrapper {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+.review-list-new {
+    flex: 2;
+}
+
+.review-card-new {
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid #edf2f7;
+}
+
+.review-card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.review-user {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+
+.review-avatar-new {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.review-user h4 {
+    margin-bottom: 4px;
+}
+
+.review-user span {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.review-time-new {
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.review-stars-new {
+    color: #fbbf24;
+    display: flex;
+    gap: 4px;
+    margin-bottom: 15px;
+}
+
+.review-text-new {
+    line-height: 1.8;
+    color: #334155;
+    font-style: italic;
+}
+
+.review-form-card {
+    width: 380px;
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    border: 1px solid #edf2f7;
+    position: sticky;
+    top: 20px;
+}
+
+.review-form-card h3 {
+    margin-bottom: 25px;
+}
+
+.form-group-review {
+    margin-bottom: 18px;
+}
+
+.form-group-review label {
+    display: block;
+    font-weight: 400;
+    margin-bottom: 8px;
+}
+
+.form-group-review input,
+.form-group-review textarea {
+    width: 100%;
+    border: 1px solid #dbe3f0;
+    border-radius: 12px;
+    padding: 12px 15px;
+    font-size: 14px;
+}
+
+.review-form-stars {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.active-star {
+    color: #fbbf24;
+    cursor: pointer;
+}
+
+.send-review-btn {
+    width: 100%;
+    height: 50px;
+    border: none;
+    border-radius: 14px;
+    background: #6d94f0;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.send-review-btn:hover {
+    transform: translateY(-2px);
+}
+.feedback-title{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #0f172a;
+    margin-bottom: 20px;
+}
+
+.feedback-icon{
+    color: #2563eb;
+    font-size: 1.2rem;
+}
+/* khóa học*/
+.courses-grid-new{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:28px;
+}
+
+.course-card-new{
+    background:#fff;
+    border-radius:24px;
+    overflow:hidden;
+    border:1px solid #e5e7eb;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);
+    transition:.3s;
+}
+
+.course-card-new:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 30px rgba(0,0,0,.12);
+}
+
+.course-image-box{
+    position:relative;
+    height:180px;
+    overflow:hidden;
+}
+
+.course-image-new{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.best-seller-badge{
+    position:absolute;
+    top:16px;
+    left:16px;
+    background:#0057d8;
+    color:#fff;
+    padding:8px 14px;
+    border-radius:12px;
+    font-size:12px;
+    font-weight:700;
+}
+
+.wishlist-btn{
+    position:absolute;
+    top:16px;
+    right:16px;
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:50%;
+    background:#fff;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.course-category-badge{
+    position:absolute;
+    bottom:16px;
+    left:16px;
+    background:rgba(0,0,0,.65);
+    color:#fff;
+    padding:6px 12px;
+    border-radius:10px;
+    font-size:13px;
+}
+
+.course-content-new{
+    padding:20px;
+}
+
+.course-title-new{
+    font-size:18px;
+    font-weight:500;
+    color:#0f172a;
+    margin-bottom:10px;
+}
+
+.course-meta-new{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    color:#64748b;
+    margin-bottom:10px;
+}
+
+.meta-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:14px;
+}
+
+.meta-item svg:first-child{
+    color:#fbbf24;
+}
+
+.meta-divider{
+    width:1px;
+    height:18px;
+    background:#dbe2ea;
+}
+
+.course-footer-new{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-top:1px solid #eef2f7;
+    padding-top:10px;
+}
+
+.price-new{
+    font-size:16px;
+    font-weight:400;
+    color:#0f172a;
+}
+
+.course-actions-new{
+    display:flex;
+    gap:10px;
+}
+
+.buy-btn-new{
+    border:none;
+    background:#eef4ff;
+    color:#0057d8;
+    font-weight:600;
+    padding:12px 20px;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+.detail-btn-new{
+    border:1px solid #dbe2ea;
+    background:#fff;
+    padding:12px 18px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    cursor:pointer;
+}
+
+@media(max-width:992px){
+    .courses-grid-new{
+        grid-template-columns:1fr;
     }
 }
