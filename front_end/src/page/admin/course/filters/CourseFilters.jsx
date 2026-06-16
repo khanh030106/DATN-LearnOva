@@ -78,30 +78,55 @@ const CourseFilters = () => {
     priceTypeOptions.find((item) => item.id === selectedPriceType)?.label ||
     "Tất cả";
 
-  const openCategoryDropdown = () => {
-    setCategoryDropdownOpen((prev) => !prev);
+  const closeAllDropdowns = () => {
+    setCategoryDropdownOpen(false);
     setInstructorDropdownOpen(false);
     setSortDropdownOpen(false);
+    setIsPriceDropdownOpen(false);
+  };
+
+  const openCategoryDropdown = () => {
+    setCategoryDropdownOpen(true);
+    setInstructorDropdownOpen(false);
+    setSortDropdownOpen(false);
+    setIsPriceDropdownOpen(false);
+  };
+
+  const closeCategoryDropdown = () => {
+    setCategoryDropdownOpen(false);
   };
 
   const openInstructorDropdown = () => {
-    setInstructorDropdownOpen((prev) => !prev);
+    setInstructorDropdownOpen(true);
     setCategoryDropdownOpen(false);
     setSortDropdownOpen(false);
+    setIsPriceDropdownOpen(false);
+  };
+
+  const closeInstructorDropdown = () => {
+    setInstructorDropdownOpen(false);
   };
 
   const openSortDropdown = () => {
-    setSortDropdownOpen((prev) => !prev);
+    setSortDropdownOpen(true);
     setCategoryDropdownOpen(false);
     setInstructorDropdownOpen(false);
     setIsPriceDropdownOpen(false);
   };
 
+  const closeSortDropdown = () => {
+    setSortDropdownOpen(false);
+  };
+
   const openPriceDropdown = () => {
-    setIsPriceDropdownOpen((prev) => !prev);
+    setIsPriceDropdownOpen(true);
     setCategoryDropdownOpen(false);
     setInstructorDropdownOpen(false);
     setSortDropdownOpen(false);
+  };
+
+  const closePriceDropdown = () => {
+    setIsPriceDropdownOpen(false);
   };
 
   return (
@@ -120,7 +145,13 @@ const CourseFilters = () => {
             />
           </div>
 
-          <div className="filterDropdownWrapper">
+          <div
+            className={`filterDropdownWrapper ${
+              isCategoryDropdownOpen ? "open" : ""
+            }`}
+            onMouseEnter={openCategoryDropdown}
+            onMouseLeave={closeCategoryDropdown}
+          >
             <button
               className={`filterDropdownButton ${
                 isCategoryDropdownOpen ? "active" : ""
@@ -150,7 +181,13 @@ const CourseFilters = () => {
             </div>
           </div>
 
-          <div className="filterDropdownWrapper">
+          <div
+            className={`filterDropdownWrapper ${
+              isInstructorDropdownOpen ? "open" : ""
+            }`}
+            onMouseEnter={openInstructorDropdown}
+            onMouseLeave={closeInstructorDropdown}
+          >
             <button
               className={`filterDropdownButton ${
                 isInstructorDropdownOpen ? "active" : ""
@@ -180,7 +217,13 @@ const CourseFilters = () => {
             </div>
           </div>
 
-          <div className="filterDropdownWrapper">
+          <div
+            className={`filterDropdownWrapper ${
+              isSortDropdownOpen ? "open" : ""
+            }`}
+            onMouseEnter={openSortDropdown}
+            onMouseLeave={closeSortDropdown}
+          >
             <button
               className={`filterDropdownButton ${
                 isSortDropdownOpen ? "active" : ""
@@ -210,7 +253,13 @@ const CourseFilters = () => {
             </div>
           </div>
 
-          <div className="filterDropdownWrapper">
+          <div
+            className={`filterDropdownWrapper ${
+              isPriceDropdownOpen ? "open" : ""
+            }`}
+            onMouseEnter={openPriceDropdown}
+            onMouseLeave={closePriceDropdown}
+          >
             <button
               className={`filterDropdownButton ${
                 isPriceDropdownOpen ? "active" : ""
