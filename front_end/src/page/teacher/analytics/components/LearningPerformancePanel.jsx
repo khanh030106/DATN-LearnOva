@@ -21,17 +21,7 @@ const LearningPerformancePanel = ({ chartLabels, series }) => {
       </header>
 
       <article className="teacher-analytics-panel teacher-analytics-performance">
-      <div className="teacher-analytics-performance-tabs">
-        {performanceTabs.map((tab) => (
-          <button
-            key={tab}
-            type="button"
-            className={tab === "Completion" ? "teacher-analytics-performance-tabs__active" : ""}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+
 
       <div className="teacher-analytics-chart">
         <div className="teacher-analytics-chart__legend">

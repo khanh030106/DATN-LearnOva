@@ -41,7 +41,6 @@ const CoursePreviewPanel = ({ course, sections }) => {
               <div key={lesson.id} className="teacher-preview-lesson">
                 <span>{lesson.lessonOrder}. {lesson.title}</span>
                 <small>{lesson.duration}</small>
-                <CheckCircle size={15} />
               </div>
             ))}
           </details>

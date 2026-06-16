@@ -159,7 +159,7 @@
 
 .teacher-create-field {
   display: grid;
-  gap: 6px;
+  gap: 4px;
 }
 
 .teacher-create-field span,
@@ -168,9 +168,9 @@
 .teacher-publish-settings h2,
 .teacher-course-summary h2,
 .teacher-next-card h2 {
-  color: #071a33;
+  color: #404040;
   font-size: 0.82rem;
-  font-weight: 900;
+  font-weight: 700 !important;
 }
 
 .teacher-create-field input,
@@ -331,16 +331,16 @@
 .teacher-section-card small,
 .teacher-section-card em {
   display: block;
-  color: #94a3b8;
+  color: #6a6a6a;
   font-size: 0.68rem;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 600 !important;
 }
 
 .teacher-section-card strong {
   display: block;
   color: #071a33;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
 }
 
 .teacher-section-editor {
@@ -359,6 +359,7 @@
   min-height: 36px;
   display: inline-flex;
   align-items: center;
+  padding: 10px;
   gap: 7px;
   border: 0;
   border-radius: 7px;
@@ -439,7 +440,7 @@
   background: #eff6ff;
   color: #1d4ed8;
   font-size: 0.8rem;
-  font-weight: 800;
+  font-weight: 600 !important;
 }
 
 .teacher-device-toggle {

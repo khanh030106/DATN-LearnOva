@@ -124,8 +124,8 @@
   .teacher-students-table-head span,
   .teacher-revenue-transactions th
 ) {
-  color: #0f172a !important;
-  font-weight: 900 !important;
+  color: #494949 !important;
+  font-weight: 700 !important;
 }
 
 .teacher-main :where(
@@ -223,8 +223,8 @@
 }
 
 .teacher-main :where(.teacher-analytics-course-head span) {
-  color: #0f172a !important;
-  font-weight: 900 !important;
+  color: #434343 !important;
+  font-weight: 800 !important;
 }
 
 .teacher-main :where(.teacher-analytics-stat small) {
