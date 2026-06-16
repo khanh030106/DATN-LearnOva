@@ -15,7 +15,7 @@
 
 .learning-header h2 {
     font-size: 42px;
-    color: #003983;
+    color: #0044e4;
     margin-bottom: 5px;
 }
 
@@ -41,7 +41,7 @@
 
 .learning-card {
     padding: 15px 40px 40px;
-    border-radius: 6px;
+    border-radius: 24px;
     border: 1px solid #e2e8f0;
     background: #ffffff;
     transition: 0.4s;
@@ -82,7 +82,7 @@
     font-size: 14px;
     font-weight: 700;
     text-transform: uppercase;
-    color: #0034c6;
+    color: #0044e4;
 }
 
 .learning-steps {
@@ -106,7 +106,7 @@
     align-items: center;
     justify-content: center;
 
-    background: #00299c;
+    background: #0044e4;
     color: white;
     font-weight: bold;
     flex-shrink: 0;
@@ -121,7 +121,7 @@
 .step-content h4 {
     font-size: 18px;
     margin: 0 0 6px;
-    color: #1e293b;
+    color: #0f172a;
     line-height: 1.2;
 }
 
@@ -142,7 +142,7 @@
     border: none;
     border-radius: 6px;
 
-    background: #2400ac;
+    background: #4d82f7;
     color: white;
     font-size: 16px;
     font-weight: 700;

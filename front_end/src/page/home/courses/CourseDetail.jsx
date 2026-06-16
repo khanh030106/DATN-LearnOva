@@ -474,82 +474,80 @@ const CourseDetail = () => {
                   </div>
                 )}
                 {activeTab === "Reviews" && (
-  <div className="review-section">
+                  <div className="review-section">
 
-    {/* FORM COMMENT */}
+                    {/* FORM COMMENT */}
 
-    <div className="review-form-card">
-      <h3>Viết đánh giá của bạn</h3>
+                    <div className="review-form-card">
+                      <h3>Viết đánh giá của bạn</h3>
 
-      <div className="review-rating-picker">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <FaStar
-            key={star}
-            className={
-              star <= newRating
-                ? "review-star active"
-                : "review-star"
-            }
-            onClick={() => setNewRating(star)}
-          />
-        ))}
-      </div>
+                      <div className="review-rating-picker">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <FaStar
+                            key={star}
+                            className={
+                              star <= newRating
+                                ? "review-star active"
+                                : "review-star"
+                            }
+                            onClick={() => setNewRating(star)}
+                          />
+                        ))}
+                      </div>
 
-      <textarea
-        placeholder="Chia sẻ trải nghiệm học tập..."
-        value={newComment}
-        onChange={(e) =>
-          setNewComment(e.target.value)
-        }
-      />
-    </div>
+                      <textarea
+                        placeholder="Chia sẻ trải nghiệm học tập..."
+                        value={newComment}
+                        onChange={(e) =>
+                          setNewComment(e.target.value)
+                        }
+                      />
+                    </div>
 
-    {/* REVIEW LIST */}
+                    {/* REVIEW LIST */}
 
-    <div className="review-grid">
-      {reviews.map((review, index) => (
-        <article
-          key={index}
-          className="review-card"
-        >
-          <div className="review-header">
+                    <div className="review-grid">
+                      {reviews.map((review, index) => (
+                        <article
+                          key={index}
+                          className="review-card"
+                        >
+                          <div className="review-header">
 
-            <div className="review-user">
-              <div className="review-avatar">
-                {review.avatar}
-              </div>
+                            <div className="review-user">
+                              <div className="review-avatar">
+                                {review.avatar}
+                              </div>
 
-              <div>
-                <h4>{review.name}</h4>
-                <span>{review.role}</span>
-              </div>
-            </div>
+                              <div>
+                                <h4>{review.name}</h4>
+                                <span>{review.role}</span>
+                              </div>
+                            </div>
 
-            <div className="review-stars">
-              {[...Array(5)].map((_, i) =>
-                i < review.rating ? (
-                  <FaStar key={i} />
-                ) : (
-                  <FaRegStar key={i} />
-                )
-              )}
-            </div>
+                            <div className="review-stars">
+                              {[...Array(5)].map((_, i) =>
+                                i < review.rating ? (
+                                  <FaStar key={i} />
+                                ) : (
+                                  <FaRegStar key={i} />
+                                )
+                              )}
+                            </div>
 
-          </div>
+                          </div>
 
-          <p className="review-text">
-            {review.text}
-          </p>
+                          <p className="review-text">
+                            {review.text}
+                          </p>
 
-          <div className="review-footer">
-            👍 {review.likes} người thấy hữu ích
-          </div>
-        </article>
-      ))}
-    </div>
+                          
+                        </article>
+                      ))}
+                    </div>
 
-  </div>
-)}
+                  </div>
+                )}
               </div>
             </div>
           </div>
