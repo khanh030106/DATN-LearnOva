@@ -68,13 +68,8 @@ function InstructorsPage() {
     ],
     language: [
       { id: 1, name: "English", count: 286 },
-      { id: 2, name: "Vietnamese", count: 98 },
-      { id: 3, name: "Spanish", count: 76 },
-      { id: 4, name: "French", count: 54 },
-      { id: 5, name: "Chinese", count: 43 },
-      { id: 6, name: "Japanese", count: 31 },
-      { id: 7, name: "German", count: 28 },
-      { id: 8, name: "Korean", count: 24 },
+      { id: 2, name: "Vietnamese", count: 98 }
+
     ],
   };
 
@@ -288,14 +283,10 @@ function InstructorsPage() {
                     <label key={item.id} className="filter-chip-in">
                       <input type="checkbox" />
                       <span className="filter-chip-name">
-                {React.createElement(item.icon, {
-                  className: "item-icon",
-                  size: 16,
-                  strokeWidth: 2,
-                })}
+
                         {item.name}
               </span>
-                      <span className="item-count">{item.count}</span>
+
                     </label>
                 ))}
               </div>
@@ -311,16 +302,10 @@ function InstructorsPage() {
                     <label key={index} className="filter-row-in">
                       <input type="radio" name="rating" />
                       <span className="filter-row-main">
-                <span className="rating-stars">
-                  {Array.from({ length: Math.floor(item.stars) }).map(
-                      (_, starIndex) => (
-                          <FaStar key={starIndex} />
-                      ),
-                  )}
-                </span>
+
                         {item.label}
               </span>
-                      <span className="item-count">{item.count}</span>
+
                     </label>
                 ))}
               </div>
@@ -336,7 +321,7 @@ function InstructorsPage() {
                     <label key={item.id} className="filter-pill-in">
                       <input type="checkbox" />
                       <span>{item.name}</span>
-                      <em>{item.count}</em>
+
                     </label>
                 ))}
               </div>
@@ -352,7 +337,7 @@ function InstructorsPage() {
                     <label key={item.id} className="filter-pill-in">
                       <input type="checkbox" />
                       <span>{item.name}</span>
-                      <em>{item.count}</em>
+
                     </label>
                 ))}
               </div>
@@ -367,9 +352,9 @@ function InstructorsPage() {
                 {filterData.language.map((item) => (
                     <label key={item.id} className="filter-language">
                       <input type="checkbox" />
-                      <Languages className="item-icon" size={16} strokeWidth={2} />
+
                       <span>{item.name}</span>
-                      <em>{item.count}</em>
+
                     </label>
                 ))}
               </div>
@@ -407,7 +392,7 @@ function InstructorsPage() {
           </div>
 
           {/* INSTRUCTORS GRID */}
-          <div className="instructors-grid">
+          <div className="instructors-grid-in">
             {instructors.map((instructor) => {
               const badgeInfo = getBadgeInfo(instructor.badge);
               return (
@@ -421,7 +406,7 @@ function InstructorsPage() {
                   </div>
 
                   {/* Avatar */}
-                  <div className="avatar-wrapper">
+                  <div className="avatar-wrapper-in">
                     <img
                       src={instructor.avatar}
                       alt={instructor.name}

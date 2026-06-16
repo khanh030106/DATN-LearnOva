@@ -614,7 +614,7 @@ body {
 }
 
 /* INSTRUCTORS GRID */
-.instructors-grid {
+.instructors-grid-in {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   gap: 20px;
@@ -776,7 +776,7 @@ body {
   border-color: var(--blue-strong);
 }
 
-.avatar-wrapper {
+.avatar-wrapper-in {
   position: relative;
   width: 100px;
   height: 100px;
@@ -1768,8 +1768,10 @@ body {
 
 /* INSTRUCTORS PAGE POLISH */
 .instructors-page {
-  padding: 16px 24px 32px;
+  /*padding: 16px 24px 32px;*/
   background: var(--bg-main);
+  padding: 110px;
+  margin-top: -60px;
 }
 
 .instructors-overview {
@@ -1866,6 +1868,7 @@ body {
 /* Thẻ Wrapper đứng im làm chỗ tựa trong Grid */
 .sidebar-wrapper {
   display: block;
+  width: 70%;
 }
 
 /* Thẻ con bên trong thực hiện nhiệm vụ Sticky cuộn độc lập */
@@ -1981,7 +1984,7 @@ body {
   outline: none;
 }
 
-.instructors-grid {
+.instructors-grid-in {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 18px;
 }

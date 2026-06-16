@@ -401,12 +401,14 @@ hr.hr-in {
     display: flex;
     flex-direction: column;
     gap: 30px;
+    margin-top: -55px;
 }
 
 /* Sections */
 .section {
     background: white;
     padding: 30px;
+    /*margin-top: -30px;*/
     border-radius: 6px;
 
 }
@@ -1348,13 +1350,13 @@ hr.hr-in {
 }
 
 .course-card-new:hover{
-    transform:translateY(-6px);
+    transform:translateY(-1px);
     box-shadow:0 12px 30px rgba(0,0,0,.12);
 }
 
 .course-image-box{
     position:relative;
-    height:180px;
+    height:170px;
     overflow:hidden;
 }
 
@@ -1409,6 +1411,7 @@ hr.hr-in {
     font-weight:500;
     color:#0f172a;
     margin-bottom:10px;
+    margin-top: -10px;
 }
 
 .course-meta-new{
@@ -1445,8 +1448,8 @@ hr.hr-in {
 }
 
 .price-new{
-    font-size:16px;
-    font-weight:400;
+    font-size:19px;
+    font-weight:500;
     color:#0f172a;
 }
 
@@ -1480,4 +1483,15 @@ hr.hr-in {
     .courses-grid-new{
         grid-template-columns:1fr;
     }
+}
+.student-count {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.student-count svg {
+    font-size: 16px;
 }
