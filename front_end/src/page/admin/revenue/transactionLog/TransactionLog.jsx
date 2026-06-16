@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Search, FileText } from "lucide-react";
+import AdminHoverSelect from "../../shared/AdminHoverSelect";
 import "./TransactionLog.css";
 
 const transactions = [
@@ -123,6 +124,9 @@ const PAGE_SIZE = 7;
 
 const TransactionLog = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [selectedGateway, setSelectedGateway] = useState("All Payment Gateways");
+  const [selectedStatus, setSelectedStatus] = useState("All Statuses");
   const totalPages = Math.ceil(transactions.length / PAGE_SIZE);
   const pageStart = (currentPage - 1) * PAGE_SIZE;
   const currentTransactions = transactions.slice(
@@ -136,6 +140,9 @@ const TransactionLog = () => {
     }
     setCurrentPage(page);
   };
+  const categoryOptions = ["All Categories", ...new Set(transactions.map((item) => item.type))];
+  const gatewayOptions = ["All Payment Gateways", ...new Set(transactions.map((item) => item.gateway))];
+  const statusOptions = ["All Statuses", ...new Set(transactions.map((item) => item.status))];
 
   return (
     <section
@@ -159,9 +166,27 @@ const TransactionLog = () => {
             <input placeholder="Search by transaction ID, student name, course" />
           </label>
           <div className="transactionFilters">
-            <button type="button">All Categories</button>
-            <button type="button">All Payment Gateways</button>
-            <button type="button">All Statuses</button>
+            <AdminHoverSelect
+              className="transactionFilterSelect"
+              options={categoryOptions}
+              value={selectedCategory}
+              onChange={setSelectedCategory}
+              ariaLabel="Filter transactions by category"
+            />
+            <AdminHoverSelect
+              className="transactionFilterSelect transactionFilterSelectWide"
+              options={gatewayOptions}
+              value={selectedGateway}
+              onChange={setSelectedGateway}
+              ariaLabel="Filter transactions by payment gateway"
+            />
+            <AdminHoverSelect
+              className="transactionFilterSelect"
+              options={statusOptions}
+              value={selectedStatus}
+              onChange={setSelectedStatus}
+              ariaLabel="Filter transactions by status"
+            />
           </div>
         </div>
 

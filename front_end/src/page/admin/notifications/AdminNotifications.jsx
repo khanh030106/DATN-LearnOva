@@ -1,5 +1,7 @@
 import { Bell, CheckCircle2, Clock, Eye, GraduationCap, MailCheck, XCircle } from "lucide-react";
+import { useState } from "react";
 import "../shared/AdminDataPage.css";
+import AdminHoverSelect from "../shared/AdminHoverSelect";
 
 const stats = [
   { label: "New Notifications", value: "12", note: "unread admin alerts", icon: Bell },
@@ -48,6 +50,11 @@ const notifications = [
 ];
 
 const AdminNotifications = () => {
+  const [selectedType, setSelectedType] = useState("All Types");
+  const [selectedReadStatus, setSelectedReadStatus] = useState("Unread");
+  const [selectedRequestType, setSelectedRequestType] = useState("Teacher Requests");
+  const typeOptions = ["All Types", ...new Set(notifications.map((item) => item.type))];
+
   return (
     <section className="adminDataPage" aria-label="Admin notification center">
       <div className="adminDataContent">
@@ -82,9 +89,24 @@ const AdminNotifications = () => {
 
         <div className="adminDataFilters">
           <input type="search" placeholder="Search notification, user, email..." />
-          <button type="button">All Types</button>
-          <button type="button">Unread</button>
-          <button type="button">Teacher Requests</button>
+          <AdminHoverSelect
+            options={typeOptions}
+            value={selectedType}
+            onChange={setSelectedType}
+            ariaLabel="Filter notifications by type"
+          />
+          <AdminHoverSelect
+            options={["Unread", "Read", "All Statuses"]}
+            value={selectedReadStatus}
+            onChange={setSelectedReadStatus}
+            ariaLabel="Filter notifications by read status"
+          />
+          <AdminHoverSelect
+            options={["Teacher Requests", "Violation Alerts", "All Requests"]}
+            value={selectedRequestType}
+            onChange={setSelectedRequestType}
+            ariaLabel="Filter notifications by request type"
+          />
         </div>
 
         <div className="adminDataTableCard">

@@ -1,5 +1,7 @@
-import "./VoucherTable.css";
 import { FiEye, FiEdit, FiTrash2 } from "react-icons/fi";
+import { useState } from "react";
+import AdminHoverSelect from "../../shared/AdminHoverSelect";
+import "./VoucherTable.css";
 
 // ===== VOUCHER DATA =====
 const vouchers = [
@@ -45,6 +47,8 @@ const vouchers = [
 const statusOptions = ["All statuses", "Active", "Expiring Soon", "Expired"];
 
 const VoucherTable = ({ onCreateVoucher }) => {
+  const [selectedStatus, setSelectedStatus] = useState(statusOptions[0]);
+
   return (
     <section className="voucherTableSection">
       {/* HEADER SECTION */}
@@ -68,13 +72,13 @@ const VoucherTable = ({ onCreateVoucher }) => {
             placeholder="Search code or campaign..."
             className="voucherSearchInput"
           />
-          <select className="voucherStatusSelect">
-            {statusOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+          <AdminHoverSelect
+            className="voucherStatusSelect"
+            options={statusOptions}
+            value={selectedStatus}
+            onChange={setSelectedStatus}
+            ariaLabel="Filter vouchers by status"
+          />
           <button
             type="button"
             className="voucherCreateBtn"

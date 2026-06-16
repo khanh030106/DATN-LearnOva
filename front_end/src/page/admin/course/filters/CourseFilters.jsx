@@ -78,13 +78,6 @@ const CourseFilters = () => {
     priceTypeOptions.find((item) => item.id === selectedPriceType)?.label ||
     "Tất cả";
 
-  const closeAllDropdowns = () => {
-    setCategoryDropdownOpen(false);
-    setInstructorDropdownOpen(false);
-    setSortDropdownOpen(false);
-    setIsPriceDropdownOpen(false);
-  };
-
   const openCategoryDropdown = () => {
     setCategoryDropdownOpen(true);
     setInstructorDropdownOpen(false);

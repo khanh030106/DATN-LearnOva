@@ -1,3 +1,4 @@
+import AdminHoverSelect from "../../shared/AdminHoverSelect";
 import "./UserManagementFilters.css";
 
 const searchFields = {
@@ -37,31 +38,21 @@ const UserManagementFilters = ({
             onChange={(event) => onSearchChange(event.target.value)}
           />
 
-          <select
+          <AdminHoverSelect
             className="userManagementFilterSelect"
-            aria-label={searchFields.roleLabel}
+            ariaLabel={searchFields.roleLabel}
             defaultValue="all"
-            onChange={(event) => onRoleChange(event.target.value)}
-          >
-            {roleOptions.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            options={roleOptions}
+            onChange={onRoleChange}
+          />
 
-          <select
+          <AdminHoverSelect
             className="userManagementFilterSelect"
-            aria-label={searchFields.statusLabel}
+            ariaLabel={searchFields.statusLabel}
             defaultValue="all"
-            onChange={(event) => onStatusChange(event.target.value)}
-          >
-            {statusOptions.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            options={statusOptions}
+            onChange={onStatusChange}
+          />
         </div>
       </div>
     </div>

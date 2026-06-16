@@ -68,21 +68,9 @@
 }
 
 .voucherStatusSelect {
-  padding: 10px 14px;
-  font-size: 13px;
-  color: #111827;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: #ffffff;
-  cursor: pointer;
   min-width: 130px;
+  height: 40px;
   margin-left: auto;
-}
-
-.voucherStatusSelect:focus {
-  outline: none;
-  border-color: #93c5fd;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
 }
 
 .voucherCreateBtn {

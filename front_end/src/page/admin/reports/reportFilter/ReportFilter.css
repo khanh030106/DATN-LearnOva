@@ -52,7 +52,7 @@
   color: #64748b;
 }
 
-.filterInput {
+.filterInput:not(.adminHoverSelect) {
   width: 100%;
   min-height: 34px;
   padding: 0 14px;
@@ -70,16 +70,16 @@
   text-overflow: ellipsis;
 }
 
-.filterInput::-webkit-datetime-edit-year-field,
-.filterInput::-moz-placeholder {
+.filterInput:not(.adminHoverSelect)::-webkit-datetime-edit-year-field,
+.filterInput:not(.adminHoverSelect)::-moz-placeholder {
   opacity: 1;
 }
 
-.filterInput:hover {
+.filterInput:not(.adminHoverSelect):hover {
   border-color: #93c5fd;
 }
 
-.filterInput:focus {
+.filterInput:not(.adminHoverSelect):focus {
   outline: none;
   border-color: #93c5fd;
   background: #ffffff;
@@ -90,10 +90,14 @@
   font-family: var(--font-sans);
 }
 
-.filterSelect {
-  appearance: none;
-  background-image: none;
-  padding-right: 14px;
+.filterSelect.adminHoverSelect {
+  min-width: 0;
+  width: 100%;
+  height: 34px;
+}
+
+.filterSelect.adminHoverSelect .adminHoverSelectButton {
+  font-size: 0.82rem;
 }
 
 @media (max-width: 1280px) {
