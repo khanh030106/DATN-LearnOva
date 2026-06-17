@@ -25,8 +25,7 @@ public class User {
     private Long id;
 
     @Size(max = 100)
-    @NotNull
-    @Column(name = "full_name", nullable = false, length = 100)
+    @Column(name = "full_name", length = 100)
     private String fullName;
 
     @NotNull
@@ -68,9 +67,8 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @NotNull
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @OneToMany(mappedBy = "user")

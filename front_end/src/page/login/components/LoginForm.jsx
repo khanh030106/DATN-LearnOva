@@ -6,10 +6,9 @@ import {useAuth} from "../../../hook/UseAuth.jsx"
 
 const LoginForm = ({ onSwitchToRegister }) => {
     const navigate = useNavigate();
-    const [form, setForm] = useState({email: '', password: '', remember: false});
+    const [form, setForm] = useState({email: '', password: '', rememberMe: false});
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
-
     const {login} = useAuth();
 
     const handleChange = (e) => {
@@ -24,12 +23,12 @@ const LoginForm = ({ onSwitchToRegister }) => {
         e.preventDefault();
         setError('');
         try {
-            const data = await login(form.email, form.password, form.remember);
+            const data = await login(form.email, form.password, form.rememberMe);
 
             if (!data?.accessToken) {
                 throw new Error("No access token returned");
             }
-            navigate('/learnova/user/home');
+            navigate('/learnova/courses');
         }catch (err) {
             const message =
                 err.response?.data?.message ||
@@ -89,7 +88,7 @@ const LoginForm = ({ onSwitchToRegister }) => {
                             <label className="form-option-remember">
                                 <input
                                     type="checkbox" name="remember"
-                                    checked={form.remember} onChange={handleChange}
+                                    checked={form.rememberMe} onChange={handleChange}
                                 />
                                 Remember me
                             </label>
