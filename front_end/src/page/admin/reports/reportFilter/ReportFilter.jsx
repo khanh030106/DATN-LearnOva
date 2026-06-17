@@ -3,6 +3,7 @@ import {
   initialReportFilters,
   reportFilterFields,
 } from "./reportFilterData.js";
+import AdminHoverSelect from "../../shared/AdminHoverSelect";
 import "./ReportFilter.css";
 
 const FilterField = ({ field, value, onChange }) => {
@@ -12,17 +13,16 @@ const FilterField = ({ field, value, onChange }) => {
     <div className="filterField">
       <label htmlFor={field.id}>{field.label}</label>
       {field.type === "select" ? (
-        <select
+        <AdminHoverSelect
           id={field.id}
-          name={field.id}
-          value={value}
-          onChange={onChange}
           className={inputClassName}
-        >
-          {field.options.map((option) => (
-            <option key={option}>{option}</option>
-          ))}
-        </select>
+          options={field.options}
+          value={value}
+          onChange={(nextValue) =>
+            onChange({ target: { name: field.id, value: nextValue } })
+          }
+          ariaLabel={field.label}
+        />
       ) : (
         <input
           id={field.id}

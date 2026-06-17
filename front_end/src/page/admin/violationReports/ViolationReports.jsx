@@ -1,5 +1,7 @@
 import { Ban, Eye, Flag, LockKeyhole, ShieldAlert, TriangleAlert, XCircle } from "lucide-react";
+import { useState } from "react";
 import "../shared/AdminDataPage.css";
+import AdminHoverSelect from "../shared/AdminHoverSelect";
 import "./ViolationReports.css";
 
 const stats = [
@@ -37,6 +39,12 @@ const reportRows = [
 ];
 
 const ViolationReports = () => {
+  const [selectedType, setSelectedType] = useState("All Types");
+  const [selectedStatus, setSelectedStatus] = useState("All Statuses");
+  const [selectedCount, setSelectedCount] = useState("Report Count");
+  const statusOptions = ["All Statuses", ...new Set(reportRows.map((row) => row.status))];
+  const countOptions = ["Report Count", "1 / 3", "2 / 3", "3 / 3"];
+
   return (
     <section className="adminDataPage" aria-label="Violation reports">
       <div className="adminDataContent">
@@ -60,9 +68,24 @@ const ViolationReports = () => {
 
         <div className="adminDataFilters">
           <input type="search" placeholder="Search report ID or target..." />
-          <button type="button">All Types</button>
-          <button type="button">All Statuses</button>
-          <button type="button">Report Count</button>
+          <AdminHoverSelect
+            options={["All Types", "Course", "Lesson", "Instructor"]}
+            value={selectedType}
+            onChange={setSelectedType}
+            ariaLabel="Filter reports by type"
+          />
+          <AdminHoverSelect
+            options={statusOptions}
+            value={selectedStatus}
+            onChange={setSelectedStatus}
+            ariaLabel="Filter reports by status"
+          />
+          <AdminHoverSelect
+            options={countOptions}
+            value={selectedCount}
+            onChange={setSelectedCount}
+            ariaLabel="Sort reports by count"
+          />
         </div>
 
         <div className="adminDataTableCard">

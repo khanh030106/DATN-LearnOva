@@ -71,6 +71,8 @@
 .filterDropdownWrapper {
   position: relative;
   flex-shrink: 0;
+  width: 200px;
+  min-width: 200px;
 }
 
 /* Dropdown Button */
@@ -80,6 +82,7 @@
   justify-content: space-between;
   gap: 6px;
   height: 40px;
+  width: 100%;
   padding: 0 12px;
   border: 1px solid #e2e8f0;
   border-radius: 7px;
@@ -90,11 +93,28 @@
   font-family: var(--font-sans);
   cursor: pointer;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition:
     border-color 0.2s ease,
     background-color 0.2s ease;
   box-sizing: border-box;
-  flex: 0 1 auto;
+  flex: 0 0 auto;
+}
+
+.filterButtonLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filterButtonLabel span {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .filterButtonLabel {
@@ -123,7 +143,7 @@
 /* Dropdown Menu */
 .filterDropdownMenu {
   position: absolute;
-  top: calc(100% + 6px);
+  top: 100%;
   left: 0;
   right: 0;
   background-color: #ffffff;
@@ -137,10 +157,11 @@
   pointer-events: none;
   transform: translateY(4px);
   transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+  width: 100%;
+  min-width: 0;
 }
 
-.filterDropdownWrapper:hover .filterDropdownMenu,
-.filterDropdownWrapper:focus-within .filterDropdownMenu {
+.filterDropdownWrapper.open .filterDropdownMenu {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -151,6 +172,7 @@
 .filterDropdownItem {
   display: block;
   width: 100%;
+  white-space: nowrap;
   text-align: left;
   padding: 10px 16px;
   border: none;

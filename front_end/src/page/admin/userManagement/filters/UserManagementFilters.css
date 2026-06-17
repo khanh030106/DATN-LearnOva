@@ -67,8 +67,7 @@
   margin-left: auto;
 }
 
-.userManagementFilterSearch,
-.userManagementFilterSelect {
+.userManagementFilterSearch {
   min-width: 0;
   height: 34px;
   padding: 0 14px;
@@ -89,14 +88,15 @@
 
 .userManagementFilterSelect {
   width: 180px;
+  min-width: 180px;
+  height: 34px;
 }
 
 .userManagementFilterSearch::placeholder {
   color: #94a3b8;
 }
 
-.userManagementFilterSearch:focus,
-.userManagementFilterSelect:focus {
+.userManagementFilterSearch:focus {
   border-color: #93c5fd;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
 }

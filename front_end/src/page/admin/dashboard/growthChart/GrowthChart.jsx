@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
+import AdminHoverSelect from "../../shared/AdminHoverSelect";
 import "./GrowthChart.css";
 
 const growthChartYears = [
@@ -23,6 +24,7 @@ const chartLabels = growthChartSeries.map((item) => item.month);
 
 const GrowthChart = () => {
   const canvasRef = useRef(null);
+  const [selectedYear, setSelectedYear] = useState(growthChartYears[0].value);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -129,17 +131,14 @@ const GrowthChart = () => {
         </div>
 
         <div className="growthChartCardFilter">
-          <select
+          <AdminHoverSelect
             id="growthChartYear"
             className="growthChartCardSelect"
-            defaultValue={growthChartYears[0].value}
-          >
-            {growthChartYears.map((year) => (
-              <option key={year.value} value={year.value}>
-                {year.label}
-              </option>
-            ))}
-          </select>
+            options={growthChartYears}
+            value={selectedYear}
+            onChange={setSelectedYear}
+            ariaLabel="Select growth chart year"
+          />
         </div>
       </div>
 

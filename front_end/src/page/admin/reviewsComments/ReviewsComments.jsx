@@ -1,5 +1,7 @@
 import { Eye, EyeOff, MessageSquareText, Star, Trash2, TriangleAlert } from "lucide-react";
+import { useState } from "react";
 import "../shared/AdminDataPage.css";
+import AdminHoverSelect from "../shared/AdminHoverSelect";
 import "./ReviewsComments.css";
 
 const stats = [
@@ -49,6 +51,13 @@ const moderationRows = [
 ];
 
 const ReviewsComments = () => {
+  const [selectedCourse, setSelectedCourse] = useState("All Courses");
+  const [selectedUser, setSelectedUser] = useState("All Users");
+  const [selectedStatus, setSelectedStatus] = useState("All Statuses");
+  const courseOptions = ["All Courses", ...new Set(moderationRows.map((row) => row.course))];
+  const userOptions = ["All Users", ...new Set(moderationRows.map((row) => row.user))];
+  const statusOptions = ["All Statuses", ...new Set(moderationRows.map((row) => row.status))];
+
   return (
     <section className="adminDataPage" aria-label="Reviews and comments moderation">
       <div className="adminDataContent">
@@ -72,9 +81,24 @@ const ReviewsComments = () => {
 
         <div className="adminDataFilters">
           <input type="search" placeholder="Search course, user, review, comment..." />
-          <button type="button">All Courses</button>
-          <button type="button">All Users</button>
-          <button type="button">All Statuses</button>
+          <AdminHoverSelect
+            options={courseOptions}
+            value={selectedCourse}
+            onChange={setSelectedCourse}
+            ariaLabel="Filter reviews by course"
+          />
+          <AdminHoverSelect
+            options={userOptions}
+            value={selectedUser}
+            onChange={setSelectedUser}
+            ariaLabel="Filter reviews by user"
+          />
+          <AdminHoverSelect
+            options={statusOptions}
+            value={selectedStatus}
+            onChange={setSelectedStatus}
+            ariaLabel="Filter reviews by status"
+          />
         </div>
 
         <div className="adminDataTableCard">

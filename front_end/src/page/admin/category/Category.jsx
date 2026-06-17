@@ -1,5 +1,6 @@
 import { Edit3, Eye, FolderTree, Plus, Trash2, X } from "lucide-react";
 import { useMemo, useState } from "react";
+import AdminHoverSelect from "../shared/AdminHoverSelect";
 import "./Category.css";
 
 const categoryStats = [
@@ -55,8 +56,12 @@ const categories = [
 const Category = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState("All Statuses");
+  const [selectedParent, setSelectedParent] = useState("All Parents");
   const pageSize = 4;
   const totalPages = Math.ceil(categories.length / pageSize);
+  const statusOptions = ["All Statuses", ...new Set(categories.map((category) => category.status))];
+  const parentOptions = ["All Parents", ...new Set(categories.map((category) => category.parent))];
   const visibleCategories = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize;
     return categories.slice(startIndex, startIndex + pageSize);
@@ -82,8 +87,20 @@ const Category = () => {
 
         <div className="adminCategoryFilters">
           <input type="search" placeholder="Search category name or parent..." />
-          <button type="button">All Statuses</button>
-          <button type="button">All Parents</button>
+          <AdminHoverSelect
+            className="adminCategoryFilterSelect"
+            options={statusOptions}
+            value={selectedStatus}
+            onChange={setSelectedStatus}
+            ariaLabel="Filter categories by status"
+          />
+          <AdminHoverSelect
+            className="adminCategoryFilterSelect"
+            options={parentOptions}
+            value={selectedParent}
+            onChange={setSelectedParent}
+            ariaLabel="Filter categories by parent"
+          />
           <button
             type="button"
             className="adminCategoryCreateButton"
