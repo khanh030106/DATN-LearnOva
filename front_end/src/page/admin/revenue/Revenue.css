@@ -1,7 +1,6 @@
 .revenuePage {
   width: 100%;
   box-sizing: border-box;
-  padding: 20px 12px 32px;
 }
 
 .revenuePageInner {
@@ -19,7 +18,9 @@
 }
 
 .revenueQuickNav a,
-.revenueDetailHeader a {
+.revenueQuickNav span,
+.revenueDetailHeader a,
+.revenueDetailHeader span {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -39,7 +40,9 @@
 }
 
 .revenueQuickNav a:hover,
-.revenueDetailHeader a:hover {
+.revenueQuickNav span:hover,
+.revenueDetailHeader a:hover,
+.revenueDetailHeader span:hover {
   background: rgba(37, 99, 235, 0.08);
   border-color: rgba(37, 99, 235, 0.46);
   transform: translateY(-1px);
@@ -57,7 +60,7 @@
 
 .revenueDetailHeader h2 {
   margin: 0;
-  color: #1b140c;
+  color: #0f172a;
   font-size: 22px;
   font-weight: 600;
 }
@@ -89,11 +92,12 @@
 .revenueDetailSide {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: 16px;
 }
 
 .revenueDetailSide > section {
-  background: #ffffff;
+  background: transparent;
   border-radius: 6px;
   min-width: 0;
 }
@@ -158,6 +162,11 @@
 }
 
 @media (max-width: 1100px) {
+  .revenueHero {
+    grid-template-columns: 220px minmax(0, 1fr);
+    padding-right: 220px;
+  }
+
   .revenueOverviewRow,
   .revenueTopBlocksRow {
     grid-template-columns: 1fr;
@@ -177,6 +186,24 @@
 }
 
 @media (max-width: 840px) {
+  .revenueHero {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding-right: 0;
+  }
+
+  .revenueHeroText {
+    order: -1;
+  }
+
+  .revenueHeroImageWrap {
+    height: 132px;
+  }
+
+  .revenueHeroText h1 {
+    font-size: 26px;
+  }
+
   .revenueTopBlocksRow,
   .revenueOverviewRow {
     gap: 12px;

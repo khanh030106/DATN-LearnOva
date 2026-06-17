@@ -10,10 +10,10 @@ const Revenue = () => {
       <div className="revenuePageInner">
         <RevenueCard />
         <nav className="revenueQuickNav" aria-label="Revenue detail pages">
-          <Link to="/learnova/admin/revenue/top-rankings">
+          <Link className="revenueQuickNavItem" to="/learnova/admin/revenue/top-rankings">
             View top revenue tables
           </Link>
-          <Link to="/learnova/admin/revenue/transactions">
+          <Link className="revenueQuickNavItem" to="/learnova/admin/revenue/transactions">
             View transaction details
           </Link>
         </nav>

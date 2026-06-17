@@ -1,34 +1,247 @@
 .adminLayout {
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
-  background: var(--bg-secondary);
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  overflow: hidden;
+  background: #f6f8fc;
+  color: #26354f;
+  font-family: var(--font-sans);
+  font-size: 16px;
 }
 
 .adminLayoutContent {
-  flex: 1;
+  min-width: 0;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  min-width: 0;
-  padding: 0;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: 16px;
 }
 
 .adminLayoutMain {
-  flex: 1;
-  min-width: 0;
-  padding: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 24px 24px 24px;
+  font-family: var(--font-sans);
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
-@media (max-width: 768px) {
+.adminLayout :where(select) {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: none !important;
+  padding-right: 14px !important;
+}
+
+.adminLayout :where(select::-ms-expand) {
+  display: none;
+}
+
+
+
+.adminLayoutMain table thead th {
+  background: #eff6ff !important;
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+.adminLayoutMain :where(
+  .userManagementUsersTableHeader > span,
+  .userRowTableHeader > span
+) {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+.adminLayoutMain :where(
+  p,
+  span,
+  small,
+  em,
+  label,
+  input,
+  textarea,
+  select,
+  td,
+  th,
+  li
+) {
+  font-family: var(--font-sans);
+  font-weight: 400 !important;
+}
+
+.adminLayoutMain :where(h1, h2, h3, h4, h5, h6, strong, b, button, a) {
+  color: #0f172a;
+  font-family: var(--font-sans);
+  font-weight: 500 !important;
+  letter-spacing: 0;
+}
+
+.adminLayoutMain :where(p, small, label, td) {
+  color: #64748b;
+}
+
+.adminLayoutMain :where(input, textarea, select) {
+  border-color: #e2e8f0;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.82rem;
+}
+
+.adminLayoutMain :where(input, textarea, select)::placeholder {
+  color: #94a3b8;
+}
+
+.adminLayoutMain :where(input, textarea, select):focus {
+  border-color: #93c5fd !important;
+  outline: none;
+}
+
+.adminLayoutMain :where(button) {
+  font-family: var(--font-sans);
+}
+
+.adminLayoutMain :where(
+  .userManagementUsersTableHeader > span,
+  .userRowTableHeader > span,
+  .adminDataTable th,
+  .adminCategoryTable th,
+  .courseTableHeader span,
+  .instructorTableHeader span,
+  .voucherTable th
+) {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+.adminLayoutMain :where(
+  .adminDataStatCard strong,
+  .adminCategoryStatCard strong,
+  .dashboardStatisticValue,
+  .totalCoursesCardValue,
+  .revenueMetricValue,
+  .revenueCardValue,
+  .voucherCardValue,
+  .userManagementStatsValue
+) {
+  font-family: var(--font-sans);
+  font-weight: 900 !important;
+}
+
+.adminLayoutMain :where(
+  .adminDataHeaderAction,
+  .adminDataTextButton--primary,
+  .adminCategoryCreateButton,
+  .voucherCreateSubmitBtn,
+  .voucherTableCreateButton
+) {
+  border-color: #1d4ed8 !important;
+  background: #1d4ed8 !important;
+  color: #ffffff !important;
+}
+
+.adminLayoutMain :where(
+  .adminDataHeaderAction,
+  .adminDataTextButton--primary,
+  .adminCategoryCreateButton,
+  .voucherCreateSubmitBtn,
+  .voucherTableCreateButton
+):hover {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+}
+
+.adminLayoutMain :where(
+  .adminDataTableCard,
+  .adminDataStatCard,
+  .adminCategoryTableCard,
+  .adminCategoryStatCard,
+  .courseTableWrapper,
+  .instructorTableWrapper,
+  .userManagementUsersList,
+  .voucherTableSection,
+  .reportsCard,
+  .reportChartsCard,
+  .revenueCard,
+  .revenueChartCard,
+  .revenueDonutCard,
+  .voucherCardsItem,
+  .voucherChartSection,
+  .voucherCampaignChartSection
+) {
+  color: #0f172a;
+}
+
+.adminLayoutMain :where(
+  .adminDataTable tbody tr:hover,
+  .adminCategoryTable tbody tr:hover,
+  .courseTableRow:hover,
+  .instructorTableRow:hover,
+  .userManagementUsersTableRow:hover,
+  .voucherTable tbody tr:hover
+) {
+  background: #eff6ff !important;
+}
+
+.adminLayoutMain :where(
+  .adminDataIconButton,
+  .adminDataTextButton,
+  .adminCategoryActionButton,
+  .courseActionButton,
+  .instructorActionButton,
+  .voucherActionButton
+) {
+  border-color: #e2e8f0;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.adminLayoutMain :where(
+  .adminDataIconButton,
+  .adminDataTextButton,
+  .adminCategoryActionButton,
+  .courseActionButton,
+  .instructorActionButton,
+  .voucherActionButton
+):hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.adminLayoutMain :where(
+  .filterDropdownMenu,
+  .filterDropdownItem
+) {
+  font-family: var(--font-sans);
+}
+
+@media (max-width: 1080px) {
   .adminLayout {
-    flex-direction: column;
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .adminLayout {
+    height: auto;
+    min-height: 100vh;
+    display: block;
+    overflow: visible;
   }
 
   .adminLayoutContent {
-    padding: 0;
+    height: auto;
+    overflow: visible;
   }
 
   .adminLayoutMain {
-    padding: 0;
+    overflow: visible;
+    padding-inline: 16px;
   }
 }

@@ -13,7 +13,9 @@ const RevenueTransactions = () => {
             <h2>Revenue Transaction Details</h2>
             <p>Inspect transaction logs, category metrics, and system revenue records.</p>
           </div>
-          <Link to="/learnova/admin/revenue">Back to overview</Link>
+          <Link className="revenueDetailBack" to="/learnova/admin/revenue">
+            Back to overview
+          </Link>
         </div>
 
         <div className="revenueDetailGrid">

@@ -1,11 +1,11 @@
 .course-detail-page {
   min-height: 100vh;
   background: #f8fafc;
-  padding: 16px 16px;
+  padding: 32px 16px;
 }
 
 .course-detail-panel {
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -37,15 +37,17 @@
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-  padding:12px;
+  padding: 32px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   align-items: start;
 }
 
-.course-detail-media {
-  padding: 12px;
+.course-detail-media-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .course-detail-media img {
@@ -53,7 +55,6 @@
   height: 350px;
   object-fit: cover;
   border-radius: 10px;
-  display: block;
 }
 
 .course-detail-gallery {
@@ -121,22 +122,22 @@
 .course-detail-instructor-card {
   display: grid;
   grid-template-columns: 120px minmax(0, 1fr);
-  gap: 16px;
+  gap: 20px;
   align-items: center;
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 16px;
   border: 1px solid #eef2f7;
-  padding: 12px;
+  padding: 20px;
 }
 
 .instructor-card {
   width: 100%;
   display: grid;
   grid-template-columns: 180px 1fr;
-  gap: 10px;
+  gap: 24px;
   align-items: center;
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 20px;
   border: 1px solid #eef2f7;
   padding: 24px;
   overflow: hidden;
@@ -197,38 +198,26 @@
 }
 
 .course-detail-info {
-  column-count: 2;
-  column-gap: 24px;
-  margin: 0;
-  padding: 0;
+  margin-bottom: 20px;
+  display: grid;
+  gap: 12px;
+  color: #334155;
+  font-size: 0.95rem;
 }
 
 .course-detail-info > div {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 0;
+  gap: 10px;
+  padding: 12px 14px;
   color: #0f172a;
-  break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  page-break-inside: avoid;
 }
 
 .course-detail-info > div svg {
-  width: 20px;
-  height: 20px;
   flex-shrink: 0;
-  padding: 6px;
-  border-radius: 8px;
-  background: rgba(29, 78, 216, 0.06);
+  width: 18px;
+  height: 18px;
   color: #1d4ed8;
-}
-
-@media (max-width: 768px) {
-  .course-detail-info {
-    column-count: 1;
-    column-gap: 0;
-  }
 }
 
 .course-detail-actions {
@@ -253,71 +242,31 @@
   transition: all 0.2s ease;
 }
 
-/* Wishlist (trái tim) — đỏ nhẹ giống nút */
-.course-detail-actions button:first-child,
-.course-detail-actions button:first-child svg,
-.course-detail-actions button:first-child svg * {
+/* Nút Wishlist - icon trái tim màu đỏ */
+.course-detail-actions button:first-child {
   color: #ef4444;
-  fill: #ef4444;
-  stroke: #ef4444;
+  border-color: #fecaca;
 }
 
-/* Share — xanh nhẹ giống nút */
-.course-detail-actions button:last-child,
-.course-detail-actions button:last-child svg,
-.course-detail-actions button:last-child svg * {
+.course-detail-actions button:first-child:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+/* Nút Share - icon xanh */
+.course-detail-actions button:last-child {
   color: #1d4ed8;
-  fill: #1d4ed8;
-  stroke: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.course-detail-actions button:last-child:hover {
+  background: #eff6ff;
+  border-color: #1d4ed8;
 }
 
 .course-detail-actions button svg {
   width: 18px;
   height: 18px;
-  fill: currentColor;
-  stroke: currentColor;
-}
-
-/* Smooth transition for buttons */
-.course-detail-actions button {
-  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
-}
-
-/* Wishlist (trái tim) - trạng thái mặc định */
-.course-detail-actions button:first-child {
-  color: #ef4444;
-  border-color: #fecaca;
-  background: transparent;
-}
-
-/* Wishlist hover: nền đỏ nhẹ */
-.course-detail-actions button:first-child:hover,
-.course-detail-actions button:first-child:focus {
-  background: rgba(239, 68, 68, 0.08);
-  border-color: #ef4444;
-  color: #ef4444;
-}
-
-/* Share - trạng thái mặc định */
-.course-detail-actions button:last-child {
-  color: #1d4ed8;
-  border-color: #bfdbfe;
-  background: transparent;
-}
-
-/* Share hover: nền xanh nhẹ */
-.course-detail-actions button:last-child:hover,
-.course-detail-actions button:last-child:focus {
-  background: rgba(29, 78, 216, 0.06);
-  border-color: #1d4ed8;
-  color: #1d4ed8;
-}
-
-/* Ensure SVG icons follow text color */
-.course-detail-actions button svg,
-.course-detail-actions button svg * {
-  fill: currentColor;
-  stroke: currentColor;
 }
 
 /* TABS */
@@ -352,28 +301,22 @@
   border-bottom: 3px solid #1d4ed8;
 }
 
+.tab-content {
+  padding: 32px;
+}
+
 .tab-content h2 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  line-height: 1.2;
-  margin: 0 0 18px;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
   color: #0f172a;
-  letter-spacing: -0.02em;
-  padding: 12px 12px;
 }
 
-.tab-content p {
-  margin: 0 0 18px;
-  color: #475569;
-  font-size: 1rem;
-  line-height: 1.75;
-  max-width: 760px;
-  letter-spacing: 0.01em;
-  padding: 12px 12px;
-}
-
-.tab-content > h2 + p {
-  margin-top: 0;
+.learning-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  color: #334155;
+  margin-top: 16px;
 }
 
 /* SIDEBAR */
@@ -566,12 +509,8 @@
   font-weight: 600;
   cursor: pointer;
   font-size: 0.95rem;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
 }
+
 .support-button:hover {
   background: #e0f2fe;
 }
@@ -1282,7 +1221,7 @@
 .course-detail-instructor-card {
   background: #f8fafc;
   border-radius: 14px;
-  padding: 8px;
+  padding: 20px;
   display: flex;
   gap: 16px;
   align-items: flex-start;
@@ -1367,6 +1306,7 @@
   color: #1d4ed8;
   font-weight: 700;
 }
+<<<<<<< HEAD
 
 /* Icon màu theo nút */
 .course-detail-actions button:first-child svg {
@@ -1648,3 +1588,5 @@
   background: #ffffff !important;
   transition: none !important;
 }
+=======
+>>>>>>> 966e98cac2a63f830f4d516bf343bcf7eb413b59

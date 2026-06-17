@@ -39,7 +39,6 @@ const SectionsStep = ({ sections, activeSectionId, onSelectSection, onAddSection
             </label>
             <button type="button">
               <Trash2 size={15} />
-              Delete Section
             </button>
           </div>
 

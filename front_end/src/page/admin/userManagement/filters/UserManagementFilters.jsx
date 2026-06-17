@@ -1,12 +1,5 @@
+import AdminHoverSelect from "../../shared/AdminHoverSelect";
 import "./UserManagementFilters.css";
-
-const filterTabs = [
-  { id: "all", label: "All", active: true },
-  { id: "students", label: "Students", active: false },
-  { id: "teachers", label: "Instructors", active: false },
-  { id: "admins", label: "Admins", active: false },
-  { id: "locked", label: "Locked", active: false },
-];
 
 const searchFields = {
   searchPlaceholder: "Search...",
@@ -29,8 +22,6 @@ const statusOptions = [
 ];
 
 const UserManagementFilters = ({
-  activeTabId = "all",
-  onTabChange = () => {},
   onSearchChange = () => {},
   onRoleChange = () => {},
   onStatusChange = () => {},
@@ -38,24 +29,6 @@ const UserManagementFilters = ({
   return (
     <div className="userManagementFilters" aria-label="Search and filter users">
       <div className="userManagementFiltersRow">
-        <div
-          className="userManagementFiltersChips"
-          role="tablist"
-          aria-label="Quick filter"
-        >
-          {filterTabs.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              className={`userManagementFilterChip ${activeTabId === tab.id ? "userManagementFilterChipActive" : ""}`}
-              aria-pressed={activeTabId === tab.id}
-              onClick={() => onTabChange(tab.id)}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
         <div className="userManagementFiltersControls">
           <input
             type="search"
@@ -65,31 +38,21 @@ const UserManagementFilters = ({
             onChange={(event) => onSearchChange(event.target.value)}
           />
 
-          <select
+          <AdminHoverSelect
             className="userManagementFilterSelect"
-            aria-label={searchFields.roleLabel}
+            ariaLabel={searchFields.roleLabel}
             defaultValue="all"
-            onChange={(event) => onRoleChange(event.target.value)}
-          >
-            {roleOptions.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            options={roleOptions}
+            onChange={onRoleChange}
+          />
 
-          <select
+          <AdminHoverSelect
             className="userManagementFilterSelect"
-            aria-label={searchFields.statusLabel}
+            ariaLabel={searchFields.statusLabel}
             defaultValue="all"
-            onChange={(event) => onStatusChange(event.target.value)}
-          >
-            {statusOptions.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            options={statusOptions}
+            onChange={onStatusChange}
+          />
         </div>
       </div>
     </div>

@@ -36,13 +36,13 @@ const RevenueCategoryChart = () => {
         beginAtZero: true,
         ticks: {
           color: "#4b5563",
-          font: { size: 12, family: "system-ui" },
+          font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
           callback: (value) => `${value}M`,
         },
         grid: { color: "rgba(37, 99, 235, 0.1)", drawBorder: false },
       },
       x: {
-        ticks: { color: "#4b5563", font: { size: 12, family: "system-ui" } },
+        ticks: { color: "#4b5563", font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } },
         grid: { display: false },
       },
     },

@@ -75,6 +75,12 @@
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
 }
 
+.teacher-promotion-card h2{
+  color: #00295e !important;
+  font-size: 1.2rem;
+  font-weight: 700 !important;
+}
+
 .teacher-promotion-card__media {
   position: relative;
   height: 156px;
@@ -119,10 +125,10 @@
   min-height: calc(1.05rem * 1.18 * 2);
   margin: 0;
   overflow: hidden;
-  color: #0a144f;
-  font-family: math;
-  font-size: 1.2rem;
-  font-weight: 700 !important;
+  color: #071a33;
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 800;
   line-height: 1.18;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -134,9 +140,8 @@
   align-items: center;
   gap: 8px;
   margin: 0;
-  color: #272727;
-  font-size: 0.82rem;
-  font-weight: 600 !important;
+  color: #475569;
+  font-size: 0.85rem;
 }
 
 .teacher-promotion-card__price-row {
@@ -149,15 +154,14 @@
 }
 
 .teacher-promotion-card__price-row strong {
-  color: #0030c2;
-  font-size: 20px;
-  font-weight: 650 !important;
+  color: #313131;
+  font-size: 1.2rem;
+  font-weight: 700 !important;
 }
 
 .teacher-promotion-card__price-row del {
-  color: #94a3b8;
-  font-size: 0.9rem;
-  font-weight: 500;
+  color: #8b8b8b;
+  font-size: 0.78rem;
 }
 
 .teacher-promotion-card__price-row span {
@@ -223,7 +227,7 @@
 
 .teacher-promotion-modal__header h2 {
   color: #071a33;
-  font-family: math;
+  font-family: var(--font-sans);
   font-size: 1.35rem;
   font-weight: 800;
   line-height: 1.2;

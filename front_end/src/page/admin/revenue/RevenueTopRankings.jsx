@@ -12,7 +12,9 @@ const RevenueTopRankings = () => {
             <h2>Revenue Ranking Tables</h2>
             <p>Review course and instructor earning performance in full-width tables.</p>
           </div>
-          <Link to="/learnova/admin/revenue">Back to overview</Link>
+          <Link className="revenueDetailBack" to="/learnova/admin/revenue">
+            Back to overview
+          </Link>
         </div>
 
         <div className="revenueDetailStack">

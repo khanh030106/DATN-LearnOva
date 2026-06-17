@@ -310,52 +310,53 @@ const UsersList = () => {
           })}
         </div>
 
-        <div className="userManagementUsersFooter">
-          <p className="userManagementUsersPageInfo">
-            Displaying{" "}
-            {Math.min((currentPage - 1) * pageSize + 1, usersData.length)}-
-            {Math.min(currentPage * pageSize, usersData.length)} out of{" "}
-            {usersData.length} users
-          </p>
+      </div>
 
-          <div
-            className="userManagementUsersPagination"
-            aria-label="User Pagination"
+      <div className="userManagementUsersFooter">
+        <p className="userManagementUsersPageInfo">
+          Displaying{" "}
+          {Math.min((currentPage - 1) * pageSize + 1, usersData.length)}-
+          {Math.min(currentPage * pageSize, usersData.length)} out of{" "}
+          {usersData.length} users
+        </p>
+
+        <div
+          className="userManagementUsersPagination"
+          aria-label="User Pagination"
+        >
+          <button
+            type="button"
+            className="userManagementUsersPageButton userManagementUsersPageButton--nav"
+            disabled={currentPage === 1}
+            onClick={() => goToPage(currentPage - 1)}
+            aria-label="Previous page"
           >
-            <button
-              type="button"
-              className="userManagementUsersPageButton userManagementUsersPageButton--nav"
-              disabled={currentPage === 1}
-              onClick={() => goToPage(currentPage - 1)}
-              aria-label="Previous page"
-            >
-              <ChevronLeft size={16} aria-hidden="true" />
-            </button>
+            <ChevronLeft size={16} aria-hidden="true" />
+          </button>
 
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-              (page) => (
-                <button
-                  key={page}
-                  type="button"
-                  className={`userManagementUsersPageButton ${currentPage === page ? "userManagementUsersPageButton--active" : ""}`}
-                  onClick={() => goToPage(page)}
-                  aria-label={`Go to page ${page}`}
-                >
-                  {page}
-                </button>
-              ),
-            )}
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+            (page) => (
+              <button
+                key={page}
+                type="button"
+                className={`userManagementUsersPageButton ${currentPage === page ? "userManagementUsersPageButton--active" : ""}`}
+                onClick={() => goToPage(page)}
+                aria-label={`Go to page ${page}`}
+              >
+                {page}
+              </button>
+            ),
+          )}
 
-            <button
-              type="button"
-              className="userManagementUsersPageButton userManagementUsersPageButton--nav"
-              disabled={currentPage === totalPages}
-              onClick={() => goToPage(currentPage + 1)}
-              aria-label="Next page"
-            >
-              <ChevronRight size={16} aria-hidden="true" />
-            </button>
-          </div>
+          <button
+            type="button"
+            className="userManagementUsersPageButton userManagementUsersPageButton--nav"
+            disabled={currentPage === totalPages}
+            onClick={() => goToPage(currentPage + 1)}
+            aria-label="Next page"
+          >
+            <ChevronRight size={16} aria-hidden="true" />
+          </button>
         </div>
       </div>
 

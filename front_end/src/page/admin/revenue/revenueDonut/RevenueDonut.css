@@ -23,13 +23,13 @@
   margin: 0 0 8px;
   font-size: 22px;
   line-height: 1.2;
-  font-weight: 5z00;
-  color: #1b140c;
+  font-weight: 500;
+  color: #0f172a;
 }
 
 .revenueDonutSubtitle {
   margin: 0;
-  color: var(--text-secondary);
+  color: #64748b;
   font-size: 13px;
   line-height: 1.6;
 }
@@ -68,14 +68,14 @@
 .revenueDonutCenterValue {
   font-size: 28px;
   font-weight: 800;
-  color: #1b140c;
+  color: #0f172a;
 }
 
 .revenueDonutCenterLabel {
   margin-top: 6px;
   font-size: 12px;
   font-weight: 700;
-  color: #5a4d34;
+  color: #64748b;
   letter-spacing: 0.12em;
 }
 
@@ -110,7 +110,7 @@
 }
 
 .revenueDonutLegendText {
-  color: #5a4d34;
+  color: #334155;
   font-size: 13px;
   font-weight: 600;
 }

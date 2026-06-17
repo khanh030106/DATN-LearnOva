@@ -11,7 +11,6 @@ const SectionCard = ({ section, isActive, onSelect }) => {
       <span>
         <small>Section {section.sectionOrder}</small>
         <strong>{section.title}</strong>
-        <em>{section.lessons.length} lessons</em>
       </span>
       <MoreVertical size={16} />
     </button>

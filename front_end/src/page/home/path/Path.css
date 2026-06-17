@@ -41,7 +41,11 @@
 
 .learning-card {
     padding: 15px 40px 40px;
+<<<<<<< HEAD
     border-radius: 24px;
+=======
+    border-radius: 18px;
+>>>>>>> 966e98cac2a63f830f4d516bf343bcf7eb413b59
     border: 1px solid #e2e8f0;
     background: #ffffff;
     transition: 0.4s;

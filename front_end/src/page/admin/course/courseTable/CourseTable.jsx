@@ -13,7 +13,8 @@ const courseTableData = [
     rating: 4.7,
     revenue: "$0",
     publishDate: "01/06/2026",
-    status: "Published",
+    reportCount: 0,
+    status: "Active",
   },
   {
     id: "KH002",
@@ -24,7 +25,8 @@ const courseTableData = [
     rating: 4.7,
     revenue: "$0",
     publishDate: "22/04/2026",
-    status: "Published",
+    reportCount: 1,
+    status: "Active",
   },
   {
     id: "KH003",
@@ -35,7 +37,8 @@ const courseTableData = [
     rating: 4.5,
     revenue: "$68.000",
     publishDate: "05/03/2026",
-    status: "Suspended",
+    reportCount: 2,
+    status: "Hidden",
   },
   {
     id: "KH004",
@@ -46,7 +49,8 @@ const courseTableData = [
     rating: 4.6,
     revenue: "$89.000",
     publishDate: "16/02/2026",
-    status: "Published",
+    reportCount: 0,
+    status: "Active",
   },
   {
     id: "KH005",
@@ -57,7 +61,8 @@ const courseTableData = [
     rating: 4.4,
     revenue: "$0",
     publishDate: "28/01/2026",
-    status: "Published",
+    reportCount: 3,
+    status: "Locked",
   },
   {
     id: "KH006",
@@ -68,7 +73,8 @@ const courseTableData = [
     rating: 4.9,
     revenue: "$135.000",
     publishDate: "12/01/2026",
-    status: "Published",
+    reportCount: 0,
+    status: "Active",
   },
   {
     id: "KH007",
@@ -79,7 +85,8 @@ const courseTableData = [
     rating: 4.6,
     revenue: "$72.000",
     publishDate: "04/12/2025",
-    status: "Published",
+    reportCount: 1,
+    status: "Active",
   },
   {
     id: "KH008",
@@ -90,7 +97,8 @@ const courseTableData = [
     rating: 4.7,
     revenue: "$81.000",
     publishDate: "14/11/2025",
-    status: "Suspended",
+    reportCount: 3,
+    status: "Locked",
   },
   {
     id: "KH009",
@@ -101,7 +109,8 @@ const courseTableData = [
     rating: 4.5,
     revenue: "$0",
     publishDate: "08/10/2025",
-    status: "Published",
+    reportCount: 0,
+    status: "Active",
   },
   {
     id: "KH010",
@@ -112,7 +121,8 @@ const courseTableData = [
     rating: 4.8,
     revenue: "$107.000",
     publishDate: "25/09/2025",
-    status: "Published",
+    reportCount: 0,
+    status: "Active",
   },
   {
     id: "KH011",
@@ -123,7 +133,8 @@ const courseTableData = [
     rating: 4.6,
     revenue: "$98.000",
     publishDate: "28/08/2025",
-    status: "Published",
+    reportCount: 1,
+    status: "Active",
   },
   {
     id: "KH012",
@@ -134,6 +145,7 @@ const courseTableData = [
     rating: 4.4,
     revenue: "$0",
     publishDate: "13/07/2025",
+    reportCount: 3,
     status: "Locked",
   },
 ];
@@ -162,6 +174,7 @@ const CourseTable = () => {
               <th>Students</th>
               <th>Rating</th>
               <th>Revenue</th>
+              <th>Report Count</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -182,6 +195,11 @@ const CourseTable = () => {
                   </div>
                 </td>
                 <td>{course.revenue}</td>
+                <td>
+                  <span className={course.reportCount >= 3 ? "courseReportCount courseReportCount--locked" : "courseReportCount"}>
+                    {course.reportCount} / 3
+                  </span>
+                </td>
                 <td>{course.status}</td>
                 <td>
                   <div className="courseTableActions">
@@ -201,36 +219,37 @@ const CourseTable = () => {
           </tbody>
         </table>
 
-        <div className="courseTablePagination">
-          <button
-            type="button"
-            className="paginationButton"
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-          >
-            Previous
-          </button>
+      </div>
 
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i + 1}
-              type="button"
-              className={`paginationButton ${currentPage === i + 1 ? "paginationButton--active" : ""}`}
-              onClick={() => setCurrentPage(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
+      <div className="courseTablePagination">
+        <button
+          type="button"
+          className="paginationButton"
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+        >
+          Previous
+        </button>
 
+        {Array.from({ length: totalPages }, (_, i) => (
           <button
+            key={i + 1}
             type="button"
-            className="paginationButton"
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+            className={`paginationButton ${currentPage === i + 1 ? "paginationButton--active" : ""}`}
+            onClick={() => setCurrentPage(i + 1)}
           >
-            Next
+            {i + 1}
           </button>
-        </div>
+        ))}
+
+        <button
+          type="button"
+          className="paginationButton"
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+        >
+          Next
+        </button>
       </div>
     </section>
   );

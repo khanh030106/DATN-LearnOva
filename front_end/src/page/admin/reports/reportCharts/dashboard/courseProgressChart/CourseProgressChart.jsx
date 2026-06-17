@@ -44,19 +44,19 @@ const CourseProgressChart = () => {
       y: {
         beginAtZero: true,
         ticks: {
-          font: { size: 12, family: "system-ui" },
-          color: "#a89a85",
+          font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
+          color: "#64748b",
           callback: (value) => value + " Courses",
         },
         grid: {
-          color: "rgba(232, 190, 116, 0.15)",
+          color: "rgba(226, 232, 240, 0.9)",
           drawBorder: false,
         },
       },
       x: {
         ticks: {
-          font: { size: 12, family: "system-ui" },
-          color: "#8b7355",
+          font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
+          color: "#64748b",
         },
         grid: {
           display: false,

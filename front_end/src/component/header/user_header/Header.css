@@ -57,7 +57,6 @@
 .main-header.hero-header.hero-header-top .header-action-login {
   border-color: rgb(214 214 214 / 0.42);
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.12);
 }
 .main-header.hero-header.hero-header-top .header-search-icon {
   color: #ececec;
@@ -285,7 +284,7 @@
   align-items: center;
   justify-content: center;
   height: 38px;
-  border: 1px solid rgb(0 0 0 / 0.42);
+  border: 1px solid rgb(253 252 252 / 25%) !important;
   border-radius: 999px;
   text-decoration: none;
   transition:
@@ -405,7 +404,6 @@
   border: 1px solid #d8b4fe;
   border-radius: 8px;
 
-  background: #fff;
   color: #7c3aed;
 
   font-weight: 600;
@@ -431,11 +429,11 @@
   align-items: center;
   justify-content: center;
 
-  border: 1px solid rgb(0 0 0 / 0.25);
+      border: 1px solid rgb(255 255 255 / 25%) !important;
   border-radius: 8px;
 
-  background: #ffffff;
-  color: #515151;
+  background: transparent;
+  color: #ffffff;
 
   cursor: pointer;
   transition: all 0.25s ease;
@@ -445,7 +443,7 @@
   height: 38px !important;
 
   border-radius: 5px !important;
-  border: 1px solid rgb(0 0 0 / 0.25) !important;
+  border: 1px solid rgb(255 255 255 / 25%) !important;
   color: #ffffff !important;
 
   font-weight: 600;
@@ -513,4 +511,17 @@
 
 .main-header.scrolled .header-action-login {
   color: #252525 !important;
+}
+/* Khi header đã scroll */
+
+.main-header.scrolled .header-action-language {
+  color: #374151 !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+}
+
+.main-header.scrolled .header-action-login {
+  color: #374151 !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
 }

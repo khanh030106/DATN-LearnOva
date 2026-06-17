@@ -27,7 +27,7 @@
 .teacher-page__header h1 {
   margin-top: 8px;
   color: #071a33;
-  font-family: math;
+  font-family: var(--font-sans);
   font-size: clamp(1.35rem, 1.7vw, 1.65rem);
   font-weight: 800;
   line-height: 1.2;
@@ -199,7 +199,7 @@
   padding: 0 14px;
   border: 0;
   border-radius: 7px;
-  background: #0d4dff;
+  background: #1d4ed8;
   color: #ffffff;
   font-weight: 900;
   font-size: 0.78rem;
@@ -209,9 +209,7 @@
 .teacher-courses-create svg {
   width: 16px;
   height: 16px;
-  background-color: white;
-  color: #073dff;
-  border-radius: 10px
+  color: #ffffff;
 }
 
 .teacher-courses-view-toggle {
@@ -264,10 +262,6 @@
   font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-.teacher-course-table__head span {
-  font-weight: 700 !important;
 }
 
 .teacher-course-table__head span:nth-child(n + 2):nth-child(-n + 6) {
@@ -329,7 +323,7 @@
 .teacher-course-row h2 {
   overflow: hidden;
   color: #071a33;
-  font-family: math;
+  font-family: var(--font-sans);
   font-size: 1.02rem;
   font-weight: 800;
   line-height: 1.25;

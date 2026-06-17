@@ -9,6 +9,7 @@ const LoginForm = ({ onSwitchToRegister }) => {
     const [form, setForm] = useState({email: '', password: '', remember: false});
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
+
     const {login} = useAuth();
 
     const handleChange = (e) => {
@@ -28,7 +29,7 @@ const LoginForm = ({ onSwitchToRegister }) => {
             if (!data?.accessToken) {
                 throw new Error("No access token returned");
             }
-            navigate('/learnova/home');
+            navigate('/learnova/user/home');
         }catch (err) {
             const message =
                 err.response?.data?.message ||
@@ -115,6 +116,8 @@ const LoginForm = ({ onSwitchToRegister }) => {
                     </form>
 
                     <SocialLogin/>
+
+
 
                 </div>
             </div>

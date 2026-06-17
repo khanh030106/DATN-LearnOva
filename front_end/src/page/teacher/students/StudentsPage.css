@@ -155,7 +155,7 @@
 .teacher-student-row__profile strong {
   display: block;
   color: #071a33;
-  font-family: math;
+  font-family: var(--font-sans);
   font-size: 1.02rem;
   font-weight: 800;
   line-height: 1.25;

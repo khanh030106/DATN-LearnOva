@@ -23,12 +23,12 @@
   font-size: 22px;
   line-height: 1.2;
   font-weight: 500;
-  color: #1b140c;
+  color: #0f172a;
 }
 
 .revenueChartSubtitle {
   margin: 0;
-  color: var(--text-secondary);
+  color: #64748b;
   font-size: 13px;
   line-height: 1.6;
 }
@@ -48,10 +48,10 @@
 .revenueChartFilterButton {
   min-width: 72px;
   padding: 8px 14px;
-  border: 1px solid rgba(160, 146, 117, 0.4);
-  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
   background: #ffffff;
-  color: #5a4d34;
+  color: #334155;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
@@ -66,8 +66,9 @@
 
 .revenueChartFilterButton:hover,
 .revenueChartFilterButton.active {
-  border-color: rgba(183, 142, 52, 0.8);
-  background-color: #ffffff;
+  border-color: #93c5fd;
+  background-color: #eff6ff;
+  color: #1d4ed8;
 }
 
 .revenueChartBody {
@@ -97,7 +98,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: #5a4d34;
+  color: #334155;
   font-size: 13px;
   font-weight: 600;
 }
@@ -110,11 +111,11 @@
 }
 
 .revenueChartLegendDot.gold {
-  background-color: #b78e34;
+  background-color: #2563eb;
 }
 
 .revenueChartLegendDot.purple {
-  background-color: #7b5dd1;
+  background-color: #60a5fa;
 }
 
 .revenueChartLegendDot.red {

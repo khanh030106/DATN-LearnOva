@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ChevronDown, Search, Layers, Users, CalendarDays } from "lucide-react";
+import { Search } from "lucide-react";
 import "./CourseFilters.css";
 
 const categoryFilterOptions = [
@@ -79,29 +79,47 @@ const CourseFilters = () => {
     "Tất cả";
 
   const openCategoryDropdown = () => {
-    setCategoryDropdownOpen((prev) => !prev);
+    setCategoryDropdownOpen(true);
     setInstructorDropdownOpen(false);
     setSortDropdownOpen(false);
+    setIsPriceDropdownOpen(false);
+  };
+
+  const closeCategoryDropdown = () => {
+    setCategoryDropdownOpen(false);
   };
 
   const openInstructorDropdown = () => {
-    setInstructorDropdownOpen((prev) => !prev);
+    setInstructorDropdownOpen(true);
     setCategoryDropdownOpen(false);
     setSortDropdownOpen(false);
+    setIsPriceDropdownOpen(false);
+  };
+
+  const closeInstructorDropdown = () => {
+    setInstructorDropdownOpen(false);
   };
 
   const openSortDropdown = () => {
-    setSortDropdownOpen((prev) => !prev);
+    setSortDropdownOpen(true);
     setCategoryDropdownOpen(false);
     setInstructorDropdownOpen(false);
     setIsPriceDropdownOpen(false);
   };
 
+  const closeSortDropdown = () => {
+    setSortDropdownOpen(false);
+  };
+
   const openPriceDropdown = () => {
-    setIsPriceDropdownOpen((prev) => !prev);
+    setIsPriceDropdownOpen(true);
     setCategoryDropdownOpen(false);
     setInstructorDropdownOpen(false);
     setSortDropdownOpen(false);
+  };
+
+  const closePriceDropdown = () => {
+    setIsPriceDropdownOpen(false);
   };
 
   return (
@@ -120,7 +138,13 @@ const CourseFilters = () => {
             />
           </div>
 
-          <div className="filterDropdownWrapper">
+          <div
+            className={`filterDropdownWrapper ${
+              isCategoryDropdownOpen ? "open" : ""
+            }`}
+            onMouseEnter={openCategoryDropdown}
+            onMouseLeave={closeCategoryDropdown}
+          >
             <button
               className={`filterDropdownButton ${
                 isCategoryDropdownOpen ? "active" : ""
@@ -131,37 +155,32 @@ const CourseFilters = () => {
               <span className="filterButtonLabel">
                 <span>{getSelectedCategoryLabel()}</span>
               </span>
-              <ChevronDown
-                size={18}
-                color="#e8be74"
-                strokeWidth={2.5}
-                style={{
-                  transition: "transform 0.2s ease",
-                  transform: isCategoryDropdownOpen ? "rotate(180deg)" : "none",
-                }}
-              />
             </button>
-            {isCategoryDropdownOpen && (
-              <div className="filterDropdownMenu">
-                {categoryFilterOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    className={`filterDropdownItem ${
-                      selectedCategory === option.id ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedCategory(option.id);
-                      setCategoryDropdownOpen(false);
-                    }}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="filterDropdownMenu">
+              {categoryFilterOptions.map((option) => (
+                <button
+                  key={option.id}
+                  className={`filterDropdownItem ${
+                    selectedCategory === option.id ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedCategory(option.id);
+                    setCategoryDropdownOpen(false);
+                  }}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="filterDropdownWrapper">
+          <div
+            className={`filterDropdownWrapper ${
+              isInstructorDropdownOpen ? "open" : ""
+            }`}
+            onMouseEnter={openInstructorDropdown}
+            onMouseLeave={closeInstructorDropdown}
+          >
             <button
               className={`filterDropdownButton ${
                 isInstructorDropdownOpen ? "active" : ""
@@ -172,39 +191,32 @@ const CourseFilters = () => {
               <span className="filterButtonLabel">
                 <span>Instructor ({getSelectedInstructorLabel()})</span>
               </span>
-              <ChevronDown
-                size={18}
-                color="#7a6b52"
-                strokeWidth={2.5}
-                style={{
-                  transition: "transform 0.2s ease",
-                  transform: isInstructorDropdownOpen
-                    ? "rotate(180deg)"
-                    : "none",
-                }}
-              />
             </button>
-            {isInstructorDropdownOpen && (
-              <div className="filterDropdownMenu">
-                {instructorFilterOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    className={`filterDropdownItem ${
-                      selectedInstructor === option.id ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedInstructor(option.id);
-                      setInstructorDropdownOpen(false);
-                    }}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="filterDropdownMenu">
+              {instructorFilterOptions.map((option) => (
+                <button
+                  key={option.id}
+                  className={`filterDropdownItem ${
+                    selectedInstructor === option.id ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedInstructor(option.id);
+                    setInstructorDropdownOpen(false);
+                  }}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="filterDropdownWrapper">
+          <div
+            className={`filterDropdownWrapper ${
+              isSortDropdownOpen ? "open" : ""
+            }`}
+            onMouseEnter={openSortDropdown}
+            onMouseLeave={closeSortDropdown}
+          >
             <button
               className={`filterDropdownButton ${
                 isSortDropdownOpen ? "active" : ""
@@ -215,37 +227,32 @@ const CourseFilters = () => {
               <span className="filterButtonLabel">
                 <span>Published: {getSelectedPublishSortLabel()}</span>
               </span>
-              <ChevronDown
-                size={18}
-                color="#7a6b52"
-                strokeWidth={2.5}
-                style={{
-                  transition: "transform 0.2s ease",
-                  transform: isSortDropdownOpen ? "rotate(180deg)" : "none",
-                }}
-              />
             </button>
-            {isSortDropdownOpen && (
-              <div className="filterDropdownMenu">
-                {publishSortOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    className={`filterDropdownItem ${
-                      selectedPublishSort === option.id ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedPublishSort(option.id);
-                      setSortDropdownOpen(false);
-                    }}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="filterDropdownMenu">
+              {publishSortOptions.map((option) => (
+                <button
+                  key={option.id}
+                  className={`filterDropdownItem ${
+                    selectedPublishSort === option.id ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedPublishSort(option.id);
+                    setSortDropdownOpen(false);
+                  }}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="filterDropdownWrapper">
+          <div
+            className={`filterDropdownWrapper ${
+              isPriceDropdownOpen ? "open" : ""
+            }`}
+            onMouseEnter={openPriceDropdown}
+            onMouseLeave={closePriceDropdown}
+          >
             <button
               className={`filterDropdownButton ${
                 isPriceDropdownOpen ? "active" : ""
@@ -256,34 +263,23 @@ const CourseFilters = () => {
               <span className="filterButtonLabel">
                 <span>Price: {getSelectedPriceTypeLabel()}</span>
               </span>
-              <ChevronDown
-                size={18}
-                color="#7a6b52"
-                strokeWidth={2.5}
-                style={{
-                  transition: "transform 0.2s ease",
-                  transform: isPriceDropdownOpen ? "rotate(180deg)" : "none",
-                }}
-              />
             </button>
-            {isPriceDropdownOpen && (
-              <div className="filterDropdownMenu">
-                {priceTypeOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    className={`filterDropdownItem ${
-                      selectedPriceType === option.id ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedPriceType(option.id);
-                      setIsPriceDropdownOpen(false);
-                    }}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="filterDropdownMenu">
+              {priceTypeOptions.map((option) => (
+                <button
+                  key={option.id}
+                  className={`filterDropdownItem ${
+                    selectedPriceType === option.id ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedPriceType(option.id);
+                    setIsPriceDropdownOpen(false);
+                  }}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

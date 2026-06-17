@@ -13,6 +13,9 @@ import RevenueTransactions from "../page/admin/revenue/RevenueTransactions.jsx";
 import Reports from "../page/admin/reports/Reports.jsx";
 import Vouchers from "../page/admin/vouchers/Vouchers.jsx";
 import VoucherCreate from "../page/admin/vouchers/voucherCreate/VoucherCreate.jsx";
+import Category from "../page/admin/category/Category.jsx";
+import ReviewsComments from "../page/admin/reviewsComments/ReviewsComments.jsx";
+import ViolationReports from "../page/admin/violationReports/ViolationReports.jsx";
 import TeacherLayout from "../layout/teacher/TeacherLayout.jsx";
 import OverviewPage from "../page/teacher/overview/OverviewPage.jsx";
 import CoursesPage from "../page/teacher/courses/CoursesPage.jsx";
@@ -56,6 +59,9 @@ const App = () => {
                     <Route path="reports" element={<Reports/>}/>
                     <Route path="vouchers" element={<Vouchers/>}/>
                     <Route path="vouchers/create" element={<VoucherCreate/>}/>
+                    <Route path="categories" element={<Category/>}/>
+                    <Route path="reviews-comments" element={<ReviewsComments/>}/>
+                    <Route path="violation-reports" element={<ViolationReports/>}/>
                 </Route>
 
                 {/* Teacher */}

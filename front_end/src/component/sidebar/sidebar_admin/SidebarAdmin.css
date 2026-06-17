@@ -1,23 +1,141 @@
+.adminSidebar {
+  overflow: hidden;
+  gap: 28px;
+  padding: 20px 10px 24px;
+  border-right: 1px solid #dcdcdc;
+  box-shadow: 16px 0 40px rgba(31, 49, 82, 0.04);
+}
+
+.adminSidebar .teacher-nav {
+  display: grid;
+  gap: 20px;
+}
+
+.adminSidebar .teacher-brand {
+  display: flex;
+  align-items: center;
+  min-height: 58px;
+  padding: 0 10px 10px;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.adminSidebar .teacher-brand img {
+  display: block;
+  width: 168px;
+  max-width: 100%;
+}
+
+.adminSidebar .teacher-nav__section {
+  display: grid;
+  gap: 12px;
+}
+
+.adminSidebar .teacher-nav__section + .teacher-nav__section {
+  padding-top: 18px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.adminSidebar .teacher-nav__subtitle {
+  margin: 0;
+  padding: 0 17px;
+  color: #7a7a7a;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.adminSidebar .teacher-nav__link {
+  position: relative;
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
+  padding: 0 17px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #353535;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.adminSidebar .teacher-nav__link::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  content: "";
+  background: #2563eb;
+  transition: width 0.25s ease;
+}
+
+.adminSidebar .teacher-nav__link svg,
+.adminSidebar .teacher-nav__link span {
+  position: relative;
+  z-index: 1;
+}
+
+.adminSidebar .teacher-nav__link svg {
+  width: 21px;
+  height: 21px;
+  color: #3d3d3d;
+  stroke-width: 2.2;
+  flex: 0 0 auto;
+}
+
+.adminSidebar .teacher-nav__link span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1rem;
+  font-family: inherit;
+  letter-spacing: 0;
+}
+
+.adminSidebar .teacher-nav__link:hover,
+.adminSidebar .teacher-nav__link--active {
+  color: #386cff;
+  background: #eef5ff;
+}
+
+.adminSidebar .teacher-nav__link--active {
+  border-left: 4px solid #386cff;
+}
+
+.adminSidebar .teacher-nav__link:hover::before,
+.adminSidebar .teacher-nav__link--active::before {
+  opacity: 1;
+}
+
+.adminSidebar .teacher-nav__link:hover svg,
+.adminSidebar .teacher-nav__link--active svg {
+  color: #386cff;
+}
+
 .sidebarAdmin {
   position: sticky;
   top: 0;
-  align-self: flex-start;
   height: 100vh;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  width: 250px;
-  padding: 26px 14px 18px;
-  background: linear-gradient(180deg, #071a33 0%, #0b2545 100%);
-  border-right: 1px solid rgba(147, 197, 253, 0.14);
-  color: #ffffff;
+  gap: 28px;
+  padding: 20px 10px 24px;
+  background: #ffffff;
+  border-right: 1px solid #dcdcdc;
+  box-shadow: 16px 0 40px rgba(31, 49, 82, 0.04);
 }
 
 .sidebarAdminBrand {
-  display: block;
-  padding: 0 0 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-  text-align: center;
+  display: flex;
+  align-items: center;
+  min-height: 58px;
+  padding: 0 10px 10px;
+  border-bottom: 1px solid #e1e1e1;
 }
 
 .sidebarAdminBrandText {
@@ -26,47 +144,52 @@
 
 .sidebarAdminBrandWordmark {
   display: block;
-  width: 178px;
+  width: 168px;
   max-width: 100%;
-  height: auto;
-  object-fit: contain;
-  margin: 0 auto;
-}
-
-.sidebarAdminBrandSubtitle {
-  margin: 8px auto 0;
-  color: #ffffff;
-  font-size: 0.6rem;
-  font-weight: 900;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
 }
 
 .sidebarAdminNav {
   display: grid;
-  gap: 14px;
-  margin-top: 18px;
+  gap: 20px;
+}
+
+.sidebarAdminNavSection {
+  display: grid;
+  gap: 12px;
+}
+
+.sidebarAdminNavSection + .sidebarAdminNavSection {
+  padding-top: 18px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.sidebarAdminNavSubtitle {
+  margin: 0;
+  padding: 0 17px;
+  color: #7a7a7a;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .sidebarAdminNavItem {
   position: relative;
-  min-height: 50px;
+  min-height: 45px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   overflow: hidden;
-  padding: 0 18px 0 22px;
+  padding: 0 17px;
   border: 1px solid transparent;
-  border-radius: 8px;
-  color: rgba(255, 255, 255, 0.88);
+  border-radius: 6px;
+  color: #353535;
   text-decoration: none;
-  font-size: 0.96rem;
-  font-weight: 800;
-  transition:
-    background 0.25s ease,
-    color 0.25s ease,
-    box-shadow 0.25s ease;
-  font-family: math, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
 .sidebarAdminNavItem::before {
@@ -78,30 +201,25 @@
   transition: width 0.25s ease;
 }
 
-.sidebarAdminNavItem:hover,
-.sidebarAdminNavItemActive {
-  color: #ffffff;
-  background: #002ea2c9;
-}
-
-.sidebarAdminNavItem:hover::before,
-.sidebarAdminNavItemActive::before {
-  width: 0;
-}
-
-.sidebarAdminNavItem:hover .sidebarAdminNavIcon,
-.sidebarAdminNavItemActive .sidebarAdminNavIcon {
-  color: #ffffff;
+.sidebarAdminNavIcon,
+.sidebarAdminNavLabel {
+  position: relative;
+  z-index: 1;
 }
 
 .sidebarAdminNavIcon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  color: inherit;
+  flex: 0 0 auto;
+}
+
+.sidebarAdminNavIcon svg {
+  width: 21px;
+  height: 21px;
+  color: #3d3d3d;
+  stroke-width: 2.2;
+  flex: 0 0 auto;
 }
 
 .sidebarAdminNavLabel {
@@ -109,52 +227,59 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 17px;
-  font-family: math, sans-serif;
-  letter-spacing: 1.1px;
+  font-size: 1rem;
+  font-family: inherit;
+  letter-spacing: 0;
+}
+
+.sidebarAdminNavItem:hover {
+  color: #386cff;
+  background: #eef5ff;
+}
+
+.sidebarAdminNavItemActive {
+  color: #386cff;
+  background: #eef5ff;
+  border-left: 4px solid #386cff;
+}
+
+.sidebarAdminNavItem:hover .sidebarAdminNavIcon svg,
+.sidebarAdminNavItemActive .sidebarAdminNavIcon svg {
+  color: #386cff;
+}
+
+.sidebarAdminNavItemActive::before {
+  width: 0;
 }
 
 .sidebarAdminFooterActions {
   margin-top: auto;
-  padding-top: 18px;
+  padding: 18px 10px 0;
+  border-top: 1px solid #eef2f8;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
 .sidebarAdminFooterAction {
+  min-height: 52px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
-  width: 100%;
-  padding: 12px 14px;
-  border: none;
   border-radius: 8px;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.72);
-  text-align: left;
-  font-size: 0.95rem;
-  font-weight: 900;
-  font-family: math, sans-serif;
+  background: #386cff;
+  color: #ffffff;
   text-decoration: none;
-  cursor: pointer;
-  transition:
-    background 0.2s ease,
-    color 0.2s ease;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .sidebarAdminFooterAction:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
-}
-
-.sidebarAdminFooterActionDanger {
-  color: #f87171;
-}
-
-.sidebarAdminFooterActionDanger:hover {
-  background: rgba(248, 113, 113, 0.12);
-  color: #f87171;
+  background: #2459ef;
+  box-shadow: 0 14px 30px rgba(56, 108, 255, 0.28);
+  transform: translateY(-1px);
 }
 
 .sidebarAdminFooterActionIcon {
@@ -164,42 +289,51 @@
   flex-shrink: 0;
 }
 
-@media (max-width: 1024px) {
+.sidebarAdminFooterActionIcon svg {
+  color: #006fff;
+  background-color: white;
+  border-radius: 10px;
+}
+
+@media (max-width: 1080px) {
   .sidebarAdmin {
-    width: 240px;
+    padding-inline: 16px;
+  }
+
+  .sidebarAdminBrandText,
+  .sidebarAdminNavSubtitle,
+  .sidebarAdminNavLabel,
+  .sidebarAdminFooterAction > span:not(.sidebarAdminFooterActionIcon) {
+    display: none;
+  }
+
+  .sidebarAdminBrand,
+  .sidebarAdminNavItem,
+  .sidebarAdminFooterAction {
+    justify-content: center;
+    padding-inline: 0;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 760px) {
   .sidebarAdmin {
-    width: 100%;
-    min-height: auto;
+    position: static;
     height: auto;
-    position: relative;
-    top: auto;
-    border-right: none;
-    border-bottom: 1px solid rgba(147, 197, 253, 0.18);
+    padding: 18px 16px;
   }
 
   .sidebarAdminNav {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .sidebarAdminFooterActions {
-    margin-top: 18px;
+    grid-template-columns: repeat(4, minmax(54px, 1fr));
+    gap: 10px;
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 460px) {
   .sidebarAdmin {
-    padding: 16px;
+    padding-inline: 16px;
   }
 
   .sidebarAdminNav {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebarAdminBrandWordmark {
-    width: 104px;
+    grid-template-columns: repeat(3, minmax(54px, 1fr));
   }
 }

@@ -9,12 +9,12 @@ const NewUsersChart = () => {
       {
         label: "New Users",
         data: [3000, 4000, 3800, 4500, 5200, 5600],
-        borderColor: "#ff8c00",
+        borderColor: "#2563eb",
         backgroundColor: "rgba(255, 140, 0, 0.1)",
         fill: true,
         tension: 0.4,
         pointRadius: 5,
-        pointBackgroundColor: "#ff8c00",
+        pointBackgroundColor: "#2563eb",
         pointBorderColor: "#fff",
         pointBorderWidth: 2,
       },
@@ -50,19 +50,19 @@ const NewUsersChart = () => {
       y: {
         beginAtZero: true,
         ticks: {
-          font: { size: 12, family: "system-ui" },
-          color: "#a89a85",
+          font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
+          color: "#64748b",
           callback: (value) => (value / 1000).toFixed(1) + "k users",
         },
         grid: {
-          color: "rgba(232, 190, 116, 0.15)",
+          color: "rgba(226, 232, 240, 0.9)",
           drawBorder: false,
         },
       },
       x: {
         ticks: {
-          font: { size: 12, family: "system-ui" },
-          color: "#8b7355",
+          font: { size: 12, family: 'poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
+          color: "#64748b",
         },
         grid: {
           display: false,

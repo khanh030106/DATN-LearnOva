@@ -7,9 +7,57 @@
 .userManagementContent {
   width: 100%;
   min-width: 0;
-  padding: 12px 24px 24px;
   display: flex;
   flex-direction: column;
   gap: 18px;
   box-sizing: border-box;
+}
+
+.userManagementHeroText span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: #7c8ba3;
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.userManagementHeroText svg {
+  color: #6d8ec9;
+  stroke-width: 2.2;
+}
+
+@media (max-width: 1200px) {
+  .userManagementHero {
+    grid-template-columns: 220px minmax(0, 1fr);
+    padding-right: 220px;
+  }
+}
+
+@media (max-width: 900px) {
+  .userManagementHero {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding-right: 0;
+  }
+
+  .userManagementHeroText {
+    order: -1;
+  }
+}
+
+@media (max-width: 700px) {
+  .userManagementContent {
+    padding: 0 16px 18px;
+  }
+
+  .userManagementHeroImageWrap {
+    height: 132px;
+  }
+
+  .userManagementHeroText h1 {
+    font-size: 26px;
+  }
 }

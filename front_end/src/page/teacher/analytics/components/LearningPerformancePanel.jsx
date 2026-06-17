@@ -8,8 +8,8 @@ const LearningPerformancePanel = ({ chartLabels, series }) => {
   const engagementLine = buildAnalyticsChartPoints(series.engagement);
 
   return (
-    <article className="teacher-analytics-panel teacher-analytics-performance">
-      <header className="teacher-analytics-panel__header">
+    <section className="teacher-analytics-panel-wrap">
+      <header className="teacher-analytics-panel-title">
         <h2>
           Learning Performance
           <Info size={15} />
@@ -20,17 +20,8 @@ const LearningPerformancePanel = ({ chartLabels, series }) => {
         </select>
       </header>
 
-      <div className="teacher-analytics-performance-tabs">
-        {performanceTabs.map((tab) => (
-          <button
-            key={tab}
-            type="button"
-            className={tab === "Completion" ? "teacher-analytics-performance-tabs__active" : ""}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+      <article className="teacher-analytics-panel teacher-analytics-performance">
+
 
       <div className="teacher-analytics-chart">
         <div className="teacher-analytics-chart__legend">
@@ -72,7 +63,8 @@ const LearningPerformancePanel = ({ chartLabels, series }) => {
           </div>
         </div>
       </div>
-    </article>
+      </article>
+    </section>
   );
 };
 

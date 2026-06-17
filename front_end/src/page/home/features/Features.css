@@ -80,8 +80,13 @@
 
 .feature-item-title {
   margin: 0;
+<<<<<<< HEAD
   color: #0044e4;
   font-family: inherit;
+=======
+  color: #003983;
+  font-family: var(--font-sans);
+>>>>>>> 966e98cac2a63f830f4d516bf343bcf7eb413b59
   font-size: 20px;
   line-height: 1.35;
   font-weight: 700;

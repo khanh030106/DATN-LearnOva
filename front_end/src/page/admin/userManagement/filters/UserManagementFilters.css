@@ -1,10 +1,10 @@
 .userManagementFilters {
-  background: #ffffff;
+  background: transparent;
   width: 100%;
   min-width: 0;
-  padding: 9px 18px;
-  border: 1px solid rgba(37, 99, 235, 0.28);
-  border-radius: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
   box-sizing: border-box;
 }
 
@@ -23,10 +23,10 @@
 }
 
 .userManagementFilterChip {
-  border: 1px solid rgba(37, 99, 235, 0.28);
-  border-radius: 6px;
-  background: #f8fafc;
-  color: var(--text-secondary);
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #475569;
   font-size: 13px;
   font-weight: 700;
   line-height: 1;
@@ -39,13 +39,22 @@
 }
 
 .userManagementFilterChipActive {
-  background: linear-gradient(
-    135deg,
-    var(--blue-primary) 0%,
-    var(--blue-strong) 100%
-  );
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-color: #93c5fd;
+  box-shadow: none;
+}
+
+.userManagementFilterChip:hover {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #93c5fd;
+}
+
+.userManagementFilterChipActive {
   color: #ffffff;
-  border-color: rgba(37, 99, 235, 0.48);
+  background: #1d4ed8;
+  border-color: #1d4ed8;
   box-shadow: none;
 }
 
@@ -55,17 +64,17 @@
   justify-content: flex-end;
   gap: 12px;
   flex-wrap: wrap;
+  margin-left: auto;
 }
 
-.userManagementFilterSearch,
-.userManagementFilterSelect {
+.userManagementFilterSearch {
   min-width: 0;
   height: 34px;
   padding: 0 14px;
-  border: 1px solid rgba(37, 99, 235, 0.26);
-  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
   background: #ffffff;
-  color: #1b140c;
+  color: #0f172a;
   font-size: 13px;
   font-weight: 600;
   box-sizing: border-box;
@@ -79,16 +88,17 @@
 
 .userManagementFilterSelect {
   width: 180px;
+  min-width: 180px;
+  height: 34px;
 }
 
 .userManagementFilterSearch::placeholder {
-  color: var(--text-secondary);
+  color: #94a3b8;
 }
 
-.userManagementFilterSearch:focus,
-.userManagementFilterSelect:focus {
-  border-color: rgba(37, 99, 235, 0.62);
-  box-shadow: none;
+.userManagementFilterSearch:focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
 }
 
 @media (max-width: 960px) {

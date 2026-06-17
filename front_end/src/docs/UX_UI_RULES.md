@@ -44,7 +44,7 @@ Use the existing pattern: create a folder for a page section, put `Component.jsx
   --color-text-muted: #5a6a9a;
   --color-border: #e8e8e8;
   --color-bg: #ffffff;
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-size-sm: 0.8rem;
   --font-size-base: 1rem;
   --spacing-xs: 0.25rem;
@@ -80,22 +80,16 @@ The global variables use navy as primary, but the current home and login UI most
 
 Base typography comes from `index.css`:
 
-- `body` uses `font-family: var(--font-sans)`, currently `'Inter', sans-serif`.
+- `body` uses `font-family: var(--font-sans)`, currently `poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`.
 - Body line-height is `1.6`.
 - Buttons inherit the current font.
 
-Current components also use several ad hoc font families:
-
-- Hero title in `Banner.css`: `"Playfair Display", Georgia, serif`
-- Hero subtitle and hero CTA in `Banner.css`: `"Lora", Georgia, serif`
-- Header nav and several section titles use `font-family: math`
-- Instructor names use `Georgia, 'Times New Roman', serif`
-- Footer uses `system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif`
+Current components should use the shared Poppins stack through `var(--font-sans)` or the exact Chart.js family string where CSS variables are not available.
 
 Rules for future work:
 
 - Use `var(--font-sans)` or inherited font for normal UI, forms, body copy, cards, and controls.
-- Use serif-style headings only for hero/editorial moments or instructor/profile-style presentation.
+- Use the shared Poppins stack for hero/editorial moments, instructor/profile presentation, and normal UI.
 - If matching home section headings, use large, bold orange/gold headings around `38px` to `45px`, or responsive `clamp(2rem, 3vw, 2.8rem)`.
 - Body text should usually be `15px` to `19px`, line-height `1.6` to `1.8`, and muted gray/slate/warm-brown.
 - Hero titles can use `clamp(2.4rem, 5vw, 4rem)`, `font-weight: 700`, `line-height: 1.25`, white text, and text-shadow.
@@ -616,7 +610,7 @@ Pattern:
 These are not required changes, but future agents should be aware of them:
 
 - The global `:root` tokens in `index.css` do not fully represent the dominant warm gold UI. A future design-token cleanup could add gold, ivory, muted slate, and warm shadow variables.
-- Font usage is inconsistent: `Inter`, `math`, `serif`, `Georgia`, `Lora`, and `Playfair Display` all appear. Preserve current local styles when editing existing sections, but avoid adding more new font families.
+- Font usage has been standardized on `--font-sans`: `poppins, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`.
 - Some comments in CSS show encoding issues. Avoid copying those comments into new files.
 - Folder naming is inconsistent (`component`, `components`, `conponents`, `Role`). Follow the nearby local convention instead of broad renaming.
 - Several CSS files repeat `* { box-sizing: border-box; }` even though `index.css` already defines it. New component CSS does not need to repeat it.

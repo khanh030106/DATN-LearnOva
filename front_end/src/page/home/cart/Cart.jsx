@@ -78,7 +78,7 @@ const Cart = () => {
                   <img src={item.image} alt={item.title} />
                   <div>
                     <Link
-                      to={`/learnova/home/course/${item.id}`}
+                      to={`/learnova/user/CoursesDetail/${item.id}`}
                       className="cart-item-title"
                     >
                       {item.title}

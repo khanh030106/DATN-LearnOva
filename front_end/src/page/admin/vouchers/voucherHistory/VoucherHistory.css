@@ -1,7 +1,10 @@
 .voucherHistorySection {
-  padding: 22px;
   margin-top: 22px;
   width: 100%;
+}
+
+.voucherHistoryCard {
+  padding: 22px;
   background: #ffffff;
   border: 1px solid rgba(37, 99, 235, 0.08);
   border-radius: 6px;
@@ -13,7 +16,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  margin-bottom: 22px;
+  margin-bottom: 14px;
   flex-wrap: wrap;
 }
 
@@ -26,7 +29,7 @@
 .voucherHistoryIcon {
   width: 22px;
   height: 22px;
-  color: #f97316;
+  color: #1d4ed8;
   flex-shrink: 0;
 }
 
@@ -70,7 +73,7 @@
 
 .voucherHistorySearchInput:focus {
   outline: none;
-  border-color: #f97316;
+  border-color: #93c5fd;
   box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
 }
 

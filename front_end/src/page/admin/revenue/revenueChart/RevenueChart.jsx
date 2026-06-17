@@ -46,7 +46,7 @@ const verticalHoverLinePlugin = {
     ctx.moveTo(x, topY);
     ctx.lineTo(x, bottomY);
     ctx.lineWidth = 1;
-    ctx.strokeStyle = "rgba(183, 142, 52, 0.35)";
+    ctx.strokeStyle = "rgba(37, 99, 235, 0.24)";
     ctx.setLineDash([4, 4]);
     ctx.stroke();
     ctx.restore();
@@ -70,9 +70,9 @@ const RevenueChart = () => {
             label: "Gross Revenue (Recorded Transactions)",
             tooltipShortLabel: "Gross Revenue",
             data: totalRevenueValues,
-            borderColor: "#b78e34",
-            pointBackgroundColor: "#b78e34",
-            pointBorderColor: "#b78e34",
+            borderColor: "#2563eb",
+            pointBackgroundColor: "#2563eb",
+            pointBorderColor: "#2563eb",
             pointRadius: 4,
             pointHoverRadius: 6,
             tension: 0.35,
@@ -83,9 +83,9 @@ const RevenueChart = () => {
             label: "Net Revenue (After Refund Deductions)",
             tooltipShortLabel: "Net Revenue",
             data: netRevenueValues,
-            borderColor: "#7b5dd1",
-            pointBackgroundColor: "#7b5dd1",
-            pointBorderColor: "#7b5dd1",
+            borderColor: "#60a5fa",
+            pointBackgroundColor: "#60a5fa",
+            pointBorderColor: "#60a5fa",
             pointRadius: 4,
             pointHoverRadius: 6,
             tension: 0.35,
@@ -169,7 +169,7 @@ const RevenueChart = () => {
               drawBorder: false,
             },
             ticks: {
-              color: "#7a6b52",
+              color: "#64748b",
               font: {
                 size: 12,
                 weight: 600,
@@ -189,7 +189,7 @@ const RevenueChart = () => {
               },
             },
             grid: {
-              color: "rgba(232, 190, 116, 0.18)",
+              color: "rgba(226, 232, 240, 0.9)",
               borderDash: [4, 4],
               drawBorder: false,
             },

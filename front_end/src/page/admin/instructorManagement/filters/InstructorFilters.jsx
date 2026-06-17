@@ -1,5 +1,6 @@
-import { Download, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState } from "react";
+import AdminHoverSelect from "../../shared/AdminHoverSelect";
 import "./InstructorFilters.css";
 
 const filterTabs = [
@@ -28,18 +29,13 @@ const InstructorFilters = () => {
         </div>
 
         <div className="instructorFiltersTabs">
-          <select
+          <AdminHoverSelect
             className="instructorFiltersSelect"
             value={activeTab}
-            onChange={(e) => setActiveTab(e.target.value)}
-            aria-label="Filter instructors"
-          >
-            {filterTabs.map((tab) => (
-              <option key={tab.id} value={tab.id}>
-                {tab.label}
-              </option>
-            ))}
-          </select>
+            options={filterTabs}
+            onChange={setActiveTab}
+            ariaLabel="Filter instructors"
+          />
         </div>
       </div>
     </div>

@@ -1,8 +1,8 @@
 import { TrendingUp, Wallet } from "lucide-react";
 
 const PayoutPanel = ({ payout }) => (
-  <article className="teacher-revenue-panel teacher-revenue-payout">
-    <header className="teacher-revenue-panel__header">
+  <section className="teacher-revenue-panel-wrap">
+    <header className="teacher-revenue-panel-title">
       <h2>Upcoming payout</h2>
     </header>
 
@@ -25,7 +25,7 @@ const PayoutPanel = ({ payout }) => (
         <TrendingUp size={34} />
       </div>
     </div>
-  </article>
+  </section>
 );
 
 export default PayoutPanel;
