@@ -1,7 +1,7 @@
 import axiosClient from "./axiosClient.js";
 
 export const getCurrentUserApi = async (accessToken) => {
-    const response = await axiosClient.get("/users/me", {
+    const response = await axiosClient.get("/user/me", {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },

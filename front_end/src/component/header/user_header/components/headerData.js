@@ -1,13 +1,9 @@
 import courseOne from "../../../../assets/course/course-1.jpg";
 import courseTwo from "../../../../assets/course/course-2.jpg";
 import courseThree from "../../../../assets/course/course-3.jpg";
+import {useAuth} from "../../../../hook/UseAuth.jsx";
+import defaultAvatar from "../../../../assets/default_user_avatar.jpg"
 
-export const homeMenuItems = [
-  { id: "featured", label: "Featured Courses", path: "/learnova/courses?sort=featured" },
-  { id: "new", label: "New Courses", path: "/learnova/courses?sort=new" },
-  { id: "popular", label: "Popular Courses", path: "/learnova/courses?sort=popular" },
-  { id: "trending", label: "Trending Courses", path: "/learnova/courses?sort=trending" },
-];
 
 export const courseCategories = [
   "Web Development",
@@ -92,9 +88,14 @@ export const notificationItems = [
   { id: "reply", title: "Instructor Replied", description: "A mentor answered your question.", unread: true },
 ];
 
-export const userData = {
-  name: "Learnova Student",
-  avatar: "https://i.pravatar.cc/96?img=32",
+export const useUserData = () => {
+  const { currentUser } = useAuth();
+
+  return {
+    name: currentUser?.fullName || "Guest User",
+    avatar: currentUser?.avatar || defaultAvatar,
+    roles: currentUser?.roles || [],
+  };
 };
 
 export const userMenuItems = [
@@ -102,5 +103,5 @@ export const userMenuItems = [
   { id: "courses", label: "My Courses", path: "/learnova/user/profile/courses" },
   { id: "favorites", label: "Favorite Courses", path: "/learnova/user/profile/favorites" },
   { id: "security", label: "Security", path: "/learnova/user/profile/security" },
-  { id: "logout", label: "Logout", path: "/learnova/auth/login", danger: true },
+  { id: "logout", label: "Logout", danger: true },  // Removed path - handled by onClick
 ];

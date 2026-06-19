@@ -85,9 +85,9 @@ const LoginForm = ({ onSwitchToRegister }) => {
                         )}
 
                         <div className="form-options">
-                            <label className="form-option-remember">
+                            <label className="form-option-rememberMe">
                                 <input
-                                    type="checkbox" name="remember"
+                                    type="checkbox" name="rememberMe"
                                     checked={form.rememberMe} onChange={handleChange}
                                 />
                                 Remember me

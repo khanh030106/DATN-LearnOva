@@ -14,7 +14,6 @@ import {
   ratingFilters,
   searchSuggestions,
   subscriptionPlans,
-  userData,
   userMenuItems,
 } from "./components/headerData.js";
 import AvatarDropdown from "./components/AvatarDropdown.jsx";
@@ -23,9 +22,9 @@ import HeaderSearch from "./components/HeaderSearch.jsx";
 import NotificationDropdown from "./components/NotificationDropdown.jsx";
 import UserLoggedNav from "./components/UserLoggedNav.jsx";
 import CoursesMegaMenu from "./components/CoursesMegaMenu";
-import "./UserLoggedHeader.css";
+import "./LoggedInHeader.css";
 
-const UserLoggedHeader = () => {
+const LoggedInHeader = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showCourses, setShowCourses] = useState(false);
 
@@ -102,11 +101,11 @@ const UserLoggedHeader = () => {
         <div className="user-logged-actions">
           <CartDropdown initialItems={cartItems} />
           <NotificationDropdown notifications={notificationItems} />
-          <AvatarDropdown user={userData} menuItems={userMenuItems} />
+          <AvatarDropdown menuItems={userMenuItems} />
         </div>
       </div>
     </header>
   );
 };
 
-export default UserLoggedHeader;
+export default LoggedInHeader;

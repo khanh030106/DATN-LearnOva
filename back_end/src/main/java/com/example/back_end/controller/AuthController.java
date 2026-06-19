@@ -48,11 +48,25 @@ public class AuthController {
 
      @PostMapping("/refresh")
      public ResponseEntity<LoginResponse> refresh(
-           @CookieValue("refreshToken") String refreshToken
+           @CookieValue(value = "refreshToken", required = false) String refreshToken,
+           HttpServletResponse response
      ) {
-     LoginResponse response = authService.refreshAccessToken(refreshToken);
+     if (refreshToken == null) {
+          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+     }
 
-     return ResponseEntity.ok(response);
+     try {
+          LoginResponse loginResponse = authService.refreshAccessToken(refreshToken);
+          return ResponseEntity.ok(loginResponse);
+     } catch (RuntimeException e) {
+          // Token không hợp lệ, đã bị xóa, hoặc hết hạn
+          // Clear cookie cũ và trả về 401
+          response.addHeader(
+                  HttpHeaders.SET_COOKIE,
+                  refreshCookieService.clearRefreshTokenCookie().toString()
+          );
+          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+     }
      }
 
 
@@ -70,6 +84,4 @@ public class AuthController {
 
      return ResponseEntity.noContent().build();
     }
-
-
  }
