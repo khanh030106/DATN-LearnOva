@@ -29,11 +29,22 @@ public class CustomUserDetails implements UserDetails{
   }
 
   @Override
-  public @NullMarked Collection<? extends GrantedAuthority> getAuthorities() {
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+
+    System.out.println("=== GET AUTHORITIES ===");
+    System.out.println("USER = " + user.getEmail());
+    System.out.println("ROLES = " + user.getRoles());
+
+    if (user.getRoles() == null || user.getRoles().isEmpty()) {
+      System.out.println("❌ ROLES EMPTY");
+    }
+
     return user.getRoles()
             .stream()
-            .map(Role::getRoleName)
-            .map(roleName -> new SimpleGrantedAuthority(roleName.name()))
+            .map(role -> {
+              System.out.println("ROLE = " + role.getRoleName());
+              return new SimpleGrantedAuthority("ROLE_" + role.getRoleName());
+            })
             .toList();
   }
 

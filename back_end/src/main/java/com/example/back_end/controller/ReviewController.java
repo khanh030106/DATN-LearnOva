@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.example.back_end.security.CustomUserDetails;
+import com.example.back_end.dto.resquest.UpdateReviewRequest;
 
 import java.util.List;
 
@@ -40,5 +41,42 @@ public class ReviewController {
             @PathVariable Long courseId
     ) {
         return reviewService.getCourseReviews(courseId);
+    }
+    @PutMapping("/review/update")
+    public ReviewResponse updateReview(
+            Authentication authentication,
+            @RequestBody UpdateReviewRequest request
+    ) {
+        if (authentication == null) {
+            throw new RuntimeException("No authentication");
+        }
+
+        CustomUserDetails userDetails =
+                (CustomUserDetails) authentication.getPrincipal();
+
+        return reviewService.updateReview(userDetails.getId(), request);
+    }
+    @DeleteMapping("/review/{reviewId}")
+    public void deleteReview(
+            Authentication authentication,
+            @PathVariable Long reviewId
+    ) {
+        System.out.println("=== CONTROLLER DELETE REVIEW START ===");
+        System.out.println("reviewId = " + reviewId);
+
+        if (authentication == null) {
+            System.out.println("AUTH NULL");
+            throw new RuntimeException("No authentication");
+        }
+
+        CustomUserDetails userDetails =
+                (CustomUserDetails) authentication.getPrincipal();
+
+        System.out.println("userId = " + userDetails.getId());
+        System.out.println("userEmail = " + userDetails.getUsername());
+
+        reviewService.deleteReview(userDetails.getId(), reviewId);
+
+        System.out.println("=== CONTROLLER DELETE REVIEW END ===");
     }
 }

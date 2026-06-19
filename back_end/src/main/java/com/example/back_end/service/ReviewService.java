@@ -10,6 +10,7 @@ import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.example.back_end.dto.resquest.UpdateReviewRequest;
 
 import java.time.Instant;
 import java.util.List;
@@ -82,5 +83,56 @@ public class ReviewService {
                                 .build()
                 )
                 .toList();
+    }
+    public ReviewResponse updateReview(Long userId, UpdateReviewRequest request) {
+
+        Review review = reviewRepository.findByUserIdAndCourseId(
+                userId,
+                request.getCourseId()
+        ).orElseThrow(() ->
+                new RuntimeException("Review not found for this user and course")
+        );
+
+        // update data
+        review.setRating(request.getRating());
+        review.setComment(request.getComment());
+        review.setUpdatedAt(Instant.now());
+
+        reviewRepository.save(review);
+
+        return ReviewResponse.builder()
+                .reviewId(review.getId())
+                .userId(userId)
+                .userName(review.getUser().getFullName())
+                .rating(review.getRating())
+                .comment(review.getComment())
+                .createdAt(review.getCreatedAt())
+                .build();
+    }
+    public void deleteReview(Long userId, Long reviewId) {
+
+        System.out.println("=== SERVICE DELETE REVIEW START ===");
+        System.out.println("userId = " + userId);
+        System.out.println("reviewId = " + reviewId);
+
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> {
+                    System.out.println("REVIEW NOT FOUND");
+                    return new RuntimeException("Review not found");
+                });
+
+        System.out.println("FOUND REVIEW: " + review.getId());
+        System.out.println("OWNER USER ID: " + review.getUser().getId());
+
+        if (!review.getUser().getId().equals(userId)) {
+            System.out.println("NOT OWNER - BLOCK DELETE");
+            throw new RuntimeException("You cannot delete this review");
+        }
+
+        reviewRepository.delete(review);
+
+        System.out.println("REVIEW DELETED SUCCESSFULLY");
+
+        System.out.println("=== SERVICE DELETE REVIEW END ===");
     }
 }
