@@ -30,13 +30,8 @@
 .course-title h3 {
     min-height: 56px;
     margin: 0;
-<<<<<<< HEAD
-    font-family: math;
-    color: #4D82F7;
-=======
     font-family: var(--font-sans);
     color: #071a33;
->>>>>>> 966e98cac2a63f830f4d516bf343bcf7eb413b59
     font-size: 22px;
     line-height: 1.25;
     font-weight: 800;
