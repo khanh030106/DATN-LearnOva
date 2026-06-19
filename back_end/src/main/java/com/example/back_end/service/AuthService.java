@@ -17,6 +17,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.back_end.dto.resquest.RegisterRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import java.time.Instant;
+
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -26,6 +31,7 @@ public class AuthService {
     private final VerificationTokenService verificationTokenService;
     private final CustomUserDetailsService customUserDetailsService;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Transactional
@@ -82,5 +88,34 @@ public class AuthService {
                 user.getAvatar(),
                 user.getDateOfBirth()
         );
+    }
+    @Transactional
+    public void register(RegisterRequest request) {
+
+        if (userRepository.existsUsersByEmail(request.email())) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        if (!request.password().equals(request.confirmPassword())) {
+            throw new RuntimeException(
+                    "Password and confirm password do not match"
+            );
+        }
+
+        User user = new User();
+
+        user.setEmail(request.email());
+        user.setPasswordHash(
+                passwordEncoder.encode(request.password())
+        );
+
+        // chưa xác thực email
+        user.setIsActive(false);
+        user.setIsDeleted(false);
+        user.setCreatedAt(Instant.now());
+        userRepository.save(user);
+
+        // Gửi email xác minh ở đây
+        // emailService.sendVerificationEmail(user);
     }
 }
