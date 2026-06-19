@@ -74,9 +74,8 @@
     display: flex;
     gap: 12px;
     margin-top: 8px;
-
     font-size: 12px;
-    color: #64748b;
+    color: #353535;
 }
 
 .section-meta span {
@@ -1902,6 +1901,12 @@ hr {
     margin-bottom: 0.15rem;
     word-break: break-word;
     font-weight: 100;
+    display: block;
+    font-size: 0.95rem;
+    color: #121212;
+    margin-bottom: 0.15rem;
+    word-break: break-word;
+    font-weight: 600;
 }
 
 .section-title-co p {

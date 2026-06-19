@@ -1,7 +1,8 @@
 import {courses, introDetails, reviews} from "./intructorData.js";
-// import {FaStar} from "react-icons/fa";
+
 import React from "react";
-import { FaRegCommentDots } from "react-icons/fa";
+
+import { FaUserGraduate } from "react-icons/fa";
 import {
     FaStar,
     FaRegHeart,
@@ -38,15 +39,16 @@ function MainIntructor({ activeTab }) {
                             Instructor's Courses
                         </h2>
 
-                        <a href="#" className="view-more">
-                            View All
-                        </a>
+
 
                     </div>
 
                     <div className="courses-grid-new">
 
-                        {courses.map(course => (
+                        {(activeTab === "overview"
+                                ? courses.slice(0, 4)
+                                : courses
+                        ).map(course => (
 
                             <div
                                 key={course.id}
@@ -89,8 +91,9 @@ function MainIntructor({ activeTab }) {
                                         <div className="meta-divider"></div>
 
                                         <div className="meta-item">
-                            <span>
-                                {course.student}
+                            <span className="student-count">
+                                <FaUserGraduate />
+                                                            {course.student}
                             </span>
                                         </div>
 
@@ -99,8 +102,8 @@ function MainIntructor({ activeTab }) {
                                         <div className="meta-item">
                                             <FiClock />
                                             <span>
-                                42 Hours
-                            </span>
+                                                42 Hours
+                                            </span>
                                         </div>
 
                                     </div>
@@ -136,7 +139,7 @@ function MainIntructor({ activeTab }) {
 
             {/* Reviews Section */}
             {/* Reviews Section */}
-            {(activeTab === "overview" || activeTab === "reviews") && (
+            {(activeTab === "reviews") && (
                 <section className="review-section-new">
 
                     {/* Header Review */}
@@ -262,58 +265,7 @@ function MainIntructor({ activeTab }) {
                         </div>
 
                         {/* Right */}
-                        <div className="review-form-card">
 
-                            <h3 className="feedback-title">
-                                <FaRegCommentDots className="feedback-icon" />
-                                Leave Your Feedback
-                            </h3>
-
-                            <div className="form-group-review">
-
-                                <label>Star Rating:</label>
-
-                                <div className="review-form-stars">
-
-                                    {Array.from({ length: 5 }).map((_, i) => (
-                                        <FaStar
-                                            key={i}
-                                            className="active-star"
-                                        />
-                                    ))}
-
-                                    <span>(5/5 Stars)</span>
-
-                                </div>
-
-                            </div>
-
-                            <div className="form-group-review">
-
-                                <label>Your Full Name</label>
-
-                                <input
-                                    type="text"
-                                    placeholder="e.g. John Smith"
-                                />
-
-                            </div>
-
-                            <div className="form-group-review">
-
-                                <label>Your Review</label>
-
-                                <textarea
-                                    rows="5"
-                                    placeholder="Share your learning experience with this instructor..."
-                                />
-
-                            </div>
-
-                            <button className="send-review-btn">
-                                Submit Review
-                            </button>
-                            </div>
 
                     </div>
 

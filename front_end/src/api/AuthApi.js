@@ -1,10 +1,10 @@
 import axiosClient from "./axiosClient.js";
 
-export const loginApi = async (email, password, remember) => {
+export const loginApi = async (email, password, rememberMe) => {
     const response = await axiosClient.post("/auth/login", {
         email,
         password,
-        remember
+        rememberMe
     });
 
     return response.data;

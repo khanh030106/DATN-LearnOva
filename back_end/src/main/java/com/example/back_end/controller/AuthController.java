@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
+import com.example.back_end.dto.resquest.RegisterRequest;
+import com.example.back_end.dto.response.RegisterResponse;
 
 
 @RestController
@@ -70,6 +72,18 @@ public class AuthController {
 
      return ResponseEntity.noContent().build();
     }
+    @PostMapping("/register")
+    public ResponseEntity<?> register(
+            @RequestBody RegisterRequest request
+    ) {
+        authService.register(request);
 
+        return ResponseEntity.ok(
+                new RegisterResponse(
+                        true,
+                        "Registration successful. Please verify your email."
+                )
+        );
+    }
 
  }

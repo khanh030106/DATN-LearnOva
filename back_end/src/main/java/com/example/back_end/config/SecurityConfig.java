@@ -37,6 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/learnova/auth/**").permitAll()
                         .requestMatchers("/api/learnova/user/me").permitAll()
+                        .requestMatchers("/api/learnova/review/post").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
