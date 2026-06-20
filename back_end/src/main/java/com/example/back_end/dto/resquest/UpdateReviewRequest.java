@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class UpdateReviewRequest {
 
-    private Long courseId;
+    private Long reviewId;
     private Integer rating;
     private String comment;
 }

@@ -31,23 +31,13 @@ public class CustomUserDetails implements UserDetails{
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
 
-    System.out.println("=== GET AUTHORITIES ===");
-    System.out.println("USER = " + user.getEmail());
-    System.out.println("ROLES = " + user.getRoles());
-
-    if (user.getRoles() == null || user.getRoles().isEmpty()) {
-      System.out.println("❌ ROLES EMPTY");
-    }
-
     return user.getRoles()
             .stream()
-            .map(role -> {
-              System.out.println("ROLE = " + role.getRoleName());
-              return new SimpleGrantedAuthority("ROLE_" + role.getRoleName());
-            })
+            .map(role ->
+                    new SimpleGrantedAuthority(role.getRoleName().name())
+            )
             .toList();
   }
-
   @Override
   public String getPassword() {
     return user.getPasswordHash();

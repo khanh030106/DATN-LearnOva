@@ -85,20 +85,48 @@ public class ReviewService {
                 .toList();
     }
     public ReviewResponse updateReview(Long userId, UpdateReviewRequest request) {
+        System.out.println("==================================================");
+        System.out.println("=== [SERVICE] START UPDATE REVIEW ===");
+        System.out.println("-> ID Người dùng đang đăng nhập (userId): " + userId);
+        System.out.println("-> Request ID Review cần sửa (reviewId): " + (request != null ? request.getReviewId() : "null"));
+        System.out.println("-> Request Rating mới: " + (request != null ? request.getRating() : "null"));
+        System.out.println("-> Request Comment mới: " + (request != null ? request.getComment() : "null"));
+        System.out.println("==================================================");
 
-        Review review = reviewRepository.findByUserIdAndCourseId(
-                userId,
-                request.getCourseId()
-        ).orElseThrow(() ->
-                new RuntimeException("Review not found for this user and course")
-        );
+        if (request == null || request.getReviewId() == null) {
+            System.out.println("[ERROR] Request hoặc reviewId bị NULL từ Frontend gửi lên!");
+            throw new RuntimeException("Review ID cannot be null");
+        }
 
-        // update data
+        // 1. Tìm review trong DB dựa vào ID gửi lên
+        Review review = reviewRepository.findById(request.getReviewId())
+                .orElseThrow(() -> {
+                    System.out.println("[ERROR] Không tìm thấy Review nào trong DB với ID = " + request.getReviewId());
+                    return new RuntimeException("Review not found");
+                });
+
+        System.out.println("[INFO] Tìm thấy Review thành công trong Database!");
+        System.out.println("-> ID chủ sở hữu thực sự của Review này (trong DB): " + review.getUser().getId());
+        System.out.println("-> Tên chủ sở hữu: " + review.getUser().getFullName());
+
+        // 2. Kiểm tra xem người đang đăng nhập có phải là chủ sở hữu của review này không
+        if (!review.getUser().getId().equals(userId)) {
+            System.out.println("[WARNING] CHẶN CẬP NHẬT: Người dùng (ID: " + userId + ") KHÔNG PHẢI là chủ sở hữu của Review này (ID chủ: " + review.getUser().getId() + ")");
+            throw new RuntimeException("You cannot update this review");
+        }
+
+        System.out.println("[INFO] Xác thực chính chủ thành công! Tiến hành cập nhật dữ liệu...");
+
+        // 3. Cập nhật dữ liệu mới
         review.setRating(request.getRating());
         review.setComment(request.getComment());
         review.setUpdatedAt(Instant.now());
 
+        // 4. Lưu lại vào DB
         reviewRepository.save(review);
+        System.out.println("[SUCCESS] Đã lưu dữ liệu Review mới vào Database thành công!");
+        System.out.println("=== [SERVICE] END UPDATE REVIEW ===");
+        System.out.println("==================================================");
 
         return ReviewResponse.builder()
                 .reviewId(review.getId())
