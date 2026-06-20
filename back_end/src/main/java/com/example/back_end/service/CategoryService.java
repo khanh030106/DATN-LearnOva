@@ -22,14 +22,14 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     
     public List<CategoryResponse> getAllCategories() {
-        return categoryRepository.findAllActive()
+        return categoryRepository.findAllForAdmin()
             .stream()
             .map(this::toCategoryResponse)
             .collect(Collectors.toList());
     }
     
     public CategoryResponse getCategoryById(Long id) {
-        Category category = categoryRepository.findActiveById(id).orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+        Category category = categoryRepository.findByIdForAdmin(id).orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
         return toCategoryResponse(category);
     }
     
@@ -52,7 +52,9 @@ public class CategoryService {
         category.setSlug(request.slug());
         category.setParent(parent);
         category.setDisplayOrder(request.displayOrder() != null ? request.displayOrder() : 0);
-        category.setIsDeleted(false);
+        String status = normalizeStatus(request.status());
+        category.setStatus(status);
+        category.setIsDeleted(isHiddenStatus(status));
         category.setCreatedAt(Instant.now());
         category.setUpdatedAt(Instant.now());
         
@@ -61,7 +63,7 @@ public class CategoryService {
     }
     
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
-        Category category = categoryRepository.findActiveById(id).orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+        Category category = categoryRepository.findByIdForAdmin(id).orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
         
         if (!category.getSlug().equals(request.slug()) && 
             categoryRepository.countBySlugAndNotId(request.slug(), id) > 0) {
@@ -78,6 +80,9 @@ public class CategoryService {
         category.setName(request.name());
         category.setSlug(request.slug());
         category.setDisplayOrder(request.displayOrder() != null ? request.displayOrder() : 0);
+        String status = normalizeStatus(request.status());
+        category.setStatus(status);
+        category.setIsDeleted(isHiddenStatus(status));
         category.setUpdatedAt(Instant.now());
         
         Category updated = categoryRepository.save(category);
@@ -85,11 +90,31 @@ public class CategoryService {
     }
     
     public void deleteCategory(Long id) {
-        Category category = categoryRepository.findActiveById(id).orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+        Category category = categoryRepository.findByIdForAdmin(id).orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
         
+        category.setStatus("Hidden");
         category.setIsDeleted(true);           
         category.setUpdatedAt(Instant.now()); 
         categoryRepository.save(category);     
+    }
+
+    private String normalizeStatus(String status) {
+        if (status == null || status.isBlank()) {
+            return "Active";
+        }
+
+        switch (status.trim().toLowerCase()) {
+            case "pending":
+                return "Pending";
+            case "hidden":
+                return "Hidden";
+            default:
+                return "Active";
+        }
+    }
+
+    private boolean isHiddenStatus(String status) {
+        return "Hidden".equals(status);
     }
     
     private CategoryResponse toCategoryResponse(Category category) {
@@ -103,6 +128,7 @@ public class CategoryService {
             parentId,
             parentName,
             category.getDisplayOrder(),
+            category.getStatus() != null ? category.getStatus() : (Boolean.TRUE.equals(category.getIsDeleted()) ? "Hidden" : "Active"),
             category.getIsDeleted(),
             category.getCreatedAt(),
             category.getUpdatedAt()

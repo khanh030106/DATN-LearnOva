@@ -1,168 +1,16 @@
 import {
   Ban,
-  CalendarDays,
   ChevronLeft,
   ChevronRight,
   Eye,
   Mail,
   PencilLine,
-  Search,
   Trash2,
-  Shield,
-  UserRound,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import EditUserModal from "./EditUserModal";
+import ViewUserModal from "./ViewUserModal";
 import "./UsersList.css";
-
-const usersData = [
-  {
-    id: 1,
-    name: "Nguyễn Minh Anh",
-    email: "minhanh@learnoa.com",
-    role: "Student",
-    roleTone: "student",
-    status: "Active",
-    statusTone: "active",
-    joinedAt: "12/01/2026",
-    avatar: "https://i.pravatar.cc/120?img=32",
-  },
-  {
-    id: 2,
-    name: "Trần Quốc Huy",
-    email: "quochuy@learnoa.com",
-    role: "Instructor",
-    roleTone: "teacher",
-    status: "Pending",
-    statusTone: "pending",
-    joinedAt: "18/01/2026",
-    avatar: "https://i.pravatar.cc/120?img=12",
-  },
-  {
-    id: 3,
-    name: "Phạm Gia Hân",
-    email: "giahann@learnoa.com",
-    role: "Student",
-    roleTone: "student",
-    status: "Active",
-    statusTone: "active",
-    joinedAt: "21/01/2026",
-    avatar: "https://i.pravatar.cc/120?img=44",
-  },
-  {
-    id: 4,
-    name: "Lê Thanh Tùng",
-    email: "thanhtung@learnoa.com",
-    role: "Admin",
-    roleTone: "admin",
-    status: "Active",
-    statusTone: "active",
-    joinedAt: "03/02/2026",
-    avatar: "https://i.pravatar.cc/120?img=56",
-  },
-  {
-    id: 5,
-    name: "Vũ Hồng Nhung",
-    email: "hongnhung@learnoa.com",
-    role: "Student",
-    roleTone: "student",
-    status: "Locked",
-    statusTone: "locked",
-    joinedAt: "09/02/2026",
-    avatar: "https://i.pravatar.cc/120?img=48",
-  },
-  {
-    id: 6,
-    name: "Đỗ Văn Khánh",
-    email: "vankhanh@learnoa.com",
-    role: "Instructor",
-    roleTone: "teacher",
-    status: "Active",
-    statusTone: "active",
-    joinedAt: "15/02/2026",
-    avatar: "https://i.pravatar.cc/120?img=15",
-  },
-  {
-    id: 7,
-    name: "Ngô Thùy Trang",
-    email: "thuytrang@learnoa.com",
-    role: "Student",
-    roleTone: "student",
-    status: "Pending",
-    statusTone: "pending",
-    joinedAt: "19/02/2026",
-    avatar: "https://i.pravatar.cc/120?img=23",
-  },
-  {
-    id: 8,
-    name: "Mai Quang Nhật",
-    email: "quangnhat@learnoa.com",
-    role: "Admin",
-    roleTone: "admin",
-    status: "Active",
-    statusTone: "active",
-    joinedAt: "25/02/2026",
-    avatar: "https://i.pravatar.cc/120?img=7",
-  },
-  {
-    id: 9,
-    name: "Bùi Khánh Vy",
-    email: "khanhvy@learnoa.com",
-    role: "Student",
-    roleTone: "student",
-    status: "Active",
-    statusTone: "active",
-    joinedAt: "01/03/2026",
-    avatar: "https://i.pravatar.cc/120?img=18",
-  },
-  {
-    id: 10,
-    name: "Phan Nhật Minh",
-    email: "nhatminh@learnoa.com",
-    role: "Instructor",
-    roleTone: "teacher",
-    status: "Active",
-    statusTone: "active",
-    joinedAt: "04/03/2026",
-    avatar: "https://i.pravatar.cc/120?img=29",
-  },
-  {
-    id: 11,
-    name: "Hồ Thanh Thảo",
-    email: "thanhao@learnoa.com",
-    role: "Student",
-    roleTone: "student",
-    status: "Pending",
-    statusTone: "pending",
-    joinedAt: "06/03/2026",
-    avatar: "https://i.pravatar.cc/120?img=34",
-  },
-  {
-    id: 12,
-    name: "Trịnh Gia Bảo",
-    email: "giabao@learnoa.com",
-    role: "Admin",
-    roleTone: "admin",
-    status: "Active",
-    statusTone: "active",
-    joinedAt: "08/03/2026",
-    avatar: "https://i.pravatar.cc/120?img=21",
-  },
-];
-
-const roleMeta = {
-  student: {
-    icon: UserRound,
-    label: "Student",
-  },
-  teacher: {
-    icon: Shield,
-    label: "Teacher",
-  },
-  admin: {
-    icon: Shield,
-    label: "Admin",
-  },
-};
 
 const statusMeta = {
   active: {
@@ -180,28 +28,58 @@ const tableColumns = [
   { id: "user", label: "User" },
   { id: "role", label: "Role" },
   { id: "status", label: "Status" },
+  { id: "phone", label: "Phone" },
   { id: "joinedAt", label: "Joined At" },
   { id: "actions", label: "Actions" },
 ];
 
 const pageSize = 10;
 
-const getRoleMeta = (roleTone) => roleMeta[roleTone] ?? roleMeta.student;
-
 const getStatusClassName = (statusTone) =>
   `userManagementUsersStatus userManagementUsersStatus--${statusTone}`;
 
-const UsersList = () => {
+const getInitials = (name) =>
+  name
+    .split(" ")
+    .filter(Boolean)
+    .slice(-2)
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase() || "U";
+
+const UserAvatar = ({ user, className }) => {
+  if (user.avatar) {
+    return <img className={className} src={user.avatar} alt={user.name} />;
+  }
+
+  return (
+    <span className={`${className} userManagementUserAvatarFallback`}>
+      {getInitials(user.name)}
+    </span>
+  );
+};
+
+const UsersList = ({
+  users = [],
+  isLoading = false,
+  onUserUpdated = () => {},
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedAction, setSelectedAction] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const totalPages = Math.ceil(usersData.length / pageSize);
+  const totalPages = Math.max(1, Math.ceil(users.length / pageSize));
+
+  useEffect(() => {
+    setCurrentPage(1);
+    setSelectedAction(null);
+    setSelectedUser(null);
+  }, [users]);
 
   const visibleUsers = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize;
-    return usersData.slice(startIndex, startIndex + pageSize);
-  }, [currentPage]);
+    return users.slice(startIndex, startIndex + pageSize);
+  }, [currentPage, users]);
 
   const openActionPopup = (action, user) => {
     setSelectedAction(action);
@@ -234,17 +112,12 @@ const UsersList = () => {
 
         <div className="userManagementUsersList">
           {visibleUsers.map((user) => {
-            const roleInfo = getRoleMeta(user.roleTone);
             const statusInfo = statusMeta[user.statusTone] ?? statusMeta.active;
 
             return (
               <article key={user.id} className="userManagementUserRow">
                 <div className="userManagementUserProfile">
-                  <img
-                    className="userManagementUserAvatar"
-                    src={user.avatar}
-                    alt={user.name}
-                  />
+                  <UserAvatar user={user} className="userManagementUserAvatar" />
 
                   <div className="userManagementUserMeta">
                     <p className="userManagementUserName">{user.name}</p>
@@ -261,13 +134,19 @@ const UsersList = () => {
                   <span
                     className={`userManagementUserRole userManagementUserRole--${user.roleTone}`}
                   >
-                    <span>{roleInfo.label}</span>
+                    <span>{user.role}</span>
                   </span>
                 </div>
 
                 <div className="userManagementUserStatusWrap">
                   <span className={getStatusClassName(user.statusTone)}>
                     <span>{statusInfo.label}</span>
+                  </span>
+                </div>
+
+                <div className="userManagementUserPhoneWrap">
+                  <span className="userManagementUserPhone">
+                    <span>{user.phone}</span>
                   </span>
                 </div>
 
@@ -308,16 +187,25 @@ const UsersList = () => {
               </article>
             );
           })}
+
+          {!isLoading && users.length === 0 ? (
+            <div className="userManagementUsersEmpty">
+              Không có user nào khớp với bộ lọc hiện tại.
+            </div>
+          ) : null}
+
+          {isLoading ? (
+            <div className="userManagementUsersEmpty">Đang tải users...</div>
+          ) : null}
         </div>
 
       </div>
 
       <div className="userManagementUsersFooter">
         <p className="userManagementUsersPageInfo">
-          Displaying{" "}
-          {Math.min((currentPage - 1) * pageSize + 1, usersData.length)}-
-          {Math.min(currentPage * pageSize, usersData.length)} out of{" "}
-          {usersData.length} users
+          Displaying {users.length ? (currentPage - 1) * pageSize + 1 : 0}-
+          {Math.min(currentPage * pageSize, users.length)} out of {users.length}{" "}
+          users
         </p>
 
         <div
@@ -360,7 +248,23 @@ const UsersList = () => {
         </div>
       </div>
 
-      {selectedAction && selectedUser ? (
+      {selectedAction === "View" && selectedUser ? (
+        <ViewUserModal user={selectedUser} onClose={closeActionPopup} />
+      ) : null}
+
+      {selectedAction === "Edit" && selectedUser ? (
+        <EditUserModal
+          user={selectedUser}
+          onClose={closeActionPopup}
+          onSaved={(updatedUser) => {
+            onUserUpdated(updatedUser);
+            setSelectedUser(updatedUser);
+            closeActionPopup();
+          }}
+        />
+      ) : null}
+
+      {selectedAction && !["View", "Edit"].includes(selectedAction) && selectedUser ? (
         <div
           className="userManagementUsersModalBackdrop"
           onClick={closeActionPopup}
@@ -395,10 +299,9 @@ const UsersList = () => {
 
             <div className="userManagementUsersModalBody">
               <div className="userManagementUsersModalAvatarWrap">
-                <img
+                <UserAvatar
+                  user={selectedUser}
                   className="userManagementUsersModalAvatar"
-                  src={selectedUser.avatar}
-                  alt={selectedUser.name}
                 />
               </div>
 
@@ -416,6 +319,12 @@ const UsersList = () => {
                   </span>
                 </div>
                 <div className="userManagementUsersModalRow">
+                  <span className="userManagementUsersModalLabel">Phone: </span>
+                  <span className="userManagementUsersModalValue">
+                    {selectedUser.phone}
+                  </span>
+                </div>
+                <div className="userManagementUsersModalRow">
                   <span className="userManagementUsersModalLabel">
                     Status:{" "}
                   </span>
@@ -429,6 +338,22 @@ const UsersList = () => {
                   </span>
                   <span className="userManagementUsersModalValue">
                     {selectedUser.joinedAt}
+                  </span>
+                </div>
+                <div className="userManagementUsersModalRow">
+                  <span className="userManagementUsersModalLabel">
+                    Gender:{" "}
+                  </span>
+                  <span className="userManagementUsersModalValue">
+                    {selectedUser.gender}
+                  </span>
+                </div>
+                <div className="userManagementUsersModalRow">
+                  <span className="userManagementUsersModalLabel">
+                    Birthday:{" "}
+                  </span>
+                  <span className="userManagementUsersModalValue">
+                    {selectedUser.dateOfBirth}
                   </span>
                 </div>
               </div>

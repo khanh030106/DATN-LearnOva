@@ -56,6 +56,11 @@ public class Category {
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
 
+    @NotNull
+    @ColumnDefault("'Active'")
+    @Column(name = "category_status", nullable = false, length = 20)
+    private String status = "Active";
+
     @OneToMany(mappedBy = "parent")
     private Set<Category> categories = new LinkedHashSet<>();
 

@@ -14,5 +14,7 @@ public record CategoryRequest(
 
     Long parentId,
 
-    Integer displayOrder
+    Integer displayOrder,
+
+    String status
 ) {}

@@ -13,9 +13,15 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     
     @Query("SELECT c FROM Category c WHERE c.isDeleted = false ORDER BY c.displayOrder, c.name")
     List<Category> findAllActive();
+
+    @Query("SELECT c FROM Category c ORDER BY c.displayOrder, c.name")
+    List<Category> findAllForAdmin();
     
     @Query("SELECT c FROM Category c WHERE c.id = :id AND c.isDeleted = false")
     Optional<Category> findActiveById(@Param("id") Long id);
+
+    @Query("SELECT c FROM Category c WHERE c.id = :id")
+    Optional<Category> findByIdForAdmin(@Param("id") Long id);
     
     @Query("SELECT c FROM Category c WHERE c.parent.id = :parentId AND c.isDeleted = false")
     List<Category> findChildrenByParentId(@Param("parentId") Long parentId);

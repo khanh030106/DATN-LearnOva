@@ -69,8 +69,8 @@
 .userManagementUsersTableHeader {
   display: grid;
   grid-template-columns:
-    minmax(300px, 1.25fr) minmax(140px, 0.78fr) minmax(140px, 0.78fr)
-    minmax(160px, 0.88fr) minmax(170px, 0.88fr);
+    minmax(280px, 1.2fr) minmax(120px, 0.62fr) minmax(120px, 0.62fr)
+    minmax(140px, 0.72fr) minmax(140px, 0.72fr) minmax(150px, 0.78fr);
   gap: 16px;
   padding: 18px 24px;
   border-bottom: 1px solid rgba(37, 99, 235, 0.12);
@@ -95,6 +95,7 @@
 
 .userManagementUsersColumn--role,
 .userManagementUsersColumn--status,
+.userManagementUsersColumn--phone,
 .userManagementUsersColumn--joinedAt {
   justify-self: center;
   text-align: center;
@@ -109,8 +110,8 @@
 .userManagementUserRow {
   display: grid;
   grid-template-columns:
-    minmax(300px, 1.25fr) minmax(140px, 0.78fr) minmax(140px, 0.78fr)
-    minmax(160px, 0.88fr) minmax(170px, 0.88fr);
+    minmax(280px, 1.2fr) minmax(120px, 0.62fr) minmax(120px, 0.62fr)
+    minmax(140px, 0.72fr) minmax(140px, 0.72fr) minmax(150px, 0.78fr);
   gap: 16px;
   align-items: center;
   padding: 14px 24px;
@@ -137,6 +138,16 @@
   object-fit: cover;
   border: 2px solid #ffffff;
   box-shadow: none;
+}
+
+.userManagementUserAvatarFallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .userManagementUserMeta {
@@ -168,12 +179,14 @@
 
 .userManagementUserRoleWrap,
 .userManagementUserStatusWrap,
+.userManagementUserPhoneWrap,
 .userManagementUserJoinedWrap {
   min-width: 0;
 }
 
 .userManagementUserRoleWrap,
 .userManagementUserStatusWrap,
+.userManagementUserPhoneWrap,
 .userManagementUserJoinedWrap {
   display: flex;
   justify-content: center;
@@ -181,6 +194,7 @@
 
 .userManagementUserRole,
 .userManagementUserStatus,
+.userManagementUserPhone,
 .userManagementUserJoined {
   display: inline-flex;
   align-items: center;
@@ -196,9 +210,11 @@
 }
 
 .userManagementUserRole {
-  border: 1px solid rgba(37, 99, 235, 0.22);
-  background: rgba(255, 250, 240, 0.95);
   color: #b46a00;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
 .userManagementUserRole--student {
@@ -231,6 +247,18 @@
   color: var(--text-muted);
 }
 
+.userManagementUserPhone {
+  color: var(--text-secondary);
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.userManagementUserPhone svg {
+  color: var(--text-placeholder);
+}
+
 .userManagementUserStatusDot {
   width: 8px;
   height: 8px;
@@ -240,9 +268,11 @@
 }
 
 .userManagementUserJoined {
-  border: 1px solid rgba(37, 99, 235, 0.18);
-  background: #f8fafc;
   color: var(--text-secondary);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .userManagementUserActions {
@@ -296,9 +326,6 @@
   gap: 16px;
   margin-top: 14px;
   padding: 14px 18px;
-  border: 1px solid rgba(37, 99, 235, 0.18);
-  border-radius: 6px;
-  background: #ffffff;
   font-weight: 600;
   box-sizing: border-box;
 }
@@ -519,6 +546,7 @@
 
   .userManagementUserRoleWrap,
   .userManagementUserStatusWrap,
+  .userManagementUserPhoneWrap,
   .userManagementUserJoinedWrap {
     display: flex;
     justify-content: flex-start;

@@ -1,176 +1,120 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Eye, Edit3, Trash2 } from "lucide-react";
+import {
+  getAdminInstructorsApi,
+  getAdminInstructorByIdApi,
+  updateAdminInstructorApi,
+  deleteAdminInstructorApi,
+} from "../../../../api/AdminInstructorApi.js";
+import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
+import ViewInstructorModal from "../viewInstructorModal/ViewInstructorModal.jsx";
 import "./InstructorTable.css";
 
-const instructorsData = [
-  {
-    id: "GV001",
-    initials: "VH",
-    name: "Nguyễn Văn Hùng",
-    email: "hung.nguyen@academy.edu.vn",
-    specialization: "Web Development & Cloud Computing",
-    classes: 3,
-    students: "1.250",
-    rating: 4.8,
-    revenue: "$145,000",
-    status: "Active",
-  },
-  {
-    id: "GV002",
-    initials: "MT",
-    name: "Trần Thị Minh Thư",
-    email: "thu.tran@academy.edu.vn",
-    specialization: "UI/UX Design & Figma",
-    classes: 3,
-    students: "940",
-    rating: 4.9,
-    revenue: "$98,000",
-    status: "Active",
-  },
-  {
-    id: "GV003",
-    initials: "LN",
-    name: "Lê Ngọc Nam",
-    email: "nam.le@academy.edu.vn",
-    specialization: "Database Administration & SQL",
-    classes: 2,
-    students: "765",
-    rating: 4.7,
-    revenue: "$82,500",
-    status: "Paused",
-  },
-  {
-    id: "GV004",
-    initials: "PH",
-    name: "Phạm Hoài An",
-    email: "an.pham@academy.edu.vn",
-    specialization: "Digital Marketing",
-    classes: 4,
-    students: "1.120",
-    rating: 4.6,
-    revenue: "$112,000",
-    status: "Active",
-  },
-  {
-    id: "GV005",
-    initials: "TT",
-    name: "Trần Thị Thuỳ",
-    email: "thuy.tran@academy.edu.vn",
-    specialization: "Interior Design",
-    classes: 2,
-    students: "630",
-    rating: 4.5,
-    revenue: "$67,900",
-    status: "Active",
-  },
-  {
-    id: "GV006",
-    initials: "QD",
-    name: "Quách Duy Đức",
-    email: "duc.quach@academy.edu.vn",
-    specialization: "React & Frontend",
-    classes: 5,
-    students: "1.420",
-    rating: 4.9,
-    revenue: "$162,500",
-    status: "Active",
-  },
-  {
-    id: "GV007",
-    initials: "NL",
-    name: "Ngọc Lan",
-    email: "lan.ngoc@academy.edu.vn",
-    specialization: "Agile Project Management",
-    classes: 3,
-    students: "790",
-    rating: 4.4,
-    revenue: "$89,400",
-    status: "Paused",
-  },
-  {
-    id: "GV008",
-    initials: "BT",
-    name: "Bùi Thị Thảo",
-    email: "thao.bui@academy.edu.vn",
-    specialization: "Public Speaking",
-    classes: 2,
-    students: "520",
-    rating: 4.7,
-    revenue: "$56,800",
-    status: "Active",
-  },
-  {
-    id: "GV009",
-    initials: "HN",
-    name: "Hà Nguyễn",
-    email: "nguyen.ha@academy.edu.vn",
-    specialization: "Data Analysis",
-    classes: 4,
-    students: "1.010",
-    rating: 4.8,
-    revenue: "$130,000",
-    status: "Active",
-  },
-  {
-    id: "GV010",
-    initials: "DV",
-    name: "Đặng Văn Dũng",
-    email: "dung.dang@academy.edu.vn",
-    specialization: "E-commerce Management",
-    classes: 3,
-    students: "880",
-    rating: 4.6,
-    revenue: "$95,300",
-    status: "Active",
-  },
-  {
-    id: "GV011",
-    initials: "HP",
-    name: "Hoàng Phương",
-    email: "phuong.hoang@academy.edu.vn",
-    specialization: "Content Marketing",
-    classes: 2,
-    students: "610",
-    rating: 4.3,
-    revenue: "$58,200",
-    status: "Locked",
-  },
-  {
-    id: "GV012",
-    initials: "NL",
-    name: "Nguyễn Lê",
-    email: "le.nguyen@academy.edu.vn",
-    specialization: "SEO & Content",
-    classes: 3,
-    students: "700",
-    rating: 4.5,
-    revenue: "$79,500",
-    status: "Active",
-  },
-];
+const fmtNumber = (v) => (v == null ? "0" : new Intl.NumberFormat("vi-VN").format(v));
+
+const mapInstructor = (item) => ({
+  ...item,
+  instructorId: item.instructorId,
+  id: item.instructorCode ?? `GV${String(item.instructorId ?? 0).padStart(3, "0")}`,
+  name: item.fullName ?? "Unknown",
+  email: item.email ?? "",
+  specialization: item.specialization ?? "",
+  classes: item.numberOfClasses ?? 0,
+  students: fmtNumber(item.totalStudents ?? 0),
+  revenue: `${fmtNumber(item.totalRevenue ?? 0)} đ`,
+  status: item.isActive ? "Active" : "Paused",
+});
 
 const InstructorTable = () => {
+  const axiosPrivate = useAxiosPrivate();
+  const [instructorsData, setInstructorsData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedInstructor, setSelectedInstructor] = useState(null);
+  const [isViewLoading, setIsViewLoading] = useState(false);
+  const [viewError, setViewError] = useState("");
+  const [error, setError] = useState("");
   const pageSize = 10;
-  const totalPages = Math.ceil(instructorsData.length / pageSize);
-  const currentItems = instructorsData.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize,
-  );
+  const totalPages = Math.max(1, Math.ceil(instructorsData.length / pageSize));
+  const currentItems = instructorsData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getAdminInstructorsApi(axiosPrivate);
+        if (!mounted) return;
+        setInstructorsData(Array.isArray(data) ? data.map(mapInstructor) : []);
+      } catch (e) {
+        console.error(e);
+        setError("Không tải được danh sách giảng viên.");
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    };
+    load();
+    return () => { mounted = false; };
+  }, [axiosPrivate]);
+
+  const handleView = async (instructor) => {
+    setSelectedInstructor(instructor);
+    setViewError("");
+    setIsViewLoading(true);
+
+    try {
+      const detail = await getAdminInstructorByIdApi(instructor.instructorId, axiosPrivate);
+      setSelectedInstructor(mapInstructor(detail));
+    } catch (e) {
+      console.error(e);
+      setViewError("Không tải được chi tiết giảng viên. Đang hiển thị dữ liệu trong bảng.");
+    } finally {
+      setIsViewLoading(false);
+    }
+  };
+
+  const handleEdit = async (instructor) => {
+    const fullName = window.prompt("Sửa tên giảng viên", instructor.name);
+    if (!fullName) return;
+    try {
+      const updated = await updateAdminInstructorApi(instructor.instructorId, {
+        fullName,
+        email: instructor.email,
+        avatar: null,
+        phone: null,
+        gender: null,
+        isActive: instructor.status === "Active",
+      }, axiosPrivate);
+      setInstructorsData((s) => s.map((it) => it.instructorId === updated.instructorId ? mapInstructor(updated) : it));
+    } catch {
+      setError("Cập nhật thất bại.");
+    }
+  };
+
+  const handleDelete = async (instructor) => {
+    if (!window.confirm(`Xóa giảng viên ${instructor.name}?`)) return;
+    try {
+      await deleteAdminInstructorApi(instructor.instructorId, axiosPrivate);
+      setInstructorsData((s) => s.filter((it) => it.instructorId !== instructor.instructorId));
+    } catch {
+      setError("Xóa thất bại.");
+    }
+  };
 
   return (
-    <section
-      className="instructorTableSection"
-      aria-label="Instructor Management Table"
-    >
+    <section className="instructorTableSection" aria-label="Instructor Management Table">
       <div className="instructorTableCard">
+        
+
+        {error ? <div className="instructorTableError" style={{ padding: 12 }}>{error}</div> : null}
+
         <table className="instructorTable" aria-label="Instructor List">
           <colgroup>
-            <col className="instructorTableCol instructorTableCol--id" />
-            <col className="instructorTableCol instructorTableCol--profile" />
-            <col className="instructorTableCol instructorTableCol--classes" />
-            <col className="instructorTableCol instructorTableCol--students" />
-            <col className="instructorTableCol instructorTableCol--actions" />
+            <col className="instructorTableCol instructorTableCol--id"/>
+            <col className="instructorTableCol instructorTableCol--profile"/>
+            <col className="instructorTableCol instructorTableCol--classes"/>
+            <col className="instructorTableCol instructorTableCol--students"/>
+            <col className="instructorTableCol instructorTableCol--actions"/>
           </colgroup>
 
           <thead>
@@ -184,55 +128,29 @@ const InstructorTable = () => {
           </thead>
 
           <tbody>
-            {currentItems.map((instructor) => (
-              <tr key={instructor.id}>
-                <td>
-                  <span className="instructorTableBadge">{instructor.id}</span>
-                </td>
+            {isLoading ? (
+              <tr><td colSpan="5">Đang tải...</td></tr>
+            ) : currentItems.length === 0 ? (
+              <tr><td colSpan="5">Không có giảng viên.</td></tr>
+            ) : currentItems.map((instructor) => (
+              <tr key={instructor.instructorId}>
+                <td><span className="instructorTableBadge">{instructor.id}</span></td>
                 <td>
                   <div className="instructorTableProfile">
                     <div className="instructorTableProfileText">
                       <p className="instructorTableName">{instructor.name}</p>
                       <p className="instructorTableEmail">{instructor.email}</p>
-                      <span className="instructorTableTag">
-                        {instructor.specialization}
-                      </span>
+                      <span className="instructorTableTag">{instructor.specialization}</span>
                     </div>
                   </div>
                 </td>
-                <td>
-                  <div className="instructorTableStat">
-                    <strong>{instructor.classes}</strong>
-                  </div>
-                </td>
-                <td>
-                  <div className="instructorTableStat">
-                    <strong>{instructor.students}</strong>
-                  </div>
-                </td>
+                <td><div className="instructorTableStat"><strong>{instructor.classes}</strong></div></td>
+                <td><div className="instructorTableStat"><strong>{instructor.students}</strong></div></td>
                 <td>
                   <div className="instructorTableActions">
-                    <button
-                      type="button"
-                      className="instructorActionButton"
-                      aria-label="View"
-                    >
-                      <Eye size={16} />
-                    </button>
-                    <button
-                      type="button"
-                      className="instructorActionButton"
-                      aria-label="Edit"
-                    >
-                      <Edit3 size={16} />
-                    </button>
-                    <button
-                      type="button"
-                      className="instructorActionButton instructorActionButton--danger"
-                      aria-label="Delete"
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    <button type="button" className="instructorActionButton" aria-label="View" onClick={() => handleView(instructor)}><Eye size={16}/></button>
+                    <button type="button" className="instructorActionButton" aria-label="Edit" onClick={() => handleEdit(instructor)}><Edit3 size={16}/></button>
+                    <button type="button" className="instructorActionButton instructorActionButton--danger" aria-label="Delete" onClick={() => handleDelete(instructor)}><Trash2 size={16}/></button>
                   </div>
                 </td>
               </tr>
@@ -240,41 +158,21 @@ const InstructorTable = () => {
           </tbody>
         </table>
 
-        <div className="instructorTablePagination">
-          <button
-            type="button"
-            className="instructorPaginationButton"
-            onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index + 1}
-              type="button"
-              className={`instructorPaginationButton ${
-                currentPage === index + 1
-                  ? "instructorPaginationButton--active"
-                  : ""
-              }`}
-              onClick={() => setCurrentPage(index + 1)}
-            >
-              {index + 1}
-            </button>
+        <div className="instructorTablePagination" style={{ padding: 12 }}>
+          <button type="button" className="instructorPaginationButton" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1}>Previous</button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+            <button key={p} type="button" className={`instructorPaginationButton ${currentPage === p ? "instructorPaginationButton--active" : ""}`} onClick={() => setCurrentPage(p)}>{p}</button>
           ))}
-          <button
-            type="button"
-            className="instructorPaginationButton"
-            onClick={() =>
-              setCurrentPage((page) => Math.min(totalPages, page + 1))
-            }
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
+          <button type="button" className="instructorPaginationButton" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>Next</button>
         </div>
       </div>
+
+      <ViewInstructorModal
+        instructor={selectedInstructor}
+        isLoading={isViewLoading}
+        error={viewError}
+        onClose={() => setSelectedInstructor(null)}
+      />
     </section>
   );
 };

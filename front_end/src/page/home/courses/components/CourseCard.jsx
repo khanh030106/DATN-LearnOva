@@ -35,9 +35,7 @@ const CourseCard = ({ course }) => {
         <div className="course-card__footer">
           <div>
             <p className="course-card__price">
-              <span className="icon">
-                <MdAttachMoney />
-              </span>
+              
               {course.price}
             </p>
           </div>

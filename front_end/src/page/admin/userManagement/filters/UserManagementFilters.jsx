@@ -9,9 +9,9 @@ const searchFields = {
 
 const roleOptions = [
   { id: "all", label: "All" },
-  { id: "students", label: "Students" },
-  { id: "teachers", label: "Instructors" },
-  { id: "admins", label: "Admins" },
+  { id: "student", label: "Students" },
+  { id: "teacher", label: "Instructors" },
+  { id: "admin", label: "Admins" },
 ];
 
 const statusOptions = [

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import axiosClient from "../api/axiosClient.js";
-import { useAuth } from "./useAuth.js";
+import axiosClient from "../api/AxiosClient.js";
+import { useAuth } from "./UseAuth.jsx";
 
 export const useAxiosPrivate = () => {
     const { accessToken, refreshAccessToken, logout } = useAuth();
