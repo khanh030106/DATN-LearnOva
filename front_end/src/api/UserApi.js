@@ -9,3 +9,8 @@ export const getCurrentUserApi = async (accessToken) => {
 
     return response.data;
 };
+
+export const getAdminUsersApi = async () => {
+  const response = await axiosClient.get("/admin/users");
+  return response.data;
+};

@@ -1,5 +1,12 @@
 package com.example.back_end.service;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.back_end.dto.response.AuthTokenResponse;
 import com.example.back_end.dto.response.CurrentUserResponse;
 import com.example.back_end.dto.response.LoginResponse;
@@ -9,13 +16,8 @@ import com.example.back_end.entity.Verificationtoken;
 import com.example.back_end.repository.UserRepository;
 import com.example.back_end.security.CustomUserDetailsService;
 import com.example.back_end.security.JwtService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,10 +33,10 @@ public class AuthService {
     @Transactional
     public AuthTokenResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.email(),
-                        request.password()
-                )
+            new UsernamePasswordAuthenticationToken(
+                request.email(),
+                request.password()
+            )
         );
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -43,8 +45,8 @@ public class AuthService {
         Verificationtoken refreshToken = verificationTokenService.createRefreshToken(userDetails.getUsername(), request.rememberMe());
 
         return new AuthTokenResponse(
-                accessToken,
-                refreshToken.getToken()
+            accessToken,
+            refreshToken.getToken()
         );
     }
 
@@ -70,9 +72,7 @@ public class AuthService {
 
     public CurrentUserResponse getCurrentUser(String email) {
 
-        User user = userRepository
-                .findByEmailAndIsDeletedFalse(email, false)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmailAndIsDeletedFalse(email, false).orElseThrow(() -> new RuntimeException("User not found"));
 
 
         return new CurrentUserResponse(
