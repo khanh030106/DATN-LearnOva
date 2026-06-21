@@ -1,11 +1,4 @@
 import {useState} from "react";
-import {
-    createDraftCourse,
-    createSection,
-    createLesson,
-    updateSectionTitle as updateSectionTitleApi,
-    updateLessonTitle as updateLessonTitleApi,
-} from "../../../../../api/teacher/courseCreation/courseCreationApi.js";
 
 const createEmptyCourse = () => ({
     id: null,
@@ -23,7 +16,6 @@ const createEmptyCourse = () => ({
     whatYouLearn: [""],
 });
 
-const createClientId = () => crypto.randomUUID();
 
 export const useCourseCreationForm = () => {
     const [currentStep, setCurrentStep] = useState(1);
@@ -170,8 +162,8 @@ export const useCourseCreationForm = () => {
         await updateSectionTitleApi(sectionId, title);
     };
 
-    const publishCourse = () => {
-        setCourse((currentCourse) => ({...currentCourse, status: "PUBLISHED"}));
+    const publishCourse = (status = "PUBLISHED") => {
+        setCourse((currentCourse) => ({...currentCourse, status}));
     };
 
     const saveCourseDraft = async () => {
@@ -211,6 +203,23 @@ export const useCourseCreationForm = () => {
         );
     };
 
+    const updateLessonResources = (sectionId, lessonId, newResources) => {
+        setSections((currentSections) =>
+            currentSections.map((section) => {
+                if (section.id !== sectionId) return section;
+
+                return {
+                    ...section,
+                    lessons: section.lessons.map((lesson) =>
+                        lesson.id === lessonId
+                            ? { ...lesson, resources: [...(lesson.resources || []), ...newResources] }
+                            : lesson
+                    ),
+                };
+            })
+        );
+    };
+
     return {
         currentStep,
         setCurrentStep,
@@ -231,5 +240,6 @@ export const useCourseCreationForm = () => {
         publishCourse,
         saveCourseDraft,
         updateLessonVideo,
+        updateLessonResources,
     };
 };

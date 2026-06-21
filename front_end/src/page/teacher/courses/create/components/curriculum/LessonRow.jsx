@@ -1,13 +1,21 @@
 import {useEffect, useRef, useState} from "react";
-import {FileText, GripVertical, HelpCircle, Pencil, PlayCircle, Trash2} from "lucide-react";
+import {FileText, GripVertical, HelpCircle, Pencil, PlayCircle, Trash2, FileUp} from "lucide-react";
 import LessonResourceList from "./LessonResourceList.jsx";
 import LessonVideoUploader from "./LessonVideoUploader.jsx";
+import LessonResourceUploader from "./LessonResourceUploader.jsx";
+
+const RESOURCE_TYPES = [
+    {value: "Video", label: "Video", icon: PlayCircle},
+    {value: "Document", label: "Document", icon: FileText},
+    {value: "Resource", label: "Resource", icon: FileUp},
+];
 
 const iconMap = {
     Video: PlayCircle,
     Article: FileText,
     Quiz: HelpCircle,
     Document: FileText,
+    Resource: FileUp,
 };
 
 const LessonRow = ({
@@ -15,12 +23,14 @@ const LessonRow = ({
                        lesson,
                        onTitleChange,
                        onVideoChange,
+                       onResourceChange,
                        onDelete,
                    }) => {
     const Icon = iconMap[lesson.type] || FileText;
     const lessonTitle = lesson.title || "Untitled lesson";
     const [isEditing, setIsEditing] = useState(false);
     const [draftTitle, setDraftTitle] = useState(lesson.title);
+    const [resourceType, setResourceType] = useState(lesson.type || "Video");
     const titleInputRef = useRef(null);
 
     useEffect(() => {
@@ -82,18 +92,43 @@ const LessonRow = ({
                     <strong>{lesson.lessonOrder}. {lessonTitle}</strong>
                 )}
                 {lesson.sourceName && <small>{lesson.sourceName}</small>}
+                {lesson.videoName && <small className="teacher-lesson-builder-row__video-tag">🎬 {lesson.videoName}</small>}
                 <LessonResourceList resources={lesson.resources}/>
             </div>
+
+            <select
+                className="teacher-lesson-builder-row__type-select"
+                value={resourceType}
+                onChange={(e) => setResourceType(e.target.value)}
+                aria-label="Select resource type"
+            >
+                {RESOURCE_TYPES.map((type) => (
+                    <option key={type.value} value={type.value}>{type.label}</option>
+                ))}
+            </select>
+
             <button type="button" aria-label={`Edit ${lessonTitle}`} onClick={startTitleEdit}>
                 <Pencil size={16}/>
             </button>
-            <LessonVideoUploader
-                courseId={courseId}
-                lessonId={lesson.id}
-                accept="video/mp4"
-                label="Upload lesson video"
-                onUploadComplete={(file) => onVideoChange?.(file)}
-            />
+
+            {resourceType === "Video" && (
+                <LessonVideoUploader
+                    courseId={courseId}
+                    lessonId={lesson.id}
+                    accept="video/mp4,video/webm,video/quicktime"
+                    label="Upload lesson video"
+                    onUploadComplete={(file) => onVideoChange?.(file)}
+                />
+            )}
+
+            {(resourceType === "Document" || resourceType === "Resource") && (
+                <LessonResourceUploader
+                    courseId={courseId}
+                    lessonId={lesson.id}
+                    onUploadComplete={(files) => onResourceChange?.(files, {courseId, lessonId: lesson.id, resourceType})}
+                />
+            )}
+
             <button type="button" aria-label={`Delete ${lessonTitle}`} className="teacher-lesson-builder-row__delete"
                     onClick={onDelete}>
                 <Trash2 size={16}/>

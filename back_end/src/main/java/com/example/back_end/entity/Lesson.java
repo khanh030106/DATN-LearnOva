@@ -33,16 +33,15 @@ public class Lesson {
     @Column(name = "title", nullable = false, length = Integer.MAX_VALUE)
     private String title;
 
-    @NotNull
-    @Column(name = "video_url", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "video_url", length = Integer.MAX_VALUE)
     private String videoUrl;
 
     @NotNull
     @Column(name = "lesson_order", nullable = false)
     private Double lessonOrder;
 
-    @NotNull
-    @Column(name = "duration_seconds", nullable = false)
+    @ColumnDefault("0")
+    @Column(name = "duration_seconds")
     private Integer durationSeconds;
 
     @NotNull

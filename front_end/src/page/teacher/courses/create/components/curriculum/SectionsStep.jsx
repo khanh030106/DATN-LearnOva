@@ -12,6 +12,7 @@ const SectionsStep = ({
                           onAddLesson,
                           onLessonTitleChange,
                           onLessonSourceChange,
+                          onLessonResourceChange,
                           onDeleteLesson,
                           onSectionTitleChange,
                           onPrevious,
@@ -67,6 +68,7 @@ const SectionsStep = ({
                                         onTitleChange={(title) => onLessonTitleChange(activeSection.id, lesson.id, title)}
                                         onSourceChange={(file) => onLessonSourceChange(activeSection.id, lesson.id, file)}
                                         onVideoChange={(file) => onLessonVideoChange(activeSection.id, lesson.id, file)}
+                                        onResourceChange={(files, meta) => onLessonResourceChange?.(activeSection.id, lesson.id, files, meta)}
                                         onDelete={() => onDeleteLesson(activeSection.id, lesson.id)}
                                     />
                                 ))}

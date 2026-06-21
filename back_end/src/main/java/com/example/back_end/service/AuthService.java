@@ -4,6 +4,7 @@ import com.example.back_end.dto.response.AuthTokenResponse;
 import com.example.back_end.dto.response.CurrentUserResponse;
 import com.example.back_end.dto.response.LoginResponse;
 import com.example.back_end.dto.resquest.LoginRequest;
+import com.example.back_end.entity.Role;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.Verificationtoken;
 import com.example.back_end.entity.enums.RoleName;
@@ -79,7 +80,7 @@ public class AuthService {
 
         // Extract RoleName enums from user's roles
         Set<RoleName> roleNames = user.getRoles().stream()
-                .map(role -> role.getRoleName())
+                .map(Role::getRoleName)
                 .collect(java.util.stream.Collectors.toSet());
 
         return new CurrentUserResponse(

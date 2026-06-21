@@ -377,7 +377,7 @@
 .teacher-lesson-builder-row {
   min-height: 58px;
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr) auto auto auto;
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto auto auto auto;
   align-items: center;
   gap: 10px;
   padding: 0 10px;
@@ -408,6 +408,31 @@
   color: #475569;
   font-size: 0.74rem;
   font-weight: 700;
+}
+
+.teacher-lesson-builder-row__video-tag {
+  background: #dbeafe;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: #1d4ed8;
+}
+
+.teacher-lesson-builder-row__type-select {
+  min-width: 100px;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.teacher-lesson-builder-row__type-select:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 1px;
 }
 
 .teacher-lesson-builder-row em {
