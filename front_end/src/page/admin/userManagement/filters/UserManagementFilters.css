@@ -11,52 +11,11 @@
 .userManagementFiltersRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 16px;
-  flex-wrap: wrap;
+  width: 100%;
 }
 
-.userManagementFiltersChips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.userManagementFilterChip {
-  border: 1px solid #e2e8f0;
-  border-radius: 7px;
-  background: #ffffff;
-  color: #475569;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1;
-  padding: 10px 16px;
-  cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.userManagementFilterChipActive {
-  background: #dbeafe;
-  color: #1d4ed8;
-  border-color: #93c5fd;
-  box-shadow: none;
-}
-
-.userManagementFilterChip:hover {
-  background: #eff6ff;
-  color: #1d4ed8;
-  border-color: #93c5fd;
-}
-
-.userManagementFilterChipActive {
-  color: #ffffff;
-  background: #1d4ed8;
-  border-color: #1d4ed8;
-  box-shadow: none;
-}
 
 .userManagementFiltersControls {
   display: flex;
@@ -64,75 +23,162 @@
   justify-content: flex-end;
   gap: 12px;
   flex-wrap: wrap;
-  margin-left: auto;
 }
 
-.userManagementFilterSearch {
-  min-width: 0;
-  height: 34px;
-  padding: 0 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 7px;
-  background: #ffffff;
-  color: #0f172a;
-  font-size: 13px;
-  font-weight: 600;
-  box-sizing: border-box;
-  outline: none;
-}
 
+/* Search input */
 .userManagementFilterSearch {
   width: 240px;
-  border-radius: 6px;
-}
-
-.userManagementFilterSelect {
-  width: 180px;
-  min-width: 180px;
   height: 34px;
+
+  padding: 0 14px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+
+  background: #ffffff;
+  color: #0f172a;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  outline: none;
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .userManagementFilterSearch::placeholder {
   color: #94a3b8;
 }
 
+
 .userManagementFilterSearch:focus {
   border-color: #93c5fd;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+
+/* Select filter */
+.userManagementFilterSelect {
+  width: 180px;
+  min-width: 180px;
+  height: 34px;
+}
+
+
+/* Add User Button bên phải */
+.addUserButton {
+
+  height: 36px;
+
+  padding: 0 18px;
+
+  background: #2563eb;
+
+  color: #ffffff;
+
+  border: none;
+
+  border-radius: 7px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+.addUserButton:hover {
+
+  background: #1d4ed8;
+
+  transform: translateY(-1px);
+
 }
 
 @media (max-width: 960px) {
+
   .userManagementFiltersRow {
+
     align-items: stretch;
+
   }
+
 
   .userManagementFiltersControls {
+
     width: 100%;
-    justify-content: flex-start;
+
   }
+
+
+  .addUserButton {
+
+    width: fit-content;
+
+  }
+
 
   .userManagementFilterSearch {
+
     width: min(100%, 320px);
+
   }
 
+
   .userManagementFilterSelect {
+
     width: min(100%, 220px);
+
   }
+
 }
 
 @media (max-width: 640px) {
-  .userManagementFilters {
-    padding: 14px;
+
+
+  .userManagementFiltersRow {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
   }
 
-  .userManagementFilterChip,
+
+  .userManagementFiltersControls {
+
+    width: 100%;
+
+    flex-direction: column;
+
+  }
+
   .userManagementFilterSearch,
   .userManagementFilterSelect {
+
     width: 100%;
+
   }
 
-  .userManagementFiltersChips,
-  .userManagementFiltersControls {
+  .addUserButton {
+
     width: 100%;
+
+    justify-content: center;
+
   }
+
 }

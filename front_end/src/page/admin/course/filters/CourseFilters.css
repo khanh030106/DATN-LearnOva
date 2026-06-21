@@ -197,6 +197,35 @@
   font-weight: 800;
 }
 
+.courseFiltersAddButton {
+  min-width: 126px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 0 16px;
+  border: 1px solid #1d4ed8;
+  border-radius: 7px;
+  background: #1d4ed8;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.courseFiltersAddButton:hover {
+  border-color: #1e40af;
+  background: #1e40af;
+  transform: translateY(-1px);
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
   .courseFiltersRow {
@@ -231,5 +260,11 @@
     font-size: 11px;
     padding: 0 10px;
     flex-shrink: 0;
+  }
+
+  .courseFiltersAddButton {
+    height: 36px;
+    font-size: 12px;
+    white-space: nowrap;
   }
 }

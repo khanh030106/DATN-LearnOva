@@ -1,4 +1,4 @@
-package com.example.back_end.controller;
+package com.example.back_end.controller.admin;
 
 import java.util.List;
 
@@ -12,23 +12,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.back_end.dto.response.InstructorResponse;
-import com.example.back_end.dto.resquest.InstructorRequest;
-import com.example.back_end.service.AdminInstructorService;
+import com.example.back_end.dto.response.admin.InstructorResponse;
+import com.example.back_end.dto.resquest.admin.InstructorRequest;
+import com.example.back_end.service.admin.InstructorService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/learnova/admin/instructors")
-public class AdminInstructorController {
+@RequestMapping("/api/learnova/admin/instructors-management")
+public class InstructorController {
 
-    private final AdminInstructorService adminInstructorService;
+    private final InstructorService adminInstructorService;
 
     @GetMapping
     public ResponseEntity<List<InstructorResponse>> getAllInstructors() {
-        return ResponseEntity.ok(adminInstructorService.getAllInstructors());
+        return ResponseEntity.ok(
+            adminInstructorService.getAllInstructors()
+        );
     }
 
     @GetMapping("/{id}")
@@ -36,20 +38,20 @@ public class AdminInstructorController {
         return ResponseEntity.ok(adminInstructorService.getInstructorById(id));
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<InstructorResponse> createInstructor(
             @RequestBody @Valid InstructorRequest request) {
         return ResponseEntity.ok(adminInstructorService.createInstructor(request));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<InstructorResponse> updateInstructor(
             @PathVariable Long id,
             @RequestBody @Valid InstructorRequest request) {
         return ResponseEntity.ok(adminInstructorService.updateInstructor(id, request));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteInstructor(@PathVariable Long id) {
         adminInstructorService.deleteInstructor(id);
         return ResponseEntity.noContent().build();

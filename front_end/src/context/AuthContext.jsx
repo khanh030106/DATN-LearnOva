@@ -14,6 +14,11 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password, remember) => {
         const data = await loginApi(email, password, remember);
         setAccessToken(data.accessToken);
+        try {
+            await fetchCurrentUser(data.accessToken);
+        } catch (e) {
+            console.error("Failed to fetch user", e);
+        }
         return data;
     };
 
@@ -34,27 +39,37 @@ export const AuthProvider = ({ children }) => {
             await logoutApi();
         } finally {
             setAccessToken(null);
+            setCurrentUser(null);
         }
     };
 
-    // useEffect(() => {
-    //     const restoreLogin = async () => {
-    //         try {
-    //             await refreshAccessToken();
-    //         } catch (error) {
-    //             setAccessToken(null);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
+    useEffect(() => {
+        const restoreLogin = async () => {
+            try {
+                const token = await refreshAccessToken();
 
-    //     restoreLogin();
-    // }, []);
+                try {
+                    await fetchCurrentUser(token);
+                } catch (e) {
+                    console.error("Failed to fetch user", e);
+                }
+
+            } catch (error) {
+                setAccessToken(null);
+                setCurrentUser(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        restoreLogin();
+    }, []);
 
     return (
         <AuthContext.Provider
             value={{
                 accessToken,
+                currentUser,
                 isAuthenticated: !!accessToken,
                 loading,
                 login,
@@ -67,4 +82,3 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
-

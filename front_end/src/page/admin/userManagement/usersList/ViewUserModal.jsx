@@ -16,28 +16,23 @@ import {
 } from "lucide-react";
 import "./ViewUserModal.css";
 
+const defaultCoverImage =
+  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1400&auto=format&fit=crop";
+
 const formatDate = (value, fallback) => {
-  if (!value) {
-    return fallback || "N/A";
-  }
+  if (!value) return fallback || "N/A";
 
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return fallback || "N/A";
-  }
+  if (Number.isNaN(date.getTime())) return fallback || "N/A";
 
   return new Intl.DateTimeFormat("en-GB").format(date);
 };
 
 const formatDateTime = (value, fallback) => {
-  if (!value) {
-    return fallback || "N/A";
-  }
+  if (!value) return fallback || "N/A";
 
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return fallback || "N/A";
-  }
+  if (Number.isNaN(date.getTime())) return fallback || "N/A";
 
   return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
@@ -56,6 +51,9 @@ const getInitials = (name) =>
     .map((word) => word[0])
     .join("")
     .toUpperCase() || "U";
+
+const getAvatarFallback = (name) =>
+  `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "User")}&background=2563eb&color=fff`;
 
 const LinkValue = ({ value }) => {
   if (!value || value === "N/A") {
@@ -77,29 +75,34 @@ const LinkValue = ({ value }) => {
 };
 
 const ViewUserModal = ({ user, onClose }) => {
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
   const fullName = user.fullName || user.name || "Unknown user";
+  const coverImage = user.coverImage || defaultCoverImage;
+  const avatar = user.avatar || getAvatarFallback(fullName);
   const rows = [
-    { icon: Mail, label: "EMAIL", value: user.email },
+    { icon: Mail, label: "Email", value: user.email },
     { icon: IdCard, label: "ID", value: user.id },
     {
       icon: Shield,
-      label: "ROLE",
+      label: "Role",
       value: <span className="view-user-badge view-user-badge-role">{user.role}</span>,
     },
-    { icon: User, label: "FULL NAME", value: fullName },
-    { icon: Phone, label: "PHONE", value: user.phone },
+    { icon: User, label: "Full Name", value: fullName },
+    { icon: Phone, label: "Phone", value: user.phone },
     {
       icon: Image,
-      label: "AVATAR",
+      label: "Avatar",
       value: <LinkValue value={user.avatar} />,
     },
     {
+      icon: Image,
+      label: "Cover Image",
+      value: <LinkValue value={user.coverImage} />,
+    },
+    {
       icon: Users,
-      label: "STATUS",
+      label: "Status",
       value: (
         <span className={`view-user-badge view-user-badge-status view-user-badge-status--${user.statusTone}`}>
           {user.status}
@@ -108,28 +111,28 @@ const ViewUserModal = ({ user, onClose }) => {
     },
     {
       icon: Calendar,
-      label: "JOINED DATE",
+      label: "Joined Date",
       value: formatDateTime(user.joinedAtRaw, user.joinedAt),
     },
     {
       icon: Trash2,
       iconTone: "danger",
-      label: "IS DELETED",
+      label: "Is Deleted",
       value: (
         <span className="view-user-badge view-user-badge-deleted">
           {user.isDeleted ? "Yes" : "No"}
         </span>
       ),
     },
-    { icon: Mars, label: "GENDER", value: user.gender },
+    { icon: Mars, label: "Gender", value: user.gender },
     {
       icon: Clock,
-      label: "UPDATED AT",
+      label: "Updated At",
       value: formatDateTime(user.updatedAtRaw, user.updatedAt),
     },
     {
       icon: Cake,
-      label: "BIRTHDAY",
+      label: "Birthday",
       value: formatDate(user.dateOfBirthRaw, user.dateOfBirth),
     },
   ];
@@ -137,7 +140,7 @@ const ViewUserModal = ({ user, onClose }) => {
   return (
     <div className="view-user-overlay" onClick={onClose} role="presentation">
       <div
-        className="view-user-modal"
+        className="view-user-modal view-user-modal--profile"
         role="dialog"
         aria-modal="true"
         aria-label="View User"
@@ -152,19 +155,24 @@ const ViewUserModal = ({ user, onClose }) => {
           <X size={22} aria-hidden="true" />
         </button>
 
-        <div className="view-user-title">
-          <div>VIEW USER</div>
+        <div className="view-user-cover">
+          <img src={coverImage} alt="" />
+          <div className="view-user-title">
+            <div>VIEW USER</div>
+          </div>
         </div>
 
-        <div className="view-user-top">
-          {user.avatar ? (
-            <img className="view-user-avatar" src={user.avatar} alt={fullName} />
-          ) : (
-            <span className="view-user-avatar view-user-avatar-fallback">
-              {getInitials(fullName)}
-            </span>
-          )}
+        <div className="view-user-top view-user-top--profile">
+          <img
+            className="view-user-avatar"
+            src={avatar}
+            alt={fullName}
+            onError={(event) => {
+              event.currentTarget.src = getAvatarFallback(getInitials(fullName));
+            }}
+          />
           <h2>{fullName}</h2>
+          <span className="view-user-profile-role">{user.role || "User"}</span>
         </div>
 
         <div className="view-user-grid">

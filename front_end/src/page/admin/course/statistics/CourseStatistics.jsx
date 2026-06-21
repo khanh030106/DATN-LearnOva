@@ -5,50 +5,57 @@ import SuspendedCoursesCard from "./cards/suspendedCourses/SuspendedCoursesCard"
 import ReportedCoursesCard from "./cards/reportedCourses/ReportedCoursesCard";
 import "./CourseStatistics.css";
 
-const courseStatsData = [
-  {
-    id: "total",
-    component: TotalCoursesCard,
-    label: "Total Courses",
-    value: "10",
-    trend: "this month",
-    trendPercent: "+12.4%",
-  },
-  {
-    id: "published",
-    component: PublishedCoursesCard,
-    label: "Published",
-    value: "7",
-    trend: "this month",
-    trendPercent: "+8.5%",
-  },
-  {
-    id: "pending",
-    component: PendingReviewCard,
-    label: "Pending Review",
-    value: "1",
-    trend: "this month",
-    trendPercent: "+25%",
-  },
-  {
-    id: "suspended",
-    component: SuspendedCoursesCard,
-    label: "Suspended",
-    value: "1",
-    trend: "this month",
-    trendPercent: "-5.2%",
-  },
-  {
-    id: "reported",
-    component: ReportedCoursesCard,
-    label: "Reported",
-    value: "1",
-    trend: "this month",
-    trendPercent: "+18.2%",
-  },
-];
+const CourseStatistics = ({ courses = [], loading = false }) => {
+  const valueOrLoading = (value) => (loading ? "..." : String(value));
+  const activeCourses = courses.filter((course) => !Boolean(course.isDeleted));
+  const publishedCount = activeCourses.filter((course) => course.status === "PUBLISHED").length;
+  const draftCount = activeCourses.filter((course) => course.status === "DRAFT").length;
+  const archivedCount = activeCourses.filter((course) => course.status === "ARCHIVED").length;
+  const deletedCount = courses.filter((course) => Boolean(course.isDeleted)).length;
 
-const CourseStatistics = () => {
+  const courseStatsData = [
+    {
+      id: "total",
+      component: TotalCoursesCard,
+      label: "Total Courses",
+      value: valueOrLoading(courses.length),
+      trend: "from database",
+      trendPercent: "",
+    },
+    {
+      id: "published",
+      component: PublishedCoursesCard,
+      label: "Published",
+      value: valueOrLoading(publishedCount),
+      trend: "status",
+      trendPercent: "PUBLISHED",
+    },
+    {
+      id: "pending",
+      component: PendingReviewCard,
+      label: "Draft",
+      value: valueOrLoading(draftCount),
+      trend: "status",
+      trendPercent: "DRAFT",
+    },
+    {
+      id: "suspended",
+      component: SuspendedCoursesCard,
+      label: "Archived",
+      value: valueOrLoading(archivedCount),
+      trend: "status",
+      trendPercent: "ARCHIVED",
+    },
+    {
+      id: "reported",
+      component: ReportedCoursesCard,
+      label: "Deleted",
+      value: valueOrLoading(deletedCount),
+      trend: "soft delete",
+      trendPercent: "",
+    },
+  ];
+
   return (
     <section className="courseStatistics" aria-label="Course Statistics">
       <div className="courseStatisticsGrid">

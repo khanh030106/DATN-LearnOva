@@ -1,4 +1,4 @@
-package com.example.back_end.dto.resquest;
+package com.example.back_end.dto.resquest.admin;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

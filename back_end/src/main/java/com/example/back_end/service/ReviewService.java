@@ -10,9 +10,9 @@ import com.example.back_end.dto.resquest.CreateReviewRequest;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Review;
 import com.example.back_end.entity.User;
-import com.example.back_end.repository.CourseRepository;
 import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.repository.UserRepository;
+import com.example.back_end.repository.admin.CourseRepository;
 
 import lombok.RequiredArgsConstructor;
 

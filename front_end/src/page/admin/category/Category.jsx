@@ -1,10 +1,12 @@
 import { Edit3, Eye, FolderTree, Plus, Trash2, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
+  createAdminCategoryApi,
   getAdminCategoriesApi,
   updateAdminCategoryApi,
-} from "../../../api/CategoryApi";
+} from "../../../api/admin/CategoryApi.js";
 import AdminHoverSelect from "../shared/AdminHoverSelect";
+import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";
 import "./Category.css";
 
 const pageSize = 4;
@@ -64,6 +66,7 @@ const CategoryDetailModal = ({
   parentCategories,
   onClose,
   onSaved,
+  axiosClient, 
 }) => {
   const isEdit = mode === "edit";
   const [form, setForm] = useState({
@@ -91,13 +94,17 @@ const CategoryDetailModal = ({
     setError("");
 
     try {
-      const updatedCategory = await updateAdminCategoryApi(category.id, {
-        name: form.name.trim(),
-        slug: form.slug.trim(),
-        parentId: form.parentId === "" ? null : Number(form.parentId),
-        displayOrder: Number(form.displayOrder || 0),
-        status: form.status,
-      });
+      const updatedCategory = await updateAdminCategoryApi(
+        category.id,
+        {
+          name: form.name.trim(),
+          slug: form.slug.trim(),
+          parentId: form.parentId === "" ? null : Number(form.parentId),
+          displayOrder: Number(form.displayOrder || 0),
+          status: form.status,
+        },
+        axiosClient
+      );
 
       onSaved(normalizeCategory(updatedCategory));
     } catch (saveError) {
@@ -142,6 +149,7 @@ const CategoryDetailModal = ({
         </div>
 
         <div className="adminCategoryDetailGrid">
+          {/* ... form fields identical to previous code ... */}
           <label className="adminCategoryDetailRow">
             <span>Category ID</span>
             <input
@@ -274,6 +282,7 @@ const CategoryDetailModal = ({
 };
 
 const Category = () => {
+  const axiosPrivate = useAxiosPrivate(); 
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -292,7 +301,7 @@ const Category = () => {
       try {
         setIsLoading(true);
         setError("");
-        const response = await getAdminCategoriesApi();
+        const response = await getAdminCategoriesApi(axiosPrivate);
         const normalizedCategories = Array.isArray(response)
           ? response.map(normalizeCategory)
           : [];
@@ -319,7 +328,7 @@ const Category = () => {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [axiosPrivate]);
 
   const categoryStats = useMemo(() => getCategoryStats(categories), [categories]);
   const statusOptions = useMemo(
@@ -377,6 +386,55 @@ const Category = () => {
       ),
     );
     closeCategoryPopup();
+  };
+
+  const [createFormData, setCreateFormData] = useState({
+    name: "",
+    slug: "",
+    parentId: "",
+    displayOrder: 0,
+    status: "Active",
+  });
+  const [createFormError, setCreateFormError] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
+
+  const handleCreateCategory = async (e) => {
+    e.preventDefault();
+    
+    if (!createFormData.name.trim()) {
+      setCreateFormError("Category name is required");
+      return;
+    }
+    if (!createFormData.slug.trim()) {
+      setCreateFormError("Slug is required");
+      return;
+    }
+
+    setIsCreating(true);
+    setCreateFormError("");
+
+    try {
+      const newCategory = await createAdminCategoryApi(
+        {
+          name: createFormData.name.trim(),
+          slug: createFormData.slug.trim(),
+          parentId: createFormData.parentId === "" ? null : Number(createFormData.parentId),
+          displayOrder: Number(createFormData.displayOrder || 0),
+          status: createFormData.status,
+        },
+        axiosPrivate
+      );
+      
+      setCategories((current) => [...current, normalizeCategory(newCategory)]);
+      setIsCreateOpen(false);
+      setCreateFormData({ name: "", slug: "", parentId: "", displayOrder: 0, status: "Active" });
+    } catch (error) {
+      setCreateFormError(
+        error?.response?.data?.message || "Failed to create category"
+      );
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   return (
@@ -537,12 +595,13 @@ const Category = () => {
           role="presentation"
           onClick={() => setIsCreateOpen(false)}
         >
-          <div
+          <form
             className="adminCategoryModal"
             role="dialog"
             aria-modal="true"
             aria-labelledby="admin-category-create-title"
             onClick={(event) => event.stopPropagation()}
+            onSubmit={handleCreateCategory}
           >
             <div className="adminCategoryModalHeader">
               <div>
@@ -562,39 +621,84 @@ const Category = () => {
             <div className="adminCategoryModalForm">
               <label>
                 Category Name
-                <input type="text" placeholder="Example: Frontend" />
+                <input 
+                  type="text" 
+                  placeholder="Example: Frontend"
+                  value={createFormData.name}
+                  onChange={(e) => setCreateFormData({...createFormData, name: e.target.value})}
+                  required
+                />
               </label>
               <label>
                 Slug
-                <input type="text" placeholder="example: frontend" />
+                <input 
+                  type="text" 
+                  placeholder="example: frontend"
+                  value={createFormData.slug}
+                  onChange={(e) => setCreateFormData({...createFormData, slug: e.target.value})}
+                  required
+                />
               </label>
               <label>
-                Parent ID
-                <input type="number" placeholder="Leave blank for root" />
+                Parent Category
+                <select 
+                  value={createFormData.parentId}
+                  onChange={(e) => setCreateFormData({...createFormData, parentId: e.target.value})}
+                >
+                  <option value="">Root</option>
+                  {categories
+                    .filter((cat) => !cat.parentId)
+                    .map((cat) => (
+                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Status
+                <select
+                  value={createFormData.status}
+                  onChange={(e) => setCreateFormData({...createFormData, status: e.target.value})}
+                  required
+                >
+                  <option value="Active">Active</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Hidden">Hidden</option>
+                </select>
               </label>
               <label>
                 Display Order
-                <input type="number" placeholder="Example: 1" />
+                <input 
+                  type="number" 
+                  placeholder="Example: 1"
+                  value={createFormData.displayOrder}
+                  onChange={(e) => setCreateFormData({...createFormData, displayOrder: e.target.value})}
+                />
               </label>
-            </div>
 
-            <div className="adminCategoryModalActions">
-              <button
-                type="button"
-                className="adminCategoryModalCancel"
-                onClick={() => setIsCreateOpen(false)}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="adminCategoryModalSubmit"
-                onClick={() => setIsCreateOpen(false)}
-              >
-                Save Category
-              </button>
+              {createFormError && <p className="adminCategoryError">{createFormError}</p>}
+
+              <div className="adminCategoryModalActions">
+                <button
+                  type="button"
+                  className="adminCategoryModalCancel"
+                  onClick={() => {
+                    setIsCreateOpen(false);
+                    setCreateFormData({ name: "", slug: "", parentId: "", displayOrder: 0, status: "Active" });
+                    setCreateFormError("");
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="adminCategoryModalSubmit"
+                  disabled={isCreating}
+                >
+                  {isCreating ? "Creating..." : "Create Category"}
+                </button>
+              </div>
             </div>
-          </div>
+          </form>
         </div>
       )}
 
@@ -608,6 +712,7 @@ const Category = () => {
           )}
           onClose={closeCategoryPopup}
           onSaved={handleCategorySaved}
+          axiosClient={axiosPrivate} 
         />
       ) : null}
     </section>

@@ -1,5 +1,4 @@
 import {
-  Ban,
   ChevronLeft,
   ChevronRight,
   Eye,
@@ -8,6 +7,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import DeleteUserModal from "./DeleteUserModal";
 import EditUserModal from "./EditUserModal";
 import ViewUserModal from "./ViewUserModal";
 import "./UsersList.css";
@@ -264,112 +264,16 @@ const UsersList = ({
         />
       ) : null}
 
-      {selectedAction && !["View", "Edit"].includes(selectedAction) && selectedUser ? (
-        <div
-          className="userManagementUsersModalBackdrop"
-          onClick={closeActionPopup}
-          role="presentation"
-        >
-          <div
-            className="userManagementUsersModal"
-            role="dialog"
-            aria-modal="true"
-            aria-label={`${selectedAction} User`}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="userManagementUsersModalHeader">
-              <div>
-                <p className="userManagementUsersModalEyebrow">
-                  {selectedAction} User
-                </p>
-                <h4 className="userManagementUsersModalTitle">
-                  {selectedUser.name}
-                </h4>
-              </div>
-
-              <button
-                type="button"
-                className="userManagementUsersModalClose"
-                onClick={closeActionPopup}
-                aria-label="Close popup"
-              >
-                <Ban size={16} aria-hidden="true" />
-              </button>
-            </div>
-
-            <div className="userManagementUsersModalBody">
-              <div className="userManagementUsersModalAvatarWrap">
-                <UserAvatar
-                  user={selectedUser}
-                  className="userManagementUsersModalAvatar"
-                />
-              </div>
-
-              <div className="userManagementUsersModalInfo">
-                <div className="userManagementUsersModalRow">
-                  <span className="userManagementUsersModalLabel">Email: </span>
-                  <span className="userManagementUsersModalValue">
-                    {selectedUser.email}
-                  </span>
-                </div>
-                <div className="userManagementUsersModalRow">
-                  <span className="userManagementUsersModalLabel">Role: </span>
-                  <span className="userManagementUsersModalValue">
-                    {selectedUser.role}
-                  </span>
-                </div>
-                <div className="userManagementUsersModalRow">
-                  <span className="userManagementUsersModalLabel">Phone: </span>
-                  <span className="userManagementUsersModalValue">
-                    {selectedUser.phone}
-                  </span>
-                </div>
-                <div className="userManagementUsersModalRow">
-                  <span className="userManagementUsersModalLabel">
-                    Status:{" "}
-                  </span>
-                  <span className="userManagementUsersModalValue">
-                    {selectedUser.status}
-                  </span>
-                </div>
-                <div className="userManagementUsersModalRow">
-                  <span className="userManagementUsersModalLabel">
-                    Joined Date:{" "}
-                  </span>
-                  <span className="userManagementUsersModalValue">
-                    {selectedUser.joinedAt}
-                  </span>
-                </div>
-                <div className="userManagementUsersModalRow">
-                  <span className="userManagementUsersModalLabel">
-                    Gender:{" "}
-                  </span>
-                  <span className="userManagementUsersModalValue">
-                    {selectedUser.gender}
-                  </span>
-                </div>
-                <div className="userManagementUsersModalRow">
-                  <span className="userManagementUsersModalLabel">
-                    Birthday:{" "}
-                  </span>
-                  <span className="userManagementUsersModalValue">
-                    {selectedUser.dateOfBirth}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="userManagementUsersModalFooter">
-              <button
-                type="button"
-                className="userManagementUsersModalPrimary"
-                onClick={closeActionPopup}
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
+      {selectedAction === "Delete" && selectedUser ? (
+        <DeleteUserModal
+          user={selectedUser}
+          onClose={closeActionPopup}
+          onDeleted={(deletedUser) => {
+            onUserUpdated(deletedUser);
+            setSelectedUser(deletedUser);
+            closeActionPopup();
+          }}
+        />
       ) : null}
     </section>
   );

@@ -1,4 +1,4 @@
-package com.example.back_end.repository;
+package com.example.back_end.repository.admin;
 
 import java.util.List;
 import java.util.Optional;

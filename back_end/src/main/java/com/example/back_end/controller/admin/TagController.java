@@ -1,4 +1,4 @@
-package com.example.back_end.controller;
+package com.example.back_end.controller.admin;
 
 import java.util.List;
 
@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.back_end.dto.response.TagResponse;
-import com.example.back_end.dto.resquest.TagRequest;
-import com.example.back_end.service.TagService;
+import com.example.back_end.dto.response.admin.TagResponse;
+import com.example.back_end.dto.resquest.admin.TagRequest;
+import com.example.back_end.service.admin.TagService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/learnova/tags")
+@RequestMapping("/api/learnova/tags-management")
 public class TagController {
     
     private final TagService tagService;
@@ -43,7 +43,7 @@ public class TagController {
         }
     }
     
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<TagResponse> createTag(
         @Valid @RequestBody TagRequest request
     ) {
@@ -55,7 +55,7 @@ public class TagController {
         }
     }
     
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<TagResponse> updateTag(
         @PathVariable Long id,
         @Valid @RequestBody TagRequest request
@@ -68,7 +68,7 @@ public class TagController {
         }
     }
     
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteTag(@PathVariable Long id) {
         try {
             tagService.deleteTag(id);

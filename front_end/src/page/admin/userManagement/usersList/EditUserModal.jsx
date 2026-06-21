@@ -9,6 +9,7 @@ import {
   Mars,
   Phone,
   Shield,
+  Trash2,
   User,
   Users,
   X,
@@ -16,32 +17,48 @@ import {
 import { updateUserApi } from "../../../../api/UserApi";
 import "./ViewUserModal.css";
 
+const defaultCoverImage =
+  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1400&auto=format&fit=crop";
+
+const roleOptions = [
+  { value: "ROLE_ADMIN", label: "Admin", role: "Admin", tone: "admin", filter: "admin" },
+  { value: "ROLE_TEACHER", label: "Instructor", role: "Instructor", tone: "teacher", filter: "teacher" },
+  { value: "ROLE_USER", label: "Student", role: "Student", tone: "student", filter: "student" },
+];
+
+const genderOptions = ["Male", "Female", "Other"];
+
+const getTodayValue = () => new Date().toISOString().slice(0, 10);
+
 const formatDate = (value) => {
-  if (!value) {
-    return "N/A";
-  }
+  if (!value) return "N/A";
 
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return "N/A";
-  }
+  if (Number.isNaN(date.getTime())) return "N/A";
 
-  return new Intl.DateTimeFormat("vi-VN", {
+  return new Intl.DateTimeFormat("en-GB").format(date);
+};
+
+const formatDateTime = (value, fallback) => {
+  if (!value) return fallback || "N/A";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return fallback || "N/A";
+
+  return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   }).format(date);
 };
 
 const toDateInputValue = (value) => {
-  if (!value || value === "N/A") {
-    return "";
-  }
+  if (!value || value === "N/A") return "";
 
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return "";
-  }
+  if (Number.isNaN(date.getTime())) return "";
 
   return date.toISOString().slice(0, 10);
 };
@@ -55,6 +72,29 @@ const getInitials = (name) =>
     .join("")
     .toUpperCase() || "U";
 
+const getAvatarFallback = (name) =>
+  `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "User")}&background=2563eb&color=fff`;
+
+const toRoleValue = (role) => {
+  const normalizedRole = String(role || "USER")
+    .replace("ROLE_", "")
+    .toUpperCase();
+
+  if (normalizedRole === "ADMIN") return "ROLE_ADMIN";
+  if (["TEACHER", "INSTRUCTOR"].includes(normalizedRole)) return "ROLE_TEACHER";
+  return "ROLE_USER";
+};
+
+const getStatusValue = (user) => {
+  const normalizedStatus = String(user.status || "").toLowerCase();
+
+  if (normalizedStatus === "inactive" || user.statusTone === "locked") {
+    return "false";
+  }
+
+  return "true";
+};
+
 const buildSavedUser = (user, form) => {
   const fullName = form.fullName.trim() || user.fullName || user.name;
   const phone = form.phone.trim() || "N/A";
@@ -62,6 +102,11 @@ const buildSavedUser = (user, form) => {
   const coverImage = form.coverImage.trim() || null;
   const dateOfBirthRaw = form.dateOfBirth || null;
   const gender = form.gender || "N/A";
+  const roleInfo = roleOptions.find((option) => option.value === form.role) || roleOptions[2];
+  const isActive = form.isActive === "true";
+  const isDeleted = form.isDeleted === "true";
+  const status = isActive ? "Active" : "Inactive";
+  const statusTone = isDeleted || !isActive ? "locked" : "active";
   const updatedAtRaw = new Date().toISOString();
 
   return {
@@ -74,6 +119,13 @@ const buildSavedUser = (user, form) => {
     dateOfBirthRaw,
     dateOfBirth: formatDate(dateOfBirthRaw),
     gender,
+    role: roleInfo.role,
+    roleTone: roleInfo.tone,
+    roleFilter: roleInfo.filter,
+    status,
+    statusTone,
+    statusFilter: statusTone,
+    isDeleted,
     updatedAtRaw,
     updatedAt: formatDate(updatedAtRaw),
   };
@@ -88,17 +140,28 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
     coverImage: user.coverImage || "",
     dateOfBirth: toDateInputValue(user.dateOfBirthRaw),
     gender: user.gender === "N/A" ? "" : user.gender || "",
+    role: toRoleValue(user.role),
+    isActive: getStatusValue(user),
+    isDeleted: String(Boolean(user.isDeleted)),
   });
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
 
   const previewName = form.fullName.trim() || user.name || "Unknown user";
+  const previewAvatar = form.avatar || getAvatarFallback(previewName);
+  const previewCoverImage = form.coverImage || defaultCoverImage;
+  const selectedRole =
+    roleOptions.find((option) => option.value === form.role)?.role || "User";
+
+  const updateForm = (field, value) => {
+    setForm((current) => ({ ...current, [field]: value }));
+  };
 
   const rows = useMemo(
     () => [
       {
         icon: Mail,
-        label: "EMAIL",
+        label: "Email",
         input: (
           <input
             className="view-user-input view-user-input-readonly"
@@ -111,114 +174,159 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
       {
         icon: IdCard,
         label: "ID",
-        input: <input className="view-user-input view-user-input-readonly" value={user.id} readOnly />,
+        input: (
+          <input
+            className="view-user-input view-user-input-readonly"
+            value={user.id}
+            readOnly
+            aria-label="ID cannot be changed"
+          />
+        ),
       },
       {
         icon: Shield,
-        label: "ROLE",
-        input: <input className="view-user-input view-user-input-readonly" value={user.role} readOnly />,
+        label: "Role",
+        input: (
+          <select
+            className="view-user-input"
+            value={form.role}
+            onChange={(event) => updateForm("role", event.target.value)}
+          >
+            {roleOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        ),
       },
       {
         icon: User,
-        label: "FULL NAME",
+        label: "Full Name",
         input: (
           <input
             className="view-user-input"
             value={form.fullName}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, fullName: event.target.value }))
-            }
+            onChange={(event) => updateForm("fullName", event.target.value)}
           />
         ),
       },
       {
         icon: Phone,
-        label: "PHONE",
+        label: "Phone",
         input: (
           <input
             className="view-user-input"
             value={form.phone}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, phone: event.target.value }))
-            }
+            onChange={(event) => updateForm("phone", event.target.value)}
           />
         ),
       },
       {
         icon: Image,
-        label: "AVATAR",
+        label: "Avatar",
         input: (
           <input
             className="view-user-input"
             value={form.avatar}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, avatar: event.target.value }))
-            }
+            placeholder="https://example.com/avatar.png"
+            onChange={(event) => updateForm("avatar", event.target.value)}
+          />
+        ),
+      },
+      {
+        icon: Image,
+        label: "Cover Image",
+        input: (
+          <input
+            className="view-user-input"
+            value={form.coverImage}
+            placeholder="https://example.com/cover.jpg"
+            onChange={(event) => updateForm("coverImage", event.target.value)}
           />
         ),
       },
       {
         icon: Users,
-        label: "STATUS",
-        input: <input className="view-user-input view-user-input-readonly" value={user.status} readOnly />,
-      },
-      {
-        icon: Image,
-        label: "COVER IMAGE",
-        input: (
-          <input
-            className="view-user-input"
-            value={form.coverImage}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, coverImage: event.target.value }))
-            }
-          />
-        ),
-      },
-      {
-        icon: Calendar,
-        label: "JOINED DATE",
-        input: <input className="view-user-input view-user-input-readonly" value={user.joinedAt} readOnly />,
-      },
-      {
-        icon: Mars,
-        label: "GENDER",
+        label: "Status",
         input: (
           <select
             className="view-user-input"
-            value={form.gender}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, gender: event.target.value }))
-            }
+            value={form.isActive}
+            onChange={(event) => updateForm("isActive", event.target.value)}
           >
-            <option value="">N/A</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
           </select>
         ),
       },
       {
-        icon: Cake,
-        label: "BIRTHDAY",
+        icon: Calendar,
+        label: "Joined Date",
         input: (
           <input
-            className="view-user-input"
-            type="date"
-            value={form.dateOfBirth}
-            onChange={(event) =>
-              setForm((current) => ({
-                ...current,
-                dateOfBirth: event.target.value,
-              }))
-            }
+            className="view-user-input view-user-input-readonly"
+            value={formatDateTime(user.joinedAtRaw, user.joinedAt)}
+            readOnly
           />
         ),
       },
       {
+        icon: Trash2,
+        iconTone: "danger",
+        label: "Is Deleted",
+        input: (
+          <select
+            className="view-user-input"
+            value={form.isDeleted}
+            onChange={(event) => updateForm("isDeleted", event.target.value)}
+          >
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+          </select>
+        ),
+      },
+      {
+        icon: Mars,
+        label: "Gender",
+        input: (
+          <select
+            className="view-user-input"
+            value={form.gender}
+            onChange={(event) => updateForm("gender", event.target.value)}
+          >
+            <option value="">N/A</option>
+            {genderOptions.map((gender) => (
+              <option key={gender} value={gender}>
+                {gender}
+              </option>
+            ))}
+          </select>
+        ),
+      },
+      {
         icon: Clock,
-        label: "UPDATED AT",
-        input: <input className="view-user-input view-user-input-readonly" value={user.updatedAt} readOnly />,
+        label: "Updated At",
+        input: (
+          <input
+            className="view-user-input view-user-input-readonly"
+            value={formatDateTime(user.updatedAtRaw, user.updatedAt)}
+            readOnly
+          />
+        ),
+      },
+      {
+        icon: Cake,
+        label: "Birthday",
+        input: (
+          <input
+            className="view-user-input"
+            type="date"
+            max={getTodayValue()}
+            value={form.dateOfBirth}
+            onChange={(event) => updateForm("dateOfBirth", event.target.value)}
+          />
+        ),
       },
     ],
     [form, user],
@@ -226,6 +334,11 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (form.dateOfBirth && form.dateOfBirth > getTodayValue()) {
+      setError("Date of birth cannot be in the future.");
+      return;
+    }
+
     setIsSaving(true);
     setError("");
 
@@ -236,6 +349,9 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
       coverImage: form.coverImage.trim() || null,
       dateOfBirth: form.dateOfBirth || null,
       gender: form.gender || null,
+      role: form.role,
+      isActive: form.isActive === "true",
+      isDeleted: form.isDeleted === "true",
     };
 
     try {
@@ -244,7 +360,7 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
     } catch (saveError) {
       setError(
         saveError?.response?.data?.message ||
-          "Không lưu được thông tin user xuống database.",
+          "Could not save this user. Please try again.",
       );
     } finally {
       setIsSaving(false);
@@ -254,7 +370,7 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
   return (
     <div className="view-user-overlay" onClick={onClose} role="presentation">
       <form
-        className="view-user-modal"
+        className="view-user-modal view-user-modal--profile view-user-modal--edit"
         role="dialog"
         aria-modal="true"
         aria-label="Edit User"
@@ -270,19 +386,24 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
           <X size={22} aria-hidden="true" />
         </button>
 
-        <div className="view-user-title">
-          <div>EDIT USER</div>
+        <div className="view-user-cover">
+          <img src={previewCoverImage} alt="" />
+          <div className="view-user-title">
+            <div>EDIT USER</div>
+          </div>
         </div>
 
-        <div className="view-user-top">
-          {form.avatar ? (
-            <img className="view-user-avatar" src={form.avatar} alt={previewName} />
-          ) : (
-            <span className="view-user-avatar view-user-avatar-fallback">
-              {getInitials(previewName)}
-            </span>
-          )}
+        <div className="view-user-top view-user-top--profile">
+          <img
+            className="view-user-avatar"
+            src={previewAvatar}
+            alt={previewName}
+            onError={(event) => {
+              event.currentTarget.src = getAvatarFallback(getInitials(previewName));
+            }}
+          />
           <h2>{previewName}</h2>
+          <span className="view-user-profile-role">{selectedRole}</span>
         </div>
 
         <div className="view-user-grid">
@@ -291,13 +412,14 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
 
             return (
               <label className="view-user-row view-user-edit-row" key={row.label}>
-                <div className="view-user-icon" aria-hidden="true">
+                <div
+                  className={`view-user-icon ${row.iconTone === "danger" ? "view-user-icon-danger" : ""}`}
+                  aria-hidden="true"
+                >
                   <Icon />
                 </div>
                 <div className="view-user-label">{row.label}</div>
-                <div className="view-user-value view-user-edit-value">
-                  {row.input}
-                </div>
+                <div className="view-user-value view-user-edit-value">{row.input}</div>
               </label>
             );
           })}
@@ -310,7 +432,7 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
             Cancel
           </button>
           <button type="submit" className="view-user-close-btn" disabled={isSaving}>
-            {isSaving ? "Saving..." : "Save"}
+            {isSaving ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </form>

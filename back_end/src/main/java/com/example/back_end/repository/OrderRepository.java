@@ -2,12 +2,10 @@ package com.example.back_end.repository;
 
 import java.math.BigDecimal;
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import com.example.back_end.entity.Order;
 import com.example.back_end.entity.enums.OrderStatus;
 

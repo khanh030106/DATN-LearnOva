@@ -1,4 +1,4 @@
-package com.example.back_end.dto.response;
+package com.example.back_end.dto.response.admin;
 
 import java.time.Instant;
 

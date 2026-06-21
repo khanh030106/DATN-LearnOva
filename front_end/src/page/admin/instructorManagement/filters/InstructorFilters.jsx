@@ -1,5 +1,4 @@
-import { Search } from "lucide-react";
-import { useState } from "react";
+import { Plus, Search } from "lucide-react";
 import AdminHoverSelect from "../../shared/AdminHoverSelect";
 import "./InstructorFilters.css";
 
@@ -10,10 +9,13 @@ const filterTabs = [
   { id: "locked", label: "Locked" },
 ];
 
-const InstructorFilters = () => {
-  const [activeTab, setActiveTab] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
-
+const InstructorFilters = ({
+  activeTab = "all",
+  searchTerm = "",
+  onFilterChange = () => {},
+  onSearchChange = () => {},
+  onAddInstructor = () => {},
+}) => {
   return (
     <div className="instructorFilters" aria-label="Instructor Filters">
       <div className="instructorFiltersMain">
@@ -24,7 +26,7 @@ const InstructorFilters = () => {
             className="instructorFiltersInput"
             placeholder="Search by instructor name, email, or expertise..."
             value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
+            onChange={(event) => onSearchChange(event.target.value)}
           />
         </div>
 
@@ -33,9 +35,13 @@ const InstructorFilters = () => {
             className="instructorFiltersSelect"
             value={activeTab}
             options={filterTabs}
-            onChange={setActiveTab}
+            onChange={onFilterChange}
             ariaLabel="Filter instructors"
           />
+          <button type="button" className="instructorFiltersAddButton" onClick={onAddInstructor}>
+            <Plus size={17} aria-hidden="true" />
+            Add Instructor
+          </button>
         </div>
       </div>
     </div>

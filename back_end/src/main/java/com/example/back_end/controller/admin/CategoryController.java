@@ -1,4 +1,4 @@
-package com.example.back_end.controller;
+package com.example.back_end.controller.admin;
 
 import java.util.List;
 
@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.back_end.dto.response.CategoryResponse;
-import com.example.back_end.dto.resquest.CategoryRequest;
-import com.example.back_end.service.CategoryService;
+import com.example.back_end.dto.response.admin.CategoryResponse;
+import com.example.back_end.dto.resquest.admin.CategoryRequest;
+import com.example.back_end.service.admin.CategoryService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/learnova/admin/categories")
+@RequestMapping("/api/learnova/admin/categories-management")
 public class CategoryController {
     
     private final CategoryService categoryService;
@@ -54,7 +54,7 @@ public class CategoryController {
         }
     }
     
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<CategoryResponse> createCategory(
         @Valid @RequestBody CategoryRequest request
     ) {
@@ -66,10 +66,11 @@ public class CategoryController {
         }
     }
     
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<CategoryResponse> updateCategory(
         @PathVariable Long id,
-        @Valid @RequestBody CategoryRequest request
+        @Valid 
+        @RequestBody CategoryRequest request
     ) {
         try {
             CategoryResponse category = categoryService.updateCategory(id, request);
@@ -79,7 +80,7 @@ public class CategoryController {
         }
     }
     
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         try {
             categoryService.deleteCategory(id);

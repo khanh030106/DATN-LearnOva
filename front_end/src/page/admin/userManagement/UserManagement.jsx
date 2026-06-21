@@ -1,20 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
-import { getAdminUsersApi } from "../../../api/UserApi";
+import { createUserApi, getAdminUsersApi } from "../../../api/UserApi";
+import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";  // ← Thêm import này
 import UserManagementStats from "./statistics/UserManagementStats";
-import InstructorApprovalAlert from "./instructor/InstructorApprovalAlert";
 import UserManagementFilters from "./filters/UserManagementFilters";
 import UsersList from "./usersList/UsersList";
+import AddUserModal from "./filters/AddUserModal";
 import "./UserManagement.css";
 
 const formatDate = (value) => {
-  if (!value) {
-    return "N/A";
-  }
+  if (!value) return "N/A";
 
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return "N/A";
-  }
+  if (Number.isNaN(date.getTime())) return "N/A";
 
   return new Intl.DateTimeFormat("vi-VN", {
     day: "2-digit",
@@ -24,7 +21,9 @@ const formatDate = (value) => {
 };
 
 const normalizeRole = (role) => {
-  const normalizedRole = String(role ?? "USER").replace("ROLE_", "").toUpperCase();
+  const normalizedRole = String(role ?? "USER")
+    .replace("ROLE_", "")
+    .toUpperCase();
 
   if (normalizedRole === "ADMIN") {
     return { label: "Admin", tone: "admin", filter: "admin" };
@@ -39,7 +38,11 @@ const normalizeRole = (role) => {
 
 const normalizeStatus = (user) => {
   const rawStatus = String(user.status ?? "").toLowerCase();
-  const isLocked = Boolean(user.isDeleted) || rawStatus === "inactive" || rawStatus === "locked";
+
+  const isLocked =
+    Boolean(user.isDeleted) ||
+    rawStatus === "inactive" ||
+    rawStatus === "locked";
 
   if (isLocked) {
     return { label: "Locked", tone: "locked", filter: "locked" };
@@ -86,12 +89,15 @@ const normalizeUser = (user) => {
 };
 
 const UserManagement = () => {
+  const axiosPrivate = useAxiosPrivate();  
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -100,7 +106,9 @@ const UserManagement = () => {
       try {
         setIsLoading(true);
         setError("");
+
         const response = await getAdminUsersApi();
+
         const normalizedUsers = Array.isArray(response)
           ? response.map(normalizeUser)
           : [];
@@ -112,7 +120,7 @@ const UserManagement = () => {
         if (isMounted) {
           setError(
             fetchError?.response?.data?.message ||
-              "Không tải được danh sách users từ server.",
+              "Không tải được danh sách users từ server."
           );
         }
       } finally {
@@ -139,8 +147,10 @@ const UserManagement = () => {
           .join(" ")
           .toLowerCase()
           .includes(keyword);
+
       const matchesRole =
         roleFilter === "all" || user.roleFilter === roleFilter;
+
       const matchesStatus =
         statusFilter === "all" || user.statusFilter === statusFilter;
 
@@ -151,26 +161,41 @@ const UserManagement = () => {
   const handleUserUpdated = (updatedUser) => {
     setUsers((currentUsers) =>
       currentUsers.map((user) =>
-        user.id === updatedUser.id ? { ...user, ...updatedUser } : user,
-      ),
+        user.id === updatedUser.id ? { ...user, ...updatedUser } : user
+      )
     );
+  };
+
+  const handleCreateUser = async (userData) => {
+    const createdUser = await createUserApi(userData, axiosPrivate);  // ← Pass axiosPrivate
+    setUsers((currentUsers) => [...currentUsers, normalizeUser(createdUser)]);
+    setShowAddUserModal(false);
   };
 
   return (
     <section className="userManagementPage" aria-label="User management">
       <div className="userManagementContent">
-        {/* <InstructorApprovalAlert /> */}
         <UserManagementStats users={users} isLoading={isLoading} />
+
         <UserManagementFilters
           onSearchChange={setSearchTerm}
           onRoleChange={setRoleFilter}
           onStatusChange={setStatusFilter}
+          onAddUser={() => setShowAddUserModal(true)}
         />
+
         {error ? <p className="userManagementError">{error}</p> : null}
+
         <UsersList
           users={filteredUsers}
           isLoading={isLoading}
           onUserUpdated={handleUserUpdated}
+        />
+
+        <AddUserModal
+          isOpen={showAddUserModal}
+          onClose={() => setShowAddUserModal(false)}
+          onSubmit={handleCreateUser}
         />
       </div>
     </section>
