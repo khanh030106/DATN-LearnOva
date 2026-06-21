@@ -10,14 +10,9 @@ import java.time.Instant;
 public class ReviewResponse {
 
     private Long reviewId;
-
     private Long userId;
-
-    private String userName;
-
+    private String userName;  //fullName
     private Integer rating;
-
     private String comment;
-
     private Instant createdAt;
 }

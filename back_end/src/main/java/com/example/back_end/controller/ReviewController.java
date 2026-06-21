@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.example.back_end.security.CustomUserDetails;
 import com.example.back_end.dto.resquest.UpdateReviewRequest;
+import com.example.back_end.dto.response.RatingSummaryResponse;
 
 import java.util.List;
 
@@ -23,26 +24,23 @@ public class ReviewController {
             Authentication authentication,
             @RequestBody CreateReviewRequest request
     ) {
-
         if (authentication == null) {
             throw new RuntimeException("No authentication - missing token or filter failed");
         }
-
         CustomUserDetails userDetails =
                 (CustomUserDetails) authentication.getPrincipal();
-
         Long userId = userDetails.getId();
 
         return reviewService.createReview(userId, request);
     }
 
-    @GetMapping("/course/{courseId}")
+    @GetMapping("/course/{courseId}")// /review/get-review/{courseId}
     public List<ReviewResponse> getCourseReviews(
             @PathVariable Long courseId
     ) {
         return reviewService.getCourseReviews(courseId);
     }
-    @PutMapping("/review/update")
+    @PutMapping("/review/update")  // /
     public ReviewResponse updateReview(
             Authentication authentication,
             @RequestBody UpdateReviewRequest request
@@ -56,11 +54,11 @@ public class ReviewController {
 
         return reviewService.updateReview(userDetails.getId(), request);
     }
-    @DeleteMapping("/review/{reviewId}")
+
+    @DeleteMapping("/review/delete/{reviewId}")  // /review/delete/{reviewId}
     public void deleteReview(
             Authentication authentication,
-            @PathVariable Long reviewId
-    ) {
+            @PathVariable Long reviewId) {
         System.out.println("=== CONTROLLER DELETE REVIEW START ===");
         System.out.println("reviewId = " + reviewId);
 
@@ -78,5 +76,9 @@ public class ReviewController {
         reviewService.deleteReview(userDetails.getId(), reviewId);
 
         System.out.println("=== CONTROLLER DELETE REVIEW END ===");
+    }
+    @GetMapping("/review/summary/{courseId}")
+    public RatingSummaryResponse getRatingSummary(@PathVariable Long courseId) {
+        return reviewService.getRatingSummary(courseId);
     }
 }

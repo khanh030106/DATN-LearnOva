@@ -2,6 +2,7 @@ package com.example.back_end.service;
 
 import com.example.back_end.dto.resquest.CreateReviewRequest;
 import com.example.back_end.dto.response.ReviewResponse;
+import com.example.back_end.dto.response.RatingSummaryResponse;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Review;
 import com.example.back_end.entity.User;
@@ -27,15 +28,11 @@ public class ReviewService {
             Long userId,
             CreateReviewRequest request
     ) {
-
         if (reviewRepository.findByUserIdAndCourseId(
                 userId,
                 request.getCourseId()
         ).isPresent()) {
-
-            throw new RuntimeException(
-                    "You have already reviewed this course"
-            );
+            throw new RuntimeException("You have already reviewed this course");
         }
 
         // 1. Kiểm tra User
@@ -47,7 +44,6 @@ public class ReviewService {
                 .orElseThrow(() -> new RuntimeException("LỖI: Không tìm thấy khóa học với ID = " + request.getCourseId()));
 
         Review review = new Review();
-
         review.setUser(user);
         review.setCourse(course);
         review.setRating(request.getRating());
@@ -162,5 +158,21 @@ public class ReviewService {
         System.out.println("REVIEW DELETED SUCCESSFULLY");
 
         System.out.println("=== SERVICE DELETE REVIEW END ===");
+    }
+    public RatingSummaryResponse getRatingSummary(Long courseId) {
+        List<Review> reviews = reviewRepository.findByCourseId(courseId);
+
+        if (reviews.isEmpty()) {
+            return new RatingSummaryResponse(0, 0);
+        }
+
+        double avg = reviews.stream()
+                .mapToInt(Review::getRating)
+                .average()
+                .orElse(0);
+
+        long total = reviews.size();
+
+        return new RatingSummaryResponse(avg, total);
     }
 }

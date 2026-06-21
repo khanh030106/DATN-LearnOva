@@ -103,7 +103,7 @@ public class AuthService {
         }
 
         User user = new User();
-
+        user.setFullName(request.fullName());
         user.setEmail(request.email());
         user.setPasswordHash(
                 passwordEncoder.encode(request.password())
