@@ -69,8 +69,8 @@
 .userManagementUsersTableHeader {
   display: grid;
   grid-template-columns:
-    minmax(280px, 1.2fr) minmax(120px, 0.62fr) minmax(120px, 0.62fr)
-    minmax(140px, 0.72fr) minmax(140px, 0.72fr) minmax(150px, 0.78fr);
+    minmax(300px, 1.35fr) minmax(140px, 0.7fr) minmax(140px, 0.7fr)
+    minmax(150px, 0.75fr) minmax(170px, 0.75fr);
   gap: 16px;
   padding: 18px 24px;
   border-bottom: 1px solid rgba(37, 99, 235, 0.12);
@@ -94,7 +94,6 @@
 }
 
 .userManagementUsersColumn--role,
-.userManagementUsersColumn--status,
 .userManagementUsersColumn--phone,
 .userManagementUsersColumn--joinedAt {
   justify-self: center;
@@ -110,8 +109,8 @@
 .userManagementUserRow {
   display: grid;
   grid-template-columns:
-    minmax(280px, 1.2fr) minmax(120px, 0.62fr) minmax(120px, 0.62fr)
-    minmax(140px, 0.72fr) minmax(140px, 0.72fr) minmax(150px, 0.78fr);
+    minmax(300px, 1.35fr) minmax(140px, 0.7fr) minmax(140px, 0.7fr)
+    minmax(150px, 0.75fr) minmax(170px, 0.75fr);
   gap: 16px;
   align-items: center;
   padding: 14px 24px;
@@ -178,14 +177,12 @@
 }
 
 .userManagementUserRoleWrap,
-.userManagementUserStatusWrap,
 .userManagementUserPhoneWrap,
 .userManagementUserJoinedWrap {
   min-width: 0;
 }
 
 .userManagementUserRoleWrap,
-.userManagementUserStatusWrap,
 .userManagementUserPhoneWrap,
 .userManagementUserJoinedWrap {
   display: flex;
@@ -193,7 +190,6 @@
 }
 
 .userManagementUserRole,
-.userManagementUserStatus,
 .userManagementUserPhone,
 .userManagementUserJoined {
   display: inline-flex;
@@ -229,24 +225,6 @@
   color: #1a2e6e;
 }
 
-.userManagementUserStatus {
-  border: 1px solid var(--border-soft);
-  background: var(--bg-main);
-  color: var(--text-secondary);
-}
-
-.userManagementUserStatus--active {
-  color: var(--blue-primary);
-}
-
-.userManagementUserStatus--pending {
-  color: var(--blue-medium);
-}
-
-.userManagementUserStatus--locked {
-  color: var(--text-muted);
-}
-
 .userManagementUserPhone {
   color: var(--text-secondary);
   font-size: 16px;
@@ -257,14 +235,6 @@
 
 .userManagementUserPhone svg {
   color: var(--text-placeholder);
-}
-
-.userManagementUserStatusDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
 .userManagementUserJoined {
@@ -545,7 +515,6 @@
   }
 
   .userManagementUserRoleWrap,
-  .userManagementUserStatusWrap,
   .userManagementUserPhoneWrap,
   .userManagementUserJoinedWrap {
     display: flex;

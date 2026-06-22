@@ -7,11 +7,10 @@ import "./CourseStatistics.css";
 
 const CourseStatistics = ({ courses = [], loading = false }) => {
   const valueOrLoading = (value) => (loading ? "..." : String(value));
-  const activeCourses = courses.filter((course) => !Boolean(course.isDeleted));
-  const publishedCount = activeCourses.filter((course) => course.status === "PUBLISHED").length;
-  const draftCount = activeCourses.filter((course) => course.status === "DRAFT").length;
-  const archivedCount = activeCourses.filter((course) => course.status === "ARCHIVED").length;
-  const deletedCount = courses.filter((course) => Boolean(course.isDeleted)).length;
+  const publishedCount = courses.filter((course) => course.status === "PUBLISHED").length;
+  const draftCount = courses.filter((course) => course.status === "DRAFT").length;
+  const archivedCount = courses.filter((course) => course.status === "ARCHIVED").length;
+  const deletedCount = courses.filter((course) => course.status === "DELETED").length;
 
   const courseStatsData = [
     {
@@ -51,8 +50,8 @@ const CourseStatistics = ({ courses = [], loading = false }) => {
       component: ReportedCoursesCard,
       label: "Deleted",
       value: valueOrLoading(deletedCount),
-      trend: "soft delete",
-      trendPercent: "",
+      trend: "status",
+      trendPercent: "DELETED",
     },
   ];
 

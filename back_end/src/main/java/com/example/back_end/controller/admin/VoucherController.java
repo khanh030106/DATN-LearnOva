@@ -41,8 +41,7 @@ public class VoucherController {
     }
 
     @DeleteMapping("/delete/{voucherId}")
-    public String deleteVoucher(@PathVariable Long voucherId) {
-        voucherService.deleteVoucher(voucherId);
-        return "Delete voucher successfully";
+    public VoucherResponse deleteVoucher(@PathVariable Long voucherId) {
+        return voucherService.deleteVoucher(voucherId);
     }
 }

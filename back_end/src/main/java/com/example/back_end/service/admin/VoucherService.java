@@ -1,20 +1,23 @@
 package com.example.back_end.service.admin;
 
-import com.example.back_end.dto.resquest.admin.VoucherRequest;
-import com.example.back_end.dto.response.admin.VoucherResponse;
-import com.example.back_end.entity.User;
-import com.example.back_end.entity.Voucher;
-import com.example.back_end.entity.enums.DiscountType;
-import com.example.back_end.repository.UserRepository;
-import com.example.back_end.repository.admin.VoucherRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
+import com.example.back_end.dto.response.admin.VoucherResponse;
+import com.example.back_end.dto.resquest.admin.VoucherRequest;
+import com.example.back_end.entity.User;
+import com.example.back_end.entity.Voucher;
+import com.example.back_end.entity.enums.DiscountType;
+import com.example.back_end.repository.UserRepository;
+import com.example.back_end.repository.admin.VoucherRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -108,8 +111,8 @@ public class VoucherService {
         voucher.setDescription(voucherDescription);
         voucher.setDiscountType(discountType);
         voucher.setDiscountValue(voucherRequest.discountValue());
-        voucher.setMinimumOrder(voucherRequest.minimumOrder());
-        voucher.setMaximumDiscountAmount(voucherRequest.maximumDiscountAmount());
+        voucher.setMinimumOrder(BigDecimal.ZERO);
+        voucher.setMaximumDiscountAmount(BigDecimal.ZERO);
         voucher.setUsageLimit(voucherRequest.usageLimit());
         voucher.setUsedCount(0);
         voucher.setStartDate(startDate);
@@ -140,10 +143,7 @@ public class VoucherService {
         );
     }
 
-    public VoucherResponse updateVoucher(
-            Long voucherId,
-            VoucherRequest voucherRequest
-    ) {
+    public VoucherResponse updateVoucher(Long voucherId, VoucherRequest voucherRequest ) {
         Voucher voucher = voucherRepository.findById(voucherId)
                 .orElseThrow(() -> new RuntimeException("Voucher not found id=" + voucherId));
 
@@ -174,8 +174,8 @@ public class VoucherService {
         voucher.setDescription(voucherDescription);
         voucher.setDiscountType(discountType);
         voucher.setDiscountValue(voucherRequest.discountValue());
-        voucher.setMinimumOrder(voucherRequest.minimumOrder());
-        voucher.setMaximumDiscountAmount(voucherRequest.maximumDiscountAmount());
+        voucher.setMinimumOrder(BigDecimal.ZERO);
+        voucher.setMaximumDiscountAmount(BigDecimal.ZERO);
         voucher.setUsageLimit(voucherRequest.usageLimit());
         voucher.setStartDate(startDate);
         voucher.setEndDate(endDate);
@@ -204,10 +204,31 @@ public class VoucherService {
         );
     }
 
-    public void deleteVoucher(Long voucherId) {
+    public VoucherResponse deleteVoucher(Long voucherId) {
         Voucher voucher = voucherRepository.findById(voucherId)
                 .orElseThrow(() -> new RuntimeException("Voucher not found id=" + voucherId));
 
-        voucherRepository.delete(voucher);
+        voucher.setIsActive(false);
+        voucher.setUpdatedAt(Instant.now());
+
+        Voucher deletedVoucher = voucherRepository.save(voucher);
+
+        return new VoucherResponse(
+                deletedVoucher.getId(),
+                deletedVoucher.getCode(),
+                deletedVoucher.getDescription(),
+                deletedVoucher.getDiscountType() == null ? null : deletedVoucher.getDiscountType().name(),
+                deletedVoucher.getDiscountValue(),
+                deletedVoucher.getMinimumOrder(),
+                deletedVoucher.getMaximumDiscountAmount(),
+                deletedVoucher.getUsageLimit(),
+                deletedVoucher.getUsedCount(),
+                deletedVoucher.getStartDate(),
+                deletedVoucher.getEndDate(),
+                deletedVoucher.getIsActive(),
+                deletedVoucher.getCreatedBy() == null ? null : deletedVoucher.getCreatedBy().getId(),
+                deletedVoucher.getCreatedAt(),
+                deletedVoucher.getUpdatedAt()
+        );
     }
 }

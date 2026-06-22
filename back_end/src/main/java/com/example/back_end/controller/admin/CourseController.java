@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.example.back_end.dto.response.admin.CourseResponse;
 import com.example.back_end.dto.resquest.admin.CourseRequest;
 import com.example.back_end.service.admin.CourseService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -44,14 +46,9 @@ public class CourseController {
         return ResponseEntity.ok(adminCourseService.updateCourse(id, request));
     }
 
-    @PutMapping("/restore/{id}")
-    public ResponseEntity<CourseResponse> restore(@PathVariable Long id) {
-        return ResponseEntity.ok(adminCourseService.restoreCourse(id));
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<CourseResponse> delete(@PathVariable Long id) {
+        return ResponseEntity.ok(adminCourseService.deleteCourse(id));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        adminCourseService.deleteCourse(id);
-        return ResponseEntity.noContent().build();
-    }
 }

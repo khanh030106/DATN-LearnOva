@@ -1,18 +1,8 @@
 import { Plus, Search } from "lucide-react";
-import AdminHoverSelect from "../../shared/AdminHoverSelect";
 import "./InstructorFilters.css";
 
-const filterTabs = [
-  { id: "all", label: "All" },
-  { id: "active", label: "Active" },
-  { id: "paused", label: "Paused" },
-  { id: "locked", label: "Locked" },
-];
-
 const InstructorFilters = ({
-  activeTab = "all",
   searchTerm = "",
-  onFilterChange = () => {},
   onSearchChange = () => {},
   onAddInstructor = () => {},
 }) => {
@@ -31,13 +21,6 @@ const InstructorFilters = ({
         </div>
 
         <div className="instructorFiltersTabs">
-          <AdminHoverSelect
-            className="instructorFiltersSelect"
-            value={activeTab}
-            options={filterTabs}
-            onChange={onFilterChange}
-            ariaLabel="Filter instructors"
-          />
           <button type="button" className="instructorFiltersAddButton" onClick={onAddInstructor}>
             <Plus size={17} aria-hidden="true" />
             Add Instructor

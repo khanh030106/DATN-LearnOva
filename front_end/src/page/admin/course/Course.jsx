@@ -105,15 +105,6 @@ const Course = () => {
               current.map((course) => (course.id === updatedCourse.id ? updatedCourse : course)),
             )
           }
-          onCourseDeleted={(courseId) =>
-            setCourses((current) =>
-              current.map((course) =>
-                course.id === courseId
-                  ? { ...course, isDeleted: true }
-                  : course,
-              ),
-            )
-          }
         />
       </div>
     </section>

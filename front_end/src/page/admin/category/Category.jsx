@@ -2,6 +2,7 @@ import { Edit3, Eye, FolderTree, Plus, Trash2, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   createAdminCategoryApi,
+  deleteAdminCategoryApi,
   getAdminCategoriesApi,
   updateAdminCategoryApi,
 } from "../../../api/admin/CategoryApi.js";
@@ -33,18 +34,15 @@ const normalizeCategory = (category) => ({
   displayId: `CAT-${String(category.id).padStart(3, "0")}`,
   name: category.name ?? "N/A",
   slug: category.slug ?? "N/A",
-  parentId: category.parentId,
-  parentName: category.parentName ?? "Root",
   displayOrder: category.displayOrder ?? 0,
-  status: category.status ?? (category.isDeleted ? "Hidden" : "Active"),
   isDeleted: Boolean(category.isDeleted),
+  status: category.isDeleted ? "Hidden" : "Active",
   createdAt: formatDate(category.createdAt),
   updatedAt: formatDate(category.updatedAt),
 });
 
 const getCategoryStats = (categories) => {
-  const rootCategories = categories.filter((category) => !category.parentId).length;
-  const childCategories = categories.length - rootCategories;
+  const activeCategories = categories.filter((category) => !category.isDeleted).length;
   const hiddenCategories = categories.filter((category) => category.isDeleted).length;
   const totalDisplayOrder = categories.reduce(
     (total, category) => total + Number(category.displayOrder || 0),
@@ -53,8 +51,7 @@ const getCategoryStats = (categories) => {
 
   return [
     { label: "Total Categories", value: categories.length, note: "from database" },
-    { label: "Root Categories", value: rootCategories, note: "without parent" },
-    { label: "Child Categories", value: childCategories, note: "mapped to parent" },
+    { label: "Active Topics", value: activeCategories, note: "visible to users" },
     { label: "Hidden Topics", value: hiddenCategories, note: "not visible to users" },
     { label: "Display Order Total", value: totalDisplayOrder, note: "sum from database" },
   ];
@@ -63,7 +60,6 @@ const getCategoryStats = (categories) => {
 const CategoryDetailModal = ({
   category,
   mode,
-  parentCategories,
   onClose,
   onSaved,
   axiosClient, 
@@ -72,9 +68,8 @@ const CategoryDetailModal = ({
   const [form, setForm] = useState({
     name: category.name === "N/A" ? "" : category.name,
     slug: category.slug === "N/A" ? "" : category.slug,
-    parentId: category.parentId ?? "",
     displayOrder: category.displayOrder ?? 0,
-    status: category.status,
+    status: category.isDeleted ? "Hidden" : "Active",
   });
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
@@ -99,9 +94,8 @@ const CategoryDetailModal = ({
         {
           name: form.name.trim(),
           slug: form.slug.trim(),
-          parentId: form.parentId === "" ? null : Number(form.parentId),
           displayOrder: Number(form.displayOrder || 0),
-          status: form.status,
+          isDeleted: form.status === "Hidden",
         },
         axiosClient
       );
@@ -168,7 +162,6 @@ const CategoryDetailModal = ({
                 onChange={(event) => setField("status", event.target.value)}
               >
                 <option value="Active">Active</option>
-                <option value="Pending">Pending</option>
                 <option value="Hidden">Hidden</option>
               </select>
             ) : (
@@ -200,30 +193,6 @@ const CategoryDetailModal = ({
               required={isEdit}
               onChange={(event) => setField("slug", event.target.value)}
             />
-          </label>
-
-          <label className="adminCategoryDetailRow">
-            <span>Parent Category</span>
-            {isEdit ? (
-              <select
-                className="adminCategoryDetailInput"
-                value={form.parentId}
-                onChange={(event) => setField("parentId", event.target.value)}
-              >
-                <option value="">Root</option>
-                {parentCategories.map((parentCategory) => (
-                  <option key={parentCategory.id} value={parentCategory.id}>
-                    {parentCategory.name}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <input
-                className="adminCategoryDetailInput adminCategoryDetailInput--readonly"
-                value={category.parentName}
-                readOnly
-              />
-            )}
           </label>
 
           <label className="adminCategoryDetailRow">
@@ -288,8 +257,7 @@ const Category = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedAction, setSelectedAction] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState("All Statuses");
-  const [selectedParent, setSelectedParent] = useState("All Parents");
+  const [selectedStatus, setSelectedStatus] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -332,12 +300,8 @@ const Category = () => {
 
   const categoryStats = useMemo(() => getCategoryStats(categories), [categories]);
   const statusOptions = useMemo(
-    () => ["All Statuses", "Active", "Pending", "Hidden"],
+    () => ["All", "Active", "Hidden"],
     [],
-  );
-  const parentOptions = useMemo(
-    () => ["All Parents", ...new Set(categories.map((category) => category.parentName))],
-    [categories],
   );
 
   const filteredCategories = useMemo(() => {
@@ -346,18 +310,18 @@ const Category = () => {
     return categories.filter((category) => {
       const matchesSearch =
         !keyword ||
-        [category.displayId, category.name, category.slug, category.parentName, category.status]
+        [category.displayId, category.name, category.slug, category.status]
           .join(" ")
           .toLowerCase()
           .includes(keyword);
       const matchesStatus =
-        selectedStatus === "All Statuses" || category.status === selectedStatus;
-      const matchesParent =
-        selectedParent === "All Parents" || category.parentName === selectedParent;
+        selectedStatus === "All" ||
+        (selectedStatus === "Active" && !category.isDeleted) ||
+        (selectedStatus === "Hidden" && category.isDeleted);
 
-      return matchesSearch && matchesStatus && matchesParent;
+      return matchesSearch && matchesStatus;
     });
-  }, [categories, searchTerm, selectedParent, selectedStatus]);
+  }, [categories, searchTerm, selectedStatus]);
 
   const totalPages = Math.max(1, Math.ceil(filteredCategories.length / pageSize));
   const visibleCategories = useMemo(() => {
@@ -367,7 +331,7 @@ const Category = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, selectedParent, selectedStatus]);
+  }, [searchTerm, selectedStatus]);
 
   const openCategoryPopup = (action, category) => {
     setSelectedAction(action);
@@ -391,9 +355,7 @@ const Category = () => {
   const [createFormData, setCreateFormData] = useState({
     name: "",
     slug: "",
-    parentId: "",
     displayOrder: 0,
-    status: "Active",
   });
   const [createFormError, setCreateFormError] = useState("");
   const [isCreating, setIsCreating] = useState(false);
@@ -418,16 +380,14 @@ const Category = () => {
         {
           name: createFormData.name.trim(),
           slug: createFormData.slug.trim(),
-          parentId: createFormData.parentId === "" ? null : Number(createFormData.parentId),
           displayOrder: Number(createFormData.displayOrder || 0),
-          status: createFormData.status,
         },
         axiosPrivate
       );
       
       setCategories((current) => [...current, normalizeCategory(newCategory)]);
       setIsCreateOpen(false);
-      setCreateFormData({ name: "", slug: "", parentId: "", displayOrder: 0, status: "Active" });
+      setCreateFormData({ name: "", slug: "", displayOrder: 0 });
     } catch (error) {
       setCreateFormError(
         error?.response?.data?.message || "Failed to create category"
@@ -447,7 +407,7 @@ const Category = () => {
                 <FolderTree size={22} />
               </span>
               <div>
-                <strong>{isLoading ? "..." : item.value}</strong>
+                <strong>{item.value}</strong>
                 <p>{item.label}</p>
                 <small>{item.note}</small>
               </div>
@@ -458,7 +418,7 @@ const Category = () => {
         <div className="adminCategoryFilters">
           <input
             type="search"
-            placeholder="Search category name, slug or parent..."
+            placeholder="Search category name or slug..."
             value={searchTerm}
             onChange={(event) => setSearchTerm(event.target.value)}
           />
@@ -468,13 +428,6 @@ const Category = () => {
             value={selectedStatus}
             onChange={setSelectedStatus}
             ariaLabel="Filter categories by status"
-          />
-          <AdminHoverSelect
-            className="adminCategoryFilterSelect"
-            options={parentOptions}
-            value={selectedParent}
-            onChange={setSelectedParent}
-            ariaLabel="Filter categories by parent"
           />
           <button
             type="button"
@@ -530,7 +483,27 @@ const Category = () => {
                       >
                         <Edit3 size={16} />
                       </button>
-                      <button type="button" aria-label={`Delete ${category.name}`}>
+                      <button
+                        type="button"
+                        aria-label={`Delete ${category.name}`}
+                        onClick={async () => {
+                          try {
+                            await deleteAdminCategoryApi(category.id, axiosPrivate);
+                            setCategories((current) =>
+                              current.map((item) =>
+                                item.id === category.id
+                                  ? { ...item, isDeleted: true, status: "Hidden" }
+                                  : item,
+                              ),
+                            );
+                          } catch (deleteError) {
+                            setError(
+                              deleteError?.response?.data?.message ||
+                                "Không xóa được category.",
+                            );
+                          }
+                        }}
+                      >
                         <Trash2 size={16} />
                       </button>
                     </div>
@@ -640,32 +613,6 @@ const Category = () => {
                 />
               </label>
               <label>
-                Parent Category
-                <select 
-                  value={createFormData.parentId}
-                  onChange={(e) => setCreateFormData({...createFormData, parentId: e.target.value})}
-                >
-                  <option value="">Root</option>
-                  {categories
-                    .filter((cat) => !cat.parentId)
-                    .map((cat) => (
-                      <option key={cat.id} value={cat.id}>{cat.name}</option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                Status
-                <select
-                  value={createFormData.status}
-                  onChange={(e) => setCreateFormData({...createFormData, status: e.target.value})}
-                  required
-                >
-                  <option value="Active">Active</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Hidden">Hidden</option>
-                </select>
-              </label>
-              <label>
                 Display Order
                 <input 
                   type="number" 
@@ -683,7 +630,7 @@ const Category = () => {
                   className="adminCategoryModalCancel"
                   onClick={() => {
                     setIsCreateOpen(false);
-                    setCreateFormData({ name: "", slug: "", parentId: "", displayOrder: 0, status: "Active" });
+                    setCreateFormData({ name: "", slug: "", displayOrder: 0 });
                     setCreateFormError("");
                   }}
                 >
@@ -706,10 +653,6 @@ const Category = () => {
         <CategoryDetailModal
           category={selectedCategory}
           mode={selectedAction}
-          parentCategories={categories.filter(
-            (category) =>
-              category.id !== selectedCategory.id && !category.isDeleted,
-          )}
           onClose={closeCategoryPopup}
           onSaved={handleCategorySaved}
           axiosClient={axiosPrivate} 

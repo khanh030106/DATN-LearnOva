@@ -1,9 +1,9 @@
 import {
   Calendar,
   Image,
+  LockKeyhole,
   Mail,
   Phone,
-  Shield,
   UserRound,
   VenusAndMars,
   X,
@@ -91,9 +91,6 @@ const InstructorFormModal = ({
                 <Mail size={14} />
                 {form.email || "email@example.com"}
               </p>
-              <span className={`status ${form.isActive === "false" ? "inactive" : "active"}`}>
-                {form.isActive === "false" ? "Inactive" : "Active"}
-              </span>
             </div>
 
             <div className="profile-extra">
@@ -131,7 +128,7 @@ const InstructorFormModal = ({
           </Field>
 
           {!isEdit ? (
-            <Field icon={Shield} label="Password *" error={errors.password}>
+            <Field icon={LockKeyhole} label="Password *" error={errors.password}>
               <input
                 name="password"
                 type="password"
@@ -190,12 +187,6 @@ const InstructorFormModal = ({
             />
           </Field>
 
-          <Field icon={Shield} label="Status" error={errors.isActive}>
-            <select name="isActive" value={form.isActive} onChange={onChange}>
-              <option value="true">Active</option>
-              <option value="false">Inactive</option>
-            </select>
-          </Field>
         </div>
 
         {submitError ? <p className="instructor-form-error">{submitError}</p> : null}

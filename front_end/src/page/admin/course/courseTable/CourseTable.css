@@ -326,7 +326,8 @@
 }
 
 .courseModal,
-.courseFormModal {
+.courseFormModal,
+.courseDeleteModal {
   width: min(820px, 100%);
   max-height: calc(100vh - 48px);
   overflow-y: auto;
@@ -339,6 +340,41 @@
 
 .courseFormModal {
   width: min(900px, 100%);
+}
+
+.courseDeleteModal {
+  width: min(460px, 100%);
+  text-align: center;
+}
+
+.courseDeleteIcon {
+  width: 56px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.courseDeleteContent {
+  display: grid;
+  gap: 8px;
+  color: #475569;
+}
+
+.courseDeleteContent h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.courseDeleteContent p {
+  margin: 0;
+  line-height: 1.55;
 }
 
 .courseModalHeader {
@@ -472,7 +508,8 @@
 }
 
 .courseModalCancel,
-.courseModalSubmit {
+.courseModalSubmit,
+.courseModalDanger {
   min-height: 42px;
   padding: 0 18px;
   border-radius: 8px;
@@ -493,7 +530,15 @@
   color: #ffffff;
 }
 
-.courseModalSubmit:disabled {
+.courseModalDanger {
+  border: 1px solid #dc2626;
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.courseModalSubmit:disabled,
+.courseModalDanger:disabled,
+.courseModalCancel:disabled {
   opacity: 0.65;
   cursor: not-allowed;
 }

@@ -70,8 +70,9 @@
 
 .voucherCreateContent {
   display: grid;
-  grid-template-columns: 1.4fr 0.8fr;
+  grid-template-columns: minmax(0, 1fr) 374px;
   gap: 24px;
+  align-items: stretch;
 }
 
 .voucherCreateFormCard,
@@ -80,6 +81,11 @@
   border: 1px solid rgba(37, 99, 235, 0.3);
   border-radius: 18px;
   padding: 24px;
+}
+
+.voucherCreateSummaryCard {
+  display: flex;
+  flex-direction: column;
 }
 
 .voucherCreateFormRow {
@@ -139,6 +145,25 @@
   box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
 }
 
+.voucherCreatePercentInputWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.voucherCreatePercentInput {
+  padding-right: 42px;
+}
+
+.voucherCreatePercentInputWrap span {
+  position: absolute;
+  right: 16px;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 800;
+  pointer-events: none;
+}
+
 .voucherCreateActions {
   display: flex;
   gap: 12px;
@@ -174,7 +199,8 @@
 .voucherCreateSummaryHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 12px;
   margin-bottom: 18px;
 }
 
@@ -189,19 +215,55 @@
 .voucherCreateSummaryCode {
   display: inline-flex;
   align-items: center;
+  max-width: 150px;
   padding: 8px 12px;
   border-radius: 999px;
   background: rgba(37, 99, 235, 0.08);
   color: var(--blue-strong);
   font-size: 13px;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.voucherCreateSummaryTitle {
+  margin: 6px 0 0;
+  color: #111827;
+  font-size: 18px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+
+.voucherCreatePreviewBox {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 18px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(37, 99, 235, 0.16);
+}
+
+.voucherCreatePreviewBox span,
+.voucherCreatePreviewBox small {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.voucherCreatePreviewBox strong {
+  color: #1d4ed8;
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 900;
 }
 
 .voucherCreateSummaryItem {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   font-size: 14px;
   color: #334155;
 }

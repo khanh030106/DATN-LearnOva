@@ -12,31 +12,15 @@ import EditUserModal from "./EditUserModal";
 import ViewUserModal from "./ViewUserModal";
 import "./UsersList.css";
 
-const statusMeta = {
-  active: {
-    label: "Active",
-  },
-  pending: {
-    label: "Pending",
-  },
-  locked: {
-    label: "Locked",
-  },
-};
-
 const tableColumns = [
   { id: "user", label: "User" },
   { id: "role", label: "Role" },
-  { id: "status", label: "Status" },
   { id: "phone", label: "Phone" },
   { id: "joinedAt", label: "Joined At" },
   { id: "actions", label: "Actions" },
 ];
 
 const pageSize = 10;
-
-const getStatusClassName = (statusTone) =>
-  `userManagementUsersStatus userManagementUsersStatus--${statusTone}`;
 
 const getInitials = (name) =>
   name
@@ -112,7 +96,6 @@ const UsersList = ({
 
         <div className="userManagementUsersList">
           {visibleUsers.map((user) => {
-            const statusInfo = statusMeta[user.statusTone] ?? statusMeta.active;
 
             return (
               <article key={user.id} className="userManagementUserRow">
@@ -135,12 +118,6 @@ const UsersList = ({
                     className={`userManagementUserRole userManagementUserRole--${user.roleTone}`}
                   >
                     <span>{user.role}</span>
-                  </span>
-                </div>
-
-                <div className="userManagementUserStatusWrap">
-                  <span className={getStatusClassName(user.statusTone)}>
-                    <span>{statusInfo.label}</span>
                   </span>
                 </div>
 

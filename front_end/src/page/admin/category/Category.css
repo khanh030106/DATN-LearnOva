@@ -52,7 +52,7 @@
 
 .adminCategoryStats {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -271,11 +271,6 @@
 .adminCategoryStatus--hidden {
   background: #f1f5f9;
   color: #475569;
-}
-
-.adminCategoryStatus--pending {
-  background: #fff7ed;
-  color: #b45309;
 }
 
 .adminCategoryActions {

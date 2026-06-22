@@ -6,7 +6,6 @@ import {
   Phone,
   Shield,
   User,
-  Users,
   VenusAndMars,
   X,
 } from "lucide-react";
@@ -21,7 +20,6 @@ const initialForm = {
   dateOfBirth: "",
   gender: "",
   role: "ROLE_USER",
-  isActive: "true",
 };
 
 const roleOptions = [
@@ -118,7 +116,7 @@ const AddUserModal = ({ isOpen, onClose, onSubmit }) => {
       dateOfBirth: formData.dateOfBirth,
       gender: formData.gender,
       role: formData.role,
-      isActive: formData.isActive === "true",
+      isActive: true,
       isDeleted: false,
       avatar: null,
       coverImage: null,
@@ -277,17 +275,6 @@ const AddUserModal = ({ isOpen, onClose, onSubmit }) => {
               ))}
             </select>
             {renderFieldError("role")}
-          </label>
-
-          <label className="add-user-field">
-            <span>
-              <Users aria-hidden="true" />
-              Status
-            </span>
-            <select name="isActive" value={formData.isActive} onChange={handleChange}>
-              <option value="true">Active</option>
-              <option value="false">Inactive</option>
-            </select>
           </label>
 
           <div className="add-user-note">

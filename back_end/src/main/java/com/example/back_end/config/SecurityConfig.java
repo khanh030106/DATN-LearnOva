@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 
 import com.example.back_end.security.CustomUserDetailsService;
 import com.example.back_end.security.JwtAuthenticationFilter;
@@ -37,6 +38,7 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/learnova/auth/**").permitAll()
                         .requestMatchers("/api/learnova/admin/users").permitAll()
                         .requestMatchers("/api/learnova/admin/create/users").permitAll()
@@ -44,7 +46,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/learnova/admin/delete/users/**").permitAll()
                         .requestMatchers("/api/learnova/admin/users/**").permitAll()
                         .requestMatchers("/api/learnova/admin/categories-management/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/admin/courses-management/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/learnova/admin/courses-management/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/learnova/admin/courses-management/**").permitAll()
                         .requestMatchers("/api/learnova/admin/courses-management/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/vouchers/**").permitAll()
                         .requestMatchers("/api/learnova/admin/instructors-management/**").permitAll()
                         .requestMatchers("/api/learnova/user/me").permitAll()
                         .requestMatchers("/api/learnova/review/post").permitAll()

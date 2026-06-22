@@ -9,7 +9,6 @@ public record CategoryResponse(
     Long parentId,
     String parentName,
     Integer displayOrder,
-    String status,
     Boolean isDeleted,
     Instant createdAt,
     Instant updatedAt

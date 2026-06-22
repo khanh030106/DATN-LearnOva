@@ -85,7 +85,6 @@ const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClo
   if (!instructor) return null;
 
   const fullName = instructor.fullName || instructor.name || "Unknown instructor";
-  const isActive = Boolean(instructor.isActive ?? instructor.status === "Active");
   const courseItems = Array.isArray(instructor.courses) ? instructor.courses : courses;
   const avatar = instructor.avatar;
   const coverImage = instructor.coverImage || defaultCover;
@@ -128,9 +127,6 @@ const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClo
                 <Phone size={14} />
                 {valueOrDash(instructor.phone)}
               </p>
-              <span className={`status ${isActive ? "active" : "inactive"}`}>
-                {isActive ? "Active" : "Inactive"}
-              </span>
             </div>
 
             <div className="profile-extra">
@@ -157,11 +153,6 @@ const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClo
             <InfoRow label="Email">{valueOrDash(instructor.email)}</InfoRow>
             <InfoRow label="Phone">{valueOrDash(instructor.phone)}</InfoRow>
             <InfoRow label="Gender">{valueOrDash(instructor.gender)}</InfoRow>
-            <InfoRow label="Status">
-              <em className={`mini-status ${isActive ? "active" : "inactive"}`}>
-                {isActive ? "Active" : "Inactive"}
-              </em>
-            </InfoRow>
             <InfoRow label="Is Deleted">{instructor.isDeleted ? "Yes" : "No"}</InfoRow>
             <InfoRow label="Date Of Birth">{formatDate(instructor.dateOfBirth)}</InfoRow>
             <InfoRow label="Created At">{formatDateTime(instructor.createdAt)}</InfoRow>

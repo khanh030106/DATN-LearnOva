@@ -11,7 +11,6 @@ import {
   Shield,
   Trash2,
   User,
-  Users,
   X,
 } from "lucide-react";
 import { updateUserApi } from "../../../../api/UserApi";
@@ -85,16 +84,6 @@ const toRoleValue = (role) => {
   return "ROLE_USER";
 };
 
-const getStatusValue = (user) => {
-  const normalizedStatus = String(user.status || "").toLowerCase();
-
-  if (normalizedStatus === "inactive" || user.statusTone === "locked") {
-    return "false";
-  }
-
-  return "true";
-};
-
 const buildSavedUser = (user, form) => {
   const fullName = form.fullName.trim() || user.fullName || user.name;
   const phone = form.phone.trim() || "N/A";
@@ -103,10 +92,9 @@ const buildSavedUser = (user, form) => {
   const dateOfBirthRaw = form.dateOfBirth || null;
   const gender = form.gender || "N/A";
   const roleInfo = roleOptions.find((option) => option.value === form.role) || roleOptions[2];
-  const isActive = form.isActive === "true";
   const isDeleted = form.isDeleted === "true";
-  const status = isActive ? "Active" : "Inactive";
-  const statusTone = isDeleted || !isActive ? "locked" : "active";
+  const status = isDeleted ? "Locked" : user.status || "Active";
+  const statusTone = isDeleted ? "locked" : user.statusTone || "active";
   const updatedAtRaw = new Date().toISOString();
 
   return {
@@ -141,7 +129,6 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
     dateOfBirth: toDateInputValue(user.dateOfBirthRaw),
     gender: user.gender === "N/A" ? "" : user.gender || "",
     role: toRoleValue(user.role),
-    isActive: getStatusValue(user),
     isDeleted: String(Boolean(user.isDeleted)),
   });
   const [isSaving, setIsSaving] = useState(false);
@@ -247,20 +234,6 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
         ),
       },
       {
-        icon: Users,
-        label: "Status",
-        input: (
-          <select
-            className="view-user-input"
-            value={form.isActive}
-            onChange={(event) => updateForm("isActive", event.target.value)}
-          >
-            <option value="true">Active</option>
-            <option value="false">Inactive</option>
-          </select>
-        ),
-      },
-      {
         icon: Calendar,
         label: "Joined Date",
         input: (
@@ -350,7 +323,6 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
       dateOfBirth: form.dateOfBirth || null,
       gender: form.gender || null,
       role: form.role,
-      isActive: form.isActive === "true",
       isDeleted: form.isDeleted === "true",
     };
 

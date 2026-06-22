@@ -25,7 +25,6 @@ const emptyForm = {
   phone: "",
   dateOfBirth: "",
   gender: "",
-  isActive: "true",
 };
 
 const fmtNumber = (v) => (v == null ? "0" : new Intl.NumberFormat("vi-VN").format(v));
@@ -41,7 +40,6 @@ const mapInstructor = (item) => ({
   students: fmtNumber(item.totalStudents ?? 0),
   revenue: `${fmtNumber(item.totalRevenue ?? 0)} đ`,
   isDeleted: item.isDeleted ?? false,
-  status: item.isDeleted ? "Deleted" : (item.isActive ? "Active" : "Paused"),
 });
 
 const toForm = (instructor) => ({
@@ -53,7 +51,6 @@ const toForm = (instructor) => ({
   phone: instructor.phone || "",
   dateOfBirth: toDateInputValue(instructor.dateOfBirth),
   gender: instructor.gender || "",
-  isActive: String(Boolean(instructor.isActive ?? instructor.status === "Active")),
 });
 
 const buildPayload = (form, includePassword) => ({
@@ -64,7 +61,6 @@ const buildPayload = (form, includePassword) => ({
   phone: form.phone.trim() || null,
   dateOfBirth: form.dateOfBirth || null,
   gender: form.gender || null,
-  isActive: form.isActive === "true",
   ...(includePassword ? { password: form.password } : {}),
 });
 
@@ -95,7 +91,6 @@ const validateForm = (form, mode) => {
 
 const InstructorTable = ({
   searchTerm = "",
-  statusFilter = "all",
   isCreateOpen = false,
   onCreateClose = () => {},
 }) => {
@@ -141,7 +136,7 @@ const InstructorTable = ({
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, statusFilter]);
+  }, [searchTerm]);
 
   useEffect(() => {
     if (isCreateOpen) {
@@ -180,15 +175,9 @@ const InstructorTable = ({
           .toLowerCase()
           .includes(keyword);
 
-      const normalizedStatus = String(instructor.status || "").toLowerCase();
-      const matchesStatus =
-        statusFilter === "all" ||
-        normalizedStatus === statusFilter ||
-        (statusFilter === "locked" && instructor.isDeleted);
-
-      return matchesSearch && matchesStatus;
+      return matchesSearch;
     });
-  }, [instructorsData, searchTerm, statusFilter]);
+  }, [instructorsData, searchTerm]);
 
   const totalPages = Math.max(1, Math.ceil(filteredInstructors.length / pageSize));
   const currentItems = filteredInstructors.slice((currentPage - 1) * pageSize, currentPage * pageSize);
@@ -287,7 +276,7 @@ const InstructorTable = ({
       setInstructorsData((current) =>
         current.map((item) =>
           item.instructorId === deleteInstructor.instructorId
-            ? { ...item, isDeleted: true, status: "Deleted" }
+            ? { ...item, isDeleted: true }
             : item,
         ),
       );

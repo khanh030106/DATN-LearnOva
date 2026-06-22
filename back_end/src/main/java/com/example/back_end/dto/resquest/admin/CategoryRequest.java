@@ -16,5 +16,5 @@ public record CategoryRequest(
 
     Integer displayOrder,
 
-    String status
+    Boolean isDeleted
 ) {}

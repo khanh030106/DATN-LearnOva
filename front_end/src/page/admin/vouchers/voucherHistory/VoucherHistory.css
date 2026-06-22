@@ -3,14 +3,6 @@
   width: 100%;
 }
 
-.voucherHistoryCard {
-  padding: 22px;
-  background: #ffffff;
-  border: 1px solid rgba(37, 99, 235, 0.08);
-  border-radius: 6px;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
-}
-
 .voucherHistoryHeader {
   display: flex;
   justify-content: space-between;

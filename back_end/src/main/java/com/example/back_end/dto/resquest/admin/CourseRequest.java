@@ -18,5 +18,6 @@ public record CourseRequest(
     @NotNull BigDecimal basePrice,
     @NotBlank String level,
     @NotBlank String status,
-    @NotNull Long instructorId
+    @NotNull Long instructorId,
+    Boolean isDeleted
 ) {}

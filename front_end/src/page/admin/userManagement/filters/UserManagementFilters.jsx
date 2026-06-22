@@ -4,7 +4,6 @@ import "./UserManagementFilters.css";
 const searchFields = {
   searchPlaceholder: "Search...",
   roleLabel: "Role",
-  statusLabel: "Status",
 };
 
 
@@ -16,17 +15,9 @@ const roleOptions = [
 ];
 
 
-const statusOptions = [
-  { id: "all", label: "All" },
-  { id: "active", label: "Active" },
-  { id: "pending", label: "Pending" },
-  { id: "locked", label: "Locked" },
-];
-
 const UserManagementFilters = ({
   onSearchChange = () => { },
   onRoleChange = () => { },
-  onStatusChange = () => { },
   onAddUser = () => { },
 }) => {
 
@@ -57,13 +48,6 @@ const UserManagementFilters = ({
             defaultValue="all"
             options={roleOptions}
             onChange={onRoleChange}
-          />
-          <AdminHoverSelect
-            className="userManagementFilterSelect"
-            ariaLabel={searchFields.statusLabel}
-            defaultValue="all"
-            options={statusOptions}
-            onChange={onStatusChange}
           />
         </div>
         <button

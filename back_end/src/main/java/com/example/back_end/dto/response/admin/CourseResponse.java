@@ -18,6 +18,5 @@ public record CourseResponse(
     String status,
     Long instructorId,
     String instructorName,
-    OffsetDateTime publishedAt,
-    Boolean isDeleted
+    OffsetDateTime publishedAt
 ) {}

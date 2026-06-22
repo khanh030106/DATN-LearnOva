@@ -3,12 +3,12 @@ import { Edit3, Eye, Trash2, X } from "lucide-react";
 import {
   createAdminCourseApi,
   deleteAdminCourseApi,
-  restoreAdminCourseApi,
   updateAdminCourseApi,
 } from "../../../../api/admin/CourseApi.js";
 import "./CourseTable.css";
 
 const pageSize = 10;
+const courseStatusOptions = ["DRAFT", "PUBLISHED", "ARCHIVED", "DELETED"];
 
 const emptyForm = {
   thumbnailUrl: "",
@@ -21,7 +21,6 @@ const emptyForm = {
   basePrice: 0,
   level: "Beginner",
   status: "DRAFT",
-  visibility: "visible",
   instructorId: "",
 };
 
@@ -56,8 +55,7 @@ const getInstructorId = (instructor) => instructor.instructorId ?? instructor.id
 const getInstructorName = (instructor) =>
   instructor.fullName || instructor.email || `Instructor #${getInstructorId(instructor)}`;
 
-const getCourseDisplayStatus = (course) =>
-  Boolean(course.isDeleted) ? "DELETED" : course.status || "N/A";
+const getCourseDisplayStatus = (course) => course.status || "N/A";
 
 const toFormData = (course) => ({
   thumbnailUrl: course.thumbnailUrl || "",
@@ -69,8 +67,7 @@ const toFormData = (course) => ({
   whatYouLearn: (course.whatYouLearn || []).join("\n"),
   basePrice: course.basePrice ?? 0,
   level: course.level || "Beginner",
-  status: course.status === "DELETED" ? "ARCHIVED" : course.status || "DRAFT",
-  visibility: course.isDeleted ? "hidden" : "visible",
+  status: course.status || "DRAFT",
   instructorId: course.instructorId ? String(course.instructorId) : "",
 });
 
@@ -86,6 +83,7 @@ const buildPayload = (form) => ({
   level: form.level,
   status: form.status,
   instructorId: Number(form.instructorId),
+  isDeleted: form.status === "DELETED",
 });
 
 const CourseViewModal = ({ course, onClose }) => (
@@ -134,6 +132,72 @@ const CourseViewModal = ({ course, onClose }) => (
   </div>
 );
 
+const getCourseErrorMessage = (error, fallback) => {
+  const data = error?.response?.data;
+
+  if (typeof data === "string") return data;
+  if (data?.message) return data.message;
+  if (data?.error) return data.error;
+
+  return fallback;
+};
+
+const CourseDeleteModal = ({
+  course,
+  error,
+  isDeleting,
+  onClose,
+  onConfirm,
+}) => {
+  if (!course) return null;
+
+  return (
+    <div className="courseModalBackdrop" role="presentation" onClick={onClose}>
+      <div
+        className="courseDeleteModal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Confirm delete course"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="courseDeleteIcon">
+          <Trash2 size={24} aria-hidden="true" />
+        </div>
+
+        <div className="courseDeleteContent">
+          <p className="courseModalEyebrow">DELETE COURSE</p>
+          <h2>Chuyển khóa học sang DELETED?</h2>
+          <p>
+            Khóa học <strong>{course.title}</strong> sẽ được xóa mềm bằng cách
+            đổi Status thành <strong>DELETED</strong>.
+          </p>
+        </div>
+
+        {error ? <p className="courseFormError">{error}</p> : null}
+
+        <div className="courseModalActions">
+          <button
+            type="button"
+            className="courseModalCancel"
+            onClick={onClose}
+            disabled={isDeleting}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="courseModalDanger"
+            onClick={onConfirm}
+            disabled={isDeleting}
+          >
+            {isDeleting ? "Deleting..." : "Confirm Delete"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const CourseFormModal = ({
   course,
   instructors,
@@ -178,23 +242,14 @@ const CourseFormModal = ({
 
     try {
       const payload = buildPayload(form);
-      let savedCourse = isEdit
+      const savedCourse = isEdit
         ? await updateAdminCourseApi(course.id, payload, axiosClient)
         : await createAdminCourseApi(payload, axiosClient);
-
-      if (isEdit && form.visibility === "visible" && savedCourse.isDeleted) {
-        savedCourse = await restoreAdminCourseApi(course.id, axiosClient);
-      }
-
-      if (isEdit && form.visibility === "hidden" && !savedCourse.isDeleted) {
-        await deleteAdminCourseApi(course.id, axiosClient);
-        savedCourse = { ...savedCourse, isDeleted: true };
-      }
 
       onSaved(savedCourse);
       onClose();
     } catch (saveError) {
-      setError(saveError?.response?.data?.message || "Không lưu được khóa học.");
+      setError(getCourseErrorMessage(saveError, "Không lưu được khóa học."));
     } finally {
       setIsSaving(false);
     }
@@ -269,24 +324,17 @@ const CourseFormModal = ({
           <label>
             Status
             <select value={form.status} onChange={(event) => setField("status", event.target.value)} required>
-              <option value="DRAFT">DRAFT</option>
-              <option value="PUBLISHED">PUBLISHED</option>
-              <option value="ARCHIVED">ARCHIVED</option>
+              {courseStatusOptions.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
             </select>
           </label>
           <label>
             Language
             <input maxLength={10} value={form.language} onChange={(event) => setField("language", event.target.value)} required />
           </label>
-          {isEdit ? (
-            <label>
-              Visibility Status
-              <select value={form.visibility} onChange={(event) => setField("visibility", event.target.value)} required>
-                <option value="visible">Visible</option>
-                <option value="hidden">Hidden</option>
-              </select>
-            </label>
-          ) : null}
           <label className="courseFormWide">
             Description
             <textarea rows={3} value={form.description} onChange={(event) => setField("description", event.target.value)} required />
@@ -318,7 +366,7 @@ const CourseFormModal = ({
             Cancel
           </button>
           <button type="submit" className="courseModalSubmit" disabled={isSaving}>
-            {isSaving ? "Saving..." : isEdit ? "Save Course" : "Create Course"}
+            {isSaving ? "Saving..." : isEdit ? "Update Course" : "Create Course"}
           </button>
         </div>
       </form>
@@ -336,12 +384,13 @@ const CourseTable = ({
   onCreateClose,
   onCourseCreated,
   onCourseUpdated,
-  onCourseDeleted,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [editingCourse, setEditingCourse] = useState(null);
+  const [deletingCourse, setDeletingCourse] = useState(null);
   const [deletingCourseId, setDeletingCourseId] = useState(null);
+  const [deleteError, setDeleteError] = useState("");
 
   const totalPages = Math.max(1, Math.ceil(courses.length / pageSize));
   const currentPageItems = useMemo(
@@ -355,16 +404,28 @@ const CourseTable = ({
     }
   }, [currentPage, totalPages]);
 
-  const handleDelete = async (course) => {
-    const confirmed = window.confirm(`Xóa khóa học "${course.title}"?`);
-    if (!confirmed) return;
+  const openDeleteModal = (course) => {
+    setDeletingCourse(course);
+    setDeleteError("");
+  };
 
-    setDeletingCourseId(course.id);
+  const closeDeleteModal = () => {
+    if (deletingCourseId) return;
+    setDeletingCourse(null);
+    setDeleteError("");
+  };
+
+  const handleDelete = async () => {
+    if (!deletingCourse) return;
+
+    setDeletingCourseId(deletingCourse.id);
+    setDeleteError("");
     try {
-      await deleteAdminCourseApi(course.id, axiosClient);
-      onCourseDeleted(course.id);
+      const updatedCourse = await deleteAdminCourseApi(deletingCourse.id, axiosClient);
+      onCourseUpdated(updatedCourse);
+      setDeletingCourse(null);
     } catch (deleteError) {
-      window.alert(deleteError?.response?.data?.message || "Không xóa được khóa học.");
+      setDeleteError(getCourseErrorMessage(deleteError, "Không xóa được khóa học."));
     } finally {
       setDeletingCourseId(null);
     }
@@ -430,7 +491,7 @@ const CourseTable = ({
                         className="actionButton actionButton--delete"
                         aria-label="Delete Course"
                         disabled={deletingCourseId === course.id}
-                        onClick={() => handleDelete(course)}
+                        onClick={() => openDeleteModal(course)}
                       >
                         <Trash2 className="actionIcon" />
                       </button>
@@ -463,6 +524,15 @@ const CourseTable = ({
       </div>
 
       {selectedCourse ? <CourseViewModal course={selectedCourse} onClose={() => setSelectedCourse(null)} /> : null}
+      {deletingCourse ? (
+        <CourseDeleteModal
+          course={deletingCourse}
+          error={deleteError}
+          isDeleting={deletingCourseId === deletingCourse.id}
+          onClose={closeDeleteModal}
+          onConfirm={handleDelete}
+        />
+      ) : null}
       {editingCourse ? (
         <CourseFormModal
           course={editingCourse}

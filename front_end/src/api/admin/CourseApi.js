@@ -20,11 +20,6 @@ export const updateAdminCourseApi = async (id, payload, client = axiosClient) =>
   return response.data;
 };
 
-export const restoreAdminCourseApi = async (id, client = axiosClient) => {
-  const response = await client.put(`/admin/courses-management/restore/${id}`);
-  return response.data;
-};
-
 export const deleteAdminCourseApi = async (id, client = axiosClient) => {
   const response = await client.delete(`/admin/courses-management/delete/${id}`);
   return response.data;

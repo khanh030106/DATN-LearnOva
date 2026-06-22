@@ -11,7 +11,6 @@ import {
   Shield,
   Trash2,
   User,
-  Users,
   X,
 } from "lucide-react";
 import "./ViewUserModal.css";
@@ -99,15 +98,6 @@ const ViewUserModal = ({ user, onClose }) => {
       icon: Image,
       label: "Cover Image",
       value: <LinkValue value={user.coverImage} />,
-    },
-    {
-      icon: Users,
-      label: "Status",
-      value: (
-        <span className={`view-user-badge view-user-badge-status view-user-badge-status--${user.statusTone}`}>
-          {user.status}
-        </span>
-      ),
     },
     {
       icon: Calendar,

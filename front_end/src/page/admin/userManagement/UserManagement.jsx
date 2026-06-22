@@ -93,7 +93,6 @@ const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -151,12 +150,9 @@ const UserManagement = () => {
       const matchesRole =
         roleFilter === "all" || user.roleFilter === roleFilter;
 
-      const matchesStatus =
-        statusFilter === "all" || user.statusFilter === statusFilter;
-
-      return matchesSearch && matchesRole && matchesStatus;
+      return matchesSearch && matchesRole;
     });
-  }, [roleFilter, searchTerm, statusFilter, users]);
+  }, [roleFilter, searchTerm, users]);
 
   const handleUserUpdated = (updatedUser) => {
     setUsers((currentUsers) =>
@@ -180,7 +176,6 @@ const UserManagement = () => {
         <UserManagementFilters
           onSearchChange={setSearchTerm}
           onRoleChange={setRoleFilter}
-          onStatusChange={setStatusFilter}
           onAddUser={() => setShowAddUserModal(true)}
         />
 

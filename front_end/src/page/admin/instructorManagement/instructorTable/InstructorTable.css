@@ -181,30 +181,6 @@
   font-size: 12px;
 }
 
-.instructorTableStatus {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 12px;
-  border-radius: 9999px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.instructorTableStatus--active {
-  background: rgba(26, 133, 92, 0.14);
-  color: #166a45;
-}
-
-.instructorTableStatus--paused {
-  background: rgba(247, 159, 6, 0.12);
-  color: #8a5d16;
-}
-
-.instructorTableStatus--locked {
-  background: rgba(255, 60, 60, 0.12);
-  color: #b02b2b;
-}
-
 .instructorTableActions {
   display: flex;
   align-items: center;
