@@ -21,7 +21,7 @@ const CourseInfoStep = ({
             <div className="teacher-create-card teacher-course-info-card">
                 <CourseThumbnailUploader
                     courseId={course.id}
-                    currentFileUrl={course.thumbnailPreviewUrl || course.thumbnailUrl}
+                    currentFileUrl={course.thumbnailPreviewUrl}
                     onUploadComplete={onThumbnailSelected}
                 />
 

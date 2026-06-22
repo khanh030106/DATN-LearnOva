@@ -3,20 +3,9 @@ import axiosClient from "../api/axiosClient.js";
 import { useAuth } from "./useAuth.js";
 
 export const useAxiosPrivate = () => {
-    const { accessToken, refreshAccessToken, logout } = useAuth();
+    const { refreshAccessToken, logout } = useAuth();
 
     useEffect(() => {
-        const requestInterceptor = axiosClient.interceptors.request.use(
-            (config) => {
-                if (accessToken && !config.headers.Authorization) {
-                    config.headers.Authorization = `Bearer ${accessToken}`;
-                }
-
-                return config;
-            },
-            (error) => Promise.reject(error)
-        );
-
         const responseInterceptor = axiosClient.interceptors.response.use(
             (response) => response,
             async (error) => {
@@ -26,10 +15,10 @@ export const useAxiosPrivate = () => {
                     originalRequest._retry = true;
 
                     try {
-                        const newAccessToken = await refreshAccessToken();
+                        await refreshAccessToken();
 
-                        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-
+                        // Retry the original request — the refreshed accessToken cookie
+                        // will be sent automatically by the browser
                         return axiosClient(originalRequest);
                     } catch (refreshError) {
                         await logout();
@@ -42,10 +31,9 @@ export const useAxiosPrivate = () => {
         );
 
         return () => {
-            axiosClient.interceptors.request.eject(requestInterceptor);
             axiosClient.interceptors.response.eject(responseInterceptor);
         };
-    }, [accessToken, refreshAccessToken, logout]);
+    }, [refreshAccessToken, logout]);
 
     return axiosClient;
 };

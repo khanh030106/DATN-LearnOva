@@ -31,9 +31,11 @@ const CourseCreationPage = () => {
         updateLessonSource,
         deleteLesson,
         updateSectionTitle,
-        saveCourseDraft,
-        updateLessonVideo,
+        setLessonVideo,
         updateLessonResources,
+        removeLessonResource,
+        handleCourseInfoNext,
+        handleSectionsNext,
     } = useCourseCreationForm();
 
     const { handleThumbnailSelected, handleLessonVideoSelected, handleLessonSourceSelected, handleLessonResourceSelected } =
@@ -41,50 +43,10 @@ const CourseCreationPage = () => {
             courseId: course.id,
             onCourseChange: updateCourse,
             onLessonSourceChange: updateLessonSource,
-            onLessonVideoChange: updateLessonVideo,
+            onLessonVideoChange: setLessonVideo,
             onLessonResourcesChange: updateLessonResources,
         });
 
-    /**
-     * Step 1 → Step 2:
-     * 1. Tạo course draft (lấy courseId)
-     * 2. Upload thumbnail lên S3 nếu user đã chọn file
-     * 3. Cập nhật thumbnailUrl trong DB
-     */
-    const handleSaveAndContinue = async () => {
-        try {
-            const courseId = await saveCourseDraft();
-
-            if (course.thumbnailFile) {
-                const { uploadUrl, fileKey } = await createThumbnailUploadUrl(courseId, course.thumbnailFile);
-                await uploadFileToS3(uploadUrl, course.thumbnailFile);
-                await updateDraftCourse(courseId, { thumbnailUrl: fileKey });
-                updateCourse({ thumbnailUrl: fileKey, thumbnailFile: null });
-            }
-
-            setCurrentStep(2);
-        } catch (error) {
-            console.error("Failed to save course draft:", error);
-            alert("Không thể lưu khóa học. Vui lòng thử lại.");
-        }
-    };
-
-    /**
-     * Publish course — gọi API thực sự.
-     */
-    const handlePublish = async () => {
-        if (!course.id) {
-            alert("Vui lòng lưu khóa học trước khi publish.");
-            return;
-        }
-        try {
-            const data = await publishCourseApi(course.id);
-            updateCourse({ status: data.status ?? "PUBLISHED" });
-        } catch (error) {
-            console.error("Failed to publish course:", error);
-            alert("Không thể publish khóa học. Vui lòng thử lại.");
-        }
-    };
 
     return (
         <section className="teacher-create-page">
@@ -107,7 +69,7 @@ const CourseCreationPage = () => {
                     onAddListItem={addListItem}
                     onThumbnailSelected={handleThumbnailSelected}
                     onCancel={() => navigate("/learnova/teacher/courses")}
-                    onNext={handleSaveAndContinue}
+                    onNext={() => handleCourseInfoNext()}
                 />
             )}
 
@@ -123,11 +85,12 @@ const CourseCreationPage = () => {
                     onLessonTitleChange={updateLessonTitle}
                     onLessonSourceChange={handleLessonSourceSelected}
                     onLessonResourceChange={handleLessonResourceSelected}
+                    onLessonResourceRemove={removeLessonResource}
                     onDeleteLesson={deleteLesson}
                     onSectionTitleChange={updateSectionTitle}
                     onLessonVideoChange={handleLessonVideoSelected}
                     onPrevious={() => setCurrentStep(1)}
-                    onNext={() => setCurrentStep(3)}
+                    onNext={handleSectionsNext}
                 />
             )}
 
@@ -150,7 +113,7 @@ const CourseCreationPage = () => {
                     visibility={course.visibility}
                     onStatusChange={(status) => updateCourse({ status })}
                     onVisibilityChange={(visibility) => updateCourse({ visibility })}
-                    onPublish={handlePublish}
+                    onPublish={() => updateCourse({ status: "PUBLISHED" })}
                     onPrevious={() => setCurrentStep(3)}
                 />
             )}

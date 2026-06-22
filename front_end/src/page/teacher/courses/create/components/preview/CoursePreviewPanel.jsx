@@ -8,8 +8,8 @@ const CoursePreviewPanel = ({course, sections}) => {
         <div className="teacher-preview-layout">
             <section className="teacher-create-card teacher-student-preview">
                 <div className="teacher-student-preview__media">
-                    {course.thumbnailUrl ? (
-                        <img src={course.thumbnailUrl} alt={courseTitle}/>
+                    {course.thumbnailPreviewUrl ? (
+                        <img src={course.thumbnailPreviewUrl} alt={courseTitle}/>
                     ) : (
                         <span className="teacher-student-preview__placeholder">
               <Image size={34}/>

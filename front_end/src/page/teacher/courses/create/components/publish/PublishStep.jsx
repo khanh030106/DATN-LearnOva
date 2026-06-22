@@ -21,8 +21,8 @@ const PublishStep = ({
                     <section className="teacher-create-card teacher-course-summary">
                         <h2>Course Summary</h2>
                         <div>
-                            {course.thumbnailUrl ? (
-                                <img src={course.thumbnailUrl} alt={courseTitle}/>
+                            {course.thumbnailPreviewUrl ? (
+                                <img src={course.thumbnailPreviewUrl} alt={courseTitle}/>
                             ) : (
                                 <span className="teacher-course-summary__placeholder">
                   <Image size={24}/>

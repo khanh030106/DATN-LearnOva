@@ -40,7 +40,12 @@ public class AuthController {
          response.addHeader(
                  HttpHeaders.SET_COOKIE,
                  refreshCookieService.createRefreshTokenCookie(result.refreshToken(), request.rememberMe()).toString()
-     );
+         );
+
+         response.addHeader(
+                 HttpHeaders.SET_COOKIE,
+                 refreshCookieService.createAccessTokenCookie(result.accessToken()).toString()
+         );
 
      return ResponseEntity.ok(new LoginResponse(result.accessToken()));
      }
@@ -57,13 +62,21 @@ public class AuthController {
 
      try {
           LoginResponse loginResponse = authService.refreshAccessToken(refreshToken);
+
+          response.addHeader(
+                  HttpHeaders.SET_COOKIE,
+                  refreshCookieService.createAccessTokenCookie(loginResponse.accessToken()).toString()
+          );
+
           return ResponseEntity.ok(loginResponse);
      } catch (RuntimeException e) {
-          // Token không hợp lệ, đã bị xóa, hoặc hết hạn
-          // Clear cookie cũ và trả về 401
           response.addHeader(
                   HttpHeaders.SET_COOKIE,
                   refreshCookieService.clearRefreshTokenCookie().toString()
+          );
+          response.addHeader(
+                  HttpHeaders.SET_COOKIE,
+                  refreshCookieService.clearAccessTokenCookie().toString()
           );
           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
      }
@@ -80,6 +93,11 @@ public class AuthController {
      response.addHeader(
              HttpHeaders.SET_COOKIE,
              refreshCookieService.clearRefreshTokenCookie().toString()
+     );
+
+     response.addHeader(
+             HttpHeaders.SET_COOKIE,
+             refreshCookieService.clearAccessTokenCookie().toString()
      );
 
      return ResponseEntity.noContent().build();

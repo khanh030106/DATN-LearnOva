@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from "react";
-import {FileText, GripVertical, HelpCircle, Pencil, PlayCircle, Trash2, FileUp} from "lucide-react";
+import {FileText, GripVertical, HelpCircle, Pencil, PlayCircle, Trash2, FileUp, X} from "lucide-react";
 import LessonResourceList from "./LessonResourceList.jsx";
 import LessonVideoUploader from "./LessonVideoUploader.jsx";
 import LessonResourceUploader from "./LessonResourceUploader.jsx";
@@ -21,13 +21,15 @@ const iconMap = {
 const LessonRow = ({
                        courseId,
                        lesson,
+                       sectionId,
                        onTitleChange,
                        onVideoChange,
                        onResourceChange,
+                       onResourceRemove,
                        onDelete,
                    }) => {
     const Icon = iconMap[lesson.type] || FileText;
-    const lessonTitle = lesson.title || "Untitled lesson";
+    const lessonTitle = lesson.title || "Enter lesson title...";
     const [isEditing, setIsEditing] = useState(false);
     const [draftTitle, setDraftTitle] = useState(lesson.title);
     const [resourceType, setResourceType] = useState(lesson.type || "Video");
@@ -43,7 +45,7 @@ const LessonRow = ({
     const commitTitle = () => {
         const nextTitle = draftTitle.trim();
 
-        if (nextTitle && nextTitle !== lesson.title) {
+        if (nextTitle !== lesson.title) {
             onTitleChange(nextTitle);
         } else {
             setDraftTitle(lesson.title);
@@ -93,7 +95,10 @@ const LessonRow = ({
                 )}
                 {lesson.sourceName && <small>{lesson.sourceName}</small>}
                 {lesson.videoName && <small className="teacher-lesson-builder-row__video-tag">🎬 {lesson.videoName}</small>}
-                <LessonResourceList resources={lesson.resources}/>
+                <LessonResourceList 
+                    resources={lesson.resources} 
+                    onRemove={(index) => onResourceRemove?.(index)}
+                />
             </div>
 
             <select

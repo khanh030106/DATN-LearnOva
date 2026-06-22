@@ -206,6 +206,10 @@
   white-space: nowrap;
 }
 
+.teacher-upload-box__preview{
+  width: 300px;
+}
+
 .teacher-courses-create svg {
   width: 16px;
   height: 16px;

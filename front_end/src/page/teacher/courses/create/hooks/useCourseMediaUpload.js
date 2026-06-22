@@ -1,4 +1,27 @@
 import {isValidUploadFile} from "../utils/courseCreationValidation.js";
+import { generateUploadUrl } from "../../../../../api/teacher/UploadApi.js";
+import { uploadFileToS3 } from "../../../../../services/UploadService.js";
+
+// Helper function to get video duration
+const getVideoDuration = (file) => {
+    return new Promise((resolve, reject) => {
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+        
+        video.onloadedmetadata = () => {
+            window.URL.revokeObjectURL(video.src);
+            const duration = Math.floor(video.duration); // Duration in seconds
+            resolve(duration);
+        };
+        
+        video.onerror = () => {
+            window.URL.revokeObjectURL(video.src);
+            reject(new Error('Failed to load video metadata'));
+        };
+        
+        video.src = URL.createObjectURL(file);
+    });
+};
 
 export const useCourseMediaUpload = ({
                                          courseId,
@@ -8,13 +31,68 @@ export const useCourseMediaUpload = ({
                                          onLessonResourcesChange,
                                      } = {}) => {
 
-    const handleThumbnailSelected = (file) => {
+    const handleThumbnailSelected = async (file) => {
         if (!isValidUploadFile(file)) {
             return;
         }
+        const { uploadUrl, fileKey } =
+            await generateUploadUrl({
+                type: "THUMBNAIL",
+                fileName: file.name,
+                contentType: file.type,
+            });
+        await uploadFileToS3(
+            uploadUrl,
+            file
+        );
         onCourseChange?.({
-            thumbnailFile: file, thumbnailPreviewUrl: URL.createObjectURL(file),
+            thumbnailKey: fileKey,
+            thumbnailPreviewUrl:
+                URL.createObjectURL(file),
         });
+    };
+
+    const handleLessonVideoSelected = async (sectionId, lessonId, file) => {
+        if (!isValidUploadFile(file)) {
+            alert("Invalid file. Please select a valid video file.");
+            return;
+        }
+
+        try {
+            // Get video duration before uploading
+            let durationSeconds = null;
+            try {
+                durationSeconds = await getVideoDuration(file);
+                console.log(`Video duration: ${durationSeconds} seconds`);
+            } catch (error) {
+                console.warn("Could not extract video duration:", error);
+                // Continue without duration - it's optional
+            }
+
+            // Generate presigned URL for video
+            const { uploadUrl, fileKey } = await generateUploadUrl({
+                type: "VIDEO",
+                fileName: file.name,
+                contentType: file.type,
+            });
+
+            // Upload to S3
+            await uploadFileToS3(uploadUrl, file);
+
+            // Update local state with video info INCLUDING metadata and duration
+            onLessonVideoChange?.(sectionId, lessonId, {
+                key: fileKey,
+                name: file.name,
+                contentType: file.type,
+                sizeBytes: file.size,
+                durationSeconds: durationSeconds,
+            });
+
+            console.log("Video uploaded successfully:", file.name);
+        } catch (error) {
+            console.error("Failed to upload video:", error);
+            alert(`Failed to upload video: ${file.name}`);
+        }
     };
 
     const handleLessonSourceSelected = (sectionId, lessonId, file) => {
@@ -24,40 +102,35 @@ export const useCourseMediaUpload = ({
         onLessonSourceChange?.(sectionId, lessonId, file);
     };
 
-    const handleLessonVideoSelected = async (sectionId, lessonId, file) => {
-        if (!isValidUploadFile(file)) return;
-
-        try {
-            const { uploadUrl, fileKey } = await createLessonVideoUploadUrl(lessonId, file, courseId, sectionId);
-            await uploadFileToS3(uploadUrl, file);
-            await completeLessonVideoUpload(lessonId, fileKey);
-            onLessonVideoChange?.(sectionId, lessonId, {
-                videoKey: fileKey,
-                videoStatus: "READY",
-                videoName: file.name,
-            });
-        } catch (error) {
-            console.error(error);
-            alert("Failed to upload lesson video.");
-        }
-    };
-
-    const handleLessonResourceSelected = async (sectionId, lessonId, files, meta) => {
-        const { resourceType } = meta || {};
+    const handleLessonResourceSelected = async (sectionId, lessonId, files) => {
         const uploadedResources = [];
 
         for (const file of files) {
-            if (!isValidUploadFile(file)) continue;
+            if (!isValidUploadFile(file)) {
+                console.warn(`Skipping invalid file: ${file.name}`);
+                continue;
+            }
 
             try {
-                const { uploadUrl, fileKey } = await createLessonResourceUploadUrl(lessonId, file, courseId, sectionId);
-                await uploadFileToS3(uploadUrl, file);
-                uploadedResources.push({
-                    id: crypto.randomUUID(),
-                    name: file.name,
-                    fileKey,
-                    type: resourceType || "Document",
+                // Generate presigned URL
+                const { uploadUrl, fileKey } = await generateUploadUrl({
+                    type: "DOCUMENT",
+                    fileName: file.name,
+                    contentType: file.type,
                 });
+
+                // Upload to S3
+                await uploadFileToS3(uploadUrl, file);
+
+                // Add to uploaded resources
+                uploadedResources.push({
+                    fileKey: fileKey,
+                    fileName: file.name,
+                    fileSize: file.size,
+                    fileType: file.type,
+                });
+
+                console.log("Resource uploaded successfully:", file.name);
             } catch (error) {
                 console.error(`Failed to upload resource: ${file.name}`, error);
                 alert(`Failed to upload: ${file.name}`);
@@ -70,6 +143,9 @@ export const useCourseMediaUpload = ({
     };
 
     return {
-        handleThumbnailSelected, handleLessonSourceSelected, handleLessonVideoSelected, handleLessonResourceSelected,
+        handleThumbnailSelected,
+        handleLessonVideoSelected,
+        handleLessonSourceSelected,
+        handleLessonResourceSelected,
     };
 };

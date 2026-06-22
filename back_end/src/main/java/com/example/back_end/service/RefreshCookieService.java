@@ -9,12 +9,16 @@ import java.time.Duration;
 public class RefreshCookieService {
 
     private static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
+    private static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
 
     @Value("${jwt.refresh-token-expiration}")
     private Long refreshTokenExpiration;
 
     @Value("${jwt.refresh-token-remember-expiration}")
     private Long refreshTokenRememberExpiration;
+
+    @Value("${jwt.access-token-expiration}")
+    private Long accessTokenExpiration;
 
     public ResponseCookie createRefreshTokenCookie(String refreshToken, Boolean remember) {
         Long expiration = Boolean.TRUE.equals(remember)
@@ -35,6 +39,26 @@ public class RefreshCookieService {
                 .httpOnly(true)
                 .secure(false)
                 .path("/api/learnova/auth")
+                .maxAge(0)
+                .sameSite("Lax")
+                .build();
+    }
+
+    public ResponseCookie createAccessTokenCookie(String accessToken) {
+        return ResponseCookie.from(ACCESS_TOKEN_COOKIE_NAME, accessToken)
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(Duration.ofMillis(accessTokenExpiration))
+                .sameSite("Lax")
+                .build();
+    }
+
+    public ResponseCookie clearAccessTokenCookie() {
+        return ResponseCookie.from(ACCESS_TOKEN_COOKIE_NAME, "")
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
                 .maxAge(0)
                 .sameSite("Lax")
                 .build();

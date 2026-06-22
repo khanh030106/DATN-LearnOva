@@ -1,4 +1,9 @@
+import {useRef} from "react";
+import {FileUp} from "lucide-react";
+
 const LessonResourceUploader = ({courseId, lessonId, onUploadComplete}) => {
+    const fileInputRef = useRef(null);
+
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files || []);
 
@@ -10,12 +15,15 @@ const LessonResourceUploader = ({courseId, lessonId, onUploadComplete}) => {
     };
 
     return (
-        <input
-            type="file"
-            multiple
-            aria-label="Upload lesson resources"
-            onChange={handleFileChange}
-        />
+        <button type="button" aria-label="Upload lesson resources" onClick={() => fileInputRef.current?.click()}>
+            <FileUp size={16}/>
+            <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                onChange={handleFileChange}
+            />
+        </button>
     );
 };
 
