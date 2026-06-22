@@ -88,5 +88,28 @@ public class AuthController {
                 )
         );
     }
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyAccount(@RequestParam("token") String token) {
+        System.out.println("=== PROCESSING ACCOUNT VERIFICATION ===");
+        System.out.println("Received token from client: " + token);
+
+        authService.verifyEmail(token);
+
+        return ResponseEntity.ok(
+                new RegisterResponse(
+                        true,
+                        "Your account has been activated successfully! You can now log in."
+                )
+        );
+    }
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleRuntimeException(
+            RuntimeException ex
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ex.getMessage()));
+    }
+
 
  }

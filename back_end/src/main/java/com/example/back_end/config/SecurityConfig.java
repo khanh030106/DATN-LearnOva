@@ -40,6 +40,7 @@ public class SecurityConfig {
 //                        .requestMatchers("/api/learnova/review/post").permitAll()
 //                        .requestMatchers("/api/learnova/course/**").permitAll()
                         .requestMatchers("/api/learnova/review/**").permitAll()
+                                .requestMatchers("/api/learnova/auth/resend-verification").permitAll()
                                 .requestMatchers("/error").permitAll()// để test
                         .anyRequest().authenticated()
                 )

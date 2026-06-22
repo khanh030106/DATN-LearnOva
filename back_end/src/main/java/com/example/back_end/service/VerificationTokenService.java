@@ -49,12 +49,12 @@ public class VerificationTokenService {
     }
 
     public Verificationtoken verifyRefreshToken(String token) {
-
+        // Tuân thủ 3 tham số từ Repository của bạn đóng gói, truyền Boolean.FALSE tường minh
         return verificationTokenRepository.findByTokenAndTokenTypeAndIsUsedFalse(
                 token,
                 VerificationType.REFRESH_TOKEN,
-                false
-                ).orElseThrow(() -> new RuntimeException("Refresh token expired"));
+                Boolean.FALSE
+        ).orElseThrow(() -> new RuntimeException("Refresh token expired"));
     }
 
     @Transactional
@@ -68,5 +68,40 @@ public class VerificationTokenService {
                 VerificationType.REFRESH_TOKEN,
                 OffsetDateTime.now()
         );
+    }
+
+    @Transactional
+    public Verificationtoken createActiveAccountToken(User user) {
+        verificationTokenRepository.deleteByUserAndTokenType(
+                user,
+                VerificationType.ACTIVE_ACCOUNT
+        );
+
+        Verificationtoken token = new Verificationtoken();
+        token.setUser(user);
+        token.setToken(UUID.randomUUID().toString());
+        token.setTokenType(VerificationType.ACTIVE_ACCOUNT);
+        token.setCreatedAt(Instant.now());
+        token.setExpiredAt(OffsetDateTime.now().plusMinutes(5));
+        token.setIsUsed(false);
+
+        return verificationTokenRepository.save(token);
+    }
+
+    public Verificationtoken verifyActiveAccountToken(String token) {
+        // Tuân thủ 3 tham số từ Repository của bạn đóng gói, truyền Boolean.FALSE tường minh
+        return verificationTokenRepository
+                .findByTokenAndTokenTypeAndIsUsedFalse(
+                        token,
+                        VerificationType.ACTIVE_ACCOUNT,
+                        Boolean.FALSE
+                )
+                .orElseThrow(() -> new RuntimeException("Invalid activation token"));
+    }
+
+    @Transactional
+    public void markAsUsed(Verificationtoken token) {
+        token.setIsUsed(true);
+        verificationTokenRepository.save(token);
     }
 }
