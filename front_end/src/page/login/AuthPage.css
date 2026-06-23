@@ -390,7 +390,7 @@ body {
 }
 
 .auth-error {
-    margin: -12px 0 18px;
+    /*margin: -12px 0 18px;*/
     color: var(--auth-danger);
     font-size: 14px;
     font-weight: 600;
@@ -787,4 +787,162 @@ body {
         width: 58px;
         height: 58px;
     }
+}
+.auth-error {
+    color: #ef4444;
+    font-size: 14px;
+     /*text-align: center;*/
+     margin-top: 10px;
+}
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-box-register {
+    width: 420px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px 20px;
+    text-align: center;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+
+    transform: scale(0.95);
+    animation: popIn 0.25s ease forwards;
+}
+
+.modal-box-register h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #111827;
+}
+
+.modal-box-register p {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.modal-actions-register {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn-primary-register {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.btn-primary-register:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.btn-secondary-register {
+    background: #e5e7eb;
+    color: #111827;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.btn-secondary-register:hover {
+    background: #d1d5db;
+}
+
+.btn-secondary-register:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-close-register {
+    margin-top: 12px;
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.btn-close-register:hover {
+    text-decoration: underline;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 3px solid #ffffff;
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.register-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.register-modal-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.register-modal-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #06b6d4);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-size: 20px;
 }

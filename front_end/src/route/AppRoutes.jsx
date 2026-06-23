@@ -35,13 +35,15 @@ import CourseDetail from "../page/users/course/CourseDetail/CourseDetail.jsx";
 import CourseDetaill from "../page/home/courses/CourseDetail.jsx";
 import Cart from "../page/home/cart/Cart.jsx";
 
+
 const App = () => {
     return (
         <BrowserRouter>
             <Routes>
 
                 <Route path="/learnova/auth/login" element={<AuthPage/>}/>
-                <Route path="/learnova/user/CoursesDetail" element={<CourseDetail/>}/>
+                <Route path="/learnova/user/Courses-detail" element={<CourseDetail/>}/>
+
 
                 <Route element={<HomeLayout/>}>
                     <Route path="/learnova/home" element={<Home/>}/>

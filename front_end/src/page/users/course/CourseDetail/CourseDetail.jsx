@@ -1,42 +1,115 @@
-import React, {useState} from 'react';
-import './CourseDetail.css';
-import {FaClipboardCheck} from "react-icons/fa";
-import {FaPlay } from 'react-icons/fa';
-import {ChevronDown} from 'lucide-react';
+
+import "./CourseDetail.css";
+
+import { FaClipboardCheck } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa";
+import { ChevronDown } from "lucide-react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Header from "../../../../component/header/user_header/Header.jsx";
 import Footer from "../../../../component/footer/footer-courseDetail/footer-courseDetail.jsx";
+
 import {
     qaData,
     course,
-    reviewsData,
     courseDescription,
     instructor,
     curriculum
 } from "./mockCourseData.js";
+
 import CourseVideoPlayer from "./VideoPlayer.jsx";
 import OverviewTab from "./OverviewTab.jsx";
 import QATab from "./QATab.jsx";
 import ReviewsTab from "./Review.jsx";
+
 import LearnovaAI from "../../../home/AI/AI.jsx";
-import {FaPlayCircle, FaClock} from "react-icons/fa";
-import QuizTab from "./QuizPage.jsx";
+
+import { FaPlayCircle, FaClock } from "react-icons/fa";
+
 import QuizPage from "./QuizPage.jsx";
+
+import {
+    getCourseReviewsApi,
+    deleteReviewApi,
+    getRatingSummaryApi
+} from "../../../../api/ReviewApi.js";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../../../../context/AuthContext";
+
 
 
 function CourseDetail() {
+    const reviewsPerPage = 3;
+
+    const [reviewsData, setReviewsData] = useState([]);
+    const [ratingSummary, setRatingSummary] = useState(null);
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const data = await getCourseReviewsApi(5);
+                console.log("DATA =", data);
+                setReviewsData(data);
+            } catch (error) {
+                console.log("ERROR =", error.response);
+            }
+        };
+
+        fetchReviews();
+    }, []);
+    useEffect(() => {
+        const fetchRatingSummary = async () => {
+            try {
+                const data = await getRatingSummaryApi(5); // sau thay  courseId động
+                console.log("RATING SUMMARY =", data);
+                setRatingSummary(data);
+            } catch (error) {
+                console.log("ERROR SUMMARY =", error.response);
+            }
+        };
+
+        fetchRatingSummary();
+    }, []);
+    const handleDeleteReview = async (reviewId) => {
+        try {
+            await deleteReviewApi(reviewId);
+
+            setReviewsData(prev =>
+                prev.filter(item => item.reviewId !== reviewId)
+            );
+
+            return true;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
+
     const [activeTab, setActiveTab] = useState('overview');
     const [expandedSections, setExpandedSections] = useState([1]);
     const [activeVideo, setActiveVideo] = useState(1);
     const [expandedDescription, setExpandedDescription] = useState(false);
 
+    const { currentUser } = useContext(AuthContext);
+
+    console.log("=== CURRENT USER FROM CONTEXT ===");
+    console.log(currentUser);
+
+    const currentUserId =
+        currentUser?.id ||
+        currentUser?.userId ||
+        currentUser?.idUser;
+
+    console.log("CURRENT USER ID =", currentUserId);
 
     // data
-
     const [reviewQuery, setReviewQuery] = useState('');
     const [ratingFilter, setRatingFilter] = useState('all'); // 'all' | 5 | 4 | ...
     const [currentReviewPage, setCurrentReviewPage] = useState(1);
-    const reviewsPerPage = 5;
     const [helpfulMap, setHelpfulMap] = useState({});
+
     const handleSearchReviews = (e) => {
         setReviewQuery(e.target.value);
         setCurrentReviewPage(1);
@@ -50,6 +123,7 @@ function CourseDetail() {
     const toggleHelpful = (id) => {
         setHelpfulMap(prev => ({...prev, [id]: (prev[id] || 0) + 1}));
     };
+
     const [selectedQuestion, setSelectedQuestion] = useState(null);
     const [replyText, setReplyText] = useState('');
     const [savedQuestions, setSavedQuestions] = useState([]);
@@ -62,9 +136,9 @@ function CourseDetail() {
     const handleReplySubmit = (qId) => {
         if (!replyText.trim()) return;
         console.log('Gửi phản hồi cho question', qId, replyText);
-        // TODO: gọi API hoặc cập nhật state local
         setReplyText('');
     };
+
     const [showQuestionForm, setShowQuestionForm] = useState(false);
     const toggleSection = (sectionId) => {
         setExpandedSections((prev) =>
@@ -87,6 +161,7 @@ function CourseDetail() {
                 <div className="left-side">
                     {/* VIDEO PLAYER */}
                     <CourseVideoPlayer/>
+                    <ToastContainer />
 
                     {/* TABS */}
                     <div className="tabs-container">
@@ -151,6 +226,10 @@ function CourseDetail() {
                         {activeTab === "reviews" && (
                             <ReviewsTab
                                 reviewsData={reviewsData}
+                                setReviewsData={setReviewsData}
+                                currentUserId={currentUserId}
+                                ratingSummary={ratingSummary}
+                                handleDeleteReview={handleDeleteReview}
                                 reviewQuery={reviewQuery}
                                 setReviewQuery={setReviewQuery}
                                 ratingFilter={ratingFilter}
@@ -162,6 +241,7 @@ function CourseDetail() {
                                 toggleHelpful={toggleHelpful}
                                 handleSearchReviews={handleSearchReviews}
                                 handleRatingFilter={handleRatingFilter}
+
                             />
                         )}
                     </div>

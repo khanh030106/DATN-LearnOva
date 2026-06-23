@@ -2083,3 +2083,180 @@ hr {
     color: #2563eb;
     font-size: 16px;
 }
+.no-reviews {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    color: #777;
+    text-align: center;
+}
+
+.no-reviews h3 {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.no-reviews p {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #999;
+}
+.menu-wrapper {
+    margin-left: auto;
+    position: relative;
+}
+
+.menu-btn-course {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 25px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    min-width: 100px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+.dropdown-menu button {
+    padding: 8px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+}
+
+.dropdown-menu button:hover {
+    background: #f2f2f2;
+}
+
+.edit-box textarea {
+    width: 100%;
+    min-height: 60px;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+/* màu cho thông báo*/
+.toast-green {
+    background-color: #FFFFFF !important; /* xanh lá */
+    color: #1c1c1c !important;
+}
+
+.toast-progress-white {
+    background: white !important;
+}
+.no-search-result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px 20px;
+    margin-top: 20px;
+
+    text-align: center;
+    border: 1px dashed #ddd;
+    border-radius: 12px;
+    background-color: #fafafa;
+}
+
+.no-search-result svg {
+    margin-bottom: 12px;
+    opacity: 0.7;
+}
+
+.no-search-result h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 6px;
+}
+
+.no-search-result p {
+    font-size: 14px;
+    color: #888;
+}
+.edit-box {
+    margin-top: 12px;
+    padding: 18px;
+    background: #f8fbff;
+    border: 1px solid #dbeafe;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+}
+
+.edit-box textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px 14px;
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    resize: vertical;
+    font-size: 14px;
+    line-height: 1.6;
+    outline: none;
+    transition: all 0.25s ease;
+    background: #fff;
+}
+
+.edit-box textarea:focus {
+    border-color: #6092df;
+    box-shadow: 0 0 0 2px rgba(139, 170, 225, 0.15);
+}
+
+.edit-actions {
+    display: flex;
+    justify-content: flex-end; /* đẩy nút sang phải */
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.edit-actions button {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+/* Save */
+.edit-actions button:first-child {
+    background: #3b82f6;
+    color: white;
+}
+
+.edit-actions button:first-child:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+/* Cancel */
+.edit-actions button:last-child {
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+}
+
+.edit-actions button:last-child:hover {
+    background: #dbeafe;
+}
