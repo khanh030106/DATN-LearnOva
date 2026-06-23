@@ -49,19 +49,16 @@ public class VerificationTokenService {
     }
 
     public Verificationtoken verifyRefreshToken(String token) {
-        // Tuân thủ 3 tham số từ Repository của bạn đóng gói, truyền Boolean.FALSE tường minh
         return verificationTokenRepository.findByTokenAndTokenTypeAndIsUsedFalse(
                 token,
                 VerificationType.REFRESH_TOKEN,
                 Boolean.FALSE
         ).orElseThrow(() -> new RuntimeException("Refresh token expired"));
     }
-
     @Transactional
     public void deleteRefreshTokenByUser(User user) {
         verificationTokenRepository.deleteByUserAndTokenType(user, VerificationType.REFRESH_TOKEN);
     }
-
     @Transactional
     public int deleteExpiredRefreshTokens() {
         return verificationTokenRepository.deleteExpiredTokens(
@@ -69,14 +66,12 @@ public class VerificationTokenService {
                 OffsetDateTime.now()
         );
     }
-
     @Transactional
     public Verificationtoken createActiveAccountToken(User user) {
         verificationTokenRepository.deleteByUserAndTokenType(
                 user,
                 VerificationType.ACTIVE_ACCOUNT
         );
-
         Verificationtoken token = new Verificationtoken();
         token.setUser(user);
         token.setToken(UUID.randomUUID().toString());
@@ -84,12 +79,9 @@ public class VerificationTokenService {
         token.setCreatedAt(Instant.now());
         token.setExpiredAt(OffsetDateTime.now().plusMinutes(5));
         token.setIsUsed(false);
-
         return verificationTokenRepository.save(token);
     }
-
     public Verificationtoken verifyActiveAccountToken(String token) {
-        // Tuân thủ 3 tham số từ Repository của bạn đóng gói, truyền Boolean.FALSE tường minh
         return verificationTokenRepository
                 .findByTokenAndTokenTypeAndIsUsedFalse(
                         token,

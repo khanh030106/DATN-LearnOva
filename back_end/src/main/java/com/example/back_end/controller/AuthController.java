@@ -15,6 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import com.example.back_end.dto.resquest.RegisterRequest;
 import com.example.back_end.dto.response.RegisterResponse;
+import com.example.back_end.dto.resquest.ResendVerificationRequest;
 
 
 @RestController
@@ -110,6 +111,24 @@ public class AuthController {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(ex.getMessage()));
     }
+
+    @PostMapping("/resend-verification")
+    public ResponseEntity<?> resendVerification(
+            @RequestBody ResendVerificationRequest request
+    ) {
+
+        authService.resendVerificationEmail(
+                request.getEmail()
+        );
+
+        return ResponseEntity.ok(
+                new RegisterResponse(
+                        true,
+                        "Verification email sent successfully."
+                )
+        );
+    }
+
 
 
  }

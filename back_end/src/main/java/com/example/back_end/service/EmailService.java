@@ -105,11 +105,6 @@ public class EmailService {
                );
 
         try {
-
-            System.out.println("=== START SEND EMAIL ===");
-            System.out.println("TO: " + toEmail);
-            System.out.println("LINK: " + verifyLink);
-
             MimeMessage message =
                     new MimeMessage(session);
 
@@ -138,8 +133,6 @@ public class EmailService {
 
             Transport.send(message);
 
-            System.out.println("=== EMAIL SENT SUCCESSFULLY ===");
-
         } catch (Exception e) {
 
             System.out.println("=== SEND EMAIL FAILED ===");
@@ -152,7 +145,4 @@ public class EmailService {
 
         }
     }
-
-
-
 }

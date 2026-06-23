@@ -71,7 +71,6 @@ public class AuthService {
         if (refreshToken == null) {
             return;
         }
-
         Verificationtoken validRefreshToken = verificationTokenService.verifyRefreshToken(refreshToken);
         verificationTokenService.deleteRefreshTokenByUser(validRefreshToken.getUser());
     }
@@ -81,7 +80,6 @@ public class AuthService {
         User user = userRepository
                 .findByEmailAndIsDeletedFalse(email, false)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
 
         return new CurrentUserResponse(
                 user.getId(),
@@ -93,19 +91,16 @@ public class AuthService {
     }
     @Transactional
     public void register(RegisterRequest request) {
-
         // Check email exists
         if (userRepository.existsUsersByEmail(request.email())) {
             throw new RuntimeException("Email already exists.");
         }
-
         // Check password length
         if (request.password() == null || request.password().length() < 6) {
             throw new RuntimeException(
                     "Password must be at least 6 characters long."
             );
         }
-
         // Check confirm password
         if (!request.password().equals(request.confirmPassword())) {
             throw new RuntimeException(
@@ -119,7 +114,6 @@ public class AuthService {
         user.setPasswordHash(
                 passwordEncoder.encode(request.password())
         );
-
         // Account is inactive until email verification
         user.setIsActive(false);
         user.setIsDeleted(false);
@@ -169,26 +163,19 @@ public class AuthService {
     }
     @Transactional
     public void resendVerificationEmail(String email) {
-        // 1. Tìm xem user có tồn tại với email này không
         User user = userRepository.findByEmailAndIsDeletedFalse(email.trim().toLowerCase(), false)
                 .orElseThrow(() -> new RuntimeException("Email không tồn tại trên hệ thống."));
-
-        // 2. Nếu tài khoản đã kích hoạt rồi thì không cần gửi nữa
         if (user.getIsActive()) {
             throw new RuntimeException("Tài khoản này đã được kích hoạt trước đó.");
         }
-
-        // 3. Tạo một mã kích hoạt mới tinh (nó sẽ tự ghi đè hoặc tạo mới tùy logic Service của bạn)
         Verificationtoken verificationToken = verificationTokenService.createActiveAccountToken(user);
-
-        // 4. Tạo đường link chuẩn chạy thẳng về trang Login của Frontend giống như lúc đăng ký
         String verifyLink = "http://localhost:5173/learnova/auth/login?token=" + verificationToken.getToken();
 
-        // 5. Tiến hành gửi lại Mail
         emailService.sendVerificationEmail(
                 user.getEmail(),
                 user.getFullName(),
                 verifyLink
         );
     }
+
 }

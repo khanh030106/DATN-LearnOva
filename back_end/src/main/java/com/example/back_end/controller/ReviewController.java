@@ -55,12 +55,11 @@ public class ReviewController {
         return reviewService.updateReview(userDetails.getId(), request);
     }
 
-    @DeleteMapping("/review/delete/{reviewId}")  // /review/delete/{reviewId}
+    @DeleteMapping("/review/delete/{reviewId}")
     public void deleteReview(
             Authentication authentication,
             @PathVariable Long reviewId) {
-        System.out.println("=== CONTROLLER DELETE REVIEW START ===");
-        System.out.println("reviewId = " + reviewId);
+
 
         if (authentication == null) {
             System.out.println("AUTH NULL");
@@ -69,13 +68,7 @@ public class ReviewController {
 
         CustomUserDetails userDetails =
                 (CustomUserDetails) authentication.getPrincipal();
-
-        System.out.println("userId = " + userDetails.getId());
-        System.out.println("userEmail = " + userDetails.getUsername());
-
         reviewService.deleteReview(userDetails.getId(), reviewId);
-
-        System.out.println("=== CONTROLLER DELETE REVIEW END ===");
     }
     @GetMapping("/review/summary/{courseId}")
     public RatingSummaryResponse getRatingSummary(@PathVariable Long courseId) {
