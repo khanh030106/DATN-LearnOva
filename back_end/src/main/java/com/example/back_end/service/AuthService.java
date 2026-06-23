@@ -78,7 +78,7 @@ public class AuthService {
     public CurrentUserResponse getCurrentUser(String email) {
 
         User user = userRepository
-                .findByEmailAndIsDeletedFalse(email, false)
+                .findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return new CurrentUserResponse(
@@ -163,8 +163,9 @@ public class AuthService {
     }
     @Transactional
     public void resendVerificationEmail(String email) {
-        User user = userRepository.findByEmailAndIsDeletedFalse(email.trim().toLowerCase(), false)
-                .orElseThrow(() -> new RuntimeException("Email không tồn tại trên hệ thống."));
+        User user = userRepository.findByEmailAndIsDeletedFalse(
+                email.trim().toLowerCase()
+        ).orElseThrow(() -> new RuntimeException("Email không tồn tại trên hệ thống."));
         if (user.getIsActive()) {
             throw new RuntimeException("Tài khoản này đã được kích hoạt trước đó.");
         }

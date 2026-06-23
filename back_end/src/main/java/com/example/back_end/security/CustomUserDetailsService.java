@@ -15,7 +15,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public @NullMarked UserDetails loadUserByUsername(String email){
-        User user = userRepository.findByEmailAndIsDeletedFalse(email, false)
+
+        User user = userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
 
         return new CustomUserDetails(user);

@@ -34,6 +34,7 @@ import CoursePage from "../page/users/course/CourseNew.jsx";
 import CourseDetail from "../page/users/course/CourseDetail/CourseDetail.jsx";
 import CourseDetaill from "../page/home/courses/CourseDetail.jsx";
 import Cart from "../page/home/cart/Cart.jsx";
+import OAuth2Success from "./../page/login/OAuth2Success.jsx";
 
 
 const App = () => {
@@ -43,6 +44,7 @@ const App = () => {
 
                 <Route path="/learnova/auth/login" element={<AuthPage/>}/>
                 <Route path="/learnova/user/Courses-detail" element={<CourseDetail/>}/>
+                <Route path="/oauth2-success" element={<OAuth2Success />}/>
 
 
                 <Route element={<HomeLayout/>}>

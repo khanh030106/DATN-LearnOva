@@ -34,7 +34,7 @@ public class ReviewController {
         return reviewService.createReview(userId, request);
     }
 
-    @GetMapping("/course/{courseId}")// /review/get-review/{courseId}
+    @GetMapping("/course/{courseId}")
     public List<ReviewResponse> getCourseReviews(
             @PathVariable Long courseId
     ) {

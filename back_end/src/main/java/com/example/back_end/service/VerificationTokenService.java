@@ -30,7 +30,7 @@ public class VerificationTokenService {
 
     @Transactional
     public Verificationtoken createRefreshToken(String email, Boolean rememberMe) {
-        User user = userRepository.findByEmailAndIsDeletedFalse(email, false)
+        User user = userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         verificationTokenRepository.deleteByUserAndTokenType(user, VerificationType.REFRESH_TOKEN);
