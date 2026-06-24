@@ -1,7 +1,7 @@
 import {useRef} from "react";
 import {FileUp} from "lucide-react";
 
-const LessonResourceUploader = ({courseId, lessonId, onUploadComplete}) => {
+const ResourceUploader = ({courseId, lessonId, onUploadComplete}) => {
     const fileInputRef = useRef(null);
 
     const handleFileChange = (event) => {
@@ -27,4 +27,4 @@ const LessonResourceUploader = ({courseId, lessonId, onUploadComplete}) => {
     );
 };
 
-export default LessonResourceUploader;
+export default ResourceUploader;

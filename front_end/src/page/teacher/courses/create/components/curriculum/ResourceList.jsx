@@ -1,6 +1,6 @@
 import {FileText, X} from "lucide-react";
 
-const LessonResourceList = ({resources = [], onRemove}) => {
+const ResourceList = ({resources = [], onRemove}) => {
     if (resources.length === 0) {
         return null;
     }
@@ -36,4 +36,4 @@ const LessonResourceList = ({resources = [], onRemove}) => {
     );
 };
 
-export default LessonResourceList;
+export default ResourceList;

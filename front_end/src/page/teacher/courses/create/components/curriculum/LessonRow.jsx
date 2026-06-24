@@ -1,8 +1,8 @@
 import {useEffect, useRef, useState} from "react";
 import {FileText, GripVertical, HelpCircle, Pencil, PlayCircle, Trash2, FileUp, X} from "lucide-react";
-import LessonResourceList from "./LessonResourceList.jsx";
-import LessonVideoUploader from "./LessonVideoUploader.jsx";
-import LessonResourceUploader from "./LessonResourceUploader.jsx";
+import ResourceList from "./ResourceList.jsx";
+import VideoUploader from "./VideoUploader.jsx";
+import ResourceUploader from "./ResourceUploader.jsx";
 
 const RESOURCE_TYPES = [
     {value: "Video", label: "Video", icon: PlayCircle},
@@ -95,8 +95,8 @@ const LessonRow = ({
                 )}
                 {lesson.sourceName && <small>{lesson.sourceName}</small>}
                 {lesson.videoName && <small className="teacher-lesson-builder-row__video-tag">🎬 {lesson.videoName}</small>}
-                <LessonResourceList 
-                    resources={lesson.resources} 
+                <ResourceList
+                    resources={lesson.resources}
                     onRemove={(index) => onResourceRemove?.(index)}
                 />
             </div>
@@ -117,7 +117,7 @@ const LessonRow = ({
             </button>
 
             {resourceType === "Video" && (
-                <LessonVideoUploader
+                <VideoUploader
                     courseId={courseId}
                     lessonId={lesson.id}
                     accept="video/mp4,video/webm,video/quicktime"
@@ -127,7 +127,7 @@ const LessonRow = ({
             )}
 
             {(resourceType === "Document" || resourceType === "Resource") && (
-                <LessonResourceUploader
+                <ResourceUploader
                     courseId={courseId}
                     lessonId={lesson.id}
                     onUploadComplete={(files) => onResourceChange?.(files, {courseId, lessonId: lesson.id, resourceType})}

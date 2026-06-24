@@ -30,7 +30,7 @@ const createEmptyCourse = () => ({
 });
 
 
-export const useCourseCreationForm = () => {
+export const useCourseForm = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [course, setCourse] = useState(createEmptyCourse);
     const [sections, setSections] = useState([]);
@@ -59,7 +59,7 @@ export const useCourseCreationForm = () => {
             alert("Please create course draft first.");
             return;
         }
-        
+
         const tempId = generateTempId();
         const nextSection = {
             id: tempId,
@@ -68,7 +68,7 @@ export const useCourseCreationForm = () => {
             lessons: [],
             isNew: true, // Flag to identify unsaved sections
         };
-        
+
         setSections((currentSections) => [...currentSections, nextSection]);
         setActiveSectionId(tempId);
     };
@@ -92,7 +92,7 @@ export const useCourseCreationForm = () => {
         if (!targetSection) {
             return;
         }
-        
+
         const tempId = generateTempId();
         const nextLesson = {
             id: tempId,
@@ -102,7 +102,7 @@ export const useCourseCreationForm = () => {
             resources: [],
             isNew: true, // Flag to identify unsaved lessons
         };
-        
+
         setSections((currentSections) =>
             currentSections.map((section) => {
                 if (section.id !== sectionId) {
@@ -173,14 +173,14 @@ export const useCourseCreationForm = () => {
         console.log("Starting to save sections and lessons...");
         console.log("Course ID:", course.id);
         console.log("Sections:", sections);
-        
+
         try {
             // Process each section
             for (const section of sections) {
                 let actualSectionId = section.id;
-                
+
                 console.log(`Processing section: ${section.title} (ID: ${section.id}, isNew: ${section.isNew})`);
-                
+
                 // If section is new (has temp ID), create it
                 if (section.isNew) {
                     const sectionPayload = {
@@ -196,13 +196,13 @@ export const useCourseCreationForm = () => {
                     console.log("Updating existing section:", section.id);
                     await updateSection(section.id, { title: section.title });
                 }
-                
+
                 // Process lessons for this section
                 for (const lesson of section.lessons) {
                     console.log(`Processing lesson: ${lesson.title} (ID: ${lesson.id}, isNew: ${lesson.isNew})`);
-                    
+
                     let actualLessonId = lesson.id;
-                    
+
                     if (lesson.isNew) {
                         const lessonPayload = {
                             title: lesson.title || "Untitled Lesson",
@@ -213,7 +213,7 @@ export const useCourseCreationForm = () => {
                         const lessonData = await createLesson(actualSectionId, lessonPayload);
                         actualLessonId = lessonData.lessonId;
                         console.log("Lesson created with ID:", actualLessonId);
-                        
+
                         // Update local state with real IDs
                         setSections((currentSections) =>
                             currentSections.map((s) => {
@@ -242,7 +242,7 @@ export const useCourseCreationForm = () => {
                         console.log("Updating existing lesson:", lesson.id);
                         await updateLesson(lesson.id, { title: lesson.title });
                     }
-                    
+
                     // Save video metadata if exists
                     if (lesson.videoKey) {
                         console.log("=== VIDEO METADATA DEBUG ===");
@@ -252,7 +252,7 @@ export const useCourseCreationForm = () => {
                         console.log("Video Content Type:", lesson.videoContentType);
                         console.log("Video Size Bytes:", lesson.videoSizeBytes);
                         console.log("Duration Seconds:", lesson.durationSeconds);
-                        
+
                         const videoPayload = {
                             videoKey: lesson.videoKey,
                             videoOriginalFilename: lesson.videoName,
@@ -260,23 +260,23 @@ export const useCourseCreationForm = () => {
                             videoSizeBytes: lesson.videoSizeBytes,
                             durationSeconds: lesson.durationSeconds || null,
                         };
-                        
+
                         console.log("Video Payload to send:", videoPayload);
                         console.log("🔵 About to call updateLessonVideo API with lessonId:", actualLessonId);
-                        
+
                         const result = await updateLessonVideo(actualLessonId, videoPayload);
                         console.log("🟢 Video metadata API response:", result);
                         console.log("✅ Video metadata saved successfully");
                     } else {
                         console.log("⚠️ No video key found for lesson:", actualLessonId);
                     }
-                    
+
                     // Save lesson resources (documents, files)
                     if (lesson.resources && lesson.resources.length > 0) {
                         console.log("=== RESOURCES DEBUG ===");
                         console.log(`Processing ${lesson.resources.length} resources for lesson:`, actualLessonId);
                         console.log("Resources array:", JSON.stringify(lesson.resources, null, 2));
-                        
+
                         for (let i = 0; i < lesson.resources.length; i++) {
                             const resource = lesson.resources[i];
                             console.log(`\n--- Resource ${i + 1} ---`);
@@ -284,7 +284,7 @@ export const useCourseCreationForm = () => {
                             console.log("File Name:", resource.fileName);
                             console.log("Content Type:", resource.fileType);
                             console.log("File Size:", resource.fileSize);
-                            
+
                             const resourcePayload = {
                                 fileKey: resource.fileKey,
                                 originalFileName: resource.fileName,
@@ -292,9 +292,9 @@ export const useCourseCreationForm = () => {
                                 fileSizeBytes: resource.fileSize || null,
                                 resourceType: "Resources",
                             };
-                            
+
                             console.log("Resource Payload to send:", resourcePayload);
-                            
+
                             try {
                                 const result = await createLessonSource(actualLessonId, resourcePayload);
                                 console.log(`✅ Resource ${i + 1} saved successfully:`, result);
@@ -308,7 +308,7 @@ export const useCourseCreationForm = () => {
                     }
                 }
             }
-            
+
             console.log("All sections and lessons saved successfully");
         } catch (error) {
             console.error("Failed to save sections/lessons:", error);
@@ -325,7 +325,7 @@ export const useCourseCreationForm = () => {
                 alert("Please enter titles for all sections before proceeding.");
                 return;
             }
-            
+
             // Validate that lessons have titles
             for (const section of sections) {
                 const emptyLessons = section.lessons.filter((l) => !l.title || l.title.trim() === "");
@@ -334,17 +334,15 @@ export const useCourseCreationForm = () => {
                     return;
                 }
             }
-            
-            // Save all sections and lessons
+
             await saveSectionsAndLessons();
-            
-            // Move to next step
+
             setCurrentStep(3);
         } catch (error) {
             console.error("Full error:", error);
             console.error("Error response:", error.response?.data);
             console.error("Error status:", error.response?.status);
-            
+
             let errorMessage = "Failed to save sections and lessons";
             if (error.response?.status === 403) {
                 errorMessage = "Access denied. Please login again.";
@@ -353,7 +351,7 @@ export const useCourseCreationForm = () => {
             } else if (error.response?.data?.message) {
                 errorMessage = error.response.data.message;
             }
-            
+
             alert(errorMessage);
         }
     };

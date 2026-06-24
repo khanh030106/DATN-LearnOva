@@ -1,30 +1,8 @@
-import {isValidUploadFile} from "../utils/courseCreationValidation.js";
+import {isValidUploadFile} from "../utils/courseValidation.js";
 import { generateUploadUrl } from "../../../../../api/teacher/UploadApi.js";
 import { uploadFileToS3 } from "../../../../../services/UploadService.js";
 
-// Helper function to get video duration
-const getVideoDuration = (file) => {
-    return new Promise((resolve, reject) => {
-        const video = document.createElement('video');
-        video.preload = 'metadata';
-        
-        video.onloadedmetadata = () => {
-            window.URL.revokeObjectURL(video.src);
-            const duration = Math.floor(video.duration); // Duration in seconds
-            resolve(duration);
-        };
-        
-        video.onerror = () => {
-            window.URL.revokeObjectURL(video.src);
-            reject(new Error('Failed to load video metadata'));
-        };
-        
-        video.src = URL.createObjectURL(file);
-    });
-};
-
-export const useCourseMediaUpload = ({
-                                         courseId,
+export const useCourseUpload = ({
                                          onCourseChange,
                                          onLessonSourceChange,
                                          onLessonVideoChange,
@@ -52,6 +30,26 @@ export const useCourseMediaUpload = ({
         });
     };
 
+    const getVideoDuration = (file) => {
+        return new Promise((resolve, reject) => {
+            const video = document.createElement('video');
+            video.preload = 'metadata';
+
+            video.onloadedmetadata = () => {
+                window.URL.revokeObjectURL(video.src);
+                const duration = Math.floor(video.duration);
+                resolve(duration);
+            };
+
+            video.onerror = () => {
+                window.URL.revokeObjectURL(video.src);
+                reject(new Error('Failed to load video metadata'));
+            };
+
+            video.src = URL.createObjectURL(file);
+        });
+    };
+
     const handleLessonVideoSelected = async (sectionId, lessonId, file) => {
         if (!isValidUploadFile(file)) {
             alert("Invalid file. Please select a valid video file.");
@@ -59,27 +57,20 @@ export const useCourseMediaUpload = ({
         }
 
         try {
-            // Get video duration before uploading
             let durationSeconds = null;
             try {
                 durationSeconds = await getVideoDuration(file);
-                console.log(`Video duration: ${durationSeconds} seconds`);
             } catch (error) {
                 console.warn("Could not extract video duration:", error);
-                // Continue without duration - it's optional
             }
-
-            // Generate presigned URL for video
             const { uploadUrl, fileKey } = await generateUploadUrl({
                 type: "VIDEO",
                 fileName: file.name,
                 contentType: file.type,
             });
 
-            // Upload to S3
             await uploadFileToS3(uploadUrl, file);
 
-            // Update local state with video info INCLUDING metadata and duration
             onLessonVideoChange?.(sectionId, lessonId, {
                 key: fileKey,
                 name: file.name,
@@ -119,10 +110,8 @@ export const useCourseMediaUpload = ({
                     contentType: file.type,
                 });
 
-                // Upload to S3
                 await uploadFileToS3(uploadUrl, file);
 
-                // Add to uploaded resources
                 uploadedResources.push({
                     fileKey: fileKey,
                     fileName: file.name,

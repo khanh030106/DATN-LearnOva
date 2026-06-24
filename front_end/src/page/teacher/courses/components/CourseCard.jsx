@@ -6,7 +6,7 @@ const statusLabels = {
   ARCHIVED: "Archived",
 };
 
-const CourseManagerCard = ({ course, onDelete, onUpdate }) => {
+const CourseCard = ({ course, onDelete, onUpdate }) => {
   const status = statusLabels[course.courseStatus] || "Review";
   const isPublished = course.courseStatus === "PUBLISHED";
   const studentCount = isPublished ? course.students.replace(" students", "") : "-";
@@ -63,4 +63,4 @@ const CourseManagerCard = ({ course, onDelete, onUpdate }) => {
   );
 };
 
-export default CourseManagerCard;
+export default CourseCard;

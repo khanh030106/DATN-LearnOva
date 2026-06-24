@@ -1,5 +1,5 @@
 import {CheckCircle, GraduationCap, Image, ListChecks} from "lucide-react";
-import PublishSettingsCard from "./PublishSettingsCard.jsx";
+import PublishCard from "./PublishCard.jsx";
 
 const PublishStep = ({
                          course,
@@ -52,7 +52,7 @@ const PublishStep = ({
                     </section>
                 </div>
 
-                <PublishSettingsCard
+                <PublishCard
                     status={status}
                     visibility={visibility}
                     onStatusChange={onStatusChange}

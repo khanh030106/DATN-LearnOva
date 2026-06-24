@@ -1,6 +1,6 @@
 import {CheckCircle, GraduationCap, Image, Play} from "lucide-react";
 
-const CoursePreviewPanel = ({course, sections}) => {
+const CoursePreview = ({course, sections}) => {
     const lessonCount = sections.reduce((total, section) => total + section.lessons.length, 0);
     const courseTitle = course.title || "Untitled course";
 
@@ -51,4 +51,4 @@ const CoursePreviewPanel = ({course, sections}) => {
     );
 };
 
-export default CoursePreviewPanel;
+export default CoursePreview;

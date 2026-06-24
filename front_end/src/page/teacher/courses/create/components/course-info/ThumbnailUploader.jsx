@@ -1,7 +1,7 @@
 import {Image} from "lucide-react";
-import {THUMBNAIL_ACCEPTED_TYPES} from "../../utils/courseCreationValidation.js";
+import {THUMBNAIL_ACCEPTED_TYPES} from "../../utils/courseValidation.js";
 
-const CourseThumbnailUploader = ({
+const ThumbnailUploader = ({
                                      courseId,
                                      currentFileUrl,
                                      onUploadComplete,
@@ -46,4 +46,4 @@ const CourseThumbnailUploader = ({
     );
 };
 
-export default CourseThumbnailUploader;
+export default ThumbnailUploader;

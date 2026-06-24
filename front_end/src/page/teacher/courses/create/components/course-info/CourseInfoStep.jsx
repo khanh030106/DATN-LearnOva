@@ -1,6 +1,6 @@
 import {Plus} from "lucide-react";
-import {COURSE_DESCRIPTION_MAX_LENGTH} from "../../utils/courseCreationValidation.js";
-import CourseThumbnailUploader from "./CourseThumbnailUploader.jsx";
+import {COURSE_DESCRIPTION_MAX_LENGTH} from "../../utils/courseValidation.js";
+import ThumbnailUploader from "./ThumbnailUploader.jsx";
 
 const CourseInfoStep = ({
                             course,
@@ -19,7 +19,7 @@ const CourseInfoStep = ({
     return (
         <section className="teacher-create-step">
             <div className="teacher-create-card teacher-course-info-card">
-                <CourseThumbnailUploader
+                <ThumbnailUploader
                     courseId={course.id}
                     currentFileUrl={course.thumbnailPreviewUrl}
                     onUploadComplete={onThumbnailSelected}

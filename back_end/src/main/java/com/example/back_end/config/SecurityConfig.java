@@ -40,6 +40,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/learnova/auth/**").permitAll()
                         .requestMatchers("/api/learnova/uploads/presigned-url").permitAll()
                         .requestMatchers("/api/learnova/courses/video-url/**").permitAll()
+                        .requestMatchers("/api/learnova/courses/my-courses").permitAll()
+                        .requestMatchers("/api/learnova/user/me").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

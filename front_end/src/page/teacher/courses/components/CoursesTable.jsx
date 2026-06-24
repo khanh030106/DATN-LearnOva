@@ -1,5 +1,5 @@
 import { courseTableColumns } from "../coursePageConfig.js";
-import CourseManagerCard from "./CourseManagerCard.jsx";
+import CourseCard from "./CourseCard.jsx";
 
 const CoursesTable = ({ courses, onDeleteCourse, onUpdateCourse }) => {
   return (
@@ -11,7 +11,7 @@ const CoursesTable = ({ courses, onDeleteCourse, onUpdateCourse }) => {
       </div>
 
       {courses.map((course) => (
-        <CourseManagerCard
+        <CourseCard
           key={course.id}
           course={course}
           onDelete={onDeleteCourse}

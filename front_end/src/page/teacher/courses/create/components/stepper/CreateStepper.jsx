@@ -2,7 +2,7 @@ import {Check} from "lucide-react";
 
 const steps = ["Course", "Sections", "Preview", "Publish"];
 
-const CourseCreationStepper = ({currentStep}) => {
+const CreateStepper = ({currentStep}) => {
     return (
         <nav className="teacher-create-stepper" aria-label="Course creation progress">
             {steps.map((step, index) => {
@@ -24,4 +24,4 @@ const CourseCreationStepper = ({currentStep}) => {
     );
 };
 
-export default CourseCreationStepper;
+export default CreateStepper;

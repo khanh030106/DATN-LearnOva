@@ -1,8 +1,8 @@
 import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCourseCreationForm } from "./hooks/useCourseCreationForm.js";
-import { useCourseMediaUpload } from "./hooks/useCourseMediaUpload.js";
-import CourseCreationStepper from "./components/stepper/CourseCreationStepper.jsx";
+import { useCourseForm } from "./hooks/useCourseForm.js";
+import { useCourseUpload } from "./hooks/useCourseUpload.js";
+import CreateStepper from "./components/stepper/CreateStepper.jsx";
 import CourseInfoStep from "./components/course-info/CourseInfoStep.jsx";
 import SectionsStep from "./components/curriculum/SectionsStep.jsx";
 import PreviewStep from "./components/preview/PreviewStep.jsx";
@@ -36,10 +36,10 @@ const CourseCreationPage = () => {
         removeLessonResource,
         handleCourseInfoNext,
         handleSectionsNext,
-    } = useCourseCreationForm();
+    } = useCourseForm();
 
     const { handleThumbnailSelected, handleLessonVideoSelected, handleLessonSourceSelected, handleLessonResourceSelected } =
-        useCourseMediaUpload({
+        useCourseUpload({
             courseId: course.id,
             onCourseChange: updateCourse,
             onLessonSourceChange: updateLessonSource,
@@ -55,7 +55,7 @@ const CourseCreationPage = () => {
                     <ArrowLeft size={15} />
                     Back to My Courses
                 </Link>
-                <CourseCreationStepper currentStep={currentStep} />
+                <CreateStepper currentStep={currentStep} />
                 <button type="button" onClick={() => updateCourse({ status: "DRAFT" })}>
                     Save Draft
                 </button>

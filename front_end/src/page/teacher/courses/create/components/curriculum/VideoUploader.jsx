@@ -1,7 +1,7 @@
 import {useRef} from "react";
 import {Upload} from "lucide-react";
 
-const LessonVideoUploader = ({courseId, lessonId, currentFileUrl, accept, onUploadComplete, label}) => {
+const VideoUploader = ({courseId, lessonId, currentFileUrl, accept, onUploadComplete, label}) => {
     const fileInputRef = useRef(null);
 
     const handleFileChange = (event) => {
@@ -22,4 +22,4 @@ const LessonVideoUploader = ({courseId, lessonId, currentFileUrl, accept, onUplo
     );
 };
 
-export default LessonVideoUploader;
+export default VideoUploader;
