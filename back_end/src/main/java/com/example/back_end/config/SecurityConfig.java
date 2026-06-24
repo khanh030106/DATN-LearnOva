@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.example.back_end.security.OAuth2AuthenticationSuccessHandler;
 
 
 @Configuration
@@ -27,6 +28,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomUserDetailsService customUserDetailsService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,16 +36,25 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/learnova/auth/**").permitAll()
                         .requestMatchers("/api/learnova/uploads/presigned-url").permitAll()
                         .requestMatchers("/api/learnova/courses/video-url/**").permitAll()
                         .requestMatchers("/api/learnova/courses/my-courses").permitAll()
                         .requestMatchers("/api/learnova/user/me").permitAll()
+                        .requestMatchers("/api/learnova/review/**").permitAll()
+                                .requestMatchers("/api/learnova/auth/resend-verification").permitAll()
+                                .requestMatchers("/error").permitAll()// để test
                         .anyRequest().authenticated()
                 )
+
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                )
+
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(
                         jwtAuthenticationFilter,

@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
+import com.example.back_end.dto.resquest.RegisterRequest;
+import com.example.back_end.dto.response.RegisterResponse;
+import com.example.back_end.dto.resquest.ResendVerificationRequest;
 
 
 @RestController
@@ -50,7 +53,6 @@ public class AuthController {
      return ResponseEntity.ok(new LoginResponse(result.accessToken()));
      }
 
-
      @PostMapping("/refresh")
      public ResponseEntity<LoginResponse> refresh(
            @CookieValue(value = "refreshToken", required = false) String refreshToken,
@@ -82,7 +84,6 @@ public class AuthController {
      }
      }
 
-
      @PostMapping("/logout")
      public ResponseEntity<Void> logout(
              @CookieValue(value = "refreshToken", required = false) String refreshToken,
@@ -102,4 +103,55 @@ public class AuthController {
 
      return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(
+            @RequestBody RegisterRequest request
+    ) {
+        authService.register(request);
+
+        return ResponseEntity.ok(
+                new RegisterResponse(
+                        true,
+                        "Registration successful. Please verify your email."
+                )
+        );
+    }
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyAccount(@RequestParam("token") String token) {
+        authService.verifyEmail(token);
+
+        return ResponseEntity.ok(
+                new RegisterResponse(
+                        true,
+                        "Your account has been activated successfully! You can now log in."
+                )
+        );
+    }
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleRuntimeException(
+            RuntimeException ex
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ex.getMessage()));
+    }
+
+    @PostMapping("/resend-verification")
+    public ResponseEntity<?> resendVerification(
+            @RequestBody ResendVerificationRequest request
+    ) {
+
+        authService.resendVerificationEmail(
+                request.getEmail()
+        );
+
+        return ResponseEntity.ok(
+                new RegisterResponse(
+                        true,
+                        "Verification email sent successfully."
+                )
+        );
+    }
+
  }

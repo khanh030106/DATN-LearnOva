@@ -1,9 +1,17 @@
 import gg_svg from "../../../assets/login/Ggoogle.svg"
 import fb_svg from "../../../assets/login/Facebook.svg"
-import {Link} from "react-router-dom";
-import {Home} from "lucide-react";
 
 const SocialLogin = () => {
+
+    const handleGoogleLogin = () => {
+        window.location.href =
+            "http://localhost:8080/oauth2/authorization/google";
+    };
+    const handleFacebookLogin = () => {
+        window.location.href =
+            "http://localhost:8080/oauth2/authorization/facebook";
+    };
+
     return (
         <div className="auth-socials">
             <div className="social-login-divider">
@@ -11,11 +19,21 @@ const SocialLogin = () => {
             </div>
 
             <div className="social-login-buttons">
-                <button type="button" className="social-login-btn-gg" aria-label="Continue with Google">
+                <button
+                    type="button"
+                    className="social-login-btn-gg"
+                    aria-label="Continue with Google"
+                    onClick={handleGoogleLogin}
+                >
                     <img src={gg_svg} alt="google" width={20}/>
                 </button>
 
-                <button type="button" className="social-login-btn-fb" aria-label="Continue with Facebook">
+                <button
+                    type="button"
+                    className="social-login-btn-fb"
+                    aria-label="Continue with Facebook"
+                    onClick={handleFacebookLogin}
+                >
                     <img src={fb_svg} alt="facebook" width={20}/>
                 </button>
 

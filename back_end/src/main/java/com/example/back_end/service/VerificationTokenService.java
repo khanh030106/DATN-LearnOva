@@ -30,7 +30,7 @@ public class VerificationTokenService {
 
     @Transactional
     public Verificationtoken createRefreshToken(String email, Boolean rememberMe) {
-        User user = userRepository.findByEmailAndIsDeletedFalse(email, false)
+        User user = userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         verificationTokenRepository.deleteByUserAndTokenType(user, VerificationType.REFRESH_TOKEN);
@@ -49,6 +49,7 @@ public class VerificationTokenService {
     }
 
     public Verificationtoken verifyRefreshToken(String token) {
+
         Verificationtoken refreshToken = verificationTokenRepository.findByTokenAndTokenTypeAndIsUsedFalse(
                 token,
                 VerificationType.REFRESH_TOKEN
@@ -60,18 +61,46 @@ public class VerificationTokenService {
         }
 
         return refreshToken;
-    }
 
+    }
     @Transactional
     public void deleteRefreshTokenByUser(User user) {
         verificationTokenRepository.deleteByUserAndTokenType(user, VerificationType.REFRESH_TOKEN);
     }
-
     @Transactional
     public int deleteExpiredRefreshTokens() {
         return verificationTokenRepository.deleteExpiredTokens(
                 VerificationType.REFRESH_TOKEN,
                 OffsetDateTime.now()
         );
+    }
+    @Transactional
+    public Verificationtoken createActiveAccountToken(User user) {
+        verificationTokenRepository.deleteByUserAndTokenType(
+                user,
+                VerificationType.ACTIVE_ACCOUNT
+        );
+        Verificationtoken token = new Verificationtoken();
+        token.setUser(user);
+        token.setToken(UUID.randomUUID().toString());
+        token.setTokenType(VerificationType.ACTIVE_ACCOUNT);
+        token.setCreatedAt(Instant.now());
+        token.setExpiredAt(OffsetDateTime.now().plusMinutes(5));
+        token.setIsUsed(false);
+        return verificationTokenRepository.save(token);
+    }
+    public Verificationtoken verifyActiveAccountToken(String token) {
+        return verificationTokenRepository
+                .findByTokenAndTokenTypeAndIsUsedFalse(
+                        token,
+                        VerificationType.ACTIVE_ACCOUNT
+                )
+                .orElseThrow(() -> new RuntimeException("Invalid activation token"));
+    }
+
+    @Transactional
+    public void markAsUsed(Verificationtoken token) {
+        token.setIsUsed(true);
+        verificationTokenRepository.save(token);
     }
 }

@@ -36,7 +36,7 @@ public class CourseService {
             String email
     ) {
         User instructor = userRepository
-                .findByEmailAndIsDeletedFalse(email, false)
+                .findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Course course = new Course();
@@ -64,7 +64,7 @@ public class CourseService {
     public List<TeacherCoursesResponse> getMyCourses(String email) {
 
         User instructor = userRepository
-                .findByEmailAndIsDeletedFalse(email, false)
+                .findByEmailAndIsDeletedFalse(email)
                 .orElseThrow();
 
         return courseRepository

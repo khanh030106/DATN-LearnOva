@@ -1,0 +1,21 @@
+package com.example.back_end.dto.response;
+
+import lombok.Data;
+
+import java.time.Instant;
+import java.util.List;
+
+@Data
+public class QuestionResponse {
+    private Long id;
+    private String content;
+
+    private Long userId;
+    private String userName;
+
+    private Instant createdAt;
+
+    private Boolean isSolved;
+
+    private List<AnswerResponse> answers;
+}

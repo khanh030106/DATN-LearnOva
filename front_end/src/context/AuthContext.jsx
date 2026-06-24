@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password, remember) => {
         const data = await loginApi(email, password, remember);
         setAccessToken(data.accessToken);
+        localStorage.setItem("token", data.accessToken);  //xoa
         try {
             await fetchCurrentUser();
         } catch (e) {
@@ -31,6 +32,7 @@ export const AuthProvider = ({ children }) => {
     const refreshAccessToken = async () => {
         const data = await refreshApi();
         setAccessToken(data.accessToken);
+        localStorage.setItem("token", data.accessToken); // FIX
         return data.accessToken;
     };
 
