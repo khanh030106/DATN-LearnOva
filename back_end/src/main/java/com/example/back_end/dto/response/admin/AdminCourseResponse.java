@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-public record CourseResponse(
+public record AdminCourseResponse(
     Long id,
     String thumbnailUrl,
     String title,

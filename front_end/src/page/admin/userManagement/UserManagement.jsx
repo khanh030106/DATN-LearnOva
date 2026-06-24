@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { createUserApi, getAdminUsersApi } from "../../../api/UserApi";
+import { createAdminUserApi, getAdminUsersApi } from "../../../api/admin/AdminUserApi.js";
 import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";  // ← Thêm import này
 import UserManagementStats from "./statistics/UserManagementStats";
 import UserManagementFilters from "./filters/UserManagementFilters";
@@ -62,6 +62,7 @@ const normalizeUser = (user) => {
   const role = normalizeRole(user.role);
   const status = normalizeStatus(user);
   const name = getDisplayName(user);
+  const joinedAt = user.createdAt ?? user.joinedAt;
 
   return {
     id: user.id,
@@ -80,8 +81,8 @@ const normalizeUser = (user) => {
     status: status.label,
     statusTone: status.tone,
     statusFilter: status.filter,
-    joinedAtRaw: user.joinedAt,
-    joinedAt: formatDate(user.joinedAt),
+    joinedAtRaw: joinedAt,
+    joinedAt: formatDate(joinedAt),
     isDeleted: Boolean(user.isDeleted),
     updatedAtRaw: user.updatedAt,
     updatedAt: formatDate(user.updatedAt),
@@ -163,7 +164,7 @@ const UserManagement = () => {
   };
 
   const handleCreateUser = async (userData) => {
-    const createdUser = await createUserApi(userData, axiosPrivate);  // ← Pass axiosPrivate
+    const createdUser = await createAdminUserApi(userData, axiosPrivate);  // ← Pass axiosPrivate
     setUsers((currentUsers) => [...currentUsers, normalizeUser(createdUser)]);
     setShowAddUserModal(false);
   };

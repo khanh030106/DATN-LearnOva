@@ -12,7 +12,7 @@ import com.example.back_end.entity.Review;
 import com.example.back_end.entity.User;
 import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.repository.UserRepository;
-import com.example.back_end.repository.admin.CourseRepository;
+import com.example.back_end.repository.admin.AdminCourseRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +22,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
-    private final CourseRepository courseRepository;
+    private final AdminCourseRepository courseRepository;
 
     public ReviewResponse createReview(Long userId, CreateReviewRequest request ) {
 

@@ -10,36 +10,36 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import com.example.back_end.dto.response.admin.VoucherResponse;
-import com.example.back_end.dto.resquest.admin.VoucherRequest;
+import com.example.back_end.dto.response.admin.AdminVoucherResponse;
+import com.example.back_end.dto.resquest.admin.AdminVoucherRequest;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.Voucher;
 import com.example.back_end.entity.enums.DiscountType;
-import com.example.back_end.repository.UserRepository;
-import com.example.back_end.repository.admin.VoucherRepository;
+import com.example.back_end.repository.admin.AdminUserRepository;
+import com.example.back_end.repository.admin.AdminVoucherRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class VoucherService {
+public class AdminVoucherService {
 
-    private final VoucherRepository voucherRepository;
-    private final UserRepository userRepository;
+    private final AdminVoucherRepository voucherRepository;
+    private final AdminUserRepository adminUserRepository;
 
-    public VoucherService(
-            VoucherRepository voucherRepository,
-            UserRepository userRepository
+    public AdminVoucherService(
+            AdminVoucherRepository voucherRepository,
+            AdminUserRepository adminUserRepository
     ) {
         this.voucherRepository = voucherRepository;
-        this.userRepository = userRepository;
+        this.adminUserRepository = adminUserRepository;
     }
 
-    public List<VoucherResponse> getAllVouchers() {
+    public List<AdminVoucherResponse> getAllVouchers() {
         List<Voucher> voucherList = voucherRepository.findAll();
 
         return voucherList.stream()
-                .map(voucher -> new VoucherResponse(
+                .map(voucher -> new AdminVoucherResponse(
                         voucher.getId(),
                         voucher.getCode(),
                         voucher.getDescription(),
@@ -59,11 +59,11 @@ public class VoucherService {
                 .collect(Collectors.toList());
     }
 
-    public VoucherResponse getVoucherById(Long voucherId) {
+    public AdminVoucherResponse getVoucherById(Long voucherId) {
         Voucher voucher = voucherRepository.findById(voucherId)
                 .orElseThrow(() -> new RuntimeException("Voucher not found id=" + voucherId));
 
-        return new VoucherResponse(
+        return new AdminVoucherResponse(
                 voucher.getId(),
                 voucher.getCode(),
                 voucher.getDescription(),
@@ -82,7 +82,7 @@ public class VoucherService {
         );
     }
 
-    public VoucherResponse createVoucher(Authentication authentication, VoucherRequest voucherRequest) {
+    public AdminVoucherResponse createVoucher(Authentication authentication, AdminVoucherRequest voucherRequest) {
         if (authentication == null) {
             throw new RuntimeException("No authentication - missing token or filter failed");
         }
@@ -124,7 +124,7 @@ public class VoucherService {
             throw new RuntimeException("End date must be after start date");
         }
 
-        User createdByUser = userRepository.findByEmailAndIsDeletedFalse(authentication.getName(), false)
+        User createdByUser = adminUserRepository.findByEmailAndIsDeletedFalse(authentication.getName(), false)
                 .orElseThrow(() -> new RuntimeException("User not found email=" + authentication.getName()));
 
         Voucher voucher = new Voucher();
@@ -147,7 +147,7 @@ public class VoucherService {
 
         Voucher savedVoucher = voucherRepository.save(voucher);
 
-        return new VoucherResponse(
+        return new AdminVoucherResponse(
                 savedVoucher.getId(),
                 savedVoucher.getCode(),
                 savedVoucher.getDescription(),
@@ -166,7 +166,7 @@ public class VoucherService {
         );
     }
 
-    public VoucherResponse updateVoucher(Long voucherId, VoucherRequest voucherRequest ) {
+    public AdminVoucherResponse updateVoucher(Long voucherId, AdminVoucherRequest voucherRequest ) {
         Voucher voucher = voucherRepository.findById(voucherId)
                 .orElseThrow(() -> new RuntimeException("Voucher not found id=" + voucherId));
 
@@ -190,7 +190,7 @@ public class VoucherService {
             throw new RuntimeException("Invalid date format", exception);
         }
 
-        User createdByUser = userRepository.findById(voucherRequest.createdById())
+        User createdByUser = adminUserRepository.findById(voucherRequest.createdById())
                 .orElseThrow(() -> new RuntimeException("User not found id=" + voucherRequest.createdById()));
 
         voucher.setCode(voucherCode);
@@ -208,7 +208,7 @@ public class VoucherService {
 
         Voucher updatedVoucher = voucherRepository.save(voucher);
 
-        return new VoucherResponse(
+        return new AdminVoucherResponse(
                 updatedVoucher.getId(),
                 updatedVoucher.getCode(),
                 updatedVoucher.getDescription(),
@@ -227,7 +227,7 @@ public class VoucherService {
         );
     }
 
-    public VoucherResponse deleteVoucher(Long voucherId) {
+    public AdminVoucherResponse deleteVoucher(Long voucherId) {
         Voucher voucher = voucherRepository.findById(voucherId)
                 .orElseThrow(() -> new RuntimeException("Voucher not found id=" + voucherId));
 
@@ -236,7 +236,7 @@ public class VoucherService {
 
         Voucher deletedVoucher = voucherRepository.save(voucher);
 
-        return new VoucherResponse(
+        return new AdminVoucherResponse(
                 deletedVoucher.getId(),
                 deletedVoucher.getCode(),
                 deletedVoucher.getDescription(),

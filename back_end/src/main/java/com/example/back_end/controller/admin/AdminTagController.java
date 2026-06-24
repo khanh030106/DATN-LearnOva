@@ -13,30 +13,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.back_end.dto.response.admin.TagResponse;
-import com.example.back_end.dto.resquest.admin.TagRequest;
-import com.example.back_end.service.admin.TagService;
+import com.example.back_end.dto.response.admin.AdminTagResponse;
+import com.example.back_end.dto.resquest.admin.AdminTagRequest;
+import com.example.back_end.service.admin.AdminTagService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/learnova/tags-management")
-public class TagController {
+@RequestMapping("/api/learnova/admin/tags-management")
+public class AdminTagController {
     
-    private final TagService tagService;
+    private final AdminTagService tagService;
     
     @GetMapping
-    public ResponseEntity<List<TagResponse>> getAllTags() {
-        List<TagResponse> tags = tagService.getAllTags();
+    public ResponseEntity<List<AdminTagResponse>> getAllTags() {
+        List<AdminTagResponse> tags = tagService.getAllTags();
         return ResponseEntity.ok(tags);
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<TagResponse> getTagById(@PathVariable Long id) {
+    public ResponseEntity<AdminTagResponse> getTagById(@PathVariable Long id) {
         try {
-            TagResponse tag = tagService.getTagById(id);
+            AdminTagResponse tag = tagService.getTagById(id);
             return ResponseEntity.ok(tag);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -44,11 +44,11 @@ public class TagController {
     }
     
     @PostMapping("/create")
-    public ResponseEntity<TagResponse> createTag(
-        @Valid @RequestBody TagRequest request
+    public ResponseEntity<AdminTagResponse> createTag(
+        @Valid @RequestBody AdminTagRequest request
     ) {
         try {
-            TagResponse tag = tagService.createTag(request);
+            AdminTagResponse tag = tagService.createTag(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(tag);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
@@ -56,12 +56,12 @@ public class TagController {
     }
     
     @PutMapping("/update/{id}")
-    public ResponseEntity<TagResponse> updateTag(
+    public ResponseEntity<AdminTagResponse> updateTag(
         @PathVariable Long id,
-        @Valid @RequestBody TagRequest request
+        @Valid @RequestBody AdminTagRequest request
     ) {
         try {
-            TagResponse tag = tagService.updateTag(id, request);
+            AdminTagResponse tag = tagService.updateTag(id, request);
             return ResponseEntity.ok(tag);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();

@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.back_end.entity.Category;
 
-public interface CategoryRepository extends JpaRepository<Category, Long> {
+public interface AdminCategoryRepository extends JpaRepository<Category, Long> {
     
     @Query("SELECT category FROM Category category WHERE category.isDeleted = false ORDER BY category.displayOrder, category.name")
     List<Category> findAllActive();

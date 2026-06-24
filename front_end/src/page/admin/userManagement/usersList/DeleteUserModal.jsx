@@ -1,6 +1,6 @@
 import { AlertTriangle, Trash2, X } from "lucide-react";
 import { useState } from "react";
-import { deleteUserApi } from "../../../../api/UserApi";
+import { deleteAdminUserApi } from "../../../../api/admin/AdminUserApi.js";
 import "./ViewUserModal.css";
 
 const DeleteUserModal = ({ user, onClose, onDeleted }) => {
@@ -14,7 +14,7 @@ const DeleteUserModal = ({ user, onClose, onDeleted }) => {
     setError("");
 
     try {
-      await deleteUserApi(user.id);
+      await deleteAdminUserApi(user.id);
       onDeleted({
         ...user,
         isDeleted: true,

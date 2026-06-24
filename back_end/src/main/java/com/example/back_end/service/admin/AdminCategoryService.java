@@ -7,26 +7,26 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.back_end.dto.response.admin.CategoryResponse;
-import com.example.back_end.dto.resquest.admin.CategoryRequest;
+import com.example.back_end.dto.response.admin.AdminCategoryResponse;
+import com.example.back_end.dto.resquest.admin.AdminCategoryRequest;
 import com.example.back_end.entity.Category;
-import com.example.back_end.repository.admin.CategoryRepository;
+import com.example.back_end.repository.admin.AdminCategoryRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class CategoryService {
+public class AdminCategoryService {
 
-    private final CategoryRepository categoryRepository;
+    private final AdminCategoryRepository categoryRepository;
 
-    public List<CategoryResponse> getAllCategories() {
+    public List<AdminCategoryResponse> getAllCategories() {
         return categoryRepository.findAllForAdmin().stream()
                 .map(category -> {
                     Long parentId = category.getParent() != null ? category.getParent().getId() : null;
                     String parentName = category.getParent() != null ? category.getParent().getName() : null;
-                    return new CategoryResponse(
+                    return new AdminCategoryResponse(
                         category.getId(),
                         category.getName(),
                         category.getSlug(),
@@ -41,14 +41,14 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public CategoryResponse getCategoryById(Long id) {
+    public AdminCategoryResponse getCategoryById(Long id) {
         Category category = categoryRepository.findByIdForAdmin(id)
                 .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
 
         Long parentId = category.getParent() != null ? category.getParent().getId() : null;
         String parentName = category.getParent() != null ? category.getParent().getName() : null;
 
-        return new CategoryResponse(
+        return new AdminCategoryResponse(
             category.getId(),
             category.getName(),
             category.getSlug(),
@@ -61,12 +61,12 @@ public class CategoryService {
         );
     }
 
-    public List<CategoryResponse> getCategoriesByParentId(Long parentIdQuery) {
+    public List<AdminCategoryResponse> getCategoriesByParentId(Long parentIdQuery) {
         return categoryRepository.findChildrenByParentId(parentIdQuery).stream()
                 .map(category -> {
                     Long parentId = category.getParent() != null ? category.getParent().getId() : null;
                     String parentName = category.getParent() != null ? category.getParent().getName() : null;
-                    return new CategoryResponse(
+                    return new AdminCategoryResponse(
                         category.getId(),
                         category.getName(),
                         category.getSlug(),
@@ -81,7 +81,7 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public CategoryResponse createCategory(CategoryRequest request) {
+    public AdminCategoryResponse createCategory(AdminCategoryRequest request) {
         if (categoryRepository.countBySlug(request.slug()) > 0) {
             throw new RuntimeException("Category with slug '" + request.slug() + "' already exists");
         }
@@ -106,7 +106,7 @@ public class CategoryService {
         Long parentId = saved.getParent() != null ? saved.getParent().getId() : null;
         String parentName = saved.getParent() != null ? saved.getParent().getName() : null;
 
-        return new CategoryResponse(
+        return new AdminCategoryResponse(
             saved.getId(),
             saved.getName(),
             saved.getSlug(),
@@ -119,7 +119,7 @@ public class CategoryService {
         );
     }
 
-    public CategoryResponse updateCategory(Long id, CategoryRequest request) {
+    public AdminCategoryResponse updateCategory(Long id, AdminCategoryRequest request) {
         Category category = categoryRepository.findByIdForAdmin(id)
                 .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
 
@@ -155,7 +155,7 @@ public class CategoryService {
         Long parentId = updated.getParent() != null ? updated.getParent().getId() : null;
         String parentName = updated.getParent() != null ? updated.getParent().getName() : null;
 
-        return new CategoryResponse(
+        return new AdminCategoryResponse(
             updated.getId(),
             updated.getName(),
             updated.getSlug(),

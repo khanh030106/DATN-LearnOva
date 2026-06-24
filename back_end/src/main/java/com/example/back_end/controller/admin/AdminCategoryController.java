@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.back_end.dto.response.admin.CategoryResponse;
-import com.example.back_end.dto.resquest.admin.CategoryRequest;
-import com.example.back_end.service.admin.CategoryService;
+import com.example.back_end.dto.response.admin.AdminCategoryResponse;
+import com.example.back_end.dto.resquest.admin.AdminCategoryRequest;
+import com.example.back_end.service.admin.AdminCategoryService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,20 +23,20 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/learnova/admin/categories-management")
-public class CategoryController {
+public class AdminCategoryController {
     
-    private final CategoryService categoryService;
+    private final AdminCategoryService categoryService;
     
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
-        List<CategoryResponse> categories = categoryService.getAllCategories();
+    public ResponseEntity<List<AdminCategoryResponse>> getAllCategories() {
+        List<AdminCategoryResponse> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id) {
+    public ResponseEntity<AdminCategoryResponse> getCategoryById(@PathVariable Long id) {
         try {
-            CategoryResponse category = categoryService.getCategoryById(id);
+            AdminCategoryResponse category = categoryService.getCategoryById(id);
             return ResponseEntity.ok(category);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -44,10 +44,10 @@ public class CategoryController {
     }
     
     @GetMapping("/{id}/children")
-    public ResponseEntity<List<CategoryResponse>> getChildCategories(@PathVariable Long id) {
+    public ResponseEntity<List<AdminCategoryResponse>> getChildCategories(@PathVariable Long id) {
         try {
             categoryService.getCategoryById(id);
-            List<CategoryResponse> children = categoryService.getCategoriesByParentId(id);
+            List<AdminCategoryResponse> children = categoryService.getCategoriesByParentId(id);
             return ResponseEntity.ok(children);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -55,11 +55,11 @@ public class CategoryController {
     }
     
     @PostMapping("/create")
-    public ResponseEntity<CategoryResponse> createCategory(
-        @Valid @RequestBody CategoryRequest request
+    public ResponseEntity<AdminCategoryResponse> createCategory(
+        @Valid @RequestBody AdminCategoryRequest request
     ) {
         try {
-            CategoryResponse category = categoryService.createCategory(request);
+            AdminCategoryResponse category = categoryService.createCategory(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(category);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
@@ -67,13 +67,13 @@ public class CategoryController {
     }
     
     @PutMapping("/update/{id}")
-    public ResponseEntity<CategoryResponse> updateCategory(
+    public ResponseEntity<AdminCategoryResponse> updateCategory(
         @PathVariable Long id,
         @Valid 
-        @RequestBody CategoryRequest request
+        @RequestBody AdminCategoryRequest request
     ) {
         try {
-            CategoryResponse category = categoryService.updateCategory(id, request);
+            AdminCategoryResponse category = categoryService.updateCategory(id, request);
             return ResponseEntity.ok(category);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();

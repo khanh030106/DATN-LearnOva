@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public record VoucherRequest(
+public record AdminVoucherRequest(
     @NotBlank String code,
     @NotBlank String description,
     @NotBlank String discountType, 

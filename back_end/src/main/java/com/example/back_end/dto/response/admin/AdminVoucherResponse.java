@@ -6,7 +6,7 @@ import java.time.OffsetDateTime;
 
 
 
-public record VoucherResponse(
+public record AdminVoucherResponse(
     Long id,
     String code,
     String description,

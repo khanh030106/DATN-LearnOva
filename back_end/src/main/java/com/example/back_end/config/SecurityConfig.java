@@ -40,10 +40,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/learnova/auth/**").permitAll()
-                        .requestMatchers("/api/learnova/admin/users").permitAll()
-                        .requestMatchers("/api/learnova/admin/create/users").permitAll()
-                        .requestMatchers("/api/learnova/admin/update/users/**").permitAll()
-                        .requestMatchers("/api/learnova/admin/delete/users/**").permitAll()
                         .requestMatchers("/api/learnova/admin/users/**").permitAll()
                         .requestMatchers("/api/learnova/admin/categories-management/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/learnova/admin/courses-management/**").permitAll()
@@ -52,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/learnova/admin/courses-management/**").permitAll()
                         .requestMatchers("/api/learnova/admin/vouchers/**").permitAll()
                         .requestMatchers("/api/learnova/admin/instructors-management/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/tags-management/**").permitAll()
                         .requestMatchers("/api/learnova/user/me").permitAll()
                         .requestMatchers("/api/learnova/review/post").permitAll()
                         .anyRequest().authenticated()

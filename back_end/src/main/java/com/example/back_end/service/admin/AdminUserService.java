@@ -7,27 +7,27 @@ import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.back_end.dto.resquest.admin.UserRequest;
-import com.example.back_end.dto.response.UserResponse;
+import com.example.back_end.dto.resquest.admin.AdminUserRequest;
+import com.example.back_end.dto.response.admin.AdminUserResponse;
 import com.example.back_end.entity.Role;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.RoleName;
 import com.example.back_end.repository.RoleRepository;
-import com.example.back_end.repository.UserRepository;
+import com.example.back_end.repository.admin.AdminUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserService {
+public class AdminUserService {
 
-    private final UserRepository userRepository;
+    private final AdminUserRepository adminUserRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public List<UserResponse> getAllUsers() {
-        return userRepository.findAll()
+    public List<AdminUserResponse> getAllUsers() {
+        return adminUserRepository.findAll()
             .stream()
             .map(user -> {
                 String roleText = user.getRoles()
@@ -38,7 +38,7 @@ public class UserService {
 
                 String statusText = Boolean.TRUE.equals(user.getIsActive()) ? "Active" : "Inactive";
 
-                return new UserResponse(
+                return new AdminUserResponse(
                     user.getId(),
                     user.getFullName(),
                     user.getEmail(),
@@ -57,7 +57,7 @@ public class UserService {
             .toList();
     }
 
-    public UserResponse createUser(UserRequest request) {
+    public AdminUserResponse createUser(AdminUserRequest request) {
         if (request.password() == null || request.password().isBlank()) {
             throw new RuntimeException("Password is required");
         }
@@ -91,7 +91,7 @@ public class UserService {
         user.setCreatedAt(now);
         user.setUpdatedAt(now);
 
-        User savedUser = userRepository.save(user);
+        User savedUser = adminUserRepository.save(user);
 
         String roleText = savedUser.getRoles()
             .stream()
@@ -101,7 +101,7 @@ public class UserService {
 
         String statusText = Boolean.TRUE.equals(savedUser.getIsActive()) ? "Active" : "Inactive";
 
-        return new UserResponse(
+        return new AdminUserResponse(
             savedUser.getId(),
             savedUser.getFullName(),
             savedUser.getEmail(),
@@ -118,8 +118,8 @@ public class UserService {
         );
     }
 
-    public UserResponse updateUser(Long id, UserRequest request) {
-        User user = userRepository.findById(id)
+    public AdminUserResponse updateUser(Long id, AdminUserRequest request) {
+        User user = adminUserRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (request.fullName() != null) {
@@ -166,7 +166,7 @@ public class UserService {
 
         user.setUpdatedAt(Instant.now());
 
-        User updatedUser = userRepository.save(user);
+        User updatedUser = adminUserRepository.save(user);
 
         String roleText = updatedUser.getRoles()
             .stream()
@@ -176,7 +176,7 @@ public class UserService {
 
         String statusText = Boolean.TRUE.equals(updatedUser.getIsActive()) ? "Active" : "Inactive";
 
-        return new UserResponse(
+        return new AdminUserResponse(
             updatedUser.getId(),
             updatedUser.getFullName(),
             updatedUser.getEmail(),
@@ -194,11 +194,11 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        User user = userRepository.findByIdAndIsDeletedFalse(id)
+        User user = adminUserRepository.findByIdAndIsDeletedFalse(id)
             .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setIsDeleted(true);
         user.setUpdatedAt(Instant.now());
-        userRepository.save(user);
+        adminUserRepository.save(user);
     }
 }

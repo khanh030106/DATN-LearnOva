@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
-public record InstructorRequest(
+public record AdminInstructorRequest(
         @NotBlank String fullName,
         @NotBlank @Email String email,
         String avatar,

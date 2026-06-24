@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record CourseRequest(
+public record AdminCourseRequest(
     @NotBlank String thumbnailUrl,
     @NotBlank String title,
     @NotBlank String slug,

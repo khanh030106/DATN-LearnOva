@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.back_end.dto.response.admin.InstructorResponse;
-import com.example.back_end.dto.response.admin.InstructorResponse.CourseSummary;
-import com.example.back_end.dto.resquest.admin.InstructorRequest;
+import com.example.back_end.dto.response.admin.AdminInstructorResponse;
+import com.example.back_end.dto.response.admin.AdminInstructorResponse.CourseSummary;
+import com.example.back_end.dto.resquest.admin.AdminInstructorRequest;
 import com.example.back_end.entity.Category;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Coursecategory;
@@ -23,22 +23,22 @@ import com.example.back_end.entity.Role;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.RoleName;
 import com.example.back_end.repository.RoleRepository;
-import com.example.back_end.repository.UserRepository;
+import com.example.back_end.repository.admin.AdminUserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class InstructorService {
+public class AdminInstructorService {
 
-    private final UserRepository userRepository;
+    private final AdminUserRepository adminUserRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(Transactional.TxType.SUPPORTS)
-    public List<InstructorResponse> getAllInstructors() {
-        return userRepository.findAll().stream()
+    public List<AdminInstructorResponse> getAllInstructors() {
+        return adminUserRepository.findAll().stream()
                 .filter(user -> user.getRoles().stream()
                         .map(Role::getRoleName)
                         .anyMatch(roleName -> roleName == RoleName.ROLE_TEACHER))
@@ -119,7 +119,7 @@ public class InstructorService {
 
                     String instructorCode = String.format("GV%03d", user.getId());
 
-                    return new InstructorResponse(
+                    return new AdminInstructorResponse(
                             user.getId(),
                             instructorCode,
                             user.getFullName(),
@@ -143,8 +143,8 @@ public class InstructorService {
     }
 
     @Transactional(Transactional.TxType.SUPPORTS)
-    public InstructorResponse getInstructorById(Long id) {
-        User user = userRepository.findByIdAndIsDeletedFalse(id)
+    public AdminInstructorResponse getInstructorById(Long id) {
+        User user = adminUserRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Instructor not found"));
 
         if (user.getRoles().stream()
@@ -229,7 +229,7 @@ public class InstructorService {
 
         String instructorCode = String.format("GV%03d", user.getId());
 
-        return new InstructorResponse(
+        return new AdminInstructorResponse(
                 user.getId(),
                 instructorCode,
                 user.getFullName(),
@@ -251,8 +251,8 @@ public class InstructorService {
     }
 
     @Transactional
-    public InstructorResponse createInstructor(InstructorRequest request) {
-        if (userRepository.existsUsersByEmail(request.email())) {
+    public AdminInstructorResponse createInstructor(AdminInstructorRequest request) {
+        if (adminUserRepository.existsUsersByEmail(request.email())) {
             throw new RuntimeException("Email already exists");
         }
 
@@ -285,7 +285,7 @@ public class InstructorService {
         user.setUpdatedAt(Instant.now());
         user.setRoles(new LinkedHashSet<>(Set.of(teacherRole)));
 
-        User saved = userRepository.save(user);
+        User saved = adminUserRepository.save(user);
 
         Set<Course> courses = saved.getCourses().stream()
                 .filter(course -> !Boolean.TRUE.equals(course.getIsDeleted()))
@@ -363,7 +363,7 @@ public class InstructorService {
 
         String instructorCode = String.format("GV%03d", saved.getId());
 
-        return new InstructorResponse(
+        return new AdminInstructorResponse(
                 saved.getId(),
                 instructorCode,
                 saved.getFullName(),
@@ -385,8 +385,8 @@ public class InstructorService {
     }
 
     @Transactional
-    public InstructorResponse updateInstructor(Long id, InstructorRequest request) {
-        User user = userRepository.findByIdAndIsDeletedFalse(id)
+    public AdminInstructorResponse updateInstructor(Long id, AdminInstructorRequest request) {
+        User user = adminUserRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Instructor not found"));
 
         if (user.getRoles().stream()
@@ -409,7 +409,7 @@ public class InstructorService {
         user.setIsActive(request.isActive() == null ? user.getIsActive() : request.isActive());
         user.setUpdatedAt(Instant.now());
 
-        User updated = userRepository.save(user);
+        User updated = adminUserRepository.save(user);
 
         Set<Course> courses = updated.getCourses().stream()
                 .filter(course -> !Boolean.TRUE.equals(course.getIsDeleted()))
@@ -487,7 +487,7 @@ public class InstructorService {
 
         String instructorCode = String.format("GV%03d", updated.getId());
 
-        return new InstructorResponse(
+        return new AdminInstructorResponse(
                 updated.getId(),
                 instructorCode,
                 updated.getFullName(),
@@ -510,7 +510,7 @@ public class InstructorService {
 
     @Transactional
     public void deleteInstructor(Long id) {
-        User user = userRepository.findByIdAndIsDeletedFalse(id)
+        User user = adminUserRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Instructor not found"));
 
         if (user.getRoles().stream()
@@ -521,6 +521,6 @@ public class InstructorService {
 
         user.setIsDeleted(true);
         user.setUpdatedAt(Instant.now());
-        userRepository.save(user);
+        adminUserRepository.save(user);
     }
 }

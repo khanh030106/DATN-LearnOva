@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.back_end.dto.response.admin.CourseResponse;
-import com.example.back_end.dto.resquest.admin.CourseRequest;
-import com.example.back_end.service.admin.CourseService;
+import com.example.back_end.dto.response.admin.AdminCourseResponse;
+import com.example.back_end.dto.resquest.admin.AdminCourseRequest;
+import com.example.back_end.service.admin.AdminCourseService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,32 +22,32 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/learnova/admin/courses-management")
-public class CourseController {
+public class AdminCourseController {
 
-    private final CourseService adminCourseService;
+    private final AdminCourseService adminCourseService;
 
     @GetMapping
-    public ResponseEntity<List<CourseResponse>> listAll() {
+    public ResponseEntity<List<AdminCourseResponse>> listAll() {
         return ResponseEntity.ok(adminCourseService.getAllCourses());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<AdminCourseResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(adminCourseService.getCourseById(id));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CourseResponse> create(@RequestBody @Valid CourseRequest request) {
+    public ResponseEntity<AdminCourseResponse> create(@RequestBody @Valid AdminCourseRequest request) {
         return ResponseEntity.ok(adminCourseService.createCourse(request));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CourseResponse> update(@PathVariable Long id, @RequestBody @Valid CourseRequest request) {
+    public ResponseEntity<AdminCourseResponse> update(@PathVariable Long id, @RequestBody @Valid AdminCourseRequest request) {
         return ResponseEntity.ok(adminCourseService.updateCourse(id, request));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<CourseResponse> delete(@PathVariable Long id) {
+    public ResponseEntity<AdminCourseResponse> delete(@PathVariable Long id) {
         return ResponseEntity.ok(adminCourseService.deleteCourse(id));
     }
 

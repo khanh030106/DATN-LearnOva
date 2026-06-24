@@ -7,30 +7,32 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.back_end.dto.response.admin.CourseResponse;
-import com.example.back_end.dto.resquest.admin.CourseRequest;
+import com.example.back_end.dto.response.admin.AdminCourseResponse;
+import com.example.back_end.dto.resquest.admin.AdminCourseRequest;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.CourseLevel;
 import com.example.back_end.entity.enums.CourseStatus;
-import com.example.back_end.repository.UserRepository;
-import com.example.back_end.repository.admin.CourseRepository;
+import com.example.back_end.repository.admin.AdminUserRepository;
+import com.example.back_end.repository.admin.AdminCourseRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class CourseService {
+public class AdminCourseService {
 
-    private final CourseRepository courseRepository;
-    private final UserRepository userRepository;
+    private final AdminCourseRepository courseRepository;
+    private final AdminUserRepository adminUserRepository;
 
-    public CourseService(CourseRepository courseRepository, UserRepository userRepository) {
+    public AdminCourseService(
+            AdminCourseRepository courseRepository,
+            AdminUserRepository adminUserRepository) {
         this.courseRepository = courseRepository;
-        this.userRepository = userRepository;
+        this.adminUserRepository = adminUserRepository;
     }
 
-    public List<CourseResponse> getAllCourses() {
+    public List<AdminCourseResponse> getAllCourses() {
         return courseRepository.findAll().stream()
                 .map(course -> {
                     Long instructorId = course.getInstructor() == null ? null : course.getInstructor().getId();
@@ -43,7 +45,7 @@ public class CourseService {
                     String status = Boolean.TRUE.equals(course.getIsDeleted())
                             ? "DELETED"
                             : (course.getStatus() == null ? null : course.getStatus().name());
-                    return new CourseResponse(
+                    return new AdminCourseResponse(
                             course.getId(),
                             course.getThumbnailUrl(),
                             course.getTitle(),
@@ -63,7 +65,7 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
-    public CourseResponse getCourseById(Long id) {
+    public AdminCourseResponse getCourseById(Long id) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found id=" + id));
 
@@ -78,7 +80,7 @@ public class CourseService {
                 ? "DELETED"
                 : (course.getStatus() == null ? null : course.getStatus().name());
 
-        return new CourseResponse(
+        return new AdminCourseResponse(
                 course.getId(),
                 course.getThumbnailUrl(),
                 course.getTitle(),
@@ -96,7 +98,7 @@ public class CourseService {
         );
     }
 
-    public CourseResponse createCourse(CourseRequest courseRequest) {
+    public AdminCourseResponse createCourse(AdminCourseRequest courseRequest) {
         Course course = new Course();
 
         CourseLevel level;
@@ -120,7 +122,7 @@ public class CourseService {
         boolean deleted = Boolean.TRUE.equals(courseRequest.isDeleted())
                 || "DELETED".equalsIgnoreCase(courseRequest.status());
 
-        User instructor = userRepository.findById(courseRequest.instructorId())
+        User instructor = adminUserRepository.findById(courseRequest.instructorId())
                 .orElseThrow(() -> new RuntimeException("Instructor not found id=" + courseRequest.instructorId()));
 
         course.setThumbnailUrl(courseRequest.thumbnailUrl().trim());
@@ -154,7 +156,7 @@ public class CourseService {
                 ? "DELETED"
                 : (saved.getStatus() == null ? null : saved.getStatus().name());
 
-        return new CourseResponse(
+        return new AdminCourseResponse(
                 saved.getId(),
                 saved.getThumbnailUrl(),
                 saved.getTitle(),
@@ -172,7 +174,7 @@ public class CourseService {
         );
     }
 
-    public CourseResponse updateCourse(Long id, CourseRequest courseRequest) {
+    public AdminCourseResponse updateCourse(Long id, AdminCourseRequest courseRequest) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found id=" + id));
 
@@ -197,7 +199,7 @@ public class CourseService {
         boolean deleted = Boolean.TRUE.equals(courseRequest.isDeleted())
                 || "DELETED".equalsIgnoreCase(courseRequest.status());
 
-        User instructor = userRepository.findById(courseRequest.instructorId())
+        User instructor = adminUserRepository.findById(courseRequest.instructorId())
                 .orElseThrow(() -> new RuntimeException("Instructor not found id=" + courseRequest.instructorId()));
 
         course.setThumbnailUrl(courseRequest.thumbnailUrl().trim());
@@ -234,7 +236,7 @@ public class CourseService {
                 ? "DELETED"
                 : (updated.getStatus() == null ? null : updated.getStatus().name());
 
-        return new CourseResponse(
+        return new AdminCourseResponse(
                 updated.getId(),
                 updated.getThumbnailUrl(),
                 updated.getTitle(),
@@ -252,7 +254,7 @@ public class CourseService {
         );
     }
 
-    public CourseResponse deleteCourse(Long id) {
+    public AdminCourseResponse deleteCourse(Long id) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found id=" + id));
 
@@ -276,7 +278,7 @@ public class CourseService {
                 ? "DELETED"
                 : (deletedCourse.getStatus() == null ? null : deletedCourse.getStatus().name());
 
-        return new CourseResponse(
+        return new AdminCourseResponse(
                 deletedCourse.getId(),
                 deletedCourse.getThumbnailUrl(),
                 deletedCourse.getTitle(),

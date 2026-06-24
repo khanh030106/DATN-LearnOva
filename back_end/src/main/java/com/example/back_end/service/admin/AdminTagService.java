@@ -7,24 +7,24 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.back_end.dto.response.admin.TagResponse;
-import com.example.back_end.dto.resquest.admin.TagRequest;
+import com.example.back_end.dto.response.admin.AdminTagResponse;
+import com.example.back_end.dto.resquest.admin.AdminTagRequest;
 import com.example.back_end.entity.Tag;
-import com.example.back_end.repository.admin.TagRepository;
+import com.example.back_end.repository.admin.AdminTagRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class TagService {
+public class AdminTagService {
     
-    private final TagRepository tagRepository;
+    private final AdminTagRepository tagRepository;
     
-    public List<TagResponse> getAllTags() {
+    public List<AdminTagResponse> getAllTags() {
         return tagRepository.findAllActive()
             .stream()
-            .map(tag -> new TagResponse(
+            .map(tag -> new AdminTagResponse(
                 tag.getId(),
                 tag.getName(),
                 tag.getSlug(),
@@ -34,11 +34,11 @@ public class TagService {
             .collect(Collectors.toList());
     }
     
-    public TagResponse getTagById(Long id) {
+    public AdminTagResponse getTagById(Long id) {
         Tag tag = tagRepository.findActiveById(id)
             .orElseThrow(() -> new RuntimeException("Tag not found with id: " + id));
 
-        return new TagResponse(
+        return new AdminTagResponse(
             tag.getId(),
             tag.getName(),
             tag.getSlug(),
@@ -47,7 +47,7 @@ public class TagService {
         );
     }
     
-    public TagResponse createTag(TagRequest request) {
+    public AdminTagResponse createTag(AdminTagRequest request) {
         if (tagRepository.countBySlug(request.slug()) > 0) {
             throw new RuntimeException("Tag with slug '" + request.slug() + "' already exists");
         }
@@ -59,7 +59,7 @@ public class TagService {
         tag.setUpdatedAt(Instant.now());
         
         Tag saved = tagRepository.save(tag);
-        return new TagResponse(
+        return new AdminTagResponse(
             saved.getId(),
             saved.getName(),
             saved.getSlug(),
@@ -68,7 +68,7 @@ public class TagService {
         );
     }
     
-    public TagResponse updateTag(Long id, TagRequest request) {
+    public AdminTagResponse updateTag(Long id, AdminTagRequest request) {
         Tag tag = tagRepository.findActiveById(id)
             .orElseThrow(() -> new RuntimeException("Tag not found with id: " + id));
         
@@ -82,7 +82,7 @@ public class TagService {
         tag.setUpdatedAt(Instant.now());
         
         Tag updated = tagRepository.save(tag);
-        return new TagResponse(
+        return new AdminTagResponse(
             updated.getId(),
             updated.getName(),
             updated.getSlug(),

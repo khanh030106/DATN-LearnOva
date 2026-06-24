@@ -13,7 +13,7 @@ import {
   User,
   X,
 } from "lucide-react";
-import { updateUserApi } from "../../../../api/UserApi";
+import { updateAdminUserApi } from "../../../../api/admin/AdminUserApi.js";
 import "./ViewUserModal.css";
 
 const defaultCoverImage =
@@ -327,7 +327,7 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
     };
 
     try {
-      await updateUserApi(user.id, payload);
+      await updateAdminUserApi(user.id, payload);
       onSaved(buildSavedUser(user, form));
     } catch (saveError) {
       setError(

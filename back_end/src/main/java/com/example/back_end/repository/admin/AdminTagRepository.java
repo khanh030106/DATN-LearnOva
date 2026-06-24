@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.back_end.entity.Tag;
 
-public interface TagRepository extends JpaRepository<Tag, Long> {
+public interface AdminTagRepository extends JpaRepository<Tag, Long> {
     
     @Query("SELECT tag FROM Tag tag WHERE tag.isDeleted = false ORDER BY tag.name")
     List<Tag> findAllActive();

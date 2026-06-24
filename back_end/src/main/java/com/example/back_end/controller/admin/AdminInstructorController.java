@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.back_end.dto.response.admin.InstructorResponse;
-import com.example.back_end.dto.resquest.admin.InstructorRequest;
-import com.example.back_end.service.admin.InstructorService;
+import com.example.back_end.dto.response.admin.AdminInstructorResponse;
+import com.example.back_end.dto.resquest.admin.AdminInstructorRequest;
+import com.example.back_end.service.admin.AdminInstructorService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,32 +22,32 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/learnova/admin/instructors-management")
-public class InstructorController {
+public class AdminInstructorController {
 
-    private final InstructorService adminInstructorService;
+    private final AdminInstructorService adminInstructorService;
 
     @GetMapping
-    public ResponseEntity<List<InstructorResponse>> getAllInstructors() {
+    public ResponseEntity<List<AdminInstructorResponse>> getAllInstructors() {
         return ResponseEntity.ok(
             adminInstructorService.getAllInstructors()
         );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InstructorResponse> getInstructorById(@PathVariable Long id) {
+    public ResponseEntity<AdminInstructorResponse> getInstructorById(@PathVariable Long id) {
         return ResponseEntity.ok(adminInstructorService.getInstructorById(id));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<InstructorResponse> createInstructor(
-            @RequestBody @Valid InstructorRequest request) {
+    public ResponseEntity<AdminInstructorResponse> createInstructor(
+            @RequestBody @Valid AdminInstructorRequest request) {
         return ResponseEntity.ok(adminInstructorService.createInstructor(request));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<InstructorResponse> updateInstructor(
+    public ResponseEntity<AdminInstructorResponse> updateInstructor(
             @PathVariable Long id,
-            @RequestBody @Valid InstructorRequest request) {
+            @RequestBody @Valid AdminInstructorRequest request) {
         return ResponseEntity.ok(adminInstructorService.updateInstructor(id, request));
     }
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.example.back_end.entity.enums.GenderType;
 
-public record InstructorResponse(
+public record AdminInstructorResponse(
     Long instructorId,
     String instructorCode,
     String fullName,

@@ -12,48 +12,48 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.back_end.dto.response.admin.VoucherResponse;
-import com.example.back_end.dto.resquest.admin.VoucherRequest;
-import com.example.back_end.service.admin.VoucherService;
+import com.example.back_end.dto.response.admin.AdminVoucherResponse;
+import com.example.back_end.dto.resquest.admin.AdminVoucherRequest;
+import com.example.back_end.service.admin.AdminVoucherService;
 
 @RestController
 @RequestMapping("/api/learnova/admin/vouchers")
-public class VoucherController {
+public class AdminVoucherController {
 
-    private final VoucherService voucherService;
+    private final AdminVoucherService voucherService;
 
-    public VoucherController(VoucherService voucherService) {
+    public AdminVoucherController(AdminVoucherService voucherService) {
         this.voucherService = voucherService;
     }
 
     @GetMapping
-    public List<VoucherResponse> getAllVouchers() {
+    public List<AdminVoucherResponse> getAllVouchers() {
         return voucherService.getAllVouchers();
     }
 
     @GetMapping("/{voucherId}")
-    public VoucherResponse getVoucherById(@PathVariable Long voucherId) {
+    public AdminVoucherResponse getVoucherById(@PathVariable Long voucherId) {
         return voucherService.getVoucherById(voucherId);
     }
 
     @PostMapping("/create")
-    public VoucherResponse createVoucher(
+    public AdminVoucherResponse createVoucher(
             Authentication authentication,
-            @RequestBody VoucherRequest voucherRequest
+            @RequestBody AdminVoucherRequest voucherRequest
     ) {
         return voucherService.createVoucher(authentication, voucherRequest);
     }
 
     @PutMapping("/update/{voucherId}")
-    public VoucherResponse updateVoucher(
+    public AdminVoucherResponse updateVoucher(
             @PathVariable Long voucherId,
-            @RequestBody VoucherRequest voucherRequest
+            @RequestBody AdminVoucherRequest voucherRequest
     ) {
         return voucherService.updateVoucher(voucherId, voucherRequest);
     }
 
     @DeleteMapping("/delete/{voucherId}")
-    public VoucherResponse deleteVoucher(@PathVariable Long voucherId) {
+    public AdminVoucherResponse deleteVoucher(@PathVariable Long voucherId) {
         return voucherService.deleteVoucher(voucherId);
     }
 }
