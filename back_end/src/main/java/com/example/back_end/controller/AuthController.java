@@ -40,7 +40,12 @@ public class AuthController {
          response.addHeader(
                  HttpHeaders.SET_COOKIE,
                  refreshCookieService.createRefreshTokenCookie(result.refreshToken(), request.rememberMe()).toString()
-     );
+         );
+
+         response.addHeader(
+                 HttpHeaders.SET_COOKIE,
+                 refreshCookieService.createAccessTokenCookie(result.accessToken()).toString()
+         );
 
      return ResponseEntity.ok(new LoginResponse(result.accessToken()));
      }
@@ -48,11 +53,33 @@ public class AuthController {
 
      @PostMapping("/refresh")
      public ResponseEntity<LoginResponse> refresh(
-           @CookieValue("refreshToken") String refreshToken
+           @CookieValue(value = "refreshToken", required = false) String refreshToken,
+           HttpServletResponse response
      ) {
-     LoginResponse response = authService.refreshAccessToken(refreshToken);
+     if (refreshToken == null) {
+          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+     }
 
-     return ResponseEntity.ok(response);
+     try {
+          LoginResponse loginResponse = authService.refreshAccessToken(refreshToken);
+
+          response.addHeader(
+                  HttpHeaders.SET_COOKIE,
+                  refreshCookieService.createAccessTokenCookie(loginResponse.accessToken()).toString()
+          );
+
+          return ResponseEntity.ok(loginResponse);
+     } catch (RuntimeException e) {
+          response.addHeader(
+                  HttpHeaders.SET_COOKIE,
+                  refreshCookieService.clearRefreshTokenCookie().toString()
+          );
+          response.addHeader(
+                  HttpHeaders.SET_COOKIE,
+                  refreshCookieService.clearAccessTokenCookie().toString()
+          );
+          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+     }
      }
 
 
@@ -68,8 +95,11 @@ public class AuthController {
              refreshCookieService.clearRefreshTokenCookie().toString()
      );
 
+     response.addHeader(
+             HttpHeaders.SET_COOKIE,
+             refreshCookieService.clearAccessTokenCookie().toString()
+     );
+
      return ResponseEntity.noContent().build();
     }
-
-
  }

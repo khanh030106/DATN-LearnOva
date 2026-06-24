@@ -10,7 +10,7 @@ const SectionCard = ({section, isActive, onSelect}) => {
             <GripVertical size={14}/>
             <span>
         <small>Section {section.sectionOrder}</small>
-        <strong>{section.title || "Untitled section"}</strong>
+        <strong>{section.title || "Enter section title..."}</strong>
       </span>
         </button>
     );

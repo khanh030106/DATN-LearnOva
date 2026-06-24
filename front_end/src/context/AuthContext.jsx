@@ -15,15 +15,15 @@ export const AuthProvider = ({ children }) => {
         const data = await loginApi(email, password, remember);
         setAccessToken(data.accessToken);
         try {
-            await fetchCurrentUser(data.accessToken);
+            await fetchCurrentUser();
         } catch (e) {
             console.error("Failed to fetch user", e);
         }
         return data;
     };
 
-    const fetchCurrentUser = async (token) => {
-        const user = await getCurrentUserApi(token);
+    const fetchCurrentUser = async () => {
+        const user = await getCurrentUserApi();
         setCurrentUser(user);
         return user;
     };
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
                 const token = await refreshAccessToken();
 
                 try {
-                    await fetchCurrentUser(token);
+                    await fetchCurrentUser();
                 } catch (e) {
                     console.error("Failed to fetch user", e);
                 }

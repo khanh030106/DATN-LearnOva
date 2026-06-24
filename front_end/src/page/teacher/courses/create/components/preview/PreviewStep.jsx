@@ -1,9 +1,9 @@
-import CoursePreviewPanel from "./CoursePreviewPanel.jsx";
+import CoursePreview from "./CoursePreview.jsx";
 
 const PreviewStep = ({course, sections, onPrevious, onNext}) => {
     return (
         <section className="teacher-create-step">
-            <CoursePreviewPanel course={course} sections={sections}/>
+            <CoursePreview course={course} sections={sections}/>
 
             <footer className="teacher-create-actions">
                 <button type="button" onClick={onPrevious}>

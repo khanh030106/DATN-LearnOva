@@ -33,16 +33,24 @@ public class Lesson {
     @Column(name = "title", nullable = false, length = Integer.MAX_VALUE)
     private String title;
 
-    @NotNull
-    @Column(name = "video_url", nullable = false, length = Integer.MAX_VALUE)
-    private String videoUrl;
+    @Column(name = "video_key", length = Integer.MAX_VALUE)
+    private String videoKey;
+
+    @Column(name = "video_original_filename", length = Integer.MAX_VALUE)
+    private String videoOriginalFilename;
+
+    @Column(name = "video_content_type", length = 100)
+    private String videoContentType;
+
+    @Column(name = "video_size_bytes")
+    private Long videoSizeBytes;
 
     @NotNull
     @Column(name = "lesson_order", nullable = false)
     private Double lessonOrder;
 
-    @NotNull
-    @Column(name = "duration_seconds", nullable = false)
+    @ColumnDefault("0")
+    @Column(name = "duration_seconds")
     private Integer durationSeconds;
 
     @NotNull
