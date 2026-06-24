@@ -47,7 +47,7 @@ public class AdminCourseService {
                             : (course.getStatus() == null ? null : course.getStatus().name());
                     return new AdminCourseResponse(
                             course.getId(),
-                            course.getThumbnailUrl(),
+                            course.getThumbnailKey(),
                             course.getTitle(),
                             course.getSlug(),
                             course.getDescription(),
@@ -82,7 +82,7 @@ public class AdminCourseService {
 
         return new AdminCourseResponse(
                 course.getId(),
-                course.getThumbnailUrl(),
+                course.getThumbnailKey(),
                 course.getTitle(),
                 course.getSlug(),
                 course.getDescription(),
@@ -125,7 +125,7 @@ public class AdminCourseService {
         User instructor = adminUserRepository.findById(courseRequest.instructorId())
                 .orElseThrow(() -> new RuntimeException("Instructor not found id=" + courseRequest.instructorId()));
 
-        course.setThumbnailUrl(courseRequest.thumbnailUrl().trim());
+        course.setThumbnailKey(courseRequest.thumbnailKey().trim());
         course.setTitle(courseRequest.title().trim());
         course.setSlug(courseRequest.slug().trim());
         course.setDescription(courseRequest.description().trim());
@@ -158,7 +158,7 @@ public class AdminCourseService {
 
         return new AdminCourseResponse(
                 saved.getId(),
-                saved.getThumbnailUrl(),
+                saved.getThumbnailKey(),
                 saved.getTitle(),
                 saved.getSlug(),
                 saved.getDescription(),
@@ -202,7 +202,7 @@ public class AdminCourseService {
         User instructor = adminUserRepository.findById(courseRequest.instructorId())
                 .orElseThrow(() -> new RuntimeException("Instructor not found id=" + courseRequest.instructorId()));
 
-        course.setThumbnailUrl(courseRequest.thumbnailUrl().trim());
+        course.setThumbnailKey(courseRequest.thumbnailKey().trim());
         course.setTitle(courseRequest.title().trim());
         course.setSlug(courseRequest.slug().trim());
         course.setDescription(courseRequest.description().trim());
@@ -238,7 +238,7 @@ public class AdminCourseService {
 
         return new AdminCourseResponse(
                 updated.getId(),
-                updated.getThumbnailUrl(),
+                updated.getThumbnailKey(),
                 updated.getTitle(),
                 updated.getSlug(),
                 updated.getDescription(),
@@ -280,7 +280,7 @@ public class AdminCourseService {
 
         return new AdminCourseResponse(
                 deletedCourse.getId(),
-                deletedCourse.getThumbnailUrl(),
+                deletedCourse.getThumbnailKey(),
                 deletedCourse.getTitle(),
                 deletedCourse.getSlug(),
                 deletedCourse.getDescription(),

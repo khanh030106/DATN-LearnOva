@@ -48,7 +48,7 @@ public class AdminInstructorService {
                             .collect(Collectors.toSet());
 
                     long numberOfClasses = courses.size();
-                    
+
                     long totalStudents = courses.stream()
                             .flatMap(course -> course.getEnrollments().stream())
                             .map(Enrollment::getUser)
@@ -105,7 +105,7 @@ public class AdminInstructorService {
                                 return new CourseSummary(
                                         course.getId(),
                                         course.getTitle(),
-                                        course.getThumbnailUrl(),
+                                        course.getThumbnailKey(),
                                         category,
                                         students,
                                         Math.round(rating * 10.0) / 10.0,
@@ -158,7 +158,7 @@ public class AdminInstructorService {
                 .collect(Collectors.toSet());
 
         long numberOfClasses = courses.size();
-        
+
         long totalStudents = courses.stream()
                 .flatMap(course -> course.getEnrollments().stream())
                 .map(Enrollment::getUser)
@@ -215,7 +215,7 @@ public class AdminInstructorService {
                     return new CourseSummary(
                             course.getId(),
                             course.getTitle(),
-                            course.getThumbnailUrl(),
+                            course.getThumbnailKey(),
                             category,
                             students,
                             Math.round(rating * 10.0) / 10.0,
@@ -292,7 +292,7 @@ public class AdminInstructorService {
                 .collect(Collectors.toSet());
 
         long numberOfClasses = courses.size();
-        
+
         long totalStudents = courses.stream()
                 .flatMap(course -> course.getEnrollments().stream())
                 .map(Enrollment::getUser)
@@ -349,7 +349,7 @@ public class AdminInstructorService {
                     return new CourseSummary(
                             course.getId(),
                             course.getTitle(),
-                            course.getThumbnailUrl(),
+                            course.getThumbnailKey(),
                             category,
                             students,
                             Math.round(rating * 10.0) / 10.0,
@@ -416,7 +416,7 @@ public class AdminInstructorService {
                 .collect(Collectors.toSet());
 
         long numberOfClasses = courses.size();
-        
+
         long totalStudents = courses.stream()
                 .flatMap(course -> course.getEnrollments().stream())
                 .map(Enrollment::getUser)
@@ -473,7 +473,7 @@ public class AdminInstructorService {
                     return new CourseSummary(
                             course.getId(),
                             course.getTitle(),
-                            course.getThumbnailUrl(),
+                            course.getThumbnailKey(),
                             category,
                             students,
                             Math.round(rating * 10.0) / 10.0,

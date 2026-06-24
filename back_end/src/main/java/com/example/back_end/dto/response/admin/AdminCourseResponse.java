@@ -6,7 +6,7 @@ import java.util.List;
 
 public record AdminCourseResponse(
     Long id,
-    String thumbnailUrl,
+    String thumbnailKey,
     String title,
     String slug,
     String description,
