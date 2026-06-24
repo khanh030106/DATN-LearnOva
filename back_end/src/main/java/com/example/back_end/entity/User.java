@@ -42,6 +42,15 @@ public class User {
     @Column(name = "cover_image", length = Integer.MAX_VALUE)
     private String coverImage;
 
+    @Column(name = "title", length = 100)
+    private String title;
+
+    @Column(name = "skills", columnDefinition = "text")
+    private String skills;
+
+    @Column(name = "bio", columnDefinition = "text")
+    private String bio;
+
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 

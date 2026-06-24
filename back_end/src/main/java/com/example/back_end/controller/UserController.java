@@ -1,17 +1,16 @@
 package com.example.back_end.controller;
 
 import com.example.back_end.dto.response.CurrentUserResponse;
-import com.example.back_end.security.CustomUserDetails;
-import com.example.back_end.service.AuthService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import com.example.back_end.dto.response.CurrentUserResponse;
 import com.example.back_end.entity.User;
-import com.example.back_end.repository.UserRepository;
 import com.example.back_end.service.AuthService;
+import com.example.back_end.service.UserService;
+import com.example.back_end.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
+import java.time.Instant;
+import java.util.List;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
         private final AuthService authService;
+        private final UserService userService;
         private final UserRepository userRepository;
 
         @GetMapping("/user/me")
@@ -28,59 +28,57 @@ public class UserController {
                         Authentication authentication) {
 
                 String email = authentication.getName();
+
                 return ResponseEntity.ok(
                                 authService.getCurrentUser(email));
         }
 
-        // THÊM USER
         @PostMapping("/admin/create/users")
         public ResponseEntity<User> createUser(
                         @RequestBody User user) {
 
                 user.setId(null);
                 user.setIsDeleted(false);
+                User saved = userRepository.save(user);
 
-                User savedUser = userRepository.save(user);
-
-                return ResponseEntity.ok(savedUser);
+                return ResponseEntity.ok(saved);
         }
 
-        // SỬA USER
-        @PutMapping("/update/users/{id}")
+        @PutMapping("/admin/update/users/{id}")
         public ResponseEntity<User> updateUser(
                         @PathVariable Long id,
                         @RequestBody User request) {
 
-                User user = userRepository.findByIdAndIsDeletedFalse(id)
-                                .orElseThrow(() -> new RuntimeException("User not found"));
-
-                user.setFullName(request.getFullName());
-                user.setPhone(request.getPhone());
-                user.setAvatar(request.getAvatar());
-                user.setCoverImage(request.getCoverImage());
-                user.setDateOfBirth(request.getDateOfBirth());
-                user.setGender(request.getGender());
-
-                user.setUpdatedAt(java.time.Instant.now());
-
-                User updatedUser = userRepository.save(user);
-
-                return ResponseEntity.ok(updatedUser);
+                return ResponseEntity.ok(
+                                userService.updateUser(id, request));
         }
 
-        // XÓA USER (SOFT DELETE)
         @DeleteMapping("/admin/delete/users/{id}")
         public ResponseEntity<String> deleteUser(
                         @PathVariable Long id) {
-
-                User user = userRepository.findByIdAndIsDeletedFalse(id)
-                                .orElseThrow(() -> new RuntimeException("User not found"));
+                User user = userRepository
+                .findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
                 user.setIsDeleted(true);
-                user.setUpdatedAt(java.time.Instant.now());
+                user.setUpdatedAt(Instant.now());
 
                 userRepository.save(user);
 
                 return ResponseEntity.ok("User deleted successfully");
         }
+
+        @GetMapping("/admin/users")
+        public ResponseEntity<List<User>> getAllUsers() {
+                List<User> users = userRepository.findByIsDeletedFalse();
+                return ResponseEntity.ok(users);
+        }
+
+        // Debug endpoint to check all users (public access for testing)
+        @GetMapping("/debug/users")
+        public ResponseEntity<List<User>> debugGetAllUsers() {
+                List<User> users = userRepository.findAll();
+                return ResponseEntity.ok(users);
+        }
+
 }
