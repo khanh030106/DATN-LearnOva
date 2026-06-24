@@ -7,12 +7,9 @@ import java.util.List;
 
 public interface LessonQARepository extends JpaRepository<LessonQA, Long> {
 
-    // lấy question theo lesson
-    List<LessonQA> findByLessonIdAndParentIsNull(Long lessonId);
+    List<LessonQA> findByLesson_IdAndParentIsNull(Long lessonId);
 
-    // lấy answer theo list question
-    List<LessonQA> findByParentIdIn(List<Long> parentIds);
+    List<LessonQA> findByParent_IdIn(List<Long> parentIds);
 
-    // lấy tất cả Q&A theo lesson
-    List<LessonQA> findByLessonId(Long lessonId);
+    List<LessonQA> findByLesson_Id(Long lessonId);
 }
