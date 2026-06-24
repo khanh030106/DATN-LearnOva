@@ -1,0 +1,142 @@
+[33m3d1986a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev-backend[m[33m, [m[1;31morigin/dev-backend[m[33m)[m mới úp lại
+[33me01e4e1[m Merge remote-tracking branch 'origin/khanh' into dev-backend
+[33m10215e9[m[33m ([m[1;31morigin/khanh[m[33m)[m Khanh-fix conflict merge thong
+[33m1140c6b[m hú hú hú hú
+[33m6168a58[m Khanh-fix merge and conflict file name
+[33m6470166[m úp lại
+[33mdacca3e[m Khanh_merge origin hieu
+[33mef62d91[m Khanh_merge origin hieu
+[33mbd4da8e[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #1 from khanh030106/khanh
+[33m2eac336[m Khanh_fff
+[33m8b0e360[m[33m ([m[1;31morigin/hieu[m[33m)[m update lại voucher
+[33m1671737[m XONG đăng nhập fb gg, đăng ký
+[33m011505f[m sửa giao diện  tab review
+[33m2ebdad2[m xong đăng ký
+[33mf3a4513[m cc to nhất vn
+[33m3fbc78d[m update be lên fe
+[33m5a62443[m khanh_done upload video and resource
+[33m1980c8c[m sắp xong
+[33m768e561[m Merge branch 'minh' of https://github.com/khanh030106/DATN-LearnOva into hieu
+[33mb276a4e[m khanh_upload sources to s3-processing
+[33m62d55ea[m gần xong:)))
+[33m8af2760[m Merge branch'minh' of https://github.com/khanh030106/DATN-LearnOva into hieu
+[33me36b0ea[m[33m ([m[1;31morigin/minh[m[33m)[m Fix user update delete API and JWT
+[33me458f5c[m api users
+[33m3296f17[m Add user service update delete API
+[33m9379e56[m Fix user update delete API and JWT
+[33mee4ee39[m done /user/me
+[33ma61295e[m chưa xong
+[33mb918d9c[m Merge branch dev-backend into minh
+[33m5030036[m API REGISTER, REVIEW
+[33m2f22548[m khanh_update DB and Entity
+[33mb755c8c[m chỉnh giao diện trang giảng viên, chi tiết giảng viên , xem video
+[33m173fd21[m Merge main into minh
+[33m3ff479d[m Update home page
+[33m079074e[m[33m ([m[1;32mmain[m[33m)[m Update README.md
+[33m966e98c[m Merge remote-tracking branch 'origin/hieu'
+[33mfd63f4e[m update full select của các trang admin
+[33m2ea3cb4[m update lại kiểu select
+[33m0520923[m Merge remote-tracking branch 'origin/hieu'
+[33mba83691[m update lại
+[33med944a3[m update style cho đồng bộ của admin
+[33m8fedf2c[m Update UI roles section
+[33mc02c1bf[m first committtt
+[33me4f106e[m first committt
+[33m8a565d8[m UPDATE INSTRUCSTORDETAIL
+[33m36a6838[m first committ
+[33m4a50162[m Merge remote-tracking branch 'origin/thong' into hieu
+[33me4e2a84[m UPDATE INSTRUCTORS
+[33m1fc606e[m merge thử
+[33m5698c58[m fix courses
+[33mfe4377d[m push
+[33mdfb1860[m push
+[33m36c4974[m Full refactor UX/UI----
+[33m03bad4a[m Merge branch 'main' of https://github.com/khanh030106/DATN-LearnOva into thong
+[33mfc8bfb1[m Merge remote-tracking branch 'origin/minh'
+[33mafd1aa6[m Full refactor UX/UI---
+[33m5c2b72c[m Update header UI and styles
+[33mb886674[m Full refactor UX/UI--
+[33m5dcfdff[m UPDATE AI
+[33m9dfce0a[m Full refactor UX/UI-
+[33mb7ff4ac[m Merge remote-tracking branch 'origin/thong'
+[33m3dd58bd[m update header
+[33m86d58b4[m Full refactor UX/UI
+[33m0affee9[m Update CourseDetail UI
+[33m5167568[m Resolve merge conflict in CourseDetail
+[33m89aca6c[m Full login
+[33mf3c1e3f[m UPDATE QUIZ
+[33m0c973ed[m hieu-xong UI admin
+[33m376647c[m fix sơ admin
+[33mdba000d[m QUIZ
+[33m1356fac[m chỉnh admin
+[33mbd18250[m khanh pushhhhh
+[33m07cc0ea[m ...
+[33m897ae6b[m ...
+[33m579778e[m khanh pushhhh
+[33mb842815[m profile
+[33m40539cd[m Merge main into minh
+[33m391e693[m ...
+[33m51177c1[m khanh pushhh
+[33mfb9eee5[m khanh pushh
+[33mbffd99f[m Add Home.jsx
+[33me124edf[m fix duong dan user
+[33m87f4c08[m khanh push
+[33m4f1fbc7[m sidebar
+[33mcd50b08[m ...
+[33mdda317c[m M co lam dc viec khong hieu
+[33m01adc7d[m Khanhh
+[33m94869e0[m Khanh
+[33mce06250[m Khanh
+[33mdc13a21[m fix lại toàn bộ font-family
+[33m502674a[m thong
+[33mea519de[m uapdte header
+[33mbe0847c[m update lại UI
+[33m463a6f2[m update thử
+[33mc9d9203[m fix ful UI
+[33me9b8805[m tanhieu_update sau merge
+[33m30ef20e[m LOGIN/REGISTER AND UI FIXES
+[33mb6dbf9b[m tanhieu_code_sau_merge
+[33m1e7ab23[m NEW UPDATE
+[33m3f4babb[m tanhieu_upload fix UI
+[33mbf03f4f[m của thong ae nhé
+[33m623eb3a[m CHI TIET GIANG VIEN
+[33md4838fb[m FULL CODE 09/06/2026 : 1:49 HEHE
+[33md5437eb[m trang XEM VIDEO
+[33m49d735a[m resolve merge conflict
+[33m412bf10[m resolve merge conflict
+[33m171eea6[m Restore Minh branch: cart + course detail + header + routing update
+[33m27bc3a2[m tanhieu_update instructor page
+[33m1158e44[m đổi tiếng việt sang anh
+[33m1192514[m upload lại profile
+[33m027dc1d[m Khanh connect
+[33m7b40045[m add header sau login
+[33m9c537ec[m Khanh connect
+[33m65ed201[m Khanh resolve AppRoutes merge conflict
+[33m8a81bd7[m thong: update course UI + instructor
+[33ma9aa9cb[m Khanh refactor login color
+[33m0440d52[m kéo code mới từ main về
+[33m19355d6[m tanhieu_fix style dễ nhìn
+[33m8317f9e[m Khanh finish instructor FE
+[33m92d07e2[m tanhieu_Update full UI
+[33m49818fa[m Khanh- Full teacher page
+[33m3337d18[m tanhieu_Adjust the color of the sidebar and header
+[33m8520f83[m tanhieu_update UI
+[33m6c9038e[m tanhieu_full admin interface update
+[33m153000f[m Update UI admin
+[33m4310e73[m Khanh - FE Platform
+[33md53f311[m Khanh-
+[33m9a156f3[m thong hoàn thành giao diện user
+[33mfcb8bf5[m Finished login and added UX/UI rules file
+[33m2cee6d5[m cập nhật viết data cho features riêng ra không gộp
+[33m189ee51[m cập nhật data cho features
+[33mdeb0c79[m cap nhat header full
+[33md302757[m cap nhat header
+[33mf01fce1[m Khanh-refactor homeAnimation
+[33m6dbc1c9[m Khanh-Refactor Home page and animation
+[33m7ba72f0[m full home UI
+[33m8a54364[m full member
+[33m9a6bf5b[m minh engagement, testimonial
+[33mb53d810[m khanh+thong+hieu
+[33mb7b85a2[m khanh+hieu
+[33md9b1fc0[m update frontend UI + footer
+[33mb8e037b[m Khanh
