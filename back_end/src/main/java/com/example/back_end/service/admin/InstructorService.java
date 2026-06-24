@@ -6,8 +6,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.example.back_end.dto.response.admin.InstructorResponse;
 import com.example.back_end.dto.response.admin.InstructorResponse.CourseSummary;
 import com.example.back_end.dto.resquest.admin.InstructorRequest;
@@ -46,6 +48,7 @@ public class InstructorService {
                             .collect(Collectors.toSet());
 
                     long numberOfClasses = courses.size();
+                    
                     long totalStudents = courses.stream()
                             .flatMap(course -> course.getEnrollments().stream())
                             .map(Enrollment::getUser)
@@ -155,6 +158,7 @@ public class InstructorService {
                 .collect(Collectors.toSet());
 
         long numberOfClasses = courses.size();
+        
         long totalStudents = courses.stream()
                 .flatMap(course -> course.getEnrollments().stream())
                 .map(Enrollment::getUser)
@@ -288,6 +292,7 @@ public class InstructorService {
                 .collect(Collectors.toSet());
 
         long numberOfClasses = courses.size();
+        
         long totalStudents = courses.stream()
                 .flatMap(course -> course.getEnrollments().stream())
                 .map(Enrollment::getUser)
@@ -411,6 +416,7 @@ public class InstructorService {
                 .collect(Collectors.toSet());
 
         long numberOfClasses = courses.size();
+        
         long totalStudents = courses.stream()
                 .flatMap(course -> course.getEnrollments().stream())
                 .map(Enrollment::getUser)

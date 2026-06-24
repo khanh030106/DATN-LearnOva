@@ -145,17 +145,17 @@
   box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
 }
 
-.voucherCreatePercentInputWrap {
+.voucherCreateAmountInputWrap {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.voucherCreatePercentInput {
-  padding-right: 42px;
+.voucherCreateAmountInput {
+  padding-right: 56px;
 }
 
-.voucherCreatePercentInputWrap span {
+.voucherCreateAmountInputWrap span {
   position: absolute;
   right: 16px;
   color: #475569;

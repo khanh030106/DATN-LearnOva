@@ -7,6 +7,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.example.back_end.dto.response.admin.VoucherResponse;
@@ -81,17 +82,32 @@ public class VoucherService {
         );
     }
 
-    public VoucherResponse createVoucher(VoucherRequest voucherRequest) {
-        Voucher voucher = new Voucher();
+    public VoucherResponse createVoucher(Authentication authentication, VoucherRequest voucherRequest) {
+        if (authentication == null) {
+            throw new RuntimeException("No authentication - missing token or filter failed");
+        }
 
-        String voucherCode = voucherRequest.code().trim();
-        String voucherDescription = voucherRequest.description().trim();
         DiscountType discountType;
 
         try {
-            discountType = DiscountType.valueOf(voucherRequest.discountType());
+            String discountTypeValue = voucherRequest.discountType() == null
+                    ? DiscountType.Fixed.name()
+                    : voucherRequest.discountType().trim();
+            discountType = DiscountType.valueOf(discountTypeValue);
         } catch (Exception exception) {
             throw new RuntimeException("Invalid discount type: " + voucherRequest.discountType());
+        }
+
+        if (voucherRequest.discountValue() == null) {
+            throw new RuntimeException("Discount value is required");
+        }
+
+        if (voucherRequest.discountValue().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("Discount value must be greater than 0");
+        }
+
+        if (discountType == DiscountType.Percent && voucherRequest.discountValue().compareTo(new BigDecimal("100")) > 0) {
+            throw new RuntimeException("Discount percent must be less than or equal to 100");
         }
 
         OffsetDateTime startDate;
@@ -104,15 +120,22 @@ public class VoucherService {
             throw new RuntimeException("Invalid date format", exception);
         }
 
-        User createdByUser = userRepository.findById(voucherRequest.createdById())
-                .orElseThrow(() -> new RuntimeException("User not found id=" + voucherRequest.createdById()));
+        if (!endDate.isAfter(startDate)) {
+            throw new RuntimeException("End date must be after start date");
+        }
 
-        voucher.setCode(voucherCode);
-        voucher.setDescription(voucherDescription);
+        User createdByUser = userRepository.findByEmailAndIsDeletedFalse(authentication.getName(), false)
+                .orElseThrow(() -> new RuntimeException("User not found email=" + authentication.getName()));
+
+        Voucher voucher = new Voucher();
+        voucher.setCode(voucherRequest.code().trim());
+        voucher.setDescription(voucherRequest.description().trim());
         voucher.setDiscountType(discountType);
         voucher.setDiscountValue(voucherRequest.discountValue());
         voucher.setMinimumOrder(BigDecimal.ZERO);
-        voucher.setMaximumDiscountAmount(BigDecimal.ZERO);
+        voucher.setMaximumDiscountAmount(
+                discountType == DiscountType.Percent ? new BigDecimal("999999999") : BigDecimal.ZERO
+        );
         voucher.setUsageLimit(voucherRequest.usageLimit());
         voucher.setUsedCount(0);
         voucher.setStartDate(startDate);
@@ -174,8 +197,8 @@ public class VoucherService {
         voucher.setDescription(voucherDescription);
         voucher.setDiscountType(discountType);
         voucher.setDiscountValue(voucherRequest.discountValue());
-        voucher.setMinimumOrder(BigDecimal.ZERO);
-        voucher.setMaximumDiscountAmount(BigDecimal.ZERO);
+        voucher.setMinimumOrder(voucherRequest.minimumOrder());
+        voucher.setMaximumDiscountAmount(voucherRequest.maximumDiscountAmount());
         voucher.setUsageLimit(voucherRequest.usageLimit());
         voucher.setStartDate(startDate);
         voucher.setEndDate(endDate);

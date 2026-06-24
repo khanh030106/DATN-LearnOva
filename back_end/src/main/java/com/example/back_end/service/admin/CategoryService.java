@@ -23,7 +23,21 @@ public class CategoryService {
 
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAllForAdmin().stream()
-                .map(this::toResponse)
+                .map(category -> {
+                    Long parentId = category.getParent() != null ? category.getParent().getId() : null;
+                    String parentName = category.getParent() != null ? category.getParent().getName() : null;
+                    return new CategoryResponse(
+                        category.getId(),
+                        category.getName(),
+                        category.getSlug(),
+                        parentId,
+                        parentName,
+                        category.getDisplayOrder(),
+                        category.getIsDeleted(),
+                        category.getCreatedAt(),
+                        category.getUpdatedAt()
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
@@ -31,12 +45,39 @@ public class CategoryService {
         Category category = categoryRepository.findByIdForAdmin(id)
                 .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
 
-        return toResponse(category);
+        Long parentId = category.getParent() != null ? category.getParent().getId() : null;
+        String parentName = category.getParent() != null ? category.getParent().getName() : null;
+
+        return new CategoryResponse(
+            category.getId(),
+            category.getName(),
+            category.getSlug(),
+            parentId,
+            parentName,
+            category.getDisplayOrder(),
+            category.getIsDeleted(),
+            category.getCreatedAt(),
+            category.getUpdatedAt()
+        );
     }
 
-    public List<CategoryResponse> getCategoriesByParentId(Long parentId) {
-        return categoryRepository.findChildrenByParentId(parentId).stream()
-                .map(this::toResponse)
+    public List<CategoryResponse> getCategoriesByParentId(Long parentIdQuery) {
+        return categoryRepository.findChildrenByParentId(parentIdQuery).stream()
+                .map(category -> {
+                    Long parentId = category.getParent() != null ? category.getParent().getId() : null;
+                    String parentName = category.getParent() != null ? category.getParent().getName() : null;
+                    return new CategoryResponse(
+                        category.getId(),
+                        category.getName(),
+                        category.getSlug(),
+                        parentId,
+                        parentName,
+                        category.getDisplayOrder(),
+                        category.getIsDeleted(),
+                        category.getCreatedAt(),
+                        category.getUpdatedAt()
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
@@ -61,7 +102,21 @@ public class CategoryService {
         category.setUpdatedAt(Instant.now());
 
         Category saved = categoryRepository.save(category);
-        return toResponse(saved);
+
+        Long parentId = saved.getParent() != null ? saved.getParent().getId() : null;
+        String parentName = saved.getParent() != null ? saved.getParent().getName() : null;
+
+        return new CategoryResponse(
+            saved.getId(),
+            saved.getName(),
+            saved.getSlug(),
+            parentId,
+            parentName,
+            saved.getDisplayOrder(),
+            saved.getIsDeleted(),
+            saved.getCreatedAt(),
+            saved.getUpdatedAt()
+        );
     }
 
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
@@ -96,7 +151,21 @@ public class CategoryService {
         category.setUpdatedAt(Instant.now());
 
         Category updated = categoryRepository.save(category);
-        return toResponse(updated);
+
+        Long parentId = updated.getParent() != null ? updated.getParent().getId() : null;
+        String parentName = updated.getParent() != null ? updated.getParent().getName() : null;
+
+        return new CategoryResponse(
+            updated.getId(),
+            updated.getName(),
+            updated.getSlug(),
+            parentId,
+            parentName,
+            updated.getDisplayOrder(),
+            updated.getIsDeleted(),
+            updated.getCreatedAt(),
+            updated.getUpdatedAt()
+        );
     }
 
     public void deleteCategory(Long id) {
@@ -106,22 +175,5 @@ public class CategoryService {
         category.setIsDeleted(true);
         category.setUpdatedAt(Instant.now());
         categoryRepository.save(category);
-    }
-
-    private CategoryResponse toResponse(Category category) {
-        Long parentId = category.getParent() != null ? category.getParent().getId() : null;
-        String parentName = category.getParent() != null ? category.getParent().getName() : null;
-
-        return new CategoryResponse(
-            category.getId(),
-            category.getName(),
-            category.getSlug(),
-            parentId,
-            parentName,
-            category.getDisplayOrder(),
-            category.getIsDeleted(),
-            category.getCreatedAt(),
-            category.getUpdatedAt()
-        );
     }
 }

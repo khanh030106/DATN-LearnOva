@@ -11,15 +11,15 @@ import com.example.back_end.entity.Tag;
 
 public interface TagRepository extends JpaRepository<Tag, Long> {
     
-    @Query("SELECT t FROM Tag t WHERE t.isDeleted = false ORDER BY t.name")
+    @Query("SELECT tag FROM Tag tag WHERE tag.isDeleted = false ORDER BY tag.name")
     List<Tag> findAllActive();
     
-    @Query("SELECT t FROM Tag t WHERE t.id = :id AND t.isDeleted = false")
+    @Query("SELECT tag FROM Tag tag WHERE tag.id = :id AND tag.isDeleted = false")
     Optional<Tag> findActiveById(@Param("id") Long id);
     
-    @Query("SELECT COUNT(t) FROM Tag t WHERE t.slug = :slug AND t.isDeleted = false AND t.id != :id")
+    @Query("SELECT COUNT(tag) FROM Tag tag WHERE tag.slug = :slug AND tag.isDeleted = false AND tag.id != :id")
     long countBySlugAndNotId(@Param("slug") String slug, @Param("id") Long id);
     
-    @Query("SELECT COUNT(t) FROM Tag t WHERE t.slug = :slug AND t.isDeleted = false")
+    @Query("SELECT COUNT(tag) FROM Tag tag WHERE tag.slug = :slug AND tag.isDeleted = false")
     long countBySlug(@Param("slug") String slug);
 }

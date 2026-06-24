@@ -1,11 +1,20 @@
 package com.example.back_end.controller.admin;
 
-import com.example.back_end.dto.resquest.admin.VoucherRequest;
-import com.example.back_end.dto.response.admin.VoucherResponse;
-import com.example.back_end.service.admin.VoucherService;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.back_end.dto.response.admin.VoucherResponse;
+import com.example.back_end.dto.resquest.admin.VoucherRequest;
+import com.example.back_end.service.admin.VoucherService;
 
 @RestController
 @RequestMapping("/api/learnova/admin/vouchers")
@@ -28,8 +37,11 @@ public class VoucherController {
     }
 
     @PostMapping("/create")
-    public VoucherResponse createVoucher(@RequestBody VoucherRequest voucherRequest) {
-        return voucherService.createVoucher(voucherRequest);
+    public VoucherResponse createVoucher(
+            Authentication authentication,
+            @RequestBody VoucherRequest voucherRequest
+    ) {
+        return voucherService.createVoucher(authentication, voucherRequest);
     }
 
     @PutMapping("/update/{voucherId}")

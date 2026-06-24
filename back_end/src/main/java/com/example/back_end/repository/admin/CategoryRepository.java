@@ -11,24 +11,24 @@ import com.example.back_end.entity.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     
-    @Query("SELECT c FROM Category c WHERE c.isDeleted = false ORDER BY c.displayOrder, c.name")
+    @Query("SELECT category FROM Category category WHERE category.isDeleted = false ORDER BY category.displayOrder, category.name")
     List<Category> findAllActive();
 
-    @Query("SELECT c FROM Category c ORDER BY c.displayOrder, c.name")
+    @Query("SELECT category FROM Category category ORDER BY category.displayOrder, category.name")
     List<Category> findAllForAdmin();
     
-    @Query("SELECT c FROM Category c WHERE c.id = :id AND c.isDeleted = false")
+    @Query("SELECT category FROM Category category WHERE category.id = :id AND category.isDeleted = false")
     Optional<Category> findActiveById(@Param("id") Long id);
 
-    @Query("SELECT c FROM Category c WHERE c.id = :id")
+    @Query("SELECT category FROM Category category WHERE category.id = :id")
     Optional<Category> findByIdForAdmin(@Param("id") Long id);
     
-    @Query("SELECT c FROM Category c WHERE c.parent.id = :parentId AND c.isDeleted = false")
+    @Query("SELECT category FROM Category category WHERE category.parent.id = :parentId AND category.isDeleted = false")
     List<Category> findChildrenByParentId(@Param("parentId") Long parentId);
     
-    @Query("SELECT COUNT(c) FROM Category c WHERE c.slug = :slug AND c.isDeleted = false AND c.id != :id")
+    @Query("SELECT COUNT(category) FROM Category category WHERE category.slug = :slug AND category.isDeleted = false AND category.id != :id")
     long countBySlugAndNotId(@Param("slug") String slug, @Param("id") Long id);
     
-    @Query("SELECT COUNT(c) FROM Category c WHERE c.slug = :slug AND c.isDeleted = false")
+    @Query("SELECT COUNT(category) FROM Category category WHERE category.slug = :slug AND category.isDeleted = false")
     long countBySlug(@Param("slug") String slug);
 }

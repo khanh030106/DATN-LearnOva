@@ -15,11 +15,6 @@ const toDateInputValue = (value) => {
   return date.toISOString().slice(0, 10);
 };
 
-const formatNumberInput = (value) => {
-  const digits = String(value).replace(/[^0-9]/g, "");
-  return digits;
-};
-
 const formatCurrency = (value) =>
   new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -34,13 +29,24 @@ const formatDateLabel = (value) => {
   return new Intl.DateTimeFormat("vi-VN").format(date);
 };
 
+const getDiscountLabel = (discountType) =>
+  discountType === "Percent" ? "Discount Percent" : "Discount Amount";
+
+const getDiscountUnit = (discountType) =>
+  discountType === "Percent" ? "%" : "VND";
+
+const formatDiscountPreview = (discountType, value) =>
+  discountType === "Percent"
+    ? `${Number(value || 0)}%`
+    : formatCurrency(value);
+
 const getPayload = (form, currentUser, voucher) => ({
   code: form.code.trim(),
   description: form.description.trim(),
-  discountType: "Percent",
+  discountType: form.discountType,
   discountValue: Number(form.discountValue || 0),
   minimumOrder: 0,
-  maximumDiscountAmount: 0,
+  maximumDiscountAmount: form.discountType === "Percent" ? 999999999 : 0,
   usageLimit: Number(form.usageLimit || 0),
   startDate: form.startDate ? `${form.startDate}T00:00:00Z` : "",
   endDate: form.endDate ? `${form.endDate}T23:59:59Z` : "",
@@ -60,7 +66,7 @@ const VoucherCreate = ({
   const [form, setForm] = useState({
     code: "",
     description: "",
-    discountType: "Percent",
+    discountType: "Fixed",
     discountValue: "",
     usageLimit: "",
     startDate: "",
@@ -79,7 +85,7 @@ const VoucherCreate = ({
     setForm({
       code: voucher.code || "",
       description: voucher.description || "",
-      discountType: "Percent",
+      discountType: voucher.discountType || "Fixed",
       discountValue:
         voucher.discountValue != null ? String(voucher.discountValue) : "",
       usageLimit: voucher.usageLimit != null ? String(voucher.usageLimit) : "",
@@ -95,6 +101,14 @@ const VoucherCreate = ({
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleDiscountTypeChange = (event) => {
+    setForm((prev) => ({
+      ...prev,
+      discountType: event.target.value,
+      discountValue: "",
+    }));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (isView) return;
@@ -106,6 +120,16 @@ const VoucherCreate = ({
 
     if (!form.code.trim() || !form.description.trim()) {
       setError("Code và description không được để trống.");
+      return;
+    }
+
+    if (Number(form.discountValue || 0) <= 0) {
+      setError("Giá trị giảm phải lớn hơn 0.");
+      return;
+    }
+
+    if (form.discountType === "Percent" && Number(form.discountValue) > 100) {
+      setError("Phần trăm giảm không được lớn hơn 100.");
       return;
     }
 
@@ -195,18 +219,31 @@ const VoucherCreate = ({
 
           <div className="voucherCreateFormRow">
             <label className="voucherCreateLabel">
-              Discount Percent
-              <div className="voucherCreatePercentInputWrap">
+              Discount Type
+              <select
+                value={form.discountType}
+                onChange={handleDiscountTypeChange}
+                className="voucherCreateInput"
+                disabled={isView}
+              >
+                <option value="Fixed">Fixed amount</option>
+                <option value="Percent">Percent</option>
+              </select>
+            </label>
+
+            <label className="voucherCreateLabel">
+              {getDiscountLabel(form.discountType)}
+              <div className="voucherCreateAmountInputWrap">
                 <input
                   type="number"
                   min="0"
-                  max="100"
+                  max={form.discountType === "Percent" ? "100" : undefined}
                   value={form.discountValue}
                   onChange={handleChange("discountValue")}
-                  className="voucherCreateInput voucherCreatePercentInput"
+                  className="voucherCreateInput voucherCreateAmountInput"
                   disabled={isView}
                 />
-                <span>%</span>
+                <span>{getDiscountUnit(form.discountType)}</span>
               </div>
             </label>
           </div>
@@ -314,8 +351,10 @@ const VoucherCreate = ({
 
           <div className="voucherCreatePreviewBox">
             <span>Discount</span>
-            <strong>{Number(form.discountValue || 0)}%</strong>
-            <small>Percent</small>
+            <strong>{formatDiscountPreview(form.discountType, form.discountValue)}</strong>
+            <small>
+              {form.discountType === "Percent" ? "Percent" : "Fixed amount"}
+            </small>
           </div>
 
           <div className="voucherCreateSummaryItem">

@@ -32,7 +32,34 @@ public class CourseService {
 
     public List<CourseResponse> getAllCourses() {
         return courseRepository.findAll().stream()
-                .map(this::toResponse)
+                .map(course -> {
+                    Long instructorId = course.getInstructor() == null ? null : course.getInstructor().getId();
+                    String instructorName = course.getInstructor() == null
+                            ? null
+                            : (course.getInstructor().getFullName() == null
+                                    ? course.getInstructor().getEmail()
+                                    : course.getInstructor().getFullName());
+                    String level = course.getLevel() == null ? null : course.getLevel().name();
+                    String status = Boolean.TRUE.equals(course.getIsDeleted())
+                            ? "DELETED"
+                            : (course.getStatus() == null ? null : course.getStatus().name());
+                    return new CourseResponse(
+                            course.getId(),
+                            course.getThumbnailUrl(),
+                            course.getTitle(),
+                            course.getSlug(),
+                            course.getDescription(),
+                            course.getLanguage(),
+                            course.getRequirements(),
+                            course.getWhatYouLearn(),
+                            course.getBasePrice(),
+                            level,
+                            status,
+                            instructorId,
+                            instructorName,
+                            course.getPublishedAt()
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
@@ -40,15 +67,58 @@ public class CourseService {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found id=" + id));
 
-        return toResponse(course);
+        Long instructorId = course.getInstructor() == null ? null : course.getInstructor().getId();
+        String instructorName = course.getInstructor() == null
+                ? null
+                : (course.getInstructor().getFullName() == null
+                        ? course.getInstructor().getEmail()
+                        : course.getInstructor().getFullName());
+        String level = course.getLevel() == null ? null : course.getLevel().name();
+        String status = Boolean.TRUE.equals(course.getIsDeleted())
+                ? "DELETED"
+                : (course.getStatus() == null ? null : course.getStatus().name());
+
+        return new CourseResponse(
+                course.getId(),
+                course.getThumbnailUrl(),
+                course.getTitle(),
+                course.getSlug(),
+                course.getDescription(),
+                course.getLanguage(),
+                course.getRequirements(),
+                course.getWhatYouLearn(),
+                course.getBasePrice(),
+                level,
+                status,
+                instructorId,
+                instructorName,
+                course.getPublishedAt()
+        );
     }
 
     public CourseResponse createCourse(CourseRequest courseRequest) {
         Course course = new Course();
 
-        CourseLevel level = parseCourseLevel(courseRequest.level());
-        CourseStatus status = parsePersistedStatus(courseRequest.status());
-        boolean deleted = isDeletedRequest(courseRequest);
+        CourseLevel level;
+        try {
+            level = CourseLevel.valueOf(courseRequest.level());
+        } catch (Exception exception) {
+            throw new RuntimeException("Invalid course level: " + courseRequest.level());
+        }
+
+        CourseStatus status;
+        if ("DELETED".equalsIgnoreCase(courseRequest.status())) {
+            status = CourseStatus.ARCHIVED;
+        } else {
+            try {
+                status = CourseStatus.valueOf(courseRequest.status());
+            } catch (Exception exception) {
+                throw new RuntimeException("Invalid course status: " + courseRequest.status());
+            }
+        }
+
+        boolean deleted = Boolean.TRUE.equals(courseRequest.isDeleted())
+                || "DELETED".equalsIgnoreCase(courseRequest.status());
 
         User instructor = userRepository.findById(courseRequest.instructorId())
                 .orElseThrow(() -> new RuntimeException("Instructor not found id=" + courseRequest.instructorId()));
@@ -71,18 +141,61 @@ public class CourseService {
         course.setUpdatedAt(Instant.now());
         course.setIsDeleted(deleted);
 
-        courseRepository.save(course);
+        Course saved = courseRepository.save(course);
 
-        return toResponse(course);
+        Long instructorId = saved.getInstructor() == null ? null : saved.getInstructor().getId();
+        String instructorName = saved.getInstructor() == null
+                ? null
+                : (saved.getInstructor().getFullName() == null
+                        ? saved.getInstructor().getEmail()
+                        : saved.getInstructor().getFullName());
+        String savedLevel = saved.getLevel() == null ? null : saved.getLevel().name();
+        String savedStatus = Boolean.TRUE.equals(saved.getIsDeleted())
+                ? "DELETED"
+                : (saved.getStatus() == null ? null : saved.getStatus().name());
+
+        return new CourseResponse(
+                saved.getId(),
+                saved.getThumbnailUrl(),
+                saved.getTitle(),
+                saved.getSlug(),
+                saved.getDescription(),
+                saved.getLanguage(),
+                saved.getRequirements(),
+                saved.getWhatYouLearn(),
+                saved.getBasePrice(),
+                savedLevel,
+                savedStatus,
+                instructorId,
+                instructorName,
+                saved.getPublishedAt()
+        );
     }
 
     public CourseResponse updateCourse(Long id, CourseRequest courseRequest) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found id=" + id));
 
-        CourseLevel level = parseCourseLevel(courseRequest.level());
-        CourseStatus status = parsePersistedStatus(courseRequest.status());
-        boolean deleted = isDeletedRequest(courseRequest);
+        CourseLevel level;
+        try {
+            level = CourseLevel.valueOf(courseRequest.level());
+        } catch (Exception exception) {
+            throw new RuntimeException("Invalid course level: " + courseRequest.level());
+        }
+
+        CourseStatus status;
+        if ("DELETED".equalsIgnoreCase(courseRequest.status())) {
+            status = CourseStatus.ARCHIVED;
+        } else {
+            try {
+                status = CourseStatus.valueOf(courseRequest.status());
+            } catch (Exception exception) {
+                throw new RuntimeException("Invalid course status: " + courseRequest.status());
+            }
+        }
+
+        boolean deleted = Boolean.TRUE.equals(courseRequest.isDeleted())
+                || "DELETED".equalsIgnoreCase(courseRequest.status());
 
         User instructor = userRepository.findById(courseRequest.instructorId())
                 .orElseThrow(() -> new RuntimeException("Instructor not found id=" + courseRequest.instructorId()));
@@ -100,46 +213,43 @@ public class CourseService {
         course.setLevel(level);
         course.setStatus(status);
         course.setInstructor(instructor);
-        course.setPublishedAt(deleted ? null : resolvePublishedAt(course, status));
+        if (status != CourseStatus.PUBLISHED) {
+            course.setPublishedAt(null);
+        } else {
+            course.setPublishedAt(course.getPublishedAt() == null ? OffsetDateTime.now() : course.getPublishedAt());
+        }
         course.setIsDeleted(deleted);
 
         course.setUpdatedAt(Instant.now());
-        courseRepository.save(course);
+        Course updated = courseRepository.save(course);
 
-        return toResponse(course);
-    }
+        Long instructorId = updated.getInstructor() == null ? null : updated.getInstructor().getId();
+        String instructorName = updated.getInstructor() == null
+                ? null
+                : (updated.getInstructor().getFullName() == null
+                        ? updated.getInstructor().getEmail()
+                        : updated.getInstructor().getFullName());
+        String updatedLevel = updated.getLevel() == null ? null : updated.getLevel().name();
+        String updatedStatus = Boolean.TRUE.equals(updated.getIsDeleted())
+                ? "DELETED"
+                : (updated.getStatus() == null ? null : updated.getStatus().name());
 
-    private OffsetDateTime resolvePublishedAt(Course course, CourseStatus nextStatus) {
-        if (nextStatus != CourseStatus.PUBLISHED) {
-            return null;
-        }
-
-        return course.getPublishedAt() == null ? OffsetDateTime.now() : course.getPublishedAt();
-    }
-
-    private CourseLevel parseCourseLevel(String value) {
-        try {
-            return CourseLevel.valueOf(value);
-        } catch (Exception exception) {
-            throw new RuntimeException("Invalid course level: " + value);
-        }
-    }
-
-    private CourseStatus parsePersistedStatus(String value) {
-        if ("DELETED".equalsIgnoreCase(value)) {
-            return CourseStatus.ARCHIVED;
-        }
-
-        try {
-            return CourseStatus.valueOf(value);
-        } catch (Exception exception) {
-            throw new RuntimeException("Invalid course status: " + value);
-        }
-    }
-
-    private boolean isDeletedRequest(CourseRequest courseRequest) {
-        return Boolean.TRUE.equals(courseRequest.isDeleted())
-                || "DELETED".equalsIgnoreCase(courseRequest.status());
+        return new CourseResponse(
+                updated.getId(),
+                updated.getThumbnailUrl(),
+                updated.getTitle(),
+                updated.getSlug(),
+                updated.getDescription(),
+                updated.getLanguage(),
+                updated.getRequirements(),
+                updated.getWhatYouLearn(),
+                updated.getBasePrice(),
+                updatedLevel,
+                updatedStatus,
+                instructorId,
+                instructorName,
+                updated.getPublishedAt()
+        );
     }
 
     public CourseResponse deleteCourse(Long id) {
@@ -154,31 +264,33 @@ public class CourseService {
         course.setUpdatedAt(Instant.now());
 
         Course deletedCourse = courseRepository.save(course);
-        return toResponse(deletedCourse);
-    }
 
-    private CourseResponse toResponse(Course course) {
+        Long instructorId = deletedCourse.getInstructor() == null ? null : deletedCourse.getInstructor().getId();
+        String instructorName = deletedCourse.getInstructor() == null
+                ? null
+                : (deletedCourse.getInstructor().getFullName() == null
+                        ? deletedCourse.getInstructor().getEmail()
+                        : deletedCourse.getInstructor().getFullName());
+        String deletedLevel = deletedCourse.getLevel() == null ? null : deletedCourse.getLevel().name();
+        String deletedStatus = Boolean.TRUE.equals(deletedCourse.getIsDeleted())
+                ? "DELETED"
+                : (deletedCourse.getStatus() == null ? null : deletedCourse.getStatus().name());
+
         return new CourseResponse(
-                course.getId(),
-                course.getThumbnailUrl(),
-                course.getTitle(),
-                course.getSlug(),
-                course.getDescription(),
-                course.getLanguage(),
-                course.getRequirements(),
-                course.getWhatYouLearn(),
-                course.getBasePrice(),
-                course.getLevel() == null ? null : course.getLevel().name(),
-                Boolean.TRUE.equals(course.getIsDeleted())
-                        ? "DELETED"
-                        : (course.getStatus() == null ? null : course.getStatus().name()),
-                course.getInstructor() == null ? null : course.getInstructor().getId(),
-                course.getInstructor() == null
-                        ? null
-                        : (course.getInstructor().getFullName() == null
-                                ? course.getInstructor().getEmail()
-                                : course.getInstructor().getFullName()),
-                course.getPublishedAt()
+                deletedCourse.getId(),
+                deletedCourse.getThumbnailUrl(),
+                deletedCourse.getTitle(),
+                deletedCourse.getSlug(),
+                deletedCourse.getDescription(),
+                deletedCourse.getLanguage(),
+                deletedCourse.getRequirements(),
+                deletedCourse.getWhatYouLearn(),
+                deletedCourse.getBasePrice(),
+                deletedLevel,
+                deletedStatus,
+                instructorId,
+                instructorName,
+                deletedCourse.getPublishedAt()
         );
     }
 }

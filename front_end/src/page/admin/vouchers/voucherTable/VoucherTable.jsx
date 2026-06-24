@@ -17,11 +17,18 @@ const formatDate = (value) => {
   return Number.isNaN(date.getTime()) ? "" : date.toLocaleDateString("en-GB");
 };
 
+const formatCurrency = (value) =>
+  new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+    maximumFractionDigits: 0,
+  }).format(Number(value || 0));
+
 const formatDiscount = (voucher) => {
   if (!voucher?.discountType || voucher?.discountValue == null) return "";
   const type = String(voucher.discountType).toLowerCase();
   if (type.includes("percent")) return `${voucher.discountValue}%`;
-  return `$${voucher.discountValue}`;
+  return formatCurrency(voucher.discountValue);
 };
 
 const VoucherTable = ({
