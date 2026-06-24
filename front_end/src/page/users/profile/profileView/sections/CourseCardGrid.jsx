@@ -1,7 +1,17 @@
 import { Heart, Play, Star } from "lucide-react";
+import { t } from "../../../../../util/i18n.js";
+import { getLanguage, LANG_EVENT } from "../../../../../util/language.js";
+import { useEffect, useState } from "react";
 
 const CourseCardGrid = ({ courses = [], onOpenCourse, variant = "mine" }) => {
   const isFavorite = variant === "favorite";
+  const [lang, setLang] = useState(getLanguage());
+
+  useEffect(() => {
+    const onLangChange = (e) => setLang(e?.detail?.lang || getLanguage());
+    window.addEventListener(LANG_EVENT, onLangChange);
+    return () => window.removeEventListener(LANG_EVENT, onLangChange);
+  }, []);
 
   return (
     <div className="courses-grid favorite-grid">
@@ -68,7 +78,7 @@ const CourseCardGrid = ({ courses = [], onOpenCourse, variant = "mine" }) => {
               type="button"
             >
               <Play size={13} />
-              {isFavorite ? "View Course" : "Continue Learning"}
+              {isFavorite ? t('view_course') : t('continue_learning')}
             </button>
           </div>
         </article>

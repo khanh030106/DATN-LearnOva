@@ -82,6 +82,7 @@ const App = () => {
                     <Route path="/learnova/cart" element={<Cart/>}/>
                     <Route path="/learnova/CoursesDetail/:id" element={<CourseDetaill/>}/>
                     <Route path="/learnova/intructors" element={<InstructorsPage/>}/>
+                    <Route path="/learnova/instructors" element={<InstructorsPage/>}/>
                     <Route path="/learnova/intructorDetail" element={<InstructorDetail/>}/>
                     <Route path="/learnova/about" element={<AboutView/>}/>
                     <Route path="/learnova/user/profile" element={<ProfileViewProps key="profile" initialTab="profile"/>}/>

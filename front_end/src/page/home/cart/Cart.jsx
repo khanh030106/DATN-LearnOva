@@ -1,48 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AlertTriangle, Tag, Trash2, X } from "lucide-react";
+import { getCartItems, removeFromCart, updateCartQty, CART_EVENT } from "../../../util/cartStorage.js";
+import { formatVnd } from "../../../util/currency.js";
+import { getLanguage, LANG_EVENT } from "../../../util/language.js";
+import { t } from "../../../util/i18n.js";
 import "./Cart.css";
 
-const initialItems = [
-  {
-    id: 1,
-    title: "React - From Zero to Hero",
-    teacher: "John Smith",
-    price: 49.99,
-    qty: 1,
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-  },
-  {
-    id: 2,
-    title: "Node.js - Complete Guide",
-    teacher: "Sarah Johnson",
-    price: 54.99,
-    qty: 1,
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
-  },
-  {
-    id: 3,
-    title: "MongoDB Masterclass",
-    teacher: "Michael Chen",
-    price: 39.99,
-    qty: 1,
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c",
-  },
-];
-
 const Cart = () => {
-  const [items, setItems] = useState(initialItems);
+  const [lang, setLang] = useState(getLanguage());
+  const [items, setItems] = useState(getCartItems());
   const [promo, setPromo] = useState("");
   const [itemToRemove, setItemToRemove] = useState(null);
 
+  useEffect(() => {
+    const handleCartUpdate = () => setItems(getCartItems());
+    const onLang = (e) => setLang(e?.detail?.lang || getLanguage());
+
+    window.addEventListener(CART_EVENT, handleCartUpdate);
+    window.addEventListener(LANG_EVENT, onLang);
+    return () => {
+      window.removeEventListener(CART_EVENT, handleCartUpdate);
+      window.removeEventListener(LANG_EVENT, onLang);
+    };
+  }, []);
+
   const increment = (id) => {
-    setItems((s) => s.map((i) => (i.id === id ? { ...i, qty: i.qty + 1 } : i)));
+    const current = getCartItems().find((item) => item.id === id);
+    if (!current) return;
+    setItems(updateCartQty(id, current.qty + 1));
   };
 
   const decrement = (id) => {
-    setItems((s) =>
-      s.map((i) => (i.id === id ? { ...i, qty: Math.max(1, i.qty - 1) } : i)),
-    );
+    const current = getCartItems().find((item) => item.id === id);
+    if (!current) return;
+    setItems(updateCartQty(id, Math.max(1, current.qty - 1)));
   };
 
   const askRemoveItem = (item) => setItemToRemove(item);
@@ -60,16 +52,16 @@ const Cart = () => {
   const total = Math.max(0, subtotal - discount);
 
   return (
-    <div className="cart-page">
+    <div className="cart-page" data-lang={lang}>
       <div className="cart-panel">
         <div className="cart-left">
           <div className="cart-list">
             <div className="cart-list-header">
-              <div>Course</div>
-              <div>Price</div>
-              <div>Quantity</div>
-              <div>Total</div>
-              <div>Actions</div>
+              <div>{t('course')}</div>
+              <div>{t('price')}</div>
+              <div>{t('quantity')}</div>
+              <div>{t('total')}</div>
+              <div>{t('actions')}</div>
             </div>
 
             {items.map((item) => (
@@ -87,7 +79,7 @@ const Cart = () => {
                   </div>
                 </div>
 
-                <div className="cart-item-price">${item.price.toFixed(2)}</div>
+                <div className="cart-item-price">{formatVnd(item.price)}</div>
 
                 <div className="cart-item-qty">
                   <button
@@ -108,7 +100,7 @@ const Cart = () => {
                 </div>
 
                 <div className="cart-item-total">
-                  ${(item.price * item.qty).toFixed(2)}
+                  {formatVnd(item.price * item.qty)}
                 </div>
 
                 <button
@@ -126,18 +118,18 @@ const Cart = () => {
 
         <aside className="cart-right">
           <div className="order-card">
-            <h3>Order summary</h3>
+            <h3>{t('order_summary')}</h3>
             <div className="order-row">
-              <span>Subtotal ({items.length} courses)</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>{t('subtotal')} ({items.length} {t('cart_items') || 'courses'})</span>
+              <span>{formatVnd(subtotal)}</span>
             </div>
             <div className="order-row">
-              <span>Discount</span>
-              <span className="discount">-${discount.toFixed(2)}</span>
+              <span>{t('discount')}</span>
+              <span className="discount">-{formatVnd(discount)}</span>
             </div>
 
             <div className="voucher-box">
-              <label htmlFor="voucher-code">Voucher code</label>
+              <label htmlFor="voucher-code">{t('voucher_code')}</label>
               <div className="voucher-input-wrap">
                 <Tag size={18} />
                 <input
@@ -145,18 +137,18 @@ const Cart = () => {
                   type="text"
                   value={promo}
                   onChange={(event) => setPromo(event.target.value)}
-                  placeholder="Enter voucher"
+                  placeholder={t('enter_voucher')}
                 />
               </div>
             </div>
 
             <div className="order-total">
-              <span>Total</span>
-              <span className="total-amount">${total.toFixed(2)}</span>
+              <span>{t('total')}</span>
+              <span className="total-amount">{formatVnd(total)}</span>
             </div>
 
-            <button className="checkout">Proceed to checkout</button>
-            <button className="continue">Continue shopping</button>
+            <button className="checkout">{t('proceed_checkout')}</button>
+            <button className="continue">{t('continue_shopping')}</button>
           </div>
         </aside>
       </div>
@@ -182,10 +174,9 @@ const Cart = () => {
               <AlertTriangle size={26} />
             </div>
 
-            <h3 id="remove-cart-title">Remove course?</h3>
+            <h3 id="remove-cart-title">{t('remove_course_title')}</h3>
             <p>
-              Are you sure you want to remove{" "}
-              <strong>{itemToRemove.title}</strong> from your cart?
+              {t('remove_course_text')} <strong>{itemToRemove.title}</strong>?
             </p>
 
             <div className="cart-popup-actions">
@@ -194,14 +185,14 @@ const Cart = () => {
                 type="button"
                 onClick={closeRemovePopup}
               >
-                Cancel
+                {t('cancel')}
               </button>
               <button
                 className="cart-popup-confirm"
                 type="button"
                 onClick={confirmRemoveItem}
               >
-                Remove
+                {t('remove')}
               </button>
             </div>
           </div>

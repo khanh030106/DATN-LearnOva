@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Course.css";
 import { BiHeart, BiCart } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
 import { LayoutGrid, List, RotateCcw, Users, X } from "lucide-react";
 import LearnovaAI from "../../home/AI/AI.jsx";
+import { getCoursesApi } from "../../../api/CourseApi.js";
+import { addToCart } from "../../../util/cartStorage.js";
 
 const categories = [
   { id: "all", name: "All Categories", count: 120 },
@@ -19,131 +21,6 @@ const levels = [
   { id: "beginner", name: "Beginner", count: 124 },
   { id: "intermediate", name: "Intermediate", count: 156 },
   { id: "advanced", name: "Advanced", count: 78 },
-];
-
-const courses = [
-  {
-    id: 1,
-    title: "Lập trình Fullstack Master Node.js",
-    instructor: "Nguyễn Văn A",
-    instructorAvatar:
-      "https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg",
-    category: "Technology",
-    rating: 4.9,
-    reviews: 2400,
-    students: 2400,
-    price: "1.290.000đ",
-    image:
-      "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80",
-    level: "Intermediate",
-  },
-  {
-    id: 2,
-    title: "Phân tích dữ liệu kinh doanh",
-    instructor: "Trần Thị B",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
-    category: "Marketing",
-    rating: 4.8,
-    reviews: 1600,
-    students: 1600,
-    price: "990.000đ",
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
-    level: "Beginner",
-  },
-  {
-    id: 3,
-    title: "Thiết kế UI/UX Chuyên sâu",
-    instructor: "Lê Hoàng C",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
-    category: "Design",
-    rating: 4.7,
-    reviews: 1800,
-    students: 1800,
-    price: "1.590.000đ",
-    image:
-      "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=600&q=80",
-    level: "Intermediate",
-  },
-  {
-    id: 4,
-    title: "Digital Marketing Mastery",
-    instructor: "Phạm Thị D",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
-    category: "Marketing",
-    rating: 4.8,
-    reviews: 1200,
-    students: 1200,
-    price: "690.000đ",
-    image:
-      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80",
-    level: "Beginner",
-  },
-  {
-    id: 5,
-    title: "Quản lý nhân sự hiện đại",
-    instructor: "Phạm Văn E",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
-    category: "Business",
-    rating: 4.6,
-    reviews: 980,
-    students: 980,
-    price: "890.000đ",
-    image:
-      "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=600&q=80",
-    level: "Intermediate",
-  },
-  {
-    id: 6,
-    title: "Python for Data Science",
-    instructor: "Bùi Thị F",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
-    category: "Technology",
-    rating: 4.8,
-    reviews: 2100,
-    students: 2100,
-    price: "959.000đ",
-    originalPrice: "1.350.000đ",
-    discount: 29,
-    image:
-      "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80",
-    level: "Intermediate",
-  },
-  {
-    id: 7,
-    title: "Nâng thuật lực Trình",
-    instructor: "Đặng Thị G",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
-    category: "Soft Skills",
-    rating: 4.7,
-    reviews: 1260,
-    students: 1260,
-    price: "690.000đ",
-    image:
-      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80",
-    level: "Beginner",
-  },
-  {
-    id: 8,
-    title: "Tiếng Anh giao tiếp",
-    instructor: "Dương H",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
-    category: "Languages",
-    rating: 4.6,
-    reviews: 1100,
-    students: 1100,
-    price: "490.000đ",
-    image:
-      "https://images.unsplash.com/photo-1546410531-bb4ca050552d?auto=format&fit=crop&w=600&q=80",
-    level: "Beginner",
-  },
 ];
 
 const categoryBadgeClass = {
@@ -166,6 +43,16 @@ function formatCount(num) {
   return String(num);
 }
 
+function formatCurrency(value) {
+  const number = typeof value === "string" ? parseFloat(value) : value;
+  if (!Number.isFinite(number)) return "Free";
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+    maximumFractionDigits: 0,
+  }).format(number);
+}
+
 function FilterChip({ label, onRemove }) {
   return (
     <span className="filter-chip">
@@ -178,16 +65,54 @@ function FilterChip({ label, onRemove }) {
 }
 
 function CoursesPage() {
+  const [courses, setCourses] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("popular");
   const [selectedCategories, setSelectedCategories] = useState(["tech"]);
   const [selectedLevels, setSelectedLevels] = useState(["intermediate"]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const coursesPerPage = 8;
-  const totalPages = Math.ceil(courses.length / coursesPerPage);
+  const totalPages = Math.max(1, Math.ceil(courses.length / coursesPerPage));
   const startIndex = (currentPage - 1) * coursesPerPage;
   const visibleCourses = courses.slice(startIndex, startIndex + coursesPerPage);
+
+  const defaultCourseImage =
+    "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80";
+  const defaultInstructorAvatar =
+    "https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg";
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      setLoading(true);
+      try {
+        const data = await getCoursesApi();
+        setCourses(
+          data.map((course) => ({
+            ...course,
+            image: course.thumbnailUrl || defaultCourseImage,
+            instructor: course.instructorName || "Unknown Instructor",
+            instructorAvatar: defaultInstructorAvatar,
+            category: course.category || "Technology",
+            price: formatCurrency(course.basePrice),
+            rating: course.rating ?? 0,
+            reviews: course.reviews ?? 0,
+            students: course.students ?? 0,
+          })),
+        );
+        setError(null);
+      } catch (err) {
+        console.error(err);
+        setError("Unable to load courses. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   const activeFilters = [
     ...selectedCategories
@@ -240,6 +165,11 @@ function CoursesPage() {
     setWishlist((prev) =>
       prev.includes(courseId) ? prev.filter((id) => id !== courseId) : [...prev, courseId],
     );
+  };
+
+  const handleAddToCart = (course) => {
+    addToCart(course);
+    setError(null);
   };
 
   return (
@@ -296,8 +226,13 @@ function CoursesPage() {
             </div>
           </div>
 
-          <div className={`courses-grid ${viewMode === "list" ? "courses-grid--list" : ""}`}>
-            {visibleCourses.map((course) => (
+          {loading ? (
+            <div className="courses-loading">Loading courses...</div>
+          ) : error ? (
+            <div className="courses-error">{error}</div>
+          ) : (
+            <div className={`courses-grid ${viewMode === "list" ? "courses-grid--list" : ""}`}>
+              {visibleCourses.map((course) => (
               <div key={course.id} className="course-card-course">
                 <div className="course-card-img">
                   <img src={course.image} alt={course.title} />
@@ -357,7 +292,7 @@ function CoursesPage() {
                         </>
                       )}
                     </div>
-                    <button type="button" className="add-to-cart-btn">
+                    <button type="button" className="add-to-cart-btn" onClick={() => handleAddToCart(course)}>
                       <BiCart size={18} />
                       <span>Add to Cart</span>
                     </button>
@@ -365,7 +300,8 @@ function CoursesPage() {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+          )}
 
           <div className="pagination-section" aria-label="Courses pagination">
             <button

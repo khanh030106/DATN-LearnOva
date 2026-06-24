@@ -6,37 +6,51 @@ import {
 } from "lucide-react";
 
 import "./Roles.css";
+import { t } from "../../../util/i18n.js";
+import { useEffect, useState } from "react";
+import { getLanguage, LANG_EVENT } from "../../../util/language.js";
 
 const roles = [
     {
-        title: "Student",
-        desc: "Access thousands of high-quality courses...",
+        titleKey: "role_student_title",
+        descKey: "role_student_desc",
         icon: School,
-        link: "Learn More",
+        linkKey: "role_student_link",
     },
     {
-        title: "Instructor",
-        desc: "Build your personal brand...",
+        titleKey: "role_instructor_title",
+        descKey: "role_instructor_desc",
         icon: History,
-        link: "Become an Instructor",
+        linkKey: "role_instructor_link",
     },
     {
-        title: "Administrator",
-        desc: "Efficiently manage internal training...",
+        titleKey: "role_admin_title",
+        descKey: "role_admin_desc",
         icon: ShieldCheck,
-        link: "Enterprise Solutions",
+        linkKey: "role_admin_link",
     },
 ];
 
 const Roles = ({ onSelectRole }) => {
+    const [lang, setLang] = useState(getLanguage());
+
+    useEffect(() => {
+        const onLangChange = (e) => {
+            console.log("Language change event received:", e?.detail?.lang);
+            setLang(e?.detail?.lang || getLanguage());
+        };
+        window.addEventListener(LANG_EVENT, onLangChange);
+        return () => window.removeEventListener(LANG_EVENT, onLangChange);
+    }, []);
+
     return (
         <section className="roles-section">
             <div className="roles-header">
-                <h2>Reaching further together</h2>
+                        <h2>{t('roles_header_title')}</h2>
 
-                <p>
-                    Choose your role to explore specialized features designed specifically for you.
-                </p>
+                        <p>
+                            {t('roles_header_subtitle')}
+                        </p>
             </div>
 
             <div className="roles-grid">
@@ -50,12 +64,12 @@ const Roles = ({ onSelectRole }) => {
                             <role.icon size={24} />
                         </div>
 
-                        <h3>{role.title}</h3>
+                        <h3>{t(role.titleKey)}</h3>
 
-                        <p>{role.desc}</p>
+                        <p>{t(role.descKey)}</p>
 
                         <button className="role-btn">
-                            {role.link}
+                            {t(role.linkKey)}
                             <ArrowRight size={16} />
                         </button>
                     </div>

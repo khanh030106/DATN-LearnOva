@@ -1,10 +1,21 @@
+import { useEffect, useState } from "react";
 import HomeBannerImg from "../../../assets/home/HomeBanner.jpg";
 import "./Banner.css";
 import Header from "../../../component/header/user_header/Header.jsx";
+import { t } from "../../../util/i18n.js";
+import { getLanguage, LANG_EVENT } from "../../../util/language.js";
 
 const HomeBanner = () => {
+    const [lang, setLang] = useState(getLanguage());
+
+    useEffect(() => {
+        const onLangChange = (e) => setLang(e?.detail?.lang || getLanguage());
+        window.addEventListener(LANG_EVENT, onLangChange);
+        return () => window.removeEventListener(LANG_EVENT, onLangChange);
+    }, []);
+
     return (
-        <section className="home-banner">
+        <section className="home-banner" data-lang={lang}>
             <div className="home-banner__header">
                 <Header />
             </div>
@@ -24,19 +35,16 @@ const HomeBanner = () => {
 
             <div className="home-banner__content">
                 <h1 className="home-banner__title">
-                    Begin your journey of <em>knowledge discovery.</em>
+                    {t('begin_your_journey_of')} <em>{t('knowledge_discovery')}</em>
                 </h1>
 
                 <p className="home-banner__subtitle">
-                    Experience modern education with interactive technology,
-                    connecting you to knowledge from
-                    <br />
-                    leading experts.
+                    {t('home_banner_description')}
                 </p>
 
                 <div className="home-banner__actions">
                     <button className="home-banner__btn-primary">
-                        Start learning now
+                        {t('start_learning_now')}
                     </button>
                 </div>
             </div>

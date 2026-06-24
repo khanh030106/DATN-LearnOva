@@ -100,7 +100,7 @@ const UserLoggedHeader = () => {
         </div>
 
         <div className="user-logged-actions">
-          <CartDropdown initialItems={cartItems} />
+          <CartDropdown />
           <NotificationDropdown notifications={notificationItems} />
           <AvatarDropdown user={userData} menuItems={userMenuItems} />
         </div>

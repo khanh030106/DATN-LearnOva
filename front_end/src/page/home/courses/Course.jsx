@@ -1,9 +1,12 @@
+import { useEffect, useState } from "react";
 import CourseCard from "./components/CourseCard.jsx";
 import course1 from '../../../assets/course/course-1.jpg';
 import course2 from '../../../assets/course/course-2.jpg';
 import course3 from '../../../assets/course/course-3.jpg';
 import course4 from '../../../assets/course/course-4.jpg';
 import './Course.css'
+import { t } from '../../../util/i18n.js';
+import { getLanguage, LANG_EVENT } from '../../../util/language.js';
 
 const courses = [
     {
@@ -45,16 +48,24 @@ const courses = [
 ];
 
 const Course = () => {
+    const [lang, setLang] = useState(getLanguage());
+
+    useEffect(() => {
+        const onLangChange = (e) => setLang(e?.detail?.lang || getLanguage());
+        window.addEventListener(LANG_EVENT, onLangChange);
+        return () => window.removeEventListener(LANG_EVENT, onLangChange);
+    }, []);
+
     return (
-        <section className="course-section">
+        <section className="course-section" data-lang={lang}>
             <div className="course-section__header">
                 <div>
-                    <h2>Featured Course</h2>
-                    <p>The latest and hottest knowledge is constantly updated..</p>
+                    <h2>{t('featured_course')}</h2>
+                    <p>{t('featured_course_description')}</p>
                 </div>
 
                 <a href="/courses" className="course-section__link">
-                    All courses ›
+                    {t('all_courses')}
                 </a>
             </div>
 

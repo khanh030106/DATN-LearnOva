@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { t } from "../../../../util/i18n.js";
 import { Eye, Edit3, Trash2 } from "lucide-react";
 import { FaStar } from "react-icons/fa";
 import "./CourseTable.css";
@@ -167,16 +168,16 @@ const CourseTable = () => {
       <div className="courseTableCard">
         <table className="courseTable" aria-label="Course List">
           <thead>
-            <tr>
-              <th>Course</th>
-              <th>Instructor</th>
-              <th>Category</th>
-              <th>Students</th>
-              <th>Rating</th>
-              <th>Revenue</th>
-              <th>Report Count</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <tr>
+              <th>{t('course')}</th>
+              <th>{t('instructor')}</th>
+              <th>{t('category')}</th>
+              <th>{t('students')}</th>
+              <th>{t('rating')}</th>
+              <th>{t('revenue')}</th>
+              <th>{t('report_count')}</th>
+              <th>{t('status')}</th>
+              <th>{t('actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -203,13 +204,13 @@ const CourseTable = () => {
                 <td>{course.status}</td>
                 <td>
                   <div className="courseTableActions">
-                    <button className="actionButton" aria-label="View Course">
+                    <button className="actionButton" aria-label={t('view_course')}>
                       <Eye className="actionIcon" />
                     </button>
-                    <button className="actionButton" aria-label="Edit Course">
+                    <button className="actionButton" aria-label={t('edit_course')}>
                       <Edit3 className="actionIcon" />
                     </button>
-                    <button className="actionButton" aria-label="Delete Course">
+                    <button className="actionButton" aria-label={t('delete_course')}>
                       <Trash2 className="actionIcon" />
                     </button>
                   </div>
@@ -228,7 +229,7 @@ const CourseTable = () => {
           disabled={currentPage === 1}
           onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
         >
-          Previous
+          {t('previous')}
         </button>
 
         {Array.from({ length: totalPages }, (_, i) => (
@@ -248,7 +249,7 @@ const CourseTable = () => {
           disabled={currentPage === totalPages}
           onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
         >
-          Next
+          {t('next')}
         </button>
       </div>
     </section>

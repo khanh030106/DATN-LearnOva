@@ -1,19 +1,30 @@
 import { NavLink } from "react-router-dom";
 import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getLanguage, LANG_EVENT } from "../../../util/language.js";
+import { t } from "../../../util/i18n.js";
 
 const leftNav = [
-    { name: "Home", path: "/learnova/home" },
-    { name: "Courses", path: "/learnova/courses" },
+    { labelKey: "home", path: "/learnova/home" },
+    { labelKey: "courses", path: "/learnova/courses" },
 ];
 
 const rightNav = [
-    { name: "Instructors", path: "/learnova/intructors" },
-    { name: "About us", path: "/learnova/about" },
+    { labelKey: "instructors", path: "/learnova/intructors" },
+    { labelKey: "about_us", path: "/learnova/about" },
 ];
 
 const NavMenu = () => {
+    const [lang, setLang] = useState(getLanguage());
+
+    useEffect(() => {
+        const onLangChange = (e) => setLang(e?.detail?.lang || getLanguage());
+        window.addEventListener(LANG_EVENT, onLangChange);
+        return () => window.removeEventListener(LANG_EVENT, onLangChange);
+    }, []);
+
     return (
-        <nav className="nav-menu">
+        <nav className="nav-menu" data-lang={lang}>
             <ul className="nav-list">
 
                 {leftNav.map((item, index) => (
@@ -25,7 +36,7 @@ const NavMenu = () => {
                                 `nav-menu-link ${isActive ? "nav-menu-link-active" : ""}`
                             }
                         >
-                            {item.name}
+                            {t(item.labelKey)}
                         </NavLink>
                     </li>
                 ))}
@@ -35,7 +46,7 @@ const NavMenu = () => {
                         <Search size={18} className="header-search-icon" />
                         <input
                             type="text"
-                            placeholder="Search courses..."
+                            placeholder={t("search_placeholder")}
                             className="header-search-input"
                         />
                     </form>
@@ -50,7 +61,7 @@ const NavMenu = () => {
                                 `nav-menu-link ${isActive ? "nav-menu-link-active" : ""}`
                             }
                         >
-                            {item.name}
+                            {t(item.labelKey)}
                         </NavLink>
                     </li>
                 ))}

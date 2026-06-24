@@ -3,10 +3,10 @@ import courseTwo from "../../../../assets/course/course-2.jpg";
 import courseThree from "../../../../assets/course/course-3.jpg";
 
 export const homeMenuItems = [
-  { id: "featured", label: "Featured Courses", path: "/learnova/courses?sort=featured" },
-  { id: "new", label: "New Courses", path: "/learnova/courses?sort=new" },
-  { id: "popular", label: "Popular Courses", path: "/learnova/courses?sort=popular" },
-  { id: "trending", label: "Trending Courses", path: "/learnova/courses?sort=trending" },
+  { id: "featured", label: "Featured Courses", labelKey: "featured_course", path: "/learnova/courses?sort=featured" },
+  { id: "new", label: "New Courses", labelKey: "new_courses", path: "/learnova/courses?sort=new" },
+  { id: "popular", label: "Popular Courses", labelKey: "popular_courses", path: "/learnova/courses?sort=popular" },
+  { id: "trending", label: "Trending Courses", labelKey: "trending_courses", path: "/learnova/courses?sort=trending" },
 ];
 
 export const courseCategories = [
@@ -35,18 +35,18 @@ export const durationFilters = [
 export const ratingFilters = ["4 Stars+", "4.5 Stars+", "5 Stars"];
 
 export const myLearningItems = [
-  { id: "continue", label: "Continue Learning", path: "/learnova/user/profile/courses" },
-  { id: "courses", label: "My Courses", path: "/learnova/user/profile/courses" },
-  { id: "completed", label: "Completed Courses", path: "/learnova/user/profile/courses" },
-  { id: "certificates", label: "Certificates", path: "/learnova/user/profile/courses" },
-  { id: "wishlist", label: "Wishlist", path: "/learnova/user/profile/favorites" },
+  { id: "continue", label: "Continue Learning", labelKey: "continue_learning", path: "/learnova/user/profile/courses" },
+  { id: "courses", label: "My Courses", labelKey: "my_courses", path: "/learnova/user/profile/courses" },
+  { id: "completed", label: "Completed Courses", labelKey: "completed_courses", path: "/learnova/user/profile/courses" },
+  { id: "certificates", label: "Certificates", labelKey: "certificates", path: "/learnova/user/profile/courses" },
+  { id: "wishlist", label: "Wishlist", labelKey: "wishlist", path: "/learnova/user/profile/favorites" },
 ];
 
 export const instructorItems = [
-  { id: "all", label: "All Instructors", path: "/learnova/intructors" },
-  { id: "top", label: "Top Rated Instructors", path: "/learnova/intructors?filter=top-rated" },
-  { id: "new", label: "New Instructors", path: "/learnova/intructors?filter=new" },
-  { id: "become", label: "Become Instructor", path: "/learnova/teacher" },
+  { id: "all", label: "All Instructors", labelKey: "all_instructors", path: "/learnova/intructors" },
+  { id: "top", label: "Top Rated Instructors", labelKey: "top_rated_instructors", path: "/learnova/intructors?filter=top-rated" },
+  { id: "new", label: "New Instructors", labelKey: "new_instructors", path: "/learnova/intructors?filter=new" },
+  { id: "become", label: "Become Instructor", labelKey: "become_instructor", path: "/learnova/teacher" },
 ];
 
 export const subscriptionPlans = [
@@ -57,12 +57,12 @@ export const subscriptionPlans = [
 ];
 
 export const searchSuggestions = [
-  { id: "react", type: "Course", label: "React JS Masterclass" },
-  { id: "node", type: "Course", label: "NodeJS API" },
-  { id: "uiux", type: "Category", label: "UI UX Design" },
-  { id: "java", type: "Course", label: "Java Programming" },
-  { id: "ai", type: "Category", label: "AI & Machine Learning" },
-  { id: "mentor", type: "Instructor", label: "Top React Instructor" },
+  { id: "react", type: "Course", label: "React JS Masterclass", labelKey: "react_masterclass" },
+  { id: "node", type: "Course", label: "NodeJS API", labelKey: "node_api" },
+  { id: "uiux", type: "Category", label: "UI UX Design", labelKey: "uiux_design" },
+  { id: "java", type: "Course", label: "Java Programming", labelKey: "java_programming" },
+  { id: "ai", type: "Category", label: "AI & Machine Learning", labelKey: "ai_ml" },
+  { id: "mentor", type: "Instructor", label: "Top React Instructor", labelKey: "top_react_instructor" },
 ];
 
 export const cartItems = [

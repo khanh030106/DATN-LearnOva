@@ -1,10 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
+import { getLanguage, LANG_EVENT } from "../../../../util/language.js";
+import { t } from "../../../../util/i18n.js";
 
 const HeaderSearch = ({ suggestions }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedTerm, setDebouncedTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [lang, setLang] = useState(getLanguage());
+
+  useEffect(() => {
+    const onLangChange = (e) => setLang(e?.detail?.lang || getLanguage());
+    window.addEventListener(LANG_EVENT, onLangChange);
+    return () => window.removeEventListener(LANG_EVENT, onLangChange);
+  }, []);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -26,7 +35,7 @@ const HeaderSearch = ({ suggestions }) => {
   }, [debouncedTerm, suggestions]);
 
   return (
-    <form className="user-logged-search" role="search">
+    <form className="user-logged-search" role="search" data-lang={lang}>
       <Search size={18} className="user-logged-search-icon" />
       <input
         type="search"
@@ -34,9 +43,9 @@ const HeaderSearch = ({ suggestions }) => {
         onChange={(event) => setSearchTerm(event.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => window.setTimeout(() => setIsFocused(false), 120)}
-        placeholder="Search Course, Instructor, Category"
+        placeholder={t("search_full")}
         className="user-logged-search-input"
-        aria-label="Search Course, Instructor, Category"
+        aria-label={t("search_full")}
       />
 
       {isFocused && filteredSuggestions.length > 0 && (
@@ -49,7 +58,7 @@ const HeaderSearch = ({ suggestions }) => {
               onMouseDown={() => setSearchTerm(item.label)}
             >
               <Search size={15} />
-              <span>{item.label}</span>
+              <span>{item.labelKey ? t(item.labelKey) : item.label}</span>
               <small>{item.type}</small>
             </button>
           ))}

@@ -1,9 +1,9 @@
 export const FAVORITE_DETAIL_TABS = [
-  { id: "overview", label: "Overview" },
-  { id: "curriculum", label: "Course Content" },
-  { id: "instructor", label: "Instructor" },
-  { id: "reviews", label: "Reviews" },
-  { id: "qa", label: "Chat" },
+  { id: "overview", label: "Overview", labelKey: "overview" },
+  { id: "curriculum", label: "Course Content", labelKey: "course_content" },
+  { id: "instructor", label: "Instructor", labelKey: "instructor" },
+  { id: "reviews", label: "Reviews", labelKey: "reviews" },
+  { id: "qa", label: "Chat", labelKey: "chat" },
 ];
 
 export const DEFAULT_FAVORITE_DETAIL = {

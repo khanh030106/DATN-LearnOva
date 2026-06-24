@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./intructor/InstructorsPage.css";
 import { FaSearch, FaStar, FaBookmark, FaCheckCircle } from "react-icons/fa";
 import { BsGrid3X3Gap, BsList } from "react-icons/bs";
@@ -13,17 +13,25 @@ import {
   Languages,
   Palette,
   Settings,
-    ShieldCheck,
-    Smartphone,
-    Users,
-    Video,
+  ShieldCheck,
+  Smartphone,
+  Users,
+  Video,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import { MessageCircle } from "lucide-react";
 import LearnovaAI from "../home/AI/AI.jsx";
+import { getInstructorsApi } from "../../api/InstructorsApi.js";
 
 function InstructorsPage() {
   const [viewMode, setViewMode] = useState("grid");
+  const [instructors, setInstructors] = useState([]);
+  const [selectedExpertise, setSelectedExpertise] = useState([]);
+  const [selectedRating, setSelectedRating] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState("Popular");
+  const [sortOption, setSortOption] = useState("Most Popular");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const categories = [
@@ -73,183 +81,119 @@ function InstructorsPage() {
     ],
   };
 
-  const instructors = [
-    {
-      id: 1,
-      name: "Alex Morgan",
-      title: "Senior Frontend Engineer",
-      badge: "verified",
-      rating: 4.9,
-      reviews: 12000,
-      avatar:
-        "https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg",
-      bio: "Former Google engineer specializing in building scalable web applications and design systems.",
-      skills: ["React", "TypeScript", "Next.js"],
-      course: {
-        title: "React Mastery",
-        subtitle: "From Zero to Hero",
-        students: "12,450 students",
-        price: "$49.99",
-        icon: (
-          <img
-            src="https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg"
-            alt=""
-          />
-        ),
-      },
-      stats: {
-        students: "12K+",
-        courses: "18",
-      },
+  const mapInstructorResponse = (instructor) => ({
+    id: instructor.id,
+    name: instructor.fullName || instructor.name || "Instructor",
+    title: instructor.title || instructor.roleName || "Instructor",
+    email: instructor.email,
+    avatar: instructor.avatar || "avatar.png",
+    coverImage: instructor.coverImage || "cover.png",
+    badge: "verified",
+    skills: instructor.skills
+      ? instructor.skills.split(",").map((skill) => skill.trim())
+      : ["Web Development", "React", "UI/UX"],
+    rating: 4.9,
+    reviews: 120,
+    bio:
+      instructor.bio ||
+      (instructor.roleName
+        ? `Giảng viên chuyên ngành ${instructor.roleName}.`
+        : "Giảng viên giàu kinh nghiệm, sẵn sàng hỗ trợ học viên."),
+    course: {
+      icon: <BookOpen size={18} />,
+      title: "Khóa học thực hành",
+      subtitle: "Học qua dự án thực tế",
+      students: "1.2K students",
+      price: "$19.99",
     },
-    {
-      id: 2,
-      name: "Olivia Chen",
-      title: "AI Researcher & Scientist",
-      badge: "top-rated",
-      rating: 4.8,
-      reviews: 8500,
-      avatar:
-        "https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg",
-      bio: "PhD in AI from Stanford. Focused on making AI & ML easy to understand and practical.",
-      skills: ["Python", "Machine Learning", "NLP"],
-      course: {
-        title: "Machine Learning",
-        subtitle: "A Practical Guide",
-        students: "8,321 students",
-        price: "$44.99",
-        icon: (
-          <img
-            src="https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg"
-            alt=""
-          />
-        ),
-      },
-      stats: {
-        students: "8.5K+",
-        courses: "14",
-      },
-    },
-    {
-      id: 3,
-      name: "Nguyễn Phi Thông",
-      title: "Senior Full-Stack Developer",
-      badge: "best-seller",
-      rating: 4.9,
-      reviews: 15000,
-      avatar:
-        "https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg",
-      bio: "Fullstack engineer with 10+ years building high-performance web applications.",
-      skills: ["Node.js", "React", "AWS"],
-      course: {
-        title: "Node.js & Express",
-        subtitle: "Complete Bootcamp",
-        students: "16,230 students",
-        price: "$39.99",
-        icon: (
-          <img
-            src="https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg"
-            alt=""
-          />
-        ),
-      },
-      stats: {
-        students: "15K+",
-        courses: "22",
-      },
-    },
-    {
-      id: 4,
-      name: "Sophia Lee",
-      title: "UI/UX Design Lead",
-      badge: "new",
-      rating: 4.7,
-      reviews: 6200,
-      avatar: "https://via.placeholder.com/120/9333EA/ffffff?text=SL",
-      bio: "Design lead at a top product company. Passionate about user-centered design.",
-      skills: ["Figma", "UI Design", "UX Research"],
-      course: {
-        title: "UI/UX Design",
-        subtitle: "From Scratch",
-        students: "6,231 students",
-        price: "$34.99",
-        icon: (
-          <img
-            src="https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg"
-            alt=""
-          />
-        ),
-      },
-      stats: {
-        students: "6.2K+",
-        courses: "10",
-      },
-    },
-    {
-      id: 5,
-      name: "Nguyễn Văn Minh",
-      title: "Data Scientist",
-      badge: "verified",
-      rating: 4.6,
-      reviews: 7800,
-      avatar: "https://via.placeholder.com/120/0F172A/ffffff?text=NVM",
-      bio: "Data science expert specializing in analytics and business intelligence.",
-      skills: ["Python", "SQL", "Data Visualization"],
-      course: null,
-      stats: {
-        students: "7.8K+",
-        courses: "12",
-      },
-    },
-    {
-      id: 6,
-      name: "Lê Minh Quân",
-      title: "AI Engineer",
-      badge: "verified",
-      rating: 4.8,
-      reviews: 5300,
-      avatar: "https://via.placeholder.com/120/3B82F6/ffffff?text=LMQ",
-      bio: "AI engineer with expertise in deep learning and computer vision.",
-      skills: ["Deep Learning", "PyTorch", "Computer Vision"],
-      course: null,
-      stats: {
-        students: "5.3K+",
-        courses: "9",
-      },
-    },
-    {
-      id: 7,
-      name: "Phạm Hoàng Dung",
-      title: "Product Manager",
-      badge: "verified",
-      rating: 4.5,
-      reviews: 4310,
-      avatar: "https://via.placeholder.com/120/EC4899/ffffff?text=PHD",
-      bio: "Product manager with 8+ years experience in tech startups.",
-      skills: ["Product Strategy", "Agile", "Growth"],
-      course: null,
-      stats: {
-        students: "4.3K+",
-        courses: "7",
-      },
-    },
-    {
-      id: 8,
-      name: "David Smith",
-      title: "DevOps Engineer",
-      badge: "verified",
-      rating: 4.6,
-      reviews: 6700,
-      avatar: "https://via.placeholder.com/120/06B6D4/ffffff?text=DS",
-      bio: "DevOps expert specializing in cloud infrastructure and Kubernetes.",
-      skills: ["AWS", "Docker", "Kubernetes"],
-      course: null,
-      stats: {
-        students: "6.7K+",
-        courses: "11",
-      },
-    },
-  ];
+    studentsCount: instructor.studentsCount || 1200,
+    createdAt: instructor.createdAt || instructor.joinedAt || null,
+  });
+
+  const normalizeTopic = (value) =>
+    value?.toLowerCase().replace(/[^a-z0-9]+/g, "") || "";
+
+  const isInstructorMatchingCategory = (instructor) => {
+    if (selectedCategory === "Popular") return true;
+
+    const normalizedCategory = normalizeTopic(selectedCategory);
+    return instructor.skills.some((skill) =>
+      normalizeTopic(skill).includes(normalizedCategory)
+    );
+  };
+
+  const getStudentCount = (instructor) => {
+    if (typeof instructor.studentsCount === "number") return instructor.studentsCount;
+    const text = instructor.course?.students || "";
+    const digits = text.replace(/[^0-9]/g, "");
+    if (!digits) return 0;
+    return parseInt(digits, 10);
+  };
+
+  const isInstructorMatchingExpertise = (instructor) => {
+    if (!selectedExpertise.length) return true;
+    return instructor.skills.some((skill) =>
+      selectedExpertise.includes(skill)
+    );
+  };
+
+  const isInstructorMatchingRating = (instructor) => {
+    if (!selectedRating) return true;
+    return instructor.rating >= selectedRating;
+  };
+
+  const sortInstructors = (list) => {
+    return [...list].sort((a, b) => {
+      if (sortOption === "Most Popular") {
+        return getStudentCount(b) - getStudentCount(a);
+      }
+      if (sortOption === "Top Rated") {
+        return b.rating - a.rating;
+      }
+      if (sortOption === "Most Students") {
+        return getStudentCount(b) - getStudentCount(a);
+      }
+      if (sortOption === "Newest") {
+        if (!a.createdAt || !b.createdAt) return 0;
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      return 0;
+    });
+  };
+
+  const filteredInstructors = sortInstructors(
+    instructors.filter(
+      (instructor) =>
+        isInstructorMatchingCategory(instructor) &&
+        isInstructorMatchingExpertise(instructor) &&
+        isInstructorMatchingRating(instructor)
+    )
+  );
+
+  const toggleExpertise = (topicName) => {
+    setSelectedExpertise((current) =>
+      current.includes(topicName)
+        ? current.filter((item) => item !== topicName)
+        : [...current, topicName]
+    );
+  };
+
+  useEffect(() => {
+    const loadInstructors = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await getInstructorsApi();
+        setInstructors(data.map(mapInstructorResponse));
+      } catch (err) {
+        setError("Không tải được dữ liệu giảng viên");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadInstructors();
+  }, []);
 
   const getBadgeInfo = (badge) => {
     const badges = {
@@ -260,6 +204,14 @@ function InstructorsPage() {
     };
     return badges[badge] || { class: "", text: "" };
   };
+
+  if (isLoading) {
+    return <div className="instructors-page">Đang tải dữ liệu giảng viên...</div>;
+  }
+
+  if (error) {
+    return <div className="instructors-page">{error}</div>;
+  }
 
   return (
     <div className="instructors-page">
@@ -276,17 +228,23 @@ function InstructorsPage() {
             <div className="filter-group-in">
               <div className="filter-title">
                 <span>Expertise</span>
-                <small>{filterData.expertise.length} topics</small>
+                <small>
+                  {selectedExpertise.length > 0
+                    ? `${selectedExpertise.length} selected`
+                    : `${filterData.expertise.length} topics`}
+                </small>
               </div>
               <div className="filter-chip-grid">
                 {filterData.expertise.map((item) => (
                     <label key={item.id} className="filter-chip-in">
-                      <input type="checkbox" />
+                      <input
+                        type="checkbox"
+                        checked={selectedExpertise.includes(item.name)}
+                        onChange={() => toggleExpertise(item.name)}
+                      />
                       <span className="filter-chip-name">
-
                         {item.name}
-              </span>
-
+                      </span>
                     </label>
                 ))}
               </div>
@@ -300,12 +258,16 @@ function InstructorsPage() {
               <div className="filter-list">
                 {filterData.rating.map((item, index) => (
                     <label key={index} className="filter-row-in">
-                      <input type="radio" name="rating" />
+                      <input
+                        type="radio"
+                        name="rating"
+                        value={item.value}
+                        checked={selectedRating === item.value}
+                        onChange={() => setSelectedRating(item.value)}
+                      />
                       <span className="filter-row-main">
-
                         {item.label}
-              </span>
-
+                      </span>
                     </label>
                 ))}
               </div>
@@ -374,7 +336,8 @@ function InstructorsPage() {
               {categories.map((cat, idx) => (
                 <button
                   key={idx}
-                  className={`tag ${idx === 0 ? "active" : ""}`}
+                  className={`tag ${selectedCategory === cat ? "active" : ""}`}
+                  onClick={() => setSelectedCategory(cat)}
                 >
                   {cat}
                 </button>
@@ -382,7 +345,10 @@ function InstructorsPage() {
             </div>
             <label className="sort-control">
               <span>Sort by:</span>
-              <select>
+              <select
+                value={sortOption}
+                onChange={(event) => setSortOption(event.target.value)}
+              >
                 <option>Most Popular</option>
                 <option>Top Rated</option>
                 <option>Most Students</option>
@@ -393,7 +359,7 @@ function InstructorsPage() {
 
           {/* INSTRUCTORS GRID */}
           <div className="instructors-grid-in">
-            {instructors.map((instructor) => {
+            {filteredInstructors.map((instructor) => {
               const badgeInfo = getBadgeInfo(instructor.badge);
               return (
                 <div key={instructor.id} className="instructor-card-in">
