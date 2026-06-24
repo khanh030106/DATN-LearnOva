@@ -37,7 +37,7 @@
 
 .role-card {
     background: #ffffff;
-    border-radius: 6px;
+    border-radius: 24px;
     padding: 40px;
     border: 1px solid #e2e8f0;
     cursor: pointer;
@@ -65,8 +65,9 @@
 .role-card h3 {
     font-size: 28px;
     margin: 0;
-    color: #071a33;
+    color: #020617;
 }
+
 
 .role-card p {
     color: #64748b;
@@ -85,6 +86,7 @@
     cursor: pointer;
     margin-left: -5px;
     transition: 0.3s;
+    margin-left:0.5px;
 }
 
 .role-btn:hover {

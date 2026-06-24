@@ -1,256 +1,555 @@
-import { useState } from "react";
-import { Eye, Edit3, Trash2 } from "lucide-react";
-import { FaStar } from "react-icons/fa";
+import { useEffect, useMemo, useState } from "react";
+import { Edit3, Eye, Trash2, X } from "lucide-react";
+import {
+  createAdminCourseApi,
+  deleteAdminCourseApi,
+  updateAdminCourseApi,
+} from "../../../../api/admin/CourseApi.js";
 import "./CourseTable.css";
 
-const courseTableData = [
-  {
-    id: "course-10",
-    title: "Machine Learning Fundamentals for Data Analysts",
-    instructor: "Vũ Hải Đăng",
-    category: "Artificial Intelligence (AI)",
-    students: 180,
-    rating: 4.7,
-    revenue: "$0",
-    publishDate: "01/06/2026",
-    reportCount: 0,
-    status: "Active",
-  },
-  {
-    id: "KH002",
-    title: "UI/UX Design Fundamentals",
-    instructor: "Trần Thị B",
-    category: "Design",
-    students: 180,
-    rating: 4.7,
-    revenue: "$0",
-    publishDate: "22/04/2026",
-    reportCount: 1,
-    status: "Active",
-  },
-  {
-    id: "KH003",
-    title: "Digital Marketing",
-    instructor: "Lê Văn C",
-    category: "Marketing",
-    students: 95,
-    rating: 4.5,
-    revenue: "$68.000",
-    publishDate: "05/03/2026",
-    reportCount: 2,
-    status: "Hidden",
-  },
-  {
-    id: "KH004",
-    title: "Agile Project Management",
-    instructor: "Ngọc Lan",
-    category: "Business",
-    students: 132,
-    rating: 4.6,
-    revenue: "$89.000",
-    publishDate: "16/02/2026",
-    reportCount: 0,
-    status: "Active",
-  },
-  {
-    id: "KH005",
-    title: "SEO & Content Marketing",
-    instructor: "Hoàng Phương",
-    category: "Marketing",
-    students: 110,
-    rating: 4.4,
-    revenue: "$0",
-    publishDate: "28/01/2026",
-    reportCount: 3,
-    status: "Locked",
-  },
-  {
-    id: "KH006",
-    title: "Advanced React Frontend Development",
-    instructor: "Quách Duy Đức",
-    category: "Programming",
-    students: 205,
-    rating: 4.9,
-    revenue: "$135.000",
-    publishDate: "12/01/2026",
-    reportCount: 0,
-    status: "Active",
-  },
-  {
-    id: "KH007",
-    title: "Figma and Product Design",
-    instructor: "Bùi Thị Thảo",
-    category: "Design",
-    students: 88,
-    rating: 4.6,
-    revenue: "$72.000",
-    publishDate: "04/12/2025",
-    reportCount: 1,
-    status: "Active",
-  },
-  {
-    id: "KH008",
-    title: "Data Analysis with SQL",
-    instructor: "Lê Ngọc Nam",
-    category: "Business",
-    students: 127,
-    rating: 4.7,
-    revenue: "$81.000",
-    publishDate: "14/11/2025",
-    reportCount: 3,
-    status: "Locked",
-  },
-  {
-    id: "KH009",
-    title: "Professional Presentation Skills",
-    instructor: "Bùi Thị Thảo",
-    category: "Business",
-    students: 72,
-    rating: 4.5,
-    revenue: "$0",
-    publishDate: "08/10/2025",
-    reportCount: 0,
-    status: "Active",
-  },
-  {
-    id: "KH010",
-    title: "Digital Product Development",
-    instructor: "Phạm Hoài An",
-    category: "Business",
-    students: 158,
-    rating: 4.8,
-    revenue: "$107.000",
-    publishDate: "25/09/2025",
-    reportCount: 0,
-    status: "Active",
-  },
-  {
-    id: "KH011",
-    title: "Mobile Application Development",
-    instructor: "Nguyễn Lê",
-    category: "Programming",
-    students: 134,
-    rating: 4.6,
-    revenue: "$98.000",
-    publishDate: "28/08/2025",
-    reportCount: 1,
-    status: "Active",
-  },
-  {
-    id: "KH012",
-    title: "Social Media Marketing Strategy",
-    instructor: "Trần Thị Minh Thư",
-    category: "Marketing",
-    students: 98,
-    rating: 4.4,
-    revenue: "$0",
-    publishDate: "13/07/2025",
-    reportCount: 3,
-    status: "Locked",
-  },
-];
+const pageSize = 10;
+const courseStatusOptions = ["DRAFT", "PUBLISHED", "ARCHIVED", "DELETED"];
 
-const CourseTable = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10;
-  const totalPages = Math.ceil(courseTableData.length / pageSize);
-  const currentPageItems = courseTableData.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize,
-  );
+const emptyForm = {
+  thumbnailUrl: "",
+  title: "",
+  slug: "",
+  description: "",
+  language: "vi",
+  requirements: "",
+  whatYouLearn: "",
+  basePrice: 0,
+  level: "Beginner",
+  status: "DRAFT",
+  instructorId: "",
+};
+
+const formatDate = (value) => {
+  if (!value) return "N/A";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "N/A";
+  return new Intl.DateTimeFormat("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+};
+
+const formatPrice = (value) => {
+  const price = Number(value || 0);
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+    maximumFractionDigits: 0,
+  }).format(price);
+};
+
+const linesToArray = (value) =>
+  value
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+const getInstructorId = (instructor) => instructor.instructorId ?? instructor.id;
+
+const getInstructorName = (instructor) =>
+  instructor.fullName || instructor.email || `Instructor #${getInstructorId(instructor)}`;
+
+const getCourseDisplayStatus = (course) => course.status || "N/A";
+
+const toFormData = (course) => ({
+  thumbnailUrl: course.thumbnailUrl || "",
+  title: course.title || "",
+  slug: course.slug || "",
+  description: course.description || "",
+  language: course.language || "vi",
+  requirements: (course.requirements || []).join("\n"),
+  whatYouLearn: (course.whatYouLearn || []).join("\n"),
+  basePrice: course.basePrice ?? 0,
+  level: course.level || "Beginner",
+  status: course.status || "DRAFT",
+  instructorId: course.instructorId ? String(course.instructorId) : "",
+});
+
+const buildPayload = (form) => ({
+  thumbnailUrl: form.thumbnailUrl.trim(),
+  title: form.title.trim(),
+  slug: form.slug.trim(),
+  description: form.description.trim(),
+  language: form.language.trim() || "vi",
+  requirements: linesToArray(form.requirements),
+  whatYouLearn: linesToArray(form.whatYouLearn),
+  basePrice: Number(form.basePrice || 0),
+  level: form.level,
+  status: form.status,
+  instructorId: Number(form.instructorId),
+  isDeleted: form.status === "DELETED",
+});
+
+const CourseViewModal = ({ course, onClose }) => (
+  <div className="courseModalBackdrop" role="presentation" onClick={onClose}>
+    <div
+      className="courseModal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Course details"
+      onClick={(event) => event.stopPropagation()}
+    >
+      <div className="courseModalHeader">
+        <div>
+          <p className="courseModalEyebrow">COURSE DETAIL</p>
+          <h2>{course.title}</h2>
+        </div>
+        <button type="button" className="courseModalClose" onClick={onClose} aria-label="Close course details">
+          <X size={20} />
+        </button>
+      </div>
+
+      <div className="courseModalBody">
+        {course.thumbnailUrl ? (
+          <img className="courseModalThumbnail" src={course.thumbnailUrl} alt={course.title} />
+        ) : null}
+        <p><strong>Instructor:</strong> {course.instructorName || "N/A"}</p>
+        <p><strong>Slug:</strong> {course.slug || "N/A"}</p>
+        <p><strong>Level:</strong> {course.level || "N/A"}</p>
+        <p><strong>Status:</strong> {getCourseDisplayStatus(course)}</p>
+        <p><strong>Language:</strong> {course.language || "N/A"}</p>
+        <p><strong>Published At:</strong> {formatDate(course.publishedAt)}</p>
+        <p><strong>Price:</strong> {formatPrice(course.basePrice)}</p>
+        <p><strong>Description:</strong> {course.description || "N/A"}</p>
+
+        <div className="courseModalListSection">
+          <h3>Requirements</h3>
+          <ul>{(course.requirements || []).map((item, index) => <li key={index}>{item}</li>)}</ul>
+        </div>
+
+        <div className="courseModalListSection">
+          <h3>What You Learn</h3>
+          <ul>{(course.whatYouLearn || []).map((item, index) => <li key={index}>{item}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const getCourseErrorMessage = (error, fallback) => {
+  const data = error?.response?.data;
+
+  if (typeof data === "string") return data;
+  if (data?.message) return data.message;
+  if (data?.error) return data.error;
+
+  return fallback;
+};
+
+const CourseDeleteModal = ({
+  course,
+  error,
+  isDeleting,
+  onClose,
+  onConfirm,
+}) => {
+  if (!course) return null;
 
   return (
-    <section
-      className="courseTableSection"
-      aria-label="Course Management Table"
-    >
+    <div className="courseModalBackdrop" role="presentation" onClick={onClose}>
+      <div
+        className="courseDeleteModal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Confirm delete course"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="courseDeleteIcon">
+          <Trash2 size={24} aria-hidden="true" />
+        </div>
+
+        <div className="courseDeleteContent">
+          <p className="courseModalEyebrow">DELETE COURSE</p>
+          <h2>Chuyển khóa học sang DELETED?</h2>
+          <p>
+            Khóa học <strong>{course.title}</strong> sẽ được xóa mềm bằng cách
+            đổi Status thành <strong>DELETED</strong>.
+          </p>
+        </div>
+
+        {error ? <p className="courseFormError">{error}</p> : null}
+
+        <div className="courseModalActions">
+          <button
+            type="button"
+            className="courseModalCancel"
+            onClick={onClose}
+            disabled={isDeleting}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="courseModalDanger"
+            onClick={onConfirm}
+            disabled={isDeleting}
+          >
+            {isDeleting ? "Deleting..." : "Confirm Delete"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CourseFormModal = ({
+  course,
+  instructors,
+  axiosClient,
+  onClose,
+  onSaved,
+}) => {
+  const isEdit = Boolean(course);
+  const [form, setForm] = useState(() => toFormData(course || emptyForm));
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState("");
+  const hasInstructorOptions = instructors.length > 0;
+
+  useEffect(() => {
+    if (!form.instructorId && instructors.length > 0) {
+      setForm((current) => ({
+        ...current,
+        instructorId: String(getInstructorId(instructors[0])),
+      }));
+    }
+  }, [form.instructorId, instructors]);
+
+  const setField = (field, value) => {
+    setForm((current) => ({ ...current, [field]: value }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!hasInstructorOptions) {
+      setError("Chưa có instructor để gán cho khóa học. Hãy kiểm tra dữ liệu instructor hoặc role ROLE_TEACHER.");
+      return;
+    }
+
+    if (!form.instructorId) {
+      setError("Vui lòng chọn instructor trước khi lưu khóa học.");
+      return;
+    }
+
+    setIsSaving(true);
+    setError("");
+
+    try {
+      const payload = buildPayload(form);
+      const savedCourse = isEdit
+        ? await updateAdminCourseApi(course.id, payload, axiosClient)
+        : await createAdminCourseApi(payload, axiosClient);
+
+      onSaved(savedCourse);
+      onClose();
+    } catch (saveError) {
+      setError(getCourseErrorMessage(saveError, "Không lưu được khóa học."));
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return (
+    <div className="courseModalBackdrop" role="presentation" onClick={onClose}>
+      <form
+        className="courseFormModal"
+        role="dialog"
+        aria-modal="true"
+        aria-label={isEdit ? "Edit course" : "Create course"}
+        onClick={(event) => event.stopPropagation()}
+        onSubmit={handleSubmit}
+      >
+        <div className="courseModalHeader">
+          <div>
+            <p className="courseModalEyebrow">{isEdit ? "EDIT COURSE" : "ADD COURSE"}</p>
+            <h2>{isEdit ? "Update Course" : "Create New Course"}</h2>
+          </div>
+          <button type="button" className="courseModalClose" onClick={onClose} aria-label="Close course form">
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="courseFormGrid">
+          <label>
+            Title
+            <input value={form.title} onChange={(event) => setField("title", event.target.value)} required />
+          </label>
+          <label>
+            Slug
+            <input value={form.slug} onChange={(event) => setField("slug", event.target.value)} required />
+          </label>
+          <label className="courseFormWide">
+            Thumbnail URL
+            <input value={form.thumbnailUrl} onChange={(event) => setField("thumbnailUrl", event.target.value)} required />
+          </label>
+          <label>
+            Instructor
+            <select
+              value={form.instructorId}
+              onChange={(event) => setField("instructorId", event.target.value)}
+              required={hasInstructorOptions}
+            >
+              <option value="">Select instructor</option>
+              {instructors.map((instructor) => (
+                <option key={getInstructorId(instructor)} value={getInstructorId(instructor)}>
+                  {getInstructorName(instructor)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Base Price
+            <input
+              type="number"
+              min="0"
+              value={form.basePrice}
+              onChange={(event) => setField("basePrice", event.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Level
+            <select value={form.level} onChange={(event) => setField("level", event.target.value)} required>
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+          </label>
+          <label>
+            Status
+            <select value={form.status} onChange={(event) => setField("status", event.target.value)} required>
+              {courseStatusOptions.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Language
+            <input maxLength={10} value={form.language} onChange={(event) => setField("language", event.target.value)} required />
+          </label>
+          <label className="courseFormWide">
+            Description
+            <textarea rows={3} value={form.description} onChange={(event) => setField("description", event.target.value)} required />
+          </label>
+          <label>
+            Requirements
+            <textarea
+              rows={4}
+              placeholder="Mỗi dòng là một yêu cầu"
+              value={form.requirements}
+              onChange={(event) => setField("requirements", event.target.value)}
+            />
+          </label>
+          <label>
+            What You Learn
+            <textarea
+              rows={4}
+              placeholder="Mỗi dòng là một nội dung học được"
+              value={form.whatYouLearn}
+              onChange={(event) => setField("whatYouLearn", event.target.value)}
+            />
+          </label>
+        </div>
+
+        {error ? <p className="courseFormError">{error}</p> : null}
+
+        <div className="courseModalActions">
+          <button type="button" className="courseModalCancel" onClick={onClose}>
+            Cancel
+          </button>
+          <button type="submit" className="courseModalSubmit" disabled={isSaving}>
+            {isSaving ? "Saving..." : isEdit ? "Update Course" : "Create Course"}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+const CourseTable = ({
+  courses = [],
+  loading,
+  error,
+  instructors = [],
+  axiosClient,
+  isCreateOpen,
+  onCreateClose,
+  onCourseCreated,
+  onCourseUpdated,
+}) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [editingCourse, setEditingCourse] = useState(null);
+  const [deletingCourse, setDeletingCourse] = useState(null);
+  const [deletingCourseId, setDeletingCourseId] = useState(null);
+  const [deleteError, setDeleteError] = useState("");
+
+  const totalPages = Math.max(1, Math.ceil(courses.length / pageSize));
+  const currentPageItems = useMemo(
+    () => courses.slice((currentPage - 1) * pageSize, currentPage * pageSize),
+    [courses, currentPage],
+  );
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  const openDeleteModal = (course) => {
+    setDeletingCourse(course);
+    setDeleteError("");
+  };
+
+  const closeDeleteModal = () => {
+    if (deletingCourseId) return;
+    setDeletingCourse(null);
+    setDeleteError("");
+  };
+
+  const handleDelete = async () => {
+    if (!deletingCourse) return;
+
+    setDeletingCourseId(deletingCourse.id);
+    setDeleteError("");
+    try {
+      const updatedCourse = await deleteAdminCourseApi(deletingCourse.id, axiosClient);
+      onCourseUpdated(updatedCourse);
+      setDeletingCourse(null);
+    } catch (deleteError) {
+      setDeleteError(getCourseErrorMessage(deleteError, "Không xóa được khóa học."));
+    } finally {
+      setDeletingCourseId(null);
+    }
+  };
+
+  return (
+    <section className="courseTableSection" aria-label="Course Management Table">
       <div className="courseTableCard">
         <table className="courseTable" aria-label="Course List">
           <thead>
             <tr>
               <th>Course</th>
               <th>Instructor</th>
-              <th>Category</th>
-              <th>Students</th>
-              <th>Rating</th>
-              <th>Revenue</th>
-              <th>Report Count</th>
+              <th>Level</th>
+              <th>Price</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
+
           <tbody>
-            {currentPageItems.map((course) => (
-              <tr key={course.id}>
-                <td>{course.title}</td>
-                <td>{course.instructor}</td>
-                <td>{course.category}</td>
-                <td>{course.students}</td>
-                <td>
-                  <div className="courseTableRating">
-                    <FaStar className="courseTableRatingIcon" />
-                    <span className="courseTableRatingValue">
-                      {course.rating}
-                    </span>
-                  </div>
-                </td>
-                <td>{course.revenue}</td>
-                <td>
-                  <span className={course.reportCount >= 3 ? "courseReportCount courseReportCount--locked" : "courseReportCount"}>
-                    {course.reportCount} / 3
-                  </span>
-                </td>
-                <td>{course.status}</td>
-                <td>
-                  <div className="courseTableActions">
-                    <button className="actionButton" aria-label="View Course">
-                      <Eye className="actionIcon" />
-                    </button>
-                    <button className="actionButton" aria-label="Edit Course">
-                      <Edit3 className="actionIcon" />
-                    </button>
-                    <button className="actionButton" aria-label="Delete Course">
-                      <Trash2 className="actionIcon" />
-                    </button>
-                  </div>
-                </td>
+            {loading ? (
+              <tr>
+                <td className="courseTableEmpty" colSpan="6">Đang tải...</td>
               </tr>
-            ))}
+            ) : error ? (
+              <tr>
+                <td className="courseTableEmpty" colSpan="6">{error}</td>
+              </tr>
+            ) : currentPageItems.length === 0 ? (
+              <tr>
+                <td className="courseTableEmpty" colSpan="6">Không có khóa học nào.</td>
+              </tr>
+            ) : (
+              currentPageItems.map((course) => (
+                <tr key={course.id}>
+                  <td>
+                    <div className="courseTableCourseCell">
+                      {course.thumbnailUrl ? <img src={course.thumbnailUrl} alt={course.title} /> : null}
+                      <div>
+                        <strong>{course.title}</strong>
+                        <span>{course.slug}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{course.instructorName || "N/A"}</td>
+                  <td>{course.level || "N/A"}</td>
+                  <td>{formatPrice(course.basePrice)}</td>
+                  <td>
+                    <span className={`courseStatusBadge courseStatusBadge--${getCourseDisplayStatus(course).toLowerCase()}`}>
+                      {getCourseDisplayStatus(course)}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="courseTableActions">
+                      <button className="actionButton actionButton--view" aria-label="View Course" onClick={() => setSelectedCourse(course)}>
+                        <Eye className="actionIcon" />
+                      </button>
+                      <button className="actionButton actionButton--edit" aria-label="Edit Course" onClick={() => setEditingCourse(course)}>
+                        <Edit3 className="actionIcon" />
+                      </button>
+                      <button
+                        className="actionButton actionButton--delete"
+                        aria-label="Delete Course"
+                        disabled={deletingCourseId === course.id}
+                        onClick={() => openDeleteModal(course)}
+                      >
+                        <Trash2 className="actionIcon" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
-
       </div>
 
       <div className="courseTablePagination">
-        <button
-          type="button"
-          className="paginationButton"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-        >
+        <button className="paginationButton" type="button" disabled={currentPage === 1} onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}>
           Previous
         </button>
-
-        {Array.from({ length: totalPages }, (_, i) => (
+        {Array.from({ length: totalPages }, (_, index) => (
           <button
-            key={i + 1}
+            key={index + 1}
             type="button"
-            className={`paginationButton ${currentPage === i + 1 ? "paginationButton--active" : ""}`}
-            onClick={() => setCurrentPage(i + 1)}
+            className={`paginationButton ${currentPage === index + 1 ? "paginationButton--active" : ""}`}
+            onClick={() => setCurrentPage(index + 1)}
           >
-            {i + 1}
+            {index + 1}
           </button>
         ))}
-
-        <button
-          type="button"
-          className="paginationButton"
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-        >
+        <button className="paginationButton" type="button" disabled={currentPage === totalPages} onClick={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}>
           Next
         </button>
       </div>
+
+      {selectedCourse ? <CourseViewModal course={selectedCourse} onClose={() => setSelectedCourse(null)} /> : null}
+      {deletingCourse ? (
+        <CourseDeleteModal
+          course={deletingCourse}
+          error={deleteError}
+          isDeleting={deletingCourseId === deletingCourse.id}
+          onClose={closeDeleteModal}
+          onConfirm={handleDelete}
+        />
+      ) : null}
+      {editingCourse ? (
+        <CourseFormModal
+          course={editingCourse}
+          instructors={instructors}
+          axiosClient={axiosClient}
+          onClose={() => setEditingCourse(null)}
+          onSaved={onCourseUpdated}
+        />
+      ) : null}
+      {isCreateOpen ? (
+        <CourseFormModal
+          instructors={instructors}
+          axiosClient={axiosClient}
+          onClose={onCreateClose}
+          onSaved={onCourseCreated}
+        />
+      ) : null}
     </section>
   );
 };

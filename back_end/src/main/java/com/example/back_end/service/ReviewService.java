@@ -6,21 +6,24 @@ import com.example.back_end.dto.response.RatingSummaryResponse;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Review;
 import com.example.back_end.entity.User;
-import com.example.back_end.repository.CourseRepository;
 import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.repository.UserRepository;
+import com.example.back_end.repository.admin.AdminCourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.example.back_end.dto.resquest.UpdateReviewRequest;
 import java.time.Instant;
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
+
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
-    private final CourseRepository courseRepository;
+    private final AdminCourseRepository adminCourseRepository;
+
     public ReviewResponse createReview(
             Long userId,
             CreateReviewRequest request
@@ -34,8 +37,9 @@ public class ReviewService {
         // 1. Kiểm tra User
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("LỖI: Không tìm thấy người dùng với ID = " + userId));
-        Course course = courseRepository.findById(request.getCourseId())
+        Course course = adminCourseRepository.findById(request.getCourseId())
                 .orElseThrow(() -> new RuntimeException("LỖI: Không tìm thấy khóa học với ID = " + request.getCourseId()));
+
         Review review = new Review();
         review.setUser(user);
         review.setCourse(course);
@@ -53,22 +57,24 @@ public class ReviewService {
                 .createdAt(review.getCreatedAt())
                 .build();
     }
+
     public List<ReviewResponse> getCourseReviews(
             Long courseId
     ) {
+
         return reviewRepository.findByCourseId(courseId)
-                .stream()
+            .stream()
                 .map(review ->
-                        ReviewResponse.builder()
-                                .reviewId(review.getId())
-                                .userId(review.getUser().getId())
-                                .userName(review.getUser().getFullName())
-                                .rating(review.getRating())
-                                .comment(review.getComment())
-                                .createdAt(review.getCreatedAt())
-                                .build()
+                ReviewResponse.builder()
+                        .reviewId(review.getId())
+                        .userId(review.getUser().getId())
+                        .userName(review.getUser().getFullName())
+                        .rating(review.getRating())
+                        .comment(review.getComment())
+                        .createdAt(review.getCreatedAt())
+                        .build()
                 )
-                .toList();
+        .toList();
     }
     public ReviewResponse updateReview(Long userId, UpdateReviewRequest request) {
 

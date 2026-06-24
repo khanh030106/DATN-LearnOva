@@ -20,7 +20,7 @@
 
 .faq-title {
   margin: 0;
-  color: #003983;
+  color: #0044e4;
   font-size: clamp(2rem, 3vw, 2.8rem);
   line-height: 1.15;
   font-weight: 700;
@@ -194,8 +194,8 @@
 }
 
 .final-cta-primary {
-  background: #1d4ed8;
-  border: 1px solid #2563eb;
+  background: transparent;
+  border-color:rgba(147, 197, 253, 0.65);
   color: #ffffff;
   box-shadow: 0 14px 28px rgba(29, 78, 216, 0.28);
 }
@@ -207,9 +207,8 @@
 }
 
 .final-cta-primary:hover {
-  background: #2563eb;
-  color: #ffffff;
-  box-shadow: 0 18px 34px rgba(29, 78, 216, 0.34);
+  background: #eff6ff;
+  color: #1d4ed8;
 }
 
 .final-cta-secondary:hover {

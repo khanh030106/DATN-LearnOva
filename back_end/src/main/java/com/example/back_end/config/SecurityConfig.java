@@ -1,8 +1,5 @@
 package com.example.back_end.config;
 
-import com.example.back_end.security.CustomUserDetailsService;
-import com.example.back_end.security.JwtAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.example.back_end.security.OAuth2AuthenticationSuccessHandler;
+import org.springframework.http.HttpMethod;
+import com.example.back_end.security.CustomUserDetailsService;
+import com.example.back_end.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 
 
 @Configuration
@@ -40,10 +41,20 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/learnova/auth/**").permitAll()
                         .requestMatchers("/api/learnova/uploads/presigned-url").permitAll()
                         .requestMatchers("/api/learnova/courses/video-url/**").permitAll()
                         .requestMatchers("/api/learnova/courses/my-courses").permitAll()
+                        .requestMatchers("/api/learnova/admin/users/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/categories-management/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/admin/courses-management/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/learnova/admin/courses-management/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/learnova/admin/courses-management/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/courses-management/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/vouchers/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/instructors-management/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/tags-management/**").permitAll()
                         .requestMatchers("/api/learnova/user/me").permitAll()
                         .requestMatchers("/api/learnova/review/**").permitAll()
                                 .requestMatchers("/api/learnova/auth/resend-verification").permitAll()
