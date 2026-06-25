@@ -2,6 +2,9 @@
 -- Make video_url nullable and set duration_seconds default to 0
 
 ALTER TABLE lessons
+    ALTER COLUMN video_url DROP NOT NULL;
+
+ALTER TABLE lessons
     ALTER COLUMN duration_seconds SET DEFAULT 0;
 
 ALTER TABLE lessons
@@ -12,4 +15,4 @@ ALTER TABLE lessons
 ALTER TABLE lessons
     DROP CONSTRAINT IF EXISTS lessons_duration_seconds_check;
 
-delete from flyway_schema_history where installed_rank = 4
+-- Flyway checksum compatibility 12: <,M9

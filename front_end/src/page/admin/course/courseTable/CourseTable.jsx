@@ -11,7 +11,7 @@ const pageSize = 10;
 const courseStatusOptions = ["DRAFT", "PUBLISHED", "ARCHIVED", "DELETED"];
 
 const emptyForm = {
-  thumbnailUrl: "",
+  thumbnailKey: "",
   title: "",
   slug: "",
   description: "",
@@ -58,7 +58,7 @@ const getInstructorName = (instructor) =>
 const getCourseDisplayStatus = (course) => course.status || "N/A";
 
 const toFormData = (course) => ({
-  thumbnailUrl: course.thumbnailUrl || "",
+  thumbnailKey: course.thumbnailKey || "",
   title: course.title || "",
   slug: course.slug || "",
   description: course.description || "",
@@ -72,7 +72,7 @@ const toFormData = (course) => ({
 });
 
 const buildPayload = (form) => ({
-  thumbnailUrl: form.thumbnailUrl.trim(),
+  thumbnailKey: form.thumbnailKey.trim(),
   title: form.title.trim(),
   slug: form.slug.trim(),
   description: form.description.trim(),
@@ -106,8 +106,8 @@ const CourseViewModal = ({ course, onClose }) => (
       </div>
 
       <div className="courseModalBody">
-        {course.thumbnailUrl ? (
-          <img className="courseModalThumbnail" src={course.thumbnailUrl} alt={course.title} />
+        {course.thumbnailKey ? (
+          <img className="courseModalThumbnail" src={course.thumbnailKey} alt={course.title} />
         ) : null}
         <p><strong>Instructor:</strong> {course.instructorName || "N/A"}</p>
         <p><strong>Slug:</strong> {course.slug || "N/A"}</p>
@@ -286,7 +286,7 @@ const CourseFormModal = ({
           </label>
           <label className="courseFormWide">
             Thumbnail URL
-            <input value={form.thumbnailUrl} onChange={(event) => setField("thumbnailUrl", event.target.value)} required />
+            <input value={form.thumbnailKey} onChange={(event) => setField("thumbnailKey", event.target.value)} required />
           </label>
           <label>
             Instructor
@@ -464,7 +464,7 @@ const CourseTable = ({
                 <tr key={course.id}>
                   <td>
                     <div className="courseTableCourseCell">
-                      {course.thumbnailUrl ? <img src={course.thumbnailUrl} alt={course.title} /> : null}
+                      {course.thumbnailKey ? <img src={course.thumbnailKey} alt={course.title} /> : null}
                       <div>
                         <strong>{course.title}</strong>
                         <span>{course.slug}</span>
