@@ -10,45 +10,41 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/qna")
+@RequestMapping("/api/learnova")
 @RequiredArgsConstructor
 public class LessonQAController {
 
     private final LessonQAService qaService;
 
     // ======================
-    // GET Q&A COURSE
+    // GET Q&A LESSON
     // ======================
-    @GetMapping("/course/{courseId}")
-    public LessonQAResponse getCourseQnA(@PathVariable Long courseId) {
-        return qaService.getCourseQnA(courseId);
+    @GetMapping("/qna/lesson/{lessonId}")
+    public LessonQAResponse getLessonQnA(@PathVariable Long lessonId) {
+        return qaService.getLessonQnA(lessonId);
     }
 
     // ======================
     // CREATE QUESTION
     // ======================
-    @PostMapping("/question")
+    @PostMapping("/qna/question")
     public void createQuestion(
             Authentication auth,
             @RequestBody CreateQuestionRequest req
     ) {
-        CustomUserDetails user =
-                (CustomUserDetails) auth.getPrincipal();
-
+        CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
         qaService.createQuestion(user.getId(), req);
     }
 
     // ======================
     // CREATE ANSWER
     // ======================
-    @PostMapping("/answer")
+    @PostMapping("/qna/answer")
     public void createAnswer(
             Authentication auth,
             @RequestBody CreateAnswerRequest req
     ) {
-        CustomUserDetails user =
-                (CustomUserDetails) auth.getPrincipal();
-
+        CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
         qaService.createAnswer(user.getId(), req);
     }
 }

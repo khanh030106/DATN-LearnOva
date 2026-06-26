@@ -1,24 +1,163 @@
-import React from "react";
+import { toast } from "react-toastify";
+import { FaCheck } from "react-icons/fa";
 import {
   FaSearch,
   FaRegCommentDots,
   FaRegThumbsUp
 } from "react-icons/fa";
-import {course, qaData} from "./mockCourseData.js";
+import React, { useEffect, useState } from "react";
+import {
+    getLessonQAApi,
+    createQuestionApi,
+    createAnswerApi
+} from "../../../../api/lessonQAApi";
 
 function QATab({
-                 qaData,
-                 course,
-                 selectedQuestion,
-                 setSelectedQuestion,
-                 showQuestionForm,
-                 setShowQuestionForm,
-                 showReplyForm,
-                 setShowReplyForm,
-                 replyText,
-                 setReplyText,
-                 handleReplySubmit
+                   lessonId,
+                   course,
+                   selectedQuestion,
+                   setSelectedQuestion,
+                   showQuestionForm,
+                   setShowQuestionForm,
+                   showReplyForm,
+                   setShowReplyForm,
+                   replyText,
+                   setReplyText,
+                   handleReplySubmit
                }) {
+    const [questions, setQuestions] = useState([]);
+    const [questionContent, setQuestionContent] = useState("");
+    const [questionError, setQuestionError] = useState("");
+    const [replyError, setReplyError] = useState("");
+
+    useEffect(() => {
+
+        const loadQA = async () => {
+
+            try {
+
+                const data = await getLessonQAApi(lessonId);
+
+                console.log("QA DATA =", data);
+
+                setQuestions(data.questions || []);
+
+            } catch (e) {
+                console.log(e);
+            }
+
+        };
+
+        if (lessonId) {
+            loadQA();
+        }
+
+    }, [lessonId]);
+    const handleCreateQuestion = async () => {
+
+        if (!questionContent.trim()) {
+            setQuestionError("Please enter your question.");
+            return;
+        }
+
+        try {
+
+            await createQuestionApi({
+                lessonId,
+                content: questionContent
+            });
+
+            toast.success("Question sent successfully!", {
+                position: "top-right",
+                autoClose: 2000,
+                className: "toast-green",
+                progressClassName: "toast-progress-white",
+                icon: <FaCheck color="#22c55e" />
+            });
+
+            setQuestionContent("");
+            setQuestionError("");
+            setShowQuestionForm(false);
+
+            const data = await getLessonQAApi(lessonId);
+            setQuestions(data.questions || []);
+
+        } catch (error) {
+
+            console.log(error);
+
+            toast.error("Failed to send question!", {
+                position: "top-right",
+                autoClose: 2000
+            });
+
+        }
+    };
+    const handleReplySubmituser = async () => {
+
+        if (!replyText.trim()) {
+            setReplyError("Please enter your reply.");
+            return;
+        }
+
+        try {
+
+            console.log("selectedQuestion.id =", selectedQuestion.id);
+
+            console.log("questionId =", selectedQuestion.id);
+
+            console.log("replyText =", replyText);
+
+            console.log(
+                JSON.stringify({
+                    questionId: selectedQuestion.id,
+                    content: replyText
+                }, null, 2)
+            );
+
+            await createAnswerApi({
+                questionId: selectedQuestion.id,
+                content: replyText
+            });
+
+            toast.success("Reply sent successfully!", {
+                position: "top-right",
+                autoClose: 2000,
+                className: "toast-green",
+                progressClassName: "toast-progress-white",
+                icon: <FaCheck color="#22c55e" />
+            });
+
+            setReplyText("");
+            setReplyError("");
+            setShowReplyForm(false);
+
+            const data = await getLessonQAApi(lessonId);
+
+            setQuestions(data.questions || []);
+
+            const updatedQuestion = data.questions.find(
+                q => q.id === selectedQuestion.id
+            );
+
+            setSelectedQuestion(updatedQuestion);
+
+        } catch (error) {
+
+            console.log(error);
+
+            if (error.response) {
+                console.log("Status =", error.response.status);
+                console.log("Data =", error.response.data);
+            }
+
+            toast.error("Failed to send reply!", {
+                position: "top-right",
+                autoClose: 2000
+            });
+
+        }
+    };
   return (
       <div className="qa-content">
           <div className="qa-search-container">
@@ -76,16 +215,21 @@ function QATab({
 
                       <h4>Ask the instructor a question</h4>
 
-                      <input
-                          type="text"
-                          placeholder="Question title..."
-                          className="qa-input"
-                      />
-
                       <textarea
                           placeholder="Describe your question in detail..."
                           className="qa-textarea"
+                          value={questionContent}
+                          onChange={(e) => {
+                              setQuestionContent(e.target.value);
+                              setQuestionError(""); // xóa lỗi khi người dùng nhập
+                          }}
                       />
+
+                      {questionError && (
+                          <p className="qa-error-message">
+                              {questionError}
+                          </p>
+                      )}
 
                       <div className="qa-form-actions">
                           <button
@@ -95,7 +239,10 @@ function QATab({
                               Cancel
                           </button>
 
-                          <button className="qa-submit-btn">
+                          <button
+                              className="qa-submit-btn"
+                              onClick={handleCreateQuestion}
+                          >
                               Send question
                           </button>
                       </div>
@@ -111,20 +258,26 @@ function QATab({
                   <button className="qa-back" onClick={() => setSelectedQuestion(null)}>‹ Back to questions list</button>
 
                   <div className="qa-detail-header">
-                      <div className="qa-detail-title">{selectedQuestion.title}</div>
+                      <div className="qa-detail-title">
+                          Câu hỏi
+                      </div>
                       <div className="qa-detail-meta">
 
                           <div className="qa-author-info">
 
                               <div className="qa-avatar-large">
-                                  {selectedQuestion.author.initials}
+                                  {selectedQuestion.userName
+                                      ?.split(" ")
+                                      .map(s => s[0])
+                                      .slice(-2)
+                                      .join("")}
                               </div>
                               <div className="qa-author-name">
-                                  {selectedQuestion.author.name}
+                                  {selectedQuestion.userName}
                               </div>
 
                               <div className="qa-author-time">
-                                  • {selectedQuestion.author.level}
+                                  {new Date(selectedQuestion.createdAt).toLocaleString()}
                               </div>
                               {/*<div className="qa-author-row">*/}
 
@@ -135,7 +288,7 @@ function QATab({
 
 
                                   <div className="qa-question-body">
-                                      <p>{selectedQuestion.description}</p>
+                                      <p>{selectedQuestion.content}</p>
                                   </div>
 
                               </div>
@@ -144,91 +297,90 @@ function QATab({
 
                       </div>
 
-                      <div className="qa-detail-tags">
-                          {selectedQuestion.tags.map((t,i) => <span key={i} className="qa-tag">{t}</span>)}
-                      </div>
+                      {/*<div className="qa-detail-tags">*/}
+                      {/*    {selectedQuestion.tags.map((t,i) => <span key={i} className="qa-tag">{t}</span>)}*/}
+                      {/*</div>*/}
                   </div>
 
 
 
                   {/* Instructor answer (mock or from data) */}
-                  <div className="qa-answer">
+                  {selectedQuestion.answers?.map(answer => (
+                      <div className="qa-answer" key={answer.id}>
 
-                      <div className="answer-by">
+                          <div className="answer-by">
 
-                          <img
-                              src={course.instructor.avatar}
-                              alt={course.instructor.name}
-                              className="answer-instructor-avatar"
-                          />
+                              <img
+                                  src={course.instructor.avatar}
+                                  alt={answer.userName}
+                                  className="answer-instructor-avatar"
+                              />
 
-                          <div className="answer-instructor-info">
+                              <div className="answer-instructor-info">
 
-                              <div className="answer-instructor-header">
-                                  <div className="answer-instructor-name">
-                                      {course.instructor.name}
+                                  <div className="answer-instructor-header">
+
+                                      <div className="answer-instructor-name">
+                                          {answer.userName}
+                                      </div>
+
+                                      <span className="instructor-badge">
+                        Instructor
+                    </span>
+
                                   </div>
 
-                                  <span className="instructor-badge">
-                                                   {course.instructor.role}
-                                                </span>
-                              </div>
+                                  <div className="answer-instructor-time">
+                                      {new Date(answer.createdAt).toLocaleString()}
+                                  </div>
 
-                              <div className="answer-instructor-time">
-                                  15 phút trước
                               </div>
 
                           </div>
 
-                      </div>
+                          <div className="answer-content">
+                              <p>{answer.content}</p>
+                          </div>
 
-                      <div className="answer-content">
-                          <p>
-                              Đây là câu trả lời mẫu từ giảng viên.
+                          <div className="answer-actions">
+                              <button
+                                  className="btn-reply"
+                                  onClick={() => setShowReplyForm(!showReplyForm)}
+                              >
+                                  <FaRegCommentDots />
+                                  <span>Reply</span>
+                              </button>
 
-                          </p>
-
-                          <pre className="code-block">
-                                                    {`// Ví dụ code
-                                                    public class JwtUtil {
-                                                    
-                                                        private String secretKey;
-                                                    
-                                                    }`}
-                                                            </pre>
-                      </div>
-
-                      <div className="answer-actions">
-
-                          <button
-                              className="btn-reply"
-                              onClick={() => setShowReplyForm(!showReplyForm)}
-                          >
-                              <FaRegCommentDots />
-                              <span>Reply</span>
-                          </button>
-
-                          <button className="btn-like">
-                              <FaRegThumbsUp />
-                              <span>24</span>
-                          </button>
+                              <button className="btn-like">
+                                  <FaRegThumbsUp />
+                                  <span>{answer.likeCount}</span>
+                              </button>
+                          </div>
 
                       </div>
-
-                  </div>
+                  ))}
 
 
 
                   {/* Reply form */}
                   {showReplyForm && (
                       <div className="qa-reply-form">
-                                            <textarea
-                                                className="qa-reply-input"
-                                                value={replyText}
-                                                onChange={(e) => setReplyText(e.target.value)}
-                                                placeholder="Viết phản hồi của bạn..."
-                                                rows={4}
-                                            />
+                                           <textarea
+                                               className={`qa-reply-input ${replyError ? "error" : ""}`}
+                                               value={replyText}
+                                               onChange={(e) => {
+                                                   setReplyText(e.target.value);
+                                                   setReplyError("");
+                                               }}
+                                               placeholder="Write your reply..."
+                                               rows={4}
+                                           />
+
+                          {replyError && (
+                              <p className="qa-error-message">
+                                  {replyError}
+                              </p>
+                          )}
 
                           <div className="qa-reply-actions">
                               <button
@@ -240,7 +392,7 @@ function QATab({
 
                               <button
                                   className="btn-primary"
-                                  onClick={() => handleReplySubmit(selectedQuestion.id)}
+                                  onClick={handleReplySubmituser}
                               >
                                   Gửi
                               </button>
@@ -250,22 +402,28 @@ function QATab({
               </div>
           ) : (
               <div className="qa-items-list">
-                  {qaData.map(q => (
+                  {(questions || []).map(q => (
                       <div key={q.id} className="qa-card" onClick={() => setSelectedQuestion(q)}>
 
                           <div className="qa-right">
                               <div className="qa-author">
-                                  <div className="qa-avatar">{q.author.initials}</div>
+                                  <div className="qa-avatar">
+                                      {q.userName
+                                          ?.split(" ")
+                                          .map(s => s[0])
+                                          .slice(-2)
+                                          .join("")}
+                                  </div>
                                   <div className="qa-author-info">
-                                      <div className="qa-qa-author-name">{q.author.name}</div>
-                                      <div className="qa-qa-author-time">{q.author.level}</div>
+                                      <div className="qa-qa-author-name">{q.userName}</div>
+                                      <div className="qa-qa-author-time">{new Date(q.createdAt).toLocaleString()}</div>
                                   </div>
                               </div>
                           </div>
                           <div className="qa-middle">
-                              <h5 className="qa-title">{q.title}</h5>
-                              <p className="qa-description">{q.description}</p>
-                              <div className="qa-tag-list">{q.tags.map((tag,i) => <span key={i} className="qa-tag">{tag}</span>)}</div>
+                              <h5 className="qa-title">{"Question"}</h5>
+                              <p className="qa-description">{q.content}</p>
+                              {/*<div className="qa-tag-list">{q.tags.map((tag,i) => <span key={i} className="qa-tag">{tag}</span>)}</div>*/}
                           </div>
 
 

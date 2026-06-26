@@ -870,8 +870,13 @@ hr {
 .qa-description {
     font-size: 0.85rem;
     color: #6b7280;
-    margin: 0 0 0.75rem 0;
+    /*margin: 0 0 0.75rem 0;*/
     line-height: 1.5;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* tối đa 2 dòng */
+    overflow: hidden;
 }
 
 .qa-tag-list {
@@ -1168,7 +1173,7 @@ hr {
 .qa-author-info {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: 10px;
 }
 .qa-content {
     display: flex;
@@ -1218,8 +1223,8 @@ hr {
 .qa-author-time {
     font-size: 13px;
     color: #6b7280;
-    margin-left: 160px;
-    margin-top: -30px;
+    margin-left: 180px;
+    margin-top: -32px;
 }
 .qa-qa-author-name {
     font-size: 15px;
@@ -1268,6 +1273,7 @@ hr {
     line-height: 1.8;
     color: #374151;
     word-break: break-word;
+    margin-left: 10px;
 }
 
 /* =========================
@@ -1325,11 +1331,12 @@ hr {
 }
 .answer-actions {
     display: flex;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
     align-items: center;
     margin-top: 16px;
     padding-top: 12px;
     border-top: 1px solid #e5e7eb;
+    margin-left: 40px;
 }
 
 .btn-reply {
@@ -2259,4 +2266,19 @@ hr {
 
 .edit-actions button:last-child:hover {
     background: #dbeafe;
+}
+.qa-textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid #93c5fd; /* xanh dương nhạt */
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+.qa-error-message {
+    margin-top: 8px;
+    margin-bottom: 12px;
+    color: #ef4444;
+    font-size: 14px;
+    font-weight: 500;
 }

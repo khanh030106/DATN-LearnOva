@@ -2,7 +2,9 @@ package com.example.back_end.service;
 
 import com.example.back_end.dto.resquest.CreateAnswerRequest;
 import com.example.back_end.dto.resquest.CreateQuestionRequest;
-import com.example.back_end.dto.response.*;
+import com.example.back_end.dto.response.AnswerResponse;
+import com.example.back_end.dto.response.LessonQAResponse;
+import com.example.back_end.dto.response.QuestionResponse;
 import com.example.back_end.entity.Lesson;
 import com.example.back_end.entity.LessonQA;
 import com.example.back_end.entity.User;
@@ -12,7 +14,9 @@ import com.example.back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,71 +27,74 @@ public class LessonQAService {
     private final LessonRepository lessonRepo;
     private final UserRepository userRepo;
 
-    // =========================
-    // 1. GET Q&A COURSE
-    // =========================
-    public LessonQAResponse getCourseQnA(Long courseId) {
+    // =====================================================
+    // GET Q&A THEO LESSON
+    // =====================================================
+    public LessonQAResponse getLessonQnA(Long lessonId) {
 
-        List<Lesson> lessons = lessonRepo.findBySectionCourseId(courseId);
+        Lesson lesson = lessonRepo.findById(lessonId)
+                .orElseThrow(() -> new RuntimeException("Lesson not found"));
 
-        List<QuestionResponse> allQuestions = new ArrayList<>();
+        List<LessonQA> questions =
+                qaRepo.findByLesson_IdAndParentIsNull(lessonId);
 
-        for (Lesson lesson : lessons) {
+        List<Long> questionIds = questions.stream()
+                .map(LessonQA::getId)
+                .toList();
 
-            List<LessonQA> questions =
-                    qaRepo.findByLesson_IdAndParentIsNull(lesson.getId());
+        List<LessonQA> answers = questionIds.isEmpty()
+                ? List.of()
+                : qaRepo.findByParent_IdIn(questionIds);
 
-            List<Long> questionIds = questions.stream()
-                    .map(LessonQA::getId)
-                    .toList();
+        Map<Long, List<LessonQA>> answerMap =
+                answers.stream()
+                        .collect(Collectors.groupingBy(a -> a.getParent().getId()));
 
-            List<LessonQA> answers =
-                    questionIds.isEmpty()
-                            ? List.of()
-                            : qaRepo.findByParent_IdIn(questionIds);
+        List<QuestionResponse> questionResponses =
+                questions.stream().map(q -> {
 
-            Map<Long, List<LessonQA>> answerMap =
-                    answers.stream()
-                            .collect(Collectors.groupingBy(a -> a.getParent().getId()));
+                    QuestionResponse qr = new QuestionResponse();
+                    qr.setId(q.getId());
+                    qr.setContent(q.getContent());
+                    qr.setUserId(q.getUser().getId());
+                    qr.setUserName(q.getUser().getFullName());
+                    qr.setCreatedAt(q.getCreatedAt());
+                    qr.setIsSolved(q.getIsSolved());
 
-            for (LessonQA q : questions) {
+                    List<AnswerResponse> answerResponses =
+                            answerMap.getOrDefault(q.getId(), List.of())
+                                    .stream()
+                                    .map(a -> {
 
-                QuestionResponse qr = new QuestionResponse();
-                qr.setId(q.getId());
-                qr.setContent(q.getContent());
-                qr.setUserId(q.getUser().getId());
-                qr.setUserName(q.getUser().getFullName());
-                qr.setCreatedAt(q.getCreatedAt());
-                qr.setIsSolved(q.getIsSolved());
+                                        AnswerResponse ar = new AnswerResponse();
+                                        ar.setId(a.getId());
+                                        ar.setContent(a.getContent());
+                                        ar.setUserId(a.getUser().getId());
+                                        ar.setUserName(a.getUser().getFullName());
+                                        ar.setCreatedAt(a.getCreatedAt());
+                                        ar.setLikeCount(a.getLikeCount());
 
-                List<AnswerResponse> answerResponses =
-                        answerMap.getOrDefault(q.getId(), List.of())
-                                .stream()
-                                .map(a -> {
-                                    AnswerResponse ar = new AnswerResponse();
-                                    ar.setId(a.getId());
-                                    ar.setContent(a.getContent());
-                                    ar.setUserId(a.getUser().getId());
-                                    ar.setUserName(a.getUser().getFullName());
-                                    ar.setCreatedAt(a.getCreatedAt());
-                                    ar.setLikeCount(a.getLikeCount());
-                                    return ar;
-                                }).toList();
+                                        return ar;
 
-                qr.setAnswers(answerResponses);
-                allQuestions.add(qr);
-            }
-        }
+                                    }).toList();
+
+                    qr.setAnswers(answerResponses);
+
+                    return qr;
+
+                }).toList();
 
         LessonQAResponse response = new LessonQAResponse();
-        response.setQuestions(allQuestions);
+        response.setLessonId(lesson.getId());
+        response.setLessonTitle(lesson.getTitle());
+        response.setQuestions(questionResponses);
 
         return response;
     }
 
-    // =========================
-    // 2. CREATE QUESTION
-    // =========================
+    // =====================================================
+    // TẠO QUESTION
+    // =====================================================
     public void createQuestion(Long userId, CreateQuestionRequest req) {
 
         Lesson lesson = lessonRepo.findById(req.getLessonId())
@@ -96,23 +103,27 @@ public class LessonQAService {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        Instant now = Instant.now();
+
         LessonQA q = new LessonQA();
         q.setLesson(lesson);
         q.setUser(user);
-        q.setContent(req.getContent());
         q.setParent(null);
+        q.setContent(req.getContent());
         q.setType("QUESTION");
         q.setIsSolved(false);
         q.setIsPinned(false);
         q.setLikeCount(0);
         q.setIsDeleted(false);
+        q.setCreatedAt(now);
+        q.setUpdatedAt(now);
 
         qaRepo.save(q);
     }
 
-    // =========================
-    // 3. CREATE ANSWER
-    // =========================
+    // =====================================================
+    // TẠO ANSWER
+    // =====================================================
     public void createAnswer(Long userId, CreateAnswerRequest req) {
 
         LessonQA parent = qaRepo.findById(req.getParentId())
@@ -121,17 +132,21 @@ public class LessonQAService {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        LessonQA a = new LessonQA();
-        a.setLesson(parent.getLesson());
-        a.setUser(user);
-        a.setContent(req.getContent());
-        a.setParent(parent);
-        a.setType("ANSWER");
-        a.setIsSolved(false);
-        a.setIsPinned(false);
-        a.setLikeCount(0);
-        a.setIsDeleted(false);
+        Instant now = Instant.now();
 
-        qaRepo.save(a);
+        LessonQA answer = new LessonQA();
+        answer.setLesson(parent.getLesson());
+        answer.setUser(user);
+        answer.setParent(parent);
+        answer.setContent(req.getContent());
+        answer.setType("ANSWER");
+        answer.setIsSolved(false);
+        answer.setIsPinned(false);
+        answer.setLikeCount(0);
+        answer.setIsDeleted(false);
+        answer.setCreatedAt(now);
+        answer.setUpdatedAt(now);
+
+        qaRepo.save(answer);
     }
 }
