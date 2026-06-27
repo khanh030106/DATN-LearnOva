@@ -17,8 +17,6 @@ export const useAxiosPrivate = () => {
                     try {
                         await refreshAccessToken();
 
-                        // Retry the original request — the refreshed accessToken cookie
-                        // will be sent automatically by the browser
                         return axiosClient(originalRequest);
                     } catch (refreshError) {
                         await logout();

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.time.Duration;
 
 @Service
-public class RefreshCookieService {
+public class CookieService {
 
     private static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
     private static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
