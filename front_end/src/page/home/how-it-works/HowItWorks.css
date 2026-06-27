@@ -1,5 +1,5 @@
 .hiw {
-    padding: 40px 0;
+    padding: 96px 0;
     background: #ffffff;
     border-top: 1px solid #e8edf3;
 }
@@ -12,7 +12,7 @@
 
 .hiw__header {
     text-align: center;
-    margin-bottom: 72px;
+    margin-bottom: 56px;
 }
 
 .hiw__title {
@@ -104,6 +104,11 @@
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+    .hiw { padding: 72px 0; }
+    .hiw__header { margin-bottom: 48px; }
+}
+
 @media (max-width: 900px) {
     .hiw__steps {
         flex-direction: column;
@@ -129,7 +134,7 @@
 
 @media (max-width: 640px) {
     .hiw {
-        padding: 72px 0;
+        padding: 56px 0;
     }
 
     .hiw__container {
@@ -141,6 +146,6 @@
     }
 
     .hiw__header {
-        margin-bottom: 48px;
+        margin-bottom: 40px;
     }
 }

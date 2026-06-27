@@ -1,5 +1,5 @@
 .cs {
-    padding: 70px 0;
+    padding: 96px 0;
     background: #f8faff;
 }
 
@@ -13,7 +13,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 36px;
+    margin-bottom: 56px;
     flex-wrap: wrap;
     gap: 16px;
 }
@@ -200,11 +200,14 @@
 
 /* Responsive */
 @media (max-width: 1024px) {
+    .cs { padding: 72px 0; }
+    .cs__header { margin-bottom: 48px; }
     .cs__grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 640px) {
-    .cs { padding: 72px 0; }
+    .cs { padding: 56px 0; }
+    .cs__header { margin-bottom: 40px; }
     .cs__container { padding: 0 16px; }
     .cs__grid { grid-template-columns: 1fr; }
     .cs__header { flex-direction: column; align-items: flex-start; }

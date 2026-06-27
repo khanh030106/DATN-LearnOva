@@ -26,7 +26,7 @@
     z-index: 1;
     max-width: 1350px;
     margin: 0 auto;
-    padding: 72px 48px 35px;
+    padding: 96px 48px 80px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 64px;
@@ -395,14 +395,14 @@
 @media (max-width: 860px) {
     .hero__inner {
         grid-template-columns: 1fr;
-        padding: 48px 24px 40px;
+        padding: 72px 32px 64px;
         min-height: auto;
     }
     .hero__right { display: none; }
 }
 
 @media (max-width: 480px) {
-    .hero__inner { padding: 32px 16px 32px; }
+    .hero__inner { padding: 56px 16px 48px; }
     .hero__search { flex-direction: column; border-radius: 12px; }
     .hero__search-input { height: 48px; }
     .hero__search-btn { height: 46px; border-radius: 0 0 10px 10px; }
