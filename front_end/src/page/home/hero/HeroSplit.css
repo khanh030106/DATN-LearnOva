@@ -10,6 +10,7 @@
     pointer-events: none;
     z-index: 0;
 }
+
 .hero__glow--1 {
     top: -80px; right: -80px;
     width: 600px; height: 600px;
@@ -26,7 +27,6 @@
     z-index: 1;
     max-width: 1350px;
     margin: 0 auto;
-    padding: 96px 48px 80px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 64px;
