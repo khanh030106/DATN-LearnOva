@@ -1,17 +1,26 @@
 package com.example.back_end.entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -61,6 +70,5 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     private Set<Coursecategory> coursecategories = new LinkedHashSet<>();
-
 
 }

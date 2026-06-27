@@ -1,120 +1,105 @@
 package com.example.back_end.controller;
 
 import com.example.back_end.dto.response.AuthTokenResponse;
-import com.example.back_end.dto.response.ErrorResponse;
 import com.example.back_end.dto.response.LoginResponse;
 import com.example.back_end.dto.resquest.LoginRequest;
 import com.example.back_end.service.AuthService;
 import com.example.back_end.service.RefreshCookieService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import com.example.back_end.dto.resquest.RegisterRequest;
 import com.example.back_end.dto.response.RegisterResponse;
+import com.example.back_end.dto.resquest.ResendVerificationRequest;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/learnova/auth")
 public class AuthController {
-        private final AuthService authService;
-        private final RefreshCookieService refreshCookieService;
 
-        @ExceptionHandler(BadCredentialsException.class)
-        public ResponseEntity<ErrorResponse> handleBadCredentials() {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                                .body(new ErrorResponse("Login failed. Please check your email and password."));
-        }
+    private final AuthService authService;
+    private final RefreshCookieService refreshCookieService;
 
-        @PostMapping("/login")
-        public ResponseEntity<LoginResponse> login(
-                        @RequestBody LoginRequest request,
-                        HttpServletResponse response) {
-                AuthTokenResponse result = authService.login(request);
-
-                response.addHeader(
-                                HttpHeaders.SET_COOKIE,
-                                refreshCookieService
-                                                .createRefreshTokenCookie(result.refreshToken(), request.rememberMe())
-                                                .toString());
-
-                return ResponseEntity.ok(new LoginResponse(result.accessToken()));
-        }
-
-         response.addHeader(
-                 HttpHeaders.SET_COOKIE,
-                 refreshCookieService.createRefreshTokenCookie(result.refreshToken(), request.rememberMe()).toString()
-         );
-
-         response.addHeader(
-                 HttpHeaders.SET_COOKIE,
-                 refreshCookieService.createAccessTokenCookie(result.accessToken()).toString()
-         );
-
-                return ResponseEntity.ok(response);
-        }
-
-        @PostMapping("/logout")
-        public ResponseEntity<Void> logout(
-                        @CookieValue(value = "refreshToken", required = false) String refreshToken,
-                        HttpServletResponse response) {
-                authService.logout(refreshToken);
-
-     @PostMapping("/refresh")
-     public ResponseEntity<LoginResponse> refresh(
-           @CookieValue(value = "refreshToken", required = false) String refreshToken,
-           HttpServletResponse response
-     ) {
-     if (refreshToken == null) {
-          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-     }
-
-     try {
-          LoginResponse loginResponse = authService.refreshAccessToken(refreshToken);
-
-          response.addHeader(
-                  HttpHeaders.SET_COOKIE,
-                  refreshCookieService.createAccessTokenCookie(loginResponse.accessToken()).toString()
-          );
-
-          return ResponseEntity.ok(loginResponse);
-     } catch (RuntimeException e) {
-          response.addHeader(
-                  HttpHeaders.SET_COOKIE,
-                  refreshCookieService.clearRefreshTokenCookie().toString()
-          );
-          response.addHeader(
-                  HttpHeaders.SET_COOKIE,
-                  refreshCookieService.clearAccessTokenCookie().toString()
-          );
-          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-     }
-     }
-
-        @PostMapping("/register")
-        public ResponseEntity<?> register(
-                        @RequestBody RegisterRequest request) {
-                authService.register(request);
-
-                return ResponseEntity.ok(
-                                new RegisterResponse(
-                                                true,
-                                                "Registration successful. Please verify your email."));
-        }
-
-     response.addHeader(
-             HttpHeaders.SET_COOKIE,
-             refreshCookieService.clearRefreshTokenCookie().toString()
-     );
-
-     response.addHeader(
-             HttpHeaders.SET_COOKIE,
-             refreshCookieService.clearAccessTokenCookie().toString()
-     );
-
-     return ResponseEntity.noContent().build();
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequest request,
+            HttpServletResponse response
+    ) {
+        AuthTokenResponse result = authService.login(request);
+        response.addHeader(HttpHeaders.SET_COOKIE,
+                refreshCookieService.createRefreshTokenCookie(result.refreshToken(), request.rememberMe()).toString());
+        response.addHeader(HttpHeaders.SET_COOKIE,
+                refreshCookieService.createAccessTokenCookie(result.accessToken()).toString());
+        return ResponseEntity.ok(new LoginResponse(result.accessToken()));
     }
- }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponse> refresh(
+            @CookieValue(value = "refreshToken", required = false) String refreshToken,
+            HttpServletResponse response
+    ) {
+        if (refreshToken == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        try {
+            AuthTokenResponse result = authService.refreshAccessToken(refreshToken);
+            // Both cookies are rotated: refresh token is replaced, access token is renewed.
+            response.addHeader(HttpHeaders.SET_COOKIE,
+                    refreshCookieService.createRefreshTokenCookie(result.refreshToken(), false).toString());
+            response.addHeader(HttpHeaders.SET_COOKIE,
+                    refreshCookieService.createAccessTokenCookie(result.accessToken()).toString());
+            return ResponseEntity.ok(new LoginResponse(result.accessToken()));
+        } catch (RuntimeException e) {
+            response.addHeader(HttpHeaders.SET_COOKIE, refreshCookieService.clearRefreshTokenCookie().toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, refreshCookieService.clearAccessTokenCookie().toString());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @CookieValue(value = "refreshToken", required = false) String refreshToken,
+            HttpServletResponse response
+    ) {
+        authService.logout(refreshToken);
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookieService.clearRefreshTokenCookie().toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookieService.clearAccessTokenCookie().toString());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<RegisterResponse> register(
+            @Valid @RequestBody RegisterRequest request
+    ) {
+        authService.register(request);
+        return ResponseEntity.ok(new RegisterResponse(
+                true,
+                "Registration successful. Please check your email to verify your account."
+        ));
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<RegisterResponse> verifyAccount(@RequestParam("token") String token) {
+        authService.verifyEmail(token);
+        return ResponseEntity.ok(new RegisterResponse(
+                true,
+                "Your account has been activated successfully! You can now log in."
+        ));
+    }
+
+    @PostMapping("/resend-verification")
+    public ResponseEntity<RegisterResponse> resendVerification(
+            @Valid @RequestBody ResendVerificationRequest request
+    ) {
+        authService.resendVerificationEmail(request.getEmail());
+        // Always return success — do not reveal whether the email is registered.
+        return ResponseEntity.ok(new RegisterResponse(
+                true,
+                "If that email is registered and unverified, a verification link has been sent."
+        ));
+    }
+}

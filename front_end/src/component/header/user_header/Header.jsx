@@ -12,6 +12,7 @@ const Header = () => {
       <>
             {isAuthenticated ? <LoggedInHeader /> : <UnloggedInHeader />}
       </>
+
   );
 }
 

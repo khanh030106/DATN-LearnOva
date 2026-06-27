@@ -14,6 +14,7 @@ import Reports from "../page/admin/reports/Reports.jsx";
 import Vouchers from "../page/admin/vouchers/Vouchers.jsx";
 import VoucherCreate from "../page/admin/vouchers/voucherCreate/VoucherCreate.jsx";
 import Category from "../page/admin/category/Category.jsx";
+import Tag from "../page/admin/tag/Tag.jsx";
 import ReviewsComments from "../page/admin/reviewsComments/ReviewsComments.jsx";
 import ViolationReports from "../page/admin/violationReports/ViolationReports.jsx";
 import TeacherLayout from "../layout/teacher/TeacherLayout.jsx";
@@ -34,6 +35,8 @@ import CoursePage from "../page/users/course/CourseNew.jsx";
 import CourseDetail from "../page/users/course/CourseDetail/CourseDetail.jsx";
 import CourseDetaill from "../page/home/courses/CourseDetail.jsx";
 import Cart from "../page/home/cart/Cart.jsx";
+import OAuth2Success from "./../page/login/OAuth2Success.jsx";
+
 
 const App = () => {
     return (
@@ -41,7 +44,9 @@ const App = () => {
             <Routes>
 
                 <Route path="/learnova/auth/login" element={<AuthPage/>}/>
-                <Route path="/learnova/user/CoursesDetail" element={<CourseDetail/>}/>
+                <Route path="/learnova/user/Courses-detail" element={<CourseDetail/>}/>
+                <Route path="/oauth2-success" element={<OAuth2Success />}/>
+
 
                 <Route element={<HomeLayout/>}>
                     <Route path="/learnova/home" element={<Home/>}/>
@@ -60,6 +65,7 @@ const App = () => {
                     <Route path="vouchers" element={<Vouchers/>}/>
                     <Route path="vouchers/create" element={<VoucherCreate/>}/>
                     <Route path="categories" element={<Category/>}/>
+                    <Route path="tags" element={<Tag/>}/>
                     <Route path="reviews-comments" element={<ReviewsComments/>}/>
                     <Route path="violation-reports" element={<ViolationReports/>}/>
                 </Route>

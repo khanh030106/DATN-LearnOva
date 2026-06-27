@@ -29,14 +29,15 @@ public class CustomUserDetails implements UserDetails{
   }
 
   @Override
-  public @NullMarked Collection<? extends GrantedAuthority> getAuthorities() {
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+
     return user.getRoles()
             .stream()
-            .map(Role::getRoleName)
-            .map(roleName -> new SimpleGrantedAuthority(roleName.name()))
+            .map(role ->
+                    new SimpleGrantedAuthority(role.getRoleName().name())
+            )
             .toList();
   }
-
   @Override
   public String getPassword() {
     return user.getPasswordHash();

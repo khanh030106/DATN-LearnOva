@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Course.css";
-import { BiHeart, BiCart } from "react-icons/bi";
+import { BiHeart } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
-import { LayoutGrid, List, RotateCcw, Users, X } from "lucide-react";
+import { X } from "lucide-react";
 import LearnovaAI from "../../home/AI/AI.jsx";
-import { getCoursesApi } from "../../../api/CourseApi.js";
-import { addToCart } from "../../../util/cartStorage.js";
 
 const categories = [
   { id: "all", name: "All Categories", count: 120 },
@@ -23,34 +21,136 @@ const levels = [
   { id: "advanced", name: "Advanced", count: 78 },
 ];
 
-const categoryBadgeClass = {
-  Technology: "badge-tech",
-  Business: "badge-business",
-  Design: "badge-design",
-  Marketing: "badge-marketing",
-  Languages: "badge-languages",
-  "Soft Skills": "badge-skills",
-};
-
-const levelBadgeClass = {
-  Beginner: "badge-beginner",
-  Intermediate: "badge-intermediate",
-  Advanced: "badge-advanced",
-};
+const courses = [
+  {
+    id: 1,
+    title: "Lập trình Fullstack Master Node.js",
+    instructor: "Nguyễn Văn A",
+    category: "Technology",
+    rating: 4.9,
+    reviews: 2400,
+    price: "1.290.000đ",
+    duration: "42h",
+    tag: "BESTSELLER",
+    image:
+      "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80",
+    level: "Intermediate",
+  },
+  {
+    id: 2,
+    title: "Phân tích dữ liệu kinh doanh",
+    instructor: "Trần Thị B",
+    category: "Marketing",
+    rating: 4.8,
+    reviews: 1600,
+    price: "990.000đ",
+    duration: "28h",
+    tag: "HOT",
+    image:
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
+    level: "Beginner",
+  },
+  {
+    id: 3,
+    title: "Thiết kế UI/UX Chuyên sâu",
+    instructor: "Lê Hoàng C",
+    category: "Design",
+    rating: 4.7,
+    reviews: 1800,
+    price: "1.590.000đ",
+    duration: "35h",
+    tag: "NEW",
+    image:
+      "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=600&q=80",
+    level: "Intermediate",
+  },
+  {
+    id: 4,
+    title: "Digital Marketing Mastery",
+    instructor: "Phạm Thị D",
+    category: "Marketing",
+    rating: 4.8,
+    reviews: 1200,
+    price: "690.000đ",
+    duration: "24h",
+    image:
+      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80",
+    level: "Beginner",
+  },
+  {
+    id: 5,
+    title: "Quản lý nhân sự hiện đại",
+    instructor: "Phạm Văn E",
+    category: "Business",
+    rating: 4.6,
+    reviews: 980,
+    price: "890.000đ",
+    duration: "18h",
+    image:
+      "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=600&q=80",
+    level: "Intermediate",
+  },
+  {
+    id: 6,
+    title: "Python for Data Science",
+    instructor: "Bùi Thị F",
+    category: "Technology",
+    rating: 4.8,
+    reviews: 2100,
+    price: "959.000đ",
+    originalPrice: "1.350.000đ",
+    discount: 29,
+    duration: "38h",
+    tag: "BESTSELLER",
+    image:
+      "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80",
+    level: "Intermediate",
+  },
+  {
+    id: 7,
+    title: "Nâng cao kỹ năng thuyết trình",
+    instructor: "Đặng Thị G",
+    category: "Soft Skills",
+    rating: 4.7,
+    reviews: 1260,
+    price: "690.000đ",
+    duration: "20h",
+    image:
+      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80",
+    level: "Beginner",
+  },
+  {
+    id: 8,
+    title: "Tiếng Anh giao tiếp",
+    instructor: "Dương H",
+    category: "Languages",
+    rating: 4.6,
+    reviews: 1100,
+    price: "490.000đ",
+    duration: "15h",
+    image:
+      "https://images.unsplash.com/photo-1546410531-bb4ca050552d?auto=format&fit=crop&w=600&q=80",
+    level: "Beginner",
+  },
+];
 
 function formatCount(num) {
   if (num >= 1000) return `${(num / 1000).toFixed(1).replace(".0", "")}k`;
   return String(num);
 }
 
-function formatCurrency(value) {
-  const number = typeof value === "string" ? parseFloat(value) : value;
-  if (!Number.isFinite(number)) return "Free";
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-    maximumFractionDigits: 0,
-  }).format(number);
+const AVATAR_COLORS = ['#1E40AF','#065F46','#5B21B6','#0369A1','#9D174D','#9A3412','#0F766E','#92400E'];
+
+function getInitials(name) {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function getAvatarColor(name) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 }
 
 function FilterChip({ label, onRemove }) {
@@ -65,54 +165,16 @@ function FilterChip({ label, onRemove }) {
 }
 
 function CoursesPage() {
-  const [courses, setCourses] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("popular");
   const [selectedCategories, setSelectedCategories] = useState(["tech"]);
   const [selectedLevels, setSelectedLevels] = useState(["intermediate"]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const coursesPerPage = 8;
-  const totalPages = Math.max(1, Math.ceil(courses.length / coursesPerPage));
+  const totalPages = Math.ceil(courses.length / coursesPerPage);
   const startIndex = (currentPage - 1) * coursesPerPage;
   const visibleCourses = courses.slice(startIndex, startIndex + coursesPerPage);
-
-  const defaultCourseImage =
-    "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80";
-  const defaultInstructorAvatar =
-    "https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg";
-
-  useEffect(() => {
-    const fetchCourses = async () => {
-      setLoading(true);
-      try {
-        const data = await getCoursesApi();
-        setCourses(
-          data.map((course) => ({
-            ...course,
-            image: course.thumbnailUrl || defaultCourseImage,
-            instructor: course.instructorName || "Unknown Instructor",
-            instructorAvatar: defaultInstructorAvatar,
-            category: course.category || "Technology",
-            price: formatCurrency(course.basePrice),
-            rating: course.rating ?? 0,
-            reviews: course.reviews ?? 0,
-            students: course.students ?? 0,
-          })),
-        );
-        setError(null);
-      } catch (err) {
-        console.error(err);
-        setError("Unable to load courses. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCourses();
-  }, []);
 
   const activeFilters = [
     ...selectedCategories
@@ -165,11 +227,6 @@ function CoursesPage() {
     setWishlist((prev) =>
       prev.includes(courseId) ? prev.filter((id) => id !== courseId) : [...prev, courseId],
     );
-  };
-
-  const handleAddToCart = (course) => {
-    addToCart(course);
-    setError(null);
   };
 
   return (
@@ -226,13 +283,8 @@ function CoursesPage() {
             </div>
           </div>
 
-          {loading ? (
-            <div className="courses-loading">Loading courses...</div>
-          ) : error ? (
-            <div className="courses-error">{error}</div>
-          ) : (
-            <div className={`courses-grid ${viewMode === "list" ? "courses-grid--list" : ""}`}>
-              {visibleCourses.map((course) => (
+          <div className={`courses-grid ${viewMode === "list" ? "courses-grid--list" : ""}`}>
+            {visibleCourses.map((course) => (
               <div key={course.id} className="course-card-course">
                 <div className="course-card-img">
                   <img src={course.image} alt={course.title} />
@@ -244,64 +296,58 @@ function CoursesPage() {
                   >
                     <BiHeart />
                   </button>
-                  <div className="course-image-badges">
-                    <span
-                      className={`course-badge ${categoryBadgeClass[course.category] || "badge-tech"}`}
-                    >
-                      {course.category}
+                  {course.tag && (
+                    <span className={`course-tag-badge course-tag-badge--${course.tag.toLowerCase()}`}>
+                      {course.tag}
                     </span>
-                    <span
-                      className={`course-badge ${levelBadgeClass[course.level] || "badge-intermediate"}`}
-                    >
-                      {course.level}
-                    </span>
-                  </div>
+                  )}
+                  {course.duration && (
+                    <span className="course-duration-badge">{course.duration}</span>
+                  )}
                 </div>
 
                 <div className="course-card-body">
                   <h3 className="course-title">{course.title}</h3>
 
                   <div className="course-instructor-row">
-                    <img
-                      src={course.instructorAvatar}
-                      alt={course.instructor}
-                      className="course-instructor-avatar"
-                    />
+                    <div
+                      className="course-instructor-avatar-initials"
+                      style={{ background: getAvatarColor(course.instructor) }}
+                      aria-hidden="true"
+                    >
+                      {getInitials(course.instructor)}
+                    </div>
                     <span className="course-author">{course.instructor}</span>
                   </div>
 
                   <div className="course-rating">
+                    <span className="course-rating-value">{course.rating}</span>
                     <div className="course-rating-stars">
-                      <strong>{course.rating}</strong>
-                      <FaStar className="rating-star-icon" />
-                      <small>({formatCount(course.reviews)})</small>
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <FaStar
+                          key={i}
+                          className={`rating-star-icon${i > Math.round(course.rating) ? " rating-star-empty" : ""}`}
+                        />
+                      ))}
                     </div>
-                    <div className="course-students">
-                      <Users size={14} />
-                      <span>{formatCount(course.students)} students</span>
-                    </div>
+                    <span className="course-reviews">({formatCount(course.reviews)})</span>
                   </div>
 
                   <div className="course-card-bottom">
                     <div className="course-price-block">
                       <span className="course-price">{course.price}</span>
                       {course.originalPrice && (
-                        <>
-                          <span className="course-original-price">{course.originalPrice}</span>
-                          <span className="course-discount">-{course.discount}%</span>
-                        </>
+                        <span className="course-original-price">{course.originalPrice}</span>
                       )}
                     </div>
-                    <button type="button" className="add-to-cart-btn" onClick={() => handleAddToCart(course)}>
-                      <BiCart size={18} />
-                      <span>Add to Cart</span>
+                    <button type="button" className="enroll-btn">
+                      Enroll Now
                     </button>
                   </div>
                 </div>
               </div>
             ))}
-            </div>
-          )}
+          </div>
 
           <div className="pagination-section" aria-label="Courses pagination">
             <button

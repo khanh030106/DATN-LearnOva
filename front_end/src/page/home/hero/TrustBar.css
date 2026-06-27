@@ -1,0 +1,55 @@
+.trust-bar {
+    padding: 28px 48px;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    background: white;
+    display: flex;
+    align-items: center;
+    gap: 44px;
+    flex-wrap: wrap;
+}
+
+.trust-bar__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #94a3b8;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.trust-bar__logos {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    flex: 1;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.trust-bar__logo {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: -0.3px;
+    transition: color 0.2s;
+}
+
+.trust-bar__logo:hover {
+    color: #64748b;
+}
+
+@media (max-width: 768px) {
+    .trust-bar {
+        padding: 20px 24px;
+        gap: 16px;
+    }
+
+    .trust-bar__logos {
+        gap: 20px;
+    }
+
+    .trust-bar__logo {
+        font-size: 15px;
+    }
+}

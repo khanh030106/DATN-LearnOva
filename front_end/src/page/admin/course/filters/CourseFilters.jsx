@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Search } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 import "./CourseFilters.css";
 
 const categoryFilterOptions = [
@@ -30,7 +30,7 @@ const priceTypeOptions = [
   { id: "free", label: "Free" },
 ];
 
-const CourseFilters = () => {
+const CourseFilters = ({ onAddCourse }) => {
   const [searchText, setSearchText] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedInstructor, setSelectedInstructor] = useState("all");
@@ -281,6 +281,15 @@ const CourseFilters = () => {
               ))}
             </div>
           </div>
+
+          <button
+            type="button"
+            className="courseFiltersAddButton"
+            onClick={onAddCourse}
+          >
+            <Plus size={18} />
+            Add Course
+          </button>
         </div>
       </div>
     </section>

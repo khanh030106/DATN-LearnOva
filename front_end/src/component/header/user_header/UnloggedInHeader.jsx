@@ -27,14 +27,8 @@ const Header = () => {
         let ticking = false;
 
         const updateHeaderState = () => {
-            const shouldUseScrolledHeader =
-                useSolidHeader || window.scrollY > (isHeroHeader ? 120 : 20);
-
+            const shouldUseScrolledHeader = useSolidHeader || isHeroHeader || window.scrollY > 20;
             header.classList.toggle("scrolled", shouldUseScrolledHeader);
-            header.classList.toggle(
-                "hero-header-top",
-                isHeroHeader && !shouldUseScrolledHeader
-            );
             ticking = false;
         };
 
@@ -56,7 +50,7 @@ const Header = () => {
     return (
         <header
             ref={headerRef}
-            className={`main-header${isHeroHeader ? " hero-header" : ""}${isCartHeader ? " cart-header" : ""}`}
+            className={`main-header scrolled${isCartHeader ? " cart-header" : ""}`}
         >
             <div className="header-container">
                 <a href="/learnova/home" className="logo">

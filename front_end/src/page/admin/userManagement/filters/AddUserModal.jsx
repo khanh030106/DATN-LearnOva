@@ -1,199 +1,306 @@
+import {
+  Calendar,
+  IdCard,
+  Mail,
+  LockKeyhole,
+  Phone,
+  Shield,
+  User,
+  VenusAndMars,
+  X,
+} from "lucide-react";
 import { useState } from "react";
 import "./AddUserModal.css";
 
-const AddUserModal = ({
-    isOpen,
-    onClose,
-    onSubmit
-}) => {
-    const initialForm = {
-        username:"",
-        email:"",
-        phone:"",
-        avatar:null,
-        birthday:"",
-        gender:""
-    };
-    const [formData,setFormData] = useState(initialForm);
-    const handleChange = (e)=>{
-        const {name,value}=e.target;
-        setFormData({
-            ...formData,
-            [name]:value
-        });
-
-    };
-    const handlePhoneChange = (e)=>{
-        const value = e.target.value.replace(/\D/g,"");
-        setFormData({
-            ...formData,
-            phone:value
-        });
-
-    };
-    const handleAvatarChange=(e)=>{
-
-        setFormData({
-            ...formData,
-            avatar:e.target.files[0]
-        });
-
-    };
-    const validateForm = ()=>{
-        const emailRegex =
-        /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-        if(!emailRegex.test(formData.email)){
-            alert("Email must be a valid Gmail address");
-            return false;
-        }
-        const phoneRegex =
-        /^0[0-9]{9}$/;
-
-        if(!phoneRegex.test(formData.phone)){
-
-            alert(
-              "Phone number must start with 0 and contain exactly 10 digits"
-            );
-            return false;
-        }
-        return true;
-    };
-    const handleSubmit=(e)=>{
-
-        e.preventDefault();
-
-        if(
-            !formData.username ||
-            !formData.email ||
-            !formData.phone ||
-            !formData.birthday ||
-            !formData.gender
-        ){
-
-            alert("Please fill all required fields");
-
-            return;
-
-        }
-
-        if(!validateForm()){
-            return;
-        }
-        onSubmit(formData);
-        setFormData(initialForm);
-
-    };
-    const handleClose = ()=>{
-        setFormData(initialForm);
-        onClose();
-    };
-    if(!isOpen)
-        return null;
-
-    return (
-        <div className="modalOverlay">
-            <div className="addUserModal">
-                <h2>
-                    Add New User
-                </h2>
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        Username *
-                    </label>
-                    <input
-                        name="username"
-                        placeholder="Enter username"
-                        value={formData.username}
-                        onChange={handleChange}
-                    />
-                    <label>
-                        Email *
-                    </label>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="example@gmail.com"
-                        value={formData.email}
-                        onChange={handleChange}
-                    />
-                    <label>
-                        Phone *
-                    </label>
-
-                    <input
-                        type="text"
-                        name="phone"
-                        placeholder="0987654321"
-                        maxLength="10"
-                        value={formData.phone}
-                        onChange={handlePhoneChange}
-                    />
-                    <label>
-                        Avatar
-                    </label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleAvatarChange}
-                    />
-                    <label>
-                        Date of birth *
-                    </label>
-                    <input
-                        type="date"
-                        name="birthday"
-                        value={formData.birthday}
-                        onChange={handleChange}
-                    />
-                    <label>
-                        Gender *
-                    </label>
-                    <div className="genderGroup">
-                        <label>
-
-                            <input
-                                type="radio"
-                                name="gender"
-                                value="MALE"
-                                checked={
-                                    formData.gender==="MALE"
-                                }
-                                onChange={handleChange}
-                            />
-                            Male
-                        </label>
-                        <label>
-
-                            <input
-                                type="radio"
-                                name="gender"
-                                value="FEMALE"
-                                checked={
-                                    formData.gender==="FEMALE"
-                                }
-                                onChange={handleChange}
-                            />
-                            Female
-                        </label>
-                    </div>
-                    <div className="modalActions">
-                        <button
-                            type="button"
-                            onClick={handleClose}
-                            className="cancelBtn"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="saveBtn"
-                        >
-                            Create User
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    );
+const initialForm = {
+  fullName: "",
+  email: "",
+  password: "",
+  phone: "",
+  dateOfBirth: "",
+  gender: "",
+  role: "ROLE_USER",
 };
+
+const roleOptions = [
+  { value: "ROLE_USER", label: "Student" },
+  { value: "ROLE_TEACHER", label: "Instructor" },
+  { value: "ROLE_ADMIN", label: "Admin" },
+];
+
+const genderOptions = ["Male", "Female", "Other"];
+
+const getTodayValue = () => new Date().toISOString().slice(0, 10);
+
+const AddUserModal = ({ isOpen, onClose, onSubmit }) => {
+  const [formData, setFormData] = useState(initialForm);
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [submitError, setSubmitError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  if (!isOpen) return null;
+
+  const updateField = (name, value) => {
+    setFormData((current) => ({ ...current, [name]: value }));
+    setFieldErrors((current) => ({ ...current, [name]: "" }));
+    setSubmitError("");
+  };
+
+  const handleChange = (event) => {
+    updateField(event.target.name, event.target.value);
+  };
+
+  const handlePhoneChange = (event) => {
+    updateField("phone", event.target.value.replace(/\D/g, "").slice(0, 10));
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    const phoneRegex = /^0[0-9]{9}$/;
+    const today = getTodayValue();
+
+    if (!formData.fullName.trim()) {
+      errors.fullName = "Full name is required.";
+    }
+
+    if (!formData.email.trim()) {
+      errors.email = "Email is required.";
+    } else if (!emailRegex.test(formData.email.trim())) {
+      errors.email = "Email must be a valid Gmail address.";
+    }
+
+    if (!formData.password) {
+      errors.password = "Password is required.";
+    } else if (formData.password.length < 6) {
+      errors.password = "Password must contain at least 6 characters.";
+    }
+
+    if (!formData.phone.trim()) {
+      errors.phone = "Phone number is required.";
+    } else if (!phoneRegex.test(formData.phone)) {
+      errors.phone = "Phone number must start with 0 and contain exactly 10 digits.";
+    }
+
+    if (!formData.dateOfBirth) {
+      errors.dateOfBirth = "Date of birth is required.";
+    } else if (formData.dateOfBirth > today) {
+      errors.dateOfBirth = "Date of birth cannot be in the future.";
+    }
+
+    if (!formData.gender) {
+      errors.gender = "Gender is required.";
+    }
+
+    if (!formData.role) {
+      errors.role = "Role is required.";
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    const payload = {
+      fullName: formData.fullName.trim(),
+      email: formData.email.trim(),
+      password: formData.password,
+      phone: formData.phone.trim(),
+      dateOfBirth: formData.dateOfBirth,
+      gender: formData.gender,
+      role: formData.role,
+      isActive: true,
+      isDeleted: false,
+      avatar: null,
+      coverImage: null,
+    };
+
+    try {
+      await onSubmit(payload);
+      setFormData(initialForm);
+      setFieldErrors({});
+    } catch (error) {
+      const message =
+        error?.response?.data?.message ||
+        error?.response?.data ||
+        "Could not create this user. Please try again.";
+      setSubmitError(message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleClose = () => {
+    setFormData(initialForm);
+    setFieldErrors({});
+    setSubmitError("");
+    onClose();
+  };
+
+  const renderFieldError = (field) =>
+    fieldErrors[field] ? <p className="add-user-field-error">{fieldErrors[field]}</p> : null;
+
+  return (
+    <div className="add-user-overlay" onClick={handleClose} role="presentation">
+      <form
+        className="add-user-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Add New User"
+        onClick={(event) => event.stopPropagation()}
+        onSubmit={handleSubmit}
+      >
+        <button
+          type="button"
+          className="add-user-close"
+          onClick={handleClose}
+          aria-label="Close popup"
+        >
+          <X size={22} aria-hidden="true" />
+        </button>
+
+        <div className="add-user-header">
+          <p>Add User</p>
+          <h2>Create New Account</h2>
+        </div>
+
+        <div className="add-user-grid">
+          <label className="add-user-field">
+            <span>
+              <User aria-hidden="true" />
+              Full Name *
+            </span>
+            <input
+              name="fullName"
+              placeholder="Enter full name"
+              value={formData.fullName}
+              onChange={handleChange}
+            />
+            {renderFieldError("fullName")}
+          </label>
+
+          <label className="add-user-field">
+            <span>
+              <Mail aria-hidden="true" />
+              Email *
+            </span>
+            <input
+              type="email"
+              name="email"
+              placeholder="example@gmail.com"
+              value={formData.email}
+              onChange={handleChange}
+            />
+            {renderFieldError("email")}
+          </label>
+
+          <label className="add-user-field">
+            <span>
+              <LockKeyhole aria-hidden="true" />
+              Password *
+            </span>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+            {renderFieldError("password")}
+          </label>
+
+          <label className="add-user-field">
+            <span>
+              <Phone aria-hidden="true" />
+              Phone *
+            </span>
+            <input
+              type="text"
+              name="phone"
+              placeholder="0987654321"
+              value={formData.phone}
+              onChange={handlePhoneChange}
+            />
+            {renderFieldError("phone")}
+          </label>
+
+          <label className="add-user-field">
+            <span>
+              <Calendar aria-hidden="true" />
+              Date of Birth *
+            </span>
+            <input
+              type="date"
+              name="dateOfBirth"
+              max={getTodayValue()}
+              value={formData.dateOfBirth}
+              onChange={handleChange}
+            />
+            {renderFieldError("dateOfBirth")}
+          </label>
+
+          <label className="add-user-field">
+            <span>
+              <VenusAndMars aria-hidden="true" />
+              Gender *
+            </span>
+            <select name="gender" value={formData.gender} onChange={handleChange}>
+              <option value="">Select gender</option>
+              {genderOptions.map((gender) => (
+                <option key={gender} value={gender}>
+                  {gender}
+                </option>
+              ))}
+            </select>
+            {renderFieldError("gender")}
+          </label>
+
+          <label className="add-user-field">
+            <span>
+              <Shield aria-hidden="true" />
+              Role *
+            </span>
+            <select name="role" value={formData.role} onChange={handleChange}>
+              {roleOptions.map((role) => (
+                <option key={role.value} value={role.value}>
+                  {role.label}
+                </option>
+              ))}
+            </select>
+            {renderFieldError("role")}
+          </label>
+
+          <div className="add-user-note">
+            <IdCard aria-hidden="true" />
+            <span>ID is generated automatically after the account is created.</span>
+          </div>
+        </div>
+
+        {submitError ? <p className="add-user-submit-error">{submitError}</p> : null}
+
+        <div className="add-user-actions">
+          <button
+            type="button"
+            className="add-user-cancel"
+            onClick={handleClose}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </button>
+          <button type="submit" className="add-user-submit" disabled={isSubmitting}>
+            {isSubmitting ? "Creating..." : "Create User"}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
 export default AddUserModal;

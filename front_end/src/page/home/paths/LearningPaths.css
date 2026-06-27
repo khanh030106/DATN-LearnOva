@@ -1,0 +1,103 @@
+.lp {
+    padding: 96px 0;
+    background:
+        radial-gradient(circle at 12% 25%, rgba(37, 99, 235, 0.16), transparent 36%),
+        radial-gradient(circle at 88% 78%, rgba(147, 197, 253, 0.06), transparent 36%),
+        linear-gradient(160deg, #071a33 0%, #0b2545 60%, #071a33 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.lp__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.lp__header {
+    text-align: center;
+    margin-bottom: 64px;
+}
+
+.lp__eyebrow {
+    display: block;
+    margin-bottom: 16px;
+    color: #93c5fd;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.lp__title {
+    margin: 0 0 16px;
+    color: #ffffff;
+    font-size: clamp(1.9rem, 3.4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.18;
+}
+
+.lp__subtitle {
+    margin: 0;
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.lp__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.lp__footer {
+    margin-top: 52px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.lp__footer-text {
+    margin: 0;
+    color: #475569;
+    font-size: 0.9rem;
+}
+
+.lp__quiz-btn {
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #93c5fd;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(147, 197, 253, 0.35);
+    transition: color 0.2s, text-decoration-color 0.2s;
+}
+
+.lp__quiz-btn:hover {
+    color: #bfdbfe;
+    text-decoration-color: #bfdbfe;
+}
+
+@media (max-width: 900px) {
+    .lp__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .lp {
+        padding: 72px 0;
+    }
+
+    .lp__container {
+        padding: 0 16px;
+    }
+
+    .lp__header {
+        margin-bottom: 48px;
+    }
+}

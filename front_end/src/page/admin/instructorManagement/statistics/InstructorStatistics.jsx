@@ -1,39 +1,79 @@
+import { useEffect, useState } from "react";
 import CourseLoadCard from "./cards/courseLoad/CourseLoadCard";
 import StudentEnrollmentCard from "./cards/studentEnrollment/StudentEnrollmentCard";
 import RevenueSummaryCard from "./cards/revenueSummary/RevenueSummaryCard";
 import "./InstructorStatistics.css";
+import { getAdminInstructorsApi } from "../../../../api/admin/InstructorApi.js";
+import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 
-const instructorStatisticsData = [
-  {
-    id: "course-load",
-    render: (props) => <CourseLoadCard {...props} />,
-    title: "Managed Courses",
-    value: "33",
-    note: "Number of courses currently managed by instructors.",
-  },
-  {
-    id: "student-enrollment",
-    render: (props) => <StudentEnrollmentCard {...props} />,
-    title: "Student Enrollment",
-    value: "5.680",
-    note: "Total number of student enrollments in existing classes.",
-  },
-  {
-    id: "revenue-summary",
-    render: (props) => <RevenueSummaryCard {...props} />,
-    title: "System Revenue",
-    value: "608.000.000 đ",
-    note: "Estimated total revenue from active instructors.",
-  },
-];
+
+const formatMoney = (v) => {
+  if (v == null) return "0 đ";
+  return new Intl.NumberFormat("vi-VN").format(v) + " đ";
+};
 
 const InstructorStatistics = () => {
+  const axiosPrivate = useAxiosPrivate();
+  const [stats, setStats] = useState({
+    totalCourses: 0,
+    totalStudents: 0,
+    totalRevenue: 0,
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getAdminInstructorsApi(axiosPrivate);
+        if (!Array.isArray(data)) return;
+        const totalCourses = data.reduce((sum, i) => sum + (i.numberOfClasses ?? 0), 0);
+        const totalStudents = data.reduce((sum, i) => sum + (i.totalStudents ?? 0), 0);
+        const totalRevenue = data.reduce((sum, i) => sum + Number(i.totalRevenue ?? 0), 0);
+        if (mounted) setStats({ totalCourses, totalStudents, totalRevenue });
+      } catch (error) {
+        console.error("Error fetching instructor statistics:", error);
+        if (mounted) {
+        const errorMessage = 
+          error.response?.status === 403 ? "You don't have permission to view this data" :
+          error.response?.status === 401 ? "Your session has expired. Please login again" :
+          error.message || "Failed to load instructor statistics";
+        setError(errorMessage);
+        }
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    };
+    load();
+    return () => { mounted = false; };
+  }, [axiosPrivate]);
+
   return (
     <section className="instructorStatistics" aria-label="Thống kê giảng viên">
+      {error && (
+        <div style={{ 
+          padding: "12px", 
+          marginBottom: "16px", 
+          backgroundColor: "#fee", 
+          color: "#c00", 
+          borderRadius: "4px",
+          border: "1px solid #fcc"
+        }}>
+          ⚠️ {error}
+        </div>
+      )}
       <div className="instructorStatisticsGrid">
-        {instructorStatisticsData.map(({ id, render, ...statProps }) => (
-          <div key={id}>{render(statProps)}</div>
-        ))}
+        <div>
+          <CourseLoadCard title="Managed Courses" value={isLoading ? "—" : String(stats.totalCourses)} note="Number of courses currently managed by instructors." />
+        </div>
+        <div>
+          <StudentEnrollmentCard title="Student Enrollment" value={isLoading ? "—" : new Intl.NumberFormat("vi-VN").format(stats.totalStudents)} note="Total number of student enrollments in existing classes." />
+        </div>
+        <div>
+          <RevenueSummaryCard title="System Revenue" value={isLoading ? "—" : formatMoney(stats.totalRevenue)} note="Estimated total revenue from active instructors." />
+        </div>
       </div>
     </section>
   );

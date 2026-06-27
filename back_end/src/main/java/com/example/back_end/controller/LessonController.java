@@ -5,6 +5,7 @@ import com.example.back_end.dto.resquest.CreateLessonRequest;
 import com.example.back_end.dto.resquest.UpdateLessonRequest;
 import com.example.back_end.dto.resquest.UpdateLessonVideoRequest;
 import com.example.back_end.service.LessonService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +16,10 @@ public class LessonController {
 
     private final LessonService lessonService;
 
-    @PostMapping("/sections/{sectionId}/lessons")
+    @PostMapping("/sections/{sectionId}/lessons")  // /lesson/create
     public CreateLessonResponse createLesson(
             @PathVariable Long sectionId,
-            @RequestBody CreateLessonRequest request
+            @Valid @RequestBody CreateLessonRequest request
     ) {
         Long lessonId = lessonService.createLesson(
                 sectionId,
@@ -36,7 +37,7 @@ public class LessonController {
         lessonService.updateLesson(lessonId, request);
     }
 
-    @PutMapping("/lessons/{lessonId}/video")
+    @PutMapping("/lessons/{lessonId}/video")  // /lesson/{lessonId}/up
     public void updateLessonVideo(
             @PathVariable Long lessonId,
             @RequestBody UpdateLessonVideoRequest request

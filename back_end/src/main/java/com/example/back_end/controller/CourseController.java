@@ -21,7 +21,7 @@ public class CourseController {
     private final CourseService courseService;
     private final S3Service s3Service;
 
-    @PostMapping("/create-draft-course")
+    @PostMapping("/create-draft-course")   //  /create/draft
     public CreateDraftCourseResponse createDraftCourse(
             @Valid @RequestBody CreateDraftCourseRequest request,
             Authentication authentication
@@ -34,7 +34,7 @@ public class CourseController {
         return new CreateDraftCourseResponse(courseId);
     }
 
-    @GetMapping("/video-url")
+    @GetMapping("/video-url")            //  /video/url
     public GetFileUrlResponse getVideoUrl(
             @RequestParam String fileKey
     ) {
@@ -43,7 +43,7 @@ public class CourseController {
         return new GetFileUrlResponse(url);
     }
 
-    @GetMapping("/my-courses")
+    @GetMapping("/my-courses")          // /courses/mine
     public List<TeacherCoursesResponse> getMyCourses(
             Authentication authentication
     ) {

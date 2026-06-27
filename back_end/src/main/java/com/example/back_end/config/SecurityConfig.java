@@ -1,8 +1,5 @@
 package com.example.back_end.config;
 
-import com.example.back_end.security.CustomUserDetailsService;
-import com.example.back_end.security.JwtAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +16,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.example.back_end.security.OAuth2AuthenticationSuccessHandler;
+import org.springframework.http.HttpMethod;
+import com.example.back_end.security.CustomUserDetailsService;
+import com.example.back_end.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 
 
 @Configuration
@@ -28,6 +30,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomUserDetailsService customUserDetailsService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -35,21 +38,35 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
+
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/learnova/auth/**").permitAll()
                         .requestMatchers("/api/learnova/uploads/presigned-url").permitAll()
                         .requestMatchers("/api/learnova/courses/video-url/**").permitAll()
                         .requestMatchers("/api/learnova/courses/my-courses").permitAll()
+                        .requestMatchers("/api/learnova/admin/users/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/categories-management/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/admin/courses-management/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/learnova/admin/courses-management/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/learnova/admin/courses-management/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/courses-management/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/vouchers/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/instructors-management/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/tags-management/**").permitAll()
                         .requestMatchers("/api/learnova/user/me").permitAll()
-                        .requestMatchers("/api/learnova/review/post").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/learnova/instructors", "/api/learnova/instructors/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/learnova/courses", "/api/learnova/courses/**").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/api/learnova/**").permitAll()
-                        .requestMatchers("/api/learnova/debug/**").permitAll()
+                        .requestMatchers("/api/learnova/review/**").permitAll()
+                                .requestMatchers("/api/learnova/auth/resend-verification").permitAll()
+                                .requestMatchers("/error").permitAll()// để test
                         .anyRequest().authenticated()
                 )
+
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                )
+
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(
                         jwtAuthenticationFilter,

@@ -1,127 +1,74 @@
-import "./footer.css";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faFacebookF, faInstagram, faLinkedinIn} from "@fortawesome/free-brands-svg-icons";
+import './footer.css';
 
-const Footer = () => {
+export default function Footer() {
     return (
-        <footer className="footer">
-            <div className="footer-container">
-
-                <div className="footer-grid">
-
-                    <div className="footer-brand">
-                        <div className="footer-logo">
-                            LearnOva
+        <footer className="footer" aria-label="Site footer">
+            <div className="footer__container">
+                <div className="footer__grid">
+                    {/* Brand */}
+                    <div className="footer__brand">
+                        <div className="footer__logo">
+                            <div className="footer__logo-icon">
+                                <div className="footer__logo-play" />
+                            </div>
+                            <span className="footer__logo-text">LearnOva</span>
                         </div>
-
-                        <p className="footer-desc">
-                            Shaping the future of knowledge.
-                            A leading online learning platform
-                            for global learners everywhere.
+                        <p className="footer__tagline">
+                            Empowering 10 million learners worldwide to build real skills
+                            and transform their careers.
                         </p>
                     </div>
 
-                    <div>
-                        <h5 className="footer-title">
-                            LINKS
-                        </h5>
-
-                        <ul className="footer-links">
-                            <li>
-                                <a href="#">
-                                    Popular Courses
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#">
-                                    Learning Paths
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#">
-                                    Instructors
-                                </a>
-                            </li>
-                        </ul>
+                    <div className="footer__col">
+                        <h3 className="footer__col-heading">Platform</h3>
+                        <nav>
+                            <a href="/learnova/courses" className="footer__link">Explore courses</a>
+                            <a href="#" className="footer__link">Teach on LearnOva</a>
+                            <a href="#" className="footer__link">LearnOva Pro</a>
+                            <a href="#" className="footer__link">For Teams</a>
+                        </nav>
                     </div>
 
-                    <div>
-                        <h5 className="footer-title">
-                            SUPPORT
-                        </h5>
-
-                        <ul className="footer-links">
-                            <li>
-                                <a href="#">
-                                    Help Center
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#">
-                                    Terms of Service
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#">
-                                    Privacy Policy
-                                </a>
-                            </li>
-                        </ul>
+                    <div className="footer__col">
+                        <h3 className="footer__col-heading">Subjects</h3>
+                        <nav>
+                            <a href="#" className="footer__link">Development</a>
+                            <a href="#" className="footer__link">Business</a>
+                            <a href="#" className="footer__link">Design</a>
+                            <a href="#" className="footer__link">Finance</a>
+                        </nav>
                     </div>
 
-                    <div>
-                        <h5 className="footer-title">
-                            NEWSLETTER
-                        </h5>
-
-                        <p className="footer-news">
-                            Get updates about the latest courses and learning resources.
-                        </p>
-
-                        <div className="footer-subscribe">
-                            <input
-                                type="email"
-                                placeholder="Your email"
-                            />
-
-                            <button>
-                                Submit
-                            </button>
-                        </div>
+                    <div className="footer__col">
+                        <h3 className="footer__col-heading">Company</h3>
+                        <nav>
+                            <a href="#" className="footer__link">About us</a>
+                            <a href="#" className="footer__link">Blog</a>
+                            <a href="#" className="footer__link">Careers</a>
+                            <a href="#" className="footer__link">Press</a>
+                        </nav>
                     </div>
 
+                    <div className="footer__col">
+                        <h3 className="footer__col-heading">Support</h3>
+                        <nav>
+                            <a href="#" className="footer__link">Help Center</a>
+                            <a href="#" className="footer__link">Refund Policy</a>
+                            <a href="#" className="footer__link">Privacy Policy</a>
+                            <a href="#" className="footer__link">Terms</a>
+                        </nav>
+                    </div>
                 </div>
 
-                <div className="footer-bottom">
-
-                    <p>
-                        © 2024 LearnOva.
-                        Shaping the future of knowledge.
-                    </p>
-
-                    <div className="footer-social">
-                        <a href="#">
-                            <FontAwesomeIcon icon={faFacebookF} />
-                        </a>
-
-                        <a href="#">
-                            <FontAwesomeIcon icon={faLinkedinIn} />
-                        </a>
-
-                        <a href="#">
-                            <FontAwesomeIcon icon={faInstagram} />
-                        </a>
+                <div className="footer__bottom">
+                    <span className="footer__copy">© 2024 LearnOva, Inc. All rights reserved.</span>
+                    <div className="footer__legal">
+                        <a href="#" className="footer__legal-link">Privacy</a>
+                        <a href="#" className="footer__legal-link">Terms</a>
+                        <a href="#" className="footer__legal-link">Cookies</a>
                     </div>
-
                 </div>
-
             </div>
         </footer>
     );
 }
-
-export default Footer;

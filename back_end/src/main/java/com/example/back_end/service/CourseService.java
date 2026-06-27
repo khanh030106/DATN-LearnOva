@@ -9,6 +9,7 @@ import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Section;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.CourseStatus;
+import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.CourseRepository;
 import com.example.back_end.repository.SectionRepository;
 import com.example.back_end.repository.UserRepository;
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -36,8 +36,8 @@ public class CourseService {
             String email
     ) {
         User instructor = userRepository
-                .findByEmailAndIsDeletedFalse(email, false)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Course course = new Course();
 
@@ -64,7 +64,7 @@ public class CourseService {
     public List<TeacherCoursesResponse> getMyCourses(String email) {
 
         User instructor = userRepository
-                .findByEmailAndIsDeletedFalse(email, false)
+                .findByEmailAndIsDeletedFalse(email)
                 .orElseThrow();
 
         return courseRepository
