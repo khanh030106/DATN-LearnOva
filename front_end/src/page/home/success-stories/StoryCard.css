@@ -1,0 +1,145 @@
+.sc {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.sc:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 44px rgba(29, 78, 216, 0.1);
+}
+
+/* ── Identity ────────────────────────────────────── */
+.sc__identity {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.sc__photo {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    flex-shrink: 0;
+    border: 2px solid #dbeafe;
+}
+
+.sc__name {
+    margin: 0 0 3px;
+    color: #0f172a;
+    font-size: 0.93rem;
+    font-weight: 700;
+}
+
+.sc__path {
+    margin: 0;
+    color: #1d4ed8;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* ── Before / After ──────────────────────────────── */
+.sc__transform {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #e8edf3;
+}
+
+.sc__transform-col {
+    flex: 1;
+    min-width: 0;
+}
+
+.sc__label {
+    display: block;
+    font-size: 8.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-bottom: 5px;
+}
+
+.sc__label--before { color: #94a3b8; }
+.sc__label--after  { color: #22c55e; }
+
+.sc__role {
+    margin: 0;
+    font-size: 0.86rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.sc__role--before { color: #64748b; }
+.sc__role--after  { color: #0f172a; font-weight: 700; }
+
+.sc__company-badge {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 2px 8px;
+    border-radius: 5px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 9.5px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.sc__arrow {
+    color: #22c55e;
+    font-size: 1.15rem;
+    font-weight: 900;
+    flex-shrink: 0;
+}
+
+/* ── Time bar ────────────────────────────────────── */
+.sc__time {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sc__time-track {
+    height: 4px;
+    border-radius: 2px;
+    background: #e8edf3;
+    overflow: hidden;
+}
+
+.sc__time-fill {
+    height: 100%;
+    width: 65%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #1d4ed8, #2563eb);
+}
+
+.sc__time-label {
+    color: #64748b;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+/* ── Quote ───────────────────────────────────────── */
+.sc__quote {
+    margin: 0;
+    padding: 0;
+    border: none;
+    color: #334155;
+    font-size: 0.88rem;
+    font-style: italic;
+    line-height: 1.75;
+}

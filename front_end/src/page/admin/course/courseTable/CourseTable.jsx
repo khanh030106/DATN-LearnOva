@@ -11,7 +11,7 @@ const pageSize = 10;
 const courseStatusOptions = ["DRAFT", "PUBLISHED", "ARCHIVED", "DELETED"];
 
 const emptyForm = {
-  thumbnailUrl: "",
+  thumbnailKey: "",
   title: "",
   slug: "",
   description: "",
@@ -22,6 +22,7 @@ const emptyForm = {
   level: "Beginner",
   status: "DRAFT",
   instructorId: "",
+  tagIds: [],
 };
 
 const formatDate = (value) => {
@@ -58,7 +59,7 @@ const getInstructorName = (instructor) =>
 const getCourseDisplayStatus = (course) => course.status || "N/A";
 
 const toFormData = (course) => ({
-  thumbnailUrl: course.thumbnailUrl || "",
+  thumbnailKey: course.thumbnailKey || "",
   title: course.title || "",
   slug: course.slug || "",
   description: course.description || "",
@@ -69,10 +70,11 @@ const toFormData = (course) => ({
   level: course.level || "Beginner",
   status: course.status || "DRAFT",
   instructorId: course.instructorId ? String(course.instructorId) : "",
+  tagIds: (course.tagIds || []).map(Number),
 });
 
 const buildPayload = (form) => ({
-  thumbnailUrl: form.thumbnailUrl.trim(),
+  thumbnailKey: form.thumbnailKey.trim(),
   title: form.title.trim(),
   slug: form.slug.trim(),
   description: form.description.trim(),
@@ -84,71 +86,83 @@ const buildPayload = (form) => ({
   status: form.status,
   instructorId: Number(form.instructorId),
   isDeleted: form.status === "DELETED",
+  tagIds: form.tagIds.map(Number),
 });
 
-const CourseViewModal = ({ course, onClose }) => (
-  <div className="courseModalBackdrop" role="presentation" onClick={onClose}>
-    <div
-      className="courseModal"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Course details"
-      onClick={(event) => event.stopPropagation()}
-    >
-      <div className="courseModalHeader">
-        <div>
-          <p className="courseModalEyebrow">COURSE DETAIL</p>
-          <h2>{course.title}</h2>
-        </div>
-        <button type="button" className="courseModalClose" onClick={onClose} aria-label="Close course details">
-          <X size={20} />
-        </button>
-      </div>
+const CourseViewModal = ({ course, availableTags, onClose }) => {
+  const tagNames = useMemo(() => {
+    if (!availableTags || !course.tagIds?.length) return [];
+    const tagMap = new Map(availableTags.map((t) => [t.id, t.name]));
+    return course.tagIds.map((id) => tagMap.get(id) || `Tag #${id}`);
+  }, [course.tagIds, availableTags]);
 
-      <div className="courseModalBody">
-        {course.thumbnailUrl ? (
-          <img className="courseModalThumbnail" src={course.thumbnailUrl} alt={course.title} />
-        ) : null}
-        <p><strong>Instructor:</strong> {course.instructorName || "N/A"}</p>
-        <p><strong>Slug:</strong> {course.slug || "N/A"}</p>
-        <p><strong>Level:</strong> {course.level || "N/A"}</p>
-        <p><strong>Status:</strong> {getCourseDisplayStatus(course)}</p>
-        <p><strong>Language:</strong> {course.language || "N/A"}</p>
-        <p><strong>Published At:</strong> {formatDate(course.publishedAt)}</p>
-        <p><strong>Price:</strong> {formatPrice(course.basePrice)}</p>
-        <p><strong>Description:</strong> {course.description || "N/A"}</p>
-
-        <div className="courseModalListSection">
-          <h3>Requirements</h3>
-          <ul>{(course.requirements || []).map((item, index) => <li key={index}>{item}</li>)}</ul>
+  return (
+    <div className="courseModalBackdrop" role="presentation" onClick={onClose}>
+      <div
+        className="courseModal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Course details"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="courseModalHeader">
+          <div>
+            <p className="courseModalEyebrow">COURSE DETAIL</p>
+            <h2>{course.title}</h2>
+          </div>
+          <button type="button" className="courseModalClose" onClick={onClose} aria-label="Close course details">
+            <X size={20} />
+          </button>
         </div>
 
-        <div className="courseModalListSection">
-          <h3>What You Learn</h3>
-          <ul>{(course.whatYouLearn || []).map((item, index) => <li key={index}>{item}</li>)}</ul>
+        <div className="courseModalBody">
+          {course.thumbnailKey ? (
+            <img className="courseModalThumbnail" src={course.thumbnailKey} alt={course.title} />
+          ) : null}
+          <p><strong>Instructor:</strong> {course.instructorName || "N/A"}</p>
+          <p><strong>Slug:</strong> {course.slug || "N/A"}</p>
+          <p><strong>Level:</strong> {course.level || "N/A"}</p>
+          <p><strong>Status:</strong> {getCourseDisplayStatus(course)}</p>
+          <p><strong>Language:</strong> {course.language || "N/A"}</p>
+          <p><strong>Published At:</strong> {formatDate(course.publishedAt)}</p>
+          <p><strong>Price:</strong> {formatPrice(course.basePrice)}</p>
+          <p><strong>Description:</strong> {course.description || "N/A"}</p>
+
+          {tagNames.length > 0 && (
+            <div className="courseModalListSection">
+              <h3>Tags</h3>
+              <div className="courseTagChips">
+                {tagNames.map((name) => (
+                  <span key={name} className="courseTagChip">{name}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="courseModalListSection">
+            <h3>Requirements</h3>
+            <ul>{(course.requirements || []).map((item, index) => <li key={index}>{item}</li>)}</ul>
+          </div>
+
+          <div className="courseModalListSection">
+            <h3>What You Learn</h3>
+            <ul>{(course.whatYouLearn || []).map((item, index) => <li key={index}>{item}</li>)}</ul>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const getCourseErrorMessage = (error, fallback) => {
   const data = error?.response?.data;
-
   if (typeof data === "string") return data;
   if (data?.message) return data.message;
   if (data?.error) return data.error;
-
   return fallback;
 };
 
-const CourseDeleteModal = ({
-  course,
-  error,
-  isDeleting,
-  onClose,
-  onConfirm,
-}) => {
+const CourseDeleteModal = ({ course, error, isDeleting, onClose, onConfirm }) => {
   if (!course) return null;
 
   return (
@@ -163,7 +177,6 @@ const CourseDeleteModal = ({
         <div className="courseDeleteIcon">
           <Trash2 size={24} aria-hidden="true" />
         </div>
-
         <div className="courseDeleteContent">
           <p className="courseModalEyebrow">DELETE COURSE</p>
           <h2>Chuyển khóa học sang DELETED?</h2>
@@ -172,24 +185,12 @@ const CourseDeleteModal = ({
             đổi Status thành <strong>DELETED</strong>.
           </p>
         </div>
-
         {error ? <p className="courseFormError">{error}</p> : null}
-
         <div className="courseModalActions">
-          <button
-            type="button"
-            className="courseModalCancel"
-            onClick={onClose}
-            disabled={isDeleting}
-          >
+          <button type="button" className="courseModalCancel" onClick={onClose} disabled={isDeleting}>
             Cancel
           </button>
-          <button
-            type="button"
-            className="courseModalDanger"
-            onClick={onConfirm}
-            disabled={isDeleting}
-          >
+          <button type="button" className="courseModalDanger" onClick={onConfirm} disabled={isDeleting}>
             {isDeleting ? "Deleting..." : "Confirm Delete"}
           </button>
         </div>
@@ -198,13 +199,7 @@ const CourseDeleteModal = ({
   );
 };
 
-const CourseFormModal = ({
-  course,
-  instructors,
-  axiosClient,
-  onClose,
-  onSaved,
-}) => {
+const CourseFormModal = ({ course, instructors, availableTags, axiosClient, onClose, onSaved }) => {
   const isEdit = Boolean(course);
   const [form, setForm] = useState(() => toFormData(course || emptyForm));
   const [isSaving, setIsSaving] = useState(false);
@@ -220,32 +215,37 @@ const CourseFormModal = ({
     }
   }, [form.instructorId, instructors]);
 
-  const setField = (field, value) => {
+  const setField = (field, value) =>
     setForm((current) => ({ ...current, [field]: value }));
+
+  const toggleTag = (tagId) => {
+    setForm((current) => {
+      const id = Number(tagId);
+      const already = current.tagIds.includes(id);
+      return {
+        ...current,
+        tagIds: already ? current.tagIds.filter((t) => t !== id) : [...current.tagIds, id],
+      };
+    });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     if (!hasInstructorOptions) {
-      setError("Chưa có instructor để gán cho khóa học. Hãy kiểm tra dữ liệu instructor hoặc role ROLE_TEACHER.");
+      setError("Chưa có instructor để gán cho khóa học.");
       return;
     }
-
     if (!form.instructorId) {
       setError("Vui lòng chọn instructor trước khi lưu khóa học.");
       return;
     }
-
     setIsSaving(true);
     setError("");
-
     try {
       const payload = buildPayload(form);
       const savedCourse = isEdit
         ? await updateAdminCourseApi(course.id, payload, axiosClient)
         : await createAdminCourseApi(payload, axiosClient);
-
       onSaved(savedCourse);
       onClose();
     } catch (saveError) {
@@ -278,21 +278,21 @@ const CourseFormModal = ({
         <div className="courseFormGrid">
           <label>
             Title
-            <input value={form.title} onChange={(event) => setField("title", event.target.value)} required />
+            <input value={form.title} onChange={(e) => setField("title", e.target.value)} required />
           </label>
           <label>
             Slug
-            <input value={form.slug} onChange={(event) => setField("slug", event.target.value)} required />
+            <input value={form.slug} onChange={(e) => setField("slug", e.target.value)} required />
           </label>
           <label className="courseFormWide">
-            Thumbnail URL
-            <input value={form.thumbnailUrl} onChange={(event) => setField("thumbnailUrl", event.target.value)} required />
+            Thumbnail Key
+            <input value={form.thumbnailKey} onChange={(e) => setField("thumbnailKey", e.target.value)} required />
           </label>
           <label>
             Instructor
             <select
               value={form.instructorId}
-              onChange={(event) => setField("instructorId", event.target.value)}
+              onChange={(e) => setField("instructorId", e.target.value)}
               required={hasInstructorOptions}
             >
               <option value="">Select instructor</option>
@@ -309,13 +309,13 @@ const CourseFormModal = ({
               type="number"
               min="0"
               value={form.basePrice}
-              onChange={(event) => setField("basePrice", event.target.value)}
+              onChange={(e) => setField("basePrice", e.target.value)}
               required
             />
           </label>
           <label>
             Level
-            <select value={form.level} onChange={(event) => setField("level", event.target.value)} required>
+            <select value={form.level} onChange={(e) => setField("level", e.target.value)} required>
               <option value="Beginner">Beginner</option>
               <option value="Intermediate">Intermediate</option>
               <option value="Advanced">Advanced</option>
@@ -323,21 +323,19 @@ const CourseFormModal = ({
           </label>
           <label>
             Status
-            <select value={form.status} onChange={(event) => setField("status", event.target.value)} required>
-              {courseStatusOptions.map((status) => (
-                <option key={status} value={status}>
-                  {status}
-                </option>
+            <select value={form.status} onChange={(e) => setField("status", e.target.value)} required>
+              {courseStatusOptions.map((s) => (
+                <option key={s} value={s}>{s}</option>
               ))}
             </select>
           </label>
           <label>
             Language
-            <input maxLength={10} value={form.language} onChange={(event) => setField("language", event.target.value)} required />
+            <input maxLength={10} value={form.language} onChange={(e) => setField("language", e.target.value)} required />
           </label>
           <label className="courseFormWide">
             Description
-            <textarea rows={3} value={form.description} onChange={(event) => setField("description", event.target.value)} required />
+            <textarea rows={3} value={form.description} onChange={(e) => setField("description", e.target.value)} required />
           </label>
           <label>
             Requirements
@@ -345,7 +343,7 @@ const CourseFormModal = ({
               rows={4}
               placeholder="Mỗi dòng là một yêu cầu"
               value={form.requirements}
-              onChange={(event) => setField("requirements", event.target.value)}
+              onChange={(e) => setField("requirements", e.target.value)}
             />
           </label>
           <label>
@@ -354,9 +352,30 @@ const CourseFormModal = ({
               rows={4}
               placeholder="Mỗi dòng là một nội dung học được"
               value={form.whatYouLearn}
-              onChange={(event) => setField("whatYouLearn", event.target.value)}
+              onChange={(e) => setField("whatYouLearn", e.target.value)}
             />
           </label>
+
+          {availableTags && availableTags.length > 0 && (
+            <div className="courseFormWide courseFormTagSection">
+              <span className="courseFormTagLabel">Tags</span>
+              <div className="courseFormTagGrid">
+                {availableTags.map((tag) => {
+                  const selected = form.tagIds.includes(Number(tag.id));
+                  return (
+                    <button
+                      key={tag.id}
+                      type="button"
+                      className={`courseFormTag ${selected ? "courseFormTag--selected" : ""}`}
+                      onClick={() => toggleTag(tag.id)}
+                    >
+                      {tag.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         {error ? <p className="courseFormError">{error}</p> : null}
@@ -379,6 +398,7 @@ const CourseTable = ({
   loading,
   error,
   instructors = [],
+  availableTags = [],
   axiosClient,
   isCreateOpen,
   onCreateClose,
@@ -399,9 +419,7 @@ const CourseTable = ({
   );
 
   useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
+    if (currentPage > totalPages) setCurrentPage(totalPages);
   }, [currentPage, totalPages]);
 
   const openDeleteModal = (course) => {
@@ -417,7 +435,6 @@ const CourseTable = ({
 
   const handleDelete = async () => {
     if (!deletingCourse) return;
-
     setDeletingCourseId(deletingCourse.id);
     setDeleteError("");
     try {
@@ -445,26 +462,19 @@ const CourseTable = ({
               <th>Actions</th>
             </tr>
           </thead>
-
           <tbody>
             {loading ? (
-              <tr>
-                <td className="courseTableEmpty" colSpan="6">Đang tải...</td>
-              </tr>
+              <tr><td className="courseTableEmpty" colSpan="6">Đang tải...</td></tr>
             ) : error ? (
-              <tr>
-                <td className="courseTableEmpty" colSpan="6">{error}</td>
-              </tr>
+              <tr><td className="courseTableEmpty" colSpan="6">{error}</td></tr>
             ) : currentPageItems.length === 0 ? (
-              <tr>
-                <td className="courseTableEmpty" colSpan="6">Không có khóa học nào.</td>
-              </tr>
+              <tr><td className="courseTableEmpty" colSpan="6">Không có khóa học nào.</td></tr>
             ) : (
               currentPageItems.map((course) => (
                 <tr key={course.id}>
                   <td>
                     <div className="courseTableCourseCell">
-                      {course.thumbnailUrl ? <img src={course.thumbnailUrl} alt={course.title} /> : null}
+                      {course.thumbnailKey ? <img src={course.thumbnailKey} alt={course.title} /> : null}
                       <div>
                         <strong>{course.title}</strong>
                         <span>{course.slug}</span>
@@ -505,25 +515,31 @@ const CourseTable = ({
       </div>
 
       <div className="courseTablePagination">
-        <button className="paginationButton" type="button" disabled={currentPage === 1} onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}>
+        <button className="paginationButton" type="button" disabled={currentPage === 1} onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}>
           Previous
         </button>
-        {Array.from({ length: totalPages }, (_, index) => (
+        {Array.from({ length: totalPages }, (_, i) => (
           <button
-            key={index + 1}
+            key={i + 1}
             type="button"
-            className={`paginationButton ${currentPage === index + 1 ? "paginationButton--active" : ""}`}
-            onClick={() => setCurrentPage(index + 1)}
+            className={`paginationButton ${currentPage === i + 1 ? "paginationButton--active" : ""}`}
+            onClick={() => setCurrentPage(i + 1)}
           >
-            {index + 1}
+            {i + 1}
           </button>
         ))}
-        <button className="paginationButton" type="button" disabled={currentPage === totalPages} onClick={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}>
+        <button className="paginationButton" type="button" disabled={currentPage === totalPages} onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}>
           Next
         </button>
       </div>
 
-      {selectedCourse ? <CourseViewModal course={selectedCourse} onClose={() => setSelectedCourse(null)} /> : null}
+      {selectedCourse ? (
+        <CourseViewModal
+          course={selectedCourse}
+          availableTags={availableTags}
+          onClose={() => setSelectedCourse(null)}
+        />
+      ) : null}
       {deletingCourse ? (
         <CourseDeleteModal
           course={deletingCourse}
@@ -537,6 +553,7 @@ const CourseTable = ({
         <CourseFormModal
           course={editingCourse}
           instructors={instructors}
+          availableTags={availableTags}
           axiosClient={axiosClient}
           onClose={() => setEditingCourse(null)}
           onSaved={onCourseUpdated}
@@ -545,6 +562,7 @@ const CourseTable = ({
       {isCreateOpen ? (
         <CourseFormModal
           instructors={instructors}
+          availableTags={availableTags}
           axiosClient={axiosClient}
           onClose={onCreateClose}
           onSaved={onCourseCreated}

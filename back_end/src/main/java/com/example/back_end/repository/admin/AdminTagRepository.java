@@ -22,4 +22,7 @@ public interface AdminTagRepository extends JpaRepository<Tag, Long> {
     
     @Query("SELECT COUNT(tag) FROM Tag tag WHERE tag.slug = :slug AND tag.isDeleted = false")
     long countBySlug(@Param("slug") String slug);
+
+    @Query("SELECT t FROM Tag t WHERE t.id IN :ids AND t.isDeleted = false")
+    List<Tag> findByIdIn(@Param("ids") List<Long> ids);
 }

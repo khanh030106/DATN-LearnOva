@@ -3,7 +3,9 @@ package com.example.back_end.controller;
 import com.example.back_end.dto.resquest.CreateReviewRequest;
 import com.example.back_end.dto.response.ReviewResponse;
 import com.example.back_end.service.ReviewService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.example.back_end.security.CustomUserDetails;
@@ -12,6 +14,7 @@ import com.example.back_end.dto.response.RatingSummaryResponse;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/learnova")
@@ -22,7 +25,7 @@ public class ReviewController {
     @PostMapping("/review/post")
     public ReviewResponse createReview(
             Authentication authentication,
-            @RequestBody CreateReviewRequest request
+            @Valid @RequestBody CreateReviewRequest request
     ) {
         if (authentication == null) {
             throw new RuntimeException("No authentication - missing token or filter failed");
@@ -40,10 +43,11 @@ public class ReviewController {
     ) {
         return reviewService.getCourseReviews(courseId);
     }
+
     @PutMapping("/review/update")  // /
     public ReviewResponse updateReview(
             Authentication authentication,
-            @RequestBody UpdateReviewRequest request
+            @Valid @RequestBody UpdateReviewRequest request
     ) {
         if (authentication == null) {
             throw new RuntimeException("No authentication");
@@ -60,9 +64,8 @@ public class ReviewController {
             Authentication authentication,
             @PathVariable Long reviewId) {
 
-
         if (authentication == null) {
-            System.out.println("AUTH NULL");
+            log.warn("deleteReview called with null authentication");
             throw new RuntimeException("No authentication");
         }
 
@@ -70,6 +73,7 @@ public class ReviewController {
                 (CustomUserDetails) authentication.getPrincipal();
         reviewService.deleteReview(userDetails.getId(), reviewId);
     }
+
     @GetMapping("/review/summary/{courseId}")
     public RatingSummaryResponse getRatingSummary(@PathVariable Long courseId) {
         return reviewService.getRatingSummary(courseId);

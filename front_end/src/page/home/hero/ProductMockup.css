@@ -1,0 +1,314 @@
+/* ============================================================
+   ProductMockup — simulated LearnOva course player UI
+   Built in pure CSS/JSX — no screenshots, no stock images.
+   This component IS the visual identity of the product.
+   ============================================================ */
+
+.pm {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 14px;
+    overflow: visible;
+    box-shadow:
+        0 48px 96px rgba(7, 26, 51, 0.55),
+        0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+
+/* ── Browser chrome ──────────────────────────────── */
+.pm__chrome {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: #1e293b;
+    border-radius: 14px 14px 0 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pm__dots {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.pm__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: block;
+}
+
+.pm__dot--red    { background: #ef4444; }
+.pm__dot--yellow { background: #f59e0b; }
+.pm__dot--green  { background: #22c55e; }
+
+.pm__url {
+    flex: 1;
+    padding: 4px 12px;
+    border-radius: 6px;
+    background: #0f172a;
+    color: #475569;
+    font-size: 11px;
+    font-family: monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── App body ────────────────────────────────────── */
+.pm__body {
+    display: flex;
+    height: 290px;
+    background: #0f172a;
+    border-radius: 0 0 14px 14px;
+    overflow: hidden;
+}
+
+/* ── Sidebar ─────────────────────────────────────── */
+.pm__sidebar {
+    width: 178px;
+    flex-shrink: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    background: #0f172a;
+}
+
+.pm__sidebar-header {
+    padding: 14px 14px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;
+}
+
+.pm__course-name {
+    margin: 0 0 9px;
+    color: #e2e8f0;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.pm__progress {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.pm__progress-track {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.pm__progress-fill {
+    height: 100%;
+    width: 50%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #1d4ed8, #2563eb);
+}
+
+.pm__progress-label {
+    margin: 0;
+    color: #475569;
+    font-size: 9.5px;
+    font-weight: 600;
+}
+
+.pm__lesson-list {
+    list-style: none;
+    margin: 0;
+    padding: 8px 0;
+    overflow-y: auto;
+    flex: 1;
+    scrollbar-width: none;
+}
+
+.pm__lesson-list::-webkit-scrollbar {
+    display: none;
+}
+
+/* ── Lesson items ────────────────────────────────── */
+.pm__lesson {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 13px;
+    cursor: default;
+}
+
+.pm__lesson--active {
+    background: rgba(29, 78, 216, 0.18);
+}
+
+.pm__lesson-icon {
+    flex-shrink: 0;
+}
+
+.pm__lesson-icon--check { color: #22c55e; }
+.pm__lesson-icon--play  { color: #2563eb; }
+.pm__lesson-icon--empty { color: #2d3f55; }
+
+.pm__lesson-title {
+    font-size: 10.5px;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pm__lesson--done .pm__lesson-title   { color: #3d5166; }
+.pm__lesson--active .pm__lesson-title { color: #93c5fd; font-weight: 600; }
+.pm__lesson-title                     { color: #475569; }
+
+/* ── Player ──────────────────────────────────────── */
+.pm__player {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.pm__video {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 35% 45%, rgba(37, 99, 235, 0.25), transparent 55%),
+        radial-gradient(circle at 72% 72%, rgba(99, 102, 241, 0.14), transparent 45%),
+        linear-gradient(135deg, #0b1437 0%, #112048 50%, #0a1a38 100%);
+}
+
+.pm__play-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(29, 78, 216, 0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 10px rgba(29, 78, 216, 0.18);
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pm__play-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 14px rgba(29, 78, 216, 0.14);
+}
+
+.pm__video-meta {
+    position: absolute;
+    bottom: 12px;
+    left: 14px;
+    z-index: 1;
+}
+
+.pm__video-label {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 8.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+
+.pm__video-title {
+    margin: 3px 0 0;
+    color: #ffffff;
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+.pm__player-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: #0c1525;
+    flex-shrink: 0;
+}
+
+.pm__player-continue {
+    color: #2563eb;
+    font-size: 10.5px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.pm__player-time {
+    color: #334155;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+/* ── Floating certificate badge ──────────────────── */
+.pm__cert {
+    position: absolute;
+    bottom: -20px;
+    left: -28px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid #e2e8f0;
+    box-shadow:
+        0 24px 48px rgba(7, 26, 51, 0.26),
+        0 0 0 1px rgba(29, 78, 216, 0.07);
+    backdrop-filter: blur(12px);
+}
+
+.pm__cert-icon {
+    font-size: 24px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.pm__cert-label {
+    margin: 0 0 3px;
+    color: #1d4ed8;
+    font-size: 8.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+}
+
+.pm__cert-title {
+    margin: 0;
+    color: #071a33;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 860px) {
+    .pm {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    .pm__sidebar {
+        display: none;
+    }
+
+    .pm__body {
+        height: 230px;
+    }
+
+    .pm__cert {
+        bottom: -14px;
+        left: 12px;
+    }
+}

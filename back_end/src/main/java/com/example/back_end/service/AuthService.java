@@ -14,15 +14,18 @@ import com.example.back_end.entity.Role;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.Verificationtoken;
 import com.example.back_end.entity.enums.RoleName;
+import com.example.back_end.exception.BusinessException;
+import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.UserRepository;
 import com.example.back_end.security.CustomUserDetailsService;
 import com.example.back_end.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import java.util.Optional;
 import java.util.Set;
 import com.example.back_end.dto.resquest.RegisterRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.Instant;
-import java.time.OffsetDateTime;
 
 
 @Service
@@ -37,6 +40,9 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
+    @Value("${app.frontend.base-url}")
+    private String frontendBaseUrl;
+
 
     @Transactional
     public AuthTokenResponse login(LoginRequest request) {
@@ -48,42 +54,50 @@ public class AuthService {
         );
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        assert userDetails != null;
+        if (userDetails == null) {
+            throw new BusinessException("Authentication failed");
+        }
+
         String accessToken = jwtService.generateAccessToken(userDetails);
         Verificationtoken refreshToken = verificationTokenService.createRefreshToken(userDetails.getUsername(), request.rememberMe());
 
-        return new AuthTokenResponse(
-            accessToken,
-            refreshToken.getToken()
-        );
+        return new AuthTokenResponse(accessToken, refreshToken.getToken());
     }
 
+    // Rotates the refresh token on every use — a stolen token can only be used once.
     @Transactional
-    public LoginResponse refreshAccessToken(String refreshToken) {
+    public AuthTokenResponse refreshAccessToken(String refreshToken) {
         Verificationtoken validRefreshToken = verificationTokenService.verifyRefreshToken(refreshToken);
 
         User user = validRefreshToken.getUser();
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getEmail());
         String newAccessToken = jwtService.generateAccessToken(userDetails);
-        return new LoginResponse(newAccessToken);
+
+        verificationTokenService.deleteRefreshTokenByUser(user);
+        String newRefreshToken = verificationTokenService.createRefreshToken(user.getEmail(), false).getToken();
+
+        return new AuthTokenResponse(newAccessToken, newRefreshToken);
     }
 
+    // Always succeeds — even if the token is expired or unknown.
     @Transactional
     public void logout(String refreshToken) {
         if (refreshToken == null) {
             return;
         }
-        Verificationtoken validRefreshToken = verificationTokenService.verifyRefreshToken(refreshToken);
-        verificationTokenService.deleteRefreshTokenByUser(validRefreshToken.getUser());
+        try {
+            Verificationtoken token = verificationTokenService.verifyRefreshToken(refreshToken);
+            verificationTokenService.deleteRefreshTokenByUser(token.getUser());
+        } catch (Exception ignored) {
+            // Token already expired or not found — still a valid logout.
+        }
     }
 
     public CurrentUserResponse getCurrentUser(String email) {
-
         User user = userRepository
                 .findByEmailAndIsDeletedFalse(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        // Extract RoleName enums from user's roles
         Set<RoleName> roleNames = user.getRoles().stream()
                 .map(Role::getRoleName)
                 .collect(java.util.stream.Collectors.toSet());
@@ -100,87 +114,61 @@ public class AuthService {
                 roleNames
         );
     }
+
     @Transactional
     public void register(RegisterRequest request) {
-        // Check email exists
         if (userRepository.existsUsersByEmail(request.email())) {
-            throw new RuntimeException("Email already exists.");
+            throw new BusinessException("Email already exists.");
         }
-        // Check password length
         if (request.password() == null || request.password().length() < 6) {
-            throw new RuntimeException(
-                    "Password must be at least 6 characters long."
-            );
+            throw new BusinessException("Password must be at least 6 characters long.");
         }
-        // Check confirm password
         if (!request.password().equals(request.confirmPassword())) {
-            throw new RuntimeException(
-                    "Passwords do not match."
-            );
+            throw new BusinessException("Passwords do not match.");
         }
 
         User user = new User();
         user.setFullName(request.fullName().trim());
         user.setEmail(request.email().trim().toLowerCase());
-        user.setPasswordHash(
-                passwordEncoder.encode(request.password())
-        );
-        // Account is inactive until email verification
+        user.setPasswordHash(passwordEncoder.encode(request.password()));
         user.setIsActive(false);
         user.setIsDeleted(false);
         user.setCreatedAt(Instant.now());
 
         User savedUser = userRepository.save(user);
 
-        Verificationtoken verificationToken =
-                verificationTokenService.createActiveAccountToken(
-                        savedUser
-                );
+        Verificationtoken verificationToken = verificationTokenService.createActiveAccountToken(savedUser);
 
-        String verifyLink =
-                "http://localhost:5173/learnova/auth/login?token="
-                        + verificationToken.getToken();
+        String verifyLink = frontendBaseUrl + "/learnova/auth/login?token=" + verificationToken.getToken();
 
-        emailService.sendVerificationEmail(
-                savedUser.getEmail(),
-                savedUser.getFullName(),
-                verifyLink
-        );
+        emailService.sendVerificationEmail(savedUser.getEmail(), savedUser.getFullName(), verifyLink);
     }
+
     @Transactional
     public void verifyEmail(String token) {
-
-        Verificationtoken verificationToken =
-                verificationTokenService.verifyActiveAccountToken(token);
-
-        if (verificationToken.getExpiredAt().isBefore(OffsetDateTime.now())) {
-            throw new RuntimeException("Activation token expired");
-        }
+        // Expiry is now checked inside verifyActiveAccountToken.
+        Verificationtoken verificationToken = verificationTokenService.verifyActiveAccountToken(token);
 
         User user = verificationToken.getUser();
-
         user.setIsActive(true);
         userRepository.save(user);
 
-        verificationToken.setIsUsed(true);
         verificationTokenService.markAsUsed(verificationToken);
     }
+
     @Transactional
     public void resendVerificationEmail(String email) {
-        User user = userRepository.findByEmailAndIsDeletedFalse(
-                email.trim().toLowerCase()
-        ).orElseThrow(() -> new RuntimeException("Email không tồn tại trên hệ thống."));
-        if (user.getIsActive()) {
-            throw new RuntimeException("Tài khoản này đã được kích hoạt trước đó.");
+        Optional<User> userOpt = userRepository.findByEmailAndIsDeletedFalse(email.trim().toLowerCase());
+
+        // Do not reveal whether the email is registered or already verified.
+        if (userOpt.isEmpty() || Boolean.TRUE.equals(userOpt.get().getIsActive())) {
+            return;
         }
+
+        User user = userOpt.get();
         Verificationtoken verificationToken = verificationTokenService.createActiveAccountToken(user);
-        String verifyLink = "http://localhost:5173/learnova/auth/login?token=" + verificationToken.getToken();
+        String verifyLink = frontendBaseUrl + "/learnova/auth/login?token=" + verificationToken.getToken();
 
-        emailService.sendVerificationEmail(
-                user.getEmail(),
-                user.getFullName(),
-                verifyLink
-        );
+        emailService.sendVerificationEmail(user.getEmail(), user.getFullName(), verifyLink);
     }
-
 }

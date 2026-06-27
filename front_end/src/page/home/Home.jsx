@@ -1,47 +1,45 @@
-import Banner from "./banner/Banner.jsx";
-import Role from "./role/Role.jsx";
-import Course from "./courses/Course.jsx";
-import Path from "./path/Path.jsx";
-import Instructors from "./instructors/Instructors.jsx";
-import Testimonials from "./testimonials/Testimonials.jsx";
-import Engagements from "./engagements/Engagements.jsx";
-import Features from "./features/Features.jsx";
-import Newsletter from "./newsletter/Newsletter.jsx";
-import LearnovaAI from "./AI/AI.jsx";
+import Header from '../../component/header/user_header/Header.jsx';
+import HeroSplit from './hero/HeroSplit.jsx';
+import TrustBar from './hero/TrustBar.jsx';
+import Course from './courses/Course.jsx';
+import Categories from './categories/Categories.jsx';
+import HowItWorks from './how-it-works/HowItWorks.jsx';
+import Instructors from './instructors/Instructors.jsx';
+import Testimonials from './testimonials/Testimonials.jsx';
+import FAQ from './faq/FAQ.jsx';
+import Footer from './footer/Footer.jsx';
+import LearnovaAI from './AI/AI.jsx';
 
-import './Home.css'
-
-
+import './Home.css';
 
 const Home = () => {
-
     return (
-        <div>
-            <Banner/>
-            <div className="home-content">
+        <>
+            <a href="#main-content" className="home-skip-link">Skip to main content</a>
 
-                    <Role/>
+            <Header />
+            <HeroSplit />
+            <TrustBar />
 
-                    <Course/>
+            <main id="main-content">
+                <Course />
+                <Categories />
+                <HowItWorks />
+                <Instructors />
+                <Testimonials />
+                <FAQ />
+                <Footer />
 
-                    <Path/>
-
-                    <Instructors/>
-
-                    <Testimonials/>
-
-                    <Engagements/>
-
-                    <Features/>
-
-                    <Newsletter/>
-                <div className="chatbot-fixed">
+                <div
+                    className="chatbot-fixed"
+                    role="complementary"
+                    aria-label="AI Chat Assistant"
+                >
                     <LearnovaAI />
                 </div>
-
-            </div>
-        </div>
+            </main>
+        </>
     );
-}
+};
 
 export default Home;

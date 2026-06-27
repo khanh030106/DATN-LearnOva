@@ -554,6 +554,16 @@
   color: #1d4ed8;
 }
 
+.adminCategoryDetailRowWide {
+  grid-column: 1 / -1;
+}
+
+.adminCategoryDetailRow select.adminCategoryDetailInput {
+  appearance: none;
+  cursor: pointer;
+  text-align: right;
+}
+
 @media (max-width: 1100px) {
   .adminCategoryHero {
     grid-template-columns: 220px minmax(0, 1fr);

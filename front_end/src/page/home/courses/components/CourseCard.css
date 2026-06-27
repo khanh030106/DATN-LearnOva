@@ -20,7 +20,7 @@
 }
 
 .course-card__body {
-    padding: 10px 10px 8px 15px;
+    padding: 14px 16px 16px;
 }
 
 .course-title{
@@ -28,19 +28,20 @@
 }
 
 .course-title h3 {
-    min-height: 56px;
+    min-height: 48px;
     margin: 0;
     font-family: var(--font-sans);
-    color: #071a33;
-    font-size: 22px;
-    line-height: 1.25;
-    font-weight: 800;
+    color: #0f172a;
+    font-size: 17px;
+    line-height: 1.4;
+    font-weight: 700;
 }
 
 .course-card__teacher {
-    margin: 21px 0 0 0;
-    color: #475569;
-    font-size: 17px;
+    margin: 6px 0 8px;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .course-card__rating {
@@ -80,9 +81,10 @@
 .course-card__price {
     margin: 0;
     display: flex;
-    color: #0030c2;
-    font-size: 24px;
-    font-weight: 900;
+    align-items: center;
+    color: #1d4ed8;
+    font-size: 18px;
+    font-weight: 800;
 }
 
 .course-card__price .icon{
@@ -101,6 +103,7 @@
 }
 
 .course-card__cart:hover {
-    background: #003983;
+    background: #1e40af;
     color: #ffffff;
+    border-color: #1e40af;
 }

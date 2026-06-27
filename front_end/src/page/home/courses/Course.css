@@ -1,71 +1,216 @@
+.cs {
+    padding: 96px 0;
+    background: #f8faff;
+}
 
-.course-section__header {
+.cs__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 48px;
+}
+
+.cs__header {
     display: flex;
+    align-items: flex-end;
     justify-content: space-between;
-    align-items: center;
-    gap: 24px;
-    margin-bottom: 18px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+    gap: 16px;
 }
 
-.course-section__header h2 {
-    color: #0044e4;
-    font-size: 38px;
+.cs__title {
+    margin: 8px 0 0;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -1.8px;
+    line-height: 1.05;
+}
+
+.cs__link {
+    font-size: 14px;
     font-weight: 600;
-    line-height: 1.2;
-    margin-bottom: 0;
+    color: #2563eb;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.18s;
 }
 
-.course-section__header p {
-    margin: 0;
+.cs__link:hover { opacity: 0.7; }
+
+/* Filter tabs */
+.cs__filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.cs__filter-btn {
+    height: 38px;
+    padding: 0 20px;
+    background: transparent;
     color: #475569;
-    font-size: 20px;
-    font-family: var(--font-sans);
+    border: 1.5px solid #cbd5e1;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
 }
 
-.course-section__link {
-    display: inline-flex;
-    align-items: center;
-    margin-top: 26px;
-    color: #1d4ed8;
-    font-size: 20px;
-    font-weight: 700;
-    text-decoration: underline;
+.cs__filter-btn--active,
+.cs__filter-btn:hover {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
 }
 
-.course-section__grid {
+/* Grid */
+.cs__grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 15px;
-    overflow: visible;
-    padding-bottom: 24px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
 }
 
-@media (max-width: 1200px) {
-    .course-section__grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+/* Card */
+.cs__card {
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    text-decoration: none;
+    display: block;
+    transition: transform 0.24s, box-shadow 0.24s;
+    box-shadow: 0 2px 10px rgba(15,23,42,0.05);
 }
 
-@media (max-width: 768px) {
-    .course-section {
-        padding: 40px 20px;
-    }
+.cs__card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 52px rgba(15,23,42,0.11);
+}
 
-    .course-section__header {
-        flex-direction: column;
-        margin-bottom: 32px;
-    }
+.cs__thumb {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
 
-    .course-section__header h2 {
-        font-size: 34px;
-    }
+.cs__play {
+    width: 46px; height: 46px;
+    background: rgba(255,255,255,0.92);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+}
 
-    .course-section__header p,
-    .course-section__link {
-        font-size: 17px;
-    }
+.cs__play-tri {
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 8px 0 8px 14px;
+    border-color: transparent transparent transparent #0f172a;
+    margin-left: 3px;
+}
 
-    .course-section__grid {
-        grid-template-columns: 1fr;
-    }
+.cs__badge {
+    position: absolute;
+    top: 12px; left: 12px;
+    background: #2563eb;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.2px;
+}
+
+.cs__body {
+    padding: 18px 20px;
+}
+
+.cs__course-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.35;
+    margin: 0 0 7px;
+}
+
+.cs__instructor {
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 0 0 12px;
+}
+
+.cs__rating-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.cs__rating {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+.cs__reviews {
+    font-size: 12px;
+    color: #cbd5e1;
+}
+
+.cs__meta {
+    margin-left: auto;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.cs__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.cs__price-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cs__price {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.cs__original {
+    font-size: 13px;
+    color: #cbd5e1;
+    text-decoration: line-through;
+}
+
+.cs__students {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .cs__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+    .cs { padding: 72px 0; }
+    .cs__container { padding: 0 16px; }
+    .cs__grid { grid-template-columns: 1fr; }
+    .cs__header { flex-direction: column; align-items: flex-start; }
 }

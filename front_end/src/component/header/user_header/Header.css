@@ -22,64 +22,6 @@
   backdrop-filter: blur(14px);
 }
 
-.main-header.hero-header.hero-header-top,
-.main-header.hero-header.hero-header-top.scrolled {
-  border-bottom-color: transparent;
-  background: transparent;
-  box-shadow: none;
-  backdrop-filter: none;
-}
-
-.main-header.hero-header {
-  position: fixed;
-  left: 0;
-  right: 0;
-}
-
-.main-header.hero-header.hero-header-top .nav-menu-link {
-  color: #ffffff;
-}
-
-.main-header.hero-header.hero-header-top .nav-menu-link:hover,
-.main-header.hero-header.hero-header-top .nav-menu-link-active {
-  color: #93c5fd;
-}
-
-.main-header.hero-header.hero-header-top .nav-menu-link::after {
-  background: #93c5fd;
-}
-
-.main-header.hero-header.hero-header-top .header-search {
-  border-color: rgba(147, 197, 253, 0.42);
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.main-header.hero-header.hero-header-top .header-search,
-.main-header.hero-header.hero-header-top .header-action-login {
-  border-color: rgba(147, 197, 253, 0.42);
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.main-header.hero-header.hero-header-top .header-search-icon {
-  color: #93c5fd;
-}
-
-.main-header.hero-header.hero-header-top .header-search-input {
-  color: #ffffff;
-}
-
-.main-header.hero-header.hero-header-top .header-search-input::placeholder {
-  color: rgba(255, 255, 255, 0.55);
-}
-
-.main-header.hero-header.hero-header-top .header-action-cart {
-  color: #93c5fd;
-}
-
-.main-header.hero-header.hero-header-top .header-action-login {
-  color: #1d4ed8;
-}
 
 .header-container {
   max-width: 1280px;
@@ -150,7 +92,7 @@
   width: 0;
   height: 2px;
   border-radius: 999px;
-  background: #93c5fd;
+  background: #1d4ed8;
   transition: width 0.25s ease;
 }
 
@@ -161,7 +103,7 @@
 
 .nav-menu-link:hover,
 .nav-menu-link-active {
-  color: #93c5fd;
+  color: #1d4ed8;
 }
 
 .main-header.scrolled .nav-menu-link {
@@ -184,14 +126,14 @@
   align-items: center;
   gap: 8px;
   padding: 0 12px;
-  border: 1px solid rgba(147, 197, 253, 0.42);
+  border: 1px solid rgba(147, 197, 253, 0.58);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(239, 246, 255, 0.98);
   backdrop-filter: blur(4px);
 }
 
 .header-search-icon {
-  color: #93c5fd;
+  color: #1d4ed8;
   flex-shrink: 0;
 }
 
@@ -200,13 +142,13 @@
   border: none;
   outline: none;
   background: transparent;
-  color: #ffffff;
+  color: #0f172a;
   font-size: 14px;
   font-family: inherit;
 }
 
 .header-search-input::placeholder {
-  color: rgba(255, 255, 255, 0.72);
+  color: #64748b;
 }
 
 .main-header.scrolled .header-search {
