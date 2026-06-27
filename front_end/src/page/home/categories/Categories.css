@@ -1,5 +1,5 @@
 .cats {
-    padding: 40px 0;
+    padding: 96px 0;
     background: #f0f7ff;
     border-top: 1px solid #dbeafe;
 }
@@ -75,11 +75,14 @@
 }
 
 @media (max-width: 1024px) {
+    .cats { padding: 72px 0; }
+    .cats__header { margin-bottom: 48px; }
     .cats__grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 640px) {
-    .cats { padding: 72px 0; }
+    .cats { padding: 56px 0; }
+    .cats__header { margin-bottom: 40px; }
     .cats__container { padding: 0 16px; }
     .cats__grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .cats__card { padding: 20px 16px; }

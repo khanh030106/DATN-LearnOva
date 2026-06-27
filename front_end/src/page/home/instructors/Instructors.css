@@ -1,7 +1,7 @@
 .inst {
-    padding: 40px 0;
-    background: #f0f7ff;
-    border-top: 1px solid #dbeafe;
+    padding: 96px 0;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
 }
 
 .inst__container {
@@ -120,11 +120,17 @@
     border-color: #2563eb;
 }
 
+@media (max-width: 1024px) {
+    .inst { padding: 72px 0; }
+    .inst__header { margin-bottom: 48px; }
+}
+
 @media (max-width: 900px) {
     .inst__grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
 }
 
 @media (max-width: 640px) {
-    .inst { padding: 72px 0; }
+    .inst { padding: 56px 0; }
+    .inst__header { margin-bottom: 40px; }
     .inst__container { padding: 0 16px; }
 }
