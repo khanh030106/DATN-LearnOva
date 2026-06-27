@@ -1,36 +1,79 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Chart from "chart.js/auto";
+import { getAdminVoucherUsageFrequencyApi } from "../../../../api/admin/VoucherApi.js";
+import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 import "./VoucherChart.css";
 
-const voucherChartData = {
-  labels: [
-    "M7/2025",
-    "M8/2025",
-    "M9/2025",
-    "M10/2025",
-    "M11/2025",
-    "M12/2025",
-    "M1/2026",
-    "M2/2026",
-    "M3/2026",
-    "M4/2026",
-    "M5/2026",
-    "M6/2026",
-  ],
-  series: [
-    {
-      id: "activation",
-      name: "Voucher Activations",
-      values: [12, 18, 17, 22, 28, 24, 30, 35, 37, 42, 47, 52],
-      borderColor: "#2563eb",
-      pointBackgroundColor: "#2563eb",
-      pointBorderColor: "#ffffff",
-    },
-  ],
+const activationSeries = {
+  id: "activation",
+  name: "Voucher Activations",
+  borderColor: "#2563eb",
+  pointBackgroundColor: "#2563eb",
+  pointBorderColor: "#ffffff",
 };
 
-const VoucherChart = () => {
+const formatMonthLabel = (month) => {
+  const [year, monthNumber] = String(month || "").split("-");
+  if (!year || !monthNumber) {
+    return "";
+  }
+
+  return `M${Number(monthNumber)}/${year}`;
+};
+
+const buildVoucherChartData = (frequencyItems) => {
+  return {
+    labels: frequencyItems.map((item) => formatMonthLabel(item.month)),
+    series: [
+      {
+        ...activationSeries,
+        values: frequencyItems.map((item) => Number(item.activations || 0)),
+      },
+    ],
+  };
+};
+
+const VoucherChart = ({ refreshKey }) => {
+  const axiosPrivate = useAxiosPrivate();
   const canvasRef = useRef(null);
+  const [frequencyItems, setFrequencyItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+
+    const fetchVoucherUsageFrequency = async () => {
+      try {
+        setIsLoading(true);
+        setError("");
+        const data = await getAdminVoucherUsageFrequencyApi(axiosPrivate);
+        if (mounted) {
+          setFrequencyItems(Array.isArray(data) ? data : []);
+        }
+      } catch (err) {
+        if (mounted) {
+          setFrequencyItems([]);
+          setError(
+            err?.response?.data?.message || "Không tải được dữ liệu voucher."
+          );
+        }
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    };
+
+    fetchVoucherUsageFrequency();
+
+    return () => {
+      mounted = false;
+    };
+  }, [axiosPrivate, refreshKey]);
+
+  const voucherChartData = useMemo(
+    () => buildVoucherChartData(frequencyItems),
+    [frequencyItems]
+  );
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -118,7 +161,7 @@ const VoucherChart = () => {
                 size: 12,
                 weight: 500,
               },
-              stepSize: 10,
+              precision: 0,
             },
           },
         },
@@ -128,7 +171,7 @@ const VoucherChart = () => {
     return () => {
       chart.destroy();
     };
-  }, []);
+  }, [voucherChartData]);
 
   return (
     <section
@@ -157,6 +200,19 @@ const VoucherChart = () => {
       </div>
       <div className="voucherChartCanvasWrapper">
         <canvas ref={canvasRef} aria-label="Voucher usage frequency chart" />
+        {isLoading && (
+          <div className="voucherChartStatus">Đang tải dữ liệu...</div>
+        )}
+        {!isLoading && error && (
+          <div className="voucherChartStatus voucherChartStatusError">
+            {error}
+          </div>
+        )}
+        {!isLoading && !error && frequencyItems.length === 0 && (
+          <div className="voucherChartStatus">
+            Chưa có dữ liệu sử dụng voucher.
+          </div>
+        )}
       </div>
     </section>
   );

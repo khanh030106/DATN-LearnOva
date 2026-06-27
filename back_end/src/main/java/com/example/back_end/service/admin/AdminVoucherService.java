@@ -11,10 +11,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.example.back_end.dto.response.admin.AdminVoucherResponse;
+import com.example.back_end.dto.response.admin.AdminVoucherUsageFrequencyResponse;
+import com.example.back_end.dto.response.admin.AdminVoucherUsageHistoryResponse;
 import com.example.back_end.dto.resquest.admin.AdminVoucherRequest;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.Voucher;
 import com.example.back_end.entity.enums.DiscountType;
+import com.example.back_end.exception.BusinessException;
+import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.admin.AdminUserRepository;
 import com.example.back_end.repository.admin.AdminVoucherRepository;
 
@@ -59,9 +63,32 @@ public class AdminVoucherService {
                 .collect(Collectors.toList());
     }
 
+    public List<AdminVoucherUsageHistoryResponse> getVoucherUsageHistories() {
+        return voucherRepository.findVoucherUsageHistoryProjections().stream()
+                .map(history -> new AdminVoucherUsageHistoryResponse(
+                        history.getStudentName(),
+                        history.getRegisteredCourse(),
+                        history.getAppliedCode(),
+                        history.getOriginalPrice(),
+                        history.getDiscount(),
+                        history.getPaid(),
+                        history.getUsedAt()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<AdminVoucherUsageFrequencyResponse> getVoucherUsageFrequency() {
+        return voucherRepository.findVoucherUsageFrequencyProjections().stream()
+                .map(item -> new AdminVoucherUsageFrequencyResponse(
+                        item.getMonth(),
+                        item.getActivations()
+                ))
+                .collect(Collectors.toList());
+    }
+
     public AdminVoucherResponse getVoucherById(Long voucherId) {
         Voucher voucher = voucherRepository.findById(voucherId)
-                .orElseThrow(() -> new RuntimeException("Voucher not found id=" + voucherId));
+                .orElseThrow(() -> new ResourceNotFoundException("Voucher not found id=" + voucherId));
 
         return new AdminVoucherResponse(
                 voucher.getId(),
@@ -95,19 +122,19 @@ public class AdminVoucherService {
                     : voucherRequest.discountType().trim();
             discountType = DiscountType.valueOf(discountTypeValue);
         } catch (Exception exception) {
-            throw new RuntimeException("Invalid discount type: " + voucherRequest.discountType());
+            throw new BusinessException("Invalid discount type: " + voucherRequest.discountType());
         }
 
         if (voucherRequest.discountValue() == null) {
-            throw new RuntimeException("Discount value is required");
+            throw new BusinessException("Discount value is required");
         }
 
         if (voucherRequest.discountValue().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new RuntimeException("Discount value must be greater than 0");
+            throw new BusinessException("Discount value must be greater than 0");
         }
 
         if (discountType == DiscountType.Percent && voucherRequest.discountValue().compareTo(new BigDecimal("100")) > 0) {
-            throw new RuntimeException("Discount percent must be less than or equal to 100");
+            throw new BusinessException("Discount percent must be less than or equal to 100");
         }
 
         OffsetDateTime startDate;
@@ -117,15 +144,15 @@ public class AdminVoucherService {
             startDate = OffsetDateTime.parse(voucherRequest.startDate());
             endDate = OffsetDateTime.parse(voucherRequest.endDate());
         } catch (DateTimeParseException exception) {
-            throw new RuntimeException("Invalid date format", exception);
+            throw new BusinessException("Invalid date format");
         }
 
         if (!endDate.isAfter(startDate)) {
-            throw new RuntimeException("End date must be after start date");
+            throw new BusinessException("End date must be after start date");
         }
 
         User createdByUser = adminUserRepository.findByEmailAndIsDeletedFalse(authentication.getName(), false)
-                .orElseThrow(() -> new RuntimeException("User not found email=" + authentication.getName()));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found email=" + authentication.getName()));
 
         Voucher voucher = new Voucher();
         voucher.setCode(voucherRequest.code().trim());
@@ -168,7 +195,7 @@ public class AdminVoucherService {
 
     public AdminVoucherResponse updateVoucher(Long voucherId, AdminVoucherRequest voucherRequest ) {
         Voucher voucher = voucherRepository.findById(voucherId)
-                .orElseThrow(() -> new RuntimeException("Voucher not found id=" + voucherId));
+                .orElseThrow(() -> new ResourceNotFoundException("Voucher not found id=" + voucherId));
 
         String voucherCode = voucherRequest.code().trim();
         String voucherDescription = voucherRequest.description().trim();
@@ -177,7 +204,7 @@ public class AdminVoucherService {
         try {
             discountType = DiscountType.valueOf(voucherRequest.discountType());
         } catch (Exception exception) {
-            throw new RuntimeException("Invalid discount type: " + voucherRequest.discountType());
+            throw new BusinessException("Invalid discount type: " + voucherRequest.discountType());
         }
 
         OffsetDateTime startDate;
@@ -187,11 +214,11 @@ public class AdminVoucherService {
             startDate = OffsetDateTime.parse(voucherRequest.startDate());
             endDate = OffsetDateTime.parse(voucherRequest.endDate());
         } catch (DateTimeParseException exception) {
-            throw new RuntimeException("Invalid date format", exception);
+            throw new BusinessException("Invalid date format");
         }
 
         User createdByUser = adminUserRepository.findById(voucherRequest.createdById())
-                .orElseThrow(() -> new RuntimeException("User not found id=" + voucherRequest.createdById()));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found id=" + voucherRequest.createdById()));
 
         voucher.setCode(voucherCode);
         voucher.setDescription(voucherDescription);
@@ -229,7 +256,7 @@ public class AdminVoucherService {
 
     public AdminVoucherResponse deleteVoucher(Long voucherId) {
         Voucher voucher = voucherRepository.findById(voucherId)
-                .orElseThrow(() -> new RuntimeException("Voucher not found id=" + voucherId));
+                .orElseThrow(() -> new ResourceNotFoundException("Voucher not found id=" + voucherId));
 
         voucher.setIsActive(false);
         voucher.setUpdatedAt(Instant.now());

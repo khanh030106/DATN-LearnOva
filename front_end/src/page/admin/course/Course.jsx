@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";
 import { getAdminCoursesApi } from "../../../api/admin/CourseApi.js";
 import { getAdminInstructorsApi } from "../../../api/admin/InstructorApi.js";
+import { getAdminTagsApi } from "../../../api/admin/TagApi.js";
 import CourseFilters from "./filters/CourseFilters";
 import CourseStatistics from "./statistics/CourseStatistics";
 import CourseTable from "./courseTable/CourseTable";
@@ -43,6 +44,7 @@ const Course = () => {
   const axiosPrivate = useAxiosPrivate();
   const [courses, setCourses] = useState([]);
   const [instructors, setInstructors] = useState([]);
+  const [availableTags, setAvailableTags] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isCourseFormOpen, setIsCourseFormOpen] = useState(false);
@@ -59,8 +61,15 @@ const Course = () => {
         let instructorData = [];
         try {
           instructorData = await getAdminInstructorsApi(axiosPrivate);
-        } catch (instructorError) {
+        } catch {
           instructorData = [];
+        }
+
+        let tagData = [];
+        try {
+          tagData = await getAdminTagsApi(axiosPrivate);
+        } catch {
+          tagData = [];
         }
 
         if (isMounted) {
@@ -71,6 +80,7 @@ const Course = () => {
               normalizedCourses,
             ),
           );
+          setAvailableTags(Array.isArray(tagData) ? tagData : []);
         }
       } catch (fetchError) {
         if (isMounted) {
@@ -96,6 +106,7 @@ const Course = () => {
           loading={loading}
           error={error}
           instructors={instructors}
+          availableTags={availableTags}
           axiosClient={axiosPrivate}
           isCreateOpen={isCourseFormOpen}
           onCreateClose={() => setIsCourseFormOpen(false)}

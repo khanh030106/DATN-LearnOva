@@ -4,16 +4,18 @@ import com.example.back_end.dto.resquest.CreateLessonSourceRequest;
 import com.example.back_end.dto.response.LessonSourceResponse;
 import com.example.back_end.entity.Lesson;
 import com.example.back_end.entity.Lessonsource;
+import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.LessonRepository;
 import com.example.back_end.repository.LessonsourceRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -24,12 +26,10 @@ public class LessonSourceService {
 
     @Transactional
     public LessonSourceResponse createLessonSource(Long lessonId, CreateLessonSourceRequest request) {
-        System.out.println("=== CREATE LESSON SOURCE DEBUG ===");
-        System.out.println("Lesson ID: " + lessonId);
-        System.out.println("Request: " + request);
-        
+        log.debug("createLessonSource called, lessonId={}, request={}", lessonId, request);
+
         Lesson lesson = lessonRepository.findById(lessonId)
-                .orElseThrow(() -> new RuntimeException("Lesson not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
 
         Lessonsource lessonSource = new Lessonsource();
         lessonSource.setLesson(lesson);
@@ -41,14 +41,9 @@ public class LessonSourceService {
         lessonSource.setResourceType(request.resourceType());
         lessonSource.setCreatedAt(Instant.now());
 
-        System.out.println("Before save - File Key: " + lessonSource.getFileKey());
-        System.out.println("Before save - Original Filename: " + lessonSource.getOriginalFileName());
-        System.out.println("Before save - Content Type: " + lessonSource.getContentType());
-        System.out.println("Before save - File Size: " + lessonSource.getFileSizeBytes());
-        
         lessonsourceRepository.save(lessonSource);
-        
-        System.out.println("✅ Lesson source saved with ID: " + lessonSource.getId());
+
+        log.debug("createLessonSource saved, sourceId={}", lessonSource.getId());
 
         return new LessonSourceResponse(
                 lessonSource.getId(),

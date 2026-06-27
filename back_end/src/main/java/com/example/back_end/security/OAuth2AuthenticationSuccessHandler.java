@@ -10,13 +10,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Set;
@@ -30,6 +30,9 @@ public class OAuth2AuthenticationSuccessHandler
     private final RoleRepository roleRepository;
     private final JwtService jwtService;
     private final VerificationTokenService verificationTokenService;
+
+    @Value("${app.frontend.base-url}")
+    private String frontendBaseUrl;
 
     @Override
     public void onAuthenticationSuccess(
@@ -108,7 +111,7 @@ public class OAuth2AuthenticationSuccessHandler
                         .getToken();
 
         response.sendRedirect(
-                "http://localhost:5173/oauth2-success"
+                frontendBaseUrl + "/oauth2-success"
                         + "?accessToken=" + accessToken
                         + "&refreshToken=" + refreshToken
         );

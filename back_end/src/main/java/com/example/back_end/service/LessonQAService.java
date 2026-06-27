@@ -6,17 +6,19 @@ import com.example.back_end.dto.response.*;
 import com.example.back_end.entity.Lesson;
 import com.example.back_end.entity.LessonQA;
 import com.example.back_end.entity.User;
+import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.LessonQARepository;
 import com.example.back_end.repository.LessonRepository;
 import com.example.back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LessonQAService {
 
     private final LessonQARepository qaRepo;
@@ -28,29 +30,57 @@ public class LessonQAService {
     // =========================
     public LessonQAResponse getCourseQnA(Long courseId) {
 
+        // ── Query 1 ─────────────────────────────────────────────────────────
+        // Lessons define the ordering of questions in the response.
+        // Loaded once here; never queried again inside any loop.
         List<Lesson> lessons = lessonRepo.findBySectionCourseId(courseId);
 
+        if (lessons.isEmpty()) {
+            LessonQAResponse empty = new LessonQAResponse();
+            empty.setQuestions(new ArrayList<>());
+            return empty;
+        }
+
+        // ── Query 2 ─────────────────────────────────────────────────────────
+        // All top-level questions for the entire course in one SQL statement.
+        // JOIN FETCH q.user means no additional user queries anywhere below.
+        // q.lesson.section.course.id navigation in the WHERE clause is resolved
+        // by Hibernate as an implicit JOIN; no extra round-trip occurs.
+        List<LessonQA> questions = qaRepo.findQuestionsForCourseWithUser(courseId);
+
+        List<Long> questionIds = questions.stream()
+                .map(LessonQA::getId)
+                .toList();
+
+        // ── Query 3 ─────────────────────────────────────────────────────────
+        // All answers for every question in the course in one SQL statement.
+        // Skipped entirely when the course has no questions at all.
+        // JOIN FETCH a.user means no additional user queries anywhere below.
+        List<LessonQA> answers = questionIds.isEmpty()
+                ? List.of()
+                : qaRepo.findAnswersByParentIdsWithUser(questionIds);
+
+        // ── In-memory grouping — zero DB calls ───────────────────────────────
+        // q.getLesson().getId():  LessonQA.lesson is @ManyToOne(LAZY). Hibernate
+        // stores the FK (lesson_id) in the owning row and sets it on the proxy at
+        // load time. Calling getId() on an uninitialised proxy returns that stored
+        // FK value without issuing any SQL.
+        Map<Long, List<LessonQA>> questionsByLesson = questions.stream()
+                .collect(Collectors.groupingBy(q -> q.getLesson().getId()));
+
+        // a.getParent().getId(): same proxy-ID guarantee as above for parent_id FK.
+        Map<Long, List<LessonQA>> answersByQuestion = answers.stream()
+                .collect(Collectors.groupingBy(a -> a.getParent().getId()));
+
+        // ── Response assembly — no repository calls inside either loop ────────
         List<QuestionResponse> allQuestions = new ArrayList<>();
 
         for (Lesson lesson : lessons) {
 
-            List<LessonQA> questions =
-                    qaRepo.findByLesson_IdAndParentIsNull(lesson.getId());
+            List<LessonQA> lessonQuestions =
+                    questionsByLesson.getOrDefault(lesson.getId(), List.of());
 
-            List<Long> questionIds = questions.stream()
-                    .map(LessonQA::getId)
-                    .toList();
-
-            List<LessonQA> answers =
-                    questionIds.isEmpty()
-                            ? List.of()
-                            : qaRepo.findByParent_IdIn(questionIds);
-
-            Map<Long, List<LessonQA>> answerMap =
-                    answers.stream()
-                            .collect(Collectors.groupingBy(a -> a.getParent().getId()));
-
-            for (LessonQA q : questions) {
+            for (LessonQA q : lessonQuestions) {
 
                 QuestionResponse qr = new QuestionResponse();
                 qr.setId(q.getId());
@@ -61,7 +91,7 @@ public class LessonQAService {
                 qr.setIsSolved(q.getIsSolved());
 
                 List<AnswerResponse> answerResponses =
-                        answerMap.getOrDefault(q.getId(), List.of())
+                        answersByQuestion.getOrDefault(q.getId(), List.of())
                                 .stream()
                                 .map(a -> {
                                     AnswerResponse ar = new AnswerResponse();
@@ -81,20 +111,20 @@ public class LessonQAService {
 
         LessonQAResponse response = new LessonQAResponse();
         response.setQuestions(allQuestions);
-
         return response;
     }
 
     // =========================
     // 2. CREATE QUESTION
     // =========================
+    @Transactional
     public void createQuestion(Long userId, CreateQuestionRequest req) {
 
         Lesson lesson = lessonRepo.findById(req.getLessonId())
-                .orElseThrow(() -> new RuntimeException("Lesson not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
 
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         LessonQA q = new LessonQA();
         q.setLesson(lesson);
@@ -113,13 +143,14 @@ public class LessonQAService {
     // =========================
     // 3. CREATE ANSWER
     // =========================
+    @Transactional
     public void createAnswer(Long userId, CreateAnswerRequest req) {
 
         LessonQA parent = qaRepo.findById(req.getParentId())
-                .orElseThrow(() -> new RuntimeException("Question not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Question not found"));
 
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         LessonQA a = new LessonQA();
         a.setLesson(parent.getLesson());

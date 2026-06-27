@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.back_end.dto.response.admin.AdminTagResponse;
 import com.example.back_end.dto.resquest.admin.AdminTagRequest;
 import com.example.back_end.entity.Tag;
+import com.example.back_end.exception.BusinessException;
+import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.admin.AdminTagRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -36,7 +38,7 @@ public class AdminTagService {
     
     public AdminTagResponse getTagById(Long id) {
         Tag tag = tagRepository.findActiveById(id)
-            .orElseThrow(() -> new RuntimeException("Tag not found with id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Tag not found with id: " + id));
 
         return new AdminTagResponse(
             tag.getId(),
@@ -49,7 +51,7 @@ public class AdminTagService {
     
     public AdminTagResponse createTag(AdminTagRequest request) {
         if (tagRepository.countBySlug(request.slug()) > 0) {
-            throw new RuntimeException("Tag with slug '" + request.slug() + "' already exists");
+            throw new BusinessException("Tag with slug '" + request.slug() + "' already exists");
         }
         
         Tag tag = new Tag();
@@ -70,11 +72,11 @@ public class AdminTagService {
     
     public AdminTagResponse updateTag(Long id, AdminTagRequest request) {
         Tag tag = tagRepository.findActiveById(id)
-            .orElseThrow(() -> new RuntimeException("Tag not found with id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Tag not found with id: " + id));
         
         if (!tag.getSlug().equals(request.slug()) && 
             tagRepository.countBySlugAndNotId(request.slug(), id) > 0) {
-            throw new RuntimeException("Tag with slug '" + request.slug() + "' already exists");
+            throw new BusinessException("Tag with slug '" + request.slug() + "' already exists");
         }
         
         tag.setName(request.name());
@@ -93,7 +95,7 @@ public class AdminTagService {
     
     public void deleteTag(Long id) {
         Tag tag = tagRepository.findActiveById(id)
-            .orElseThrow(() -> new RuntimeException("Tag not found with id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Tag not found with id: " + id));
         
         tag.setIsDeleted(true);
         tag.setUpdatedAt(Instant.now());

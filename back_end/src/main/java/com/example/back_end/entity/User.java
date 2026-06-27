@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.type.SqlTypes;
 
@@ -102,6 +103,7 @@ public class User {
     private Set<Userauthprovider> userauthproviders = new LinkedHashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @BatchSize(size = 50)
     @JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new LinkedHashSet<>();
 

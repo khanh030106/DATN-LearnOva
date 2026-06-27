@@ -1,63 +1,56 @@
-import InstructorCard from './components/InstructorsCard.jsx'
 import './Instructors.css';
 
-import instructor1 from '../../../assets/instructors/instructor-1.jpg';
-import instructor2 from '../../../assets/instructors/instructor-2.jpg';
-import instructor3 from '../../../assets/instructors/instructor-3.jpg';
-import instructor4 from '../../../assets/instructors/instructor-4.jpg';
-
 const instructors = [
-    {
-        id: 1,
-        name: 'Dr. Nguyen Van Minh',
-        role: 'PHILOSOPHY & CULTURE EXPERT',
-        students: '4.2k+ students',
-        rating: 4.9,
-        image: instructor1,
-    },
-    {
-        id: 2,
-        name: 'MSc. Le Minh Anh',
-        role: 'SENIOR PRODUCT DESIGNER',
-        students: '12k+ students',
-        rating: 4.8,
-        image: instructor2,
-    },
-    {
-        id: 3,
-        name: 'Le Quang Huy',
-        role: 'DIGITAL MARKETING DIRECTOR',
-        students: '8k+ students',
-        rating: 4.7,
-        image: instructor3,
-    },
-    {
-        id: 4,
-        name: 'Jennifer Nguyen',
-        role: 'IELTS 8.5 & CORPORATE TRAINER',
-        students: '5k+ students',
-        rating: 5.0,
-        image: instructor4,
-    },
+    { name: 'Sarah Chen',      title: 'Senior Web Engineer',    students: '142K', courses: 8, rating: '4.9', color: '#2563eb', initial: 'SC' },
+    { name: 'Dr. Alex Kumar',  title: 'Data Science PhD',       students: '98K',  courses: 5, rating: '4.9', color: '#4361ee', initial: 'AK' },
+    { name: 'Maria Gonzalez',  title: 'Lead Product Designer',  students: '67K',  courses: 6, rating: '4.8', color: '#f72585', initial: 'MG' },
 ];
 
-const Instructors = () => {
+export default function Instructors() {
     return (
-        <section className="instructors-section">
-            <div className="instructors-section__header">
-                <h2>An outstanding team of lecturers</h2>
-                <p>
-                    Learn from leading experts with years of practical experience at major corporations..
-                </p>
-            </div>
+        <section className="inst" aria-labelledby="inst-heading">
+            <div className="inst__container">
+                <div className="inst__header">
+                    <span className="section-eyebrow">Instructor Spotlight</span>
+                    <h2 id="inst-heading" className="inst__title">Learn from the best</h2>
+                </div>
 
-            <div className="instructors-section__grid">
-                {instructors.map((instructor) => (
-                    <InstructorCard key={instructor.id} instructor={instructor} />
-                ))}
+                <div className="inst__grid">
+                    {instructors.map((inst) => (
+                        <article key={inst.name} className="inst__card">
+                            <div
+                                className="inst__avatar"
+                                style={{
+                                    background: `linear-gradient(135deg, ${inst.color}, ${inst.color}88)`,
+                                    boxShadow: `0 6px 20px ${inst.color}44`,
+                                }}
+                                aria-hidden="true"
+                            >
+                                {inst.initial}
+                            </div>
+                            <h3 className="inst__name">{inst.name}</h3>
+                            <p className="inst__role">{inst.title}</p>
+
+                            <div className="inst__stats">
+                                <div className="inst__stat">
+                                    <strong>{inst.students}</strong>
+                                    <span>Students</span>
+                                </div>
+                                <div className="inst__stat">
+                                    <strong>{inst.courses}</strong>
+                                    <span>Courses</span>
+                                </div>
+                                <div className="inst__stat">
+                                    <strong>{inst.rating}</strong>
+                                    <span>Rating</span>
+                                </div>
+                            </div>
+
+                            <button className="inst__cta">View Courses</button>
+                        </article>
+                    ))}
+                </div>
             </div>
         </section>
     );
-};
-
-export default Instructors;
+}

@@ -20,14 +20,18 @@ public class RefreshCookieService {
     @Value("${jwt.access-token-expiration}")
     private Long accessTokenExpiration;
 
+    // false in local dev, true in production (set COOKIE_SECURE=true in prod env)
+    @Value("${server.cookie.secure:false}")
+    private boolean secureCookie;
+
     public ResponseCookie createRefreshTokenCookie(String refreshToken, Boolean remember) {
         Long expiration = Boolean.TRUE.equals(remember)
                 ? refreshTokenRememberExpiration
                 : refreshTokenExpiration;
 
-        return ResponseCookie.from("refreshToken", refreshToken)
+        return ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, refreshToken)
                 .httpOnly(true)
-                .secure(false)
+                .secure(secureCookie)
                 .path("/api/learnova/auth")
                 .maxAge(Duration.ofMillis(expiration))
                 .sameSite("Lax")
@@ -37,7 +41,7 @@ public class RefreshCookieService {
     public ResponseCookie clearRefreshTokenCookie() {
         return ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, "")
                 .httpOnly(true)
-                .secure(false)
+                .secure(secureCookie)
                 .path("/api/learnova/auth")
                 .maxAge(0)
                 .sameSite("Lax")
@@ -47,7 +51,7 @@ public class RefreshCookieService {
     public ResponseCookie createAccessTokenCookie(String accessToken) {
         return ResponseCookie.from(ACCESS_TOKEN_COOKIE_NAME, accessToken)
                 .httpOnly(true)
-                .secure(false)
+                .secure(secureCookie)
                 .path("/")
                 .maxAge(Duration.ofMillis(accessTokenExpiration))
                 .sameSite("Lax")
@@ -57,7 +61,7 @@ public class RefreshCookieService {
     public ResponseCookie clearAccessTokenCookie() {
         return ResponseCookie.from(ACCESS_TOKEN_COOKIE_NAME, "")
                 .httpOnly(true)
-                .secure(false)
+                .secure(secureCookie)
                 .path("/")
                 .maxAge(0)
                 .sameSite("Lax")

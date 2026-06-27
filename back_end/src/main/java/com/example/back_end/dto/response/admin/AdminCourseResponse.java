@@ -18,5 +18,6 @@ public record AdminCourseResponse(
     String status,
     Long instructorId,
     String instructorName,
-    OffsetDateTime publishedAt
+    OffsetDateTime publishedAt,
+    List<Long> tagIds
 ) {}

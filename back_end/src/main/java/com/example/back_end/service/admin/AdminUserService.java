@@ -12,6 +12,8 @@ import com.example.back_end.dto.response.admin.AdminUserResponse;
 import com.example.back_end.entity.Role;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.RoleName;
+import com.example.back_end.exception.BusinessException;
+import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.RoleRepository;
 import com.example.back_end.repository.admin.AdminUserRepository;
 
@@ -59,7 +61,7 @@ public class AdminUserService {
 
     public AdminUserResponse createUser(AdminUserRequest request) {
         if (request.password() == null || request.password().isBlank()) {
-            throw new RuntimeException("Password is required");
+            throw new BusinessException("Password is required");
         }
 
         String normalizedRole = request.role() == null
@@ -120,7 +122,7 @@ public class AdminUserService {
 
     public AdminUserResponse updateUser(Long id, AdminUserRequest request) {
         User user = adminUserRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         if (request.fullName() != null) {
             user.setFullName(request.fullName());
@@ -195,7 +197,7 @@ public class AdminUserService {
 
     public void deleteUser(Long id) {
         User user = adminUserRepository.findByIdAndIsDeletedFalse(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         user.setIsDeleted(true);
         user.setUpdatedAt(Instant.now());

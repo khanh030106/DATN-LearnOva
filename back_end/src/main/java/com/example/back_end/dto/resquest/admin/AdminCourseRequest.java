@@ -19,5 +19,6 @@ public record AdminCourseRequest(
     @NotBlank String level,
     @NotBlank String status,
     @NotNull Long instructorId,
-    Boolean isDeleted
+    Boolean isDeleted,
+    List<Long> tagIds
 ) {}
