@@ -28,9 +28,20 @@ public class Lessonsource {
     @JoinColumn(name = "lesson_id", nullable = false)
     private Lesson lesson;
 
-    @NotNull
-    @Column(name = "file_url", nullable = false, length = Integer.MAX_VALUE)
-    private String fileUrl;
+    @Column(name = "file_key", nullable = false, length = Integer.MAX_VALUE)
+    private String fileKey;
+
+    @Column(name = "original_file_name", length = Integer.MAX_VALUE)
+    private String originalFileName;
+
+    @Column(name = "file_name", length = Integer.MAX_VALUE)
+    private String fileName;
+
+    @Column(name = "content_type", length = 100)
+    private String contentType;
+
+    @Column(name = "file_size_bytes")
+    private Long fileSizeBytes;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "resource_type", columnDefinition = "lesson_source_type not null")

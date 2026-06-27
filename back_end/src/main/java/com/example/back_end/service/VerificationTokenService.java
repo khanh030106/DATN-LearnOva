@@ -49,12 +49,17 @@ public class VerificationTokenService {
     }
 
     public Verificationtoken verifyRefreshToken(String token) {
-
-        return verificationTokenRepository.findByTokenAndTokenTypeAndIsUsedFalse(
+        Verificationtoken refreshToken = verificationTokenRepository.findByTokenAndTokenTypeAndIsUsedFalse(
                 token,
-                VerificationType.REFRESH_TOKEN,
-                false
-                ).orElseThrow(() -> new RuntimeException("Refresh token expired"));
+                VerificationType.REFRESH_TOKEN
+                )
+                .orElseThrow(() -> new RuntimeException("Token not found"));
+
+        if (refreshToken.getExpiredAt().isBefore(OffsetDateTime.now())) {
+            throw new RuntimeException("refresh token expired");
+        }
+
+        return refreshToken;
     }
 
     @Transactional

@@ -44,10 +44,15 @@ public class AuthController {
                 return ResponseEntity.ok(new LoginResponse(result.accessToken()));
         }
 
-        @PostMapping("/refresh")
-        public ResponseEntity<LoginResponse> refresh(
-                        @CookieValue("refreshToken") String refreshToken) {
-                LoginResponse response = authService.refreshAccessToken(refreshToken);
+         response.addHeader(
+                 HttpHeaders.SET_COOKIE,
+                 refreshCookieService.createRefreshTokenCookie(result.refreshToken(), request.rememberMe()).toString()
+         );
+
+         response.addHeader(
+                 HttpHeaders.SET_COOKIE,
+                 refreshCookieService.createAccessTokenCookie(result.accessToken()).toString()
+         );
 
                 return ResponseEntity.ok(response);
         }
@@ -58,12 +63,36 @@ public class AuthController {
                         HttpServletResponse response) {
                 authService.logout(refreshToken);
 
-                response.addHeader(
-                                HttpHeaders.SET_COOKIE,
-                                refreshCookieService.clearRefreshTokenCookie().toString());
+     @PostMapping("/refresh")
+     public ResponseEntity<LoginResponse> refresh(
+           @CookieValue(value = "refreshToken", required = false) String refreshToken,
+           HttpServletResponse response
+     ) {
+     if (refreshToken == null) {
+          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+     }
 
-                return ResponseEntity.noContent().build();
-        }
+     try {
+          LoginResponse loginResponse = authService.refreshAccessToken(refreshToken);
+
+          response.addHeader(
+                  HttpHeaders.SET_COOKIE,
+                  refreshCookieService.createAccessTokenCookie(loginResponse.accessToken()).toString()
+          );
+
+          return ResponseEntity.ok(loginResponse);
+     } catch (RuntimeException e) {
+          response.addHeader(
+                  HttpHeaders.SET_COOKIE,
+                  refreshCookieService.clearRefreshTokenCookie().toString()
+          );
+          response.addHeader(
+                  HttpHeaders.SET_COOKIE,
+                  refreshCookieService.clearAccessTokenCookie().toString()
+          );
+          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+     }
+     }
 
         @PostMapping("/register")
         public ResponseEntity<?> register(
@@ -76,4 +105,16 @@ public class AuthController {
                                                 "Registration successful. Please verify your email."));
         }
 
-}
+     response.addHeader(
+             HttpHeaders.SET_COOKIE,
+             refreshCookieService.clearRefreshTokenCookie().toString()
+     );
+
+     response.addHeader(
+             HttpHeaders.SET_COOKIE,
+             refreshCookieService.clearAccessTokenCookie().toString()
+     );
+
+     return ResponseEntity.noContent().build();
+    }
+ }

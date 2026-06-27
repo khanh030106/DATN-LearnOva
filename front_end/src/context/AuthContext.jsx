@@ -14,11 +14,16 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password, remember) => {
         const data = await loginApi(email, password, remember);
         setAccessToken(data.accessToken);
+        try {
+            await fetchCurrentUser();
+        } catch (e) {
+            console.error("Failed to fetch user", e);
+        }
         return data;
     };
 
-    const fetchCurrentUser = async (token) => {
-        const user = await getCurrentUserApi(token);
+    const fetchCurrentUser = async () => {
+        const user = await getCurrentUserApi();
         setCurrentUser(user);
         return user;
     };
@@ -48,8 +53,22 @@ export const AuthProvider = ({ children }) => {
     //         }
     //     };
 
-    //     restoreLogin();
-    // }, []);
+                try {
+                    await fetchCurrentUser();
+                } catch (e) {
+                    console.error("Failed to fetch user", e);
+                }
+
+            } catch (error) {
+                setAccessToken(null);
+                setCurrentUser(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        restoreLogin();
+    }, []);
 
     return (
         <AuthContext.Provider

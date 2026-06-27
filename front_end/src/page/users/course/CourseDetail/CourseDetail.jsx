@@ -3,7 +3,7 @@ import './CourseDetail.css';
 import {FaClipboardCheck} from "react-icons/fa";
 import {FaPlay } from 'react-icons/fa';
 import {ChevronDown} from 'lucide-react';
-import Header from "../../../../component/header/user_header/Header.jsx";
+// import Header from "../../../../component/header/user_header/Header.jsx";
 import Footer from "../../../../component/footer/footer-courseDetail/footer-courseDetail.jsx";
 import {
     qaData,
@@ -21,6 +21,7 @@ import LearnovaAI from "../../../home/AI/AI.jsx";
 import {FaPlayCircle, FaClock} from "react-icons/fa";
 import QuizTab from "./QuizPage.jsx";
 import QuizPage from "./QuizPage.jsx";
+import Header from "../../../../component/header/user_header/Header.jsx";
 
 
 function CourseDetail() {

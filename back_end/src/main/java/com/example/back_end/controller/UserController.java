@@ -1,7 +1,6 @@
 package com.example.back_end.controller;
 
 import com.example.back_end.dto.response.CurrentUserResponse;
-import com.example.back_end.entity.User;
 import com.example.back_end.service.AuthService;
 import com.example.back_end.service.UserService;
 import com.example.back_end.repository.UserRepository;
@@ -12,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import java.time.Instant;
 import java.util.List;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor

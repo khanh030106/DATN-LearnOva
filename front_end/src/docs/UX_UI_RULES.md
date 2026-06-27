@@ -294,8 +294,6 @@ Card rules:
 
 ## 12. Header And Navbar Rules
 
-The main header is defined in `component/header/main_header/Header.jsx` and `Header.css`.
-
 Structure:
 
 - `.main-header`

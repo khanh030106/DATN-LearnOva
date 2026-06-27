@@ -12,6 +12,8 @@ const SectionsStep = ({
                           onAddLesson,
                           onLessonTitleChange,
                           onLessonSourceChange,
+                          onLessonResourceChange,
+                          onLessonResourceRemove,
                           onDeleteLesson,
                           onSectionTitleChange,
                           onPrevious,
@@ -63,10 +65,13 @@ const SectionsStep = ({
                                     <LessonRow
                                         key={lesson.id}
                                         courseId={courseId}
+                                        sectionId={activeSection.id}
                                         lesson={lesson}
                                         onTitleChange={(title) => onLessonTitleChange(activeSection.id, lesson.id, title)}
                                         onSourceChange={(file) => onLessonSourceChange(activeSection.id, lesson.id, file)}
                                         onVideoChange={(file) => onLessonVideoChange(activeSection.id, lesson.id, file)}
+                                        onResourceChange={(files, meta) => onLessonResourceChange?.(activeSection.id, lesson.id, files, meta)}
+                                        onResourceRemove={(index) => onLessonResourceRemove?.(activeSection.id, lesson.id, index)}
                                         onDelete={() => onDeleteLesson(activeSection.id, lesson.id)}
                                     />
                                 ))}
@@ -80,7 +85,6 @@ const SectionsStep = ({
                         </>
                     ) : (
                         <div className="teacher-section-empty">
-                            <h2>No sections yet</h2>
                             <button type="button" className="teacher-add-section" onClick={onAddSection}>
                                 <Plus size={15}/>
                                 Add Section

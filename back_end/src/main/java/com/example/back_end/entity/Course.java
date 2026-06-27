@@ -29,10 +29,6 @@
         private Long id;
 
         @NotNull
-        @Column(name = "thumbnail_url", nullable = false, length = Integer.MAX_VALUE)
-        private String thumbnailUrl;
-
-        @NotNull
         @Column(name = "title", nullable = false, length = Integer.MAX_VALUE)
         private String title;
 
@@ -99,6 +95,10 @@
         @ColumnDefault("to_tsvector('simple', ((immutable_unaccent(COALESCE(title, ''::text)) || ' '::text) || immutable_unaccent(COALESCE(description, ''))))")
         @Column(name = "search_vector", columnDefinition = "tsvector", insertable = false, updatable = false)
         private Object searchVector;
+
+        @NotNull
+        @Column(name = "thumbnail_key", nullable = false, length = Integer.MAX_VALUE)
+        private String thumbnailKey;
 
         @OneToMany(mappedBy = "course")
         private Set<Cart> carts = new LinkedHashSet<>();

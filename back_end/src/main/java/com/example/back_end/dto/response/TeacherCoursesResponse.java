@@ -1,0 +1,15 @@
+package com.example.back_end.dto.response;
+
+import com.example.back_end.entity.enums.CourseStatus;
+import java.math.BigDecimal;
+import java.time.Instant;
+
+public record TeacherCoursesResponse(
+        Long courseId,
+        String title,
+        String thumbnailKey,
+        CourseStatus status,
+        BigDecimal basePrice,
+        Instant createdAt
+) {
+}

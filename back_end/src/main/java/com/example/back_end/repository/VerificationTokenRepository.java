@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 public interface VerificationTokenRepository extends JpaRepository<Verificationtoken, Long> {
-    Optional<Verificationtoken> findByTokenAndTokenTypeAndIsUsedFalse(String token, VerificationType tokenType, Boolean isUsed);
+    Optional<Verificationtoken> findByTokenAndTokenTypeAndIsUsedFalse(String token, VerificationType tokenType);
 
     void deleteByUserAndTokenType(User user, VerificationType tokenType);
 

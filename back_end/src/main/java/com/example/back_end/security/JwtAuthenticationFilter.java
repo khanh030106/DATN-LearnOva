@@ -3,6 +3,7 @@ package com.example.back_end.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,56 +31,37 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        System.out.println("==== JWT FILTER START ====");
-        System.out.println("PATH: " + request.getServletPath());
-        System.out.println("AUTH HEADER: " + request.getHeader("Authorization"));
-        System.out.println("CURRENT AUTH (before): " + SecurityContextHolder.getContext().getAuthentication());
-        String header = request.getHeader("Authorization");
         String path = request.getServletPath();
 
         if (path.startsWith("/api/learnova/auth/")) {
             filterChain.doFilter(request, response);
             return;
         }
+        String token = extractTokenFromCookie(request);
 
-//        if (path.startsWith("/api/learnova/review/post")) {  //test xong thì xóaaaa
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
+        if (token == null) {
+            String header = request.getHeader("Authorization");
+            if (header != null && header.startsWith("Bearer ")) {
+                token = header.substring(7);
+            }
+        }
 
-        if (header == null || !header.startsWith("Bearer ")){
+        if (token == null) {
             filterChain.doFilter(request, response);
             return;
         }
-
-        String token = header.substring(7);
 
         String email;
         try {
             email = jwtService.getEmailFromToken(token);
-            System.out.println("EMAIL FROM TOKEN: " + email);
         } catch (Exception e) {
-            System.out.println("JWT ERROR:");
-            e.printStackTrace();
             filterChain.doFilter(request, response);
             return;
         }
 
-        if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
-
-            System.out.println("LOADING USER: " + email);
-
-            UserDetails userDetails =
-                    customUserDetailsService.loadUserByUsername(email);
-
-            System.out.println("USER FOUND: " + userDetails.getUsername());
-
-            boolean valid = jwtService.isTokenValid(token, userDetails);
-
-            System.out.println("TOKEN VALID: " + valid);
-
-            if (valid){
-
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
+            if (jwtService.isTokenValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
@@ -91,18 +73,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource()
                                 .buildDetails(request)
                 );
-
-                SecurityContextHolder.getContext()
-                        .setAuthentication(authentication);
-
-                System.out.println(
-                        "AUTH AFTER SET: "
-                                + SecurityContextHolder.getContext()
-                                .getAuthentication()
-                );
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private String extractTokenFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("accessToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }
