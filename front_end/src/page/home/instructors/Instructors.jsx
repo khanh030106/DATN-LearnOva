@@ -21,8 +21,7 @@ export default function Instructors() {
                             <div
                                 className="inst__avatar"
                                 style={{
-                                    background: `linear-gradient(135deg, ${inst.color}, ${inst.color}88)`,
-                                    boxShadow: `0 6px 20px ${inst.color}44`,
+                                    background: `linear-gradient(135deg, ${inst.color}, ${inst.color}88)`
                                 }}
                                 aria-hidden="true"
                             >

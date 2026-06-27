@@ -60,10 +60,9 @@ body {
 /* Section eyebrow label utility */
 .section-eyebrow {
   display: block;
-  margin-bottom: 10px;
-  color: var(--blue-600);
-  font-size: 12px;
-  font-weight: 600;
+  color: #0048e6;
+  font-size: 13px;
+  font-weight: 700;
   letter-spacing: 1.8px;
   text-transform: uppercase;
 }

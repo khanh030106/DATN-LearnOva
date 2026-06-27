@@ -23,8 +23,8 @@ const Home = () => {
 
             <main id="main-content">
                 <Course />
-                <Categories />
                 <HowItWorks />
+                <Categories />
                 <Instructors />
                 <Testimonials />
                 <FAQ />

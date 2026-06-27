@@ -24,9 +24,9 @@
 .hero__inner {
     position: relative;
     z-index: 1;
-    max-width: 1280px;
+    max-width: 1350px;
     margin: 0 auto;
-    padding: 72px 48px 0;
+    padding: 72px 48px 35px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 64px;

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { loginApi, logoutApi, refreshApi } from "../api/AuthApi.js";
 import { getCurrentUserApi } from "../api/UserApi.js";
 
@@ -30,21 +30,21 @@ export const AuthProvider = ({ children }) => {
         return user;
     };
 
-    const refreshAccessToken = async () => {
+    const refreshAccessToken = useCallback(async () => {
         // Backend rotates both cookies and returns the new access token in the body.
         const data = await refreshApi();
         setAccessToken(data.accessToken);
         return data.accessToken;
-    };
+    }, []);
 
-    const logout = async () => {
+    const logout = useCallback(async () => {
         try {
             await logoutApi();
         } finally {
             setAccessToken(null);
             setCurrentUser(null);
         }
-    };
+    }, []);
 
     // On every page load, try to restore the session from the refreshToken cookie.
     // If the cookie is missing or expired the refresh call returns 401 and we stay logged out.
