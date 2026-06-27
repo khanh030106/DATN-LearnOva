@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./Course.css";
-import { BiHeart, BiCart } from "react-icons/bi";
+import { BiHeart } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
-import { LayoutGrid, List, RotateCcw, Users, X } from "lucide-react";
+import { X } from "lucide-react";
 import LearnovaAI from "../../home/AI/AI.jsx";
 
 const categories = [
@@ -26,13 +26,12 @@ const courses = [
     id: 1,
     title: "Lập trình Fullstack Master Node.js",
     instructor: "Nguyễn Văn A",
-    instructorAvatar:
-      "https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg",
     category: "Technology",
     rating: 4.9,
     reviews: 2400,
-    students: 2400,
     price: "1.290.000đ",
+    duration: "42h",
+    tag: "BESTSELLER",
     image:
       "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80",
     level: "Intermediate",
@@ -41,13 +40,12 @@ const courses = [
     id: 2,
     title: "Phân tích dữ liệu kinh doanh",
     instructor: "Trần Thị B",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
     category: "Marketing",
     rating: 4.8,
     reviews: 1600,
-    students: 1600,
     price: "990.000đ",
+    duration: "28h",
+    tag: "HOT",
     image:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
     level: "Beginner",
@@ -56,13 +54,12 @@ const courses = [
     id: 3,
     title: "Thiết kế UI/UX Chuyên sâu",
     instructor: "Lê Hoàng C",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
     category: "Design",
     rating: 4.7,
     reviews: 1800,
-    students: 1800,
     price: "1.590.000đ",
+    duration: "35h",
+    tag: "NEW",
     image:
       "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=600&q=80",
     level: "Intermediate",
@@ -71,13 +68,11 @@ const courses = [
     id: 4,
     title: "Digital Marketing Mastery",
     instructor: "Phạm Thị D",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
     category: "Marketing",
     rating: 4.8,
     reviews: 1200,
-    students: 1200,
     price: "690.000đ",
+    duration: "24h",
     image:
       "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80",
     level: "Beginner",
@@ -86,13 +81,11 @@ const courses = [
     id: 5,
     title: "Quản lý nhân sự hiện đại",
     instructor: "Phạm Văn E",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
     category: "Business",
     rating: 4.6,
     reviews: 980,
-    students: 980,
     price: "890.000đ",
+    duration: "18h",
     image:
       "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=600&q=80",
     level: "Intermediate",
@@ -101,30 +94,27 @@ const courses = [
     id: 6,
     title: "Python for Data Science",
     instructor: "Bùi Thị F",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
     category: "Technology",
     rating: 4.8,
     reviews: 2100,
-    students: 2100,
     price: "959.000đ",
     originalPrice: "1.350.000đ",
     discount: 29,
+    duration: "38h",
+    tag: "BESTSELLER",
     image:
       "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80",
     level: "Intermediate",
   },
   {
     id: 7,
-    title: "Nâng thuật lực Trình",
+    title: "Nâng cao kỹ năng thuyết trình",
     instructor: "Đặng Thị G",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
     category: "Soft Skills",
     rating: 4.7,
     reviews: 1260,
-    students: 1260,
     price: "690.000đ",
+    duration: "20h",
     image:
       "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80",
     level: "Beginner",
@@ -133,37 +123,34 @@ const courses = [
     id: 8,
     title: "Tiếng Anh giao tiếp",
     instructor: "Dương H",
-    instructorAvatar:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbc7OXnWjkjG1LlI0DLXbDIDvpka53B7YJX_Yzlgs4Hg&s=10",
     category: "Languages",
     rating: 4.6,
     reviews: 1100,
-    students: 1100,
     price: "490.000đ",
+    duration: "15h",
     image:
       "https://images.unsplash.com/photo-1546410531-bb4ca050552d?auto=format&fit=crop&w=600&q=80",
     level: "Beginner",
   },
 ];
 
-const categoryBadgeClass = {
-  Technology: "badge-tech",
-  Business: "badge-business",
-  Design: "badge-design",
-  Marketing: "badge-marketing",
-  Languages: "badge-languages",
-  "Soft Skills": "badge-skills",
-};
-
-const levelBadgeClass = {
-  Beginner: "badge-beginner",
-  Intermediate: "badge-intermediate",
-  Advanced: "badge-advanced",
-};
-
 function formatCount(num) {
   if (num >= 1000) return `${(num / 1000).toFixed(1).replace(".0", "")}k`;
   return String(num);
+}
+
+const AVATAR_COLORS = ['#1E40AF','#065F46','#5B21B6','#0369A1','#9D174D','#9A3412','#0F766E','#92400E'];
+
+function getInitials(name) {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function getAvatarColor(name) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 }
 
 function FilterChip({ label, onRemove }) {
@@ -309,57 +296,52 @@ function CoursesPage() {
                   >
                     <BiHeart />
                   </button>
-                  <div className="course-image-badges">
-                    <span
-                      className={`course-badge ${categoryBadgeClass[course.category] || "badge-tech"}`}
-                    >
-                      {course.category}
+                  {course.tag && (
+                    <span className={`course-tag-badge course-tag-badge--${course.tag.toLowerCase()}`}>
+                      {course.tag}
                     </span>
-                    <span
-                      className={`course-badge ${levelBadgeClass[course.level] || "badge-intermediate"}`}
-                    >
-                      {course.level}
-                    </span>
-                  </div>
+                  )}
+                  {course.duration && (
+                    <span className="course-duration-badge">{course.duration}</span>
+                  )}
                 </div>
 
                 <div className="course-card-body">
                   <h3 className="course-title">{course.title}</h3>
 
                   <div className="course-instructor-row">
-                    <img
-                      src={course.instructorAvatar}
-                      alt={course.instructor}
-                      className="course-instructor-avatar"
-                    />
+                    <div
+                      className="course-instructor-avatar-initials"
+                      style={{ background: getAvatarColor(course.instructor) }}
+                      aria-hidden="true"
+                    >
+                      {getInitials(course.instructor)}
+                    </div>
                     <span className="course-author">{course.instructor}</span>
                   </div>
 
                   <div className="course-rating">
+                    <span className="course-rating-value">{course.rating}</span>
                     <div className="course-rating-stars">
-                      <strong>{course.rating}</strong>
-                      <FaStar className="rating-star-icon" />
-                      <small>({formatCount(course.reviews)})</small>
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <FaStar
+                          key={i}
+                          className={`rating-star-icon${i > Math.round(course.rating) ? " rating-star-empty" : ""}`}
+                        />
+                      ))}
                     </div>
-                    <div className="course-students">
-                      <Users size={14} />
-                      <span>{formatCount(course.students)} students</span>
-                    </div>
+                    <span className="course-reviews">({formatCount(course.reviews)})</span>
                   </div>
 
                   <div className="course-card-bottom">
                     <div className="course-price-block">
                       <span className="course-price">{course.price}</span>
                       {course.originalPrice && (
-                        <>
-                          <span className="course-original-price">{course.originalPrice}</span>
-                          <span className="course-discount">-{course.discount}%</span>
-                        </>
+                        <span className="course-original-price">{course.originalPrice}</span>
                       )}
                     </div>
-                    <button type="button" className="add-to-cart-btn">
-                      <BiCart size={18} />
-                      <span>Add to Cart</span>
+                    <button type="button" className="enroll-btn">
+                      Enroll Now
                     </button>
                   </div>
                 </div>
