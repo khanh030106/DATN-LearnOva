@@ -58,8 +58,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/learnova/admin/tags-management/**").permitAll()
                         .requestMatchers("/api/learnova/user/me").permitAll()
                         .requestMatchers("/api/learnova/review/**").permitAll()
-                                .requestMatchers("/api/learnova/auth/resend-verification").permitAll()
-                                .requestMatchers("/error").permitAll()// để test
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/instructors").permitAll()
+                        .requestMatchers("/api/learnova/auth/resend-verification").permitAll()
+                        .requestMatchers("/error").permitAll()// để test
                         .anyRequest().authenticated()
                 )
 

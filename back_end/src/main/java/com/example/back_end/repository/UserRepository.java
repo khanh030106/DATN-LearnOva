@@ -10,7 +10,8 @@ import com.example.back_end.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByEmailAndIsDeletedFalse(String email);;
+    Optional<User> findByEmailAndIsDeletedFalse(String email);
+    Optional<User> findByIdAndIsDeletedFalse(Long id);
 
     boolean existsUsersByEmail(String email);
 
