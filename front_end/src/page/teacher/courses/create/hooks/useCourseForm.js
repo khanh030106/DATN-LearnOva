@@ -278,6 +278,7 @@ export const useCourseForm = () => {
             thumbnailKey: course.thumbnailKey,
             requirements: course.requirements.filter(Boolean),
             whatYouLearn: course.whatYouLearn.filter(Boolean),
+            categoryId: course.category ? Number(course.category) : null,
         };
 
         const data = await createDraftCourse(payload);

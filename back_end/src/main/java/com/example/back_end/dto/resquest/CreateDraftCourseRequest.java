@@ -15,6 +15,7 @@ public record CreateDraftCourseRequest(
         @NotNull BigDecimal basePrice,
         String thumbnailKey,
         List<String> requirements,
-        List<String> whatYouLearn
+        List<String> whatYouLearn,
+        Long categoryId
 ) {
 }

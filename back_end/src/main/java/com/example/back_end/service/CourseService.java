@@ -5,15 +5,20 @@ import com.example.back_end.dto.response.TeacherCoursesResponse;
 import com.example.back_end.dto.resquest.CreateDraftCourseRequest;
 import com.example.back_end.dto.resquest.CreateLessonRequest;
 import com.example.back_end.dto.resquest.CreateSectionRequest;
+import com.example.back_end.entity.Category;
 import com.example.back_end.entity.Course;
+import com.example.back_end.entity.Coursecategory;
+import com.example.back_end.entity.CoursecategoryId;
 import com.example.back_end.entity.Section;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.CourseStatus;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
+import com.example.back_end.repository.CoursecategoryRepository;
 import com.example.back_end.repository.CourseRepository;
 import com.example.back_end.repository.SectionRepository;
 import com.example.back_end.repository.UserRepository;
+import com.example.back_end.repository.admin.AdminCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +37,8 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private final CoursecategoryRepository coursecategoryRepository;
+    private final AdminCategoryRepository categoryRepository;
 
     public Long createDraftCourse(
             CreateDraftCourseRequest request,
@@ -59,6 +66,23 @@ public class CourseService {
         course.setUpdatedAt(Instant.now());
 
         courseRepository.save(course);
+
+        if (request.categoryId() != null) {
+            Category category = categoryRepository.findActiveById(request.categoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+
+            CoursecategoryId ccId = new CoursecategoryId();
+            ccId.setCourseId(course.getId());
+            ccId.setCategoryId(category.getId());
+
+            Coursecategory cc = new Coursecategory();
+            cc.setId(ccId);
+            cc.setCourse(course);
+            cc.setCategory(category);
+            cc.setIsPrimary(true);
+
+            coursecategoryRepository.save(cc);
+        }
 
         return course.getId();
     }
@@ -101,14 +125,30 @@ public class CourseService {
                         instructor.getId()
                 )
                 .stream()
-                .map(course -> new TeacherCoursesResponse(
-                        course.getId(),
-                        course.getTitle(),
-                        course.getThumbnailKey(),
-                        course.getStatus(),
-                        course.getBasePrice(),
-                        course.getCreatedAt()
-                ))
+                .map(course -> {
+                    String categoryName = course.getCoursecategories().stream()
+                            .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
+                            .findFirst()
+                            .map(cc -> cc.getCategory().getName())
+                            .orElse(null);
+
+                    long lessonCount = course.getSections().stream()
+                            .filter(s -> !Boolean.TRUE.equals(s.getIsDeleted()))
+                            .flatMap(s -> s.getLessons().stream())
+                            .filter(l -> !Boolean.TRUE.equals(l.getIsDeleted()))
+                            .count();
+
+                    return new TeacherCoursesResponse(
+                            course.getId(),
+                            course.getTitle(),
+                            course.getThumbnailKey(),
+                            course.getStatus(),
+                            course.getBasePrice(),
+                            course.getCreatedAt(),
+                            categoryName,
+                            lessonCount
+                    );
+                })
                 .toList();
     }
 

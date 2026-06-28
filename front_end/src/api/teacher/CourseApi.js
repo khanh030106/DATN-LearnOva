@@ -91,3 +91,8 @@ export const updateCourseStatus = async (courseId, status) => {
     const response = await api.patch(`/courses/${courseId}/status`, { status });
     return response.data;
 };
+
+export const getFileUrl = async (fileKey) => {
+    const response = await api.get("/courses/video-url", { params: { fileKey } });
+    return response.data.url;
+};
