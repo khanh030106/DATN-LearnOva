@@ -58,14 +58,16 @@ const CoursesPage = () => {
               status: course.status,
               courseStatus: course.status,
               basePrice: course.basePrice,
-              displayRevenue: isPublished ? `$${course.basePrice || 0}` : "-",
+              displayPrice: isPublished ? `$${course.basePrice || 0}` : "-",
               createdAt: course.createdAt,
               updatedAt: course.createdAt,
               createdAgo,
               isDeleted: false,
               category: course.categoryName || "Uncategorized",
               modules: course.lessonCount ?? 0,
-              students: isPublished ? "0 students" : "-",
+              totalDurationSeconds: course.totalDurationSeconds ?? 0,
+              studentCount: course.studentCount ?? 0,
+              students: `${course.studentCount ?? 0} students`,
               rating: isPublished ? "0.0" : "-",
             };
           })

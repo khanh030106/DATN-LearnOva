@@ -16,6 +16,7 @@ import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.CoursecategoryRepository;
 import com.example.back_end.repository.CourseRepository;
+import com.example.back_end.repository.EnrollmentRepository;
 import com.example.back_end.repository.SectionRepository;
 import com.example.back_end.repository.UserRepository;
 import com.example.back_end.repository.admin.AdminCategoryRepository;
@@ -28,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +42,7 @@ public class CourseService {
     private final UserRepository userRepository;
     private final CoursecategoryRepository coursecategoryRepository;
     private final AdminCategoryRepository categoryRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
     public Long createDraftCourse(
             CreateDraftCourseRequest request,
@@ -120,11 +124,17 @@ public class CourseService {
                 .findByEmailAndIsDeletedFalse(email)
                 .orElseThrow();
 
-        return courseRepository
-                .findByInstructorIdAndIsDeletedFalseOrderByCreatedAtDesc(
-                        instructor.getId()
-                )
+        List<Course> courses = courseRepository
+                .findByInstructorIdAndIsDeletedFalseOrderByCreatedAtDesc(instructor.getId());
+
+        List<Long> courseIds = courses.stream().map(Course::getId).toList();
+
+        Map<Long, Long> enrollmentCountByCourseId = enrollmentRepository
+                .findByCourseIdIn(courseIds)
                 .stream()
+                .collect(Collectors.groupingBy(e -> e.getCourse().getId(), Collectors.counting()));
+
+        return courses.stream()
                 .map(course -> {
                     String categoryName = course.getCoursecategories().stream()
                             .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
@@ -132,11 +142,19 @@ public class CourseService {
                             .map(cc -> cc.getCategory().getName())
                             .orElse(null);
 
-                    long lessonCount = course.getSections().stream()
+                    var activeLessons = course.getSections().stream()
                             .filter(s -> !Boolean.TRUE.equals(s.getIsDeleted()))
                             .flatMap(s -> s.getLessons().stream())
                             .filter(l -> !Boolean.TRUE.equals(l.getIsDeleted()))
-                            .count();
+                            .toList();
+
+                    long lessonCount = activeLessons.size();
+
+                    long totalDurationSeconds = activeLessons.stream()
+                            .mapToLong(l -> l.getDurationSeconds() != null ? l.getDurationSeconds() : 0)
+                            .sum();
+
+                    long studentCount = enrollmentCountByCourseId.getOrDefault(course.getId(), 0L);
 
                     return new TeacherCoursesResponse(
                             course.getId(),
@@ -146,7 +164,9 @@ public class CourseService {
                             course.getBasePrice(),
                             course.getCreatedAt(),
                             categoryName,
-                            lessonCount
+                            lessonCount,
+                            totalDurationSeconds,
+                            studentCount
                     );
                 })
                 .toList();

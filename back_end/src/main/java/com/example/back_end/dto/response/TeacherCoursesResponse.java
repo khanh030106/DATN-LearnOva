@@ -12,6 +12,8 @@ public record TeacherCoursesResponse(
         BigDecimal basePrice,
         Instant createdAt,
         String categoryName,
-        long lessonCount
+        long lessonCount,
+        long totalDurationSeconds,
+        long studentCount
 ) {
 }

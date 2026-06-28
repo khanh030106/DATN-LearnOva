@@ -287,6 +287,10 @@ export const useCourseForm = () => {
     };
 
     const saveSectionsAndLessons = async () => {
+        // Track temp-ID → real-ID mappings; apply a single setState at the end
+        const sectionIdMap = new Map();
+        const lessonIdMap = new Map();
+
         for (const section of sections) {
             let actualSectionId = section.id;
 
@@ -296,6 +300,7 @@ export const useCourseForm = () => {
                     sectionOrder: section.sectionOrder,
                 });
                 actualSectionId = sectionData.sectionId;
+                sectionIdMap.set(section.id, actualSectionId);
             } else if (section.title) {
                 await updateSection(section.id, {title: section.title});
             }
@@ -310,20 +315,7 @@ export const useCourseForm = () => {
                         isPreview: lesson.isPreview || false,
                     });
                     actualLessonId = lessonData.lessonId;
-
-                    setSections((s) =>
-                        s.map((sec) => {
-                            if (sec.id !== section.id) return sec;
-                            return {
-                                ...sec,
-                                id: actualSectionId,
-                                isNew: false,
-                                lessons: sec.lessons.map((l) =>
-                                    l.id === lesson.id ? {...l, id: actualLessonId, isNew: false} : l
-                                ),
-                            };
-                        })
-                    );
+                    lessonIdMap.set(lesson.id, actualLessonId);
                 } else if (lesson.title) {
                     await updateLesson(lesson.id, {title: lesson.title});
                 }
@@ -354,6 +346,22 @@ export const useCourseForm = () => {
                     }
                 }
             }
+        }
+
+        // Single atomic state update — replaces every temp ID with its real DB ID
+        if (sectionIdMap.size > 0 || lessonIdMap.size > 0) {
+            setSections((s) =>
+                s.map((sec) => ({
+                    ...sec,
+                    id: sectionIdMap.get(sec.id) ?? sec.id,
+                    isNew: false,
+                    lessons: sec.lessons.map((l) => ({
+                        ...l,
+                        id: lessonIdMap.get(l.id) ?? l.id,
+                        isNew: false,
+                    })),
+                }))
+            );
         }
     };
 

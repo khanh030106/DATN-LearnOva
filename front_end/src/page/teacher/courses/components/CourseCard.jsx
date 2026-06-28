@@ -1,5 +1,14 @@
 import { Circle, Pencil, Star, Trash2 } from "lucide-react";
 
+const formatDuration = (totalSeconds) => {
+  if (!totalSeconds) return "0:00";
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor((totalSeconds % 3600) / 60);
+  const s = totalSeconds % 60;
+  if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  return `${m}:${String(s).padStart(2, "0")}`;
+};
+
 const statusLabels = {
   PUBLISHED: "Published",
   DRAFT: "Draft",
@@ -9,8 +18,8 @@ const statusLabels = {
 const CourseCard = ({ course, onDelete, onUpdate }) => {
   const status = statusLabels[course.courseStatus] || "Review";
   const isPublished = course.courseStatus === "PUBLISHED";
-  const studentCount = isPublished ? course.students.replace(" students", "") : "-";
-  const revenue = isPublished ? course.displayRevenue : "-";
+  const studentCount = isPublished ? (course.studentCount ?? 0) : "-";
+  const price = isPublished ? course.displayPrice : "-";
   const rating = isPublished ? course.rating : "-";
 
   return (
@@ -18,7 +27,7 @@ const CourseCard = ({ course, onDelete, onUpdate }) => {
       <div className="teacher-course-row__course">
         <div className="teacher-course-row__media">
           <img src={course.image} alt={course.title} />
-          <span>{course.modules}:00</span>
+          <span>{formatDuration(course.totalDurationSeconds)}</span>
         </div>
         <div>
           <h2>{course.title}</h2>
@@ -36,7 +45,7 @@ const CourseCard = ({ course, onDelete, onUpdate }) => {
       </span>
 
       <strong>{studentCount}</strong>
-      <strong>{revenue}</strong>
+      <strong>{price}</strong>
 
       <strong className="teacher-course-row__rating">
         {isPublished ? (
