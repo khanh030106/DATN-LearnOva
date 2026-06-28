@@ -25,7 +25,6 @@ import PromotionsPage from "../page/teacher/promotions/PromotionsPage.jsx";
 import StudentsPage from "../page/teacher/students/StudentsPage.jsx";
 import RevenuePage from "../page/teacher/revenue/RevenuePage.jsx";
 import AnalyticsPage from "../page/teacher/analytics/AnalyticsPage.jsx";
-import QaPage from "../page/teacher/qa/QaPage.jsx";
 import UserLayout from "../layout/user/UserLayout.jsx";
 import InstructorsPage from "../page/users/intructor.jsx";
 import InstructorDetail from "../page/users/intructor/intructorDetail/intructorDetail.jsx";
@@ -46,7 +45,6 @@ const App = () => {
                 <Route path="/learnova/auth/login" element={<AuthPage/>}/>
                 <Route path="/learnova/user/Courses-detail" element={<CourseDetail/>}/>
                 <Route path="/oauth2-success" element={<OAuth2Success />}/>
-
 
                 <Route element={<HomeLayout/>}>
                     <Route path="/learnova/home" element={<Home/>}/>
@@ -79,7 +77,6 @@ const App = () => {
                     <Route path="students" element={<StudentsPage/>}/>
                     <Route path="revenue" element={<RevenuePage/>}/>
                     <Route path="analytics" element={<AnalyticsPage/>}/>
-                    <Route path="qa" element={<QaPage/>}/>
                 </Route>
 
                 {/* User */}

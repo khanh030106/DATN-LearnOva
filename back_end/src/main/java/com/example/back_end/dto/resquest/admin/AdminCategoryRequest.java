@@ -10,7 +10,5 @@ public record AdminCategoryRequest(
 
     Long parentId,
 
-    Integer displayOrder,
-
     Boolean isDeleted
 ) {}

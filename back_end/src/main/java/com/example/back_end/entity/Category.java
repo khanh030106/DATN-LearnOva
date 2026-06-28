@@ -46,11 +46,6 @@ public class Category {
     private Category parent;
 
     @NotNull
-    @ColumnDefault("0")
-    @Column(name = "display_order", nullable = false)
-    private Integer displayOrder;
-
-    @NotNull
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;

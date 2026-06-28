@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.example.back_end.dto.response.admin.AdminCourseDropdownResponse;
 import com.example.back_end.dto.response.admin.AdminTagResponse;
 import com.example.back_end.dto.resquest.admin.AdminTagRequest;
 import com.example.back_end.service.admin.AdminTagService;
@@ -27,6 +28,11 @@ public class AdminTagController {
     @GetMapping
     public ResponseEntity<List<AdminTagResponse>> getAllTags() {
         return ResponseEntity.ok(tagService.getAllTags());
+    }
+
+    @GetMapping("/courses-dropdown")
+    public ResponseEntity<List<AdminCourseDropdownResponse>> getCoursesDropdown() {
+        return ResponseEntity.ok(tagService.getCoursesForDropdown());
     }
 
     @GetMapping("/{id}")

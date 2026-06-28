@@ -1,5 +1,6 @@
-import { Edit3, Eye, FolderTree, Plus, Trash2, X } from "lucide-react";
+import { AlertTriangle, Edit3, FolderTree, Plus, Trash2, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 import {
   createAdminCategoryApi,
   deleteAdminCategoryApi,
@@ -10,7 +11,7 @@ import AdminHoverSelect from "../shared/AdminHoverSelect";
 import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";
 import "./Category.css";
 
-const pageSize = 4;
+const pageSize = 6;
 
 const formatDate = (value) => {
   if (!value) return "N/A";
@@ -29,7 +30,6 @@ const normalizeCategory = (category) => ({
   name: category.name ?? "N/A",
   parentId: category.parentId ?? null,
   parentName: category.parentName ?? null,
-  displayOrder: category.displayOrder ?? 10,
   isDeleted: Boolean(category.isDeleted),
   status: category.isDeleted ? "Hidden" : "Active",
   createdAt: formatDate(category.createdAt),
@@ -54,7 +54,7 @@ const ParentSelect = ({ value, onChange, categories, excludeId, className }) => 
     <option value="">— None (root) —</option>
     {categories
       .filter((c) => !c.isDeleted && c.id !== excludeId)
-      .sort((a, b) => a.displayOrder - b.displayOrder || a.name.localeCompare(b.name))
+      .sort((a, b) => a.name.localeCompare(b.name))
       .map((c) => (
         <option key={c.id} value={c.id}>
           {c.name}
@@ -63,164 +63,12 @@ const ParentSelect = ({ value, onChange, categories, excludeId, className }) => 
   </select>
 );
 
-const CategoryDetailModal = ({ category, mode, onClose, onSaved, axiosClient, allCategories }) => {
-  const isEdit = mode === "edit";
-  const [form, setForm] = useState({
-    name: category.name === "N/A" ? "" : category.name,
-    parentId: category.parentId ?? null,
-    displayOrder: category.displayOrder ?? 10,
-    status: category.isDeleted ? "Hidden" : "Active",
-  });
-  const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState("");
-
-  const setField = (field, value) => setForm((current) => ({ ...current, [field]: value }));
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!isEdit) return;
-    setIsSaving(true);
-    setError("");
-    try {
-      const updated = await updateAdminCategoryApi(
-        category.id,
-        {
-          name: form.name.trim(),
-          parentId: form.parentId,
-          displayOrder: Number(form.displayOrder || 10),
-          isDeleted: form.status === "Hidden",
-        },
-        axiosClient,
-      );
-      onSaved(normalizeCategory(updated));
-    } catch (saveError) {
-      setError(saveError?.response?.data?.message || "Failed to save category.");
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const inputCls = isEdit ? "adminCategoryDetailInput" : "adminCategoryDetailInput adminCategoryDetailInput--readonly";
-
-  return (
-    <div className="adminCategoryModalBackdrop" role="presentation" onClick={onClose}>
-      <form
-        className="adminCategoryDetailModal"
-        role="dialog"
-        aria-modal="true"
-        aria-label={isEdit ? "Edit category" : "View category"}
-        onClick={(e) => e.stopPropagation()}
-        onSubmit={handleSubmit}
-      >
-        <div className="adminCategoryModalHeader">
-          <div>
-            <p className="adminCategoryModalEyebrow">{isEdit ? "EDIT CATEGORY" : "VIEW CATEGORY"}</p>
-            <h2>{category.name}</h2>
-          </div>
-          <button type="button" className="adminCategoryModalClose" onClick={onClose} aria-label="Close">
-            <X size={20} />
-          </button>
-        </div>
-
-        <div className="adminCategoryDetailGrid">
-          <label className="adminCategoryDetailRow">
-            <span>Category ID</span>
-            <input className="adminCategoryDetailInput adminCategoryDetailInput--readonly" value={category.displayId} readOnly />
-          </label>
-
-          <label className="adminCategoryDetailRow">
-            <span>Status</span>
-            {isEdit ? (
-              <select className="adminCategoryDetailInput" value={form.status} onChange={(e) => setField("status", e.target.value)}>
-                <option value="Active">Active</option>
-                <option value="Hidden">Hidden</option>
-              </select>
-            ) : (
-              <input className="adminCategoryDetailInput adminCategoryDetailInput--readonly" value={category.status} readOnly />
-            )}
-          </label>
-
-          <label className="adminCategoryDetailRow">
-            <span>Category Name</span>
-            <input
-              className={inputCls}
-              value={form.name}
-              readOnly={!isEdit}
-              required={isEdit}
-              onChange={(e) => setField("name", e.target.value)}
-            />
-          </label>
-
-          <label className="adminCategoryDetailRow">
-            <span>Display Order</span>
-            {isEdit ? (
-              <input
-                className="adminCategoryDetailInput"
-                type="number"
-                min="1"
-                step="10"
-                value={form.displayOrder}
-                onChange={(e) => setField("displayOrder", e.target.value)}
-              />
-            ) : (
-              <input className="adminCategoryDetailInput adminCategoryDetailInput--readonly" value={category.displayOrder} readOnly />
-            )}
-          </label>
-
-          <label className="adminCategoryDetailRow adminCategoryDetailRowWide">
-            <span>Parent Category</span>
-            {isEdit ? (
-              <ParentSelect
-                className="adminCategoryDetailInput"
-                value={form.parentId}
-                onChange={(val) => setField("parentId", val)}
-                categories={allCategories}
-                excludeId={category.id}
-              />
-            ) : (
-              <input
-                className="adminCategoryDetailInput adminCategoryDetailInput--readonly"
-                value={category.parentName ?? "— None —"}
-                readOnly
-              />
-            )}
-          </label>
-
-          <label className="adminCategoryDetailRow">
-            <span>Created At</span>
-            <input className="adminCategoryDetailInput adminCategoryDetailInput--readonly" value={category.createdAt} readOnly />
-          </label>
-
-          <label className="adminCategoryDetailRow">
-            <span>Updated At</span>
-            <input className="adminCategoryDetailInput adminCategoryDetailInput--readonly" value={category.updatedAt} readOnly />
-          </label>
-        </div>
-
-        {error ? <p className="adminCategoryError">{error}</p> : null}
-
-        <div className="adminCategoryModalActions">
-          <button type="button" className="adminCategoryModalCancel" onClick={onClose}>
-            {isEdit ? "Cancel" : "Close"}
-          </button>
-          {isEdit ? (
-            <button type="submit" className="adminCategoryModalSubmit" disabled={isSaving}>
-              {isSaving ? "Saving..." : "Save Category"}
-            </button>
-          ) : null}
-        </div>
-      </form>
-    </div>
-  );
-};
-
 const Category = () => {
   const axiosPrivate = useAxiosPrivate();
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedAction, setSelectedAction] = useState(null);
+  const [editingCategory, setEditingCategory] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -270,36 +118,89 @@ const Category = () => {
 
   useEffect(() => { setCurrentPage(1); }, [searchTerm, selectedStatus]);
 
-  const openCategoryPopup = (action, category) => { setSelectedAction(action); setSelectedCategory(category); };
-  const closeCategoryPopup = () => { setSelectedAction(null); setSelectedCategory(null); };
-  const handleCategorySaved = (updatedCategory) => {
-    setCategories((current) => current.map((c) => (c.id === updatedCategory.id ? updatedCategory : c)));
-    closeCategoryPopup();
-  };
-
-  const [createForm, setCreateForm] = useState({ name: "", parentId: null, displayOrder: 10 });
+  const [createForm, setCreateForm] = useState({ name: "", parentId: null, status: "Active" });
   const [createError, setCreateError] = useState("");
   const [isCreating, setIsCreating] = useState(false);
 
-  const handleCreateCategory = async (e) => {
+  const [confirmDeleteCategory, setConfirmDeleteCategory] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleConfirmDelete = async () => {
+    if (!confirmDeleteCategory) return;
+    setIsDeleting(true);
+    try {
+      await deleteAdminCategoryApi(confirmDeleteCategory.id, axiosPrivate);
+      setCategories((current) =>
+        current.map((item) =>
+          item.id === confirmDeleteCategory.id ? { ...item, isDeleted: true, status: "Hidden" } : item,
+        ),
+      );
+      setConfirmDeleteCategory(null);
+    } catch (deleteError) {
+      setError(deleteError?.response?.data?.message || "Failed to delete category.");
+      setConfirmDeleteCategory(null);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const openCreate = () => {
+    setEditingCategory(null);
+    setCreateForm({ name: "", parentId: null, status: "Active" });
+    setCreateError("");
+    setIsCreateOpen(true);
+  };
+
+  const openEdit = (category) => {
+    setEditingCategory(category);
+    setCreateForm({
+      name: category.name === "N/A" ? "" : category.name,
+      parentId: category.parentId ?? null,
+      status: category.isDeleted ? "Hidden" : "Active",
+    });
+    setCreateError("");
+    setIsCreateOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsCreateOpen(false);
+    setEditingCategory(null);
+    setCreateForm({ name: "", parentId: null, status: "Active" });
+    setCreateError("");
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!createForm.name.trim()) { setCreateError("Category name is required"); return; }
     setIsCreating(true);
     setCreateError("");
     try {
-      const newCategory = await createAdminCategoryApi(
-        {
-          name: createForm.name.trim(),
-          parentId: createForm.parentId,
-          displayOrder: Number(createForm.displayOrder || 10),
-        },
-        axiosPrivate,
-      );
-      setCategories((current) => [...current, normalizeCategory(newCategory)]);
-      setIsCreateOpen(false);
-      setCreateForm({ name: "", parentId: null, displayOrder: 10 });
+      if (editingCategory) {
+        const updated = await updateAdminCategoryApi(
+          editingCategory.id,
+          {
+            name: createForm.name.trim(),
+            parentId: createForm.parentId,
+            isDeleted: createForm.status === "Hidden",
+          },
+          axiosPrivate,
+        );
+        setCategories((current) =>
+          current.map((c) => (c.id === editingCategory.id ? normalizeCategory(updated) : c)),
+        );
+      } else {
+        const newCategory = await createAdminCategoryApi(
+          { name: createForm.name.trim(), parentId: createForm.parentId },
+          axiosPrivate,
+        );
+        setCategories((current) => [...current, normalizeCategory(newCategory)]);
+      }
+      toast.success(editingCategory ? "Category updated successfully!" : "Category created successfully!");
+      closeModal();
     } catch (err) {
-      setCreateError(err?.response?.data?.message || "Failed to create category.");
+      const msg = err?.response?.data?.message || `Failed to ${editingCategory ? "update" : "create"} category.`;
+      setCreateError(msg);
+      toast.error(msg);
     } finally {
       setIsCreating(false);
     }
@@ -337,7 +238,7 @@ const Category = () => {
             onChange={setSelectedStatus}
             ariaLabel="Filter by status"
           />
-          <button type="button" className="adminCategoryCreateButton" onClick={() => setIsCreateOpen(true)}>
+          <button type="button" className="adminCategoryCreateButton" onClick={openCreate}>
             <Plus size={18} />
             New Category
           </button>
@@ -352,7 +253,6 @@ const Category = () => {
                 <th>Category ID</th>
                 <th>Category Name</th>
                 <th>Parent</th>
-                <th>Display Order</th>
                 <th>Status</th>
                 <th>Updated</th>
                 <th>Actions</th>
@@ -364,7 +264,6 @@ const Category = () => {
                   <td>{category.displayId}</td>
                   <td>{category.name}</td>
                   <td>{category.parentName ?? <span style={{ color: "#94a3b8" }}>—</span>}</td>
-                  <td>{category.displayOrder}</td>
                   <td>
                     <span className={`adminCategoryStatus adminCategoryStatus--${category.status.toLowerCase()}`}>
                       {category.status}
@@ -373,27 +272,13 @@ const Category = () => {
                   <td>{category.updatedAt}</td>
                   <td>
                     <div className="adminCategoryActions">
-                      <button type="button" aria-label={`View ${category.name}`} onClick={() => openCategoryPopup("view", category)}>
-                        <Eye size={16} />
-                      </button>
-                      <button type="button" aria-label={`Edit ${category.name}`} onClick={() => openCategoryPopup("edit", category)}>
+                      <button type="button" aria-label={`Edit ${category.name}`} onClick={() => openEdit(category)}>
                         <Edit3 size={16} />
                       </button>
                       <button
                         type="button"
                         aria-label={`Delete ${category.name}`}
-                        onClick={async () => {
-                          try {
-                            await deleteAdminCategoryApi(category.id, axiosPrivate);
-                            setCategories((current) =>
-                              current.map((item) =>
-                                item.id === category.id ? { ...item, isDeleted: true, status: "Hidden" } : item,
-                              ),
-                            );
-                          } catch (deleteError) {
-                            setError(deleteError?.response?.data?.message || "Failed to delete category.");
-                          }
-                        }}
+                        onClick={() => setConfirmDeleteCategory(category)}
                       >
                         <Trash2 size={16} />
                       </button>
@@ -402,10 +287,10 @@ const Category = () => {
                 </tr>
               ))}
               {!isLoading && visibleCategories.length === 0 ? (
-                <tr><td colSpan={7} className="adminCategoryEmpty">No categories match the current filter.</td></tr>
+                <tr><td colSpan={6} className="adminCategoryEmpty">No categories match the current filter.</td></tr>
               ) : null}
               {isLoading ? (
-                <tr><td colSpan={7} className="adminCategoryEmpty">Loading categories...</td></tr>
+                <tr><td colSpan={6} className="adminCategoryEmpty">Loading categories...</td></tr>
               ) : null}
             </tbody>
           </table>
@@ -442,21 +327,27 @@ const Category = () => {
       </div>
 
       {isCreateOpen && (
-        <div className="adminCategoryModalBackdrop" role="presentation" onClick={() => setIsCreateOpen(false)}>
+        <div className="adminCategoryModalBackdrop" role="presentation" onClick={closeModal}>
           <form
             className="adminCategoryModal"
             role="dialog"
             aria-modal="true"
-            aria-labelledby="admin-category-create-title"
+            aria-labelledby="admin-category-modal-title"
             onClick={(e) => e.stopPropagation()}
-            onSubmit={handleCreateCategory}
+            onSubmit={handleSubmit}
           >
             <div className="adminCategoryModalHeader">
               <div>
-                <h2 id="admin-category-create-title">Create New Category</h2>
-                <p>Add a course category for catalog classification.</p>
+                <h2 id="admin-category-modal-title">
+                  {editingCategory ? "Edit Category" : "Create New Category"}
+                </h2>
+                <p>
+                  {editingCategory
+                    ? `Editing: ${editingCategory.name}`
+                    : "Add a course category for catalog classification."}
+                </p>
               </div>
-              <button type="button" className="adminCategoryModalClose" onClick={() => setIsCreateOpen(false)} aria-label="Close">
+              <button type="button" className="adminCategoryModalClose" onClick={closeModal} aria-label="Close">
                 <X size={20} />
               </button>
             </div>
@@ -475,60 +366,81 @@ const Category = () => {
               </label>
 
               <label>
-                Display Order
-                <input
-                  type="number"
-                  min="1"
-                  step="10"
-                  placeholder="10, 20, 30..."
-                  value={createForm.displayOrder}
-                  onChange={(e) => setCreateForm((f) => ({ ...f, displayOrder: e.target.value }))}
-                />
-              </label>
-
-              <label className="adminCategoryModalFieldWide">
                 Parent Category
                 <ParentSelect
                   value={createForm.parentId}
                   onChange={(val) => setCreateForm((f) => ({ ...f, parentId: val }))}
                   categories={categories}
-                  excludeId={null}
+                  excludeId={editingCategory?.id ?? null}
                 />
               </label>
+
+              {editingCategory && (
+                <label className="adminCategoryModalFieldWide">
+                  Status
+                  <select
+                    value={createForm.status}
+                    onChange={(e) => setCreateForm((f) => ({ ...f, status: e.target.value }))}
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Hidden">Hidden</option>
+                  </select>
+                </label>
+              )}
 
               {createError ? <p className="adminCategoryError">{createError}</p> : null}
 
               <div className="adminCategoryModalActions">
-                <button
-                  type="button"
-                  className="adminCategoryModalCancel"
-                  onClick={() => {
-                    setIsCreateOpen(false);
-                    setCreateForm({ name: "", parentId: null, displayOrder: 10 });
-                    setCreateError("");
-                  }}
-                >
+                <button type="button" className="adminCategoryModalCancel" onClick={closeModal}>
                   Cancel
                 </button>
                 <button type="submit" className="adminCategoryModalSubmit" disabled={isCreating}>
-                  {isCreating ? "Creating..." : "Create Category"}
+                  {isCreating
+                    ? (editingCategory ? "Saving..." : "Creating...")
+                    : (editingCategory ? "Save Category" : "Create Category")}
                 </button>
               </div>
             </div>
           </form>
         </div>
       )}
-
-      {selectedCategory && ["view", "edit"].includes(selectedAction) ? (
-        <CategoryDetailModal
-          category={selectedCategory}
-          mode={selectedAction}
-          onClose={closeCategoryPopup}
-          onSaved={handleCategorySaved}
-          axiosClient={axiosPrivate}
-          allCategories={categories}
-        />
-      ) : null}
+      {confirmDeleteCategory && (
+        <div className="adminCategoryModalBackdrop" role="presentation" onClick={() => setConfirmDeleteCategory(null)}>
+          <div
+            className="adminCategoryConfirmModal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Confirm delete"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="adminCategoryConfirmIcon">
+              <AlertTriangle size={28} />
+            </div>
+            <h3>Hide this category?</h3>
+            <p>
+              <strong>{confirmDeleteCategory.name}</strong> will be set to Hidden and no longer visible to users. You can restore it later via Edit.
+            </p>
+            <div className="adminCategoryConfirmActions">
+              <button
+                type="button"
+                className="adminCategoryModalCancel"
+                onClick={() => setConfirmDeleteCategory(null)}
+                disabled={isDeleting}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="adminCategoryConfirmDelete"
+                onClick={handleConfirmDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? "Hiding..." : "Yes, Hide"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

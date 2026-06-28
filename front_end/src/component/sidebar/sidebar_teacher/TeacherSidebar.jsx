@@ -20,7 +20,6 @@ const teacherNavSections = [
       { label: "Dashboard", path: "/learnova/teacher", icon: Home, end: true },
       { label: "Courses", path: "/learnova/teacher/courses", icon: BookOpen },
       { label: "Students", path: "/learnova/teacher/students", icon: Users },
-      { label: "Messages", path: "/learnova/teacher/qa", icon: MessageSquare },
     ],
   },
   {

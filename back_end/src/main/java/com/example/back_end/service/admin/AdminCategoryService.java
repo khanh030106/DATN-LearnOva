@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.back_end.dto.response.CategoryOptionResponse;
 import com.example.back_end.dto.response.admin.AdminCategoryResponse;
 import com.example.back_end.dto.resquest.admin.AdminCategoryRequest;
 import com.example.back_end.entity.Category;
@@ -22,9 +22,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminCategoryService {
 
-    private static final int STEP = 10;
-
     private final AdminCategoryRepository categoryRepository;
+
+    @Transactional(readOnly = true)
+    public List<CategoryOptionResponse> getActiveCategories() {
+        return categoryRepository.findAllActive().stream()
+                .map(c -> new CategoryOptionResponse(c.getId(), c.getName()))
+                .collect(Collectors.toList());
+    }
 
     @Transactional(readOnly = true)
     public List<AdminCategoryResponse> getAllCategories() {
@@ -46,29 +51,14 @@ public class AdminCategoryService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * INSERT logic:
-     *   1. Use the admin-supplied displayOrder (never fall back to MAX+step).
-     *      Default to STEP (10) only when the field is genuinely absent.
-     *   2. Shift all existing rows whose displayOrder >= requested order up by STEP.
-     *   3. Insert at the exact requested position.
-     *
-     * Why NOT MAX+step: the admin chose a position intentionally.
-     * Using MAX+step ignores that intent and always appends to the end.
-     */
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public AdminCategoryResponse createCategory(AdminCategoryRequest request) {
         Category parent = resolveParent(request.parentId(), null);
-
-        int order = request.displayOrder() != null ? request.displayOrder() : STEP;
-
-        categoryRepository.shiftUpFrom(order);   // rows with order >= X → order + 10
 
         Category category = new Category();
         category.setName(request.name());
         category.setSlug(generateUniqueSlug(request.name()));
         category.setParent(parent);
-        category.setDisplayOrder(order);
         category.setIsDeleted(false);
         category.setCreatedAt(Instant.now());
         category.setUpdatedAt(Instant.now());
@@ -76,20 +66,7 @@ public class AdminCategoryService {
         return toResponse(categoryRepository.save(category));
     }
 
-    /**
-     * UPDATE display_order logic (step = 10):
-     *
-     *   Moving UP   (newOrder < oldOrder):
-     *     Shift [newOrder, oldOrder - 10] by +10   → makes room at newOrder
-     *
-     *   Moving DOWN (newOrder > oldOrder):
-     *     Shift [oldOrder + 10, newOrder] by -10   → fills the gap left at oldOrder
-     *
-     *   No change   (newOrder == oldOrder): skip all shifts.
-     *
-     * Self is always excluded from the bulk UPDATE via AND c.id != :excludeId.
-     */
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional
     public AdminCategoryResponse updateCategory(Long id, AdminCategoryRequest request) {
         Category category = categoryRepository.findByIdForAdmin(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + id));
@@ -98,25 +75,6 @@ public class AdminCategoryService {
             throw new BusinessException("Category cannot be its own parent");
         }
         category.setParent(resolveParent(request.parentId(), id));
-
-        int oldOrder = category.getDisplayOrder();
-        int newOrder = request.displayOrder() != null ? request.displayOrder() : oldOrder;
-
-        if (newOrder < oldOrder) {
-            int lower = newOrder;
-            int upper = oldOrder - STEP;
-            if (lower <= upper) {
-                categoryRepository.shiftUpRange(lower, upper, id);
-            }
-            category.setDisplayOrder(newOrder);
-        } else if (newOrder > oldOrder) {
-            int lower = oldOrder + STEP;
-            int upper = newOrder;
-            if (lower <= upper) {
-                categoryRepository.shiftDownRange(lower, upper, id);
-            }
-            category.setDisplayOrder(newOrder);
-        }
 
         String oldName = category.getName();
         category.setName(request.name());
@@ -155,7 +113,7 @@ public class AdminCategoryService {
         String parentName = c.getParent() != null ? c.getParent().getName() : null;
         return new AdminCategoryResponse(
                 c.getId(), c.getName(), c.getSlug(),
-                parentId, parentName, c.getDisplayOrder(),
+                parentId, parentName,
                 c.getIsDeleted(), c.getCreatedAt(), c.getUpdatedAt());
     }
 
