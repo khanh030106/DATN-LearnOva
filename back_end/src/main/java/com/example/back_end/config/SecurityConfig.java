@@ -65,8 +65,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/learnova/payments/webhook").permitAll()
                         .requestMatchers("/api/learnova/user/me").permitAll()
                         .requestMatchers("/api/learnova/review/**").permitAll()
-                                .requestMatchers("/api/learnova/auth/resend-verification").permitAll()
-                                .requestMatchers("/error").permitAll()// để test
+                        .requestMatchers("/api/learnova/auth/resend-verification").permitAll()
+//                        .requestMatchers("/api/learnova/api/qna/**").authenticated()
+                                .requestMatchers("/api/learnova/qna/**").authenticated()
+                        .requestMatchers("/error").permitAll()// để test
                         .anyRequest().authenticated()
                 )
 

@@ -194,7 +194,7 @@ function CourseDetail() {
 
                         {activeTab === "qa" && (
                             <QATab
-                                qaData={qaData}
+                                lessonId={2}
                                 course={course}
                                 selectedQuestion={selectedQuestion}
                                 setSelectedQuestion={setSelectedQuestion}
