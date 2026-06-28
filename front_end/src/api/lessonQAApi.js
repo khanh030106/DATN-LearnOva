@@ -12,3 +12,20 @@ export const createAnswerApi = async (data) => {
     const res = await axiosClient.post("/qna/answer", data);
     return res.data;
 };
+export const deleteAnswerApi = async (answerId) => {
+    const res = await axiosClient.delete(`/qna/answer/${answerId}`);
+    return res.data;
+};
+export const deleteQuestionApi = async (id) => {
+    const res = await axiosClient.delete(`/qna/question/${id}`);
+    return res.data;
+};
+export const updateAnswerApi = async (id, data) => {
+    const res = await axiosClient.put(`/qna/answer/${id}`, data);
+    return res.data;
+};
+
+export const updateQuestionApi = async (id, data) => {
+    const res = await axiosClient.put(`/qna/question/${id}`, data);
+    return res.data;
+};

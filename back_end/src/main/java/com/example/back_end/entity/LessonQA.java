@@ -81,4 +81,14 @@ public class LessonQA {
     @Column(name = "is_deleted", nullable = false)
     @ColumnDefault("false")
     private Boolean isDeleted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reply_to_user_id")
+    private User replyToUser;
+
+    @Column(name = "root_id")
+    private Long rootId;
+
+    @Column(name = "level")
+    private Integer level;
 }

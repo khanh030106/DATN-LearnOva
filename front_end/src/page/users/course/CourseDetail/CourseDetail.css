@@ -1281,11 +1281,11 @@ hr {
 ========================= */
 
 .qa-answer {
-    border: 1px solid #dbeafe;
-    background: #f8fbff;
+    /*border: 1px solid #dbeafe;*/
+    /*background: #f8fbff;*/
     border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 24px;
+
+    /*margin-bottom: 24px;*/
 }
 
 .answer-by {
@@ -1329,17 +1329,14 @@ hr {
 .btn-ghost:hover {
     background: #f3f4f6;
 }
-.answer-actions {
+.answer-actions{
     display: flex;
-    /*justify-content: space-between;*/
-    align-items: center;
-    margin-top: 16px;
-    padding-top: 12px;
-    border-top: 1px solid #e5e7eb;
-    margin-left: 40px;
+    justify-content: flex-start;
+    gap: 12px;
+    margin-top: 12px;
 }
 
-.btn-reply {
+.btn-reply{
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1356,8 +1353,7 @@ hr {
     font-weight: 600;
 
     cursor: pointer;
-    transition: all 0.2s ease;
-    margin-left: 710px;
+    transition: all .2s;
 }
 .qa-reply-form {
     margin-top: 16px;
@@ -2281,4 +2277,699 @@ hr {
     color: #ef4444;
     font-size: 14px;
     font-weight: 500;
+}
+.user-answer{
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    margin: 16px 0 16px 60px;
+    padding: 18px;
+    box-shadow: none;
+}
+
+
+
+.user-answer .qa-avatar{
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #7c3aed;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    margin-right: 12px;
+}
+
+.user-answer .answer-instructor-avatar{
+    display:none;
+}
+/* Khung giảng viên */
+.instructor-answer .qa-answer-card{
+    background:#f7faff;
+    border:1px solid #d7e5ff;
+    border-radius:12px;
+    padding:20px;
+    margin:18px 0;
+}
+
+/* Wrapper của reply user */
+.qa-reply-wrapper{
+    position:relative;
+    margin-left:70px;
+    padding-left:40px;
+    margin-top:16px;
+    margin-bottom:16px;
+}
+
+/* Đường nối */
+.reply-line{
+    position:absolute;
+    left:0;
+    top:-18px;
+    width:30px;
+    height:70px;
+    border-left:2px dashed #d8d8d8;
+    border-bottom:2px dashed #d8d8d8;
+    border-bottom-left-radius:10px;
+}
+
+/* Khung reply user */
+.qa-user-card{
+    background:#fff;
+    border:1px solid #ececec;
+    border-radius:10px;
+    padding:18px;
+    box-shadow:0 2px 6px rgba(0,0,0,.04);
+}
+
+/* avatar user */
+.qa-user-card .qa-avatar{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:#6f42c1;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+}
+
+/* Reply nhỏ hơn instructor */
+.qa-user-card .answer-content{
+    margin-top:12px;
+    padding-left:58px;
+}
+
+.qa-user-card .answer-actions{
+    margin-top:16px;
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+}
+.qa-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.qa-actions .btn-reply,
+.qa-actions .btn-like {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    /*border: none;*/
+    cursor: pointer;
+    font-size: 14px;
+    color: #5459cc;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.qa-actions .btn-reply:hover {
+    background: rgba(59, 130, 246, 0.08);
+    color: #2563eb;
+}
+
+.qa-actions .btn-like:hover {
+    background: rgba(239, 68, 68, 0.08);
+    color: #446cef;
+}
+
+.qa-actions .btn-like span,
+.qa-actions .btn-reply span {
+    font-weight: 500;
+}
+.reply-to-box {
+    background: #f0f2f5;
+    padding: 6px 10px;
+    border-left: 3px solid #1877f2;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #555;
+    border-radius: 4px;
+}
+
+.qa-thread{
+
+    margin-top:25px;
+
+}
+
+.reply-node{
+
+    position:relative;
+
+}
+
+.reply-children{
+
+    position:relative;
+
+    margin-left:55px;
+
+    padding-left:30px;
+
+}
+
+.reply-children::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:-10px;
+
+    bottom:20px;
+
+    left:12px;
+
+    width:2px;
+
+    background:#d9d9d9;
+
+}
+
+.reply-item{
+
+    position:relative;
+
+}
+
+.reply-item::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:36px;
+
+    left:-18px;
+
+    width:18px;
+
+    height:2px;
+
+    background:#d9d9d9;
+
+}
+.qa-author-time-in {
+    font-size: 13px;
+    color: #6b7280;
+    /*margin-left: 130px;*/
+    margin-top: -25px;
+    font-weight: 500;
+}
+.qa-author-name-in {
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+    /*margin-left: 50px;*/
+    margin-top: -5px;
+}
+.user-1{
+color: #4b73e8;
+    font-weight: 600;
+}
+.qa-instructor-badge{
+    display:inline-flex;
+    align-items:center;
+    padding:2px 8px;
+
+    border-radius:999px;
+
+    background:#EEF4FF;
+    color:#2563EB;
+
+    font-size:11px;
+    font-weight:600;
+
+}
+/* ===== HEADER USER ===== */
+
+.answer-by{
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+}
+
+.qa-user-header{
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.qa-user-info{
+    display: flex;
+    flex-direction: column;
+}
+
+.qa-author-name-in{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.qa-author-time-in{
+    font-size: 13px;
+    color: #888;
+    margin-top: 2px;
+}
+
+
+/* ===== MENU ===== */
+
+.qa-menu{
+    position: relative;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.qa-menu-btn{
+    width: 34px;
+    height: 34px;
+
+    border: none;
+    background: transparent;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 20px;
+    color: #666;
+
+    transition: .2s;
+}
+
+.qa-menu-btn:hover{
+    background: #f3f4f6;
+}
+
+
+/* ===== DROPDOWN ===== */
+
+.qa-dropdown{
+    position: absolute;
+
+    top: 38px;
+    right: 0;
+
+    width: 160px;
+
+    background: #fff;
+
+    border-radius: 10px;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,.15);
+
+    overflow: hidden;
+
+    z-index: 9999;
+}
+
+.qa-dropdown button{
+    width: 100%;
+
+    background: #fff;
+    border: none;
+
+    text-align: left;
+
+    padding: 12px 16px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition: .2s;
+}
+
+.qa-dropdown button:hover{
+    background: #f5f5f5;
+}
+
+.qa-delete{
+    color: #ef4444;
+}
+
+.qa-delete:hover{
+    background: #fef2f2 !important;
+}
+.qa-card{
+    position:relative;
+}
+
+.qa-card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+}
+
+.qa-menu{
+    position:relative;
+    margin-left:15px;
+    flex-shrink:0;
+}
+
+.qa-menu-btn{
+    width:34px;
+    height:34px;
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    border-radius:50%;
+    font-size:22px;
+}
+
+.qa-menu-btn:hover{
+    background:#f4f4f4;
+}
+/* Icon Edit */
+.qa-edit-icon{
+    font-size:16px;
+    color:#2563eb;
+    margin-right:8px;
+    vertical-align:middle;
+    gap: 6px;
+}
+
+/* Icon Delete */
+.qa-delete-icon{
+    font-size:16px;
+    color:#ef4444;
+    margin-right:8px;
+    vertical-align:middle;
+    gap: 6px;
+}
+.qa-delete-icon:hover{
+    background: #fef2f2 !important;
+}
+.qa-delete-icon:focus{
+    background: #fef2f2 !important;
+}
+.qa-delete-icon span{
+    margin-left: 6px;
+}
+.qa-edit-icon span{
+    margin-left: 6px;
+}
+.qa-edit-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+    font-size: 14px;
+    resize: vertical;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+.qa-edit-textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+.qa-edit-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    justify-content: flex-end;
+}
+
+.qa-edit-save-btn {
+    background: #2f4ee6;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.qa-edit-save-btn:hover {
+    background: #16a34a;
+}
+
+.qa-edit-cancel-btn {
+    background: #f3f4f6;
+    color: #333;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.qa-edit-cancel-btn:hover {
+    background: #e5e7eb;
+}
+.qa-edit-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+
+/* SAVE BUTTON */
+.qa-edit-save-btn {
+    background: #363ae8;
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.qa-edit-save-btn:hover {
+    background: #16a34a;
+    transform: translateY(-1px);
+}
+
+.qa-edit-save-btn:active {
+    transform: scale(0.98);
+}
+
+/* CANCEL BUTTON */
+.qa-edit-cancel-btn {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.qa-edit-cancel-btn:hover {
+    background: #e5e7eb;
+    color: #111827;
+    transform: translateY(-1px);
+}
+
+.qa-edit-cancel-btn:active {
+    transform: scale(0.98);
+}
+.qa-edit-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.qa-edit-save-btn {
+    background: #2e31da;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.qa-edit-save-btn:hover {
+    background: #16a34a;
+}
+
+.qa-edit-cancel-btn {
+    background: #e5e7eb;
+    color: #111827;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.qa-edit-cancel-btn:hover {
+    background: #d1d5db;
+}
+.qa-edit-error {
+    color: #ef4444;
+    font-size: 13px;
+    margin-top: 6px;
+    margin-left: 10px;
+}
+.qa-edit-box {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.qa-edit-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+    resize: vertical;
+}
+
+.qa-edit-error {
+    color: #e53935;
+    font-size: 13px;
+}
+
+.qa-edit-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.qa-edit-save-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.qa-edit-save-btn:hover {
+    background: #1d4ed8;
+}
+
+.qa-edit-cancel-btn {
+    background: #e5e7eb;
+    color: #111;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.qa-edit-cancel-btn:hover {
+    background: #d1d5db;
+}
+.qa-card,
+.qa-middle,
+.qa-description {
+    width: 100%;
+    box-sizing: border-box;
+}
+.qa-edit-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-sizing: border-box;
+}
+.qa-edit-textarea {
+    width: 100%;
+    min-height: 80px;
+    resize: vertical;
+    box-sizing: border-box;
+
+    /* FIX nhảy layout khi focus */
+    outline: none;
+    border: 1px solid #ddd;
+}
+
+.qa-edit-textarea:focus {
+    border: 1px solid #2563eb;
+}
+.qa-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px 20px;
+    margin-top: 20px;
+
+    text-align: center;
+    color: #6b7280; /* gray */
+}
+
+.qa-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    color: #9ca3af;
+    margin-bottom: 12px;
+}
+
+.qa-empty-icon svg {
+    opacity: 0.8;
+}
+
+.qa-empty-state h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.qa-empty-state p {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+.qa-empty-state b {
+    color: #111827;
+    font-weight: 600;
+}
+
+.qa-reset-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+
+    background: #2563eb;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.qa-reset-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
 }

@@ -1,16 +1,32 @@
+import React, { useEffect, useState, useRef, useContext } from "react";
+
 import { toast } from "react-toastify";
-import { FaCheck } from "react-icons/fa";
+import { FaInbox } from "react-icons/fa";
+
 import {
-  FaSearch,
-  FaRegCommentDots,
-  FaRegThumbsUp
+    FaCheck,
+    FaSearch,
+    FaRegCommentDots,
+    FaRegThumbsUp
 } from "react-icons/fa";
-import React, { useEffect, useState } from "react";
+
+import {
+    FaEllipsisVertical,
+    FaPenToSquare,
+    FaTrashCan
+} from "react-icons/fa6";
+
 import {
     getLessonQAApi,
     createQuestionApi,
-    createAnswerApi
+    createAnswerApi,
+    deleteAnswerApi,
+    deleteQuestionApi,
+    updateAnswerApi,
+    updateQuestionApi
 } from "../../../../api/lessonQAApi";
+
+import { AuthContext } from "../../../../context/AuthContext";
 
 function QATab({
                    lessonId,
@@ -29,7 +45,26 @@ function QATab({
     const [questionContent, setQuestionContent] = useState("");
     const [questionError, setQuestionError] = useState("");
     const [replyError, setReplyError] = useState("");
+    const [replyTarget, setReplyTarget] = useState(null);
+    const replyFormRef = useRef(null);
+    const replyTextareaRef = useRef(null);
+    const { currentUser } = useContext(AuthContext);
+    const [editId, setEditId] = useState(null);
+    const [editText, setEditText] = useState("");
+    const [editError, setEditError] = useState("");
+    const [editQuestionId, setEditQuestionId] = useState(null);
+    const [editQuestionText, setEditQuestionText] = useState("");
+    const [editQuestionError, setEditQuestionError] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const questionsPerPage = 5;
+    const [searchText, setSearchText] = useState("");
+    const [activeTab, setActiveTab] = useState("all");
 
+    const currentUserId =
+        currentUser?.id ||
+        currentUser?.userId ||
+        currentUser?.idUser;
+    const [openMenuId, setOpenMenuId] = useState(null);
     useEffect(() => {
 
         const loadQA = async () => {
@@ -69,7 +104,7 @@ function QATab({
 
             toast.success("Question sent successfully!", {
                 position: "top-right",
-                autoClose: 2000,
+                autoClose: 1000,
                 className: "toast-green",
                 progressClassName: "toast-progress-white",
                 icon: <FaCheck color="#22c55e" />
@@ -88,7 +123,7 @@ function QATab({
 
             toast.error("Failed to send question!", {
                 position: "top-right",
-                autoClose: 2000
+                autoClose: 1000
             });
 
         }
@@ -114,15 +149,14 @@ function QATab({
                     content: replyText
                 }, null, 2)
             );
-
             await createAnswerApi({
-                questionId: selectedQuestion.id,
+                parentId: replyTarget.id,
                 content: replyText
             });
 
             toast.success("Reply sent successfully!", {
                 position: "top-right",
-                autoClose: 2000,
+                autoClose: 1000,
                 className: "toast-green",
                 progressClassName: "toast-progress-white",
                 icon: <FaCheck color="#22c55e" />
@@ -131,6 +165,8 @@ function QATab({
             setReplyText("");
             setReplyError("");
             setShowReplyForm(false);
+            setReplyTarget(null);
+
 
             const data = await getLessonQAApi(lessonId);
 
@@ -153,11 +189,337 @@ function QATab({
 
             toast.error("Failed to send reply!", {
                 position: "top-right",
-                autoClose: 2000
+                autoClose: 1000
             });
 
         }
     };
+    useEffect(() => {
+
+        const handleClickOutside = () => {
+            setOpenMenuId(null);
+        };
+
+        window.addEventListener("click", handleClickOutside);
+
+        return () =>
+            window.removeEventListener("click", handleClickOutside);
+
+    }, []);
+    const renderReplies = (answers) => {
+
+        return answers.map(answer => (
+
+            <div
+                key={answer.id}
+                className="reply-node"
+            >
+
+                <div className="reply-item">
+
+                    <div className="qa-user-card">
+
+                        <div className="answer-by">
+
+                            <div className="qa-avatar">
+                                {answer.userName
+                                    ?.split(" ")
+                                    .map(s => s[0])
+                                    .slice(-2)
+                                    .join("")}
+                            </div>
+
+                            <div className="qa-user-header">
+
+                                <div>
+
+                                    <div className="qa-author-name-in">
+                                        {answer.userName}
+
+                                        {answer.instructor && (
+                                            <span className="qa-instructor-badge">
+                    Instructor
+                </span>
+                                        )}
+                                    </div>
+
+                                    <div className="qa-author-time-in">
+                                        {new Date(answer.createdAt).toLocaleString()}
+                                    </div>
+
+                                </div>
+
+                                {currentUserId === answer.userId && (
+
+                                    <div className="qa-menu">
+
+                                        <button
+                                            className="qa-menu-btn"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+
+                                                setOpenMenuId(
+                                                    openMenuId === answer.id
+                                                        ? null
+                                                        : answer.id
+                                                );
+                                            }}
+                                        >
+                                            <FaEllipsisVertical />
+                                        </button>
+
+                                        {openMenuId === answer.id && (
+
+                                            <div className="qa-dropdown">
+
+                                                <button
+                                                    className="qa-edit-icon"
+                                                    onClick={() => {
+                                                        setEditId(answer.id);
+                                                        setEditText(answer.content);
+                                                        setOpenMenuId(null); // đóng menu luôn cho UX tốt
+                                                    }}
+                                                >
+                                                    <FaPenToSquare />
+                                                    <span>Edit</span>
+                                                </button>
+
+                                                <button
+                                                    className="qa-delete-icon"
+                                                    onClick={() => handleDeleteAnswer(answer.id)}
+                                                >
+                                                    <FaTrashCan />
+                                                    <span>Delete</span>
+                                                </button>
+
+                                            </div>
+
+                                        )}
+
+                                    </div>
+
+                                )}
+
+                            </div>
+
+                        </div>
+
+                        <div>
+                            {answer.replyToUserName &&
+                                <b className="user-1">@{answer.replyToUserName} </b>
+                            }
+
+                            {editId === answer.id ? (
+                                <div>
+           <textarea
+               value={editText}
+               onChange={(e) => {
+                   setEditText(e.target.value);
+                   setEditError("");
+               }}
+               className="qa-edit-textarea"
+           />
+                                    {editError && (
+                                        <div className="qa-edit-error">
+                                            {editError}
+                                        </div>
+                                    )}
+
+                                    <div className="qa-edit-actions">
+                                        <button
+                                            className="qa-edit-save-btn"
+                                            onClick={() => handleUpdateAnswer(answer.id)}
+                                        >
+                                            Save
+                                        </button>
+
+                                        <button
+                                            className="qa-edit-cancel-btn"
+                                            onClick={() => setEditId(null)}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <span>{answer.content}</span>
+                            )}
+                        </div>
+
+                        <div className="qa-actions">
+                            <button className={"btn-reply"}
+                                    onClick={() => {
+
+                                        setReplyTarget(answer);
+
+                                        setShowReplyForm(true);
+
+                                        setTimeout(() => {
+
+                                            replyFormRef.current?.scrollIntoView({
+                                                behavior: "smooth",
+                                                block: "center"
+                                            });
+
+                                            replyTextareaRef.current?.focus();
+
+                                        }, 100);
+
+                                    }}
+                            >
+                                <FaRegCommentDots />
+                                Reply
+                            </button>
+                            <button className="btn-like">
+                                <FaRegThumbsUp />
+                                <span>{selectedQuestion.likeCount || 0}</span>
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                {
+                    answer.replies?.length > 0 && (
+
+                        <div className="reply-children">
+
+                            {renderReplies(answer.replies)}
+
+                        </div>
+
+                    )
+                }
+
+            </div>
+
+        ));
+
+    };
+    const handleDeleteAnswer = async (answerId) => {
+
+        try {
+
+            await deleteAnswerApi(answerId);
+
+            toast.success("Deleted successfully!");
+
+            setOpenMenuId(null);
+
+            const data = await getLessonQAApi(lessonId);
+
+            setQuestions(data.questions || []);
+
+            const updatedQuestion = data.questions.find(
+                q => q.id === selectedQuestion.id
+            );
+
+            setSelectedQuestion(updatedQuestion);
+
+        } catch (e) {
+
+            console.log(e);
+            toast.error("Delete failed!");
+        }
+    };
+    const handleDeleteQuestion = async (id) => {
+        try {
+            await deleteQuestionApi(id);
+
+            toast.success("Deleted successfully!");
+
+            // reset UI trước
+            setSelectedQuestion(null);
+
+            // reload data
+            const data = await getLessonQAApi(lessonId);
+            setQuestions(data.questions || []);
+
+        } catch (e) {
+            console.log("DELETE ERROR:", e);
+            toast.error("Delete failed!");
+        }
+    };
+    const handleUpdateAnswer = async (id) => {
+        const content = editText.trim();
+
+
+        if (!content) {
+            setEditError("Content cannot be empty.");
+            return;
+        }
+
+        try {
+            await updateAnswerApi(id, { content });
+
+            setEditId(null);
+            setEditText("");
+            setEditError("");
+
+            const data = await getLessonQAApi(lessonId);
+            setQuestions(data.questions || []);
+
+            const updatedQuestion = data.questions.find(
+                q => q.id === selectedQuestion.id
+            );
+
+            setSelectedQuestion(updatedQuestion);
+
+            toast.success("Updated!");
+        } catch (e) {
+            console.error(e);
+            toast.error("Update failed!");
+        }
+    };
+    const handleUpdateQuestion = async (id) => {
+        const content = editQuestionText.trim();
+
+        if (!content) {
+            setEditQuestionError("Question content cannot be empty.");
+            return;
+        }
+
+        try {
+            await updateQuestionApi(id, { content });
+
+            setEditQuestionId(null);
+            setEditQuestionText("");
+            setEditQuestionError("");
+
+            const data = await getLessonQAApi(lessonId);
+            setQuestions(data.questions || []);
+
+            toast.success("Question updated!");
+        } catch (e) {
+            console.error(e);
+            toast.error("Update failed!");
+        }
+    };
+    const indexOfLastQuestion = currentPage * questionsPerPage;
+    const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
+
+    const currentQuestions = questions.slice(
+        indexOfFirstQuestion,
+        indexOfLastQuestion
+    );
+    const filteredQuestions = (currentQuestions || []).filter((q) => {
+        const matchSearch =
+            q.content.toLowerCase().includes(searchText.toLowerCase()) ||
+            q.userName?.toLowerCase().includes(searchText.toLowerCase());
+
+        const matchTab =
+            activeTab === "all"
+                ? true
+                : activeTab === "answered"
+                    ? (q.answers && q.answers.length > 0)
+                    : (!q.answers || q.answers.length === 0);
+
+        return matchSearch && matchTab;
+    });
+    const totalPages = Math.ceil(questions.length / questionsPerPage);
+
   return (
       <div className="qa-content">
           <div className="qa-search-container">
@@ -165,6 +527,8 @@ function QATab({
                   type="text"
                   placeholder="Search all course questions"
                   className="qa-search-box"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
               />
               <button className="qa-search-btn">
                   <FaSearch />
@@ -172,32 +536,35 @@ function QATab({
           </div>
 
           {/* Filters */}
-          <div className="qa-filter-bar">
-              <div className="qa-filter-group">
-                  <label>Filter:</label>
-                  <select className="qa-select">
-                      <option>All lectures</option>
-                  </select>
-              </div>
 
-              <div className="qa-filter-group">
-                  <label>Sort by:</label>
-                  <select className="qa-select">
-                      <option>Newest first</option>
-                  </select>
-              </div>
-
-              <button className="qa-filter-btn">Filter questions</button>
-          </div>
 
           {/* Tabs */}
           <div className="qa-tab-section">
               <div className="qa-tabs">
-                  <button className="qa-tab-btn active">All questions</button>
-                  <button className="qa-tab-btn">Unanswered</button>
-                  <button className="qa-tab-btn">Answered</button>
+                  <button
+                      className={`qa-tab-btn ${activeTab === "all" ? "active" : ""}`}
+                      onClick={() => setActiveTab("all")}
+                  >
+                      All questions
+                  </button>
+
+                  <button
+                      className={`qa-tab-btn ${activeTab === "unanswered" ? "active" : ""}`}
+                      onClick={() => setActiveTab("unanswered")}
+                  >
+                      Unanswered
+                  </button>
+
+                  <button
+                      className={`qa-tab-btn ${activeTab === "answered" ? "active" : ""}`}
+                      onClick={() => setActiveTab("answered")}
+                  >
+                      Answered
+                  </button>
               </div>
-              <span className="qa-total">128 Question</span>
+              <span className="qa-total">
+                {questions.length} Questions
+            </span>
           </div>
           <div className="qa-action-bar">
               <button
@@ -259,7 +626,7 @@ function QATab({
 
                   <div className="qa-detail-header">
                       <div className="qa-detail-title">
-                          Câu hỏi
+                          Question
                       </div>
                       <div className="qa-detail-meta">
 
@@ -290,6 +657,40 @@ function QATab({
                                   <div className="qa-question-body">
                                       <p>{selectedQuestion.content}</p>
                                   </div>
+                                  <div className="qa-actions">
+
+                                      <button className={"btn-reply"}
+                                              onClick={() => {
+
+                                                  setReplyTarget(selectedQuestion);
+
+                                                  setShowReplyForm(true);
+
+                                                  setReplyText("");
+
+                                                  setTimeout(() => {
+
+                                                      replyFormRef.current?.scrollIntoView({
+                                                          behavior: "smooth",
+                                                          block: "center"
+                                                      });
+
+                                                      replyTextareaRef.current?.focus();
+
+                                                  }, 100);
+
+                                              }}
+                                      >
+                                          <FaRegCommentDots />
+                                          <span>Reply</span>
+                                      </button>
+
+                                      <button className="btn-like">
+                                          <FaRegThumbsUp />
+                                          <span>{selectedQuestion.likeCount || 0}</span>
+                                      </button>
+
+                                  </div>
 
                               </div>
 
@@ -305,68 +706,28 @@ function QATab({
 
 
                   {/* Instructor answer (mock or from data) */}
-                  {selectedQuestion.answers?.map(answer => (
-                      <div className="qa-answer" key={answer.id}>
+                  <div className="qa-thread">
 
-                          <div className="answer-by">
+                      {renderReplies(selectedQuestion.answers || [])}
 
-                              <img
-                                  src={course.instructor.avatar}
-                                  alt={answer.userName}
-                                  className="answer-instructor-avatar"
-                              />
-
-                              <div className="answer-instructor-info">
-
-                                  <div className="answer-instructor-header">
-
-                                      <div className="answer-instructor-name">
-                                          {answer.userName}
-                                      </div>
-
-                                      <span className="instructor-badge">
-                        Instructor
-                    </span>
-
-                                  </div>
-
-                                  <div className="answer-instructor-time">
-                                      {new Date(answer.createdAt).toLocaleString()}
-                                  </div>
-
-                              </div>
-
-                          </div>
-
-                          <div className="answer-content">
-                              <p>{answer.content}</p>
-                          </div>
-
-                          <div className="answer-actions">
-                              <button
-                                  className="btn-reply"
-                                  onClick={() => setShowReplyForm(!showReplyForm)}
-                              >
-                                  <FaRegCommentDots />
-                                  <span>Reply</span>
-                              </button>
-
-                              <button className="btn-like">
-                                  <FaRegThumbsUp />
-                                  <span>{answer.likeCount}</span>
-                              </button>
-                          </div>
-
-                      </div>
-                  ))}
+                  </div>
 
 
 
                   {/* Reply form */}
                   {showReplyForm && (
-                      <div className="qa-reply-form">
-                                           <textarea
-                                               className={`qa-reply-input ${replyError ? "error" : ""}`}
+                      <div
+                          className="qa-reply-form"
+                          ref={replyFormRef}
+                      >
+                          {replyTarget && (
+                              <div className="reply-to-box">
+                                  Replying to <b className="user-1">@{replyTarget.userName}</b>
+                              </div>
+                          )}
+                          <textarea
+                              ref={replyTextareaRef}
+                              className={`qa-reply-input ${replyError ? "error" : ""}`}
                                                value={replyText}
                                                onChange={(e) => {
                                                    setReplyText(e.target.value);
@@ -385,16 +746,21 @@ function QATab({
                           <div className="qa-reply-actions">
                               <button
                                   className="btn-cancel"
-                                  onClick={() => setShowReplyForm(false)}
+                                  onClick={() => {
+                                      setShowReplyForm(false);
+                                      setReplyTarget(null);
+
+                                      setReplyText("");
+                                  }}
                               >
-                                  Hủy
+                                  Cancel
                               </button>
 
                               <button
                                   className="btn-primary"
                                   onClick={handleReplySubmituser}
                               >
-                                  Gửi
+                                  Send
                               </button>
                           </div>
                       </div>
@@ -402,44 +768,207 @@ function QATab({
               </div>
           ) : (
               <div className="qa-items-list">
-                  {(questions || []).map(q => (
-                      <div key={q.id} className="qa-card" onClick={() => setSelectedQuestion(q)}>
 
-                          <div className="qa-right">
-                              <div className="qa-author">
-                                  <div className="qa-avatar">
-                                      {q.userName
-                                          ?.split(" ")
-                                          .map(s => s[0])
-                                          .slice(-2)
-                                          .join("")}
-                                  </div>
-                                  <div className="qa-author-info">
-                                      <div className="qa-qa-author-name">{q.userName}</div>
-                                      <div className="qa-qa-author-time">{new Date(q.createdAt).toLocaleString()}</div>
-                                  </div>
-                              </div>
-                          </div>
-                          <div className="qa-middle">
-                              <h5 className="qa-title">{"Question"}</h5>
-                              <p className="qa-description">{q.content}</p>
-                              {/*<div className="qa-tag-list">{q.tags.map((tag,i) => <span key={i} className="qa-tag">{tag}</span>)}</div>*/}
+                  {filteredQuestions && filteredQuestions.length === 0 ? (
+                      <div className="qa-empty-state">
+                          <div className="qa-empty-icon">
+                              <FaInbox size={40} />
                           </div>
 
+                          <h3>No results found</h3>
 
+                          <p>
+                              No questions match your search:{" "}
+                              <b>"{searchText}"</b>
+                          </p>
+
+                          <button
+                              className="qa-reset-btn"
+                              onClick={() => {
+                                  setSearchText("");
+                                  setActiveTab("all");
+                              }}
+                          >
+                              Clear filters
+                          </button>
                       </div>
-                  ))}
+                  ) : (
+                      (filteredQuestions || []).map(q => (
+                          <div
+                              key={q.id}
+                              className="qa-card"
+                              onClick={() => {
+                                  if (editQuestionId !== q.id) {
+                                      setSelectedQuestion(q);
+                                  }
+                              }}
+                          >
+
+                              <div className="qa-card-top">
+
+                                  <div className="qa-right">
+
+                                      <div className="qa-author">
+
+                                          <div className="qa-avatar">
+                                              {q.userName
+                                                  ?.split(" ")
+                                                  .map(s => s[0])
+                                                  .slice(-2)
+                                                  .join("")}
+                                          </div>
+
+                                          <div className="qa-author-info">
+
+                                              <div className="qa-qa-author-name">
+                                                  {q.userName}
+                                              </div>
+
+                                              <div className="qa-qa-author-time">
+                                                  {new Date(q.createdAt).toLocaleString()}
+                                              </div>
+
+                                          </div>
+
+                                      </div>
+
+                                  </div>
+
+                              </div>
+
+                              <div className="qa-middle">
+
+                                  <h5 className="qa-title">Question</h5>
+
+                                  {editQuestionId === q.id ? (
+                                      <div className="qa-edit-box">
+
+                            <textarea
+                                className="qa-edit-textarea"
+                                value={editQuestionText}
+                                onChange={(e) => {
+                                    setEditQuestionText(e.target.value);
+                                    setEditQuestionError("");
+                                }}
+                            />
+
+                                          {editQuestionError && (
+                                              <div className="qa-edit-error">
+                                                  {editQuestionError}
+                                              </div>
+                                          )}
+
+                                          <div className="qa-edit-actions">
+                                              <button
+                                                  className="qa-edit-save-btn"
+                                                  onClick={() => handleUpdateQuestion(q.id)}
+                                              >
+                                                  Save
+                                              </button>
+
+                                              <button
+                                                  className="qa-edit-cancel-btn"
+                                                  onClick={() => {
+                                                      setEditQuestionId(null);
+                                                      setEditQuestionText("");
+                                                      setEditQuestionError("");
+                                                  }}
+                                              >
+                                                  Cancel
+                                              </button>
+                                          </div>
+
+                                      </div>
+                                  ) : (
+                                      <p className="qa-description">{q.content}</p>
+                                  )}
+
+                              </div>
+
+                              {currentUserId === q.userId && (
+                                  <div
+                                      className="qa-menu"
+                                      onClick={(e) => e.stopPropagation()}
+                                  >
+                                      <button
+                                          className="qa-menu-btn"
+                                          onClick={(e) => {
+                                              e.stopPropagation();
+                                              setOpenMenuId(
+                                                  openMenuId === q.id ? null : q.id
+                                              );
+                                          }}
+                                      >
+                                          <FaEllipsisVertical />
+                                      </button>
+
+                                      {openMenuId === q.id && (
+                                          <div
+                                              className="qa-dropdown"
+                                              onClick={(e) => e.stopPropagation()}
+                                          >
+                                              <button
+                                                  className="qa-edit-icon"
+                                                  onClick={() => {
+                                                      setEditQuestionId(q.id);
+                                                      setEditQuestionText(q.content);
+                                                      setEditQuestionError("");
+                                                      setOpenMenuId(null);
+                                                  }}
+                                              >
+                                                  <FaPenToSquare />
+                                                  <span>Edit</span>
+                                              </button>
+
+                                              <button
+                                                  className="qa-delete-icon"
+                                                  onClick={() => handleDeleteQuestion(q.id)}
+                                              >
+                                                  <FaTrashCan />
+                                                  <span>Delete</span>
+                                              </button>
+                                          </div>
+                                      )}
+                                  </div>
+                              )}
+
+                          </div>
+                      ))
+                  )}
+
               </div>
           )}
           {/* Pagination */}
           <div className="qa-pagination">
-              <button className="qa-page-btn">‹</button>
-              <button className="qa-page-btn active">1</button>
-              <button className="qa-page-btn">2</button>
-              <button className="qa-page-btn">3</button>
-              <span className="qa-dots">...</span>
-              <button className="qa-page-btn">11</button>
-              <button className="qa-page-btn">›</button>
+
+              <button
+                  className="qa-page-btn"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+              >
+                  ‹
+              </button>
+
+              {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                      key={index + 1}
+                      className={`qa-page-btn ${
+                          currentPage === index + 1 ? "active" : ""
+                      }`}
+                      onClick={() => setCurrentPage(index + 1)}
+                  >
+                      {index + 1}
+                  </button>
+              ))}
+
+              <button
+                  className="qa-page-btn"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+              >
+                  ›
+              </button>
+
           </div>
       </div>
   );

@@ -45,6 +45,45 @@ public class LessonQAController {
             @RequestBody CreateAnswerRequest req
     ) {
         CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+
+        System.out.println("LOGIN USER = " + user.getId());
+        System.out.println("LOGIN EMAIL = " + user.getUsername());
+
         qaService.createAnswer(user.getId(), req);
+    }
+    @DeleteMapping("/qna/answer/{answerId}")
+    public void deleteAnswer(
+            Authentication auth,
+            @PathVariable Long answerId
+    ) {
+        CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+
+        qaService.deleteAnswer(user.getId(), answerId);
+    }
+    @DeleteMapping("/qna/question/{questionId}")
+    public void deleteQuestion(
+            Authentication auth,
+            @PathVariable Long questionId
+    ) {
+        CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+        qaService.deleteQuestion(user.getId(), questionId);
+    }
+    @PutMapping("/qna/answer/{id}")
+    public void updateAnswer(
+            Authentication auth,
+            @PathVariable Long id,
+            @RequestBody CreateAnswerRequest req
+    ) {
+        CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+        qaService.updateAnswer(user.getId(), id, req);
+    }
+    @PutMapping("/qna/question/{id}")
+    public void updateQuestion(
+            Authentication auth,
+            @PathVariable Long id,
+            @RequestBody CreateQuestionRequest req
+    ) {
+        CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+        qaService.updateQuestion(user.getId(), id, req);
     }
 }
