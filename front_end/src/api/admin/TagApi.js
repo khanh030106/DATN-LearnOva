@@ -24,3 +24,8 @@ export const deleteAdminTagApi = async (id, client = axiosClient) => {
   const response = await client.delete(`/admin/tags-management/delete/${id}`);
   return response.data;
 };
+
+export const getAdminTagCoursesDropdownApi = async (client = axiosClient) => {
+  const response = await client.get("/admin/tags-management/courses-dropdown");
+  return response.data;
+};

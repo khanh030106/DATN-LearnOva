@@ -5,18 +5,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Sliding-window rate limiter for sensitive auth endpoints.
- *
- * Limits per IP:
- *   /auth/login               — 5 attempts / 1 minute
- *   /auth/register            — 10 attempts / 10 minutes
- *   /auth/resend-verification — 3 attempts / 1 hour
- */
 @Component
 public class RateLimitInterceptor implements HandlerInterceptor {
 

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { loginApi, logoutApi, refreshApi } from "../api/AuthApi.js";
 import { getCurrentUserApi } from "../api/UserApi.js";
 
@@ -6,15 +6,18 @@ import { getCurrentUserApi } from "../api/UserApi.js";
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    // accessToken lives in React memory only — never in localStorage or sessionStorage.
-    // HttpOnly cookies handle the actual authentication; this value drives UI state only.
+
     const [accessToken, setAccessToken] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const sessionVersionRef = useRef(0);
+    // Deduplicates concurrent refresh calls (StrictMode double-invoke, multiple 401s, etc.)
+    const pendingRefreshRef = useRef(null);
+
     const login = async (email, password, remember) => {
+        sessionVersionRef.current++; // Invalidate any in-flight restoreSession
         const data = await loginApi(email, password, remember);
-        // Backend set the HttpOnly cookies. Keep the token in memory for isAuthenticated.
         setAccessToken(data.accessToken);
         try {
             await fetchCurrentUser();
@@ -31,13 +34,25 @@ export const AuthProvider = ({ children }) => {
     };
 
     const refreshAccessToken = useCallback(async () => {
-        // Backend rotates both cookies and returns the new access token in the body.
-        const data = await refreshApi();
-        setAccessToken(data.accessToken);
-        return data.accessToken;
+        // If a refresh is already in flight, share the same promise instead of
+        // firing a second request. This prevents token rotation failures when
+        // React StrictMode double-invokes the restoreSession effect.
+        if (pendingRefreshRef.current) {
+            return pendingRefreshRef.current;
+        }
+        pendingRefreshRef.current = refreshApi()
+            .then((data) => {
+                setAccessToken(data.accessToken);
+                return data.accessToken;
+            })
+            .finally(() => {
+                pendingRefreshRef.current = null;
+            });
+        return pendingRefreshRef.current;
     }, []);
 
     const logout = useCallback(async () => {
+        sessionVersionRef.current++; // Invalidate any in-flight restoreSession
         try {
             await logoutApi();
         } finally {
@@ -49,11 +64,15 @@ export const AuthProvider = ({ children }) => {
     // On every page load, try to restore the session from the refreshToken cookie.
     // If the cookie is missing or expired the refresh call returns 401 and we stay logged out.
     useEffect(() => {
+        const myVersion = ++sessionVersionRef.current;
+
         const restoreSession = async () => {
             try {
                 await refreshAccessToken();
+                if (sessionVersionRef.current !== myVersion) return; // login() was called, bail
                 await fetchCurrentUser();
             } catch {
+                if (sessionVersionRef.current !== myVersion) return;
                 setAccessToken(null);
                 setCurrentUser(null);
             } finally {

@@ -8,7 +8,9 @@ public record AdminTagRequest(
     @Size(min = 1, max = 50, message = "Tag name must be between 1 and 50 characters")
     String name,
 
-    @NotBlank(message = "Slug is required")
-    @Size(min = 1, max = 255, message = "Slug must be between 1 and 255 characters")
-    String slug
+    String slug,
+
+    Long courseId,
+
+    Boolean isDeleted
 ) {}

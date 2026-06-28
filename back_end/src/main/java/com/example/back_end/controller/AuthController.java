@@ -4,7 +4,7 @@ import com.example.back_end.dto.response.AuthTokenResponse;
 import com.example.back_end.dto.response.LoginResponse;
 import com.example.back_end.dto.resquest.LoginRequest;
 import com.example.back_end.service.AuthService;
-import com.example.back_end.service.RefreshCookieService;
+import com.example.back_end.service.CookieService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import com.example.back_end.dto.resquest.ResendVerificationRequest;
 public class AuthController {
 
     private final AuthService authService;
-    private final RefreshCookieService refreshCookieService;
+    private final CookieService cookieService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(
@@ -31,9 +31,9 @@ public class AuthController {
     ) {
         AuthTokenResponse result = authService.login(request);
         response.addHeader(HttpHeaders.SET_COOKIE,
-                refreshCookieService.createRefreshTokenCookie(result.refreshToken(), request.rememberMe()).toString());
+                cookieService.createRefreshTokenCookie(result.refreshToken(), request.rememberMe()).toString());
         response.addHeader(HttpHeaders.SET_COOKIE,
-                refreshCookieService.createAccessTokenCookie(result.accessToken()).toString());
+                cookieService.createAccessTokenCookie(result.accessToken()).toString());
         return ResponseEntity.ok(new LoginResponse(result.accessToken()));
     }
 
@@ -49,13 +49,13 @@ public class AuthController {
             AuthTokenResponse result = authService.refreshAccessToken(refreshToken);
             // Both cookies are rotated: refresh token is replaced, access token is renewed.
             response.addHeader(HttpHeaders.SET_COOKIE,
-                    refreshCookieService.createRefreshTokenCookie(result.refreshToken(), false).toString());
+                    cookieService.createRefreshTokenCookie(result.refreshToken(), false).toString());
             response.addHeader(HttpHeaders.SET_COOKIE,
-                    refreshCookieService.createAccessTokenCookie(result.accessToken()).toString());
+                    cookieService.createAccessTokenCookie(result.accessToken()).toString());
             return ResponseEntity.ok(new LoginResponse(result.accessToken()));
         } catch (RuntimeException e) {
-            response.addHeader(HttpHeaders.SET_COOKIE, refreshCookieService.clearRefreshTokenCookie().toString());
-            response.addHeader(HttpHeaders.SET_COOKIE, refreshCookieService.clearAccessTokenCookie().toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, cookieService.clearRefreshTokenCookie().toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, cookieService.clearAccessTokenCookie().toString());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
@@ -66,8 +66,8 @@ public class AuthController {
             HttpServletResponse response
     ) {
         authService.logout(refreshToken);
-        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookieService.clearRefreshTokenCookie().toString());
-        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookieService.clearAccessTokenCookie().toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, cookieService.clearRefreshTokenCookie().toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, cookieService.clearAccessTokenCookie().toString());
         return ResponseEntity.noContent().build();
     }
 

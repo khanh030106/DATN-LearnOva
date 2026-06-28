@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
                 .authorizeHttpRequests(auth -> auth
@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/learnova/uploads/presigned-url").permitAll()
                         .requestMatchers("/api/learnova/courses/video-url/**").permitAll()
                         .requestMatchers("/api/learnova/courses/my-courses").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/courses/categories").permitAll()
                         .requestMatchers("/api/learnova/admin/users/**").permitAll()
                         .requestMatchers("/api/learnova/admin/categories-management/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/learnova/admin/courses-management/**").permitAll()

@@ -9,6 +9,7 @@ import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Section;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.CourseStatus;
+import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.CourseRepository;
 import com.example.back_end.repository.SectionRepository;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +61,33 @@ public class CourseService {
         courseRepository.save(course);
 
         return course.getId();
+    }
+
+    public void updateCourseStatus(Long courseId, String email, String status) {
+        User instructor = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+
+        if (!course.getInstructor().getId().equals(instructor.getId())) {
+            throw new BusinessException("You don't have permission to modify this course");
+        }
+
+        CourseStatus newStatus;
+        try {
+            newStatus = CourseStatus.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new BusinessException("Invalid course status: " + status);
+        }
+
+        course.setStatus(newStatus);
+        course.setUpdatedAt(Instant.now());
+        if (newStatus == CourseStatus.PUBLISHED && course.getPublishedAt() == null) {
+            course.setPublishedAt(OffsetDateTime.now());
+        }
+        courseRepository.save(course);
     }
 
     public List<TeacherCoursesResponse> getMyCourses(String email) {

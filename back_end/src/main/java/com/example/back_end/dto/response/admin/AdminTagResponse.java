@@ -6,6 +6,8 @@ public record AdminTagResponse(
     Long id,
     String name,
     String slug,
+    Long courseId,
+    String courseTitle,
     Boolean isDeleted,
     Instant updatedAt
 ) {}

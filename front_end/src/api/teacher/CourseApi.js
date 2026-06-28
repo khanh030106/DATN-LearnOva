@@ -7,6 +7,11 @@ export const getMyCourse = async () => {
     return response.data;
 };
 
+export const getActiveCategories = async () => {
+    const response = await axiosClient.get("/courses/categories");
+    return response.data;
+};
+
 export const createDraftCourse = async (payload) => {
     const response = await api.post(
         "/courses/create-draft-course",
@@ -79,5 +84,10 @@ export const deleteLessonSource = async (sourceId) => {
     const response = await api.delete(
         `/courses/lessons/sources/${sourceId}`
     );
+    return response.data;
+};
+
+export const updateCourseStatus = async (courseId, status) => {
+    const response = await api.patch(`/courses/${courseId}/status`, { status });
     return response.data;
 };
