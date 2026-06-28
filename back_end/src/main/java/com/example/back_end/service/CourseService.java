@@ -1,6 +1,8 @@
 package com.example.back_end.service;
 
+import com.example.back_end.dto.response.CourseDetailResponse;
 import com.example.back_end.dto.response.CreateLessonResponse;
+import com.example.back_end.dto.response.FeaturedCourseResponse;
 import com.example.back_end.dto.response.TeacherCoursesResponse;
 import com.example.back_end.dto.resquest.CreateDraftCourseRequest;
 import com.example.back_end.dto.resquest.CreateLessonRequest;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -167,6 +170,105 @@ public class CourseService {
                             lessonCount,
                             totalDurationSeconds,
                             studentCount
+                    );
+                })
+                .toList();
+    }
+
+    public CourseDetailResponse getCourseDetail(Long courseId) {
+        Course course = courseRepository.findCourseDetailById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+
+        String categoryName = course.getCoursecategories().stream()
+                .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
+                .findFirst()
+                .map(cc -> cc.getCategory().getName())
+                .orElse(null);
+
+        List<CourseDetailResponse.SectionInfo> sections = course.getSections().stream()
+                .filter(s -> !Boolean.TRUE.equals(s.getIsDeleted()))
+                .sorted(Comparator.comparingDouble(s -> s.getSectionOrder() != null ? s.getSectionOrder() : 0.0))
+                .map(s -> {
+                    List<CourseDetailResponse.LessonInfo> lessons = s.getLessons().stream()
+                            .filter(l -> !Boolean.TRUE.equals(l.getIsDeleted()))
+                            .sorted(Comparator.comparingDouble(l -> l.getLessonOrder() != null ? l.getLessonOrder() : 0.0))
+                            .map(l -> new CourseDetailResponse.LessonInfo(
+                                    l.getId(), l.getTitle(), l.getLessonOrder(),
+                                    l.getDurationSeconds(), l.getVideoKey(), l.getIsPreview()
+                            ))
+                            .toList();
+                    return new CourseDetailResponse.SectionInfo(s.getId(), s.getTitle(), s.getSectionOrder(), lessons);
+                })
+                .toList();
+
+        long lessonCount = sections.stream().mapToLong(s -> s.lessons().size()).sum();
+        long totalDurationSeconds = sections.stream()
+                .flatMap(s -> s.lessons().stream())
+                .mapToLong(l -> l.durationSeconds() != null ? l.durationSeconds() : 0)
+                .sum();
+
+        var instructor = course.getInstructor();
+        var instructorInfo = new CourseDetailResponse.InstructorInfo(
+                instructor.getId(), instructor.getFullName(), instructor.getAvatar()
+        );
+
+        return new CourseDetailResponse(
+                course.getId(), course.getTitle(), course.getDescription(),
+                course.getThumbnailKey(), course.getBasePrice(), course.getLevel(),
+                course.getLanguage(), course.getRequirements(), course.getWhatYouLearn(),
+                categoryName, lessonCount, totalDurationSeconds, instructorInfo, sections
+        );
+    }
+
+    public List<FeaturedCourseResponse> getFeaturedCourses() {
+        List<Course> published = courseRepository.findAllByStatus(CourseStatus.PUBLISHED);
+
+        List<Long> courseIds = published.stream().map(Course::getId).toList();
+
+        Map<Long, Long> enrollmentCountByCourseId = courseIds.isEmpty()
+                ? Map.of()
+                : enrollmentRepository.findByCourseIdIn(courseIds).stream()
+                        .collect(Collectors.groupingBy(e -> e.getCourse().getId(), Collectors.counting()));
+
+        return published.stream()
+                .sorted((a, b) -> Long.compare(
+                        enrollmentCountByCourseId.getOrDefault(b.getId(), 0L),
+                        enrollmentCountByCourseId.getOrDefault(a.getId(), 0L)
+                ))
+                .limit(8)
+                .map(course -> {
+                    String categoryName = course.getCoursecategories().stream()
+                            .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
+                            .findFirst()
+                            .map(cc -> cc.getCategory().getName())
+                            .orElse(null);
+
+                    var activeLessons = course.getSections().stream()
+                            .filter(s -> !Boolean.TRUE.equals(s.getIsDeleted()))
+                            .flatMap(s -> s.getLessons().stream())
+                            .filter(l -> !Boolean.TRUE.equals(l.getIsDeleted()))
+                            .toList();
+
+                    long lessonCount = activeLessons.size();
+
+                    long totalDurationSeconds = activeLessons.stream()
+                            .mapToLong(l -> l.getDurationSeconds() != null ? l.getDurationSeconds() : 0)
+                            .sum();
+
+                    long studentCount = enrollmentCountByCourseId.getOrDefault(course.getId(), 0L);
+
+                    return new FeaturedCourseResponse(
+                            course.getId(),
+                            course.getTitle(),
+                            course.getThumbnailKey(),
+                            course.getInstructor().getFullName(),
+                            course.getBasePrice(),
+                            studentCount,
+                            lessonCount,
+                            totalDurationSeconds,
+                            categoryName,
+                            course.getLevel(),
+                            0.0
                     );
                 })
                 .toList();

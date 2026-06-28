@@ -12,4 +12,7 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Enrollme
 
     @Query("SELECT e FROM Enrollment e WHERE e.course.id IN :courseIds")
     List<Enrollment> findByCourseIdIn(@Param("courseIds") List<Long> courseIds);
+
+    @Query("SELECT COUNT(e) > 0 FROM Enrollment e WHERE e.user.email = :email AND e.course.id = :courseId")
+    boolean existsByUserEmailAndCourseId(@Param("email") String email, @Param("courseId") Long courseId);
 }

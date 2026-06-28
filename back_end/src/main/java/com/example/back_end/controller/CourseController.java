@@ -1,7 +1,9 @@
 package com.example.back_end.controller;
 
 import com.example.back_end.dto.response.CategoryOptionResponse;
+import com.example.back_end.dto.response.CourseDetailResponse;
 import com.example.back_end.dto.response.CreateDraftCourseResponse;
+import com.example.back_end.dto.response.FeaturedCourseResponse;
 import com.example.back_end.dto.response.GetFileUrlResponse;
 import com.example.back_end.dto.response.TeacherCoursesResponse;
 import com.example.back_end.dto.resquest.CreateDraftCourseRequest;
@@ -65,6 +67,16 @@ public class CourseController {
         }
         courseService.updateCourseStatus(courseId, authentication.getName(), request.status());
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/featured")
+    public ResponseEntity<List<FeaturedCourseResponse>> getFeaturedCourses() {
+        return ResponseEntity.ok(courseService.getFeaturedCourses());
+    }
+
+    @GetMapping("/{courseId}")
+    public ResponseEntity<CourseDetailResponse> getCourseDetail(@PathVariable Long courseId) {
+        return ResponseEntity.ok(courseService.getCourseDetail(courseId));
     }
 
     @GetMapping("/my-courses")          // /courses/mine

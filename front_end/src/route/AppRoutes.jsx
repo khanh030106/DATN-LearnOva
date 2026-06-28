@@ -44,6 +44,7 @@ const App = () => {
 
                 <Route path="/learnova/auth/login" element={<AuthPage/>}/>
                 <Route path="/learnova/user/Courses-detail" element={<CourseDetail/>}/>
+                <Route path="/learnova/user/CoursesDetail/:courseId" element={<CourseDetail/>}/>
                 <Route path="/oauth2-success" element={<OAuth2Success />}/>
 
                 <Route element={<HomeLayout/>}>
@@ -83,7 +84,7 @@ const App = () => {
                 <Route element={<UserLayout/>}>
                     <Route path="/learnova/courses" element={<CoursePage/>}/>
                     <Route path="/learnova/cart" element={<Cart/>}/>
-                    <Route path="/learnova/CoursesDetail/:id" element={<CourseDetaill/>}/>
+                    <Route path="/learnova/courses/detail/:id" element={<CourseDetaill/>}/>
                     <Route path="/learnova/intructors" element={<InstructorsPage/>}/>
                     <Route path="/learnova/intructorDetail" element={<InstructorDetail/>}/>
                     <Route path="/learnova/about" element={<AboutView/>}/>

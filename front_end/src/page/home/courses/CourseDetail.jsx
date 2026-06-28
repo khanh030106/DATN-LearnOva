@@ -1,600 +1,291 @@
-import React, { useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import "./CourseDetail.css";
-import LearnovaAI from "../AI/AI.jsx";
-import { FaStar, FaRegStar } from "react-icons/fa";
-import { FaBookmark, FaLink } from "react-icons/fa";
-import { FaPhoneAlt } from "react-icons/fa";
+import React, { useEffect, useState, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
-  FaCode,
-  FaReact,
-  FaCloud,
-  FaDatabase,
-  FaLock,
-  FaRocket,
-  FaUsers,
-  FaBook,
-  FaClock,
-  FaGraduationCap,
-  FaCertificate,
-  FaGlobe,
-  FaRegHeart,
-  FaShareSquare,
-  FaVideo,
-  FaFileDownload,
-  FaInfinity,
-  FaMobileAlt,
+    FaPlay, FaPlayCircle, FaClock, FaGraduationCap, FaCheckCircle,
+    FaUserGraduate, FaGlobe, FaChevronDown, FaChevronUp, FaShoppingCart,
 } from "react-icons/fa";
-import { FaLightbulb, FaBullseye } from "react-icons/fa";
+import { ChevronDown } from "lucide-react";
+import { getCourseDetail, getFileUrl } from "../../../api/PublicCourseApi.js";
+import { checkEnrollment } from "../../../api/EnrollmentApi.js";
+import { AuthContext } from "../../../context/AuthContext.jsx";
+import LearnovaAI from "../AI/AI.jsx";
+import "./CourseDetail.css";
 
-const courses = [
-  {
-    id: 1,
-    title: "Fullstack Web Developer",
-    teacher: "Tran Hoang Nam",
-    subtitle: "Senior Web Developer",
-    rating: 4.9,
-    reviews: "12,450",
-    students: "32,541",
-    lessons: 128,
-    duration: "32 hours",
-    level: "Beginner to Advanced",
-    certificate: "Yes, upon completion",
-    language: "Vietnamese",
-    price: "1.299.000đ",
-    oldPrice: "1.699.000đ",
-    description:
-      "This Fullstack Web Developer course is designed to take you from zero to hero. Learn frontend, backend, databases and deployment.",
-    learnings: [
-      "HTML, CSS, JavaScript",
-      "ReactJS & NodeJS",
-      "RESTful API",
-      "MongoDB & SQL",
-      "Authentication & Security",
-      "Real-world Projects",
-    ],
-    includes: [
-      { icon: <FaReact />, text: "32 hours on-demand video" },
-      { icon: <FaReact />, text: "128 downloadable resources" },
-      { icon: <FaReact />, text: "Full lifetime access" },
-      { icon: <FaReact />, text: "Access on mobile and TV" },
-      { icon: <FaReact />, text: "Certificate of completion" },
-    ],
-    gallery: [
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c",
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-    ],
-  },
-];
-
-const Curriculum = () => {
-  const highlights = [
-    {
-      icon: <FaCode />,
-      title: "Build responsive web interfaces",
-      subtitle: "with HTML, CSS and JavaScript",
-    },
-    {
-      icon: <FaReact />,
-      title: "Create modern UIs with React",
-      subtitle: "components and hooks",
-    },
-    {
-      icon: <FaCloud />,
-      title: "Work with RESTful APIs",
-      subtitle: "and handle data effectively",
-    },
-    {
-      icon: <FaDatabase />,
-      title: "Design and manage databases",
-      subtitle: "using PostgreSQL",
-    },
-    {
-      icon: <FaLock />,
-      title: "Implement authentication",
-      subtitle: "and authorization (JWT)",
-    },
-    {
-      icon: <FaRocket />,
-      title: "Deploy applications",
-      subtitle: "to cloud platforms with confidence",
-    },
-  ];
-
-  const roadmap = [
-    { title: "Web Fundamentals", lessons: 8, duration: "1h 24m" },
-    { title: "JavaScript Essentials", lessons: 12, duration: "2h 10m" },
-    { title: "React Core", lessons: 15, duration: "4h 30m" },
-    { title: "Working with APIs", lessons: 10, duration: "2h 20m" },
-    { title: "Databases with PostgreSQL", lessons: 8, duration: "2h 00m" },
-    { title: "Authentication & Security", lessons: 6, duration: "1h 40m" },
-    { title: "Deployment & DevOps", lessons: 6, duration: "2h 10m" },
-    { title: "Real-world Project", lessons: 3, duration: "2h 00m" },
-  ];
-
-  const skills = [
-    "HTML",
-    "CSS",
-    "JavaScript",
-    "React",
-    "REST API",
-    "PostgreSQL",
-    "JWT",
-    "Git",
-    "Docker",
-    "AWS",
-  ];
-
-  return (
-    <div className="curriculum-page">
-      <div className="curriculum-top">
-        <div className="learn-card-grid">
-          {highlights.map((item, idx) => (
-            <div key={idx} className="learn-card">
-              <div className="learn-card-head">
-                <span className="learn-card-icon">{item.icon}</span>
-                <span className="learn-card-check">✓</span>
-              </div>
-              <h3>{item.title}</h3>
-              <p>{item.subtitle}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="curriculum-roadmap">
-        <div className="roadmap-header">
-          <div>
-            <p className="roadmap-label">Course roadmap</p>
-            <h3>8 sections · 68 lessons · ~18 hours total</h3>
-          </div>
-          <button className="roadmap-expand" type="button">
-            Expand all
-          </button>
-        </div>
-
-        <div className="roadmap-table">
-          {roadmap.map((item, idx) => (
-            <div key={idx} className="roadmap-row">
-              <div className="roadmap-index">{idx + 1}</div>
-              <div className="roadmap-info">
-                <p className="roadmap-section">
-                  <span className="roadmap-toggle">›</span>
-                  {item.title}
-                </p>
-              </div>
-              <div className="roadmap-meta">
-                <span>{item.lessons} lessons</span>
-                <span>{item.duration}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="skills-gain">
-          <p className="skills-heading">Skills you'll gain</p>
-          <div className="skills-list">
-            {skills.map((skill, idx) => (
-              <span key={idx} className="skill-chip">
-                {skill}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+const formatDuration = (s) => {
+    if (!s) return "0:00";
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+    return `${m}:${String(sec).padStart(2, "0")}`;
 };
 
-const CourseDetail = () => {
-  const [activeTab, setActiveTab] = useState("Overview");
-  const [reviews, setReviews] = useState([
-    {
-      name: "Nguyen An",
-      role: "Software Engineer",
-      rating: 5,
-      likes: 24,
-      avatar: "NA",
-      text: "Khóa học giúp tôi xây dựng các dự án thực tế và tìm được công việc lập trình đầu tiên.",
-    },
-    {
-      name: "Le Thi Mai",
-      role: "Frontend Developer",
-      rating: 4,
-      likes: 12,
-      avatar: "LM",
-      text: "Bài giảng rõ ràng, dễ hiểu. Giảng viên giải thích các chủ đề khó rất tốt.",
-    },
-  ]);
+const formatHours = (s) => {
+    if (!s) return "0h";
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    if (h > 0) return `${h}h ${m > 0 ? m + "m" : ""}`.trim();
+    return `${m}m`;
+};
 
-  const [newComment, setNewComment] = useState("");
-  const [newRating, setNewRating] = useState(5);
-  const handleSubmitReview = () => {
-    if (!newComment.trim()) return;
+export default function CourseDetailPreview() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const { currentUser } = useContext(AuthContext);
 
-    const review = {
-      name: "You",
-      role: "Student",
-      rating: newRating,
-      likes: 0,
-      avatar: "YO",
-      text: newComment,
+    const [course, setCourse] = useState(null);
+    const [thumbnailUrl, setThumbnailUrl] = useState(null);
+    const [instructorAvatarUrl, setInstructorAvatarUrl] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [enrolled, setEnrolled] = useState(false);
+    const [expandedSections, setExpandedSections] = useState([]);
+    const [descExpanded, setDescExpanded] = useState(false);
+
+    useEffect(() => {
+        if (!id) return;
+        const load = async () => {
+            try {
+                const data = await getCourseDetail(id);
+                setCourse(data);
+                if (data.sections?.length > 0) {
+                    setExpandedSections([data.sections[0].sectionId]);
+                }
+                if (data.thumbnailKey) {
+                    getFileUrl(data.thumbnailKey).then(setThumbnailUrl).catch(() => {});
+                }
+                if (data.instructor?.avatarKey) {
+                    getFileUrl(data.instructor.avatarKey).then(setInstructorAvatarUrl).catch(() => {});
+                }
+            } catch (err) {
+                console.error("Failed to load course:", err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        load();
+    }, [id]);
+
+    useEffect(() => {
+        if (!id) return;
+        checkEnrollment(id).then(setEnrolled).catch(() => setEnrolled(false));
+    }, [id, currentUser]);
+
+    const toggleSection = (sectionId) => {
+        setExpandedSections((prev) =>
+            prev.includes(sectionId) ? prev.filter((s) => s !== sectionId) : [...prev, sectionId]
+        );
     };
 
-    setReviews([review, ...reviews]);
+    if (isLoading) {
+        return (
+            <div className="cdp__loading">Loading course...</div>
+        );
+    }
 
-    setNewComment("");
-    setNewRating(5);
-  };
-  const { id } = useParams();
-  const navigate = useNavigate();
+    if (!course) {
+        return (
+            <div className="cdp__loading">Course not found.</div>
+        );
+    }
 
-  const course = useMemo(
-    () => courses.find((item) => String(item.id) === String(id)),
-    [id],
-  );
+    const descParagraphs = (course.description || "").split(/\n+/).filter(Boolean);
+    const visibleParas = descExpanded ? descParagraphs : descParagraphs.slice(0, 3);
 
-  if (!course) {
     return (
-      <div className="course-detail-page">
-        <div className="course-detail-panel">
-          <p>Course not found.</p>
-          <button
-            onClick={() => navigate("/learnova/home")}
-            className="course-detail-back"
-          >
-            Back to home
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="course-detail-page">
-      <div className="course-detail-panel">
-        <div className="course-detail-grid">
-          <div className="course-detail-left">
-            <div className="course-detail-card">
-              <div className="course-detail-media-section">
-                <div className="course-detail-media">
-                  <img src={course.gallery[0]} alt={course.title} />
+        <div className="cdp">
+            {/* HERO */}
+            <div className="cdp__hero">
+                <div className="cdp__hero-inner">
+                    <div className="cdp__breadcrumb">
+                        {course.categoryName && <span>{course.categoryName}</span>}
+                    </div>
+                    <h1 className="cdp__hero-title">{course.title}</h1>
+                    <div className="cdp__hero-meta">
+                        <span className="cdp__hero-instructor">
+                            <FaUserGraduate /> {course.instructor?.fullName}
+                        </span>
+                        <span className="cdp__hero-stat">
+                            <FaPlayCircle /> {course.lessonCount} lessons
+                        </span>
+                        <span className="cdp__hero-stat">
+                            <FaClock /> {formatHours(course.totalDurationSeconds)}
+                        </span>
+                        <span className="cdp__hero-stat">
+                            <FaGraduationCap /> {course.level}
+                        </span>
+                        {course.language && (
+                            <span className="cdp__hero-stat">
+                                <FaGlobe /> {course.language}
+                            </span>
+                        )}
+                    </div>
                 </div>
-
-                <div className="course-detail-info">
-                  <div>
-                    <FaBook /> {course.lessons} Lessons
-                  </div>
-                  <div>
-                    <FaClock /> {course.duration}
-                  </div>
-                  <div>
-                    <FaGraduationCap /> {course.level}
-                  </div>
-                  <div>
-                    <FaCertificate /> {course.certificate}
-                  </div>
-                  <div>
-                    <FaGlobe /> {course.language}
-                  </div>
-                </div>
-
-                <div className="course-detail-actions">
-                  <button type="button">
-                    <FaRegHeart /> Wishlist
-                  </button>
-                  <button type="button">
-                    <FaShareSquare /> Share
-                  </button>
-                </div>
-              </div>
-
-              <div className="course-detail-meta">
-                <h1>{course.title}</h1>
-                <p>{course.description}</p>
-
-                <div className="course-detail-instructor-card">
-                  <img src="https://i.pravatar.cc/100" alt={course.teacher} />
-                  <div className="course-detail-instructor-info">
-                    <h4>{course.teacher}</h4>
-                    <p>{course.subtitle}</p>
-                  </div>
-                </div>
-
-                <div className="course-detail-stats-grid">
-                  <div className="stat-card">
-                    <div className="stat-card-value">{course.rating}★</div>
-                    <div className="stat-card-label">Rating</div>
-                  </div>
-                  <div className="stat-card">
-                    <div className="stat-card-value">{course.reviews}</div>
-                    <div className="stat-card-label">Reviews</div>
-                  </div>
-                  <div className="stat-card">
-                    <div className="stat-card-value">{course.students}</div>
-                    <div className="stat-card-label">Students</div>
-                  </div>
-                </div>
-
-                <div className="course-highlight-box">
-                  <p>
-                    <strong>✓ Giảng viên chuyên nghiệp</strong> với 15+ năm kinh nghiệm
-                  </p>
-                  <p>
-                    <strong>✓ Chứng chỉ hoàn thành</strong> được công nhận
-                  </p>
-                  <p>
-                    <strong>✓ Truy cập suốt đời</strong> vào toàn bộ nội dung
-                  </p>
-                </div>
-              </div>
             </div>
 
-            <div className="course-detail-tabs">
-              <div className="tabs-row">
-                <button
-                  className={`tab-button ${activeTab === "Overview" ? "active" : ""}`}
-                  onClick={() => setActiveTab("Overview")}
-                >
-                  Overview
-                </button>
-                <button
-                  className={`tab-button ${activeTab === "Curriculum" ? "active" : ""}`}
-                  onClick={() => setActiveTab("Curriculum")}
-                >
-                  Curriculum
-                </button>
-                <button
-                  className={`tab-button ${activeTab === "Instructor" ? "active" : ""}`}
-                  onClick={() => setActiveTab("Instructor")}
-                >
-                  Instructor
-                </button>
-                <button
-                  className={`tab-button ${activeTab === "Reviews" ? "active" : ""}`}
-                  onClick={() => setActiveTab("Reviews")}
-                >
-                  Reviews
-                </button>
-              </div>
+            {/* BODY */}
+            <div className="cdp__body">
+                {/* LEFT */}
+                <div className="cdp__left">
 
-              <div className="tab-content">
-                {activeTab === "Overview" && (
-                  <>
-                    <h2>About this course</h2>
-                    <p>{course.description}</p>
+                    {/* What you'll learn */}
+                    {course.whatYouLearn?.length > 0 && (
+                        <section className="cdp__section">
+                            <h2 className="cdp__section-title">What you'll learn</h2>
+                            <ul className="cdp__learn-list">
+                                {course.whatYouLearn.map((item, idx) => (
+                                    <li key={idx}>
+                                        <FaCheckCircle className="cdp__check-icon" />
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
 
-                    <h2>What you'll learn</h2>
-                    <p>
-                      By the end of this course, you'll be able to build
-                      full-stack web applications using modern tools and
-                      industry best practices.
-                    </p>
-                  </>
-                )}
+                    {/* Description */}
+                    {descParagraphs.length > 0 && (
+                        <section className="cdp__section">
+                            <h2 className="cdp__section-title">Course Description</h2>
+                            <div className="cdp__desc">
+                                {visibleParas.map((p, idx) => <p key={idx}>{p}</p>)}
+                            </div>
+                            {descParagraphs.length > 3 && (
+                                <button className="cdp__toggle-btn" onClick={() => setDescExpanded(!descExpanded)}>
+                                    {descExpanded ? <><FaChevronUp /> Show less</> : <><FaChevronDown /> Show more</>}
+                                </button>
+                            )}
+                        </section>
+                    )}
 
-                {activeTab === "Curriculum" && <Curriculum />}
-
-                {activeTab === "Instructor" && (
-                  <div className="instructor-section">
-                    <div className="instructor-card">
-                      <div className="instructor-avatar">
-                        <img
-                          src="https://i.pravatar.cc/200"
-                          alt={course.teacher}
-                        />
-                      </div>
-                      <div className="instructor-info">
-                        <h3>{course.teacher}</h3>
-                        <p className="instructor-subtitle">{course.subtitle}</p>
-                        <div className="instructor-stats">
-                          <div className="stat-item">
-                            <span className="stat-number">15+</span>
-                            <span className="stat-label">Years Experience</span>
-                          </div>
-                          <div className="stat-item">
-                            <span className="stat-number">50K+</span>
-                            <span className="stat-label">Students</span>
-                          </div>
-                          <div className="stat-item">
-                            <span className="stat-number">4.9★</span>
-                            <span className="stat-label">Avg Rating</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="instructor-bio">
-                      <h4>About the Instructor</h4>
-                      <p>
-                        With 15+ years of experience in full-stack web
-                        development, {course.teacher} has trained over 50,000
-                        students worldwide. Passionate about making complex
-                        concepts simple and accessible, helping thousands
-                        transition into tech careers.
-                      </p>
-                      <p>
-                        Specializing in React, Node.js, and modern web
-                        technologies, brings real-world industry experience into
-                        every lesson, ensuring students learn practical skills
-                        used in production environments.
-                      </p>
-                    </div>
-
-                    <div className="instructor-teaching">
-                      <h4>Teaching Approach</h4>
-
-                      <div className="teaching-list">
-                        <div className="teaching-item">
-                          <span className="teaching-icon">
-                            <FaBook />
-                          </span>
-                          <div>
-                            <h5>Project-Based Learning</h5>
-                            <p>
-                              Learn by building real-world applications from
-                              scratch
+                    {/* Curriculum */}
+                    {course.sections?.length > 0 && (
+                        <section className="cdp__section">
+                            <h2 className="cdp__section-title">Course Content</h2>
+                            <p className="cdp__curriculum-meta">
+                                {course.sections.length} sections · {course.lessonCount} lessons · {formatHours(course.totalDurationSeconds)} total
                             </p>
-                          </div>
-                        </div>
-                        <div className="teaching-item">
-                          <span className="teaching-icon">
-                            <FaLightbulb />
-                          </span>
-                          <div>
-                            <h5>Best Practices</h5>
-                            <p>Industry standards and clean code principles</p>
-                          </div>
-                        </div>
-
-                        <div className="teaching-item">
-                          <span className="teaching-icon">
-                            <FaBullseye />
-                          </span>
-                          <div>
-                            <h5>Career Focused</h5>
-                            <p>Structured content designed for job readiness</p>
-                          </div>
-                        </div>
-
-                        <div className="teaching-item">
-                          <span className="teaching-icon">
-                            <FaUsers />
-                          </span>
-                          <div>
-                            <h5>Community Support</h5>
-                            <p>Active Q&A and continuous student support</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {activeTab === "Reviews" && (
-                  <div className="review-section">
-
-                    {/* FORM COMMENT */}
-
-                    <div className="review-form-card">
-                      <h3>Viết đánh giá của bạn</h3>
-
-                      <div className="review-rating-picker">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <FaStar
-                            key={star}
-                            className={
-                              star <= newRating
-                                ? "review-star active"
-                                : "review-star"
-                            }
-                            onClick={() => setNewRating(star)}
-                          />
-                        ))}
-                      </div>
-
-                      <textarea
-                        placeholder="Chia sẻ trải nghiệm học tập..."
-                        value={newComment}
-                        onChange={(e) =>
-                          setNewComment(e.target.value)
-                        }
-                      />
-                    </div>
-
-                    {/* REVIEW LIST */}
-
-                    <div className="review-grid">
-                      {reviews.map((review, index) => (
-                        <article
-                          key={index}
-                          className="review-card"
-                        >
-                          <div className="review-header">
-
-                            <div className="review-user">
-                              <div className="review-avatar">
-                                {review.avatar}
-                              </div>
-
-                              <div>
-                                <h4>{review.name}</h4>
-                                <span>{review.role}</span>
-                              </div>
+                            <div className="cdp__curriculum">
+                                {course.sections.map((section, sIdx) => {
+                                    const isOpen = expandedSections.includes(section.sectionId);
+                                    const sectionDuration = section.lessons.reduce((s, l) => s + (l.durationSeconds || 0), 0);
+                                    return (
+                                        <div key={section.sectionId} className="cdp__section-item">
+                                            <button
+                                                className="cdp__section-header"
+                                                onClick={() => toggleSection(section.sectionId)}
+                                            >
+                                                <ChevronDown size={16} className={`cdp__chevron ${isOpen ? "cdp__chevron--open" : ""}`} />
+                                                <span className="cdp__section-name">{sIdx + 1}. {section.title}</span>
+                                                <span className="cdp__section-info">
+                                                    {section.lessons.length} lessons · {formatHours(sectionDuration)}
+                                                </span>
+                                            </button>
+                                            {isOpen && (
+                                                <ul className="cdp__lesson-list">
+                                                    {section.lessons.map((lesson) => (
+                                                        <li key={lesson.lessonId} className="cdp__lesson-item">
+                                                            <FaPlay className="cdp__play-icon" />
+                                                            <span className="cdp__lesson-title">{lesson.title}</span>
+                                                            {lesson.isPreview && (
+                                                                <span className="cdp__preview-badge">Preview</span>
+                                                            )}
+                                                            <span className="cdp__lesson-duration">
+                                                                {formatDuration(lesson.durationSeconds)}
+                                                            </span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </div>
+                        </section>
+                    )}
 
-                            <div className="review-stars">
-                              {[...Array(5)].map((_, i) =>
-                                i < review.rating ? (
-                                  <FaStar key={i} />
+                    {/* Requirements */}
+                    {course.requirements?.length > 0 && (
+                        <section className="cdp__section">
+                            <h2 className="cdp__section-title">Requirements</h2>
+                            <ul className="cdp__req-list">
+                                {course.requirements.map((r, idx) => (
+                                    <li key={idx}>{r}</li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
+
+                    {/* Instructor */}
+                    <section className="cdp__section">
+                        <h2 className="cdp__section-title">Instructor</h2>
+                        <div className="cdp__instructor">
+                            <div className="cdp__instructor-avatar">
+                                {instructorAvatarUrl ? (
+                                    <img src={instructorAvatarUrl} alt={course.instructor?.fullName} />
                                 ) : (
-                                  <FaRegStar key={i} />
-                                )
-                              )}
+                                    <div className="cdp__instructor-initials">
+                                        {course.instructor?.fullName?.charAt(0) ?? "?"}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="cdp__instructor-info">
+                                <h3>{course.instructor?.fullName}</h3>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                {/* RIGHT — Sticky card */}
+                <aside className="cdp__sidebar">
+                    <div className="cdp__card">
+                        {thumbnailUrl ? (
+                            <img src={thumbnailUrl} alt={course.title} className="cdp__card-thumb" />
+                        ) : (
+                            <div className="cdp__card-thumb cdp__card-thumb--placeholder" />
+                        )}
+
+                        <div className="cdp__card-body">
+                            <div className="cdp__card-price">
+                                ${course.basePrice ?? "0.00"}
                             </div>
 
-                          </div>
+                            {enrolled ? (
+                                <>
+                                    <button
+                                        className="cdp__btn cdp__btn--primary"
+                                        onClick={() => navigate(`/learnova/user/CoursesDetail/${id}`)}
+                                    >
+                                        <FaPlay /> Start Learning
+                                    </button>
+                                    <button className="cdp__btn cdp__btn--secondary">
+                                        <FaShoppingCart /> Add to Cart
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button className="cdp__btn cdp__btn--primary">
+                                        <FaShoppingCart /> Add to Cart
+                                    </button>
+                                    <button className="cdp__btn cdp__btn--outline">
+                                        Subscribe
+                                    </button>
+                                </>
+                            )}
 
-                          <p className="review-text">
-                            {review.text}
-                          </p>
-                        </article>
-                      ))}
+                            <ul className="cdp__card-features">
+                                <li><FaPlayCircle /> {course.lessonCount} lessons on-demand</li>
+                                <li><FaClock /> {formatHours(course.totalDurationSeconds)} total</li>
+                                <li><FaGraduationCap /> {course.level}</li>
+                                {course.language && <li><FaGlobe /> {course.language}</li>}
+                            </ul>
+                        </div>
                     </div>
-
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <aside className="course-detail-sidebar">
-            <div className="course-detail-summary">
-              <div className="course-detail-price">
-                <span>{course.price}</span>
-                <span>{course.oldPrice}</span>
-              </div>
-
-              <button className="summary-button primary">Add To Cart</button>
-              <button className="summary-button secondary">Buy Now</button>
-
-              <div className="summary-features">
-                <p>✓ Full lifetime access</p>
-                <p>✓ Mobile & TV access</p>
-                <p>✓ Certificate of completion</p>
-                <p>✓ 30-day money-back guarantee</p>
-              </div>
+                </aside>
             </div>
 
-            <div className="course-includes-card">
-              <h3>This course includes:</h3>
-              <div className="includes-list">
-                {course.includes.map((item, index) => (
-                  <div key={index} className="include-item">
-                    <span className="include-text">{item.text}</span>
-                  </div>
-                ))}
-              </div>
+            <div className="chatbot-fixed">
+                <LearnovaAI />
             </div>
-
-            <div className="course-support-card">
-              <h3>Have questions?</h3>
-              <p>Our support team is here to help you.</p>
-
-              <button className="support-button">
-                <FaPhoneAlt />
-                <span>Contact Support</span>
-              </button>
-            </div>
-          </aside>
         </div>
-      </div>
-      <div className="chatbot-fixed">
-        <LearnovaAI />
-      </div>
-    </div>
-  );
-};
-
-export default CourseDetail;
+    );
+}
