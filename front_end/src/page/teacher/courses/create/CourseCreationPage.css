@@ -123,33 +123,6 @@
   padding: 15px;
 }
 
-.teacher-upload-box {
-  min-height: 150px;
-  display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 6px;
-  border: 1px dashed #93c5fd;
-  border-radius: 9px;
-  background: #eff6ff;
-  color: #475569;
-  text-align: center;
-}
-
-.teacher-upload-box strong {
-  color: #071a33;
-  font-size: 0.86rem;
-}
-
-.teacher-upload-box span,
-.teacher-upload-box small {
-  font-size: 0.72rem;
-  font-weight: 700;
-}
-
-.teacher-upload-box input {
-  display: none;
-}
 
 .teacher-course-info-card__main,
 .teacher-create-list-card {
@@ -677,29 +650,29 @@
 .teacher-preview-curriculum summary {
   cursor: pointer;
   list-style: none;
-}
-
-.teacher-preview-curriculum summary strong,
-.teacher-preview-curriculum summary span {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .teacher-preview-curriculum summary strong {
   color: #071a33;
   font-size: 0.84rem;
+  flex: 1;
 }
 
-.teacher-preview-curriculum summary span {
-  margin-top: 4px;
+.teacher-preview-curriculum summary > span {
+  flex-shrink: 0;
   color: #475569;
   font-size: 0.74rem;
   font-weight: 800;
 }
 
 .teacher-preview-lesson {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
   margin-top: 9px;
   color: #475569;
   font-size: 0.78rem;
@@ -707,7 +680,9 @@
 }
 
 .teacher-preview-lesson svg {
-  color: #22c55e;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #64748b;
 }
 
 .teacher-publish-layout {
@@ -881,4 +856,579 @@
   .teacher-student-preview__media {
     height: 220px;
   }
+}
+
+/* ─── Phase 3: Upload progress & states ─── */
+
+@keyframes teacher-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.teacher-spin {
+  animation: teacher-spin 0.8s linear infinite;
+}
+
+/* Thumbnail uploader */
+.teacher-upload-box {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 6px;
+  min-height: 150px;
+}
+
+.teacher-upload-box input[type="file"] {
+  display: none;
+}
+
+.teacher-upload-box__trigger {
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 6px;
+  border: 1px dashed #93c5fd;
+  border-radius: 9px;
+  background: #eff6ff;
+  color: #475569;
+  text-align: center;
+  cursor: pointer;
+}
+
+.teacher-upload-box__trigger strong {
+  color: #071a33;
+  font-size: 0.86rem;
+}
+
+.teacher-upload-box__trigger span,
+.teacher-upload-box__trigger small {
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.teacher-upload-box__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #1d4ed8;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.teacher-upload-box__preview-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.teacher-upload-box__preview-actions {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(7, 26, 51, 0.55);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.teacher-upload-box__preview-wrapper:hover .teacher-upload-box__preview-actions {
+  opacity: 1;
+}
+
+.teacher-upload-box__preview-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.92);
+  color: #071a33;
+  font-size: 0.74rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.teacher-upload-box__remove {
+  padding: 5px !important;
+  background: rgba(220,38,38,0.88) !important;
+  color: #fff !important;
+}
+
+.teacher-upload-box__error {
+  color: #ef4444;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Progress bar (shared) */
+.teacher-upload-progress-bar {
+  width: 100px;
+  height: 5px;
+  border-radius: 99px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.teacher-upload-progress-bar--sm {
+  width: 60px;
+  height: 4px;
+}
+
+.teacher-upload-progress-bar__fill {
+  height: 100%;
+  border-radius: 99px;
+  background: #1d4ed8;
+  transition: width 0.15s ease;
+}
+
+/* Video uploader */
+.teacher-video-uploader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.teacher-video-uploader__progress {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #1d4ed8;
+}
+
+.teacher-video-uploader__pct {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #1d4ed8;
+  min-width: 30px;
+}
+
+.teacher-video-uploader__done {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 180px;
+  color: #22c55e;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.teacher-video-uploader__name {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #071a33;
+}
+
+.teacher-video-uploader__duration {
+  color: #475569;
+  white-space: nowrap;
+}
+
+.teacher-video-uploader__replace {
+  width: 22px !important;
+  height: 22px !important;
+  padding: 0 !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 5px !important;
+  background: #fff !important;
+  color: #475569 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0;
+}
+
+.teacher-video-uploader__error {
+  color: #ef4444;
+  font-size: 0.68rem;
+  font-weight: 700;
+  max-width: 140px;
+}
+
+/* Resource uploader */
+.teacher-resource-uploader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.teacher-resource-queue {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 3px;
+  max-width: 180px;
+}
+
+.teacher-resource-queue__item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.teacher-resource-queue__item.--done { color: #22c55e; }
+.teacher-resource-queue__item.--error { color: #ef4444; }
+
+.teacher-resource-queue__name {
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.teacher-resource-queue__error {
+  color: #ef4444;
+  font-size: 0.66rem;
+}
+
+/* ─── Phase 5: DnD + sessionStorage ─── */
+
+/* Grip handle — pointer grab cursor */
+.teacher-section-card__grip,
+.teacher-lesson-builder-row__grip {
+  display: inline-flex;
+  align-items: center;
+  cursor: grab;
+  color: #94a3b8;
+  flex-shrink: 0;
+  padding: 2px;
+  touch-action: none;
+}
+
+.teacher-section-card__grip:active,
+.teacher-lesson-builder-row__grip:active {
+  cursor: grabbing;
+}
+
+/* Dragging ghost */
+.teacher-section-card--dragging,
+.teacher-lesson-builder-row--dragging {
+  background: #f8faff !important;
+  border-color: #93c5fd !important;
+  box-shadow: 0 4px 18px rgba(29, 78, 216, 0.12) !important;
+}
+
+/* ─── Phase 4: Stepper / Preview / Checklist ─── */
+
+/* Stepper as <button> reset */
+.teacher-create-stepper__item {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: default;
+  font-family: inherit;
+  text-align: left;
+}
+
+.teacher-create-stepper__item--complete span {
+  background: #22c55e;
+  color: #fff;
+}
+
+.teacher-create-stepper__item--clickable {
+  cursor: pointer;
+}
+
+.teacher-create-stepper__item--clickable:hover span {
+  background: #1d4ed8;
+  color: #fff;
+}
+
+.teacher-create-stepper__item--clickable:hover strong {
+  color: #1d4ed8;
+}
+
+.teacher-create-stepper__item:disabled {
+  opacity: 1;
+}
+
+/* Preview toolbar */
+.teacher-preview-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 2px;
+}
+
+.teacher-preview-toolbar > span {
+  font-size: 0.78rem;
+  font-weight: 900;
+  color: #475569;
+}
+
+.teacher-device-toggle__btn--active {
+  background: #dbeafe !important;
+  color: #1d4ed8 !important;
+}
+
+/* Device preview width variants */
+.teacher-device-preview--tablet {
+  max-width: 768px;
+  margin-inline: auto;
+}
+
+.teacher-device-preview--mobile {
+  max-width: 375px;
+  margin-inline: auto;
+  grid-template-columns: 1fr !important;
+}
+
+/* Preview card body extensions */
+.teacher-student-preview__desc {
+  margin-top: 8px;
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.teacher-student-preview__price {
+  margin-top: 10px;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #1d4ed8;
+}
+
+.teacher-student-preview__section {
+  padding: 12px 14px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.teacher-student-preview__section h3 {
+  margin: 0 0 8px;
+  font-size: 0.84rem;
+  color: #071a33;
+}
+
+.teacher-student-preview__section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.teacher-student-preview__section ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #334155;
+  line-height: 1.4;
+}
+
+.teacher-student-preview__section ul li svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #22c55e;
+}
+
+.teacher-student-preview__requirements li {
+  list-style: disc inside;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+/* Curriculum sidebar updates */
+.teacher-preview-curriculum h3 {
+  color: #071a33;
+  font-family: var(--font-sans);
+  font-size: 1.0rem;
+  margin: 0 0 2px;
+}
+
+.teacher-preview-curriculum__summary {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #64748b;
+  margin: 0 0 10px;
+}
+
+.teacher-preview-lesson span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+/* Readiness checklist */
+.teacher-readiness-card {
+  padding: 15px;
+}
+
+.teacher-readiness-card h2 {
+  margin: 0 0 10px;
+}
+
+.teacher-readiness-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.teacher-readiness-list li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.teacher-readiness-list__item--ok {
+  color: #16a34a;
+}
+
+.teacher-readiness-list__item--missing {
+  color: #dc2626;
+}
+
+.teacher-readiness-card__warning {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #fef9c3;
+  color: #713f12;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+/* Publish button warn state (checklist incomplete) */
+.teacher-publish-button--warn {
+  background: #f97316 !important;
+}
+
+/* ─── Phase 2: Inline validation ─── */
+
+.teacher-create-field__label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.teacher-create-field--error input,
+.teacher-create-field--error select,
+.teacher-create-field--error textarea {
+  border-color: #ef4444;
+  background: #fff5f5;
+}
+
+.teacher-create-field__error {
+  color: #ef4444;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* ─── Phase 2: Disabled state ─── */
+
+.teacher-create-actions button:disabled,
+.teacher-publish-button:disabled,
+.teacher-create-page__top > button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ─── Phase 2: Section card — empty title indicator ─── */
+
+.teacher-section-card--empty {
+  border-left: 3px solid #fca5a5;
+}
+
+.teacher-section-card--empty strong {
+  color: #dc2626;
+  font-style: italic;
+}
+
+/* ─── Phase 2: Lesson row — empty title ─── */
+
+.teacher-lesson-builder-row--empty {
+  border-color: #fca5a5;
+}
+
+.teacher-lesson-builder-row__empty-title {
+  color: #dc2626;
+  font-style: italic;
+}
+
+/* ─── Phase 2: Two-step delete confirm (shared) ─── */
+
+.teacher-delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.teacher-delete-confirm > span {
+  color: #dc2626;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.teacher-delete-confirm__yes,
+.teacher-delete-confirm__no {
+  min-height: 28px;
+  width: auto !important;
+  padding: 0 10px;
+  border-radius: 5px;
+  font-size: 0.74rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.teacher-delete-confirm__yes {
+  border: 0;
+  background: #dc2626;
+  color: #fff;
+}
+
+.teacher-delete-confirm__no {
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #475569;
+}
+
+/* Section editor delete trigger inherits red styling */
+.teacher-section-editor__top .teacher-delete-confirm > button {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  padding: 10px;
+  gap: 7px;
+  border: 0;
+  border-radius: 7px;
+  background: #fee2e2;
+  color: #ef4444;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+/* Lesson row delete confirm wrapper */
+.teacher-lesson-delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }

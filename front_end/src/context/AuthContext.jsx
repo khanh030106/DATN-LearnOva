@@ -12,6 +12,8 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     const sessionVersionRef = useRef(0);
+    // Deduplicates concurrent refresh calls (StrictMode double-invoke, multiple 401s, etc.)
+    const pendingRefreshRef = useRef(null);
 
     const login = async (email, password, remember) => {
         sessionVersionRef.current++; // Invalidate any in-flight restoreSession
@@ -32,10 +34,21 @@ export const AuthProvider = ({ children }) => {
     };
 
     const refreshAccessToken = useCallback(async () => {
-        // Backend rotates both cookies and returns the new access token in the body.
-        const data = await refreshApi();
-        setAccessToken(data.accessToken);
-        return data.accessToken;
+        // If a refresh is already in flight, share the same promise instead of
+        // firing a second request. This prevents token rotation failures when
+        // React StrictMode double-invokes the restoreSession effect.
+        if (pendingRefreshRef.current) {
+            return pendingRefreshRef.current;
+        }
+        pendingRefreshRef.current = refreshApi()
+            .then((data) => {
+                setAccessToken(data.accessToken);
+                return data.accessToken;
+            })
+            .finally(() => {
+                pendingRefreshRef.current = null;
+            });
+        return pendingRefreshRef.current;
     }, []);
 
     const logout = useCallback(async () => {

@@ -78,7 +78,6 @@ CREATE TABLE Categories (
                             name          TEXT UNIQUE NOT NULL,
                             slug          TEXT UNIQUE NOT NULL,
                             parent_id     BIGINT NULL,
-                            display_order INTEGER NOT NULL DEFAULT 0,
                             created_at    TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
                             updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                             is_deleted    BOOLEAN DEFAULT FALSE NOT NULL,

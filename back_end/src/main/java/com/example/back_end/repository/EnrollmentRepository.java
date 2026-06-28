@@ -1,12 +1,13 @@
 package com.example.back_end.repository;
 
-import com.example.back_end.entity.Enrollment;
-import com.example.back_end.entity.EnrollmentId;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import com.example.back_end.entity.Enrollment;
+import com.example.back_end.entity.EnrollmentId;
 
 public interface EnrollmentRepository extends JpaRepository<Enrollment, EnrollmentId> {
 
@@ -19,6 +20,13 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Enrollme
             "WHERE e.user.id = :userId " +
             "ORDER BY e.enrolledAt DESC")
     List<Enrollment> findByUserIdWithCourseAndInstructor(@Param("userId") Long userId);
+
+    @Query("SELECT COUNT(e) > 0 FROM Enrollment e " +
+            "WHERE e.user.email = :email AND e.course.id = :courseId")
+    boolean existsByUserEmailAndCourseId(
+            @Param("email") String email,
+            @Param("courseId") Long courseId
+    );
 
     boolean existsByIdCourseIdAndIdUserId(Long courseId, Long userId);
 }

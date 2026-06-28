@@ -258,7 +258,7 @@
 }
 
 .teacher-course-table__head {
-  min-height: 44px;
+  min-height: 37px;
   padding: 0 15px;
   color: #475569;
   background: #f1f7ff;
@@ -440,6 +440,45 @@
   .teacher-course-row {
     min-width: 1120px;
   }
+}
+
+.teacher-course-table__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 15px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.teacher-course-table__pagination span {
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.teacher-course-table__pagination button {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.teacher-course-table__pagination button:hover:not(:disabled) {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.teacher-course-table__pagination button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
 }
 
 @media (max-width: 760px) {

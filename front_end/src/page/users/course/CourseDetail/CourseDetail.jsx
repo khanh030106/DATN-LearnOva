@@ -1,202 +1,196 @@
 import "./CourseDetail.css";
-import { FaClipboardCheck } from "react-icons/fa";
-import { FaPlay } from "react-icons/fa";
+import { FaClipboardCheck, FaPlay, FaPlayCircle, FaClock } from "react-icons/fa";
 import { ChevronDown } from "lucide-react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "../../../../component/footer/footer-courseDetail/footer-courseDetail.jsx";
-import {
-    qaData,
-    course,
-    courseDescription,
-    instructor,
-    curriculum
-} from "./mockCourseData.js";
 import CourseVideoPlayer from "./VideoPlayer.jsx";
 import OverviewTab from "./OverviewTab.jsx";
 import QATab from "./QATab.jsx";
 import ReviewsTab from "./Review.jsx";
 import LearnovaAI from "../../../home/AI/AI.jsx";
-import { FaPlayCircle, FaClock } from "react-icons/fa";
 import QuizPage from "./QuizPage.jsx";
 import Header from "../../../../component/header/user_header/Header.jsx";
-import {
-    getCourseReviewsApi,
-    deleteReviewApi,
-    getRatingSummaryApi
-} from "../../../../api/ReviewApi.js";
-import React, { useState, useEffect, useContext } from "react";
+import { getCourseReviewsApi, deleteReviewApi, getRatingSummaryApi } from "../../../../api/ReviewApi.js";
+import { getCourseDetail, getFileUrl } from "../../../../api/PublicCourseApi.js";
+import { qaData } from "./mockCourseData.js";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { AuthContext } from "../../../../context/AuthContext";
+import { useParams } from "react-router-dom";
 
-
+const formatDuration = (totalSeconds) => {
+    if (!totalSeconds) return "0:00";
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    return `${m}:${String(s).padStart(2, "0")}`;
+};
 
 function CourseDetail() {
+    const { courseId } = useParams();
     const reviewsPerPage = 3;
+
+    const [course, setCourse] = useState(null);
+    const [instructorAvatarUrl, setInstructorAvatarUrl] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const [videoUrl, setVideoUrl] = useState(null);
+    const [activeLesson, setActiveLesson] = useState(null);
+    const [loadingVideo, setLoadingVideo] = useState(false);
 
     const [reviewsData, setReviewsData] = useState([]);
     const [ratingSummary, setRatingSummary] = useState(null);
 
+    const [activeTab, setActiveTab] = useState("overview");
+    const [expandedSections, setExpandedSections] = useState([]);
+    const [expandedDescription, setExpandedDescription] = useState(false);
+
+    const { currentUser } = useContext(AuthContext);
+    const currentUserId = currentUser?.id || currentUser?.userId || currentUser?.idUser;
+
+    const [reviewQuery, setReviewQuery] = useState("");
+    const [ratingFilter, setRatingFilter] = useState("all");
+    const [currentReviewPage, setCurrentReviewPage] = useState(1);
+    const [helpfulMap, setHelpfulMap] = useState({});
+
+    const [selectedQuestion, setSelectedQuestion] = useState(null);
+    const [replyText, setReplyText] = useState("");
+    const [showReplyForm, setShowReplyForm] = useState(false);
+    const [showQuestionForm, setShowQuestionForm] = useState(false);
+
     useEffect(() => {
-        const fetchReviews = async () => {
+        if (!courseId) return;
+        const load = async () => {
             try {
-                const data = await getCourseReviewsApi(5);
-                console.log("DATA =", data);
-                setReviewsData(data);
-            } catch (error) {
-                console.log("ERROR =", error.response);
+                const data = await getCourseDetail(courseId);
+                setCourse(data);
+
+                if (data.sections?.length > 0) {
+                    setExpandedSections([data.sections[0].sectionId]);
+                }
+
+                if (data.instructor?.avatarKey) {
+                    getFileUrl(data.instructor.avatarKey)
+                        .then(setInstructorAvatarUrl)
+                        .catch(() => {});
+                }
+
+                const firstLesson = data.sections
+                    ?.flatMap((s) => s.lessons)
+                    ?.find((l) => l.videoKey);
+
+                if (firstLesson) {
+                    setActiveLesson(firstLesson);
+                    setLoadingVideo(true);
+                    getFileUrl(firstLesson.videoKey)
+                        .then(setVideoUrl)
+                        .catch(() => {})
+                        .finally(() => setLoadingVideo(false));
+                }
+            } catch (err) {
+                console.error("Failed to load course:", err);
+            } finally {
+                setIsLoading(false);
             }
         };
+        load();
+    }, [courseId]);
 
-        fetchReviews();
-    }, []);
     useEffect(() => {
-        const fetchRatingSummary = async () => {
-            try {
-                const data = await getRatingSummaryApi(5); // sau thay  courseId động
-                console.log("RATING SUMMARY =", data);
-                setRatingSummary(data);
-            } catch (error) {
-                console.log("ERROR SUMMARY =", error.response);
-            }
-        };
+        if (!courseId) return;
+        getCourseReviewsApi(courseId).then(setReviewsData).catch(console.error);
+        getRatingSummaryApi(courseId).then(setRatingSummary).catch(console.error);
+    }, [courseId]);
 
-        fetchRatingSummary();
-    }, []);
+    const handleLessonClick = useCallback(async (lesson) => {
+        if (!lesson.videoKey || lesson.lessonId === activeLesson?.lessonId) return;
+        setActiveLesson(lesson);
+        setLoadingVideo(true);
+        setVideoUrl(null);
+        try {
+            const url = await getFileUrl(lesson.videoKey);
+            setVideoUrl(url);
+        } catch (err) {
+            console.error("Failed to load video:", err);
+        } finally {
+            setLoadingVideo(false);
+        }
+    }, [activeLesson]);
+
     const handleDeleteReview = async (reviewId) => {
         try {
             await deleteReviewApi(reviewId);
-
-            setReviewsData(prev =>
-                prev.filter(item => item.reviewId !== reviewId)
-            );
-
+            setReviewsData((prev) => prev.filter((item) => item.reviewId !== reviewId));
             return true;
-
         } catch (error) {
             console.log(error);
             throw error;
         }
     };
 
-    const [activeTab, setActiveTab] = useState('overview');
-    const [expandedSections, setExpandedSections] = useState([1]);
-    const [activeVideo, setActiveVideo] = useState(1);
-    const [expandedDescription, setExpandedDescription] = useState(false);
-
-    const { currentUser } = useContext(AuthContext);
-
-    console.log("=== CURRENT USER FROM CONTEXT ===");
-    console.log(currentUser);
-
-    const currentUserId =
-        currentUser?.id ||
-        currentUser?.userId ||
-        currentUser?.idUser;
-
-    console.log("CURRENT USER ID =", currentUserId);
-
-    // data
-    const [reviewQuery, setReviewQuery] = useState('');
-    const [ratingFilter, setRatingFilter] = useState('all'); // 'all' | 5 | 4 | ...
-    const [currentReviewPage, setCurrentReviewPage] = useState(1);
-    const [helpfulMap, setHelpfulMap] = useState({});
-
-    const handleSearchReviews = (e) => {
-        setReviewQuery(e.target.value);
-        setCurrentReviewPage(1);
-    };
-
-    const handleRatingFilter = (e) => {
-        setRatingFilter(e.target.value);
-        setCurrentReviewPage(1);
-    };
-
-    const toggleHelpful = (id) => {
-        setHelpfulMap(prev => ({...prev, [id]: (prev[id] || 0) + 1}));
-    };
-
-    const [selectedQuestion, setSelectedQuestion] = useState(null);
-    const [replyText, setReplyText] = useState('');
-    // const [savedQuestions, setSavedQuestions] = useState([]);
-    const [showReplyForm, setShowReplyForm] = useState(false);
-
-    // const toggleSaveQuestion = (id) => {
-    //     setSavedQuestions(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
-    // };
-
-    const handleReplySubmit = (qId) => {
-        if (!replyText.trim()) return;
-        console.log('Gửi phản hồi cho question', qId, replyText);
-        setReplyText('');
-    };
-
-    const [showQuestionForm, setShowQuestionForm] = useState(false);
     const toggleSection = (sectionId) => {
         setExpandedSections((prev) =>
-            prev.includes(sectionId)
-                ? prev.filter((id) => id !== sectionId)
-                : [...prev, sectionId]
+            prev.includes(sectionId) ? prev.filter((id) => id !== sectionId) : [...prev, sectionId]
         );
     };
 
+    const handleSearchReviews = (e) => { setReviewQuery(e.target.value); setCurrentReviewPage(1); };
+    const handleRatingFilter = (e) => { setRatingFilter(e.target.value); setCurrentReviewPage(1); };
+    const toggleHelpful = (id) => setHelpfulMap((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
+    const handleReplySubmit = (qId) => { if (!replyText.trim()) return; setReplyText(""); };
+
+    if (isLoading) {
+        return (
+            <div className="course-detail-container">
+                <Header />
+                <div style={{ textAlign: "center", padding: "80px", color: "#94a3b8", fontSize: "15px" }}>
+                    Loading course...
+                </div>
+            </div>
+        );
+    }
+
+    if (!course) {
+        return (
+            <div className="course-detail-container">
+                <Header />
+                <div style={{ textAlign: "center", padding: "80px", color: "#94a3b8", fontSize: "15px" }}>
+                    Course not found.
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="course-detail-container">
-            {/*HEADER*/}
-            <Header/>
+            <Header />
 
-
-            {/* MAIN LAYOUT */}
             <div className="main-layout">
-                {/* LEFT SIDE - 70% */}
+                {/* LEFT SIDE */}
                 <div className="left-side">
-                    {/* VIDEO PLAYER */}
-                    <CourseVideoPlayer/>
+                    <CourseVideoPlayer src={videoUrl} loading={loadingVideo} />
                     <ToastContainer />
 
-                    {/* TABS */}
                     <div className="tabs-container">
                         <div className="tabs-wrapper">
-                            <button
-                                className={`tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('overview')}
-                            >
-                                Overview
-                            </button>
-                            <button
-                                className={`tab-btn ${activeTab === 'qa' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('qa')}
-                            >
-                                Q&A
-                            </button>
-
-                            <button
-                                className={`tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('reviews')}
-                            >
-                                Reviews
-                            </button>
-                            <button
-                                className={`tab-btn ${activeTab === 'quiz' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('quiz')}
-                            >
-                                Quiz
-                            </button>
-
+                            <button className={`tab-btn ${activeTab === "overview" ? "active" : ""}`} onClick={() => setActiveTab("overview")}>Overview</button>
+                            <button className={`tab-btn ${activeTab === "qa" ? "active" : ""}`} onClick={() => setActiveTab("qa")}>Q&A</button>
+                            <button className={`tab-btn ${activeTab === "reviews" ? "active" : ""}`} onClick={() => setActiveTab("reviews")}>Reviews</button>
+                            <button className={`tab-btn ${activeTab === "quiz" ? "active" : ""}`} onClick={() => setActiveTab("quiz")}>Quiz</button>
                         </div>
                     </div>
-                    {/* TAB CONTENT */}
-                    <div className="content-section">
 
-                        {activeTab === 'overview' && (
+                    <div className="content-section">
+                        {activeTab === "overview" && (
                             <OverviewTab
-                                courseDescription={courseDescription}
-                                instructor={instructor}
+                                course={course}
+                                instructor={course.instructor}
+                                instructorAvatarUrl={instructorAvatarUrl}
                                 expandedDescription={expandedDescription}
                                 setExpandedDescription={setExpandedDescription}
                             />
                         )}
-
 
                         {activeTab === "qa" && (
                             <QATab
@@ -232,111 +226,78 @@ function CourseDetail() {
                                 toggleHelpful={toggleHelpful}
                                 handleSearchReviews={handleSearchReviews}
                                 handleRatingFilter={handleRatingFilter}
-
                             />
                         )}
                     </div>
-                    {activeTab === "quiz" && (
-                        <QuizPage/>
-                    )}
 
+                    {activeTab === "quiz" && <QuizPage />}
 
                     <div className="footer-wrapper">
-                        <Footer/>
+                        <Footer />
                     </div>
                 </div>
 
-                {/* RIGHT SIDE - 30% */}
+                {/* RIGHT SIDE - Curriculum */}
                 <aside className="right-side">
-
-
                     <div className="curriculum-sidebar">
-                        {curriculum.map(section => (
-                            <div key={section.id} className="curriculum-section">
-                                <div
-                                    className="section-header-qa"
-                                    onClick={() => toggleSection(section.id)}
-                                >
+                        {course.sections.map((section, sIdx) => (
+                            <div key={section.sectionId} className="curriculum-section">
+                                <div className="section-header-qa" onClick={() => toggleSection(section.sectionId)}>
                                     <ChevronDown
                                         size={18}
-                                        className={`chevron ${
-                                            expandedSections.includes(section.id) ? 'open' : ''
-                                        }`}
+                                        className={`chevron ${expandedSections.includes(section.sectionId) ? "open" : ""}`}
                                     />
                                     <div className="section-title-co">
-                                        <strong>{section.id}. {section.title}</strong>
+                                        <strong>{sIdx + 1}. {section.title}</strong>
                                         <div className="section-meta">
-                                        <span>
-                                            <FaPlayCircle/>
-                                            {section.lectures} Lessons
-                                        </span>
-
                                             <span>
-                                            <FaClock/>{section.duration}
-                                        </span>
+                                                <FaPlayCircle />
+                                                {section.lessons.length} Lessons
+                                            </span>
+                                            <span>
+                                                <FaClock />
+                                                {formatDuration(
+                                                    section.lessons.reduce((sum, l) => sum + (l.durationSeconds || 0), 0)
+                                                )}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
 
-                                {expandedSections.includes(section.id) && (
+                                {expandedSections.includes(section.sectionId) && (
                                     <div className="lessons-sidebar">
                                         {section.lessons.map((lesson) => (
                                             <div
-                                                key={lesson.id}
-                                                className={`lesson-item ${
-                                                    activeVideo === lesson.id ? "active" : ""
-                                                }`}
-                                                onClick={() => setActiveVideo(lesson.id)}
+                                                key={lesson.lessonId}
+                                                className={`lesson-item ${activeLesson?.lessonId === lesson.lessonId ? "active" : ""}`}
+                                                onClick={() => handleLessonClick(lesson)}
+                                                style={{ cursor: lesson.videoKey ? "pointer" : "default" }}
                                             >
-                                                <div className="lesson-check">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={lesson.watched}
-                                                        readOnly
-                                                    />
-                                                </div>
-
                                                 <div className="lesson-info">
-                                                    <FaPlay className="lesson-icon"/>
-                                                    <span className="lesson-name">
-                                                        {lesson.title}
-                                                    </span>
+                                                    <FaPlay className="lesson-icon" />
+                                                    <span className="lesson-name">{lesson.title}</span>
                                                 </div>
-
                                                 <span className="lesson-time">
-                                                    {lesson.duration}
+                                                    {formatDuration(lesson.durationSeconds)}
                                                 </span>
                                             </div>
                                         ))}
 
-                                        {/* Quiz cuối chương */}
                                         <div
                                             className="quiz-item"
                                             onClick={() => {
                                                 setActiveTab("quiz");
-
                                                 setTimeout(() => {
-                                                    document
-                                                        .querySelector(".tabs-container")
-                                                        ?.scrollIntoView({
-                                                            behavior: "smooth",
-                                                            block: "start"
-                                                        });
+                                                    document.querySelector(".tabs-container")?.scrollIntoView({ behavior: "smooth", block: "start" });
                                                 }, 100);
                                             }}
                                         >
                                             <div className="quiz-icon-wrapper">
-                                                <FaClipboardCheck className="quiz-icon"/>
+                                                <FaClipboardCheck className="quiz-icon" />
                                             </div>
-
                                             <div className="quiz-content">
-                                                <span className="quiz-title">
-                                                    Quiz
-                                                </span>
-
-                                                <span className="quiz-subtitle-co">
-                                                    10 Questions
-                                                </span>
+                                                <span className="quiz-title">Quiz</span>
+                                                <span className="quiz-subtitle-co">10 Questions</span>
                                             </div>
                                         </div>
                                     </div>
@@ -346,8 +307,9 @@ function CourseDetail() {
                     </div>
                 </aside>
             </div>
+
             <div className="chatbot-fixed">
-                <LearnovaAI/>
+                <LearnovaAI />
             </div>
         </div>
     );

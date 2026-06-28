@@ -1,23 +1,33 @@
 import {Check} from "lucide-react";
 
-const steps = ["Course", "Sections", "Preview", "Publish"];
+const STEPS = ["Course", "Sections", "Preview", "Publish"];
 
-const CreateStepper = ({currentStep}) => {
+const CreateStepper = ({currentStep, onStepClick, canNavigateTo}) => {
     return (
         <nav className="teacher-create-stepper" aria-label="Course creation progress">
-            {steps.map((step, index) => {
+            {STEPS.map((step, index) => {
                 const stepNumber = index + 1;
                 const isActive = stepNumber === currentStep;
                 const isComplete = stepNumber < currentStep;
+                const isClickable = !isActive && canNavigateTo?.(stepNumber);
 
                 return (
-                    <div
+                    <button
                         key={step}
-                        className={`teacher-create-stepper__item ${isActive ? "teacher-create-stepper__item--active" : ""}`}
+                        type="button"
+                        disabled={!isClickable}
+                        onClick={() => isClickable && onStepClick?.(stepNumber)}
+                        className={[
+                            "teacher-create-stepper__item",
+                            isActive ? "teacher-create-stepper__item--active" : "",
+                            isComplete ? "teacher-create-stepper__item--complete" : "",
+                            isClickable ? "teacher-create-stepper__item--clickable" : "",
+                        ].filter(Boolean).join(" ")}
+                        aria-current={isActive ? "step" : undefined}
                     >
                         <span>{isComplete ? <Check size={13}/> : stepNumber}</span>
                         <strong>{step}</strong>
-                    </div>
+                    </button>
                 );
             })}
         </nav>

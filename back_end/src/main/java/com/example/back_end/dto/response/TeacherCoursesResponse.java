@@ -10,6 +10,10 @@ public record TeacherCoursesResponse(
         String thumbnailKey,
         CourseStatus status,
         BigDecimal basePrice,
-        Instant createdAt
+        Instant createdAt,
+        String categoryName,
+        long lessonCount,
+        long totalDurationSeconds,
+        long studentCount
 ) {
 }

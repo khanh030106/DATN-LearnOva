@@ -8,7 +8,6 @@ public record AdminCategoryResponse(
     String slug,
     Long parentId,
     String parentName,
-    Integer displayOrder,
     Boolean isDeleted,
     Instant createdAt,
     Instant updatedAt
