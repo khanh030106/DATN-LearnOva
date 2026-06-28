@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import {
     createDraftCourse,
@@ -38,6 +39,7 @@ const restoreFromDraft = () => {
 };
 
 export const useCourseForm = () => {
+    const navigate = useNavigate();
     const savedDraft = restoreFromDraft();
 
     const [currentStep, setCurrentStep] = useState(savedDraft?.currentStep ?? 1);
@@ -418,6 +420,7 @@ export const useCourseForm = () => {
             });
             setIsDirty(false);
             clearDraft();
+            navigate("/learnova/teacher/courses");
         } catch {
             // handled by toast.promise
         } finally {
@@ -440,6 +443,7 @@ export const useCourseForm = () => {
             });
             setIsDirty(false);
             clearDraft();
+            navigate("/learnova/teacher/courses");
         } catch {
             // handled by toast.promise
         } finally {
