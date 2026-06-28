@@ -39,12 +39,19 @@ export const useAxiosPrivate = () => {
 
                         try {
                             if (!pendingRefresh) {
-                                pendingRefresh = latestRefreshAccessToken().finally(() => {
-                                    pendingRefresh = null;
-                                });
+                                pendingRefresh =
+                                    latestRefreshAccessToken().finally(() => {
+                                        pendingRefresh = null;
+                                    });
                             }
 
-                            await pendingRefresh;
+                            const nextAccessToken = await pendingRefresh;
+                            if (nextAccessToken) {
+                                originalRequest.headers = {
+                                    ...originalRequest.headers,
+                                    Authorization: `Bearer ${nextAccessToken}`,
+                                };
+                            }
                             return axiosClient(originalRequest);
                         } catch (refreshError) {
                             await latestLogout();
@@ -60,7 +67,10 @@ export const useAxiosPrivate = () => {
         return () => {
             privateHookSubscribers -= 1;
 
-            if (privateHookSubscribers === 0 && responseInterceptorId !== null) {
+            if (
+                privateHookSubscribers === 0 &&
+                responseInterceptorId !== null
+            ) {
                 axiosClient.interceptors.response.eject(responseInterceptorId);
                 responseInterceptorId = null;
                 pendingRefresh = null;

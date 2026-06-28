@@ -1,55 +1,59 @@
+import { useEffect, useState } from "react";
+import { getAdminTopRevenueCoursesApi } from "../../../../api/admin/RevenueApi.js";
 import "./TopCourseRevenue.css";
 
-const topCourses = [
-  {
-    rank: 1,
-    title: "Comprehensive AI Course: From Zero to LLM...",
-    teacher: "Dr. Lê Hoàng",
-    category: "AI & Data Science",
-    students: "4,250 enrollments",
-    revenue: "$127,500",
-    share: "18%",
-    tag: "HOT",
-  },
-  {
-    rank: 2,
-    title: "Full-Stack Web Development with Next.js, Node.js &...",
-    teacher: "Nguyễn Văn Sơn",
-    category: "Programming",
-    students: "3,820 enrollments",
-    revenue: "$114,600",
-    share: "16%",
-  },
-  {
-    rank: 3,
-    title: "Business Data Analytics Expert with...",
-    teacher: "ThS. Đỗ Thị Thu",
-    category: "Business",
-    students: "2,910 enrollments",
-    revenue: "$87,300",
-    share: "12%",
-  },
-  {
-    rank: 4,
-    title: "UI/UX Design Masterclass: Grid-Based Design...",
-    teacher: "Trần Thế Minh",
-    category: "Design",
-    students: "2,450 enrollments",
-    revenue: "$73,500",
-    share: "10%",
-  },
-  {
-    rank: 5,
-    title: "Startup and SME Business Operations...",
-    teacher: "Phạm Thành Nam",
-    category: "Business",
-    students: "1,980 enrollments",
-    revenue: "$59,400",
-    share: "8%",
-  },
-];
+const PAGE_SIZE = 5;
+
+const formatMoney = (value) =>
+  `$${Number(value || 0).toLocaleString("en-US", {
+    maximumFractionDigits: 0,
+  })}`;
+
+const formatPercent = (value) => `${Number(value || 0).toFixed(0)}%`;
 
 const TopCourseRevenue = () => {
+  const [courses, setCourses] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadCourses = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const data = await getAdminTopRevenueCoursesApi({
+          page,
+          size: PAGE_SIZE,
+        });
+
+        if (!isMounted) return;
+
+        setCourses(Array.isArray(data?.content) ? data.content : []);
+        setTotalPages(Number(data?.totalPages || 0));
+      } catch {
+        if (!isMounted) return;
+        setCourses([]);
+        setTotalPages(0);
+        setError("Unable to load top revenue courses.");
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    loadCourses();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [page]);
+
+  const pageNumbers = Array.from({ length: totalPages }, (_, index) => index);
+
   return (
     <section
       className="topRevenueBlockSection topCourseRevenueCard"
@@ -80,32 +84,73 @@ const TopCourseRevenue = () => {
               </tr>
             </thead>
             <tbody>
-              {topCourses.map((course) => (
-                <tr key={course.rank}>
-                  <td>
-                    <span className="topRevenueBlockRank">{course.rank}</span>
+              {loading ? (
+                <tr>
+                  <td colSpan="7" className="topRevenueBlockState">
+                    Loading...
                   </td>
-                  <td>
-                    <div className="topRevenueBlockCourseInfo">
-                      <span className="topRevenueBlockCourseName">
-                        {course.title}
-                      </span>
-                    </div>
-                  </td>
-                  <td>{course.teacher}</td>
-                  <td>{course.category}</td>
-                  <td>{course.students}</td>
-                  <td>
-                    <div className="topRevenueBlockRevenueCell">
-                      <span>{course.revenue}</span>
-                    </div>
-                  </td>
-                  <td>{course.share}</td>
                 </tr>
-              ))}
+              ) : error ? (
+                <tr>
+                  <td colSpan="7" className="topRevenueBlockState">
+                    {error}
+                  </td>
+                </tr>
+              ) : courses.length === 0 ? (
+                <tr>
+                  <td colSpan="7" className="topRevenueBlockState">
+                    No paid revenue data yet.
+                  </td>
+                </tr>
+              ) : (
+                courses.map((course, index) => (
+                  <tr key={`${course.courseId}-${course.categoryId ?? "none"}`}>
+                    <td>
+                      <span className="topRevenueBlockRank">
+                        {page * PAGE_SIZE + index + 1}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="topRevenueBlockCourseInfo">
+                        <span className="topRevenueBlockCourseName">
+                          {course.title}
+                        </span>
+                      </div>
+                    </td>
+                    <td>{course.instructor || "Unknown"}</td>
+                    <td>{course.category || "Uncategorized"}</td>
+                    <td>
+                      {Number(course.students || 0).toLocaleString("en-US")} enrollments
+                    </td>
+                    <td>
+                      <div className="topRevenueBlockRevenueCell">
+                        <span>{formatMoney(course.revenue)}</span>
+                      </div>
+                    </td>
+                    <td>{formatPercent(course.share)}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
+        {totalPages > 1 && (
+          <div
+            className="topRevenuePagination"
+            aria-label="Top course revenue pages"
+          >
+            {pageNumbers.map((pageNumber) => (
+              <button
+                key={pageNumber}
+                type="button"
+                className={pageNumber === page ? "active" : ""}
+                onClick={() => setPage(pageNumber)}
+              >
+                {pageNumber + 1}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

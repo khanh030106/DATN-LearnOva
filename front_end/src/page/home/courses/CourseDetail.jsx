@@ -1,7 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./CourseDetail.css";
 import LearnovaAI from "../AI/AI.jsx";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { FaBookmark, FaLink } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
@@ -26,6 +28,13 @@ import {
   FaMobileAlt,
 } from "react-icons/fa";
 import { FaLightbulb, FaBullseye } from "react-icons/fa";
+import { useAuth } from "../../../hook/UseAuth.jsx";
+import { addStoredCartItem } from "../../../utils/cartStorage.js";
+import { createPaymentApi } from "../../../api/PaymentApi.js";
+import { applyVoucherApi } from "../../../api/VoucherApi.js";
+import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";
+import PaymentModal from "../../../component/payment/PaymentModal.jsx";
+import { getPublicCourseByIdApi, getPublicCoursesApi } from "../../../api/CourseApi.js";
 
 const courses = [
   {
@@ -68,6 +77,45 @@ const courses = [
     ],
   },
 ];
+
+const formatVnd = (value) => `${Number(value || 0).toLocaleString("vi-VN")}đ`;
+
+const parseCoursePrice = (price) => {
+  if (typeof price === "number") return price;
+
+  const numericValue = Number(String(price).replace(/[^\d]/g, ""));
+  return Number.isFinite(numericValue) ? numericValue : 0;
+};
+
+const mapPublicCourseDetail = (course) => ({
+  id: course.courseId,
+  title: course.title,
+  teacher: course.instructorName || "LearnOva Instructor",
+  subtitle: "Instructor",
+  rating: 4.8,
+  reviews: "0",
+  students: "0",
+  lessons: 0,
+  duration: "Lifetime",
+  level: course.level || "All levels",
+  certificate: "Yes, upon completion",
+  language: "Vietnamese",
+  basePrice: Number(course.basePrice || 0),
+  price: formatVnd(course.basePrice),
+  oldPrice: "",
+  description: course.description || "",
+  learnings: [],
+  includes: [
+    { icon: <FaReact />, text: "Full lifetime access" },
+    { icon: <FaReact />, text: "Access on mobile and TV" },
+    { icon: <FaReact />, text: "Certificate of completion" },
+  ],
+  gallery: [
+    course.thumbnailKey && String(course.thumbnailKey).startsWith("http")
+      ? course.thumbnailKey
+      : "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+  ],
+});
 
 const Curriculum = () => {
   const highlights = [
@@ -189,7 +237,17 @@ const Curriculum = () => {
 };
 
 const CourseDetail = () => {
+  const { accessToken, isAuthenticated, loading: authLoading } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
   const [activeTab, setActiveTab] = useState("Overview");
+  const [activePayment, setActivePayment] = useState(null);
+  const [isCreatingPayment, setIsCreatingPayment] = useState(false);
+  const [promo, setPromo] = useState("");
+  const [appliedVoucher, setAppliedVoucher] = useState(null);
+  const [voucherMessage, setVoucherMessage] = useState("");
+  const [isApplyingVoucher, setIsApplyingVoucher] = useState(false);
+  const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false);
+  const [dbCourse, setDbCourse] = useState(null);
   const [reviews, setReviews] = useState([
     {
       name: "Nguyen An",
@@ -231,10 +289,161 @@ const CourseDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const course = useMemo(
+  const mockCourse = useMemo(
     () => courses.find((item) => String(item.id) === String(id)),
     [id],
   );
+  const course = dbCourse || mockCourse;
+  const subtotal = course?.basePrice ?? parseCoursePrice(course?.price);
+  const discount = Number(appliedVoucher?.discountAmount || 0);
+  const total = Math.max(0, subtotal - discount);
+
+  useEffect(() => {
+    let mounted = true;
+
+    getPublicCourseByIdApi(id)
+      .then((data) => {
+        if (mounted) setDbCourse(mapPublicCourseDetail(data));
+      })
+      .catch(async () => {
+        try {
+          const data = await getPublicCoursesApi();
+          if (mounted && Array.isArray(data) && data.length > 0) {
+            setDbCourse(mapPublicCourseDetail(data[0]));
+          }
+        } catch {
+          if (mounted) setDbCourse(null);
+        }
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [id]);
+
+  useEffect(() => {
+    setPromo("");
+    setAppliedVoucher(null);
+    setVoucherMessage("");
+    setIsAlreadyEnrolled(false);
+  }, [id]);
+
+  const handleVoucherChange = (event) => {
+    setPromo(event.target.value);
+    setAppliedVoucher(null);
+    setVoucherMessage("");
+  };
+
+  const handleApplyVoucher = async () => {
+    const code = promo.trim();
+
+    if (!code) {
+      setVoucherMessage("Vui lòng nhập mã voucher.");
+      return;
+    }
+
+    if (!course || subtotal <= 0) {
+      setVoucherMessage("Khóa học chưa có giá hợp lệ.");
+      return;
+    }
+
+    if (appliedVoucher?.code?.toLowerCase() === code.toLowerCase()) {
+      setVoucherMessage("Voucher này đã được áp dụng.");
+      return;
+    }
+
+    try {
+      setIsApplyingVoucher(true);
+      setVoucherMessage("");
+      const result = await applyVoucherApi({ code, subtotal });
+      setAppliedVoucher(result);
+      setVoucherMessage(`Đã áp dụng ${result.code}.`);
+      toast.success("Áp dụng voucher thành công.");
+    } catch (err) {
+      setAppliedVoucher(null);
+      const message =
+        err?.response?.data?.message || "Voucher không hợp lệ hoặc không còn sử dụng được.";
+      setVoucherMessage(message);
+      toast.error(message);
+    } finally {
+      setIsApplyingVoucher(false);
+    }
+  };
+
+  const handleAlreadyEnrolled = (message) => {
+    setIsAlreadyEnrolled(true);
+    toast.info(message || "Bạn đã sở hữu khóa học này.");
+    navigate("/learnova/user/profile/courses");
+  };
+
+  const handleAddToCart = () => {
+    if (authLoading || !course) return;
+
+    if (!isAuthenticated) {
+      toast.error("Bạn cần đăng nhập để thêm khóa học vào giỏ hàng.");
+      return;
+    }
+
+    if (!dbCourse) {
+      toast.error("Khóa học này chưa có dữ liệu thật trong hệ thống.");
+      return;
+    }
+
+    const { alreadyInCart } = addStoredCartItem({
+      id: course.id,
+      courseId: course.id,
+      title: course.title,
+      teacher: course.teacher,
+      price: course.price,
+      image: course.gallery[0],
+    });
+
+    if (alreadyInCart) {
+      toast.info("Khóa học này đã có trong giỏ hàng.");
+      return;
+    }
+
+    toast.success("Đã thêm khóa học vào giỏ hàng.");
+  };
+
+  const handleBuyNow = async () => {
+    if (authLoading || !course) return;
+
+    if (!isAuthenticated) {
+      toast.error("Bạn cần đăng nhập để thanh toán.");
+      return;
+    }
+
+    if (!dbCourse) {
+      toast.error("Khóa học này chưa có dữ liệu thật trong hệ thống.");
+      return;
+    }
+
+    try {
+      setIsCreatingPayment(true);
+      const payment = await createPaymentApi(
+        axiosPrivate,
+        {
+          courseId: course.id,
+          voucherCode: appliedVoucher?.code || null,
+        },
+        accessToken,
+      );
+      setActivePayment(payment);
+    } catch (err) {
+      const message =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        "Không thể tạo thanh toán payOS.";
+      if (err?.response?.status === 409 && message.toLowerCase().includes("already enrolled")) {
+        handleAlreadyEnrolled(message);
+        return;
+      }
+      toast.error(message);
+    } finally {
+      setIsCreatingPayment(false);
+    }
+  };
 
   if (!course) {
     return (
@@ -552,12 +761,57 @@ const CourseDetail = () => {
           <aside className="course-detail-sidebar">
             <div className="course-detail-summary">
               <div className="course-detail-price">
-                <span>{course.price}</span>
-                <span>{course.oldPrice}</span>
+                <span>{total.toLocaleString("vi-VN")}đ</span>
+                {discount > 0 ? <span>{subtotal.toLocaleString("vi-VN")}đ</span> : <span>{course.oldPrice}</span>}
               </div>
 
-              <button className="summary-button primary">Add To Cart</button>
-              <button className="summary-button secondary">Buy Now</button>
+              <div className="course-detail-order-lines">
+                <div>
+                  <span>Subtotal</span>
+                  <strong>{subtotal.toLocaleString("vi-VN")}đ</strong>
+                </div>
+                <div>
+                  <span>Discount</span>
+                  <strong>-{discount.toLocaleString("vi-VN")}đ</strong>
+                </div>
+              </div>
+
+              <div className="course-detail-voucher">
+                <label htmlFor="course-detail-voucher">Voucher code</label>
+                <div className="course-detail-voucher-input">
+                  <input
+                    id="course-detail-voucher"
+                    type="text"
+                    value={promo}
+                    onChange={handleVoucherChange}
+                    placeholder="Enter voucher"
+                  />
+                  <button type="button" onClick={handleApplyVoucher} disabled={isApplyingVoucher}>
+                    {isApplyingVoucher ? "..." : "Apply"}
+                  </button>
+                </div>
+                {voucherMessage ? (
+                  <p className={`course-detail-voucher-message ${appliedVoucher ? "success" : "error"}`}>
+                    {voucherMessage}
+                  </p>
+                ) : null}
+              </div>
+
+              <button
+                className="summary-button primary"
+                type="button"
+                onClick={handleAddToCart}
+              >
+                Add To Cart
+              </button>
+              <button
+                className="summary-button secondary"
+                type="button"
+                onClick={isAlreadyEnrolled ? () => navigate("/learnova/user/profile/courses") : handleBuyNow}
+                disabled={isCreatingPayment}
+              >
+                {isAlreadyEnrolled ? "Go To My Learning" : isCreatingPayment ? "Creating payment..." : "Buy Now"}
+              </button>
 
               <div className="summary-features">
                 <p>✓ Full lifetime access</p>
@@ -593,6 +847,13 @@ const CourseDetail = () => {
       <div className="chatbot-fixed">
         <LearnovaAI />
       </div>
+      {activePayment && (
+        <PaymentModal
+          payment={activePayment}
+          onClose={() => setActivePayment(null)}
+        />
+      )}
+      <ToastContainer position="top-right" autoClose={2500} />
     </div>
   );
 };

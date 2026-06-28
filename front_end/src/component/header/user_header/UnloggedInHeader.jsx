@@ -8,16 +8,17 @@ import "./UnLoggedInHeader.css";
 const Header = () => {
     const headerRef = useRef(null);
     const { pathname } = useLocation();
-    const isCartHeader = pathname.startsWith("/learnova/cart");
+    const normalizedPath = pathname.toLowerCase();
+    const isCartHeader = normalizedPath.startsWith("/learnova/cart");
     const isHeroHeader =
-        pathname.startsWith("/learnova/home") ||
-        pathname.startsWith("/learnova/about");
+        normalizedPath.startsWith("/learnova/home") ||
+        normalizedPath.startsWith("/learnova/about");
     const useSolidHeader =
-        pathname.startsWith("/learnova/courses") ||
-        pathname.startsWith("/learnova/intructors") ||
-        pathname.startsWith("/learnova/instructors") ||
-        pathname.startsWith("/learnova/intructorDetail") ||
-        pathname.startsWith("/learnova/user") ||
+        normalizedPath.startsWith("/learnova/courses") ||
+        normalizedPath.startsWith("/learnova/intructors") ||
+        normalizedPath.startsWith("/learnova/instructors") ||
+        normalizedPath.startsWith("/learnova/instructordetail") ||
+        normalizedPath.startsWith("/learnova/user") ||
         isCartHeader;
 
     useEffect(() => {
@@ -50,7 +51,7 @@ const Header = () => {
     return (
         <header
             ref={headerRef}
-            className={`main-header scrolled${isCartHeader ? " cart-header" : ""}`}
+            className={`main-header${useSolidHeader || isCartHeader ? " scrolled" : ""}${isCartHeader ? " cart-header" : ""}`}
         >
             <div className="header-container">
                 <a href="/learnova/home" className="logo">

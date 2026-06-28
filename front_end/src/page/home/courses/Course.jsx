@@ -53,7 +53,7 @@ export default function Course() {
                     {courses.map((course) => (
                         <Link
                             key={course.id}
-                            to={`/learnova/user/CoursesDetail/${course.id}`}
+                            to={`/learnova/CoursesDetail/${course.id}`}
                             className="cs__card"
                         >
                             <div className="cs__thumb" style={{ background: course.bg }}>

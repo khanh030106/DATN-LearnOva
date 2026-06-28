@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import "./Course.css";
-import { BiHeart } from "react-icons/bi";
+import { BiHeart, BiCart } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
 import { X } from "lucide-react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import LearnovaAI from "../../home/AI/AI.jsx";
+import { useAuth } from "../../../hook/UseAuth.jsx";
+import { addStoredCartItem } from "../../../utils/cartStorage.js";
+import { getPublicCoursesApi } from "../../../api/CourseApi.js";
 
 const categories = [
   { id: "all", name: "All Categories", count: 120 },
@@ -153,6 +159,26 @@ function getAvatarColor(name) {
   return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 }
 
+const formatVnd = (value) => `${Number(value || 0).toLocaleString("vi-VN")}đ`;
+
+const mapPublicCourse = (course) => ({
+  id: course.courseId,
+  courseId: course.courseId,
+  title: course.title,
+  instructor: course.instructorName || "LearnOva Instructor",
+  category: "Technology",
+  rating: 4.8,
+  reviews: 0,
+  price: formatVnd(course.basePrice),
+  duration: "Lifetime",
+  tag: course.status === "PUBLISHED" ? "LIVE" : "",
+  image:
+    course.thumbnailKey && String(course.thumbnailKey).startsWith("http")
+      ? course.thumbnailKey
+      : "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80",
+  level: course.level || "Intermediate",
+});
+
 function FilterChip({ label, onRemove }) {
   return (
     <span className="filter-chip">
@@ -165,16 +191,42 @@ function FilterChip({ label, onRemove }) {
 }
 
 function CoursesPage() {
+  const { isAuthenticated, loading: authLoading } = useAuth();
+  const [dbCourses, setDbCourses] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("popular");
   const [selectedCategories, setSelectedCategories] = useState(["tech"]);
   const [selectedLevels, setSelectedLevels] = useState(["intermediate"]);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    let mounted = true;
+
+    getPublicCoursesApi()
+      .then((data) => {
+        if (mounted && Array.isArray(data) && data.length > 0) {
+          setDbCourses(data.map(mapPublicCourse));
+        }
+      })
+      .catch(() => {
+        if (mounted) setDbCourses([]);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const displayCourses = useMemo(
+    () => (dbCourses.length > 0 ? dbCourses : courses),
+    [dbCourses],
+  );
+
   const coursesPerPage = 8;
-  const totalPages = Math.ceil(courses.length / coursesPerPage);
+  const totalPages = Math.ceil(displayCourses.length / coursesPerPage);
   const startIndex = (currentPage - 1) * coursesPerPage;
-  const visibleCourses = courses.slice(startIndex, startIndex + coursesPerPage);
+  const visibleCourses = displayCourses.slice(startIndex, startIndex + coursesPerPage);
 
   const activeFilters = [
     ...selectedCategories
@@ -227,6 +279,36 @@ function CoursesPage() {
     setWishlist((prev) =>
       prev.includes(courseId) ? prev.filter((id) => id !== courseId) : [...prev, courseId],
     );
+  };
+
+  const handleAddToCart = (course) => {
+    if (authLoading) return;
+
+    if (!isAuthenticated) {
+      toast.error("Bạn cần đăng nhập để thêm khóa học vào giỏ hàng.");
+      return;
+    }
+
+    if (!course.courseId) {
+      toast.error("Khóa học này chưa có dữ liệu thật trong hệ thống.");
+      return;
+    }
+
+    const { alreadyInCart } = addStoredCartItem({
+      id: course.courseId || course.id,
+      courseId: course.courseId || course.id,
+      title: course.title,
+      teacher: course.instructor,
+      price: course.price,
+      image: course.image,
+    });
+
+    if (alreadyInCart) {
+      toast.info("Khóa học này đã có trong giỏ hàng.");
+      return;
+    }
+
+    toast.success("Đã thêm khóa học vào giỏ hàng.");
   };
 
   return (
@@ -286,12 +368,16 @@ function CoursesPage() {
           <div className={`courses-grid ${viewMode === "list" ? "courses-grid--list" : ""}`}>
             {visibleCourses.map((course) => (
               <div key={course.id} className="course-card-course">
-                <div className="course-card-img">
+                <Link to={`/learnova/CoursesDetail/${course.id}`} className="course-card-img">
                   <img src={course.image} alt={course.title} />
                   <button
                     type="button"
                     className={`course-wishlist ${wishlist.includes(course.id) ? "active" : ""}`}
-                    onClick={() => toggleWishlist(course.id)}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      toggleWishlist(course.id);
+                    }}
                     aria-label="Add to wishlist"
                   >
                     <BiHeart />
@@ -304,10 +390,12 @@ function CoursesPage() {
                   {course.duration && (
                     <span className="course-duration-badge">{course.duration}</span>
                   )}
-                </div>
+                </Link>
 
                 <div className="course-card-body">
-                  <h3 className="course-title">{course.title}</h3>
+                  <Link to={`/learnova/CoursesDetail/${course.id}`} className="course-title">
+                    <h3>{course.title}</h3>
+                  </Link>
 
                   <div className="course-instructor-row">
                     <div
@@ -340,8 +428,13 @@ function CoursesPage() {
                         <span className="course-original-price">{course.originalPrice}</span>
                       )}
                     </div>
-                    <button type="button" className="enroll-btn">
-                      Enroll Now
+                    <button
+                      type="button"
+                      className="enroll-btn enroll-btn--cart"
+                      aria-label="Add to cart"
+                      onClick={() => handleAddToCart(course)}
+                    >
+                      <BiCart />
                     </button>
                   </div>
                 </div>
@@ -385,6 +478,7 @@ function CoursesPage() {
       <div className="chatbot-fixed">
         <LearnovaAI />
       </div>
+      <ToastContainer position="top-right" autoClose={2500} />
     </div>
   );
 }

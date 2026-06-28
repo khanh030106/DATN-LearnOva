@@ -2,6 +2,7 @@ package com.example.back_end.controller;
 
 import com.example.back_end.dto.response.CreateDraftCourseResponse;
 import com.example.back_end.dto.response.GetFileUrlResponse;
+import com.example.back_end.dto.response.PublicCourseResponse;
 import com.example.back_end.dto.response.TeacherCoursesResponse;
 import com.example.back_end.dto.resquest.CreateDraftCourseRequest;
 import com.example.back_end.service.CourseService;
@@ -50,6 +51,16 @@ public class CourseController {
         return courseService.getMyCourses(
                 authentication.getName()
         );
+    }
+
+    @GetMapping("/public")
+    public List<PublicCourseResponse> getPublishedCourses() {
+        return courseService.getPublishedCourses();
+    }
+
+    @GetMapping("/public/{courseId}")
+    public PublicCourseResponse getPublishedCourse(@PathVariable Long courseId) {
+        return courseService.getPublishedCourse(courseId);
     }
 
 }

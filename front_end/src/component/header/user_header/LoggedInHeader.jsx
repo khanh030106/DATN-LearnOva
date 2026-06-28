@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import logo from "../../../assets/LogoText.png";
 import {
-  cartItems,
   courseCategories,
   durationFilters,
   instructorItems,
@@ -73,12 +72,12 @@ const LoggedInHeader = () => {
               onMouseEnter={() => setShowCourses(true)}
               onMouseLeave={() => setShowCourses(false)}
           >
-            <button
-                type="button"
+            <Link
+                to="/learnova/courses"
                 className="user-logged-nav-button"
             >
               Courses
-            </button>
+            </Link>
 
             <CoursesMegaMenu
                 categories={courseCategories}
@@ -99,7 +98,7 @@ const LoggedInHeader = () => {
         </div>
 
         <div className="user-logged-actions">
-          <CartDropdown initialItems={cartItems} />
+          <CartDropdown />
           <NotificationDropdown notifications={notificationItems} />
           <AvatarDropdown menuItems={userMenuItems} />
         </div>

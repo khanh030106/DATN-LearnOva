@@ -1,22 +1,27 @@
 import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
-import { DEFAULT_ENROLLED_COURSES } from "../data/profileData";
 import CourseCardGrid from "./CourseCardGrid";
 
-const CoursesSection = ({ purchasedCourses = [], onBack, onOpenCourse }) => {
+const ITEMS_PER_PAGE = 8;
+
+const CoursesSection = ({
+  purchasedCourses = [],
+  isLoading = false,
+  error = "",
+  onBack,
+  onOpenCourse,
+}) => {
   const [sortBy, setSortBy] = useState("newest");
-  const courses =
-    purchasedCourses.length > 0
-      ? purchasedCourses.map((course, index) => ({
-          ...course,
-          progress: course.progress || (index % 2 === 0 ? 65 : 40),
-          lessonsDone: course.lessonsDone || 12 + index * 4,
-          lessonsTotal: course.lessonsTotal || 40,
-          remaining: course.remaining || "3h 15m Remaining",
-          rating: course.rating || 4.8,
-          reviews: course.reviews || "856",
-        }))
-      : DEFAULT_ENROLLED_COURSES;
+  const [currentPage, setCurrentPage] = useState(1);
+  const courses = purchasedCourses.map((course) => ({
+    ...course,
+    progress: course.progress || 0,
+    lessonsDone: course.lessonsDone || 0,
+    lessonsTotal: course.lessonsTotal || 0,
+    remaining: course.remaining || "Not started yet",
+    rating: course.rating || 4.8,
+    reviews: course.reviews || "0",
+  }));
   const sortedCourses = useMemo(() => {
     const nextCourses = [...courses];
 
@@ -35,8 +40,31 @@ const CoursesSection = ({ purchasedCourses = [], onBack, onOpenCourse }) => {
     return nextCourses;
   }, [courses, sortBy]);
 
+  const totalPages = Math.max(1, Math.ceil(sortedCourses.length / ITEMS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedCourses = sortedCourses.slice(
+    (safePage - 1) * ITEMS_PER_PAGE,
+    safePage * ITEMS_PER_PAGE,
+  );
+
+  const pageNumbers = useMemo(() => {
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, index) => index + 1);
+    }
+
+    if (safePage <= 3) {
+      return [1, 2, 3, "...", totalPages];
+    }
+
+    if (safePage >= totalPages - 2) {
+      return [1, "...", totalPages - 2, totalPages - 1, totalPages];
+    }
+
+    return [1, "...", safePage, "...", totalPages];
+  }, [safePage, totalPages]);
+
   return (
-    <>
+    <div className="courses-dashboard">
       <div className="courses-topbar">
         <div>
           <h2>Enrolled Courses</h2>
@@ -58,7 +86,10 @@ const CoursesSection = ({ purchasedCourses = [], onBack, onOpenCourse }) => {
           <select
             className="course-sort"
             value={sortBy}
-            onChange={(event) => setSortBy(event.target.value)}
+            onChange={(event) => {
+              setSortBy(event.target.value);
+              setCurrentPage(1);
+            }}
             aria-label="Sort courses"
           >
             <option value="newest">Newest</option>
@@ -69,29 +100,59 @@ const CoursesSection = ({ purchasedCourses = [], onBack, onOpenCourse }) => {
         </div>
       </div>
 
-      {sortedCourses.length > 0 ? (
+      {isLoading ? (
+        <div className="empty-state">
+          <h4>Đang tải khóa học của bạn...</h4>
+        </div>
+      ) : error ? (
+        <div className="empty-state">
+          <h4>Không tải được khóa học</h4>
+          <p>{error}</p>
+        </div>
+      ) : sortedCourses.length > 0 ? (
         <>
           <CourseCardGrid
-            courses={sortedCourses}
+            courses={paginatedCourses}
             onOpenCourse={onOpenCourse}
             variant="mine"
           />
 
-          <div className="course-pagination">
-            <button type="button">
-              <ChevronLeft size={14} />
-            </button>
-            <button className="active" type="button">
-              1
-            </button>
-            <button type="button">2</button>
-            <button type="button">3</button>
-            <span>...</span>
-            <button type="button">5</button>
-            <button type="button">
-              <ChevronRight size={14} />
-            </button>
-          </div>
+          {totalPages > 1 && (
+            <div className="course-pagination">
+              <button
+                type="button"
+                disabled={safePage === 1}
+                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+              >
+                <ChevronLeft size={14} />
+              </button>
+
+              {pageNumbers.map((page, index) =>
+                page === "..." ? (
+                  <span key={`ellipsis-${index}`}>...</span>
+                ) : (
+                  <button
+                    key={page}
+                    className={safePage === page ? "active" : ""}
+                    type="button"
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </button>
+                ),
+              )}
+
+              <button
+                type="button"
+                disabled={safePage === totalPages}
+                onClick={() =>
+                  setCurrentPage((page) => Math.min(totalPages, page + 1))
+                }
+              >
+                <ChevronRight size={14} />
+              </button>
+            </div>
+          )}
         </>
       ) : (
         <div className="empty-state">
@@ -105,7 +166,7 @@ const CoursesSection = ({ purchasedCourses = [], onBack, onOpenCourse }) => {
           </button>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

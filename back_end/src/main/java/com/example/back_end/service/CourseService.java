@@ -1,27 +1,23 @@
 package com.example.back_end.service;
 
-import com.example.back_end.dto.response.CreateLessonResponse;
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.back_end.dto.response.PublicCourseResponse;
 import com.example.back_end.dto.response.TeacherCoursesResponse;
 import com.example.back_end.dto.resquest.CreateDraftCourseRequest;
-import com.example.back_end.dto.resquest.CreateLessonRequest;
-import com.example.back_end.dto.resquest.CreateSectionRequest;
 import com.example.back_end.entity.Course;
-import com.example.back_end.entity.Section;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.CourseStatus;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.CourseRepository;
-import com.example.back_end.repository.SectionRepository;
 import com.example.back_end.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import java.time.Instant;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -81,6 +77,38 @@ public class CourseService {
                         course.getCreatedAt()
                 ))
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<PublicCourseResponse> getPublishedCourses() {
+        return courseRepository
+                .findByStatusAndIsDeletedFalseOrderByCreatedAtDesc(CourseStatus.PUBLISHED)
+                .stream()
+                .map(this::toPublicCourseResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public PublicCourseResponse getPublishedCourse(Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                .filter(item -> item.getStatus() == CourseStatus.PUBLISHED)
+                .filter(item -> !Boolean.TRUE.equals(item.getIsDeleted()))
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+
+        return toPublicCourseResponse(course);
+    }
+
+    private PublicCourseResponse toPublicCourseResponse(Course course) {
+        return new PublicCourseResponse(
+                course.getId(),
+                course.getTitle(),
+                course.getDescription(),
+                course.getInstructor().getFullName(),
+                course.getBasePrice(),
+                course.getLevel(),
+                course.getStatus(),
+                course.getThumbnailKey()
+        );
     }
 
 }

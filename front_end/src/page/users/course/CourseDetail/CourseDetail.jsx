@@ -351,7 +351,6 @@ function CourseDetail() {
             </div>
         </div>
     );
-
 }
 
 export default CourseDetail;

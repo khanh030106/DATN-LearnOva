@@ -37,13 +37,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/learnova/auth/**").permitAll()
                         .requestMatchers("/api/learnova/uploads/presigned-url").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/courses/public/**").permitAll()
                         .requestMatchers("/api/learnova/courses/video-url/**").permitAll()
                         .requestMatchers("/api/learnova/courses/my-courses").permitAll()
                         .requestMatchers("/api/learnova/admin/users/**").permitAll()
@@ -53,8 +54,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/learnova/admin/courses-management/**").permitAll()
                         .requestMatchers("/api/learnova/admin/courses-management/**").permitAll()
                         .requestMatchers("/api/learnova/admin/vouchers/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/revenue/**").permitAll()
                         .requestMatchers("/api/learnova/admin/instructors-management/**").permitAll()
                         .requestMatchers("/api/learnova/admin/tags-management/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/learnova/payments/webhook").permitAll()
                         .requestMatchers("/api/learnova/user/me").permitAll()
                         .requestMatchers("/api/learnova/review/**").permitAll()
                                 .requestMatchers("/api/learnova/auth/resend-verification").permitAll()

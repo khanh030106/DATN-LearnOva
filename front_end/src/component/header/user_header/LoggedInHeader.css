@@ -468,6 +468,11 @@
   transform: translateY(-1px);
 }
 
+.user-logged-cart-link {
+  text-decoration: none;
+  display: inline-flex;
+}
+
 .user-logged-badge {
   position: absolute;
   top: -5px;
