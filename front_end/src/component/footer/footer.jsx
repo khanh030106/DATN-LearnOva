@@ -1,22 +1,29 @@
 import './footer.css';
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaTwitch, FaYoutube } from 'react-icons/fa';
+// use explicit path to ensure correct file extension in DOM
 
 export default function Footer() {
     return (
-        <footer className="footer" aria-label="Site footer">
+        <footer className="footer" aria-label="Site footer" style={{ backgroundColor: '#fafbfd', color: '#0f1724' }}>
             <div className="footer__container">
                 <div className="footer__grid">
                     {/* Brand */}
                     <div className="footer__brand">
                         <div className="footer__logo">
-                            <div className="footer__logo-icon">
-                                <div className="footer__logo-play" />
-                            </div>
-                            <span className="footer__logo-text">LearnOva</span>
+                            <img src="/src/assets/LogoText.png" alt="LearnOva" className="footer__logo-img" />
                         </div>
                         <p className="footer__tagline">
                             Empowering 10 million learners worldwide to build real skills
                             and transform their careers.
                         </p>
+                        <div className="footer__socials">
+                            <a href="#" aria-label="Facebook" className="footer__social-icon"><FaFacebookF /></a>
+                            <a href="#" aria-label="Twitter" className="footer__social-icon"><FaTwitter /></a>
+                            <a href="#" aria-label="LinkedIn" className="footer__social-icon"><FaLinkedinIn /></a>
+                            <a href="#" aria-label="Instagram" className="footer__social-icon"><FaInstagram /></a>
+                            <a href="#" aria-label="Twitch" className="footer__social-icon"><FaTwitch /></a>
+                            <a href="#" aria-label="YouTube" className="footer__social-icon"><FaYoutube /></a>
+                        </div>
                     </div>
 
                     <div className="footer__col">
@@ -60,12 +67,19 @@ export default function Footer() {
                     </div>
                 </div>
 
+                <div className="footer__divider" />
+
                 <div className="footer__bottom">
-                    <span className="footer__copy">© 2024 LearnOva, Inc. All rights reserved.</span>
-                    <div className="footer__legal">
-                        <a href="#" className="footer__legal-link">Privacy</a>
-                        <a href="#" className="footer__legal-link">Terms</a>
-                        <a href="#" className="footer__legal-link">Cookies</a>
+                    <div className="footer__bottom-left">
+                        <span className="footer__copy">© 2024 LearnOva, Inc. All rights reserved.</span>
+                    </div>
+
+                    <div className="footer__bottom-right">
+                        <nav className="footer__legal">
+                            <a href="#" className="footer__legal-link">Privacy</a>
+                            <a href="#" className="footer__legal-link">Terms</a>
+                            <a href="#" className="footer__legal-link">Cookies</a>
+                        </nav>
                     </div>
                 </div>
             </div>

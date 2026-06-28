@@ -2,8 +2,6 @@ import "./CourseDetail.css";
 import { FaClipboardCheck } from "react-icons/fa";
 import { FaPlay } from "react-icons/fa";
 import { ChevronDown } from "lucide-react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Footer from "../../../../component/footer/footer-courseDetail/footer-courseDetail.jsx";
 import {
     qaData,
@@ -152,7 +150,6 @@ function CourseDetail() {
                 <div className="left-side">
                     {/* VIDEO PLAYER */}
                     <CourseVideoPlayer/>
-                    <ToastContainer />
 
                     {/* TABS */}
                     <div className="tabs-container">

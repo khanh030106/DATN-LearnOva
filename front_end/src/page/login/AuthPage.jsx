@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft, CheckCircle2, XCircle, Loader2 } from "lucide-react"; // Import thêm icon đẹp từ lucide
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "../../util/toast.js";
 import AuthBanner from "./components/AuthBanner.jsx";
 import LoginForm from "./components/LoginForm.jsx";
 import RegisterForm from "./components/RegisterForm.jsx";

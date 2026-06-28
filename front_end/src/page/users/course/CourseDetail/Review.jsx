@@ -6,7 +6,7 @@ import {
     updateReviewApi,
     deleteReviewApi
 } from "../../../../api/ReviewApi.js";
-import { toast } from "react-toastify";
+import { toast } from "../../../../util/toast.js";
 import { FaCheck } from "react-icons/fa";
 
 function ReviewsTab({

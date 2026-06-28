@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getLanguage, LANG_EVENT } from "../../../util/language.js";
-import { t } from "../../../util/i18n.js";
+import { getLanguage, LANG_EVENT } from "../../../../util/language.js";
+import { t } from "../../../../util/i18n.js";
 
 const leftNav = [
     { labelKey: "home", path: "/learnova/home" },

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"; // Import thêm useRef để quản lý interval chuẩn xác
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { registerApi, resendVerifyEmailApi } from "../../../api/AuthApi.js";
-import { toast } from "react-toastify";
+import { toast } from "../../../util/toast.js";
 import { MdMarkEmailRead } from "react-icons/md";
 
 const RegisterForm = ({ onSwitchToLogin }) => {

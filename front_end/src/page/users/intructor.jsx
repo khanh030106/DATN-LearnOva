@@ -186,7 +186,13 @@ function InstructorsPage() {
         const data = await getInstructorsApi();
         setInstructors(data.map(mapInstructorResponse));
       } catch (err) {
-        setError("Không tải được dữ liệu giảng viên");
+        console.error("Failed to load instructors", err);
+        setError(
+          err?.response?.data?.error ||
+          err?.response?.data?.message ||
+          err?.message ||
+          "Không tải được dữ liệu giảng viên"
+        );
       } finally {
         setIsLoading(false);
       }
@@ -211,6 +217,16 @@ function InstructorsPage() {
 
   if (error) {
     return <div className="instructors-page">{error}</div>;
+  }
+
+  if (!isLoading && filteredInstructors.length === 0) {
+    return (
+      <div className="instructors-page">
+        <div className="no-instructors-message">
+          Không tìm thấy giảng viên phù hợp. Vui lòng kiểm tra lại dữ liệu hoặc trạng thái giảng viên.
+        </div>
+      </div>
+    );
   }
 
   return (

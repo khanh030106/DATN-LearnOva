@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { ShoppingCart, Globe } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getLanguage, toggleLanguage, LANG_EVENT } from "../../../util/language.js";
-import { t } from "../../../util/i18n.js";
+import { getLanguage, toggleLanguage, LANG_EVENT } from "../../../../util/language.js";
+import { t } from "../../../../util/i18n.js";
 
 const HeaderAction = () => {
   const [lang, setLang] = useState(getLanguage());

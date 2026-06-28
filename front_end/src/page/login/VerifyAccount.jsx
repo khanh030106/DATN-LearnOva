@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "../../util/toast.js";
 
 const VerifyAccount = () => {
     const navigate = useNavigate();
