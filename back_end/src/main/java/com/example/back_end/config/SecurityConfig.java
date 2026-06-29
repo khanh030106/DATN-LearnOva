@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/learnova/auth/**").permitAll()
                         .requestMatchers("/api/learnova/uploads/presigned-url").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/courses/public/**").permitAll()
                         .requestMatchers("/api/learnova/courses/video-url/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/learnova/courses/featured").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/learnova/enrollments/check").permitAll()
@@ -58,12 +59,16 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/learnova/admin/courses-management/**").permitAll()
                         .requestMatchers("/api/learnova/admin/courses-management/**").permitAll()
                         .requestMatchers("/api/learnova/admin/vouchers/**").permitAll()
+                        .requestMatchers("/api/learnova/admin/revenue/**").permitAll()
                         .requestMatchers("/api/learnova/admin/instructors-management/**").permitAll()
                         .requestMatchers("/api/learnova/admin/tags-management/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/learnova/payments/webhook").permitAll()
                         .requestMatchers("/api/learnova/user/me").permitAll()
                         .requestMatchers("/api/learnova/review/**").permitAll()
-                                .requestMatchers("/api/learnova/auth/resend-verification").permitAll()
-                                .requestMatchers("/error").permitAll()// để test
+                        .requestMatchers("/api/learnova/auth/resend-verification").permitAll()
+//                        .requestMatchers("/api/learnova/api/qna/**").authenticated()
+                                .requestMatchers("/api/learnova/qna/**").authenticated()
+                        .requestMatchers("/error").permitAll()// để test
                         .anyRequest().authenticated()
                 )
 

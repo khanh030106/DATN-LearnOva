@@ -3,11 +3,15 @@ package com.example.back_end.repository;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.example.back_end.entity.Order;
 import com.example.back_end.entity.enums.OrderStatus;
+import jakarta.persistence.LockModeType;
+
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -20,4 +24,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                    "WHERE c.instructor_id = :instructorId " +
                    "AND o.status = 'PAID'", nativeQuery = true)
     List<BigDecimal> findRevenueByInstructor(@Param("instructorId") Long instructorId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT o FROM Order o JOIN FETCH o.user WHERE o.id = :orderId")
+    Optional<Order> findByIdForPaymentUpdate(@Param("orderId") Long orderId);
 }

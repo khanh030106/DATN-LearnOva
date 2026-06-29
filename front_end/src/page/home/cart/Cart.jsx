@@ -1,49 +1,82 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AlertTriangle, Tag, Trash2, X } from "lucide-react";
 import "./Cart.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  CART_UPDATED_EVENT,
+  getStoredCartItems,
+  removeStoredCartItem,
+  setStoredCartItems,
+} from "../../../utils/cartStorage.js";
+import { applyVoucherApi } from "../../../api/VoucherApi.js";
+import { createPaymentApi } from "../../../api/PaymentApi.js";
+import { getPublicCoursesApi } from "../../../api/CourseApi.js";
+import PaymentModal from "../../../component/payment/PaymentModal.jsx";
+import { useAuth } from "../../../hook/UseAuth.jsx";
+import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";
 
-const initialItems = [
-  {
-    id: 1,
-    title: "React - From Zero to Hero",
-    teacher: "John Smith",
-    price: 49.99,
-    qty: 1,
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-  },
-  {
-    id: 2,
-    title: "Node.js - Complete Guide",
-    teacher: "Sarah Johnson",
-    price: 54.99,
-    qty: 1,
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
-  },
-  {
-    id: 3,
-    title: "MongoDB Masterclass",
-    teacher: "Michael Chen",
-    price: 39.99,
-    qty: 1,
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c",
-  },
-];
+const parseCoursePrice = (price) => {
+  if (typeof price === "number") return price;
+
+  const numericValue = Number(String(price).replace(/[^\d]/g, ""));
+  return Number.isFinite(numericValue) ? numericValue : 0;
+};
+
+const normalizeCourseTitle = (title) =>
+  String(title || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
 
 const Cart = () => {
-  const [items, setItems] = useState(initialItems);
+  const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
+  const { accessToken, isAuthenticated, loading: authLoading } = useAuth();
+  const [items, setItems] = useState(() => getStoredCartItems());
+  const [dbCourses, setDbCourses] = useState([]);
   const [promo, setPromo] = useState("");
+  const [appliedVoucher, setAppliedVoucher] = useState(null);
+  const [voucherMessage, setVoucherMessage] = useState("");
+  const [isApplyingVoucher, setIsApplyingVoucher] = useState(false);
+  const [isCreatingPayment, setIsCreatingPayment] = useState(false);
+  const [activePayment, setActivePayment] = useState(null);
   const [itemToRemove, setItemToRemove] = useState(null);
 
-  const increment = (id) => {
-    setItems((s) => s.map((i) => (i.id === id ? { ...i, qty: i.qty + 1 } : i)));
-  };
+  useEffect(() => {
+    const syncCartItems = () => {
+      setItems(getStoredCartItems());
+      setAppliedVoucher(null);
+      setVoucherMessage("");
+    };
 
-  const decrement = (id) => {
-    setItems((s) =>
-      s.map((i) => (i.id === id ? { ...i, qty: Math.max(1, i.qty - 1) } : i)),
-    );
-  };
+    window.addEventListener(CART_UPDATED_EVENT, syncCartItems);
+    window.addEventListener("storage", syncCartItems);
+
+    return () => {
+      window.removeEventListener(CART_UPDATED_EVENT, syncCartItems);
+      window.removeEventListener("storage", syncCartItems);
+    };
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+
+    getPublicCoursesApi()
+      .then((data) => {
+        if (mounted && Array.isArray(data)) {
+          setDbCourses(data);
+        }
+      })
+      .catch(() => {
+        if (mounted) setDbCourses([]);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const askRemoveItem = (item) => setItemToRemove(item);
 
@@ -51,13 +84,133 @@ const Cart = () => {
 
   const confirmRemoveItem = () => {
     if (!itemToRemove) return;
-    setItems((s) => s.filter((i) => i.id !== itemToRemove.id));
+    const removedTitle = itemToRemove.title;
+    const nextItems = removeStoredCartItem(itemToRemove.id);
+    setItems(nextItems);
+    setAppliedVoucher(null);
+    setVoucherMessage("");
     closeRemovePopup();
+    toast.success(`Đã xóa "${removedTitle}" khỏi giỏ hàng.`);
   };
 
-  const subtotal = items.reduce((sum, it) => sum + it.price * it.qty, 0);
-  const discount = promo.trim().toUpperCase() === "SAVE20" ? 20 : 0;
+  const subtotal = items.reduce((sum, it) => sum + parseCoursePrice(it.price), 0);
+  const discount = Number(appliedVoucher?.discountAmount || 0);
   const total = Math.max(0, subtotal - discount);
+
+  const handleVoucherChange = (event) => {
+    setPromo(event.target.value);
+    setAppliedVoucher(null);
+    setVoucherMessage("");
+  };
+
+  const handleApplyVoucher = async () => {
+    const code = promo.trim();
+
+    if (!code) {
+      setVoucherMessage("Vui lòng nhập mã voucher.");
+      return;
+    }
+
+    if (items.length === 0 || subtotal <= 0) {
+      setVoucherMessage("Giỏ hàng đang trống.");
+      return;
+    }
+
+    if (appliedVoucher?.code?.toLowerCase() === code.toLowerCase()) {
+      setVoucherMessage("Voucher này đã được áp dụng.");
+      return;
+    }
+
+    try {
+      setIsApplyingVoucher(true);
+      setVoucherMessage("");
+      const result = await applyVoucherApi({ code, subtotal });
+      setAppliedVoucher(result);
+      setVoucherMessage(
+        `Đã áp dụng ${result.code}. Đã dùng ${result.usedCount}/${result.usageLimit} lượt.`,
+      );
+      toast.success("Áp dụng voucher thành công.");
+    } catch (err) {
+      setAppliedVoucher(null);
+      const message =
+        err?.response?.data?.message || "Voucher không hợp lệ hoặc không còn sử dụng được.";
+      setVoucherMessage(message);
+      toast.error(message);
+    } finally {
+      setIsApplyingVoucher(false);
+    }
+  };
+
+  const handleCheckout = async () => {
+    if (authLoading) return;
+
+    if (!isAuthenticated) {
+      toast.error("Bạn cần đăng nhập để thanh toán.");
+      return;
+    }
+
+    if (items.length === 0) {
+      toast.error("Giỏ hàng đang trống.");
+      return;
+    }
+
+    const checkoutPairs = items
+      .map((item) => ({ item, course: resolveCheckoutCourse(item) }))
+      .filter((pair) => pair.course);
+
+    if (checkoutPairs.length !== items.length) {
+      toast.error("Có khóa học trong giỏ không còn tồn tại hoặc chưa được publish.");
+      return;
+    }
+
+    const courseIds = Array.from(new Set(checkoutPairs.map((pair) => pair.course.courseId)));
+
+    try {
+      setIsCreatingPayment(true);
+      const payment = await createPaymentApi(
+        axiosPrivate,
+        {
+          courseIds,
+          voucherCode: promo.trim() || null,
+        },
+        accessToken,
+      );
+      setActivePayment({
+        ...payment,
+        cartItemIds: checkoutPairs.map((pair) => pair.item.id),
+      });
+    } catch (err) {
+      const message =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        "Không thể tạo thanh toán payOS.";
+      toast.error(message);
+    } finally {
+      setIsCreatingPayment(false);
+    }
+  };
+
+  const resolveCheckoutCourse = (item) => {
+    const rawId = item?.courseId || item?.id;
+    const byId = dbCourses.find((course) => String(course.courseId) === String(rawId));
+    if (byId) return byId;
+
+    const itemTitle = normalizeCourseTitle(item?.title);
+    if (!itemTitle) return null;
+
+    return dbCourses.find((course) => normalizeCourseTitle(course.title) === itemTitle) || null;
+  };
+
+  const handlePaymentPaid = () => {
+    if (!activePayment?.courseId) return;
+    const paidItemIds = new Set((activePayment.cartItemIds || [activePayment.cartItemId || activePayment.courseId]).map(String));
+    const nextItems = setStoredCartItems(
+      getStoredCartItems().filter((item) => !paidItemIds.has(String(item.id))),
+    );
+    setItems(nextItems);
+    setAppliedVoucher(null);
+    setVoucherMessage("");
+  };
 
   return (
     <div className="cart-page">
@@ -72,13 +225,20 @@ const Cart = () => {
               <div>Actions</div>
             </div>
 
+            {items.length === 0 && (
+              <div className="cart-empty">
+                <p>Giỏ hàng của bạn đang trống.</p>
+                <Link to="/learnova/courses">Tiếp tục mua khóa học</Link>
+              </div>
+            )}
+
             {items.map((item) => (
               <div className="cart-item" key={item.id}>
                 <div className="cart-item-course">
                   <img src={item.image} alt={item.title} />
                   <div>
                     <Link
-                      to={`/learnova/user/CoursesDetail/${item.id}`}
+                      to={`/learnova/CoursesDetail/${item.id}`}
                       className="cart-item-title"
                     >
                       {item.title}
@@ -87,28 +247,16 @@ const Cart = () => {
                   </div>
                 </div>
 
-                <div className="cart-item-price">${item.price.toFixed(2)}</div>
+                <div className="cart-item-price">
+                  {parseCoursePrice(item.price).toLocaleString("vi-VN")}đ
+                </div>
 
                 <div className="cart-item-qty">
-                  <button
-                    onClick={() => decrement(item.id)}
-                    className="qty-btn"
-                    type="button"
-                  >
-                    −
-                  </button>
-                  <span className="qty-num">{item.qty}</span>
-                  <button
-                    onClick={() => increment(item.id)}
-                    className="qty-btn"
-                    type="button"
-                  >
-                    +
-                  </button>
+                  <span className="qty-num">1</span>
                 </div>
 
                 <div className="cart-item-total">
-                  ${(item.price * item.qty).toFixed(2)}
+                  {parseCoursePrice(item.price).toLocaleString("vi-VN")}đ
                 </div>
 
                 <button
@@ -129,11 +277,11 @@ const Cart = () => {
             <h3>Order summary</h3>
             <div className="order-row">
               <span>Subtotal ({items.length} courses)</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>{subtotal.toLocaleString("vi-VN")}đ</span>
             </div>
             <div className="order-row">
               <span>Discount</span>
-              <span className="discount">-${discount.toFixed(2)}</span>
+              <span className="discount">-{discount.toLocaleString("vi-VN")}đ</span>
             </div>
 
             <div className="voucher-box">
@@ -144,19 +292,49 @@ const Cart = () => {
                   id="voucher-code"
                   type="text"
                   value={promo}
-                  onChange={(event) => setPromo(event.target.value)}
+                  onChange={handleVoucherChange}
                   placeholder="Enter voucher"
                 />
+                <button
+                  type="button"
+                  className="voucher-apply-btn"
+                  onClick={handleApplyVoucher}
+                  disabled={isApplyingVoucher}
+                >
+                  {isApplyingVoucher ? "..." : "Apply"}
+                </button>
               </div>
+              {voucherMessage ? (
+                <p
+                  className={`voucher-message ${
+                    appliedVoucher ? "voucher-message--success" : "voucher-message--error"
+                  }`}
+                >
+                  {voucherMessage}
+                </p>
+              ) : null}
             </div>
 
             <div className="order-total">
               <span>Total</span>
-              <span className="total-amount">${total.toFixed(2)}</span>
+              <span className="total-amount">{total.toLocaleString("vi-VN")}đ</span>
             </div>
 
-            <button className="checkout">Proceed to checkout</button>
-            <button className="continue">Continue shopping</button>
+            <button
+              className="checkout"
+              type="button"
+              onClick={handleCheckout}
+              disabled={isCreatingPayment || items.length === 0}
+            >
+              {isCreatingPayment ? "Creating payment..." : "Proceed to checkout"}
+            </button>
+            <button
+              className="continue"
+              type="button"
+              onClick={() => navigate("/learnova/courses")}
+            >
+              Continue shopping
+            </button>
           </div>
         </aside>
       </div>
@@ -207,6 +385,14 @@ const Cart = () => {
           </div>
         </div>
       )}
+      {activePayment && (
+        <PaymentModal
+          payment={activePayment}
+          onClose={() => setActivePayment(null)}
+          onPaid={handlePaymentPaid}
+        />
+      )}
+      <ToastContainer position="top-right" autoClose={2500} />
     </div>
   );
 };

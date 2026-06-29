@@ -25,6 +25,12 @@ const AxiosInterceptorSetup = ({ children }) => {
             (response) => response,
             async (error) => {
                 const originalRequest = error.config;
+                const requestUrl = originalRequest?.url || "";
+                const isRefreshRequest = requestUrl.includes("/auth/refresh");
+
+                if (!originalRequest || isRefreshRequest) {
+                    return Promise.reject(error);
+                }
 
                 // Never intercept auth endpoints — they don't need token refresh
                 // and doing so would create an infinite retry loop

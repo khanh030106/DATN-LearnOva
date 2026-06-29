@@ -41,7 +41,7 @@ const Vouchers = () => {
       <VoucherCards />
       <div className="voucherChartsRow">
         <div className="voucherChartColumn">
-          <VoucherChart />
+          <VoucherChart refreshKey={refreshKey} />
         </div>
         <div className="voucherChartColumn">
           <VoucherCampaignChart />
@@ -55,7 +55,7 @@ const Vouchers = () => {
         refreshKey={refreshKey}
       />
 
-      <VoucherHistory />
+      <VoucherHistory refreshKey={refreshKey} />
 
       {isModalOpen && (
         <div

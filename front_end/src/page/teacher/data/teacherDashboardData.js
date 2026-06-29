@@ -73,7 +73,7 @@ export const courses = [
     createdAgo: "2 days ago",
     completion: "82%",
     image: courseImageOne,
-    thumbnailUrl: courseImageOne,
+    thumbnailKey: courseImageOne,
     publishedAt: "2024-10-12",
     updatedAt: "2026-05-18",
     sections: [
@@ -134,7 +134,7 @@ export const courses = [
     createdAgo: "5 days ago",
     completion: "74%",
     image: courseImageTwo,
-    thumbnailUrl: courseImageTwo,
+    thumbnailKey: courseImageTwo,
     publishedAt: "",
     updatedAt: "2026-05-22",
     sections: [
@@ -186,7 +186,7 @@ export const courses = [
     createdAgo: "1 week ago",
     completion: "71%",
     image: courseImageThree,
-    thumbnailUrl: courseImageThree,
+    thumbnailKey: courseImageThree,
     publishedAt: "2024-08-04",
     updatedAt: "2026-04-30",
     sections: [

@@ -1,59 +1,59 @@
+import { useEffect, useState } from "react";
+import { getAdminTopEarningInstructorsApi } from "../../../../api/admin/RevenueApi.js";
 import "./TopTeacherRevenue.css";
 
-const topTeachers = [
-  {
-    rank: 1,
-    initials: "H",
-    name: "Dr. Lê Hoàng",
-    courses: 8,
-    students: "16,400",
-    revenue: "$385,000",
-    avgRevenue: "$48,125",
-    share: "21%",
-  },
-  {
-    rank: 2,
-    initials: "S",
-    name: "Nguyễn Văn Sơn",
-    courses: 12,
-    students: "14,200",
-    revenue: "$312,000",
-    avgRevenue: "$26,000",
-    share: "17%",
-  },
-  {
-    rank: 3,
-    initials: "T",
-    name: "ThS. Đỗ Thị Thu",
-    courses: 6,
-    students: "11,800",
-    revenue: "$245,000",
-    avgRevenue: "$40,833",
-    share: "13%",
-  },
-  {
-    rank: 4,
-    initials: "M",
-    name: "Trần Thế Minh",
-    courses: 5,
-    students: "9,400",
-    revenue: "$189,000",
-    avgRevenue: "$37,800",
-    share: "10%",
-  },
-  {
-    rank: 5,
-    initials: "N",
-    name: "Phạm Thành Nam",
-    courses: 7,
-    students: "8,100",
-    revenue: "$164,000",
-    avgRevenue: "$23,429",
-    share: "9%",
-  },
-];
+const PAGE_SIZE = 5;
+
+const formatMoney = (value) =>
+  `$${Number(value || 0).toLocaleString("en-US", {
+    maximumFractionDigits: 0,
+  })}`;
+
+const formatPercent = (value) => `${Number(value || 0).toFixed(0)}%`;
 
 const TopTeacherRevenue = () => {
+  const [teachers, setTeachers] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadTeachers = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const data = await getAdminTopEarningInstructorsApi({
+          page,
+          size: PAGE_SIZE,
+        });
+
+        if (!isMounted) return;
+
+        setTeachers(Array.isArray(data?.content) ? data.content : []);
+        setTotalPages(Number(data?.totalPages || 0));
+      } catch {
+        if (!isMounted) return;
+        setTeachers([]);
+        setTotalPages(0);
+        setError("Unable to load top earning instructors.");
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    loadTeachers();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [page]);
+
+  const pageNumbers = Array.from({ length: totalPages }, (_, index) => index);
+
   return (
     <section
       className="topRevenueBlockSection topTeacherRevenueCard"
@@ -86,26 +86,73 @@ const TopTeacherRevenue = () => {
               </tr>
             </thead>
             <tbody>
-              {topTeachers.map((teacher) => (
-                <tr key={teacher.rank}>
-                  <td>
-                    <span className="topRevenueBlockRank">{teacher.rank}</span>
+              {loading ? (
+                <tr>
+                  <td colSpan="7" className="topRevenueBlockState">
+                    Loading...
                   </td>
-                  <td>
-                    <div className="topTeacherCell">
-                      <span className="topTeacherName">{teacher.name}</span>
-                    </div>
-                  </td>
-                  <td>{teacher.courses}</td>
-                  <td>{teacher.students}</td>
-                  <td className="topTeacherRevenue">{teacher.revenue}</td>
-                  <td>{teacher.avgRevenue}</td>
-                  <td>{teacher.share}</td>
                 </tr>
-              ))}
+              ) : error ? (
+                <tr>
+                  <td colSpan="7" className="topRevenueBlockState">
+                    {error}
+                  </td>
+                </tr>
+              ) : teachers.length === 0 ? (
+                <tr>
+                  <td colSpan="7" className="topRevenueBlockState">
+                    No paid instructor revenue data yet.
+                  </td>
+                </tr>
+              ) : (
+                teachers.map((teacher, index) => (
+                  <tr key={teacher.instructorId}>
+                    <td>
+                      <span className="topRevenueBlockRank">
+                        {page * PAGE_SIZE + index + 1}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="topTeacherCell">
+                        <span className="topTeacherName">
+                          {teacher.instructor || "Unknown"}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      {Number(teacher.totalCourses || 0).toLocaleString("en-US")}
+                    </td>
+                    <td>
+                      {Number(teacher.totalStudents || 0).toLocaleString("en-US")}
+                    </td>
+                    <td className="topTeacherRevenue">
+                      {formatMoney(teacher.revenue)}
+                    </td>
+                    <td>{formatMoney(teacher.avgPerCourse)}</td>
+                    <td>{formatPercent(teacher.share)}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
+        {totalPages > 0 && (
+          <div
+            className="topRevenuePagination"
+            aria-label="Top instructor revenue pages"
+          >
+            {pageNumbers.map((pageNumber) => (
+              <button
+                key={pageNumber}
+                type="button"
+                className={pageNumber === page ? "active" : ""}
+                onClick={() => setPage(pageNumber)}
+              >
+                {pageNumber + 1}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

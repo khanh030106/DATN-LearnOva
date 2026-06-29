@@ -620,6 +620,33 @@
   background: #1d4ed8;
 }
 
+.enroll-btn--cart {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  border-radius: 10px;
+}
+
+.course-card-img {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+a.course-title {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+a.course-title:hover h3 {
+  color: var(--blue-strong);
+}
+
 /* ===== PAGINATION ===== */
 .pagination-section {
   display: flex;

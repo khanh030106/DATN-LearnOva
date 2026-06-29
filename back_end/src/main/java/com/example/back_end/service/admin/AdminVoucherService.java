@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.example.back_end.dto.response.admin.AdminVoucherResponse;
+import com.example.back_end.dto.response.admin.AdminVoucherUsageFrequencyResponse;
+import com.example.back_end.dto.response.admin.AdminVoucherUsageHistoryResponse;
 import com.example.back_end.dto.resquest.admin.AdminVoucherRequest;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.Voucher;
@@ -41,6 +43,7 @@ public class AdminVoucherService {
         List<Voucher> voucherList = voucherRepository.findAll();
 
         return voucherList.stream()
+                .map(this::syncVoucherAvailability)
                 .map(voucher -> new AdminVoucherResponse(
                         voucher.getId(),
                         voucher.getCode(),
@@ -61,9 +64,33 @@ public class AdminVoucherService {
                 .collect(Collectors.toList());
     }
 
+    public List<AdminVoucherUsageHistoryResponse> getVoucherUsageHistories() {
+        return voucherRepository.findVoucherUsageHistoryProjections().stream()
+                .map(history -> new AdminVoucherUsageHistoryResponse(
+                        history.getStudentName(),
+                        history.getRegisteredCourse(),
+                        history.getAppliedCode(),
+                        history.getOriginalPrice(),
+                        history.getDiscount(),
+                        history.getPaid(),
+                        history.getUsedAt()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<AdminVoucherUsageFrequencyResponse> getVoucherUsageFrequency() {
+        return voucherRepository.findVoucherUsageFrequencyProjections().stream()
+                .map(item -> new AdminVoucherUsageFrequencyResponse(
+                        item.getMonth(),
+                        item.getActivations()
+                ))
+                .collect(Collectors.toList());
+    }
+
     public AdminVoucherResponse getVoucherById(Long voucherId) {
         Voucher voucher = voucherRepository.findById(voucherId)
                 .orElseThrow(() -> new ResourceNotFoundException("Voucher not found id=" + voucherId));
+        voucher = syncVoucherAvailability(voucher);
 
         return new AdminVoucherResponse(
                 voucher.getId(),
@@ -124,6 +151,10 @@ public class AdminVoucherService {
 
         if (!endDate.isAfter(startDate)) {
             throw new BusinessException("End date must be after start date");
+        }
+
+        if (voucherRequest.usageLimit() == null || voucherRequest.usageLimit() <= 0) {
+            throw new BusinessException("Usage limit must be greater than 0");
         }
 
         User createdByUser = adminUserRepository.findByEmailAndIsDeletedFalse(authentication.getName(), false)
@@ -192,6 +223,14 @@ public class AdminVoucherService {
             throw new BusinessException("Invalid date format");
         }
 
+        if (!endDate.isAfter(startDate)) {
+            throw new BusinessException("End date must be after start date");
+        }
+
+        if (voucherRequest.usageLimit() == null || voucherRequest.usageLimit() <= 0) {
+            throw new BusinessException("Usage limit must be greater than 0");
+        }
+
         User createdByUser = adminUserRepository.findById(voucherRequest.createdById())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found id=" + voucherRequest.createdById()));
 
@@ -255,5 +294,29 @@ public class AdminVoucherService {
                 deletedVoucher.getCreatedAt(),
                 deletedVoucher.getUpdatedAt()
         );
+    }
+
+    private Voucher syncVoucherAvailability(Voucher voucher) {
+        boolean shouldDeactivate =
+                Boolean.TRUE.equals(voucher.getIsActive())
+                        && (isExpired(voucher) || isUsageLimitReached(voucher));
+
+        if (!shouldDeactivate) {
+            return voucher;
+        }
+
+        voucher.setIsActive(false);
+        voucher.setUpdatedAt(Instant.now());
+        return voucherRepository.save(voucher);
+    }
+
+    private boolean isExpired(Voucher voucher) {
+        return voucher.getEndDate() != null && !voucher.getEndDate().isAfter(OffsetDateTime.now());
+    }
+
+    private boolean isUsageLimitReached(Voucher voucher) {
+        Integer usageLimit = voucher.getUsageLimit();
+        if (usageLimit == null || usageLimit <= 0) return true;
+        return (voucher.getUsedCount() == null ? 0 : voucher.getUsedCount()) >= usageLimit;
     }
 }

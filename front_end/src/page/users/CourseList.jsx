@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import CourseFilter from "./course/CourseFilter.jsx";
 import CourseCard from "./course/CourseCard.jsx";
 import "./course/CourseList.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Dữ liệu mẫu, bạn có thể thay bằng API sau
 const courses = [
@@ -140,6 +142,7 @@ export default function CourseList() {
                     </div>
                 </main>
             </div>
+            <ToastContainer position="top-right" autoClose={2500} />
 
         </div>
     );

@@ -1,74 +1,113 @@
-import "./VoucherHistory.css";
+import { useEffect, useMemo, useState } from "react";
 import { FiClipboard } from "react-icons/fi";
+import { getAdminVoucherUsageHistoriesApi } from "../../../../api/admin/VoucherApi.js";
+import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
+import "./VoucherHistory.css";
 
-// ===== VOUCHER USAGE HISTORY DATA =====
-const voucherHistories = [
-  {
-    id: 1,
-    student: "Nguyễn Văn A",
-    course: "Web Programming with React",
-    code: "WELCOME2026",
-    originalPrice: "$105",
-    discount: "$21",
-    finalPrice: "$84",
-    date: "2026-05-15 14:30",
-  },
-  {
-    id: 2,
-    student: "Trần Thị B",
-    course: "Python for Beginners",
-    code: "LEARNOVA50",
-    originalPrice: "$63",
-    discount: "$31",
-    finalPrice: "$32",
-    date: "2026-05-14 09:15",
-  },
-  {
-    id: 3,
-    student: "Lê Minh C",
-    course: "Web Programming Course",
-    code: "WEBDEV30",
-    originalPrice: "$125",
-    discount: "$30",
-    finalPrice: "$95",
-    date: "2026-05-13 16:45",
-  },
-  {
-    id: 4,
-    student: "Phạm Hồng D",
-    course: "JavaScript Advanced",
-    code: "FIX500FF",
-    originalPrice: "$96",
-    discount: "$22",
-    finalPrice: "$74",
-    date: "2026-05-12 11:20",
-  },
-  {
-    id: 5,
-    student: "Đặng Anh E",
-    course: "Design UI/UX",
-    code: "WELCOME2026",
-    originalPrice: "$78",
-    discount: "$22",
-    finalPrice: "$56",
-    date: "2026-05-11 13:00",
-  },
-  {
-    id: 6,
-    student: "Vũ Tuấn F",
-    course: "Node.js & Express",
-    code: "LEARNOVA50",
-    originalPrice: "$91",
-    discount: "$46",
-    finalPrice: "$46",
-    date: "2026-05-10 10:30",
-  },
-];
+const pageSize = 10;
 
-const VoucherHistory = () => {
+const formatCurrency = (value) =>
+  new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+    maximumFractionDigits: 0,
+  }).format(Number(value || 0));
+
+const formatDateTime = (value) => {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+
+  const datePart = date.toLocaleDateString("en-CA");
+  const timePart = date.toLocaleTimeString("vi-VN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  return `${datePart} ${timePart}`;
+};
+
+const VoucherHistory = ({ refreshKey }) => {
+  const axiosPrivate = useAxiosPrivate();
+  const [histories, setHistories] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+
+    const fetchVoucherUsageHistories = async () => {
+      try {
+        setIsLoading(true);
+        setError("");
+        const data = await getAdminVoucherUsageHistoriesApi(axiosPrivate);
+        if (mounted) {
+          setHistories(Array.isArray(data) ? data : []);
+        }
+      } catch (err) {
+        if (mounted) {
+          setError(
+            err?.response?.data?.message ||
+              "Không tải được lịch sử sử dụng voucher."
+          );
+        }
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    };
+
+    fetchVoucherUsageHistories();
+    return () => {
+      mounted = false;
+    };
+  }, [axiosPrivate, refreshKey]);
+
+  const normalizedHistories = useMemo(
+    () =>
+      histories.map((history, index) => ({
+        id: `${history.usedAt || "history"}-${index}`,
+        student: history.studentName || "",
+        course: history.registeredCourse || "",
+        code: history.appliedCode || "-",
+        originalPrice: formatCurrency(history.originalPrice),
+        discount: formatCurrency(history.discount),
+        paid: formatCurrency(history.paid),
+        usedAt: formatDateTime(history.usedAt),
+      })),
+    [histories]
+  );
+
+  const filteredHistories = useMemo(() => {
+    const keyword = searchTerm.trim().toLowerCase();
+    if (!keyword) return normalizedHistories;
+
+    return normalizedHistories.filter((history) =>
+      [history.student, history.course, history.code]
+        .join(" ")
+        .toLowerCase()
+        .includes(keyword)
+    );
+  }, [normalizedHistories, searchTerm]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredHistories.length / pageSize));
+  const currentPageItems = filteredHistories.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+  const startItem = filteredHistories.length
+    ? (currentPage - 1) * pageSize + 1
+    : 0;
+  const endItem = Math.min(currentPage * pageSize, filteredHistories.length);
+
   return (
     <section className="voucherHistorySection">
-      {/* HEADER SECTION */}
       <div className="voucherHistoryHeader">
         <div>
           <div className="voucherHistoryTitleIcon">
@@ -79,19 +118,22 @@ const VoucherHistory = () => {
             View course registration transactions using discount codes.
           </p>
         </div>
+        <span className="voucherHistoryCount">
+          Showing {startItem}-{endItem} of {filteredHistories.length}
+        </span>
       </div>
 
       <div className="voucherHistoryCard">
-        {/* SEARCH SECTION */}
         <div className="voucherHistoryControls">
           <input
             type="text"
             placeholder="Search student name, code..."
             className="voucherHistorySearchInput"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
           />
         </div>
 
-        {/* TABLE SECTION */}
         <div className="voucherHistoryTableWrapper">
           <table className="voucherHistoryTable">
             <thead>
@@ -106,22 +148,82 @@ const VoucherHistory = () => {
               </tr>
             </thead>
             <tbody>
-              {/* MAPPING VOUCHER HISTORY DATA */}
-              {voucherHistories.map((h) => (
-                <tr key={h.id}>
-                  <td>{h.student}</td>
-                  <td>{h.course}</td>
-                  <td>
-                    <span className="voucherHistoryCode">{h.code}</span>
+              {isLoading ? (
+                <tr>
+                  <td colSpan="7" className="voucherHistoryLoading">
+                    Đang tải dữ liệu...
                   </td>
-                  <td>{h.originalPrice}</td>
-                  <td className="voucherHistoryDiscount">{h.discount}</td>
-                  <td className="voucherHistoryFinal">{h.finalPrice}</td>
-                  <td>{h.date}</td>
                 </tr>
-              ))}
+              ) : error ? (
+                <tr>
+                  <td colSpan="7" className="voucherHistoryError">
+                    {error}
+                  </td>
+                </tr>
+              ) : currentPageItems.length === 0 ? (
+                <tr>
+                  <td colSpan="7" className="voucherHistoryEmpty">
+                    Không có lịch sử sử dụng voucher phù hợp.
+                  </td>
+                </tr>
+              ) : (
+                currentPageItems.map((history) => (
+                  <tr key={history.id}>
+                    <td>{history.student}</td>
+                    <td>{history.course}</td>
+                    <td>
+                      <span className="voucherHistoryCode">{history.code}</span>
+                    </td>
+                    <td>{history.originalPrice}</td>
+                    <td className="voucherHistoryDiscount">
+                      {history.discount}
+                    </td>
+                    <td className="voucherHistoryFinal">{history.paid}</td>
+                    <td>{history.usedAt}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
+        </div>
+
+        <div className="voucherHistoryPagination">
+          <button
+            type="button"
+            className="voucherHistoryPaginationBtn"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}
+          >
+            Prev
+          </button>
+
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+            (page) => (
+              <button
+                key={page}
+                type="button"
+                className={`voucherHistoryPaginationBtn ${
+                  page === currentPage
+                    ? "voucherHistoryPaginationBtn--active"
+                    : ""
+                }`}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </button>
+            )
+          )}
+
+          <button
+            type="button"
+            className="voucherHistoryPaginationBtn"
+            disabled={currentPage === totalPages}
+            onClick={() =>
+              setCurrentPage((page) => Math.min(page + 1, totalPages))
+            }
+          >
+            Next
+          </button>
         </div>
       </div>
     </section>

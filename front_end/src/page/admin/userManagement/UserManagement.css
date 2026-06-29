@@ -1,6 +1,10 @@
 .userManagementPage {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
   width: 100%;
   min-width: 0;
+  padding: 4px 0 10px;
   box-sizing: border-box;
 }
 

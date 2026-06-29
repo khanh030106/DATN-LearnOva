@@ -5,6 +5,7 @@ import com.example.back_end.dto.response.CourseDetailResponse;
 import com.example.back_end.dto.response.CreateDraftCourseResponse;
 import com.example.back_end.dto.response.FeaturedCourseResponse;
 import com.example.back_end.dto.response.GetFileUrlResponse;
+import com.example.back_end.dto.response.PublicCourseResponse;
 import com.example.back_end.dto.response.TeacherCoursesResponse;
 import com.example.back_end.dto.resquest.CreateDraftCourseRequest;
 import com.example.back_end.dto.resquest.UpdateCourseStatusRequest;
@@ -87,6 +88,16 @@ public class CourseController {
             return ResponseEntity.status(401).build();
         }
         return ResponseEntity.ok(courseService.getMyCourses(authentication.getName()));
+    }
+
+    @GetMapping("/public")
+    public List<PublicCourseResponse> getPublishedCourses() {
+        return courseService.getPublishedCourses();
+    }
+
+    @GetMapping("/public/{courseId}")
+    public PublicCourseResponse getPublishedCourse(@PathVariable Long courseId) {
+        return courseService.getPublishedCourse(courseId);
     }
 
 }

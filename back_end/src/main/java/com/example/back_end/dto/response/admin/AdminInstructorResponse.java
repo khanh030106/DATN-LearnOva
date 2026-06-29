@@ -30,7 +30,7 @@ public record AdminInstructorResponse(
     public record CourseSummary(
         Long id,
         String title,
-        String thumbnailUrl,
+        String thumbnailKey,
         String category,
         Long students,
         Double rating,

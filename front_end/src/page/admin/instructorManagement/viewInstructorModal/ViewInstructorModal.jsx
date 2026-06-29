@@ -214,8 +214,8 @@ const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClo
                       <tr key={course.id || course.courseId || course.title}>
                         <td>
                           <div className="course-cell">
-                            {course.thumbnailUrl ? (
-                              <img src={course.thumbnailUrl} alt={course.title || "Course"} />
+                            {course.thumbnailKey ? (
+                              <img src={course.thumbnailKey} alt={course.title || "Course"} />
                             ) : (
                               <span className="course-thumb-fallback">AI</span>
                             )}

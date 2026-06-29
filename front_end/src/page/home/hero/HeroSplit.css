@@ -10,6 +10,7 @@
     pointer-events: none;
     z-index: 0;
 }
+
 .hero__glow--1 {
     top: -80px; right: -80px;
     width: 600px; height: 600px;

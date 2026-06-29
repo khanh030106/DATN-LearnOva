@@ -76,14 +76,13 @@ const VoucherTable = ({
   const normalizedVouchers = useMemo(
     () =>
       vouchers.map((item) => {
-        const isActive = Boolean(item.isActive);
+        const isExpired = item.endDate && new Date(item.endDate) < new Date();
+        const usageLimit = Number(item.usageLimit || 0);
+        const usedCount = Number(item.usedCount || 0);
+        const isUsageLimitReached = usageLimit <= 0 || usedCount >= usageLimit;
+        const isActive = Boolean(item.isActive) && !isExpired && !isUsageLimitReached;
         const status = isActive ? "Active" : "Inactive";
-        const statusClass =
-          isActive && item.endDate && new Date(item.endDate) < new Date()
-            ? "expired"
-            : isActive
-            ? "active"
-            : "expired";
+        const statusClass = isActive ? "active" : "expired";
 
         return {
           id: item.id,

@@ -11,6 +11,7 @@ public class CreateAnswerRequest {
     @NotNull(message = "Question ID is required")
     @Positive(message = "Question ID must be a positive number")
     private Long parentId; // questionId
+    private Long parentAnswerId;
 
     @NotBlank(message = "Answer content is required")
     private String content;

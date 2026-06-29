@@ -43,4 +43,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             """)
     Optional<Course> findCourseDetailById(@Param("id") Long id);
 
+    List<Course> findByStatusAndIsDeletedFalseOrderByCreatedAtDesc(CourseStatus status);
+
 }

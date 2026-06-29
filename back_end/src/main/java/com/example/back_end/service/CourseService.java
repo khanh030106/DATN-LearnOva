@@ -1,33 +1,27 @@
 package com.example.back_end.service;
 
 import com.example.back_end.dto.response.CourseDetailResponse;
-import com.example.back_end.dto.response.CreateLessonResponse;
 import com.example.back_end.dto.response.FeaturedCourseResponse;
+import com.example.back_end.dto.response.PublicCourseResponse;
 import com.example.back_end.dto.response.TeacherCoursesResponse;
 import com.example.back_end.dto.resquest.CreateDraftCourseRequest;
-import com.example.back_end.dto.resquest.CreateLessonRequest;
-import com.example.back_end.dto.resquest.CreateSectionRequest;
 import com.example.back_end.entity.Category;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Coursecategory;
 import com.example.back_end.entity.CoursecategoryId;
-import com.example.back_end.entity.Section;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.CourseStatus;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
-import com.example.back_end.repository.CoursecategoryRepository;
 import com.example.back_end.repository.CourseRepository;
+import com.example.back_end.repository.CoursecategoryRepository;
 import com.example.back_end.repository.EnrollmentRepository;
-import com.example.back_end.repository.SectionRepository;
 import com.example.back_end.repository.UserRepository;
 import com.example.back_end.repository.admin.AdminCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Comparator;
@@ -47,10 +41,7 @@ public class CourseService {
     private final AdminCategoryRepository categoryRepository;
     private final EnrollmentRepository enrollmentRepository;
 
-    public Long createDraftCourse(
-            CreateDraftCourseRequest request,
-            String email
-    ) {
+    public Long createDraftCourse(CreateDraftCourseRequest request, String email) {
         User instructor = userRepository
                 .findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -115,25 +106,29 @@ public class CourseService {
 
         course.setStatus(newStatus);
         course.setUpdatedAt(Instant.now());
+
         if (newStatus == CourseStatus.PUBLISHED && course.getPublishedAt() == null) {
             course.setPublishedAt(OffsetDateTime.now());
         }
+
         courseRepository.save(course);
     }
 
     public List<TeacherCoursesResponse> getMyCourses(String email) {
-
         User instructor = userRepository
                 .findByEmailAndIsDeletedFalse(email)
-                .orElseThrow();
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         List<Course> courses = courseRepository
                 .findByInstructorIdAndIsDeletedFalseOrderByCreatedAtDesc(instructor.getId());
 
-        List<Long> courseIds = courses.stream().map(Course::getId).toList();
+        List<Long> courseIds = courses.stream()
+                .map(Course::getId)
+                .toList();
 
-        Map<Long, Long> enrollmentCountByCourseId = enrollmentRepository
-                .findByCourseIdIn(courseIds)
+        Map<Long, Long> enrollmentCountByCourseId = courseIds.isEmpty()
+                ? Map.of()
+                : enrollmentRepository.findByCourseIdIn(courseIds)
                 .stream()
                 .collect(Collectors.groupingBy(e -> e.getCourse().getId(), Collectors.counting()));
 
@@ -175,6 +170,7 @@ public class CourseService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public CourseDetailResponse getCourseDetail(Long courseId) {
         Course course = courseRepository.findCourseDetailById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
@@ -193,42 +189,73 @@ public class CourseService {
                             .filter(l -> !Boolean.TRUE.equals(l.getIsDeleted()))
                             .sorted(Comparator.comparingDouble(l -> l.getLessonOrder() != null ? l.getLessonOrder() : 0.0))
                             .map(l -> new CourseDetailResponse.LessonInfo(
-                                    l.getId(), l.getTitle(), l.getLessonOrder(),
-                                    l.getDurationSeconds(), l.getVideoKey(), l.getIsPreview()
+                                    l.getId(),
+                                    l.getTitle(),
+                                    l.getLessonOrder(),
+                                    l.getDurationSeconds(),
+                                    l.getVideoKey(),
+                                    l.getIsPreview()
                             ))
                             .toList();
-                    return new CourseDetailResponse.SectionInfo(s.getId(), s.getTitle(), s.getSectionOrder(), lessons);
+
+                    return new CourseDetailResponse.SectionInfo(
+                            s.getId(),
+                            s.getTitle(),
+                            s.getSectionOrder(),
+                            lessons
+                    );
                 })
                 .toList();
 
-        long lessonCount = sections.stream().mapToLong(s -> s.lessons().size()).sum();
+        long lessonCount = sections.stream()
+                .mapToLong(s -> s.lessons().size())
+                .sum();
+
         long totalDurationSeconds = sections.stream()
                 .flatMap(s -> s.lessons().stream())
                 .mapToLong(l -> l.durationSeconds() != null ? l.durationSeconds() : 0)
                 .sum();
 
-        var instructor = course.getInstructor();
-        var instructorInfo = new CourseDetailResponse.InstructorInfo(
-                instructor.getId(), instructor.getFullName(), instructor.getAvatar()
-        );
+        User instructor = course.getInstructor();
+
+        CourseDetailResponse.InstructorInfo instructorInfo =
+                new CourseDetailResponse.InstructorInfo(
+                        instructor.getId(),
+                        instructor.getFullName(),
+                        instructor.getAvatar()
+                );
 
         return new CourseDetailResponse(
-                course.getId(), course.getTitle(), course.getDescription(),
-                course.getThumbnailKey(), course.getBasePrice(), course.getLevel(),
-                course.getLanguage(), course.getRequirements(), course.getWhatYouLearn(),
-                categoryName, lessonCount, totalDurationSeconds, instructorInfo, sections
+                course.getId(),
+                course.getTitle(),
+                course.getDescription(),
+                course.getThumbnailKey(),
+                course.getBasePrice(),
+                course.getLevel(),
+                course.getLanguage(),
+                course.getRequirements(),
+                course.getWhatYouLearn(),
+                categoryName,
+                lessonCount,
+                totalDurationSeconds,
+                instructorInfo,
+                sections
         );
     }
 
+    @Transactional(readOnly = true)
     public List<FeaturedCourseResponse> getFeaturedCourses() {
         List<Course> published = courseRepository.findAllByStatus(CourseStatus.PUBLISHED);
 
-        List<Long> courseIds = published.stream().map(Course::getId).toList();
+        List<Long> courseIds = published.stream()
+                .map(Course::getId)
+                .toList();
 
         Map<Long, Long> enrollmentCountByCourseId = courseIds.isEmpty()
                 ? Map.of()
-                : enrollmentRepository.findByCourseIdIn(courseIds).stream()
-                        .collect(Collectors.groupingBy(e -> e.getCourse().getId(), Collectors.counting()));
+                : enrollmentRepository.findByCourseIdIn(courseIds)
+                .stream()
+                .collect(Collectors.groupingBy(e -> e.getCourse().getId(), Collectors.counting()));
 
         return published.stream()
                 .sorted((a, b) -> Long.compare(
@@ -274,4 +301,35 @@ public class CourseService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<PublicCourseResponse> getPublishedCourses() {
+        return courseRepository
+                .findByStatusAndIsDeletedFalseOrderByCreatedAtDesc(CourseStatus.PUBLISHED)
+                .stream()
+                .map(this::toPublicCourseResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public PublicCourseResponse getPublishedCourse(Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                .filter(item -> item.getStatus() == CourseStatus.PUBLISHED)
+                .filter(item -> !Boolean.TRUE.equals(item.getIsDeleted()))
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+
+        return toPublicCourseResponse(course);
+    }
+
+    private PublicCourseResponse toPublicCourseResponse(Course course) {
+        return new PublicCourseResponse(
+                course.getId(),
+                course.getTitle(),
+                course.getDescription(),
+                course.getInstructor().getFullName(),
+                course.getBasePrice(),
+                course.getLevel(),
+                course.getStatus(),
+                course.getThumbnailKey()
+        );
+    }
 }
