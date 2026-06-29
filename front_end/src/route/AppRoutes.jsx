@@ -45,7 +45,7 @@ const App = () => {
             <Routes>
 
                 <Route path="/learnova/auth/login" element={<AuthPage/>}/>
-                <Route path="/learnova/user/Courses-detail" element={<CourseDetail/>}/>
+                <Route path="/learnova/user/courses-detail" element={<CourseDetail/>}/>
                 <Route path="/learnova/user/CoursesDetail/:courseId" element={<CourseDetail/>}/>
                 <Route path="/oauth2-success" element={<OAuth2Success />}/>
                 <Route path="/payment/success" element={<PaymentSuccess />}/>
