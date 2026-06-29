@@ -1656,6 +1656,7 @@ hr {
     display:flex;
     gap:8px;
     align-items:center;
+    margin-left: 750px;
 }
 .review-filter :focus {
     outline: none;
@@ -1686,7 +1687,7 @@ hr {
     width:48px;
     height:48px;
     border-radius:50%;
-    background:#111827; color:#fff;
+    background: #2360e4; color:#fff;
     display:flex; align-items:center;
     justify-content:center;
     font-weight:700;

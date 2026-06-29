@@ -125,17 +125,7 @@ function ReviewsTab({
             <h3 className="reviews-title">Reviews</h3>
 
             <div className="review-controls">
-                <div className="review-search">
-                    <input
-                        type="text"
-                        placeholder="Search reviews"
-                        value={reviewQuery}
-                        onChange={handleSearchReviews}
-                    />
-                    <button className="search-btn">
-                        <FiSearch />
-                    </button>
-                </div>
+
 
                 <div className="review-filter">
                     <label>Filter ratings</label>
