@@ -24,6 +24,10 @@ public class CookieService {
     @Value("${server.cookie.secure:false}")
     private boolean secureCookie;
 
+    private String getSameSitePolicy() {
+        return secureCookie ? "None" : "Lax";
+    }
+
     public ResponseCookie createRefreshTokenCookie(String refreshToken, Boolean remember) {
         Long expiration = Boolean.TRUE.equals(remember)
                 ? refreshTokenRememberExpiration
@@ -34,7 +38,7 @@ public class CookieService {
                 .secure(secureCookie)
                 .path("/api/learnova/auth")
                 .maxAge(Duration.ofMillis(expiration))
-                .sameSite("Lax")
+                .sameSite(getSameSitePolicy())
                 .build();
     }
 
@@ -44,7 +48,7 @@ public class CookieService {
                 .secure(secureCookie)
                 .path("/api/learnova/auth")
                 .maxAge(0)
-                .sameSite("Lax")
+                .sameSite(getSameSitePolicy())
                 .build();
     }
 
@@ -54,7 +58,7 @@ public class CookieService {
                 .secure(secureCookie)
                 .path("/")
                 .maxAge(Duration.ofMillis(accessTokenExpiration))
-                .sameSite("Lax")
+                .sameSite(getSameSitePolicy())
                 .build();
     }
 
@@ -64,7 +68,7 @@ public class CookieService {
                 .secure(secureCookie)
                 .path("/")
                 .maxAge(0)
-                .sameSite("Lax")
+                .sameSite(getSameSitePolicy())
                 .build();
     }
 }

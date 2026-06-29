@@ -97,7 +97,7 @@
         private Object searchVector;
 
         @NotNull
-        @Column(name = "thumbnail_key", nullable = false, length = Integer.MAX_VALUE)
+        @Column(name = "thumbnail_url", nullable = false, length = Integer.MAX_VALUE)
         private String thumbnailKey;
 
         @OneToMany(mappedBy = "course")
