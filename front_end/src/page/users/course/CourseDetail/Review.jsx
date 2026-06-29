@@ -128,7 +128,7 @@ function ReviewsTab({
 
 
                 <div className="review-filter">
-                    <label>Filter ratings</label>
+
                     <select value={ratingFilter} onChange={handleRatingFilter}>
                         <option value="all">All ratings</option>
                         <option value={5}>5 stars</option>

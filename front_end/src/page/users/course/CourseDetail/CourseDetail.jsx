@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Footer from "../../../../component/footer/footer-courseDetail/footer-courseDetail.jsx";
 import CourseVideoPlayer from "./VideoPlayer.jsx";
 import OverviewTab from "./OverviewTab.jsx";
+import SummaryTab from "./summayTab.jsx";
 import QATab from "./QATab.jsx";
 import ReviewsTab from "./Review.jsx";
 import LearnovaAI from "../../../home/AI/AI.jsx";
@@ -253,6 +254,8 @@ function CourseDetail() {
                             <button className={`tab-btn ${activeTab === "qa" ? "active" : ""}`} onClick={() => setActiveTab("qa")}>Q&A</button>
                             <button className={`tab-btn ${activeTab === "reviews" ? "active" : ""}`} onClick={() => setActiveTab("reviews")}>Reviews</button>
                             <button className={`tab-btn ${activeTab === "quiz" ? "active" : ""}`} onClick={() => setActiveTab("quiz")}>Quiz</button>
+                            <button className={`tab-btn ${activeTab === "summary" ? "active" : ""}`} onClick={() => setActiveTab("summary")}>Summary</button>
+
                         </div>
                     </div>
 
@@ -309,6 +312,7 @@ function CourseDetail() {
                     </div>
 
                     {activeTab === "quiz" && <QuizPage />}
+                    {activeTab === "summary" && <SummaryTab />}
 
                     <div className="footer-wrapper">
                         <Footer />

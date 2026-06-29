@@ -534,18 +534,7 @@ function QATab({
 
   return (
       <div className="qa-content">
-          <div className="qa-search-container">
-              <input
-                  type="text"
-                  placeholder="Search all course questions"
-                  className="qa-search-box"
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-              />
-              <button className="qa-search-btn">
-                  <FaSearch />
-              </button>
-          </div>
+
 
           {/* Filters */}
 
@@ -583,7 +572,7 @@ function QATab({
                   className="qa-ask-btn"
                   onClick={() => setShowQuestionForm(!showQuestionForm)}
               >
-                  + Ask a new question
+                  +
               </button>
 
 
