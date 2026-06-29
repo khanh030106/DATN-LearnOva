@@ -3086,7 +3086,7 @@ color: #4b73e8;
 
 .curriculum-progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #6366f1 0%, #10b981 100%);
+    background: #4a8fea;
     border-radius: 4px;
     transition: width 0.4s ease;
 }
@@ -3118,4 +3118,18 @@ color: #4b73e8;
 .lesson-icon.completed {
     color: #10b981;
     font-size: 16px;
-}
+}
+
+.reviewed-badge {
+    margin-top: 12px;
+    width: 100%;
+    padding: 8px 14px;
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+}
+

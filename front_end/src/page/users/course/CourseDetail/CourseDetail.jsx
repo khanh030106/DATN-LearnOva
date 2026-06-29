@@ -110,40 +110,53 @@ function CourseDetail() {
         getRatingSummaryApi(courseId).then(setRatingSummary).catch(console.error);
     }, [courseId]);
 
+    const hasReviewed = reviewsData?.some((r) => {
+        const ownerId = r.userId || r.idUser || r.id || (r.user && r.user.id);
+        return currentUserId && ownerId && String(ownerId) === String(currentUserId);
+    });
+
+    const isCourseCompleted = !!(
+        courseProgress?.isCourseCompleted ||
+        courseProgress?.courseCompleted ||
+        Math.round(courseProgress?.courseProgressPercent || 0) === 100
+    );
+
     useEffect(() => {
         if (!courseId || !currentUserId) return;
         getCourseProgressApi(courseId)
             .then((data) => {
                 setCourseProgress(data);
-                const hasReviewed = reviewsData.some((r) => String(r.userId) === String(currentUserId));
-                if (data?.isCourseCompleted && !hasReviewed && !hasAutoPromptedReview.current) {
+                const isCompleted = data?.isCourseCompleted || data?.courseCompleted || Math.round(data?.courseProgressPercent || 0) === 100;
+                if (isCompleted && !hasReviewed && !hasAutoPromptedReview.current) {
                     hasAutoPromptedReview.current = true;
                     setShowReviewModal(true);
                 }
             })
-            .catch(console.error);
-    }, [courseId, currentUserId, reviewsData]);
+            .catch((err) => {
+                // Ignore if not enrolled or unauthenticated
+            });
+    }, [courseId, currentUserId, reviewsData, hasReviewed]);
 
     const handleVideoProgressUpdate = useCallback(async (currentTime) => {
         if (!activeLesson || !currentUserId) return;
         try {
             const res = await updateLessonProgressApi(activeLesson.lessonId, currentTime);
             setCourseProgress(res);
-            const hasReviewed = reviewsData.some((r) => String(r.userId) === String(currentUserId));
-            if (res.isCourseCompleted && !hasReviewed && !hasAutoPromptedReview.current) {
+            const isCompleted = res?.isCourseCompleted || res?.courseCompleted || Math.round(res?.courseProgressPercent || 0) === 100;
+            if (isCompleted && !hasReviewed && !hasAutoPromptedReview.current) {
                 hasAutoPromptedReview.current = true;
                 setShowReviewModal(true);
             }
         } catch (err) {
-            console.error("Error updating progress:", err);
+            // Silence progress update errors for non-enrolled users
         }
-    }, [activeLesson, currentUserId, reviewsData]);
+    }, [activeLesson, currentUserId, reviewsData, hasReviewed]);
 
     const handleReviewSubmit = async ({ rating, comment }) => {
         setIsSubmittingReview(true);
         try {
             await createReviewApi({ courseId: Number(courseId), rating, comment });
-            toast.success("Cảm ơn bạn đã đánh giá khóa học!");
+            toast.success("Thank you for rating the course.!");
             setShowReviewModal(false);
             const updatedReviews = await getCourseReviewsApi(courseId);
             setReviewsData(updatedReviews);
@@ -288,6 +301,9 @@ function CourseDetail() {
                                 toggleHelpful={toggleHelpful}
                                 handleSearchReviews={handleSearchReviews}
                                 handleRatingFilter={handleRatingFilter}
+                                isCourseCompleted={isCourseCompleted}
+                                hasReviewed={hasReviewed}
+                                openReviewModal={() => setShowReviewModal(true)}
                             />
                         )}
                     </div>
@@ -305,9 +321,9 @@ function CourseDetail() {
                         {courseProgress && (
                             <div className="curriculum-progress-box">
                                 <div className="curriculum-progress-header">
-                                    <span className="curriculum-progress-title">Tiến độ khóa học</span>
+                                    <span className="curriculum-progress-title">Course progress</span>
                                     <span className="curriculum-progress-text">
-                                        {courseProgress.completedLessonsCount}/{courseProgress.totalLessonsCount} Bài học ({Math.round(courseProgress.courseProgressPercent)}%)
+                                        {courseProgress.completedLessonsCount}/{courseProgress.totalLessonsCount} Lesson ({Math.round(courseProgress.courseProgressPercent)}%)
                                     </span>
                                 </div>
                                 <div className="curriculum-progress-bar-track">
@@ -316,13 +332,18 @@ function CourseDetail() {
                                         style={{ width: `${courseProgress.courseProgressPercent}%` }}
                                     />
                                 </div>
-                                {courseProgress.isCourseCompleted && (
+                                {isCourseCompleted && !hasReviewed && (
                                     <button
                                         className="btn-review-trigger"
                                         onClick={() => setShowReviewModal(true)}
                                     >
-                                        <FaStar /> Đánh giá khóa học
+                                        <FaStar /> Course Review
                                     </button>
+                                )}
+                                {isCourseCompleted && hasReviewed && (
+                                    <div className="reviewed-badge">
+                                        ✓ You have rated this course.
+                                    </div>
                                 )}
                             </div>
                         )}

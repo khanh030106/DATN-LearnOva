@@ -22,7 +22,10 @@ function ReviewsTab({
                         handleRatingFilter,
                         currentReviewPage,
                         setCurrentReviewPage,
-                        reviewsPerPage
+                        reviewsPerPage,
+                        isCourseCompleted,
+                        hasReviewed,
+                        openReviewModal
                     }) {
     const [openMenuId, setOpenMenuId] = useState(null);
     const [editingId, setEditingId] = useState(null);
@@ -32,9 +35,6 @@ function ReviewsTab({
     const toggleMenu = (id) => {
         setOpenMenuId(prev => (prev === id ? null : id));
     };
-    const [showReviewModal, setShowReviewModal] = useState(false);
-    const [rating, setRating] = useState(5);
-    const [newComment, setNewComment] = useState("");
     const filteredReviews = (reviewsData || []).filter((r) => {
         const matchRating =
             ratingFilter === "all" ||
@@ -61,37 +61,7 @@ function ReviewsTab({
     const isNoResult =
         !hasNoReviews &&
         filteredReviews.length === 0;
-    if (!reviewsData || reviewsData.length === 0) {
-        return (
-            <div className="no-reviews">
-                <FaRegCommentDots size={48} color="#999" />
-                <h3>No reviews yet</h3>
-                <p>Be the first to leave a review for this course.</p>
-            </div>
-        );
-    }
-    const handleCreateReview = async () => {
-        try {
 
-            await createReviewApi({
-                courseId: course.id,
-                rating,
-                comment: newComment
-            });
-
-            toast.success("Review submitted!");
-
-            setShowReviewModal(false);
-            setRating(5);
-            setNewComment("");
-
-            // gọi lại API load review
-            loadReviews();
-
-        } catch (err) {
-            toast.error("Submit failed!");
-        }
-    };
     return (
         <div className="reviews-section">
             <div className="rating-summary">
@@ -149,15 +119,8 @@ function ReviewsTab({
                     </div>
                 </div>
             </div>
-            {/* REVIEW FORM */}
-            <div className="review-action">
-                <button
-                    className="write-review-btn"
-                    onClick={() => setShowReviewModal(true)}
-                >
-                    Write a Review
-                </button>
-            </div>
+            {/* REVIEW FORM ACTION */}
+
 
             <h3 className="reviews-title">Reviews</h3>
 
@@ -204,8 +167,7 @@ function ReviewsTab({
                         reviewOwnerId &&
                         String(currentUserId) === String(reviewOwnerId);
 
-                    console.log("IS OWNER =", isOwner);
-                    console.log("================================");
+
 
                     const displayComment = r.comment || r.text || "";
                     const displayName = r.userName || r.name || "Anonymous";
@@ -369,53 +331,6 @@ function ReviewsTab({
                     ›
                 </button>
             </div>
-            {showReviewModal && (
-                <div className="review-modal-overlay">
-                    <div className="review-modal">
-
-                        <h2>Review this course</h2>
-
-                        <div className="review-stars-select">
-                            {[1,2,3,4,5].map(star => (
-                                <MdStar
-                                    key={star}
-                                    className={
-                                        star <= rating
-                                            ? "star-rate active"
-                                            : "star-rate"
-                                    }
-                                    onClick={() => setRating(star)}
-                                />
-                            ))}
-                        </div>
-
-                        <textarea
-                            placeholder="Share your experience..."
-                            value={newComment}
-                            onChange={(e)=>setNewComment(e.target.value)}
-                        />
-
-                        <div className="modal-actions">
-
-                            <button
-                                className="cancel-btn"
-                                onClick={() => setShowReviewModal(false)}
-                            >
-                                Cancel
-                            </button>
-
-                            <button
-                                className="submit-btn"
-                                onClick={handleCreateReview}
-                            >
-                                Submit
-                            </button>
-
-                        </div>
-
-                    </div>
-                </div>
-            )}
         </div>
     );
 }

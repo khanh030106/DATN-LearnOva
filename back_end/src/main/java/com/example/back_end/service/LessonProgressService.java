@@ -7,7 +7,9 @@ import com.example.back_end.entity.Lesson;
 import com.example.back_end.entity.Lessonprogress;
 import com.example.back_end.entity.LessonprogressId;
 import com.example.back_end.entity.User;
+import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
+import com.example.back_end.repository.EnrollmentRepository;
 import com.example.back_end.repository.LessonRepository;
 import com.example.back_end.repository.LessonprogressRepository;
 import com.example.back_end.repository.UserRepository;
@@ -27,47 +29,57 @@ public class LessonProgressService {
     private final LessonprogressRepository lessonprogressRepository;
     private final LessonRepository lessonRepository;
     private final UserRepository userRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
     @Transactional
     public CourseProgressResponse updateProgress(Long userId, UpdateLessonProgressRequest request) {
         Lesson lesson = lessonRepository.findById(request.getLessonId())
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson not found with id: " + request.getLessonId()));
 
+        Long courseId = lesson.getSection().getCourse().getId();
+
+        boolean isEnrolled = enrollmentRepository.existsByUserIdAndCourseId(userId, courseId);
+        if (!isEnrolled) {
+            throw new BusinessException("Bạn chưa đăng ký khóa học này!");
+        }
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
-        LessonprogressId id = new LessonprogressId();
-        id.setUserId(userId);
-        id.setLessonId(request.getLessonId());
-
-        Lessonprogress progress = lessonprogressRepository.findById(id).orElseGet(() -> {
-            Lessonprogress newProgress = new Lessonprogress();
-            newProgress.setId(id);
-            newProgress.setUser(user);
-            newProgress.setLesson(lesson);
-            newProgress.setIsCompleted(false);
-            newProgress.setWatchedSeconds(0);
-            return newProgress;
-        });
+        Lessonprogress progress = lessonprogressRepository.findByUserIdAndLessonId(userId, request.getLessonId())
+                .orElseGet(() -> {
+                    Lessonprogress newProgress = new Lessonprogress();
+                    LessonprogressId id = new LessonprogressId();
+                    id.setUserId(userId);
+                    id.setLessonId(request.getLessonId());
+                    newProgress.setId(id);
+                    newProgress.setUser(user);
+                    newProgress.setLesson(lesson);
+                    newProgress.setIsCompleted(false);
+                    newProgress.setWatchedSeconds(0);
+                    return newProgress;
+                });
 
         int currentWatched = progress.getWatchedSeconds() != null ? progress.getWatchedSeconds() : 0;
-        int newWatched = Math.max(currentWatched, request.getWatchedSeconds());
+        int newWatched = Math.max(currentWatched, request.getWatchedSeconds() != null ? request.getWatchedSeconds() : 0);
         progress.setWatchedSeconds(newWatched);
 
         int duration = lesson.getDurationSeconds() != null && lesson.getDurationSeconds() > 0
                 ? lesson.getDurationSeconds()
                 : 0;
 
-        if (duration > 0) {
+        boolean currentlyCompleted = Boolean.TRUE.equals(progress.getIsCompleted());
+        if (!currentlyCompleted && duration > 0) {
             double percent = ((double) newWatched / duration) * 100.0;
             if (percent >= 95.0) {
                 progress.setIsCompleted(true);
             }
+        } else if (!currentlyCompleted && duration == 0) {
+            progress.setIsCompleted(true);
         }
 
         lessonprogressRepository.save(progress);
 
-        Long courseId = lesson.getSection().getCourse().getId();
         return getCourseProgress(userId, courseId);
     }
 

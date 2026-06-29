@@ -29,4 +29,7 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Enrollme
     );
 
     boolean existsByIdCourseIdAndIdUserId(Long courseId, Long userId);
+
+    @Query("SELECT COUNT(e) > 0 FROM Enrollment e WHERE e.user.id = :userId AND e.course.id = :courseId")
+    boolean existsByUserIdAndCourseId(@Param("userId") Long userId, @Param("courseId") Long courseId);
 }

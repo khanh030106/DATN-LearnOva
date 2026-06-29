@@ -1,5 +1,6 @@
 package com.example.back_end.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,14 @@ public class CourseProgressResponse {
     private long completedLessonsCount;
     private long totalLessonsCount;
     private double courseProgressPercent;
+    
+    @JsonProperty("isCourseCompleted")
     private boolean isCourseCompleted;
+
+    @JsonProperty("isCourseCompleted")
+    public boolean isCourseCompleted() {
+        return this.isCourseCompleted;
+    }
+    
     private List<LessonProgressResponse> lessonProgresses;
 }
