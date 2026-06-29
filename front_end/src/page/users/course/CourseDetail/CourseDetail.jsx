@@ -1,7 +1,7 @@
 import "./CourseDetail.css";
-import { FaClipboardCheck, FaPlay, FaPlayCircle, FaClock } from "react-icons/fa";
+import { FaClipboardCheck, FaPlay, FaPlayCircle, FaClock, FaCheckCircle, FaStar } from "react-icons/fa";
 import { ChevronDown } from "lucide-react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "../../../../component/footer/footer-courseDetail/footer-courseDetail.jsx";
 import CourseVideoPlayer from "./VideoPlayer.jsx";
@@ -11,10 +11,12 @@ import ReviewsTab from "./Review.jsx";
 import LearnovaAI from "../../../home/AI/AI.jsx";
 import QuizPage from "./QuizPage.jsx";
 import Header from "../../../../component/header/user_header/Header.jsx";
-import { getCourseReviewsApi, deleteReviewApi, getRatingSummaryApi } from "../../../../api/ReviewApi.js";
+import ReviewModal from "./ReviewModal.jsx";
+import { getCourseReviewsApi, deleteReviewApi, getRatingSummaryApi, createReviewApi } from "../../../../api/ReviewApi.js";
 import { getCourseDetail, getFileUrl } from "../../../../api/PublicCourseApi.js";
+import { getCourseProgressApi, updateLessonProgressApi } from "../../../../api/ProgressApi.js";
 import { qaData } from "./mockCourseData.js";
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext, useCallback, useRef } from "react";
 import { AuthContext } from "../../../../context/AuthContext";
 import { useParams } from "react-router-dom";
 
@@ -48,6 +50,11 @@ function CourseDetail() {
 
     const { currentUser } = useContext(AuthContext);
     const currentUserId = currentUser?.id || currentUser?.userId || currentUser?.idUser;
+
+    const [courseProgress, setCourseProgress] = useState(null);
+    const [showReviewModal, setShowReviewModal] = useState(false);
+    const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+    const hasAutoPromptedReview = useRef(false);
 
     const [reviewQuery, setReviewQuery] = useState("");
     const [ratingFilter, setRatingFilter] = useState("all");
@@ -102,6 +109,52 @@ function CourseDetail() {
         getCourseReviewsApi(courseId).then(setReviewsData).catch(console.error);
         getRatingSummaryApi(courseId).then(setRatingSummary).catch(console.error);
     }, [courseId]);
+
+    useEffect(() => {
+        if (!courseId || !currentUserId) return;
+        getCourseProgressApi(courseId)
+            .then((data) => {
+                setCourseProgress(data);
+                const hasReviewed = reviewsData.some((r) => String(r.userId) === String(currentUserId));
+                if (data?.isCourseCompleted && !hasReviewed && !hasAutoPromptedReview.current) {
+                    hasAutoPromptedReview.current = true;
+                    setShowReviewModal(true);
+                }
+            })
+            .catch(console.error);
+    }, [courseId, currentUserId, reviewsData]);
+
+    const handleVideoProgressUpdate = useCallback(async (currentTime) => {
+        if (!activeLesson || !currentUserId) return;
+        try {
+            const res = await updateLessonProgressApi(activeLesson.lessonId, currentTime);
+            setCourseProgress(res);
+            const hasReviewed = reviewsData.some((r) => String(r.userId) === String(currentUserId));
+            if (res.isCourseCompleted && !hasReviewed && !hasAutoPromptedReview.current) {
+                hasAutoPromptedReview.current = true;
+                setShowReviewModal(true);
+            }
+        } catch (err) {
+            console.error("Error updating progress:", err);
+        }
+    }, [activeLesson, currentUserId, reviewsData]);
+
+    const handleReviewSubmit = async ({ rating, comment }) => {
+        setIsSubmittingReview(true);
+        try {
+            await createReviewApi({ courseId: Number(courseId), rating, comment });
+            toast.success("Cảm ơn bạn đã đánh giá khóa học!");
+            setShowReviewModal(false);
+            const updatedReviews = await getCourseReviewsApi(courseId);
+            setReviewsData(updatedReviews);
+            const updatedSummary = await getRatingSummaryApi(courseId);
+            setRatingSummary(updatedSummary);
+        } catch (err) {
+            toast.error(err.response?.data?.message || err.message || "Đã xảy ra lỗi khi gửi đánh giá.");
+        } finally {
+            setIsSubmittingReview(false);
+        }
+    };
 
     const handleLessonClick = useCallback(async (lesson) => {
         if (!lesson.videoKey || lesson.lessonId === activeLesson?.lessonId) return;
@@ -169,7 +222,16 @@ function CourseDetail() {
             <div className="main-layout">
                 {/* LEFT SIDE */}
                 <div className="left-side">
-                    <CourseVideoPlayer src={videoUrl} loading={loadingVideo} />
+                    <CourseVideoPlayer
+                        src={videoUrl}
+                        loading={loadingVideo}
+                        initialTime={
+                            courseProgress?.lessonProgresses?.find(
+                                (p) => p.lessonId === activeLesson?.lessonId
+                            )?.watchedSeconds || 0
+                        }
+                        onProgressUpdate={handleVideoProgressUpdate}
+                    />
                     <ToastContainer />
 
                     <div className="tabs-container">
@@ -240,6 +302,31 @@ function CourseDetail() {
                 {/* RIGHT SIDE - Curriculum */}
                 <aside className="right-side">
                     <div className="curriculum-sidebar">
+                        {courseProgress && (
+                            <div className="curriculum-progress-box">
+                                <div className="curriculum-progress-header">
+                                    <span className="curriculum-progress-title">Tiến độ khóa học</span>
+                                    <span className="curriculum-progress-text">
+                                        {courseProgress.completedLessonsCount}/{courseProgress.totalLessonsCount} Bài học ({Math.round(courseProgress.courseProgressPercent)}%)
+                                    </span>
+                                </div>
+                                <div className="curriculum-progress-bar-track">
+                                    <div
+                                        className="curriculum-progress-bar-fill"
+                                        style={{ width: `${courseProgress.courseProgressPercent}%` }}
+                                    />
+                                </div>
+                                {courseProgress.isCourseCompleted && (
+                                    <button
+                                        className="btn-review-trigger"
+                                        onClick={() => setShowReviewModal(true)}
+                                    >
+                                        <FaStar /> Đánh giá khóa học
+                                    </button>
+                                )}
+                            </div>
+                        )}
+
                         {course.sections.map((section, sIdx) => (
                             <div key={section.sectionId} className="curriculum-section">
                                 <div className="section-header-qa" onClick={() => toggleSection(section.sectionId)}>
@@ -266,22 +353,33 @@ function CourseDetail() {
 
                                 {expandedSections.includes(section.sectionId) && (
                                     <div className="lessons-sidebar">
-                                        {section.lessons.map((lesson) => (
-                                            <div
-                                                key={lesson.lessonId}
-                                                className={`lesson-item ${activeLesson?.lessonId === lesson.lessonId ? "active" : ""}`}
-                                                onClick={() => handleLessonClick(lesson)}
-                                                style={{ cursor: lesson.videoKey ? "pointer" : "default" }}
-                                            >
-                                                <div className="lesson-info">
-                                                    <FaPlay className="lesson-icon" />
-                                                    <span className="lesson-name">{lesson.title}</span>
+                                        {section.lessons.map((lesson) => {
+                                            const lp = courseProgress?.lessonProgresses?.find(
+                                                (p) => p.lessonId === lesson.lessonId
+                                            );
+                                            const isCompleted = lp?.isCompleted;
+
+                                            return (
+                                                <div
+                                                    key={lesson.lessonId}
+                                                    className={`lesson-item ${activeLesson?.lessonId === lesson.lessonId ? "active" : ""}`}
+                                                    onClick={() => handleLessonClick(lesson)}
+                                                    style={{ cursor: lesson.videoKey ? "pointer" : "default" }}
+                                                >
+                                                    <div className="lesson-info">
+                                                        {isCompleted ? (
+                                                            <FaCheckCircle className="lesson-icon completed" />
+                                                        ) : (
+                                                            <FaPlay className="lesson-icon" />
+                                                        )}
+                                                        <span className="lesson-name">{lesson.title}</span>
+                                                    </div>
+                                                    <span className="lesson-time">
+                                                        {formatDuration(lesson.durationSeconds)}
+                                                    </span>
                                                 </div>
-                                                <span className="lesson-time">
-                                                    {formatDuration(lesson.durationSeconds)}
-                                                </span>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
 
                                         <div
                                             className="quiz-item"
@@ -307,6 +405,13 @@ function CourseDetail() {
                     </div>
                 </aside>
             </div>
+
+            <ReviewModal
+                isOpen={showReviewModal}
+                onClose={() => setShowReviewModal(false)}
+                onSubmit={handleReviewSubmit}
+                isSubmitting={isSubmittingReview}
+            />
 
             <div className="chatbot-fixed">
                 <LearnovaAI />
