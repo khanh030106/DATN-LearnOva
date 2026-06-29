@@ -3,6 +3,7 @@ import { MdStar } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import { FaRegCommentDots } from "react-icons/fa";
 import {
+    createReviewApi,
     updateReviewApi,
     deleteReviewApi
 } from "../../../../api/ReviewApi.js";
@@ -26,10 +27,14 @@ function ReviewsTab({
     const [openMenuId, setOpenMenuId] = useState(null);
     const [editingId, setEditingId] = useState(null);
     const [editText, setEditText] = useState("");
+
     // Toggle đóng mở menu 3 chấm
     const toggleMenu = (id) => {
         setOpenMenuId(prev => (prev === id ? null : id));
     };
+    const [showReviewModal, setShowReviewModal] = useState(false);
+    const [rating, setRating] = useState(5);
+    const [newComment, setNewComment] = useState("");
     const filteredReviews = (reviewsData || []).filter((r) => {
         const matchRating =
             ratingFilter === "all" ||
@@ -65,6 +70,28 @@ function ReviewsTab({
             </div>
         );
     }
+    const handleCreateReview = async () => {
+        try {
+
+            await createReviewApi({
+                courseId: course.id,
+                rating,
+                comment: newComment
+            });
+
+            toast.success("Review submitted!");
+
+            setShowReviewModal(false);
+            setRating(5);
+            setNewComment("");
+
+            // gọi lại API load review
+            loadReviews();
+
+        } catch (err) {
+            toast.error("Submit failed!");
+        }
+    };
     return (
         <div className="reviews-section">
             <div className="rating-summary">
@@ -121,6 +148,15 @@ function ReviewsTab({
                         })}
                     </div>
                 </div>
+            </div>
+            {/* REVIEW FORM */}
+            <div className="review-action">
+                <button
+                    className="write-review-btn"
+                    onClick={() => setShowReviewModal(true)}
+                >
+                    Write a Review
+                </button>
             </div>
 
             <h3 className="reviews-title">Reviews</h3>
@@ -333,6 +369,53 @@ function ReviewsTab({
                     ›
                 </button>
             </div>
+            {showReviewModal && (
+                <div className="review-modal-overlay">
+                    <div className="review-modal">
+
+                        <h2>Review this course</h2>
+
+                        <div className="review-stars-select">
+                            {[1,2,3,4,5].map(star => (
+                                <MdStar
+                                    key={star}
+                                    className={
+                                        star <= rating
+                                            ? "star-rate active"
+                                            : "star-rate"
+                                    }
+                                    onClick={() => setRating(star)}
+                                />
+                            ))}
+                        </div>
+
+                        <textarea
+                            placeholder="Share your experience..."
+                            value={newComment}
+                            onChange={(e)=>setNewComment(e.target.value)}
+                        />
+
+                        <div className="modal-actions">
+
+                            <button
+                                className="cancel-btn"
+                                onClick={() => setShowReviewModal(false)}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                className="submit-btn"
+                                onClick={handleCreateReview}
+                            >
+                                Submit
+                            </button>
+
+                        </div>
+
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
