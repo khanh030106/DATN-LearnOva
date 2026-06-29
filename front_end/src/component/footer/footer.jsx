@@ -1,7 +1,8 @@
 import './footer.css';
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaTwitch, FaYoutube } from 'react-icons/fa';
-// use explicit path to ensure correct file extension in DOM
+import logo from "../../assets/LogoText.png";
 
+// use the same logo asset as header for visual consistency
 export default function Footer() {
     return (
         <footer className="footer" aria-label="Site footer" style={{ backgroundColor: '#fafbfd', color: '#0f1724' }}>
@@ -10,14 +11,14 @@ export default function Footer() {
                     {/* Brand */}
                     <div className="footer__brand">
                         <div className="footer__logo">
-                            <img src="/src/assets/LogoText.png" alt="LearnOva" className="footer__logo-img" />
+                            <img src={logo} alt="LearnOva" className="footer__logo-img" />
                         </div>
                         <p className="footer__tagline">
                             Empowering 10 million learners worldwide to build real skills
                             and transform their careers.
                         </p>
                         <div className="footer__socials">
-                            <a href="#" aria-label="Facebook" className="footer__social-icon"><FaFacebookF /></a>
+                            <a href="https://www.facebook.com/oanhieu.695416" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="footer__social-icon"><FaFacebookF /></a>
                             <a href="#" aria-label="Twitter" className="footer__social-icon"><FaTwitter /></a>
                             <a href="#" aria-label="LinkedIn" className="footer__social-icon"><FaLinkedinIn /></a>
                             <a href="#" aria-label="Instagram" className="footer__social-icon"><FaInstagram /></a>
@@ -71,7 +72,7 @@ export default function Footer() {
 
                 <div className="footer__bottom">
                     <div className="footer__bottom-left">
-                        <span className="footer__copy">© 2024 LearnOva, Inc. All rights reserved.</span>
+                        <span className="footer__copy">© 2026 LearnOva, Inc. All rights reserved.</span>
                     </div>
 
                     <div className="footer__bottom-right">

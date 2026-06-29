@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import logo from "../../../assets/LogoText.png";
@@ -23,10 +23,16 @@ import NotificationDropdown from "./components/NotificationDropdown.jsx";
 import UserLoggedNav from "./components/UserLoggedNav.jsx";
 import CoursesMegaMenu from "./components/CoursesMegaMenu";
 import "./LoggedInHeader.css";
+import { useAuth } from "../../../hook/UseAuth.jsx";
+import { createNotificationApi, getNotificationsApi } from "../../../api/NotificationApi.js";
 
 const LoggedInHeader = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showCourses, setShowCourses] = useState(false);
+  const [notifications, setNotifications] = useState(notificationItems);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const notificationTimerRef = useRef(null);
+  const { isAuthenticated, currentUser } = useAuth();
 
   const navigationData = useMemo(
     () => ({
@@ -41,6 +47,84 @@ const LoggedInHeader = () => {
     }),
     [],
   );
+
+  useEffect(() => {
+    // fetch persisted notifications if authenticated
+    if (isAuthenticated) {
+      (async () => {
+        try {
+          const data = await getNotificationsApi();
+          const mapped = data.map((n) => ({
+            id: n.id,
+            title: n.title,
+            description: n.content,
+            unread: !n.isRead,
+            createdAt: n.createdAt,
+          }));
+          setNotifications(mapped.slice(0, 6));
+        } catch (e) {
+          // ignore
+        }
+      })();
+    }
+    const showNotification = (newNotification) => {
+      if (notificationTimerRef.current) {
+        window.clearTimeout(notificationTimerRef.current);
+      }
+
+      setNotifications((prev) => [newNotification, ...prev].slice(0, 6));
+      setIsNotificationOpen(true);
+      notificationTimerRef.current = window.setTimeout(() => {
+        setIsNotificationOpen(false);
+        notificationTimerRef.current = null;
+      }, 4500);
+    };
+
+    const handleWishlistAdded = (event) => {
+      const { title, courseId } = event.detail || {};
+      showNotification({
+        id: `wishlist-${courseId}-${Date.now()}`,
+        title: "Added to wishlist",
+        description: title ? `${title} has been added to your wishlist.` : "A course has been added to your wishlist.",
+        unread: true,
+      });
+      if (isAuthenticated && currentUser) {
+        createNotificationApi({
+          userId: currentUser.id,
+          title: "Added to wishlist",
+          content: title ? `${title} has been added to your wishlist.` : "A course has been added to your wishlist.",
+        }).catch(() => {});
+      }
+    };
+
+    const handleWishlistRemoved = (event) => {
+      const { title, courseId } = event.detail || {};
+      showNotification({
+        id: `wishlist-removed-${courseId}-${Date.now()}`,
+        title: "Removed from wishlist",
+        description: title ? `${title} has been removed from your wishlist.` : "A course has been removed from your wishlist.",
+        unread: true,
+      });
+      if (isAuthenticated && currentUser) {
+        createNotificationApi({
+          userId: currentUser.id,
+          title: "Removed from wishlist",
+          content: title ? `${title} has been removed from your wishlist.` : "A course has been removed from your wishlist.",
+        }).catch(() => {});
+      }
+    };
+
+    window.addEventListener("wishlist:added", handleWishlistAdded);
+    window.addEventListener("wishlist:removed", handleWishlistRemoved);
+
+    return () => {
+      window.removeEventListener("wishlist:added", handleWishlistAdded);
+      window.removeEventListener("wishlist:removed", handleWishlistRemoved);
+      if (notificationTimerRef.current) {
+        window.clearTimeout(notificationTimerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <header className="user-logged-header">
@@ -100,7 +184,10 @@ const LoggedInHeader = () => {
 
         <div className="user-logged-actions">
           <CartDropdown />
-          <NotificationDropdown notifications={notificationItems} />
+          <NotificationDropdown
+            notifications={notifications}
+            isOpen={isNotificationOpen}
+          />
           <AvatarDropdown menuItems={userMenuItems} />
         </div>
       </div>

@@ -449,8 +449,28 @@
   position: absolute;
   top: 8px;
   right: 8px;
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, color 0.3s ease;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
+  z-index: 2;
+}
+
+.course-wishlist {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.95);
   border: none;
@@ -465,11 +485,13 @@
   z-index: 2;
 }
 
-.course-wishlist:hover,
+.course-wishlist:hover {
+  /* giữ nguyên kích thước khi hover */
+}
+
 .course-wishlist.active {
-  background: var(--text-white);
-  color: var(--danger-red);
-  transform: scale(1.1);
+  background: #ef4444;
+  color: white;
 }
 
 

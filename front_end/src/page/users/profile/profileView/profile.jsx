@@ -6,6 +6,9 @@ import {
   DEFAULT_ACTIVITIES,
   DEFAULT_PROFILE,
 } from "./data/profileData";
+import { useAuth } from "../../../../hook/UseAuth.jsx";
+import { getWishlistApi } from "../../../../api/WishlistApi.js";
+import { toast } from "../../../../util/toast.js";
 import AchievementsSection from "./sections/AchievementsSection.jsx";
 import ActivitiesSection from "./sections/ActivitiesSection.jsx";
 import CoursesSection from "./sections/CoursesSection";
@@ -44,7 +47,10 @@ const ProfileView = ({
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [newLogText, setNewLogText] = useState("");
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const [favoriteCourses, setFavoriteCourses] = useState([]);
+  const [favoritesLoading, setFavoritesLoading] = useState(false);
   const hasMountedRef = useRef(false);
+  const { currentUser, loading: authLoading } = useAuth();
 
   const achievements = useMemo(
     () => buildAchievements(profileData, purchasedCourses),
@@ -69,6 +75,32 @@ const ProfileView = ({
 
     scrollToPageTop();
   }, [activeTab, selectedCourse]);
+
+  useEffect(() => {
+    const loadFavoriteCourses = async () => {
+      if (!currentUser || authLoading) return;
+      setFavoritesLoading(true);
+
+      try {
+        const courses = await getWishlistApi();
+        setFavoriteCourses(
+          courses.map((course) => ({
+            ...course,
+            image:
+              course.thumbnailUrl ||
+              "https://via.placeholder.com/400x225?text=Course+Cover",
+          })),
+        );
+      } catch (error) {
+        console.error("Failed to load favorite courses", error);
+        toast.error("Unable to load wishlist courses.");
+      } finally {
+        setFavoritesLoading(false);
+      }
+    };
+
+    loadFavoriteCourses();
+  }, [currentUser, authLoading]);
 
   const saveProfile = (nextProfile) => {
     localStorage.setItem("learnova_user_profile", JSON.stringify(nextProfile));
@@ -187,19 +219,7 @@ const ProfileView = ({
 
       return (
         <FavoritesSection
-          favoriteCourses={purchasedCourses}
-          onOpenCourse={handleOpenCourse}
-        />
-      );
-    }
-
-    if (activeTab === "security") {
-      return <SecuritySection profileData={profileData} />;
-    }
-
-    if (activeTab === "achievements") {
-      return (
-        <AchievementsSection
+          favoriteCourses={favoriteCourses}
           achievements={achievements}
           points={profileData.points}
           onBack={onBack}

@@ -50,7 +50,7 @@ function CourseDetail() {
     useEffect(() => {
         const fetchRatingSummary = async () => {
             try {
-                const data = await getRatingSummaryApi(5); // sau thay  courseId động
+                const data = await getRatingSummaryApi(5);
                 console.log("RATING SUMMARY =", data);
                 setRatingSummary(data);
             } catch (error) {
@@ -115,12 +115,7 @@ function CourseDetail() {
 
     const [selectedQuestion, setSelectedQuestion] = useState(null);
     const [replyText, setReplyText] = useState('');
-    // const [savedQuestions, setSavedQuestions] = useState([]);
     const [showReplyForm, setShowReplyForm] = useState(false);
-
-    // const toggleSaveQuestion = (id) => {
-    //     setSavedQuestions(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
-    // };
 
     const handleReplySubmit = (qId) => {
         if (!replyText.trim()) return;

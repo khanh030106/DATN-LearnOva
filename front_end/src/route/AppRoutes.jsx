@@ -84,6 +84,7 @@ const App = () => {
                     <Route path="/learnova/courses" element={<CoursePage/>}/>
                     <Route path="/learnova/cart" element={<Cart/>}/>
                     <Route path="/learnova/CoursesDetail/:id" element={<CourseDetaill/>}/>
+                    <Route path="/learnova/user/CoursesDetail/:id" element={<CourseDetaill/>}/>
                     <Route path="/learnova/intructors" element={<InstructorsPage/>}/>
                     <Route path="/learnova/instructors" element={<InstructorsPage/>}/>
                     <Route path="/learnova/intructorDetail" element={<InstructorDetail/>}/>

@@ -1,11 +1,11 @@
 import { Bell } from "lucide-react";
 import HeaderDropdown from "./HeaderDropdown.jsx";
 
-const NotificationDropdown = ({ notifications }) => {
+const NotificationDropdown = ({ notifications, isOpen = false }) => {
   const unreadCount = notifications.filter((item) => item.unread).length;
 
   return (
-    <div className="user-logged-icon-menu">
+    <div className={`user-logged-icon-menu ${isOpen ? "is-open" : ""}`}>
       <button type="button" className="user-logged-icon-button" aria-label="Open notifications">
         <Bell size={21} />
         {unreadCount > 0 && <span className="user-logged-badge">{unreadCount}</span>}

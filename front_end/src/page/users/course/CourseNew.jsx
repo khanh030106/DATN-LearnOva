@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 import "./Course.css";
-import { BiHeart } from "react-icons/bi";
-import { FaStar } from "react-icons/fa";
+import { FaRegHeart, FaHeart, FaStar } from "react-icons/fa";
 import { X } from "lucide-react";
 import LearnovaAI from "../../home/AI/AI.jsx";
+import { toast } from "../../../util/toast.js";
+import { addToWishlistApi, getWishlistApi, removeFromWishlistApi } from "../../../api/WishlistApi.js";
+import { getAdminCoursesApi } from "../../../api/admin/CourseApi.js";
+import { useAuth } from "../../../hook/UseAuth.jsx";
 
 const categories = [
   { id: "all", name: "All Categories", count: 120 },
@@ -15,123 +19,33 @@ const categories = [
   { id: "skills", name: "Soft Skills", count: 58 },
 ];
 
+const formatVndPrice = (value) => {
+  if (value == null) return "Free";
+  try {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+      maximumFractionDigits: 0,
+    }).format(value);
+  } catch {
+    return String(value);
+  }
+};
+
+const inferCategoryFromTitle = (title) => {
+  if (!title) return "Technology";
+  const lower = title.toLowerCase();
+  if (lower.includes("marketing")) return "Marketing";
+  if (lower.includes("design") || lower.includes("ui/ux") || lower.includes("ux")) return "Design";
+  if (lower.includes("python") || lower.includes("node") || lower.includes("react") || lower.includes("docker") || lower.includes("linux") || lower.includes("kotlin") || lower.includes("blockchain")) return "Technology";
+  if (lower.includes("soft skill") || lower.includes("communication") || lower.includes("management")) return "Business";
+  return "Technology";
+};
+
 const levels = [
   { id: "beginner", name: "Beginner", count: 124 },
   { id: "intermediate", name: "Intermediate", count: 156 },
   { id: "advanced", name: "Advanced", count: 78 },
-];
-
-const courses = [
-  {
-    id: 1,
-    title: "Lập trình Fullstack Master Node.js",
-    instructor: "Nguyễn Văn A",
-    category: "Technology",
-    rating: 4.9,
-    reviews: 2400,
-    price: "1.290.000đ",
-    duration: "42h",
-    tag: "BESTSELLER",
-    image:
-      "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80",
-    level: "Intermediate",
-  },
-  {
-    id: 2,
-    title: "Phân tích dữ liệu kinh doanh",
-    instructor: "Trần Thị B",
-    category: "Marketing",
-    rating: 4.8,
-    reviews: 1600,
-    price: "990.000đ",
-    duration: "28h",
-    tag: "HOT",
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
-    level: "Beginner",
-  },
-  {
-    id: 3,
-    title: "Thiết kế UI/UX Chuyên sâu",
-    instructor: "Lê Hoàng C",
-    category: "Design",
-    rating: 4.7,
-    reviews: 1800,
-    price: "1.590.000đ",
-    duration: "35h",
-    tag: "NEW",
-    image:
-      "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=600&q=80",
-    level: "Intermediate",
-  },
-  {
-    id: 4,
-    title: "Digital Marketing Mastery",
-    instructor: "Phạm Thị D",
-    category: "Marketing",
-    rating: 4.8,
-    reviews: 1200,
-    price: "690.000đ",
-    duration: "24h",
-    image:
-      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80",
-    level: "Beginner",
-  },
-  {
-    id: 5,
-    title: "Quản lý nhân sự hiện đại",
-    instructor: "Phạm Văn E",
-    category: "Business",
-    rating: 4.6,
-    reviews: 980,
-    price: "890.000đ",
-    duration: "18h",
-    image:
-      "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=600&q=80",
-    level: "Intermediate",
-  },
-  {
-    id: 6,
-    title: "Python for Data Science",
-    instructor: "Bùi Thị F",
-    category: "Technology",
-    rating: 4.8,
-    reviews: 2100,
-    price: "959.000đ",
-    originalPrice: "1.350.000đ",
-    discount: 29,
-    duration: "38h",
-    tag: "BESTSELLER",
-    image:
-      "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80",
-    level: "Intermediate",
-  },
-  {
-    id: 7,
-    title: "Nâng cao kỹ năng thuyết trình",
-    instructor: "Đặng Thị G",
-    category: "Soft Skills",
-    rating: 4.7,
-    reviews: 1260,
-    price: "690.000đ",
-    duration: "20h",
-    image:
-      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80",
-    level: "Beginner",
-  },
-  {
-    id: 8,
-    title: "Tiếng Anh giao tiếp",
-    instructor: "Dương H",
-    category: "Languages",
-    rating: 4.6,
-    reviews: 1100,
-    price: "490.000đ",
-    duration: "15h",
-    image:
-      "https://images.unsplash.com/photo-1546410531-bb4ca050552d?auto=format&fit=crop&w=600&q=80",
-    level: "Beginner",
-  },
 ];
 
 function formatCount(num) {
@@ -165,6 +79,8 @@ function FilterChip({ label, onRemove }) {
 }
 
 function CoursesPage() {
+  const { isAuthenticated } = useAuth();
+  const [coursesList, setCoursesList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("popular");
@@ -172,9 +88,38 @@ function CoursesPage() {
   const [selectedLevels, setSelectedLevels] = useState(["intermediate"]);
   const [currentPage, setCurrentPage] = useState(1);
   const coursesPerPage = 8;
-  const totalPages = Math.ceil(courses.length / coursesPerPage);
+
+  const filteredCourses = coursesList.filter((course) => {
+    const categoryMatch =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes("all") ||
+      selectedCategories.some((categoryId) =>
+        inferCategoryFromTitle(course.title).toLowerCase() === categoryId.toLowerCase(),
+      );
+
+    const levelMatch =
+      selectedLevels.length === 0 ||
+      selectedLevels.includes(course.level?.toLowerCase());
+
+    return categoryMatch && levelMatch;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filteredCourses.length / coursesPerPage));
   const startIndex = (currentPage - 1) * coursesPerPage;
-  const visibleCourses = courses.slice(startIndex, startIndex + coursesPerPage);
+  const visibleCourses = filteredCourses.slice(startIndex, startIndex + coursesPerPage);
+
+  // read category query param to set selected category filter
+  const location = useLocation();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const cat = params.get("category");
+    if (cat) {
+      const found = categories.find(c => c.name.toLowerCase() === cat.toLowerCase());
+      if (found) {
+        setSelectedCategories([found.id]);
+      }
+    }
+  }, [location.search]);
 
   const activeFilters = [
     ...selectedCategories
@@ -218,15 +163,83 @@ function CoursesPage() {
     setSelectedLevels([]);
   };
 
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const publicCourses = await getAdminCoursesApi();
+        const savedWishlist = isAuthenticated ? await getWishlistApi() : [];
+
+        setWishlist(savedWishlist.map((course) => course.id));
+        setCoursesList(
+          publicCourses.map((course) => ({
+            id: course.id,
+            title: course.title,
+            instructor: course.instructorName,
+            category: inferCategoryFromTitle(course.title),
+            rating: 4.8,
+            reviews: 1200,
+            price: formatVndPrice(course.basePrice),
+            duration: course.level === "Advanced" ? "40h" : "30h",
+            tag: course.status === "PUBLISHED" ? "BESTSELLER" : "NEW",
+            image:
+              course.thumbnailKey ||
+              "https://via.placeholder.com/600x400?text=Course+Cover",
+            level: course.level?.toLowerCase() || "beginner",
+          })),
+        );
+      } catch (error) {
+        console.error("Failed to load wishlist or courses", error);
+      }
+    };
+
+    loadData();
+  }, [isAuthenticated]);
+
   const resetFilters = () => {
     setSelectedCategories(["tech"]);
     setSelectedLevels(["intermediate"]);
   };
 
-  const toggleWishlist = (courseId) => {
-    setWishlist((prev) =>
-      prev.includes(courseId) ? prev.filter((id) => id !== courseId) : [...prev, courseId],
-    );
+  const toggleWishlist = async (courseId, title) => {
+    if (!isAuthenticated) {
+      toast.error("Please log in to add courses to your wishlist.");
+      return;
+    }
+
+    if (wishlist.includes(courseId)) {
+      try {
+        await removeFromWishlistApi(courseId);
+        setWishlist((prev) => prev.filter((id) => id !== courseId));
+        window.dispatchEvent(
+          new CustomEvent("wishlist:removed", {
+            detail: {
+              title,
+              courseId,
+            },
+          }),
+        );
+      } catch (error) {
+        toast.error("Failed to remove course from wishlist.");
+        console.error(error);
+      }
+      return;
+    }
+
+    try {
+      await addToWishlistApi(courseId);
+      setWishlist((prev) => [...prev, courseId]);
+      window.dispatchEvent(
+        new CustomEvent("wishlist:added", {
+          detail: {
+            title,
+            courseId,
+          },
+        }),
+      );
+    } catch (error) {
+      toast.error("Failed to add course to wishlist.");
+      console.error(error);
+    }
   };
 
   return (
@@ -291,10 +304,10 @@ function CoursesPage() {
                   <button
                     type="button"
                     className={`course-wishlist ${wishlist.includes(course.id) ? "active" : ""}`}
-                    onClick={() => toggleWishlist(course.id)}
+                    onClick={() => toggleWishlist(course.id, course.title)}
                     aria-label="Add to wishlist"
                   >
-                    <BiHeart />
+                    {wishlist.includes(course.id) ? <FaHeart size={14} /> : <FaRegHeart size={14} />}
                   </button>
                   {course.tag && (
                     <span className={`course-tag-badge course-tag-badge--${course.tag.toLowerCase()}`}>

@@ -168,17 +168,28 @@ export const mapFavoriteCourse = (
 });
 
 export const buildFavoriteCourses = (favoriteCourses = []) => {
-  const purchasedFavorites =
-    favoriteCourses.length > 0 ? favoriteCourses : DEFAULT_ENROLLED_COURSES;
+  if (!favoriteCourses || favoriteCourses.length === 0) {
+    return [];
+  }
 
-  return [
-    ...purchasedFavorites.map((course) =>
-      mapFavoriteCourse(course, FAVORITE_COURSE_STATUS.purchased),
+  return favoriteCourses.map((course) =>
+    mapFavoriteCourse(
+      {
+        title: course.title || "Untitled course",
+        instructor: course.instructorName || "Unknown instructor",
+        progress: 0,
+        lessonsDone: 0,
+        lessonsTotal: 0,
+        remaining: "Not started yet",
+        rating: 4.8,
+        reviews: "0",
+        image:
+          course.thumbnailUrl ||
+          "https://via.placeholder.com/400x225?text=Course+Cover",
+      },
+      FAVORITE_COURSE_STATUS.unpurchased,
     ),
-    ...DEFAULT_UNPURCHASED_FAVORITE_COURSES.map((course) =>
-      mapFavoriteCourse(course, FAVORITE_COURSE_STATUS.unpurchased),
-    ),
-  ];
+  );
 };
 
 export const buildAchievements = (profileData, purchasedCourses) => [

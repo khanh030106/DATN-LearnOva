@@ -468,6 +468,15 @@
   transform: translateY(-1px);
 }
 
+.user-logged-icon-menu.is-open > .user-logged-notification-dropdown,
+.user-logged-icon-menu:hover > .user-logged-notification-dropdown,
+.user-logged-icon-menu:focus-within > .user-logged-notification-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
 .user-logged-badge {
   position: absolute;
   top: -5px;

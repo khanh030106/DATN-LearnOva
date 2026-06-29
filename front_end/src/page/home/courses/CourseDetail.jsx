@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./CourseDetail.css";
 import LearnovaAI from "../AI/AI.jsx";
@@ -18,6 +18,7 @@ import {
   FaGraduationCap,
   FaCertificate,
   FaGlobe,
+  FaHeart,
   FaRegHeart,
   FaShareSquare,
   FaVideo,
@@ -25,49 +26,16 @@ import {
   FaInfinity,
   FaMobileAlt,
 } from "react-icons/fa";
+import { toast } from "../../../util/toast.js";
+import {
+  addToWishlistApi,
+  getWishlistApi,
+  removeFromWishlistApi,
+} from "../../../api/WishlistApi.js";
+import { useAuth } from "../../../hook/UseAuth.jsx";
 import { FaLightbulb, FaBullseye } from "react-icons/fa";
+import { getCourseByIdApi } from "../../../api/CourseApi.js";
 
-const courses = [
-  {
-    id: 1,
-    title: "Fullstack Web Developer",
-    teacher: "Tran Hoang Nam",
-    subtitle: "Senior Web Developer",
-    rating: 4.9,
-    reviews: "12,450",
-    students: "32,541",
-    lessons: 128,
-    duration: "32 hours",
-    level: "Beginner to Advanced",
-    certificate: "Yes, upon completion",
-    language: "Vietnamese",
-    price: "1.299.000đ",
-    oldPrice: "1.699.000đ",
-    description:
-      "This Fullstack Web Developer course is designed to take you from zero to hero. Learn frontend, backend, databases and deployment.",
-    learnings: [
-      "HTML, CSS, JavaScript",
-      "ReactJS & NodeJS",
-      "RESTful API",
-      "MongoDB & SQL",
-      "Authentication & Security",
-      "Real-world Projects",
-    ],
-    includes: [
-      { icon: <FaReact />, text: "32 hours on-demand video" },
-      { icon: <FaReact />, text: "128 downloadable resources" },
-      { icon: <FaReact />, text: "Full lifetime access" },
-      { icon: <FaReact />, text: "Access on mobile and TV" },
-      { icon: <FaReact />, text: "Certificate of completion" },
-    ],
-    gallery: [
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c",
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-    ],
-  },
-];
 
 const Curriculum = () => {
   const highlights = [
@@ -231,16 +199,86 @@ const CourseDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const course = useMemo(
-    () => courses.find((item) => String(item.id) === String(id)),
-    [id],
-  );
+  const { isAuthenticated } = useAuth();
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isMockCourse, setIsMockCourse] = useState(false);
+  const [wishlist, setWishlist] = useState([]);
 
-  if (!course) {
+  useEffect(() => {
+    let mounted = true;
+    const fetchCourse = async () => {
+      setLoading(true);
+      setError(null);
+      setIsMockCourse(false);
+
+      try {
+        const data = await getCourseByIdApi(id);
+        if (!mounted) return;
+
+        const mapped = {
+          id: data.id,
+          title: data.title || "Untitled course",
+          teacher: data.instructorName || "Unknown instructor",
+          subtitle: null,
+          rating: data.rating || 0,
+          reviews: data.reviews || 0,
+          students: data.students || 0,
+          lessons: data.lessonCount || 0,
+          duration: data.duration || "",
+          level: data.level || "",
+          certificate: data.publishedAt ? "Yes" : "No",
+          language: data.language || "",
+          price: data.basePrice ? String(data.basePrice) : "Free",
+          oldPrice: null,
+          description: data.description || "",
+          learnings: data.whatYouLearn || [],
+          includes: [],
+          gallery: data.thumbnailKey ? [data.thumbnailKey] : [],
+        };
+
+        setCourse(mapped);
+
+        if (isAuthenticated) {
+          try {
+            const savedWishlist = await getWishlistApi();
+            if (!mounted) return;
+            setWishlist(savedWishlist.map((courseItem) => courseItem.id));
+          } catch (wishlistError) {
+            console.warn("Failed to load wishlist for authenticated user", wishlistError);
+          }
+        } else {
+          setWishlist([]);
+        }
+      } catch (err) {
+        setError(err?.response?.data || err.message || "Failed to load");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourse();
+
+    return () => {
+      mounted = false;
+    };
+  }, [id, isAuthenticated]);
+
+  if (loading) {
+    return (
+      <div className="course-detail-page">
+        <div className="course-detail-panel">Loading course...</div>
+      </div>
+    );
+  }
+
+  if (error || !course) {
     return (
       <div className="course-detail-page">
         <div className="course-detail-panel">
           <p>Course not found.</p>
+          <p style={{color: 'red'}}>{error && typeof error === 'string' ? error : ''}</p>
           <button
             onClick={() => navigate("/learnova/home")}
             className="course-detail-back"
@@ -282,13 +320,61 @@ const CourseDetail = () => {
                 </div>
 
                 <div className="course-detail-actions">
-                  <button type="button">
-                    <FaRegHeart /> Wishlist
+                  <button
+                    type="button"
+                    disabled={isMockCourse}
+                    className="wishlist-button"
+                    onClick={async () => {
+                      if (isMockCourse) {
+                        toast.info("This demo course cannot be added to wishlist.");
+                        return;
+                      }
+
+                      if (!isAuthenticated) {
+                        toast.error("Please log in to add courses to your wishlist.");
+                        return;
+                      }
+
+                      try {
+                        if (wishlist.includes(course.id)) {
+                          await removeFromWishlistApi(course.id);
+                          setWishlist((prev) => prev.filter((id) => id !== course.id));
+                          window.dispatchEvent(
+                            new CustomEvent("wishlist:removed", {
+                              detail: { title: course.title, courseId: course.id },
+                            }),
+                          );
+                        } else {
+                          await addToWishlistApi(course.id);
+                          setWishlist((prev) => [...prev, course.id]);
+                          window.dispatchEvent(
+                            new CustomEvent("wishlist:added", {
+                              detail: { title: course.title, courseId: course.id },
+                            }),
+                          );
+                        }
+                      } catch (error) {
+                        console.error(error);
+                        toast.error("Failed to update wishlist.");
+                      }
+                    }}
+                  >
+                    {wishlist.includes(course?.id) ? (
+                      <FaHeart className="wishlist-icon active" />
+                    ) : (
+                      <FaRegHeart className="wishlist-icon" />
+                    )}
+                    <span>Wishlist</span>
                   </button>
                   <button type="button">
                     <FaShareSquare /> Share
                   </button>
                 </div>
+                {isMockCourse && (
+                  <p className="course-detail-demo-note">
+                    This course is rendered from local demo data and is not connected to the backend.
+                  </p>
+                )}
               </div>
 
               <div className="course-detail-meta">

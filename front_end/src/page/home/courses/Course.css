@@ -68,10 +68,48 @@
 }
 
 /* Grid */
+.cs__carousel {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 18px;
+}
+
+.cs__viewport {
+    overflow: hidden;
+}
+
 .cs__grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
+    margin: 0;
+}
+
+.cs__arrow-button {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid #cbd5e1;
+    background: white;
+    color: #475569;
+    font-size: 24px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.18s;
+}
+
+.cs__arrow-button:hover:not(:disabled) {
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+.cs__arrow-button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
 }
 
 /* Card */
@@ -211,4 +249,19 @@
     .cs__container { padding: 0 16px; }
     .cs__grid { grid-template-columns: 1fr; }
     .cs__header { flex-direction: column; align-items: flex-start; }
+}
+
+.cs__status-message {
+    padding: 32px 24px;
+    text-align: center;
+    border-radius: 16px;
+    background: #ffffff;
+    color: #0f172a;
+    font-size: 16px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+.cs__status-error {
+    color: #b91c1c;
+    border: 1px solid #fecaca;
 }

@@ -65,6 +65,9 @@ const FavoritesSection = ({ favoriteCourses = [], onOpenCourse }) => {
       <div className="courses-topbar">
         <div>
           <h2>Favorite Courses</h2>
+          <p className="course-summary">
+            Save your favorite courses for easy access and continue learning faster.
+          </p>
           <div className="course-tabs">
             {FAVORITE_COURSE_TABS.map((tab) => (
               <button
@@ -102,11 +105,18 @@ const FavoritesSection = ({ favoriteCourses = [], onOpenCourse }) => {
         </div>
       </div>
 
-      <CourseCardGrid
-        courses={sortedCourses}
-        onOpenCourse={openCourse}
-        variant="favorite"
-      />
+      {sortedCourses.length === 0 ? (
+        <div className="favorites-empty-state">
+          <p>There are no favorite courses in your wishlist yet.</p>
+          <p>Go to Courses and add a course to your wishlist to see it here.</p>
+        </div>
+      ) : (
+        <CourseCardGrid
+          courses={sortedCourses}
+          onOpenCourse={openCourse}
+          variant="favorite"
+        />
+      )}
 
       <div className="course-pagination">
         <button type="button">

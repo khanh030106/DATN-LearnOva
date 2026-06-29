@@ -56,6 +56,32 @@
     max-width: 230px;
 }
 
+/* Social icons under tagline */
+.footer__socials {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+}
+
+.footer__social-icon {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.9);
+    text-decoration: none;
+    transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.footer__social-icon:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, #2563eb, #06b6d4);
+    color: white;
+}
+
 /* Columns */
 .footer__col-heading {
     font-family: 'Bricolage Grotesque', sans-serif;

@@ -243,14 +243,32 @@
 }
 
 /* Nút Wishlist - icon trái tim màu đỏ */
-.course-detail-actions button:first-child {
-  color: #ef4444;
-  border-color: #fecaca;
+.course-detail-actions button.wishlist-button {
+  color: #0f172a;
+  border-color: #cbd5e1;
+  background: #ffffff;
 }
 
-.course-detail-actions button:first-child:hover {
-  background: #fef2f2;
-  border-color: #ef4444;
+.course-detail-actions button.wishlist-button:hover {
+  background: #f8fafc;
+}
+
+.wishlist-icon {
+  color: #0f172a;
+}
+
+.wishlist-icon.active {
+  color: #ef4444;
+}
+
+.course-detail-actions button.wishlist-active {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+.course-detail-actions button.wishlist-active:hover {
+  background: #fecaca;
 }
 
 /* Nút Share - icon xanh */
