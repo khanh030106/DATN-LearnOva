@@ -122,6 +122,7 @@ public class LessonQAController {
             @PathVariable Long id,
             @Valid @RequestBody CreateAnswerRequest req
     ) {
+        System.out.println("UPDATE CONTROLLER");
         CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
         qaService.updateAnswer(user.getId(), id, req);
     }

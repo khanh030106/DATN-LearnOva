@@ -59,6 +59,8 @@ function QATab({
     const questionsPerPage = 5;
     const [searchText, setSearchText] = useState("");
     const [activeTab, setActiveTab] = useState("all");
+    const [editAnswer, setEditAnswer] = useState(null);
+    const [editLessonId, setEditLessonId] = useState(null);
 
     const currentUserId =
         currentUser?.id ||
@@ -277,7 +279,7 @@ function QATab({
                                                     onClick={() => {
                                                         setEditId(answer.id);
                                                         setEditText(answer.content);
-                                                        setOpenMenuId(null); // đóng menu luôn cho UX tốt
+                                                        setEditAnswer(answer);
                                                     }}
                                                 >
                                                     <FaPenToSquare />
@@ -452,7 +454,10 @@ function QATab({
         }
 
         try {
-            await updateAnswerApi(id, { content });
+            await updateAnswerApi(id, {
+                parentId: editAnswer.parentId,
+                content
+            });
 
             setEditId(null);
             setEditText("");
@@ -469,6 +474,10 @@ function QATab({
 
             toast.success("Updated!");
         } catch (e) {
+
+                console.log("Status =", e.response?.status);
+                console.log("Response =", e.response?.data);
+
             console.error(e);
             toast.error("Update failed!");
         }
@@ -482,7 +491,10 @@ function QATab({
         }
 
         try {
-            await updateQuestionApi(id, { content });
+            await updateQuestionApi(id, {
+                lessonId: editLessonId,
+                content
+            });
 
             setEditQuestionId(null);
             setEditQuestionText("");
@@ -912,6 +924,7 @@ function QATab({
                                                   onClick={() => {
                                                       setEditQuestionId(q.id);
                                                       setEditQuestionText(q.content);
+                                                      setEditLessonId(lessonId);
                                                       setEditQuestionError("");
                                                       setOpenMenuId(null);
                                                   }}

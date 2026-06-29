@@ -192,21 +192,19 @@ function CourseDetail() {
                             />
                         )}
 
-                        {activeTab === "qa" && (
-                            <QATab
-                                lessonId={2}
-                                course={course}
-                                selectedQuestion={selectedQuestion}
-                                setSelectedQuestion={setSelectedQuestion}
-                                showQuestionForm={showQuestionForm}
-                                setShowQuestionForm={setShowQuestionForm}
-                                showReplyForm={showReplyForm}
-                                setShowReplyForm={setShowReplyForm}
-                                replyText={replyText}
-                                setReplyText={setReplyText}
-                                handleReplySubmit={handleReplySubmit}
-                            />
-                        )}
+                        <QATab
+                            lessonId={activeLesson?.lessonId}
+                            course={course}
+                            selectedQuestion={selectedQuestion}
+                            setSelectedQuestion={setSelectedQuestion}
+                            showQuestionForm={showQuestionForm}
+                            setShowQuestionForm={setShowQuestionForm}
+                            showReplyForm={showReplyForm}
+                            setShowReplyForm={setShowReplyForm}
+                            replyText={replyText}
+                            setReplyText={setReplyText}
+                            handleReplySubmit={handleReplySubmit}
+                        />
 
                         {activeTab === "reviews" && (
                             <ReviewsTab
