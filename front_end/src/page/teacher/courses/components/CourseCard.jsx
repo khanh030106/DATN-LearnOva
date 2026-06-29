@@ -1,4 +1,4 @@
-import { Circle, Pencil, Star, Trash2 } from "lucide-react";
+import { Circle, Eye, EyeOff, Info, Pencil, Star } from "lucide-react";
 
 const formatDuration = (totalSeconds) => {
   if (!totalSeconds) return "0:00";
@@ -9,14 +9,8 @@ const formatDuration = (totalSeconds) => {
   return `${m}:${String(s).padStart(2, "0")}`;
 };
 
-const statusLabels = {
-  PUBLISHED: "Published",
-  DRAFT: "Draft",
-  ARCHIVED: "Archived",
-};
-
-const CourseCard = ({ course, onDelete, onUpdate }) => {
-  const status = statusLabels[course.courseStatus] || "Review";
+const CourseCard = ({ course, onDelete, onUpdate, onToggleVisibility, onViewDetail }) => {
+  const isActive = !course.isDeleted;
   const isPublished = course.courseStatus === "PUBLISHED";
   const studentCount = isPublished ? (course.studentCount ?? 0) : "-";
   const price = isPublished ? course.displayPrice : "-";
@@ -39,9 +33,9 @@ const CourseCard = ({ course, onDelete, onUpdate }) => {
         </div>
       </div>
 
-      <span className={`teacher-course-row__status teacher-course-row__status--${course.courseStatus.toLowerCase()}`}>
+      <span className={`teacher-course-row__status teacher-course-row__status--${isActive ? "active" : "inactive"}`}>
         <Circle size={7} fill="currentColor" />
-        {status}
+        {isActive ? "Active" : "Inactive"}
       </span>
 
       <strong>{studentCount}</strong>
@@ -64,8 +58,16 @@ const CourseCard = ({ course, onDelete, onUpdate }) => {
         <button type="button" aria-label={`Update ${course.title}`} onClick={() => onUpdate(course)}>
           <Pencil size={16} />
         </button>
-        <button type="button" aria-label={`Delete ${course.title}`} onClick={() => onDelete(course.id)}>
-          <Trash2 size={16} />
+        <button
+          type="button"
+          aria-label={isActive ? `Deactivate ${course.title}` : `Activate ${course.title}`}
+          className={isActive ? "teacher-course-row__btn--deactivate" : "teacher-course-row__btn--activate"}
+          onClick={() => onToggleVisibility(course)}
+        >
+          {isActive ? <EyeOff size={16} /> : <Eye size={16} />}
+        </button>
+        <button type="button" aria-label={`View details of ${course.title}`} onClick={() => onViewDetail(course)}>
+          <Info size={16} />
         </button>
       </div>
     </article>

@@ -198,6 +198,21 @@
     color: #94a3b8;
 }
 
+.cs__discount-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: #fee2e2;
+    color: #ef4444;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.cs__price--sale {
+    color: #ef4444;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
     .cs { padding: 72px 0; }

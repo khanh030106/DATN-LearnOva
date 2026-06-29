@@ -1,8 +1,7 @@
 import { Search } from "lucide-react";
-import { promotionStatusFilterOptions } from "../promotionPageConfig.js";
 
-const PromotionsToolbar = ({ query, statusFilter, onQueryChange, onStatusFilterChange }) => (
-  <div className="teacher-promotions-toolbar" aria-label="Promotion filters">
+const PromotionsToolbar = ({ query, onQueryChange }) => (
+  <div className="teacher-promotions-toolbar teacher-promotions-toolbar--search-only" aria-label="Promotion filters">
     <label className="teacher-promotions-search">
       <Search size={16} />
       <input
@@ -12,14 +11,6 @@ const PromotionsToolbar = ({ query, statusFilter, onQueryChange, onStatusFilterC
         placeholder="Search courses..."
       />
     </label>
-
-    <select value={statusFilter} onChange={(event) => onStatusFilterChange(event.target.value)}>
-      {promotionStatusFilterOptions.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
   </div>
 );
 

@@ -6,10 +6,13 @@ import {
     createLesson,
     createLessonSource,
     createSection,
+    updateCourse as updateCourseApi,
     updateCourseStatus as updateCourseStatusApi,
     updateLesson,
     updateLessonVideo,
-    updateSection
+    updateSection,
+    getCourseForEdit,
+    getFileUrl,
 } from "../../../../../api/teacher/CourseApi.js";
 import {clearDraft, loadDraft, useDraftPersistence} from "./useDraftPersistence.js";
 
@@ -38,9 +41,10 @@ const restoreFromDraft = () => {
     return draft;
 };
 
-export const useCourseForm = () => {
+export const useCourseForm = ({ editCourseId = null } = {}) => {
     const navigate = useNavigate();
-    const savedDraft = restoreFromDraft();
+    // In edit mode, skip sessionStorage draft to avoid loading a different course's draft
+    const savedDraft = editCourseId ? null : restoreFromDraft();
 
     const [currentStep, setCurrentStep] = useState(savedDraft?.currentStep ?? 1);
     const [course, setCourse] = useState(savedDraft?.course ?? createEmptyCourse);
@@ -50,6 +54,7 @@ export const useCourseForm = () => {
     );
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isDirty, setIsDirty] = useState(false);
+    const [isLoadingEdit, setIsLoadingEdit] = useState(!!editCourseId);
 
     // Show restore banner once on mount if a draft was found
     useEffect(() => {
@@ -59,8 +64,73 @@ export const useCourseForm = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Auto-save to sessionStorage on every change
-    useDraftPersistence(course, sections, currentStep);
+    // Load existing course data in edit mode
+    useEffect(() => {
+        if (!editCourseId) return;
+        const load = async () => {
+            try {
+                const data = await getCourseForEdit(editCourseId);
+
+                let thumbnailPreviewUrl = "";
+                if (data.thumbnailKey) {
+                    try {
+                        thumbnailPreviewUrl = await getFileUrl(data.thumbnailKey);
+                    } catch {}
+                }
+
+                setCourse({
+                    id: data.courseId,
+                    title: data.title || "",
+                    description: data.description || "",
+                    language: data.language || "",
+                    level: data.level || "",
+                    category: data.categoryId ? String(data.categoryId) : "",
+                    basePrice: data.basePrice?.toString() || "",
+                    thumbnailKey: data.thumbnailKey || "",
+                    thumbnailPreviewUrl,
+                    status: "DRAFT",
+                    visibility: "PUBLIC",
+                    requirements: data.requirements?.length ? data.requirements : [""],
+                    whatYouLearn: data.whatYouLearn?.length ? data.whatYouLearn : [""],
+                });
+
+                if (data.sections?.length > 0) {
+                    const formSections = data.sections.map((s) => ({
+                        id: s.sectionId,
+                        title: s.title,
+                        sectionOrder: s.sectionOrder,
+                        isNew: false,
+                        lessons: s.lessons.map((l) => ({
+                            id: l.lessonId,
+                            title: l.title,
+                            lessonOrder: l.lessonOrder,
+                            type: "Video",
+                            isPreview: l.isPreview || false,
+                            resources: [],
+                            isNew: false,
+                            videoKey: l.videoKey || "",
+                            videoName: l.videoKey ? "Existing video" : "",
+                            durationSeconds: l.durationSeconds || null,
+                            videoContentType: null,
+                            videoSizeBytes: null,
+                        })),
+                    }));
+                    setSections(formSections);
+                    setActiveSectionId(formSections[0]?.id ?? null);
+                }
+            } catch (err) {
+                console.error("Failed to load course for editing:", err);
+                toast.error("Failed to load course data.");
+            } finally {
+                setIsLoadingEdit(false);
+            }
+        };
+        load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [editCourseId]);
+
+    // Auto-save to sessionStorage on every change (only in create mode)
+    useDraftPersistence(editCourseId ? null : course, editCourseId ? null : sections, currentStep);
 
     const markDirty = () => setIsDirty(true);
 
@@ -202,6 +272,7 @@ export const useCourseForm = () => {
                                 videoContentType: video.contentType,
                                 videoSizeBytes: video.sizeBytes,
                                 durationSeconds: video.durationSeconds,
+                                isVideoChanged: true,
                               }
                             : l
                     ),
@@ -266,28 +337,34 @@ export const useCourseForm = () => {
         markDirty();
     };
 
+    const buildCoursePayload = () => ({
+        title: course.title,
+        description: course.description,
+        language: course.language || "vi",
+        level: course.level || "Beginner",
+        basePrice: Number(course.basePrice) || 0,
+        thumbnailKey: course.thumbnailKey,
+        requirements: course.requirements.filter(Boolean),
+        whatYouLearn: course.whatYouLearn.filter(Boolean),
+        categoryId: course.category ? Number(course.category) : null,
+    });
+
     const saveCourseDraft = async () => {
-        if (course.id) return course.id;
+        const payload = buildCoursePayload();
 
-        const payload = {
-            title: course.title,
-            description: course.description,
-            language: course.language || "vi",
-            level: course.level || "Beginner",
-            basePrice: Number(course.basePrice) || 0,
-            thumbnailKey: course.thumbnailKey,
-            requirements: course.requirements.filter(Boolean),
-            whatYouLearn: course.whatYouLearn.filter(Boolean),
-            categoryId: course.category ? Number(course.category) : null,
-        };
+        if (course.id) {
+            // Edit mode: update existing course
+            await updateCourseApi(course.id, payload);
+            return course.id;
+        }
 
+        // Create mode: create new draft
         const data = await createDraftCourse(payload);
         setCourse((c) => ({...c, id: data.courseId}));
         return data.courseId;
     };
 
     const saveSectionsAndLessons = async () => {
-        // Track temp-ID → real-ID mappings; apply a single setState at the end
         const sectionIdMap = new Map();
         const lessonIdMap = new Map();
 
@@ -320,7 +397,8 @@ export const useCourseForm = () => {
                     await updateLesson(lesson.id, {title: lesson.title});
                 }
 
-                if (lesson.videoKey) {
+                // Only update video if it was newly uploaded (isVideoChanged) or lesson is new
+                if (lesson.videoKey && (lesson.isNew || lesson.isVideoChanged)) {
                     await updateLessonVideo(actualLessonId, {
                         videoKey: lesson.videoKey,
                         videoOriginalFilename: lesson.videoName,
@@ -348,7 +426,6 @@ export const useCourseForm = () => {
             }
         }
 
-        // Single atomic state update — replaces every temp ID with its real DB ID
         if (sectionIdMap.size > 0 || lessonIdMap.size > 0) {
             setSections((s) =>
                 s.map((sec) => ({
@@ -359,6 +436,7 @@ export const useCourseForm = () => {
                         ...l,
                         id: lessonIdMap.get(l.id) ?? l.id,
                         isNew: false,
+                        isVideoChanged: false,
                     })),
                 }))
             );
@@ -371,10 +449,10 @@ export const useCourseForm = () => {
         try {
             await saveCourseDraft();
             setIsDirty(false);
-            clearDraft();
+            if (!editCourseId) clearDraft();
             setCurrentStep(2);
         } catch (error) {
-            toast.error(error.response?.data?.message || error.message || "Failed to save course draft");
+            toast.error(error.response?.data?.message || error.message || "Failed to save course");
         } finally {
             setIsSubmitting(false);
         }
@@ -401,7 +479,7 @@ export const useCourseForm = () => {
         try {
             await saveSectionsAndLessons();
             setIsDirty(false);
-            clearDraft();
+            if (!editCourseId) clearDraft();
             setCurrentStep(3);
         } catch (error) {
             let message = "Failed to save sections and lessons";
@@ -416,19 +494,15 @@ export const useCourseForm = () => {
 
     const handleSaveDraft = async () => {
         if (isSubmitting) return;
-        if (course.id) {
-            toast.info("Draft is already saved in the cloud.");
-            return;
-        }
         setIsSubmitting(true);
         try {
             await toast.promise(saveCourseDraft(), {
-                pending: "Saving draft...",
-                success: "Draft saved!",
-                error: {render: ({data}) => data?.response?.data?.message || data?.message || "Failed to save draft"},
+                pending: course.id ? "Updating course..." : "Saving draft...",
+                success: course.id ? "Course updated!" : "Draft saved!",
+                error: {render: ({data}) => data?.response?.data?.message || data?.message || "Failed to save"},
             });
             setIsDirty(false);
-            clearDraft();
+            if (!editCourseId) clearDraft();
             navigate("/learnova/teacher/courses");
         } catch {
             // handled by toast.promise
@@ -451,7 +525,7 @@ export const useCourseForm = () => {
                 error: {render: ({data}) => data?.response?.data?.message || "Failed to update status"},
             });
             setIsDirty(false);
-            clearDraft();
+            if (!editCourseId) clearDraft();
             navigate("/learnova/teacher/courses");
         } catch {
             // handled by toast.promise
@@ -469,6 +543,7 @@ export const useCourseForm = () => {
         setActiveSectionId,
         isSubmitting,
         isDirty,
+        isLoadingEdit,
         updateCourse,
         updateListItem,
         addListItem,

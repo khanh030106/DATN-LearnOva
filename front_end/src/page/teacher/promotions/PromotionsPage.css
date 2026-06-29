@@ -12,6 +12,10 @@
   gap: 8px;
 }
 
+.teacher-promotions-toolbar--search-only {
+  grid-template-columns: minmax(260px, 400px);
+}
+
 .teacher-promotions-search,
 .teacher-promotions-toolbar select {
   height: 32px;
@@ -344,6 +348,45 @@
   border-color: #1d4ed8;
   background: #1d4ed8;
   color: #ffffff;
+}
+
+.teacher-promotions-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 0 4px;
+}
+
+.teacher-promotions-pagination button {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #475569;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+  transition: border-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.teacher-promotions-pagination button:hover:not(:disabled) {
+  border-color: #93c5fd;
+  color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.teacher-promotions-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.teacher-promotions-pagination span {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #475569;
 }
 
 @media (max-width: 1320px) {

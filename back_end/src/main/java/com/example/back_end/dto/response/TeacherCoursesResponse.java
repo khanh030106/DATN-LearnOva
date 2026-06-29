@@ -14,6 +14,7 @@ public record TeacherCoursesResponse(
         String categoryName,
         long lessonCount,
         long totalDurationSeconds,
-        long studentCount
+        long studentCount,
+        Boolean isDeleted
 ) {
 }

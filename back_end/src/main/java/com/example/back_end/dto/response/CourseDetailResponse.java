@@ -16,6 +16,7 @@ public record CourseDetailResponse(
         List<String> requirements,
         List<String> whatYouLearn,
         String categoryName,
+        Long categoryId,
         long lessonCount,
         long totalDurationSeconds,
         InstructorInfo instructor,

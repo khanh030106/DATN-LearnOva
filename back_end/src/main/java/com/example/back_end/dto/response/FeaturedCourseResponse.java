@@ -10,6 +10,7 @@ public record FeaturedCourseResponse(
         String thumbnailKey,
         String instructorName,
         BigDecimal basePrice,
+        Integer discountPercent,
         long studentCount,
         long lessonCount,
         long totalDurationSeconds,
