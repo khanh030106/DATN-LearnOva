@@ -53,7 +53,7 @@ export const clearDraft = () => {
 // the cloud, the server is the source of truth — no local draft needed.
 export const useDraftPersistence = (course, sections, currentStep) => {
     useEffect(() => {
-        if (course.id) return;
+        if (!course || course.id) return;
         saveDraft(course, sections, currentStep);
     }, [course, sections, currentStep]);
 };

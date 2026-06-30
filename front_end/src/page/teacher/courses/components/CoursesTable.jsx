@@ -5,7 +5,7 @@ import CourseCard from "./CourseCard.jsx";
 
 const ITEMS_PER_PAGE = 7;
 
-const CoursesTable = ({ courses, onDeleteCourse, onUpdateCourse }) => {
+const CoursesTable = ({ courses, onDeleteCourse, onUpdateCourse, onToggleVisibility, onViewDetail }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -30,6 +30,8 @@ const CoursesTable = ({ courses, onDeleteCourse, onUpdateCourse }) => {
           course={course}
           onDelete={onDeleteCourse}
           onUpdate={onUpdateCourse}
+          onToggleVisibility={onToggleVisibility}
+          onViewDetail={onViewDetail}
         />
       ))}
 

@@ -7,7 +7,9 @@ import com.example.back_end.dto.response.FeaturedCourseResponse;
 import com.example.back_end.dto.response.GetFileUrlResponse;
 import com.example.back_end.dto.response.PublicCourseResponse;
 import com.example.back_end.dto.response.TeacherCoursesResponse;
+import com.example.back_end.dto.response.TeacherStudentResponse;
 import com.example.back_end.dto.resquest.CreateDraftCourseRequest;
+import com.example.back_end.dto.resquest.UpdateCourseRequest;
 import com.example.back_end.dto.resquest.UpdateCourseStatusRequest;
 import com.example.back_end.service.CourseService;
 import com.example.back_end.service.S3Service;
@@ -80,6 +82,13 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getCourseDetail(courseId));
     }
 
+    @GetMapping("/my-students")
+    public ResponseEntity<List<TeacherStudentResponse>> getMyStudents(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated())
+            return ResponseEntity.status(401).build();
+        return ResponseEntity.ok(courseService.getMyStudents(authentication.getName()));
+    }
+
     @GetMapping("/my-courses")          // /courses/mine
     public ResponseEntity<List<TeacherCoursesResponse>> getMyCourses(
             Authentication authentication
@@ -88,6 +97,42 @@ public class CourseController {
             return ResponseEntity.status(401).build();
         }
         return ResponseEntity.ok(courseService.getMyCourses(authentication.getName()));
+    }
+
+    @PutMapping("/{courseId}")
+    public ResponseEntity<Void> updateCourse(
+            @PathVariable Long courseId,
+            @Valid @RequestBody UpdateCourseRequest request,
+            Authentication authentication
+    ) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).build();
+        }
+        courseService.updateCourse(courseId, request, authentication.getName());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{courseId}/visibility")
+    public ResponseEntity<Void> toggleCourseVisibility(
+            @PathVariable Long courseId,
+            Authentication authentication
+    ) {
+        if (authentication == null || !authentication.isAuthenticated())
+            return ResponseEntity.status(401).build();
+        courseService.toggleCourseVisibility(courseId, authentication.getName());
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{courseId}")
+    public ResponseEntity<Void> softDeleteCourse(
+            @PathVariable Long courseId,
+            Authentication authentication
+    ) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).build();
+        }
+        courseService.softDeleteCourse(courseId, authentication.getName());
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/public")

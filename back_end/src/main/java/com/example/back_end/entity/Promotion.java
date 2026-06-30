@@ -24,10 +24,6 @@ public class Promotion {
     private Long id;
 
     @NotNull
-    @Column(name = "promotion_name", nullable = false, length = Integer.MAX_VALUE)
-    private String promotionName;
-
-    @NotNull
     @Column(name = "discount_percent", nullable = false)
     private Integer discountPercent;
 
@@ -40,11 +36,6 @@ public class Promotion {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "end_date", nullable = false)
     private Instant endDate;
-
-    @NotNull
-    @ColumnDefault("true")
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
 
     @NotNull
     @ColumnDefault("CURRENT_TIMESTAMP")

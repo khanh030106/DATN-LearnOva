@@ -148,7 +148,17 @@ export default function Course() {
                                 </div>
                                 <div className="cs__footer">
                                     <div className="cs__price-row">
-                                        <span className="cs__price">${course.basePrice}</span>
+                                        {course.discountPercent ? (
+                                            <>
+                                                <span className="cs__price cs__price--sale">
+                                                    ${(course.basePrice * (1 - course.discountPercent / 100)).toFixed(2)}
+                                                </span>
+                                                <span className="cs__original">${Number(course.basePrice).toFixed(2)}</span>
+                                                <span className="cs__discount-badge">-{course.discountPercent}%</span>
+                                            </>
+                                        ) : (
+                                            <span className="cs__price">${Number(course.basePrice).toFixed(2)}</span>
+                                        )}
                                     </div>
                                     <span className="cs__students">{formatStudents(course.studentCount)} students</span>
                                 </div>

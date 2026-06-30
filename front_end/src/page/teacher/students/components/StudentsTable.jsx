@@ -1,7 +1,7 @@
 import { studentTableColumns } from "../studentsPageData.js";
 import StudentRow from "./StudentRow.jsx";
 
-const StudentsTable = ({ students }) => (
+const StudentsTable = ({ students, onViewDetail }) => (
   <div className="teacher-students-panel">
     <div className="teacher-students-table-head">
       {studentTableColumns.map((column) => (
@@ -10,7 +10,7 @@ const StudentsTable = ({ students }) => (
     </div>
 
     {students.map((student) => (
-      <StudentRow key={student.name} student={student} />
+      <StudentRow key={student.email} student={student} onViewDetail={onViewDetail} />
     ))}
   </div>
 );

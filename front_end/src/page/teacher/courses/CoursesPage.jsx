@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMyCourse, getFileUrl } from "../../../api/teacher/CourseApi.js";
+import { toast } from "react-toastify";
+import { getMyCourse, getFileUrl, softDeleteCourse, toggleCourseVisibility } from "../../../api/teacher/CourseApi.js";
 import {
   buildCategoryOptions,
   getFilteredCourses,
@@ -8,6 +9,8 @@ import {
 } from "./coursePageConfig.js";
 import CoursesTable from "./components/CoursesTable.jsx";
 import CoursesToolbar from "./components/CoursesToolbar.jsx";
+import DeleteConfirmModal from "./components/DeleteConfirmModal.jsx";
+import CourseDetailModal from "./components/CourseDetailModal.jsx";
 import "./CoursesPage.css";
 
 const COURSES_CREATE_PATH = "/learnova/teacher/courses/create";
@@ -20,6 +23,9 @@ const CoursesPage = () => {
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [sortOption, setSortOption] = useState("NEWEST");
   const [searchTerm, setSearchTerm] = useState("");
+  const [deleteModal, setDeleteModal] = useState({ open: false, courseId: null, courseName: "" });
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [detailCourse, setDetailCourse] = useState(null);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -62,7 +68,7 @@ const CoursesPage = () => {
               createdAt: course.createdAt,
               updatedAt: course.createdAt,
               createdAgo,
-              isDeleted: false,
+              isDeleted: course.isDeleted ?? false,
               category: course.categoryName || "Uncategorized",
               modules: course.lessonCount ?? 0,
               totalDurationSeconds: course.totalDurationSeconds ?? 0,
@@ -84,8 +90,7 @@ const CoursesPage = () => {
     fetchCourses();
   }, []);
 
-  const visibleCourses = useMemo(() => teacherCourses.filter((course) => !course.isDeleted), [teacherCourses]);
-  const categoryOptions = useMemo(() => buildCategoryOptions(visibleCourses), [visibleCourses]);
+  const categoryOptions = useMemo(() => buildCategoryOptions(teacherCourses), [teacherCourses]);
 
   const activeCourses = useMemo(() => {
     const filteredCourses = getFilteredCourses({
@@ -102,18 +107,52 @@ const CoursesPage = () => {
     navigate(COURSES_CREATE_PATH);
   };
 
-  const handleUpdateCourse = () => {
-    navigate(COURSES_CREATE_PATH);
+  const handleUpdateCourse = (course) => {
+    navigate(`/learnova/teacher/courses/edit/${course.id}`);
   };
 
-  const handleSoftDelete = (courseId) => {
-    setTeacherCourses((currentCourses) =>
-      currentCourses.map((course) =>
-        course.id === courseId
-          ? { ...course, isDeleted: true, courseStatus: "ARCHIVED", status: "Soft Deleted" }
-          : course
-      )
-    );
+  const handleDeleteClick = (course) => {
+    setDeleteModal({ open: true, courseId: course.id, courseName: course.title });
+  };
+
+  const handleDeleteConfirm = async () => {
+    setIsDeleting(true);
+    try {
+      await softDeleteCourse(deleteModal.courseId);
+      setTeacherCourses((courses) =>
+        courses.map((c) =>
+          c.id === deleteModal.courseId ? { ...c, isDeleted: true } : c
+        )
+      );
+      toast.success("Course hidden successfully.");
+    } catch (err) {
+      toast.error("Failed to hide course. Please try again.");
+    } finally {
+      setIsDeleting(false);
+      setDeleteModal({ open: false, courseId: null, courseName: "" });
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModal({ open: false, courseId: null, courseName: "" });
+  };
+
+  const handleViewDetail = (course) => {
+    setDetailCourse(course);
+  };
+
+  const handleToggleVisibility = async (course) => {
+    try {
+      await toggleCourseVisibility(course.id);
+      setTeacherCourses((courses) =>
+        courses.map((c) =>
+          c.id === course.id ? { ...c, isDeleted: !c.isDeleted } : c
+        )
+      );
+      toast.success(course.isDeleted ? "Course activated." : "Course deactivated.");
+    } catch {
+      toast.error("Failed to update course visibility.");
+    }
   };
 
   if (isLoading) {
@@ -144,9 +183,27 @@ const CoursesPage = () => {
 
       <CoursesTable
         courses={activeCourses}
-        onDeleteCourse={handleSoftDelete}
+        onDeleteCourse={handleDeleteClick}
         onUpdateCourse={handleUpdateCourse}
+        onToggleVisibility={handleToggleVisibility}
+        onViewDetail={handleViewDetail}
       />
+
+      {deleteModal.open && (
+        <DeleteConfirmModal
+          courseName={deleteModal.courseName}
+          onConfirm={handleDeleteConfirm}
+          onCancel={handleDeleteCancel}
+          isDeleting={isDeleting}
+        />
+      )}
+
+      {detailCourse && (
+        <CourseDetailModal
+          course={detailCourse}
+          onClose={() => setDetailCourse(null)}
+        />
+      )}
     </section>
   );
 };

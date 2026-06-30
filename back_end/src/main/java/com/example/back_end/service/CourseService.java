@@ -4,7 +4,10 @@ import com.example.back_end.dto.response.CourseDetailResponse;
 import com.example.back_end.dto.response.FeaturedCourseResponse;
 import com.example.back_end.dto.response.PublicCourseResponse;
 import com.example.back_end.dto.response.TeacherCoursesResponse;
+import com.example.back_end.dto.response.TeacherStudentResponse;
+import com.example.back_end.entity.Enrollment;
 import com.example.back_end.dto.resquest.CreateDraftCourseRequest;
+import com.example.back_end.dto.resquest.UpdateCourseRequest;
 import com.example.back_end.entity.Category;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Coursecategory;
@@ -16,6 +19,7 @@ import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.CourseRepository;
 import com.example.back_end.repository.CoursecategoryRepository;
 import com.example.back_end.repository.EnrollmentRepository;
+import com.example.back_end.repository.PromotioncourseRepository;
 import com.example.back_end.repository.UserRepository;
 import com.example.back_end.repository.admin.AdminCategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +44,7 @@ public class CourseService {
     private final CoursecategoryRepository coursecategoryRepository;
     private final AdminCategoryRepository categoryRepository;
     private final EnrollmentRepository enrollmentRepository;
+    private final PromotioncourseRepository promotioncourseRepository;
 
     public Long createDraftCourse(CreateDraftCourseRequest request, String email) {
         User instructor = userRepository
@@ -120,7 +125,7 @@ public class CourseService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         List<Course> courses = courseRepository
-                .findByInstructorIdAndIsDeletedFalseOrderByCreatedAtDesc(instructor.getId());
+                .findByInstructorIdOrderByCreatedAtDesc(instructor.getId());
 
         List<Long> courseIds = courses.stream()
                 .map(Course::getId)
@@ -164,7 +169,8 @@ public class CourseService {
                             categoryName,
                             lessonCount,
                             totalDurationSeconds,
-                            studentCount
+                            studentCount,
+                            course.getIsDeleted()
                     );
                 })
                 .toList();
@@ -175,11 +181,13 @@ public class CourseService {
         Course course = courseRepository.findCourseDetailById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
 
-        String categoryName = course.getCoursecategories().stream()
+        var primaryCategory = course.getCoursecategories().stream()
                 .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
                 .findFirst()
-                .map(cc -> cc.getCategory().getName())
                 .orElse(null);
+
+        String categoryName = primaryCategory != null ? primaryCategory.getCategory().getName() : null;
+        Long categoryId = primaryCategory != null ? primaryCategory.getCategory().getId() : null;
 
         List<CourseDetailResponse.SectionInfo> sections = course.getSections().stream()
                 .filter(s -> !Boolean.TRUE.equals(s.getIsDeleted()))
@@ -236,11 +244,91 @@ public class CourseService {
                 course.getRequirements(),
                 course.getWhatYouLearn(),
                 categoryName,
+                categoryId,
                 lessonCount,
                 totalDurationSeconds,
                 instructorInfo,
                 sections
         );
+    }
+
+    public void updateCourse(Long courseId, UpdateCourseRequest request, String email) {
+        User instructor = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+
+        if (!course.getInstructor().getId().equals(instructor.getId())) {
+            throw new BusinessException("You don't have permission to modify this course");
+        }
+
+        course.setTitle(request.title());
+        course.setDescription(request.description());
+        course.setLanguage(request.language());
+        course.setLevel(request.level());
+        course.setBasePrice(request.basePrice());
+        course.setThumbnailKey(request.thumbnailKey());
+        course.setRequirements(request.requirements());
+        course.setWhatYouLearn(request.whatYouLearn());
+        course.setUpdatedAt(Instant.now());
+        courseRepository.save(course);
+
+        if (request.categoryId() != null) {
+            coursecategoryRepository.deleteByCourseId(courseId);
+
+            Category category = categoryRepository.findActiveById(request.categoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+
+            CoursecategoryId ccId = new CoursecategoryId();
+            ccId.setCourseId(courseId);
+            ccId.setCategoryId(category.getId());
+
+            Coursecategory cc = new Coursecategory();
+            cc.setId(ccId);
+            cc.setCourse(course);
+            cc.setCategory(category);
+            cc.setIsPrimary(true);
+
+            coursecategoryRepository.save(cc);
+        }
+    }
+
+    public void softDeleteCourse(Long courseId, String email) {
+        User instructor = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+
+        if (!course.getInstructor().getId().equals(instructor.getId())) {
+            throw new BusinessException("You don't have permission to delete this course");
+        }
+
+        course.setIsDeleted(true);
+        course.setUpdatedAt(Instant.now());
+        courseRepository.save(course);
+    }
+
+    public boolean toggleCourseVisibility(Long courseId, String email) {
+        User instructor = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+
+        if (!course.getInstructor().getId().equals(instructor.getId())) {
+            throw new BusinessException("You don't have permission to modify this course");
+        }
+
+        boolean newState = !Boolean.TRUE.equals(course.getIsDeleted());
+        course.setIsDeleted(newState);
+        course.setUpdatedAt(Instant.now());
+        courseRepository.save(course);
+        return newState;
     }
 
     @Transactional(readOnly = true)
@@ -257,12 +345,27 @@ public class CourseService {
                 .stream()
                 .collect(Collectors.groupingBy(e -> e.getCourse().getId(), Collectors.counting()));
 
-        return published.stream()
+        List<Course> top8 = published.stream()
                 .sorted((a, b) -> Long.compare(
                         enrollmentCountByCourseId.getOrDefault(b.getId(), 0L),
                         enrollmentCountByCourseId.getOrDefault(a.getId(), 0L)
                 ))
                 .limit(8)
+                .toList();
+
+        Instant now = Instant.now();
+        List<Long> top8Ids = top8.stream().map(Course::getId).toList();
+        Map<Long, Integer> discountByCourseId = top8Ids.isEmpty()
+                ? Map.of()
+                : promotioncourseRepository.findActivePromotionsByCourseIds(top8Ids, now)
+                .stream()
+                .collect(Collectors.toMap(
+                        pc -> pc.getCourse().getId(),
+                        pc -> pc.getPromotion().getDiscountPercent(),
+                        (a, b) -> a
+                ));
+
+        return top8.stream()
                 .map(course -> {
                     String categoryName = course.getCoursecategories().stream()
                             .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
@@ -290,6 +393,7 @@ public class CourseService {
                             course.getThumbnailKey(),
                             course.getInstructor().getFullName(),
                             course.getBasePrice(),
+                            discountByCourseId.get(course.getId()),
                             studentCount,
                             lessonCount,
                             totalDurationSeconds,
@@ -331,5 +435,54 @@ public class CourseService {
                 course.getStatus(),
                 course.getThumbnailKey()
         );
+    }
+
+    @Transactional(readOnly = true)
+    public List<TeacherStudentResponse> getMyStudents(String email) {
+        User instructor = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        List<Enrollment> enrollments = enrollmentRepository.findByInstructorId(instructor.getId());
+
+        // Group enrollments by student, preserving earliest enrolledAt
+        Map<Long, List<Enrollment>> byStudent = enrollments.stream()
+                .collect(Collectors.groupingBy(e -> e.getUser().getId()));
+
+        return byStudent.entrySet().stream()
+                .map(entry -> {
+                    List<Enrollment> studentEnrollments = entry.getValue();
+                    User student = studentEnrollments.get(0).getUser();
+
+                    List<String> courseNames = studentEnrollments.stream()
+                            .map(e -> e.getCourse().getTitle())
+                            .distinct()
+                            .toList();
+
+                    Instant earliestEnrolledAt = studentEnrollments.stream()
+                            .map(Enrollment::getEnrolledAt)
+                            .min(Comparator.naturalOrder())
+                            .orElse(null);
+
+                    int avgProgress = (int) studentEnrollments.stream()
+                            .mapToInt(e -> e.getProgressPercent() != null ? e.getProgressPercent() : 0)
+                            .average()
+                            .orElse(0);
+
+                    return new TeacherStudentResponse(
+                            student.getId(),
+                            student.getFullName(),
+                            student.getEmail(),
+                            student.getAvatar(),
+                            courseNames,
+                            earliestEnrolledAt,
+                            avgProgress
+                    );
+                })
+                .sorted(Comparator.comparing(
+                        TeacherStudentResponse::enrolledAt,
+                        Comparator.nullsLast(Comparator.reverseOrder())
+                ))
+                .toList();
     }
 }

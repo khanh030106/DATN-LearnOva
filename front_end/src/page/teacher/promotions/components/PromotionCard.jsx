@@ -2,7 +2,7 @@ import { Pencil, Plus } from "lucide-react";
 import { formatPromotionCurrency } from "../promotionPageConfig.js";
 
 const PromotionCard = ({ course, promotion, onSetPromotion }) => {
-  const basePrice = course.basePrice * 24000;
+  const basePrice = course.basePrice;
   const discountPrice = promotion ? basePrice * (1 - promotion.percent / 100) : basePrice;
 
   return (

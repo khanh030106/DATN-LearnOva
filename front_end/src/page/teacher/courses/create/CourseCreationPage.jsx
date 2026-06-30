@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import {ArrowLeft} from "lucide-react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {useCourseForm} from "./hooks/useCourseForm.js";
 import {useCourseUpload} from "./hooks/useCourseUpload.js";
 import CreateStepper from "./components/stepper/CreateStepper.jsx";
@@ -12,6 +12,7 @@ import "./CourseCreationPage.css";
 
 const CourseCreationPage = () => {
     const navigate = useNavigate();
+    const { courseId: editCourseId } = useParams();
 
     const {
         currentStep,
@@ -22,6 +23,7 @@ const CourseCreationPage = () => {
         setActiveSectionId,
         isSubmitting,
         isDirty,
+        isLoadingEdit,
         updateCourse,
         updateListItem,
         addListItem,
@@ -43,7 +45,7 @@ const CourseCreationPage = () => {
         handleSectionsNext,
         handleSaveDraft,
         handlePublish,
-    } = useCourseForm();
+    } = useCourseForm({ editCourseId: editCourseId ?? null });
 
     const {handleThumbnailSelected, handleLessonSourceSelected} = useCourseUpload({
         onCourseChange: updateCourse,
@@ -80,6 +82,16 @@ const CourseCreationPage = () => {
         return () => window.removeEventListener("beforeunload", handleBeforeUnload);
     }, [isDirty]);
 
+    if (isLoadingEdit) {
+        return (
+            <section className="teacher-create-page">
+                <div style={{ textAlign: "center", padding: "4rem", color: "#64748b" }}>
+                    Loading course data...
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section className="teacher-create-page">
             <header className="teacher-create-page__top">
@@ -93,7 +105,7 @@ const CourseCreationPage = () => {
                     onStepClick={setCurrentStep}
                 />
                 <button type="button" onClick={handleSaveDraft} disabled={isSubmitting}>
-                    Save Draft
+                    {editCourseId ? "Save Changes" : "Save Draft"}
                 </button>
             </header>
 

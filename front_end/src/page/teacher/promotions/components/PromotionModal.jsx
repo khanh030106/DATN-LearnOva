@@ -1,7 +1,7 @@
 import { CalendarDays, X } from "lucide-react";
 import { formatPromotionCurrency } from "../promotionPageConfig.js";
 
-const PromotionModal = ({ course, formValues, finalPrice, onClose, onFormChange, onSubmit }) => {
+const PromotionModal = ({ course, formValues, finalPrice, isSaving, onClose, onFormChange, onSubmit }) => {
   const savedAmount = Number(formValues.basePrice || 0) - finalPrice;
 
   return (
@@ -58,7 +58,9 @@ const PromotionModal = ({ course, formValues, finalPrice, onClose, onFormChange,
           <button type="button" onClick={onClose}>
             Cancel
           </button>
-          <button type="submit">Apply Promotion</button>
+          <button type="submit" disabled={isSaving}>
+            {isSaving ? "Saving..." : "Apply Promotion"}
+          </button>
         </footer>
       </form>
     </div>

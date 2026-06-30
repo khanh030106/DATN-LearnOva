@@ -2,8 +2,8 @@ import { DollarSign, GraduationCap, Star, TrendingUp, Users } from "lucide-react
 
 export const courseStatusFilterOptions = [
   { label: "All Status", value: "ALL" },
-  { label: "Published", value: "PUBLISHED" },
-  { label: "Draft", value: "DRAFT" },
+  { label: "Active", value: "ACTIVE" },
+  { label: "Inactive", value: "INACTIVE" },
 ];
 
 export const courseSortOptions = [
@@ -26,15 +26,17 @@ export const getFilteredCourses = ({ courses, activeFilter, activeCategory, sear
   const normalizedSearch = searchTerm.trim().toLowerCase();
 
   return courses.filter((course) => {
-    const isVisible = !course.isDeleted;
-    const matchesFilter = activeFilter === "ALL" || course.courseStatus === activeFilter;
+    const matchesFilter =
+      activeFilter === "ALL" ||
+      (activeFilter === "ACTIVE" && !course.isDeleted) ||
+      (activeFilter === "INACTIVE" && course.isDeleted);
     const matchesCategory = activeCategory === "ALL" || course.category === activeCategory;
     const matchesSearch =
       !normalizedSearch ||
       course.title.toLowerCase().includes(normalizedSearch) ||
       course.category.toLowerCase().includes(normalizedSearch);
 
-    return isVisible && matchesFilter && matchesCategory && matchesSearch;
+    return matchesFilter && matchesCategory && matchesSearch;
   });
 };
 
