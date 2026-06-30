@@ -10,6 +10,15 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.example.back_end.dto.response.UserResponse;
+import com.example.back_end.dto.resquest.UpdateProfileRequest;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,5 +36,39 @@ public class UserController {
         }
 
         return ResponseEntity.ok(authService.getCurrentUser(authentication.getName()));
+    }
+    @GetMapping("/user/profile")
+    public ResponseEntity<UserResponse> getUserProfile(Authentication authentication) {
+
+        if (authentication == null
+                || !authentication.isAuthenticated()
+                || authentication instanceof AnonymousAuthenticationToken) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        return ResponseEntity.ok(authService.getUserProfile(authentication.getName()));
+    }
+    @PutMapping("/user/profile")
+    public ResponseEntity<UserResponse> updateProfile(
+            Authentication authentication,
+            @Valid @RequestBody UpdateProfileRequest request
+    ) {
+        return ResponseEntity.ok(
+                authService.updateProfile(authentication.getName(), request)
+        );
+    }
+
+
+    @PostMapping("/user/avatar")
+    public ResponseEntity<UserResponse> uploadAvatar(
+            Authentication authentication,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+
+        String email = authentication.getName();
+
+        return ResponseEntity.ok(
+                authService.updateAvatar(email, file)
+        );
     }
 }

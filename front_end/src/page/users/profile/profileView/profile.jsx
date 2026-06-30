@@ -17,6 +17,8 @@ import ProfileFormSection from "./sections/ProfileFormSection";
 import { getMyEnrolledCoursesApi } from "../../../../api/EnrollmentApi.js";
 import { useAuth } from "../../../../hook/UseAuth.jsx";
 import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
+import { getUserProfileApi,updateUserProfileApi,uploadAvatarApi } from "../../../../api/UserApi.js";
+import { toast } from "react-toastify";
 
 const readStorage = (key, fallback) => {
   const saved = localStorage.getItem(key);
@@ -29,12 +31,15 @@ const readStorage = (key, fallback) => {
   }
 };
 
+
+
 const ProfileView = ({
   purchasedCourses = [],
   onStartCourse,
   onBack,
   initialTab = "profile",
 }) => {
+  const [errors, setErrors] = useState({});
   const axiosPrivate = useAxiosPrivate();
   const { accessToken, loading: authLoading } = useAuth();
   const activeTab = initialTab;
@@ -54,10 +59,58 @@ const ProfileView = ({
   const [selectedCourse, setSelectedCourse] = useState(null);
   const hasMountedRef = useRef(false);
 
+  const validateProfile = () => {
+    const newErrors = {};
+
+    if (!profileData.fullName?.trim()) {
+      newErrors.fullName = "Full name is required";
+    }
+
+    if (!profileData.phone?.trim()) {
+      newErrors.phone = "Phone is required";
+    } else if (!/^\d{9,11}$/.test(profileData.phone)) {
+      newErrors.phone = "Phone must be 9-11 digits";
+    }
+
+    if (!profileData.dateOfBirth) {
+      newErrors.dateOfBirth = "Date of birth is required";
+    }
+
+    if (!profileData.gender) {
+      newErrors.gender = "Gender is required";
+    }
+
+    return newErrors;
+  };
+
   const achievements = useMemo(
     () => buildAchievements(profileData, ownedCourses),
     [profileData, ownedCourses],
   );
+  useEffect(() => {
+    if (authLoading) return;
+
+    const fetchProfile = async () => {
+      try {
+        const data = await getUserProfileApi();
+
+        setProfileData({
+          fullName: data.fullName || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          avatar: data.avatar || "",
+          coverImage: data.coverImage || "",
+          dateOfBirth: data.dateOfBirth || "",
+          gender: data.gender || "",
+          status: data.status || "",
+        });
+      } catch (error) {
+        console.error("Failed to load profile", error);
+      }
+    };
+
+    fetchProfile();
+  }, [authLoading]);
 
   useEffect(() => {
     if (activeTab !== "courses" && activeTab !== "favorites") return undefined;
@@ -116,25 +169,40 @@ const ProfileView = ({
     setProfileData((current) => ({ ...current, [field]: value }));
   };
 
-  const handleSaveProfile = (event) => {
+  const handleSaveProfile = async (event) => {
     event.preventDefault();
-    localStorage.setItem("learnova_user_profile", JSON.stringify(profileData));
 
-    const nextActivity = {
-      id: Date.now(),
-      type: "system",
-      text: "Updated personal account settings",
-      date: "Just now",
-    };
-    const nextActivities = [nextActivity, ...activities];
-    setActivities(nextActivities);
-    localStorage.setItem(
-      "learnova_user_activities",
-      JSON.stringify(nextActivities),
-    );
+    // 1. validate trước
+    const validationErrors = validateProfile();
 
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors); // 👈 show lỗi ngay trên form
+      return; // ❌ KHÔNG gọi API
+    }
+
+    setErrors({}); // clear lỗi nếu hợp lệ
+
+    try {
+      // 2. gọi API
+      const response = await updateUserProfileApi({
+        fullName: profileData.fullName,
+        phone: profileData.phone,
+        dateOfBirth: profileData.dateOfBirth,
+        gender: profileData.gender,
+        avatar: profileData.avatar,
+      });
+
+      // 3. update UI ngay
+      setProfileData(response);
+
+      // 4. toast success
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+      // 5. toast lỗi API
+      toast.error(
+          error?.response?.data?.message || "Update failed!"
+      );
+    }
   };
 
   const handleSelectAvatar = (url) => {
@@ -148,6 +216,26 @@ const ProfileView = ({
 
     handleSelectAvatar(customAvatarUrl.trim());
     setCustomAvatarUrl("");
+  };
+  const handleAvatarChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file); // 👈 PHẢI ĐÚNG "file"
+
+    try {
+      const res = await uploadAvatarApi(formData);
+
+      setProfileData((prev) => ({
+        ...prev,
+        avatar: res.avatar || res.url || res,
+      }));
+
+      toast.success("Avatar updated!");
+    } catch (err) {
+      toast.error("Upload failed!");
+    }
   };
 
   const handleAddCustomActivity = (event) => {
@@ -201,6 +289,7 @@ const ProfileView = ({
           />
         );
       }
+
 
       return (
         <CoursesSection
@@ -259,13 +348,14 @@ const ProfileView = ({
     }
 
     return (
-      <ProfileFormSection
-        profileData={profileData}
-        saveSuccess={saveSuccess}
-        onInputChange={handleInputChange}
-        onSaveProfile={handleSaveProfile}
-        onOpenAvatarModal={() => setShowAvatarModal(true)}
-      />
+        <ProfileFormSection
+            profileData={profileData}
+            saveSuccess={saveSuccess}
+            onInputChange={handleInputChange}
+            onSaveProfile={handleSaveProfile}
+            onAvatarChange={handleAvatarChange}
+            errors={errors}
+        />
     );
   };
 
