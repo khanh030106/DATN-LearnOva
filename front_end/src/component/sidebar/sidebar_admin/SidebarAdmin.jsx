@@ -5,7 +5,6 @@ import {
   Flag,
   GraduationCap,
   LayoutDashboard,
-  MessageSquareText,
   Tag,
   Tags,
   Ticket,
@@ -78,12 +77,6 @@ const adminNavSections = [
   {
     title: "Moderation",
     items: [
-      {
-        id: "reviews-comments",
-        label: "Reviews & Comments",
-        icon: MessageSquareText,
-        path: "/learnova/admin/reviews-comments",
-      },
       {
         id: "violation-reports",
         label: "Violation Reports",

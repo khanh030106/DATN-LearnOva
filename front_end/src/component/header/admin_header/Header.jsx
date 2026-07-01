@@ -32,8 +32,6 @@ const Header = () => {
     title = "Revenue";
   } else if (normPath === "/learnova/admin/vouchers") {
     title = "Vouchers";
-  } else if (normPath === "/learnova/admin/reviews-comments") {
-    title = "Reviews & Comments";
   } else if (normPath === "/learnova/admin/violation-reports") {
     title = "Violation Reports";
   } else if (normPath === "/learnova/admin/settings") {

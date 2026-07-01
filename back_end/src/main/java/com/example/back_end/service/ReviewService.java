@@ -12,7 +12,6 @@ import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.repository.UserRepository;
 import com.example.back_end.repository.admin.AdminCourseRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.back_end.dto.resquest.UpdateReviewRequest;
@@ -20,7 +19,6 @@ import java.time.Instant;
 import java.util.List;
 
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -88,7 +86,6 @@ public class ReviewService {
     public ReviewResponse updateReview(Long userId, UpdateReviewRequest request) {
 
         if (request == null || request.getReviewId() == null) {
-            log.warn("updateReview: null request or reviewId received");
             throw new BusinessException("Review ID cannot be null");
         }
         // 1. Tìm review trong DB dựa vào ID gửi lên
@@ -118,7 +115,6 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
         if (!review.getUser().getId().equals(userId)) {
-            log.warn("deleteReview: user {} attempted to delete review {} owned by another user", userId, reviewId);
             throw new BusinessException("You cannot delete this review");
         }
         reviewRepository.delete(review);

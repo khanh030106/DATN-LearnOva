@@ -15,7 +15,6 @@ import Vouchers from "../page/admin/vouchers/Vouchers.jsx";
 import VoucherCreate from "../page/admin/vouchers/voucherCreate/VoucherCreate.jsx";
 import Category from "../page/admin/category/Category.jsx";
 import Tag from "../page/admin/tag/Tag.jsx";
-import ReviewsComments from "../page/admin/reviewsComments/ReviewsComments.jsx";
 import ViolationReports from "../page/admin/violationReports/ViolationReports.jsx";
 import TeacherLayout from "../layout/teacher/TeacherLayout.jsx";
 import OverviewPage from "../page/teacher/overview/OverviewPage.jsx";
@@ -69,7 +68,6 @@ const App = () => {
                     <Route path="vouchers/create" element={<VoucherCreate/>}/>
                     <Route path="categories" element={<Category/>}/>
                     <Route path="tags" element={<Tag/>}/>
-                    <Route path="reviews-comments" element={<ReviewsComments/>}/>
                     <Route path="violation-reports" element={<ViolationReports/>}/>
                 </Route>
 
