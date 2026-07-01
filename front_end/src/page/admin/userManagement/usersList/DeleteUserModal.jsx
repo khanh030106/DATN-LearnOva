@@ -10,6 +10,8 @@ const DeleteUserModal = ({ user, onClose, onDeleted }) => {
   if (!user) return null;
 
   const handleDelete = async () => {
+    if (user.isDeleted) return;
+
     setIsDeleting(true);
     setError("");
 
@@ -21,6 +23,8 @@ const DeleteUserModal = ({ user, onClose, onDeleted }) => {
         status: "Inactive",
         statusTone: "locked",
         statusFilter: "locked",
+        visibility: "Deleted",
+        visibilityTone: "deleted",
         updatedAtRaw: new Date().toISOString(),
       });
     } catch (deleteError) {

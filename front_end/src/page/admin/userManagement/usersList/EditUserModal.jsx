@@ -3,13 +3,13 @@ import {
   Cake,
   Calendar,
   Clock,
+  Eye,
   IdCard,
   Image,
   Mail,
   Mars,
   Phone,
   Shield,
-  Trash2,
   User,
   X,
 } from "lucide-react";
@@ -93,8 +93,10 @@ const buildSavedUser = (user, form) => {
   const gender = form.gender || "N/A";
   const roleInfo = roleOptions.find((option) => option.value === form.role) || roleOptions[2];
   const isDeleted = form.isDeleted === "true";
-  const status = isDeleted ? "Locked" : user.status || "Active";
-  const statusTone = isDeleted ? "locked" : user.statusTone || "active";
+  const status = isDeleted ? "Locked" : user.status === "Locked" ? "Active" : user.status || "Active";
+  const statusTone = isDeleted ? "locked" : user.statusTone === "locked" ? "active" : user.statusTone || "active";
+  const visibility = isDeleted ? "Deleted" : "Visible";
+  const visibilityTone = isDeleted ? "deleted" : "visible";
   const updatedAtRaw = new Date().toISOString();
 
   return {
@@ -113,6 +115,8 @@ const buildSavedUser = (user, form) => {
     status,
     statusTone,
     statusFilter: statusTone,
+    visibility,
+    visibilityTone,
     isDeleted,
     updatedAtRaw,
     updatedAt: formatDate(updatedAtRaw),
@@ -245,17 +249,16 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
         ),
       },
       {
-        icon: Trash2,
-        iconTone: "danger",
-        label: "Is Deleted",
+        icon: Eye,
+        label: "Visibility",
         input: (
           <select
             className="view-user-input"
             value={form.isDeleted}
             onChange={(event) => updateForm("isDeleted", event.target.value)}
           >
-            <option value="false">No</option>
-            <option value="true">Yes</option>
+            <option value="false">Visible</option>
+            <option value="true">Deleted</option>
           </select>
         ),
       },
@@ -279,7 +282,7 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
       },
       {
         icon: Clock,
-        label: "Updated At",
+        label: "Update",
         input: (
           <input
             className="view-user-input view-user-input-readonly"

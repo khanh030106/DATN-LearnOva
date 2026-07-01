@@ -193,8 +193,13 @@
 }
 
 .view-user-badge-status--locked,
-.view-user-badge-deleted {
+.view-user-badge-deleted,
+.view-user-badge-visibility--deleted {
   color: #c2410c;
+}
+
+.view-user-badge-visibility--visible {
+  color: #047857;
 }
 
 .view-user-footer {
@@ -470,9 +475,15 @@
 }
 
 .view-user-modal--profile .view-user-badge-status--locked,
-.view-user-modal--profile .view-user-badge-deleted {
+.view-user-modal--profile .view-user-badge-deleted,
+.view-user-modal--profile .view-user-badge-visibility--deleted {
   background: #fee2e2;
   color: #dc2626;
+}
+
+.view-user-modal--profile .view-user-badge-visibility--visible {
+  background: #dcfce7;
+  color: #059669;
 }
 
 .view-user-modal--profile .view-user-footer {
