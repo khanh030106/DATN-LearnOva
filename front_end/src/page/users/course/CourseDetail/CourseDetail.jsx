@@ -3,7 +3,7 @@ import { FaClipboardCheck, FaPlay, FaPlayCircle, FaClock } from "react-icons/fa"
 import { ChevronDown } from "lucide-react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Footer from "../../../../component/footer/footer-courseDetail/footer-courseDetail.jsx";
+import Footer from "../../../../component/footer/footer.jsx";
 import CourseVideoPlayer from "./VideoPlayer.jsx";
 import OverviewTab from "./OverviewTab.jsx";
 import QATab from "./QATab.jsx";
@@ -13,7 +13,6 @@ import QuizPage from "./QuizPage.jsx";
 import Header from "../../../../component/header/user_header/Header.jsx";
 import { getCourseReviewsApi, deleteReviewApi, getRatingSummaryApi } from "../../../../api/ReviewApi.js";
 import { getCourseDetail, getFileUrl } from "../../../../api/PublicCourseApi.js";
-import { qaData } from "./mockCourseData.js";
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { AuthContext } from "../../../../context/AuthContext";
 import { useParams } from "react-router-dom";

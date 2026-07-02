@@ -128,17 +128,16 @@
 }
 
 .cs__course-title {
-    font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: 17px;
-    font-weight: 700;
-    color: #0f172a;
+    font-size: 18px;
+    font-weight: 600;
+    color: #000000;
     line-height: 1.35;
     margin: 0 0 7px;
 }
 
 .cs__instructor {
-    font-size: 12px;
-    color: #94a3b8;
+    font-size: 14px;
+    color: #3b3b3b;
     margin: 0 0 12px;
 }
 
@@ -163,7 +162,7 @@
 .cs__meta {
     margin-left: auto;
     font-size: 12px;
-    color: #94a3b8;
+    color: #4a4a4a;
 }
 
 .cs__footer {
@@ -181,10 +180,9 @@
 }
 
 .cs__price {
-    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 18px;
-    font-weight: 800;
-    color: #0f172a;
+    font-weight: 700;
+    color: #000000;
 }
 
 .cs__original {
@@ -195,7 +193,7 @@
 
 .cs__students {
     font-size: 12px;
-    color: #94a3b8;
+    color: #525252;
 }
 
 .cs__discount-badge {

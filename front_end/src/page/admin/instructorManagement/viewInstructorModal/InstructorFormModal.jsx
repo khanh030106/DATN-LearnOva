@@ -8,7 +8,6 @@ import {
   VenusAndMars,
   X,
 } from "lucide-react";
-import defaultCover from "../../../../assets/instructors/header-intructor.png";
 import "./ViewInstructorModal.css";
 
 const genderOptions = ["Male", "Female", "Other"];

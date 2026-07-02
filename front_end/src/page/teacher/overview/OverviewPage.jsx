@@ -15,7 +15,7 @@ import {
   WalletCards,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { courses, metrics, notifications, questions, teacherProfile } from "../data/teacherDashboardData.js";
+import { metrics } from "../data/teacherDashboardData.js";
 import { overviewLinks } from "./overviewConfig.js";
 import "./OverviewPage.css";
 
@@ -42,24 +42,8 @@ const quickActions = [
   { label: "View Analytics", icon: BarChart3, tone: "orange", href: overviewLinks.analytics },
 ];
 
-const recentEnrollments = [
-  { name: "Nguyen Van A", course: "Web Development Bootcamp", time: "10 minutes ago", avatar: questions[0].avatar },
-  { name: "Tran Thi B", course: "Data Science Fundamentals", time: "1 hour ago", avatar: questions[1].avatar },
-  { name: "Le Hoang C", course: "UI/UX Design Mastery", time: "2 hours ago", avatar: questions[0].avatar },
-  { name: "Pham My D", course: "Digital Marketing Strategy", time: "3 hours ago", avatar: questions[1].avatar },
-];
 
-const notices = [
-  ...notifications,
-  {
-    title: "System maintenance",
-    detail: "Scheduled maintenance on May 25, 2:00 AM - 4:00 AM.",
-    time: "2 days ago",
-    tone: "violet",
-  },
-];
 
-const headerInsights = ["+24 new students this week", "Revenue increased by 8.4%"];
 
 const formatCompletion = (value) => Number.parseInt(value, 10) || 0;
 

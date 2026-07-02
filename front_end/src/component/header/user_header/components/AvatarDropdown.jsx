@@ -35,28 +35,7 @@ const AvatarDropdown = ({ menuItems }) => {
         </div>
 
         <ul className="user-logged-menu-list">
-          {menuItems.map((item) => (
-            <li
-              key={item.id}
-              className={item.danger ? "user-logged-menu-separator" : ""}
-            >
-              {item.id === "logout" ? (
-                <button
-                  onClick={() => handleMenuClick(item)}
-                  className={`user-logged-menu-link ${item.danger ? "is-danger" : ""}`}
-                >
-                  {item.label}
-                </button>
-              ) : (
-                <Link
-                  to={item.path}
-                  className={`user-logged-menu-link ${item.danger ? "is-danger" : ""}`}
-                >
-                  {item.label}
-                </Link>
-              )}
-            </li>
-          ))}
+
         </ul>
       </HeaderDropdown>
     </div>

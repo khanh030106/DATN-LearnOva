@@ -11,7 +11,6 @@ import {
   payoutSummary,
   previousRevenueChart,
   revenueChart,
-  topCourses,
   transactions,
 } from "./revenuePageData.js";
 import "./RevenuePage.css";
