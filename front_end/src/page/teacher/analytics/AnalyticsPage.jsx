@@ -23,7 +23,7 @@ const AnalyticsPage = () => {
 
       <div className="teacher-analytics-main-grid">
         <LearningPerformancePanel chartLabels={chartLabels} series={performanceSeries} />
-        <CoursePerformancePanel courses={coursePerformance} />
+        <CoursePerformancePanel  />
         <StudentEngagementPanel items={engagementItems} />
         <LessonsAttentionPanel items={attentionItems} />
       </div>

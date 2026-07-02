@@ -151,7 +151,7 @@ const QuickActions = () => (
 );
 
 const ImportantNotices = () => {
-  const noticeIcons = [Megaphone, Gift, Bell];
+
 
   return (
     <section className="overview-card overview-notices">
@@ -160,21 +160,7 @@ const ImportantNotices = () => {
         <Link to={overviewLinks.qa}>View all</Link>
       </div>
       <div className="overview-notices__list">
-        {notices.map((notice, index) => {
-          const Icon = noticeIcons[index] || Bell;
 
-          return (
-            <article key={notice.title} className={`overview-notice overview-notice--${notice.tone}`}>
-              <span className="overview-notice__icon" aria-hidden="true">
-                <Icon size={19} />
-              </span>
-              <div>
-                <strong>{notice.title}</strong>
-                <p>{notice.detail}</p>
-              </div>
-            </article>
-          );
-        })}
       </div>
     </section>
   );
@@ -187,40 +173,7 @@ const TopCourses = () => (
       <Link to={overviewLinks.courses}>View all</Link>
     </div>
     <div className="overview-course-grid">
-      {courses.slice(0, 2).map((course) => {
-        const progress = formatCompletion(course.completion);
 
-        return (
-          <article key={course.id} className="overview-course">
-            <div className="overview-course__media">
-              <img src={course.image} alt={course.title} />
-              <span>{course.status}</span>
-            </div>
-            <div className="overview-course__body">
-              <small>{course.category}</small>
-              <h3>{course.title}</h3>
-              <div className="overview-course__goal">
-                <span>Course Completion</span>
-                <strong>{progress}%</strong>
-              </div>
-              <footer>
-                <span>
-                  <Users size={14} />
-                  {course.students}
-                </span>
-                <span>
-                  <Star size={14} fill="currentColor" />
-                  {course.rating}
-                </span>
-                <div className="overview-course__progress">
-                  <i style={{ width: `${progress}%` }} />
-                </div>
-                <b>{progress}%</b>
-              </footer>
-            </div>
-          </article>
-        );
-      })}
     </div>
   </section>
 );
@@ -232,19 +185,7 @@ const RecentEnrollments = () => (
       <Link to={overviewLinks.courses}>View all</Link>
     </div>
     <div className="overview-enrollments__list">
-      {recentEnrollments.map((student) => (
-        <article key={student.name} className="overview-enrollment">
-          <img src={student.avatar} alt={student.name} />
-          <div>
-            <strong>{student.name}</strong>
-            <p>{student.course}</p>
-          </div>
-          <time>{student.time}</time>
-          <span>
-            <UserPlus size={18} />
-          </span>
-        </article>
-      ))}
+
     </div>
   </section>
 );

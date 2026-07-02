@@ -33,7 +33,7 @@ const RevenuePage = () => {
           previousChart={previousRevenueChart}
           highlights={chartHighlights}
         />
-        <TopRevenueCoursesPanel courses={topCourses} />
+        <TopRevenueCoursesPanel />
         <TransactionsPanel transactions={transactions} />
         <PayoutPanel payout={payoutSummary} />
       </div>
