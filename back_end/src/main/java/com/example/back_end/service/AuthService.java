@@ -28,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.Instant;
 import com.example.back_end.dto.response.UserResponse;
 import com.example.back_end.dto.resquest.UpdateProfileRequest;
+import com.example.back_end.dto.resquest.ChangePasswordRequest;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Base64;
@@ -291,5 +292,21 @@ public class AuthService {
                 user.getIsDeleted(),
                 user.getUpdatedAt()
         );
+    }
+    public void changePassword(String email, ChangePasswordRequest request) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash())) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new RuntimeException("New password and confirm password do not match");
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }

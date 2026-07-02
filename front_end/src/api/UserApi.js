@@ -22,3 +22,7 @@ export const uploadAvatarApi = async (formData) => {
 
     return res.data;
 };
+export const changePasswordApi = async (data) => {
+    const response = await axiosClient.put("/user/change-password", data);
+    return response.data;
+};

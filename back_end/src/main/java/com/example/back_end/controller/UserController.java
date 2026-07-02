@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import org.springframework.web.multipart.MultipartFile;
+import com.example.back_end.dto.resquest.ChangePasswordRequest;
 
 @RestController
 @RequiredArgsConstructor
@@ -70,5 +71,21 @@ public class UserController {
         return ResponseEntity.ok(
                 authService.updateAvatar(email, file)
         );
+    }
+    @PutMapping("/user/change-password")
+    public ResponseEntity<?> changePassword(
+            Authentication authentication,
+            @Valid @RequestBody ChangePasswordRequest request
+    ) {
+
+        if (authentication == null
+                || !authentication.isAuthenticated()
+                || authentication instanceof AnonymousAuthenticationToken) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        authService.changePassword(authentication.getName(), request);
+
+        return ResponseEntity.ok("Change password successfully");
     }
 }

@@ -41,7 +41,7 @@ const ProfileView = ({
 }) => {
   const [errors, setErrors] = useState({});
   const axiosPrivate = useAxiosPrivate();
-  const { accessToken, loading: authLoading } = useAuth();
+  // const { accessToken, loading: authLoading } = useAuth();
   const activeTab = initialTab;
   const [ownedCourses, setOwnedCourses] = useState(purchasedCourses);
   const [isLoadingCourses, setIsLoadingCourses] = useState(initialTab === "courses");
@@ -52,6 +52,7 @@ const ProfileView = ({
   const [activities, setActivities] = useState(() =>
     readStorage("learnova_user_activities", DEFAULT_ACTIVITIES),
   );
+
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [customAvatarUrl, setCustomAvatarUrl] = useState("");
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -82,6 +83,11 @@ const ProfileView = ({
 
     return newErrors;
   };
+  const {
+    accessToken,
+    loading: authLoading,
+    setCurrentUser,
+  } = useAuth();
 
   const achievements = useMemo(
     () => buildAchievements(profileData, ownedCourses),
@@ -168,22 +174,19 @@ const ProfileView = ({
   const handleInputChange = (field, value) => {
     setProfileData((current) => ({ ...current, [field]: value }));
   };
-
   const handleSaveProfile = async (event) => {
     event.preventDefault();
 
-    // 1. validate trước
     const validationErrors = validateProfile();
 
     if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors); // 👈 show lỗi ngay trên form
-      return; // ❌ KHÔNG gọi API
+      setErrors(validationErrors);
+      return;
     }
 
-    setErrors({}); // clear lỗi nếu hợp lệ
+    setErrors({});
 
     try {
-      // 2. gọi API
       const response = await updateUserProfileApi({
         fullName: profileData.fullName,
         phone: profileData.phone,
@@ -192,16 +195,43 @@ const ProfileView = ({
         avatar: profileData.avatar,
       });
 
-      // 3. update UI ngay
-      setProfileData(response);
+      setProfileData((prev) => ({
+        ...prev,
+        ...response,
+      }));
 
-      // 4. toast success
       toast.success("Profile updated successfully!");
     } catch (error) {
-      // 5. toast lỗi API
-      toast.error(
-          error?.response?.data?.message || "Update failed!"
-      );
+      toast.error(error?.response?.data?.message || "Update failed!");
+    }
+  };
+
+  const handleAvatarChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await uploadAvatarApi(formData);
+
+      const avatar = res.avatar || res.url || res;
+
+
+      setProfileData((prev) => ({
+        ...prev,
+        avatar,
+      }));
+
+      setCurrentUser((prev) => ({
+        ...prev,
+        avatar,
+      }));
+
+      toast.success("Avatar updated!");
+    } catch (err) {
+      toast.error("Upload failed!");
     }
   };
 
@@ -217,26 +247,7 @@ const ProfileView = ({
     handleSelectAvatar(customAvatarUrl.trim());
     setCustomAvatarUrl("");
   };
-  const handleAvatarChange = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
 
-    const formData = new FormData();
-    formData.append("file", file); // 👈 PHẢI ĐÚNG "file"
-
-    try {
-      const res = await uploadAvatarApi(formData);
-
-      setProfileData((prev) => ({
-        ...prev,
-        avatar: res.avatar || res.url || res,
-      }));
-
-      toast.success("Avatar updated!");
-    } catch (err) {
-      toast.error("Upload failed!");
-    }
-  };
 
   const handleAddCustomActivity = (event) => {
     event.preventDefault();

@@ -20,4 +20,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
                    "WHERE r.role_name = 'ROLE_TEACHER' AND u.is_deleted = FALSE " +
                    "ORDER BY u.user_id", nativeQuery = true)
     List<User> findAllTeachers();
+    Optional<User> findByEmail(String email);
 }
