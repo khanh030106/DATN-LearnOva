@@ -19,4 +19,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("SELECT r FROM Review r WHERE r.course.id IN :courseIds")
     List<Review> findByCourseIdIn(@Param("courseIds") List<Long> courseIds);
+    @Query("SELECT COALESCE(AVG(r.rating), 0) FROM Review r WHERE r.course.id = :courseId")
+    Double getAverageRating(@Param("courseId") Long courseId);
+
+    long countByCourseId(Long courseId);
 }

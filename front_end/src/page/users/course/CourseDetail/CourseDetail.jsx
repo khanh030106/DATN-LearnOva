@@ -33,6 +33,7 @@ const formatDuration = (totalSeconds) => {
 function CourseDetail() {
     const { courseId } = useParams();
     const reviewsPerPage = 3;
+    const [reviewsLoaded, setReviewsLoaded] = useState(false);
 
     const [course, setCourse] = useState(null);
     const [instructorAvatarUrl, setInstructorAvatarUrl] = useState(null);
@@ -104,7 +105,17 @@ function CourseDetail() {
         };
         load();
     }, [courseId]);
+    useEffect(() => {
+        if (!courseId) return;
 
+        getCourseReviewsApi(courseId)
+            .then((data) => {
+                setReviewsData(data);
+            })
+            .finally(() => {
+                setReviewsLoaded(true);
+            });
+    }, [courseId]);
     useEffect(() => {
         if (!courseId) return;
         getCourseReviewsApi(courseId).then(setReviewsData).catch(console.error);
@@ -123,20 +134,32 @@ function CourseDetail() {
     );
 
     useEffect(() => {
-        if (!courseId || !currentUserId) return;
+        if (!courseId || !currentUserId || !reviewsLoaded) return;
+
         getCourseProgressApi(courseId)
             .then((data) => {
                 setCourseProgress(data);
-                const isCompleted = data?.isCourseCompleted || data?.courseCompleted || Math.round(data?.courseProgressPercent || 0) === 100;
-                if (isCompleted && !hasReviewed && !hasAutoPromptedReview.current) {
+
+                const isCompleted =
+                    data?.isCourseCompleted ||
+                    data?.courseCompleted ||
+                    Math.round(data?.courseProgressPercent || 0) === 100;
+
+                if (
+                    isCompleted &&
+                    !hasReviewed &&
+                    !hasAutoPromptedReview.current
+                ) {
                     hasAutoPromptedReview.current = true;
                     setShowReviewModal(true);
                 }
-            })
-            .catch((err) => {
-                // Ignore if not enrolled or unauthenticated
             });
-    }, [courseId, currentUserId, reviewsData, hasReviewed]);
+    }, [
+        courseId,
+        currentUserId,
+        reviewsLoaded,
+        hasReviewed
+    ]);
 
     const handleVideoProgressUpdate = useCallback(async (currentTime) => {
         if (!activeLesson || !currentUserId) return;

@@ -12,6 +12,12 @@ public record MyEnrolledCourseResponse(
         CourseLevel level,
         String thumbnailKey,
         Integer progressPercent,
+
+        Integer totalLessons,
+        Integer completedLessons,
+        Double averageRating,
+        Long reviewCount,
+
         Instant enrolledAt,
         OffsetDateTime completedAt
 ) {}

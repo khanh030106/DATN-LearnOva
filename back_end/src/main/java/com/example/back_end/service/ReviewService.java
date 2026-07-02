@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.back_end.dto.resquest.UpdateReviewRequest;
 import java.time.Instant;
 import java.util.List;
+import com.example.back_end.dto.response.CourseReviewResponse;
 
 
 @Slf4j
@@ -142,5 +143,27 @@ public class ReviewService {
 
         long total = reviews.size();
         return new RatingSummaryResponse(avg, total);
+    }
+    public CourseReviewResponse getCourseReviewSummary(Long courseId) {
+
+        List<ReviewResponse> reviews = reviewRepository.findByCourseIdWithUser(courseId)
+                .stream()
+                .map(review ->
+                        ReviewResponse.builder()
+                                .reviewId(review.getId())
+                                .userId(review.getUser().getId())
+                                .userName(review.getUser().getFullName())
+                                .rating(review.getRating())
+                                .comment(review.getComment())
+                                .createdAt(review.getCreatedAt())
+                                .build()
+                )
+                .toList();
+
+        return CourseReviewResponse.builder()
+                .averageRating(reviewRepository.getAverageRating(courseId))
+                .reviewCount(reviewRepository.countByCourseId(courseId))
+                .reviews(reviews)
+                .build();
     }
 }

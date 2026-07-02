@@ -128,6 +128,7 @@ const ProfileView = ({
 
     getMyEnrolledCoursesApi(axiosPrivate, accessToken)
       .then((data) => {
+        console.log(data);
         if (mounted) {
           setOwnedCourses(Array.isArray(data) ? data.map(mapEnrolledCourse) : []);
         }
@@ -405,15 +406,22 @@ const mapEnrolledCourse = (course) => ({
   instructor: course.instructorName || "LearnOva Instructor",
   level: course.level || "All levels",
   image:
-    course.thumbnailKey && String(course.thumbnailKey).startsWith("http")
-      ? course.thumbnailKey
-      : "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
-  progress: Number(course.progressPercent || 0),
-  lessonsDone: 0,
-  lessonsTotal: 0,
-  remaining: formatRemaining(Number(course.progressPercent || 0)),
-  rating: 4.8,
-  reviews: "0",
+      course.thumbnailKey && String(course.thumbnailKey).startsWith("http")
+          ? course.thumbnailKey
+          : "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
+
+  progress: Number(course.progressPercent ?? 0),
+
+  lessonsDone: Number(course.completedLessons ?? 0),
+  lessonsTotal: Number(course.totalLessons ?? 0),
+
+  remaining: formatRemaining(Number(course.progressPercent ?? 0)),
+
+
+  rating: Number(course.averageRating ?? 0).toFixed(1),
+
+  reviews: Number(course.reviewCount ?? 0),
+
   enrolledAt: course.enrolledAt,
   completedAt: course.completedAt,
 });
