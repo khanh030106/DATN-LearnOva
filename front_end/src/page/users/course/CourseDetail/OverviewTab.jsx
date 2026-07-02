@@ -1,133 +1,109 @@
 import React from "react";
-import {
-  FaGraduationCap,
-  FaCheckCircle,
-  FaUserGraduate
-} from "react-icons/fa";
+import { FaGraduationCap, FaCheckCircle, FaUserGraduate } from "react-icons/fa";
 
-function OverviewTab({ courseDescription, instructor, expandedDescription, setExpandedDescription }) {
-  return (
+const formatHours = (seconds) => {
+    if (!seconds) return "0h";
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    if (h > 0) return `${h}h ${m > 0 ? m + "m" : ""}`.trim();
+    return `${m}m`;
+};
 
-          <div className="overview-content">
-              {/* Thông tin cơ bản */}
-              <div className="course-stats">
-                  <div className="stat">
-                      <span className="star">★</span>
-                      <strong className="stat-value">5.0</strong>
-                      <small className="stat-label">(92 ratings)</small>
-                  </div>
-                  <div className="stat">
-                      <span className="stat-value">32 hours</span>
-                  </div>
-                  <div className="stat">
-                      <span className="stat-label">Beginner level</span>
-                  </div>
-              </div>
+function OverviewTab({ course, instructor, instructorAvatarUrl, expandedDescription, setExpandedDescription }) {
+    const rawDesc = course?.description || "";
+    const paragraphs = rawDesc.split(/\n+/).filter(Boolean);
+    const visibleParas = expandedDescription ? paragraphs : paragraphs.slice(0, 2);
+    const whatYouLearn = course?.whatYouLearn || [];
 
-              {/* Phần mô tả sản phẩm */}
-              <div className="description-section">
-                  <h3>Course Description</h3>
-                  <div className={`description-content ${expandedDescription ? 'expanded' : 'collapsed'}`}>
-                      {expandedDescription
-                          ? courseDescription.map((desc, idx) => (
-                              <p key={idx} className="description-para">{desc}</p>
-                          ))
-                          : courseDescription.slice(0, 2).map((desc, idx) => (
-                              <p key={idx} className="description-para">{desc}</p>
-                          ))
-                      }
-                  </div>
-                  <button
-                      className="see-more-btn"
-                      onClick={() => setExpandedDescription(!expandedDescription)}
-                  >
-                      {expandedDescription ? 'See less' : 'See more'}
-                  </button>
-              </div>
+    return (
+        <div className="overview-content">
+            <div className="course-stats">
+                <div className="stat">
+                    <span className="stat-value">{formatHours(course?.totalDurationSeconds)}</span>
+                </div>
+                <div className="stat">
+                    <span className="stat-value">{course?.lessonCount ?? 0} Lessons</span>
+                </div>
+                <div className="stat">
+                    <span className="stat-label">{course?.level}</span>
+                </div>
+            </div>
 
-              {/* Bạn sẽ học được */}
-              <div className="learn-section">
-                  <h4 className="learn-title">
-                      <FaGraduationCap className="title-icon" />
-                      What you'll learn
-                  </h4>
+            {paragraphs.length > 0 && (
+                <div className="description-section">
+                    <h3>Course Description</h3>
+                    <div className={`description-content ${expandedDescription ? "expanded" : "collapsed"}`}>
+                        {visibleParas.map((p, idx) => (
+                            <p key={idx} className="description-para">{p}</p>
+                        ))}
+                    </div>
+                    {paragraphs.length > 2 && (
+                        <button className="see-more-btn" onClick={() => setExpandedDescription(!expandedDescription)}>
+                            {expandedDescription ? "See less" : "See more"}
+                        </button>
+                    )}
+                </div>
+            )}
 
-                  <ul className="learn-list">
-                      <li>
-                          <FaCheckCircle className="learn-icon" />
-                          Xây dựng ứng dụng với Spring Boot
-                      </li>
+            {whatYouLearn.length > 0 && (
+                <div className="learn-section">
+                    <h4 className="learn-title">
+                        <FaGraduationCap className="title-icon" />
+                        What you'll learn
+                    </h4>
+                    <ul className="learn-list">
+                        {whatYouLearn.map((item, idx) => (
+                            <li key={idx}>
+                                <FaCheckCircle className="learn-icon" />
+                                {item}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
 
-                      <li>
-                          <FaCheckCircle className="learn-icon" />
-                          Truy xuất dữ liệu với Spring Data JPA
-                      </li>
+            <hr />
 
-                      <li>
-                          <FaCheckCircle className="learn-icon" />
-                          Tích hợp GitHub Copilot vào quy trình làm việc
-                      </li>
-
-                      <li>
-                          <FaCheckCircle className="learn-icon" />
-                          Xây dựng RESTful API với Spring WEB
-                      </li>
-
-                      <li>
-                          <FaCheckCircle className="learn-icon" />
-                          Triển khai ứng dụng thực tế
-                      </li>
-                  </ul>
-              </div>
-              <hr />
-
-              {/* INSTRUCTOR SECTION */}
-              <div className="instructor-section">
-                  <h4 className="section-header-title">
-                      <FaUserGraduate className="OV-section-icon" />
-                      Instructor
-                  </h4>
-
-                  <div className="instructor-container">
-                      <div className="instructor-header-box">
-                          <div className="OV-instructor-avatar-wrapper-co">
-                              <img
-                                  src={instructor.avatar}
-                                  alt={instructor.name}
-                                  className="instructor-avatar-large"
-                              />
-                          </div>
-
-                          <div className="instructor-details">
-                              <h3 className="instructor-name-large">{instructor.name}</h3>
-                              <p className="instructor-subtitle-co">{instructor.title}</p>
-
-                              <div className="instructor-social-links">
-                                  <a href="#" className="social-link" title="Twitter">
-                                      <span>𝕏</span>
-                                  </a>
-                                  <a href="#" className="social-link" title="Facebook">
-                                      <span>f</span>
-                                  </a>
-                                  <a href="#" className="social-link" title="LinkedIn">
-                                      <span>in</span>
-                                  </a>
-                                  <a href="#" className="social-link" title="YouTube">
-                                      <span>▶</span>
-                                  </a>
-                                  <a href="#" className="social-link" title="Website">
-                                      <span>🔗</span>
-                                  </a>
-                              </div>
-                          </div>
-                      </div>
-
-                      <p className="instructor-bio-text">{instructor.bio}</p>
-                  </div>
-              </div>
-          </div>
-
-  );
+            <div className="instructor-section">
+                <h4 className="section-header-title">
+                    <FaUserGraduate className="OV-section-icon" />
+                    Instructor
+                </h4>
+                <div className="instructor-container">
+                    <div className="instructor-header-box">
+                        <div className="OV-instructor-avatar-wrapper-co">
+                            {instructorAvatarUrl ? (
+                                <img
+                                    src={instructorAvatarUrl}
+                                    alt={instructor?.fullName}
+                                    className="instructor-avatar-large"
+                                />
+                            ) : (
+                                <div
+                                    className="instructor-avatar-large"
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        background: "#e2e8f0",
+                                        fontSize: "28px",
+                                        fontWeight: 700,
+                                        color: "#64748b",
+                                        borderRadius: "50%",
+                                    }}
+                                >
+                                    {instructor?.fullName?.charAt(0) ?? "?"}
+                                </div>
+                            )}
+                        </div>
+                        <div className="instructor-details">
+                            <h3 className="instructor-name-large">{instructor?.fullName}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default OverviewTab;

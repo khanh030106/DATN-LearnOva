@@ -2,17 +2,17 @@ import { DollarSign, GraduationCap, Star, TrendingUp, Users } from "lucide-react
 
 export const courseStatusFilterOptions = [
   { label: "All Status", value: "ALL" },
-  { label: "Published", value: "PUBLISHED" },
-  { label: "Draft", value: "DRAFT" },
+  { label: "Active", value: "ACTIVE" },
+  { label: "Inactive", value: "INACTIVE" },
 ];
 
 export const courseSortOptions = [
   { label: "Sort: Newest", value: "NEWEST" },
   { label: "Sort: Rating", value: "RATING" },
-  { label: "Sort: Revenue", value: "REVENUE" },
+  { label: "Sort: Price", value: "REVENUE" },
 ];
 
-export const courseTableColumns = ["Course", "Status", "Students", "Revenue", "Rating", "Updated", "Actions"];
+export const courseTableColumns = ["Course", "Status", "Students", "Price", "Rating", "Updated", "Actions"];
 
 export const parseCourseNumber = (value) => Number(String(value).replace(/[^\d.]/g, "")) || 0;
 
@@ -26,15 +26,17 @@ export const getFilteredCourses = ({ courses, activeFilter, activeCategory, sear
   const normalizedSearch = searchTerm.trim().toLowerCase();
 
   return courses.filter((course) => {
-    const isVisible = !course.isDeleted;
-    const matchesFilter = activeFilter === "ALL" || course.courseStatus === activeFilter;
+    const matchesFilter =
+      activeFilter === "ALL" ||
+      (activeFilter === "ACTIVE" && !course.isDeleted) ||
+      (activeFilter === "INACTIVE" && course.isDeleted);
     const matchesCategory = activeCategory === "ALL" || course.category === activeCategory;
     const matchesSearch =
       !normalizedSearch ||
       course.title.toLowerCase().includes(normalizedSearch) ||
       course.category.toLowerCase().includes(normalizedSearch);
 
-    return isVisible && matchesFilter && matchesCategory && matchesSearch;
+    return matchesFilter && matchesCategory && matchesSearch;
   });
 };
 
@@ -45,7 +47,7 @@ export const sortCourses = (courses, sortOption) =>
     }
 
     if (sortOption === "REVENUE") {
-      return parseCourseNumber(secondCourse.displayRevenue) - parseCourseNumber(firstCourse.displayRevenue);
+      return parseCourseNumber(secondCourse.displayPrice) - parseCourseNumber(firstCourse.displayPrice);
     }
 
     return new Date(secondCourse.updatedAt || secondCourse.publishedAt) - new Date(firstCourse.updatedAt || firstCourse.publishedAt);

@@ -1,0 +1,137 @@
+.ic {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+}
+
+.ic:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(29, 78, 216, 0.1);
+}
+
+/* ── Company bar ─────────────────────────────────── */
+.ic__company-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: #eff6ff;
+    border-bottom: 1px solid #dbeafe;
+}
+
+.ic__company-badge {
+    color: #1d4ed8;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.ic__years {
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* ── Photo ───────────────────────────────────────── */
+.ic__photo-wrap {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #f0f7ff;
+}
+
+.ic__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.ic:hover .ic__photo {
+    transform: scale(1.04);
+}
+
+/* ── Body ────────────────────────────────────────── */
+.ic__body {
+    padding: 18px 20px 22px;
+}
+
+.ic__role {
+    margin: 0 0 4px;
+    color: #1d4ed8;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.ic__name {
+    margin: 0 0 14px;
+    color: #0f172a;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+/* ── Stats ───────────────────────────────────────── */
+.ic__stats {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.ic__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ic__stat strong {
+    color: #0f172a;
+    font-size: 0.97rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.ic__stat span {
+    color: #94a3b8;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.ic__stat-divider {
+    width: 1px;
+    height: 28px;
+    background: #e8edf3;
+    flex-shrink: 0;
+}
+
+/* ── Tags ────────────────────────────────────────── */
+.ic__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ic__tag {
+    padding: 3px 9px;
+    border-radius: 5px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}

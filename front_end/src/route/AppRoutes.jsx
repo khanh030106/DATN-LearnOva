@@ -14,6 +14,7 @@ import Reports from "../page/admin/reports/Reports.jsx";
 import Vouchers from "../page/admin/vouchers/Vouchers.jsx";
 import VoucherCreate from "../page/admin/vouchers/voucherCreate/VoucherCreate.jsx";
 import Category from "../page/admin/category/Category.jsx";
+import Tag from "../page/admin/tag/Tag.jsx";
 import ReviewsComments from "../page/admin/reviewsComments/ReviewsComments.jsx";
 import ViolationReports from "../page/admin/violationReports/ViolationReports.jsx";
 import TeacherLayout from "../layout/teacher/TeacherLayout.jsx";
@@ -24,7 +25,6 @@ import PromotionsPage from "../page/teacher/promotions/PromotionsPage.jsx";
 import StudentsPage from "../page/teacher/students/StudentsPage.jsx";
 import RevenuePage from "../page/teacher/revenue/RevenuePage.jsx";
 import AnalyticsPage from "../page/teacher/analytics/AnalyticsPage.jsx";
-import QaPage from "../page/teacher/qa/QaPage.jsx";
 import UserLayout from "../layout/user/UserLayout.jsx";
 import InstructorsPage from "../page/users/intructor.jsx";
 import InstructorDetail from "../page/users/intructor/intructorDetail/intructorDetail.jsx";
@@ -34,6 +34,10 @@ import CoursePage from "../page/users/course/CourseNew.jsx";
 import CourseDetail from "../page/users/course/CourseDetail/CourseDetail.jsx";
 import CourseDetaill from "../page/home/courses/CourseDetail.jsx";
 import Cart from "../page/home/cart/Cart.jsx";
+import OAuth2Success from "./../page/login/OAuth2Success.jsx";
+import PaymentSuccess from "../page/home/payment/PaymentSuccess.jsx";
+import PaymentCancel from "../page/home/payment/PaymentCancel.jsx";
+
 
 const App = () => {
     return (
@@ -41,7 +45,11 @@ const App = () => {
             <Routes>
 
                 <Route path="/learnova/auth/login" element={<AuthPage/>}/>
-                <Route path="/learnova/user/CoursesDetail" element={<CourseDetail/>}/>
+                <Route path="/learnova/user/courses-detail" element={<CourseDetail/>}/>
+                <Route path="/learnova/user/CoursesDetail/:courseId" element={<CourseDetail/>}/>
+                <Route path="/oauth2-success" element={<OAuth2Success />}/>
+                <Route path="/payment/success" element={<PaymentSuccess />}/>
+                <Route path="/payment/cancel" element={<PaymentCancel />}/>
 
                 <Route element={<HomeLayout/>}>
                     <Route path="/learnova/home" element={<Home/>}/>
@@ -60,6 +68,7 @@ const App = () => {
                     <Route path="vouchers" element={<Vouchers/>}/>
                     <Route path="vouchers/create" element={<VoucherCreate/>}/>
                     <Route path="categories" element={<Category/>}/>
+                    <Route path="tags" element={<Tag/>}/>
                     <Route path="reviews-comments" element={<ReviewsComments/>}/>
                     <Route path="violation-reports" element={<ViolationReports/>}/>
                 </Route>
@@ -69,18 +78,18 @@ const App = () => {
                     <Route index element={<OverviewPage/>}/>
                     <Route path="courses" element={<CoursesPage/>}/>
                     <Route path="courses/create" element={<CourseCreationPage/>}/>
+                    <Route path="courses/edit/:courseId" element={<CourseCreationPage/>}/>
                     <Route path="promotions" element={<PromotionsPage/>}/>
                     <Route path="students" element={<StudentsPage/>}/>
                     <Route path="revenue" element={<RevenuePage/>}/>
                     <Route path="analytics" element={<AnalyticsPage/>}/>
-                    <Route path="qa" element={<QaPage/>}/>
                 </Route>
 
                 {/* User */}
                 <Route element={<UserLayout/>}>
                     <Route path="/learnova/courses" element={<CoursePage/>}/>
                     <Route path="/learnova/cart" element={<Cart/>}/>
-                    <Route path="/learnova/CoursesDetail/:id" element={<CourseDetaill/>}/>
+                    <Route path="/learnova/courses/detail/:id" element={<CourseDetaill/>}/>
                     <Route path="/learnova/intructors" element={<InstructorsPage/>}/>
                     <Route path="/learnova/intructorDetail" element={<InstructorDetail/>}/>
                     <Route path="/learnova/about" element={<AboutView/>}/>

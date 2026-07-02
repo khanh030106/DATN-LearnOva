@@ -1,23 +1,28 @@
-import {createContext, useEffect, useState} from "react";
-import {loginApi, logoutApi, refreshApi} from "../api/AuthApi.js";
-import {getCurrentUserApi} from "../api/UserApi.js";
-
+import { createContext, useCallback, useEffect, useRef, useState } from "react";
+import { loginApi, logoutApi, refreshApi } from "../api/AuthApi.js";
+import { getCurrentUserApi } from "../api/UserApi.js";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
+
     const [accessToken, setAccessToken] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const sessionVersionRef = useRef(0);
+    // Deduplicates concurrent refresh calls (StrictMode double-invoke, multiple 401s, etc.)
+    const pendingRefreshRef = useRef(null);
+
     const login = async (email, password, remember) => {
+        sessionVersionRef.current++; // Invalidate any in-flight restoreSession
         const data = await loginApi(email, password, remember);
         setAccessToken(data.accessToken);
         try {
             await fetchCurrentUser();
         } catch (e) {
-            console.error("Failed to fetch user", e);
+            console.error("Failed to fetch user after login", e);
         }
         return data;
     };
@@ -28,33 +33,46 @@ export const AuthProvider = ({ children }) => {
         return user;
     };
 
-    const refreshAccessToken = async () => {
-        const data = await refreshApi();
-        setAccessToken(data.accessToken);
-        return data.accessToken;
-    };
+    const refreshAccessToken = useCallback(async () => {
+        // If a refresh is already in flight, share the same promise instead of
+        // firing a second request. This prevents token rotation failures when
+        // React StrictMode double-invokes the restoreSession effect.
+        if (pendingRefreshRef.current) {
+            return pendingRefreshRef.current;
+        }
+        pendingRefreshRef.current = refreshApi()
+            .then((data) => {
+                setAccessToken(data.accessToken);
+                return data.accessToken;
+            })
+            .finally(() => {
+                pendingRefreshRef.current = null;
+            });
+        return pendingRefreshRef.current;
+    }, []);
 
-    const logout = async () => {
+    const logout = useCallback(async () => {
+        sessionVersionRef.current++; // Invalidate any in-flight restoreSession
         try {
             await logoutApi();
         } finally {
             setAccessToken(null);
             setCurrentUser(null);
         }
-    };
+    }, []);
 
+    // On every page load, try to restore the session from the refreshToken cookie.
+    // If the cookie is missing or expired the refresh call returns 401 and we stay logged out.
     useEffect(() => {
-        const restoreLogin = async () => {
+        const myVersion = ++sessionVersionRef.current;
+
+        const restoreSession = async () => {
             try {
-                const token = await refreshAccessToken();
-
-                try {
-                    await fetchCurrentUser();
-                } catch (e) {
-                    console.error("Failed to fetch user", e);
-                }
-
-            } catch (error) {
+                await refreshAccessToken();
+                if (sessionVersionRef.current !== myVersion) return; // login() was called, bail
+                await fetchCurrentUser();
+            } catch {
+                if (sessionVersionRef.current !== myVersion) return;
                 setAccessToken(null);
                 setCurrentUser(null);
             } finally {
@@ -62,7 +80,7 @@ export const AuthProvider = ({ children }) => {
             }
         };
 
-        restoreLogin();
+        restoreSession();
     }, []);
 
     return (
@@ -82,4 +100,3 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
-

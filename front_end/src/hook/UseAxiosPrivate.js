@@ -1,39 +1,82 @@
 import { useEffect } from "react";
-import axiosClient from "../api/axiosClient.js";
-import { useAuth } from "./useAuth.js";
+import axiosClient from "../api/AxiosClient.js";
+import { useAuth } from "./UseAuth.jsx";
+
+let responseInterceptorId = null;
+let privateHookSubscribers = 0;
+let pendingRefresh = null;
+let latestRefreshAccessToken = null;
+let latestLogout = null;
 
 export const useAxiosPrivate = () => {
     const { refreshAccessToken, logout } = useAuth();
 
     useEffect(() => {
-        const responseInterceptor = axiosClient.interceptors.response.use(
-            (response) => response,
-            async (error) => {
-                const originalRequest = error.config;
+        latestRefreshAccessToken = refreshAccessToken;
+        latestLogout = logout;
+    }, [refreshAccessToken, logout]);
 
-                if (error.response?.status === 401 && !originalRequest._retry) {
-                    originalRequest._retry = true;
+    useEffect(() => {
+        privateHookSubscribers += 1;
 
-                    try {
-                        await refreshAccessToken();
+        if (responseInterceptorId === null) {
+            responseInterceptorId = axiosClient.interceptors.response.use(
+                (response) => response,
+                async (error) => {
+                    const originalRequest = error.config;
+                    const requestUrl = originalRequest?.url || "";
+                    const isAuthRequest = requestUrl.includes("/auth/");
 
-                        // Retry the original request — the refreshed accessToken cookie
-                        // will be sent automatically by the browser
-                        return axiosClient(originalRequest);
-                    } catch (refreshError) {
-                        await logout();
-                        return Promise.reject(refreshError);
+                    if (!originalRequest || isAuthRequest) {
+                        return Promise.reject(error);
                     }
-                }
 
-                return Promise.reject(error);
-            }
-        );
+                    if (
+                        error.response?.status === 401 &&
+                        !originalRequest._retry
+                    ) {
+                        originalRequest._retry = true;
+
+                        try {
+                            if (!pendingRefresh) {
+                                pendingRefresh =
+                                    latestRefreshAccessToken().finally(() => {
+                                        pendingRefresh = null;
+                                    });
+                            }
+
+                            const nextAccessToken = await pendingRefresh;
+                            if (nextAccessToken) {
+                                originalRequest.headers = {
+                                    ...originalRequest.headers,
+                                    Authorization: `Bearer ${nextAccessToken}`,
+                                };
+                            }
+                            return axiosClient(originalRequest);
+                        } catch (refreshError) {
+                            await latestLogout();
+                            return Promise.reject(refreshError);
+                        }
+                    }
+
+                    return Promise.reject(error);
+                }
+            );
+        }
 
         return () => {
-            axiosClient.interceptors.response.eject(responseInterceptor);
+            privateHookSubscribers -= 1;
+
+            if (
+                privateHookSubscribers === 0 &&
+                responseInterceptorId !== null
+            ) {
+                axiosClient.interceptors.response.eject(responseInterceptorId);
+                responseInterceptorId = null;
+                pendingRefresh = null;
+            }
         };
-    }, [refreshAccessToken, logout]);
+    }, []);
 
     return axiosClient;
 };

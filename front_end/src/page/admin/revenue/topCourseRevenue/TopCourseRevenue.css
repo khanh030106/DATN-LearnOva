@@ -180,6 +180,37 @@
   font-weight: 700;
 }
 
+.topRevenueBlockState {
+  height: 72px;
+  color: #64748b !important;
+  font-weight: 700;
+  text-align: center !important;
+}
+
+.topRevenuePagination {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 18px;
+}
+
+.topRevenuePagination button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #2563eb;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.topRevenuePagination button:hover,
+.topRevenuePagination button.active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
 @media (max-width: 900px) {
   .topRevenueBlockHeader {
     flex-direction: column;

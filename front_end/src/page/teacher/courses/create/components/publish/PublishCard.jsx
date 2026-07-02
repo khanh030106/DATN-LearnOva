@@ -1,6 +1,6 @@
 import {Rocket} from "lucide-react";
 
-const PublishCard = ({status, onStatusChange, onPublish}) => {
+const PublishCard = ({status, visibility, onStatusChange, onVisibilityChange, onPublish, isSubmitting, isReady}) => {
     return (
         <section className="teacher-create-card teacher-publish-settings">
             <h2>Publish Settings</h2>
@@ -8,11 +8,13 @@ const PublishCard = ({status, onStatusChange, onPublish}) => {
             <div className="teacher-radio-group">
                 <h3>Course Status</h3>
                 {[
-                    ["DRAFT", "Draft", "Only you can see this course"],
+                    ["DRAFT",     "Draft",     "Only you can see this course"],
                     ["PUBLISHED", "Published", "Course is live and available to all students"],
                 ].map(([value, label, help]) => (
-                    <label key={value}
-                           className={status === value ? "teacher-radio-card teacher-radio-card--active" : "teacher-radio-card"}>
+                    <label
+                        key={value}
+                        className={status === value ? "teacher-radio-card teacher-radio-card--active" : "teacher-radio-card"}
+                    >
                         <input type="radio" checked={status === value} onChange={() => onStatusChange(value)}/>
                         <span>
                             <strong>{label}</strong>
@@ -22,12 +24,37 @@ const PublishCard = ({status, onStatusChange, onPublish}) => {
                 ))}
             </div>
 
-            <button type="button" className="teacher-publish-button" onClick={onPublish}>
+            <div className="teacher-radio-group">
+                <h3>Visibility</h3>
+                {[
+                    ["PUBLIC",  "Public",  "Anyone can find and enroll"],
+                    ["PRIVATE", "Private", "Only people with a link can access"],
+                ].map(([value, label, help]) => (
+                    <label
+                        key={value}
+                        className={visibility === value ? "teacher-radio-card teacher-radio-card--active" : "teacher-radio-card"}
+                    >
+                        <input type="radio" checked={visibility === value} onChange={() => onVisibilityChange?.(value)}/>
+                        <span>
+                            <strong>{label}</strong>
+                            <small>{help}</small>
+                        </span>
+                    </label>
+                ))}
+            </div>
+
+            <button
+                type="button"
+                className={`teacher-publish-button${!isReady ? " teacher-publish-button--warn" : ""}`}
+                onClick={onPublish}
+                disabled={isSubmitting}
+                title={!isReady ? "Some checklist items are incomplete" : undefined}
+            >
                 <Rocket size={17}/>
-                Publish Course
+                {isSubmitting ? "Saving..." : status === "PUBLISHED" ? "Publish Course" : "Save Status"}
             </button>
         </section>
     );
-}
+};
 
 export default PublishCard;

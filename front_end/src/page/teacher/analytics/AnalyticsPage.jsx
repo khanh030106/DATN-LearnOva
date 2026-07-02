@@ -7,7 +7,6 @@ import {
   analyticsStats,
   attentionItems,
   chartLabels,
-  coursePerformance,
   engagementItems,
   performanceSeries,
 } from "./analyticsPageData.js";

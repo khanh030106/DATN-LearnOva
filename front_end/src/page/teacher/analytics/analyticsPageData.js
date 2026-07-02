@@ -1,5 +1,4 @@
 import { CalendarDays, Clock3, Info, Star, TrendingDown, TrendingUp, Users } from "lucide-react";
-import { courses } from "../data/teacherDashboardData.js";
 
 export const analyticsStats = [
   {
@@ -55,37 +54,6 @@ export const performanceSeries = {
 };
 
 export const chartLabels = ["May 1", "May 8", "May 15", "May 22", "May 31"];
-
-export const coursePerformance = [
-  {
-    title: "Eastern Philosophy",
-    image: courses[0].image,
-    completion: 82,
-    rating: "4.9",
-    trend: "up",
-  },
-  {
-    title: "Research Skills",
-    image: courses[1].image,
-    completion: 76,
-    rating: "4.8",
-    trend: "up",
-  },
-  {
-    title: "UI/UX Design",
-    image: courses[2].image,
-    completion: 71,
-    rating: "4.7",
-    trend: "up",
-  },
-  {
-    title: "JavaScript Advanced",
-    image: courses[0].image,
-    completion: 68,
-    rating: "4.6",
-    trend: "down",
-  },
-];
 
 export const engagementItems = [
   { label: "Active students", value: "1,248", progress: 82, change: "15.8%", icon: Users, tone: "blue" },

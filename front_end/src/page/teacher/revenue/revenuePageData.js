@@ -1,5 +1,4 @@
 import { FileText, Star, TrendingUp, Users, Wallet } from "lucide-react";
-import { courses } from "../data/teacherDashboardData.js";
 
 export const periodOptions = [
   { label: "7 days", value: "7d" },
@@ -76,53 +75,6 @@ export const chartHighlights = [
   },
 ];
 
-export const topCourses = [
-  {
-    title: "React Masterclass",
-    subtitle: "From Zero to Hero",
-    image: courses[0].image,
-    revenue: "₫24.500.000",
-    students: 421,
-    trend: "+15.2%",
-    trendTone: "up",
-  },
-  {
-    title: "Python for Beginners",
-    subtitle: "The Complete Guide",
-    image: courses[1].image,
-    revenue: "₫18.200.000",
-    students: 358,
-    trend: "+9.1%",
-    trendTone: "up",
-  },
-  {
-    title: "UI/UX Design",
-    subtitle: "Fundamentals",
-    image: courses[2].image,
-    revenue: "₫15.800.000",
-    students: 289,
-    trend: "+7.3%",
-    trendTone: "up",
-  },
-  {
-    title: "JavaScript",
-    subtitle: "Advanced Concepts",
-    image: courses[0].image,
-    revenue: "₫12.450.000",
-    students: 245,
-    trend: "-1.2%",
-    trendTone: "down",
-  },
-  {
-    title: "Node.js",
-    subtitle: "Backend Developer",
-    image: courses[1].image,
-    revenue: "₫9.850.000",
-    students: 187,
-    trend: "+3.6%",
-    trendTone: "up",
-  },
-];
 
 export const transactions = [
   { student: "Nguyen Van A", course: "React Masterclass", amount: "₫499.000", method: "Momo", time: "31 May, 2026" },

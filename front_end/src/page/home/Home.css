@@ -1,5 +1,81 @@
-.home-content {
-  padding: 0 clamp(24px, 7vw, 150px);
-  background: #f8fafc;
-  color: #0f172a;
+/* ============================================================
+   HOME PAGE — Design Tokens & Shell
+   Primary: #2563eb  Accent: #38bdf8  Bg: #f8faff
+   Headings: Bricolage Grotesque  Body: DM Sans
+   ============================================================ */
+
+:root {
+  --blue-50:  #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --blue-800: #1e40af;
+  --blue-900: #1e3a8a;
+  --navy:     #0a1628;
+  --text-primary:   #0f172a;
+  --text-secondary: #475569;
+  --text-muted:     #94a3b8;
+  --border:         #e2e8f0;
+  --bg-page:        #f8faff;
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-sans:    'DM Sans', system-ui, sans-serif;
+}
+
+/* Global resets for home */
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* Skip-to-content (WCAG 2.1 – 2.4.1) */
+.home-skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 16px;
+  z-index: 9999;
+  padding: 8px 18px;
+  border-radius: 6px;
+  background: var(--blue-600);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.home-skip-link:focus {
+  left: 16px;
+}
+
+/* Chatbot wrapper — positioning handled by AI.css */
+.chatbot-fixed {
+  pointer-events: none;
+}
+.chatbot-fixed > * {
+  pointer-events: auto;
+}
+
+/* Section eyebrow label utility */
+.section-eyebrow {
+  display: block;
+  color: #0048e6;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f0f6ff; }
+::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 3px; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

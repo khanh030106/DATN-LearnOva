@@ -3,6 +3,8 @@ package com.example.back_end.service;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.Verificationtoken;
 import com.example.back_end.entity.enums.VerificationType;
+import com.example.back_end.exception.BusinessException;
+import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.UserRepository;
 import com.example.back_end.repository.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +32,8 @@ public class VerificationTokenService {
 
     @Transactional
     public Verificationtoken createRefreshToken(String email, Boolean rememberMe) {
-        User user = userRepository.findByEmailAndIsDeletedFalse(email, false)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         verificationTokenRepository.deleteByUserAndTokenType(user, VerificationType.REFRESH_TOKEN);
 
@@ -49,14 +51,12 @@ public class VerificationTokenService {
     }
 
     public Verificationtoken verifyRefreshToken(String token) {
-        Verificationtoken refreshToken = verificationTokenRepository.findByTokenAndTokenTypeAndIsUsedFalse(
-                token,
-                VerificationType.REFRESH_TOKEN
-                )
-                .orElseThrow(() -> new RuntimeException("Token not found"));
+        Verificationtoken refreshToken = verificationTokenRepository
+                .findByTokenAndTokenTypeAndIsUsedFalse(token, VerificationType.REFRESH_TOKEN)
+                .orElseThrow(() -> new BusinessException("Token not found"));
 
         if (refreshToken.getExpiredAt().isBefore(OffsetDateTime.now())) {
-            throw new RuntimeException("refresh token expired");
+            throw new BusinessException("Refresh token expired");
         }
 
         return refreshToken;
@@ -73,5 +73,38 @@ public class VerificationTokenService {
                 VerificationType.REFRESH_TOKEN,
                 OffsetDateTime.now()
         );
+    }
+
+    @Transactional
+    public Verificationtoken createActiveAccountToken(User user) {
+        verificationTokenRepository.deleteByUserAndTokenType(user, VerificationType.ACTIVE_ACCOUNT);
+
+        Verificationtoken token = new Verificationtoken();
+        token.setUser(user);
+        token.setToken(UUID.randomUUID().toString());
+        token.setTokenType(VerificationType.ACTIVE_ACCOUNT);
+        token.setCreatedAt(Instant.now());
+        token.setExpiredAt(OffsetDateTime.now().plusMinutes(30));
+        token.setIsUsed(false);
+        return verificationTokenRepository.save(token);
+    }
+
+    // Expiry is checked here, consistent with verifyRefreshToken.
+    public Verificationtoken verifyActiveAccountToken(String token) {
+        Verificationtoken verificationToken = verificationTokenRepository
+                .findByTokenAndTokenTypeAndIsUsedFalse(token, VerificationType.ACTIVE_ACCOUNT)
+                .orElseThrow(() -> new BusinessException("Invalid or already used activation link"));
+
+        if (verificationToken.getExpiredAt().isBefore(OffsetDateTime.now())) {
+            throw new BusinessException("Activation link has expired. Please request a new one.");
+        }
+
+        return verificationToken;
+    }
+
+    @Transactional
+    public void markAsUsed(Verificationtoken token) {
+        token.setIsUsed(true);
+        verificationTokenRepository.save(token);
     }
 }

@@ -1,5 +1,7 @@
 import {useEffect, useRef, useState} from "react";
-import {FileText, GripVertical, HelpCircle, Pencil, PlayCircle, Trash2, FileUp, X} from "lucide-react";
+import {FileText, FileUp, GripVertical, HelpCircle, Pencil, PlayCircle, Trash2} from "lucide-react";
+import {useSortable} from "@dnd-kit/sortable";
+import {CSS} from "@dnd-kit/utilities";
 import ResourceList from "./ResourceList.jsx";
 import VideoUploader from "./VideoUploader.jsx";
 import ResourceUploader from "./ResourceUploader.jsx";
@@ -23,16 +25,34 @@ const LessonRow = ({
                        lesson,
                        sectionId,
                        onTitleChange,
+                       onTypeChange,
                        onVideoChange,
                        onResourceChange,
                        onResourceRemove,
                        onDelete,
                    }) => {
     const Icon = iconMap[lesson.type] || FileText;
-    const lessonTitle = lesson.title || "Enter lesson title...";
+
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({id: lesson.id});
+
+    const dragStyle = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.4 : undefined,
+        zIndex: isDragging ? 1 : undefined,
+    };
+
     const [isEditing, setIsEditing] = useState(false);
     const [draftTitle, setDraftTitle] = useState(lesson.title);
     const [resourceType, setResourceType] = useState(lesson.type || "Video");
+    const [confirmDelete, setConfirmDelete] = useState(false);
     const titleInputRef = useRef(null);
 
     useEffect(() => {
@@ -43,14 +63,9 @@ const LessonRow = ({
     }, [isEditing]);
 
     const commitTitle = () => {
-        const nextTitle = draftTitle.trim();
-
-        if (nextTitle !== lesson.title) {
-            onTitleChange(nextTitle);
-        } else {
-            setDraftTitle(lesson.title);
-        }
-
+        const next = draftTitle.trim();
+        if (next !== lesson.title) onTitleChange(next);
+        else setDraftTitle(lesson.title);
         setIsEditing(false);
     };
 
@@ -59,42 +74,57 @@ const LessonRow = ({
         setIsEditing(false);
     };
 
-    const handleTitleKeyDown = (event) => {
-        if (event.key === "Enter") {
-            commitTitle();
-        }
-
-        if (event.key === "Escape") {
-            cancelTitleEdit();
-        }
+    const handleTitleKeyDown = (e) => {
+        if (e.key === "Enter") commitTitle();
+        if (e.key === "Escape") cancelTitleEdit();
     };
 
-    const startTitleEdit = () => {
-        setDraftTitle(lesson.title);
-        setIsEditing(true);
-    };
+    const isEmpty = !lesson.title?.trim();
+    const displayTitle = isEmpty
+        ? `${lesson.lessonOrder}. Enter lesson title...`
+        : `${lesson.lessonOrder}. ${lesson.title}`;
 
     return (
-        <article className="teacher-lesson-builder-row">
-            <GripVertical size={15}/>
+        <article
+            ref={setNodeRef}
+            style={dragStyle}
+            className={[
+                "teacher-lesson-builder-row",
+                isEmpty ? "teacher-lesson-builder-row--empty" : "",
+                isDragging ? "teacher-lesson-builder-row--dragging" : "",
+            ].filter(Boolean).join(" ")}
+        >
+            <span
+                className="teacher-lesson-builder-row__grip"
+                {...attributes}
+                {...listeners}
+                aria-label="Drag to reorder lesson"
+            >
+                <GripVertical size={15}/>
+            </span>
             <span className="teacher-lesson-builder-row__icon">
-        <Icon size={18}/>
-      </span>
+                <Icon size={18}/>
+            </span>
+
             <div className="teacher-lesson-builder-row__content">
                 {isEditing ? (
                     <input
                         ref={titleInputRef}
                         value={draftTitle}
-                        onChange={(event) => setDraftTitle(event.target.value)}
+                        onChange={(e) => setDraftTitle(e.target.value)}
                         onBlur={commitTitle}
                         onKeyDown={handleTitleKeyDown}
                         aria-label={`Lesson ${lesson.lessonOrder} title`}
                     />
                 ) : (
-                    <strong>{lesson.lessonOrder}. {lessonTitle}</strong>
+                    <strong className={isEmpty ? "teacher-lesson-builder-row__empty-title" : ""}>
+                        {displayTitle}
+                    </strong>
                 )}
                 {lesson.sourceName && <small>{lesson.sourceName}</small>}
-                {lesson.videoName && <small className="teacher-lesson-builder-row__video-tag">🎬 {lesson.videoName}</small>}
+                {lesson.videoName && (
+                    <small className="teacher-lesson-builder-row__video-tag">🎬 {lesson.videoName}</small>
+                )}
                 <ResourceList
                     resources={lesson.resources}
                     onRemove={(index) => onResourceRemove?.(index)}
@@ -104,7 +134,10 @@ const LessonRow = ({
             <select
                 className="teacher-lesson-builder-row__type-select"
                 value={resourceType}
-                onChange={(e) => setResourceType(e.target.value)}
+                onChange={(e) => {
+                    setResourceType(e.target.value);
+                    onTypeChange?.(e.target.value);
+                }}
                 aria-label="Select resource type"
             >
                 {RESOURCE_TYPES.map((type) => (
@@ -112,32 +145,58 @@ const LessonRow = ({
                 ))}
             </select>
 
-            <button type="button" aria-label={`Edit ${lessonTitle}`} onClick={startTitleEdit}>
+            <button type="button" aria-label="Edit title" onClick={() => {
+                setDraftTitle(lesson.title);
+                setIsEditing(true);
+            }}>
                 <Pencil size={16}/>
             </button>
 
             {resourceType === "Video" && (
                 <VideoUploader
-                    courseId={courseId}
                     lessonId={lesson.id}
                     accept="video/mp4,video/webm,video/quicktime"
-                    label="Upload lesson video"
-                    onUploadComplete={(file) => onVideoChange?.(file)}
+                    initialFile={lesson.videoName ? {name: lesson.videoName, durationSeconds: lesson.durationSeconds} : null}
+                    onUploadComplete={(result) => onVideoChange?.(result)}
                 />
             )}
 
             {(resourceType === "Document" || resourceType === "Resource") && (
                 <ResourceUploader
-                    courseId={courseId}
-                    lessonId={lesson.id}
-                    onUploadComplete={(files) => onResourceChange?.(files, {courseId, lessonId: lesson.id, resourceType})}
+                    onUploadComplete={(results) => onResourceChange?.(results)}
                 />
             )}
 
-            <button type="button" aria-label={`Delete ${lessonTitle}`} className="teacher-lesson-builder-row__delete"
-                    onClick={onDelete}>
-                <Trash2 size={16}/>
-            </button>
+            <div className="teacher-lesson-delete-confirm">
+                {confirmDelete ? (
+                    <>
+                        <span>Delete?</span>
+                        <button
+                            type="button"
+                            className="teacher-delete-confirm__yes"
+                            onClick={onDelete}
+                        >
+                            Yes
+                        </button>
+                        <button
+                            type="button"
+                            className="teacher-delete-confirm__no"
+                            onClick={() => setConfirmDelete(false)}
+                        >
+                            No
+                        </button>
+                    </>
+                ) : (
+                    <button
+                        type="button"
+                        className="teacher-lesson-builder-row__delete"
+                        aria-label="Delete lesson"
+                        onClick={() => setConfirmDelete(true)}
+                    >
+                        <Trash2 size={16}/>
+                    </button>
+                )}
+            </div>
         </article>
     );
 };

@@ -1,8 +1,6 @@
 import React from 'react';
 import './About.css';
 import { Award, Target, Globe, Users, ChevronRight } from 'lucide-react';
-import aboutVideo from '../../../assets/instructors/video/about.mp4'
-import LearnovaAI from "../../home/AI/AI.jsx";
 
 function AboutView() {
     return (

@@ -1,539 +1,651 @@
-import React, { useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import "./CourseDetail.css";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+    FaPlay,
+    FaPlayCircle,
+    FaClock,
+    FaGraduationCap,
+    FaCheckCircle,
+    FaUserGraduate,
+    FaGlobe,
+    FaChevronDown,
+    FaChevronUp,
+    FaShoppingCart,
+} from "react-icons/fa";
+import { ChevronDown } from "lucide-react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { getCourseDetail, getFileUrl } from "../../../api/PublicCourseApi.js";
+import { checkEnrollment } from "../../../api/EnrollmentApi.js";
+import { useAuth } from "../../../hook/UseAuth.jsx";
+import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";
+import { addStoredCartItem } from "../../../utils/cartStorage.js";
+import { createPaymentApi } from "../../../api/PaymentApi.js";
+import { applyVoucherApi } from "../../../api/VoucherApi.js";
+import PaymentModal from "../../../component/payment/PaymentModal.jsx";
 import LearnovaAI from "../AI/AI.jsx";
-import { FaStar, FaRegStar } from "react-icons/fa";
-import { FaBookmark, FaLink } from "react-icons/fa";
-import { FaPhoneAlt } from "react-icons/fa";
-import {
-  FaCode,
-  FaReact,
-  FaCloud,
-  FaDatabase,
-  FaLock,
-  FaRocket,
-} from "react-icons/fa";
-import {
-  FaUsers,
-  FaBook,
-  FaClock,
-  FaGraduationCap,
-  FaCertificate,
-  FaGlobe,
-  FaHeart,
-  FaShareAlt,
-  FaVideo,
-  FaFileDownload,
-  FaInfinity,
-  FaMobileAlt,
-} from "react-icons/fa";
-import { FaLightbulb, FaBullseye } from "react-icons/fa";
 
-const courses = [
-  {
-    id: 1,
-    title: "Fullstack Web Developer",
-    teacher: "Tran Hoang Nam",
-    subtitle: "Senior Web Developer",
-    rating: 4.9,
-    reviews: "12,450",
-    students: "32,541",
-    lessons: 128,
-    duration: "32 hours",
-    level: "Beginner to Advanced",
-    certificate: "Yes, upon completion",
-    language: "Vietnamese",
-    price: "1.299.000đ",
-    oldPrice: "1.699.000đ",
-    description:
-      "This Fullstack Web Developer course is designed to take you from zero to hero. Learn frontend, backend, databases and deployment.",
-    learnings: [
-      "HTML, CSS, JavaScript",
-      "ReactJS & NodeJS",
-      "RESTful API",
-      "MongoDB & SQL",
-      "Authentication & Security",
-      "Real-world Projects",
-    ],
-    includes: [
-      { icon: <FaReact />, text: "32 hours on-demand video" },
-      { icon: <FaReact />, text: "128 downloadable resources" },
-      { icon: <FaReact />, text: "Full lifetime access" },
-      { icon: <FaReact />, text: "Access on mobile and TV" },
-      { icon: <FaReact />, text: "Certificate of completion" },
-    ],
-    gallery: [
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c",
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-    ],
-  },
-];
+import "./CourseDetail.css";
 
-const Curriculum = () => {
-  const highlights = [
-    {
-      icon: <FaCode />,
-      title: "Build responsive web interfaces",
-      subtitle: "with HTML, CSS and JavaScript",
-    },
-    {
-      icon: <FaReact />,
-      title: "Create modern UIs with React",
-      subtitle: "components and hooks",
-    },
-    {
-      icon: <FaCloud />,
-      title: "Work with RESTful APIs",
-      subtitle: "and handle data effectively",
-    },
-    {
-      icon: <FaDatabase />,
-      title: "Design and manage databases",
-      subtitle: "using PostgreSQL",
-    },
-    {
-      icon: <FaLock />,
-      title: "Implement authentication",
-      subtitle: "and authorization (JWT)",
-    },
-    {
-      icon: <FaRocket />,
-      title: "Deploy applications",
-      subtitle: "to cloud platforms with confidence",
-    },
-  ];
+const formatDuration = (seconds) => {
+    if (!seconds) return "0:00";
 
-  const roadmap = [
-    { title: "Web Fundamentals", lessons: 8, duration: "1h 24m" },
-    { title: "JavaScript Essentials", lessons: 12, duration: "2h 10m" },
-    { title: "React Core", lessons: 15, duration: "4h 30m" },
-    { title: "Working with APIs", lessons: 10, duration: "2h 20m" },
-    { title: "Databases with PostgreSQL", lessons: 8, duration: "2h 00m" },
-    { title: "Authentication & Security", lessons: 6, duration: "1h 40m" },
-    { title: "Deployment & DevOps", lessons: 6, duration: "2h 10m" },
-    { title: "Real-world Project", lessons: 3, duration: "2h 00m" },
-  ];
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
 
-  const skills = [
-    "HTML",
-    "CSS",
-    "JavaScript",
-    "React",
-    "REST API",
-    "PostgreSQL",
-    "JWT",
-    "Git",
-    "Docker",
-    "AWS",
-  ];
+    if (h > 0) {
+        return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    }
 
-  return (
-    <div className="curriculum-page">
-      <div className="curriculum-top">
-        <div className="learn-card-grid">
-          {highlights.map((item, idx) => (
-            <div key={idx} className="learn-card">
-              <div className="learn-card-head">
-                <span className="learn-card-icon">{item.icon}</span>
-                <span className="learn-card-check">✓</span>
-              </div>
-              <h3>{item.title}</h3>
-              <p>{item.subtitle}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="curriculum-roadmap">
-        <div className="roadmap-header">
-          <div>
-            <p className="roadmap-label">Course roadmap</p>
-            <h3>8 sections · 68 lessons · ~18 hours total</h3>
-          </div>
-          <button className="roadmap-expand" type="button">
-            Expand all
-          </button>
-        </div>
-
-        <div className="roadmap-table">
-          {roadmap.map((item, idx) => (
-            <div key={idx} className="roadmap-row">
-              <div className="roadmap-index">{idx + 1}</div>
-              <div className="roadmap-info">
-                <p className="roadmap-section">
-                  <span className="roadmap-toggle">›</span>
-                  {item.title}
-                </p>
-              </div>
-              <div className="roadmap-meta">
-                <span>{item.lessons} lessons</span>
-                <span>{item.duration}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="skills-gain">
-          <p className="skills-heading">Skills you'll gain</p>
-          <div className="skills-list">
-            {skills.map((skill, idx) => (
-              <span key={idx} className="skill-chip">
-                {skill}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    return `${m}:${String(s).padStart(2, "0")}`;
 };
 
-const CourseDetail = () => {
-  const [activeTab, setActiveTab] = useState("Overview");
-  const { id } = useParams();
-  const navigate = useNavigate();
+const formatHours = (seconds) => {
+    if (!seconds) return "0h";
 
-  const course = useMemo(
-    () => courses.find((item) => String(item.id) === String(id)),
-    [id],
-  );
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
 
-  if (!course) {
+    if (h > 0) {
+        return `${h}h ${m > 0 ? `${m}m` : ""}`.trim();
+    }
+
+    return `${m}m`;
+};
+
+const formatVnd = (value) => {
+    return `${Number(value || 0).toLocaleString("vi-VN")}đ`;
+};
+
+export default function CourseDetail() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+
+    const {
+        accessToken,
+        isAuthenticated,
+        loading: authLoading,
+        currentUser,
+    } = useAuth();
+
+    const axiosPrivate = useAxiosPrivate();
+
+    const [course, setCourse] = useState(null);
+    const [thumbnailUrl, setThumbnailUrl] = useState(null);
+    const [instructorAvatarUrl, setInstructorAvatarUrl] = useState(null);
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [enrolled, setEnrolled] = useState(false);
+
+    const [expandedSections, setExpandedSections] = useState([]);
+    const [descExpanded, setDescExpanded] = useState(false);
+
+    const [promo, setPromo] = useState("");
+    const [appliedVoucher, setAppliedVoucher] = useState(null);
+    const [voucherMessage, setVoucherMessage] = useState("");
+    const [isApplyingVoucher, setIsApplyingVoucher] = useState(false);
+
+    const [activePayment, setActivePayment] = useState(null);
+    const [isCreatingPayment, setIsCreatingPayment] = useState(false);
+
+    useEffect(() => {
+        if (!id) return;
+
+        const loadCourse = async () => {
+            try {
+                setIsLoading(true);
+
+                const data = await getCourseDetail(id);
+                setCourse(data);
+
+                if (data.sections?.length > 0) {
+                    setExpandedSections([data.sections[0].sectionId]);
+                }
+
+                if (data.thumbnailKey) {
+                    getFileUrl(data.thumbnailKey)
+                        .then(setThumbnailUrl)
+                        .catch(() => setThumbnailUrl(null));
+                } else {
+                    setThumbnailUrl(null);
+                }
+
+                if (data.instructor?.avatarKey) {
+                    getFileUrl(data.instructor.avatarKey)
+                        .then(setInstructorAvatarUrl)
+                        .catch(() => setInstructorAvatarUrl(null));
+                } else {
+                    setInstructorAvatarUrl(null);
+                }
+            } catch (err) {
+                console.error("Failed to load course:", err);
+                setCourse(null);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadCourse();
+    }, [id]);
+
+    useEffect(() => {
+        setPromo("");
+        setAppliedVoucher(null);
+        setVoucherMessage("");
+        setActivePayment(null);
+        setEnrolled(false);
+    }, [id]);
+
+    useEffect(() => {
+        if (!id || !isAuthenticated) {
+            setEnrolled(false);
+            return;
+        }
+
+        checkEnrollment(id)
+            .then(setEnrolled)
+            .catch(() => setEnrolled(false));
+    }, [id, isAuthenticated, currentUser]);
+
+    const toggleSection = (sectionId) => {
+        setExpandedSections((prev) =>
+            prev.includes(sectionId)
+                ? prev.filter((item) => item !== sectionId)
+                : [...prev, sectionId],
+        );
+    };
+
+    const handleVoucherChange = (event) => {
+        setPromo(event.target.value);
+        setAppliedVoucher(null);
+        setVoucherMessage("");
+    };
+
+    const handleApplyVoucher = async () => {
+        const code = promo.trim();
+        const subtotal = Number(course?.basePrice || 0);
+
+        if (!code) {
+            setVoucherMessage("Vui lòng nhập mã voucher.");
+            return;
+        }
+
+        if (!course || subtotal <= 0) {
+            setVoucherMessage("Khóa học chưa có giá hợp lệ.");
+            return;
+        }
+
+        if (appliedVoucher?.code?.toLowerCase() === code.toLowerCase()) {
+            setVoucherMessage("Voucher này đã được áp dụng.");
+            return;
+        }
+
+        try {
+            setIsApplyingVoucher(true);
+            setVoucherMessage("");
+
+            const result = await applyVoucherApi({
+                code,
+                subtotal,
+            });
+
+            setAppliedVoucher(result);
+            setVoucherMessage(`Đã áp dụng ${result.code}.`);
+            toast.success("Áp dụng voucher thành công.");
+        } catch (err) {
+            const message =
+                err?.response?.data?.message ||
+                "Voucher không hợp lệ hoặc không còn sử dụng được.";
+
+            setAppliedVoucher(null);
+            setVoucherMessage(message);
+            toast.error(message);
+        } finally {
+            setIsApplyingVoucher(false);
+        }
+    };
+
+    const handleAddToCart = () => {
+        if (authLoading || !course) return;
+
+        if (!isAuthenticated) {
+            toast.error("Bạn cần đăng nhập để thêm khóa học vào giỏ hàng.");
+            return;
+        }
+
+        if (enrolled) {
+            toast.info("Bạn đã sở hữu khóa học này.");
+            return;
+        }
+
+        const { alreadyInCart } = addStoredCartItem({
+            id: course.courseId || course.id || id,
+            courseId: course.courseId || course.id || id,
+            title: course.title,
+            teacher: course.instructor?.fullName || "LearnOva Instructor",
+            price: formatVnd(course.basePrice),
+            image: thumbnailUrl,
+        });
+
+        if (alreadyInCart) {
+            toast.info("Khóa học này đã có trong giỏ hàng.");
+            return;
+        }
+
+        toast.success("Đã thêm khóa học vào giỏ hàng.");
+    };
+
+    const handleBuyNow = async () => {
+        if (authLoading || !course) return;
+
+        if (!isAuthenticated) {
+            toast.error("Bạn cần đăng nhập để thanh toán.");
+            return;
+        }
+
+        if (enrolled) {
+            toast.info("Bạn đã sở hữu khóa học này.");
+            navigate("/learnova/user/profile/courses");
+            return;
+        }
+
+        try {
+            setIsCreatingPayment(true);
+
+            const payment = await createPaymentApi(
+                axiosPrivate,
+                {
+                    courseId: Number(course.courseId || course.id || id),
+                    voucherCode: appliedVoucher?.code || null,
+                },
+                accessToken,
+            );
+
+            setActivePayment(payment);
+        } catch (err) {
+            const message =
+                err?.response?.data?.message ||
+                err?.response?.data?.error ||
+                "Không thể tạo thanh toán payOS.";
+
+            if (
+                err?.response?.status === 409 &&
+                message.toLowerCase().includes("already enrolled")
+            ) {
+                setEnrolled(true);
+                toast.info("Bạn đã sở hữu khóa học này.");
+                navigate("/learnova/user/profile/courses");
+                return;
+            }
+
+            toast.error(message);
+        } finally {
+            setIsCreatingPayment(false);
+        }
+    };
+
+    if (isLoading) {
+        return <div className="cdp__loading">Loading course...</div>;
+    }
+
+    if (!course) {
+        return <div className="cdp__loading">Course not found.</div>;
+    }
+
+    const descParagraphs = (course.description || "")
+        .split(/\n+/)
+        .filter(Boolean);
+
+    const visibleParas = descExpanded
+        ? descParagraphs
+        : descParagraphs.slice(0, 3);
+
+    const subtotal = Number(course.basePrice || 0);
+    const discount = Number(appliedVoucher?.discountAmount || 0);
+    const total = Math.max(0, subtotal - discount);
+
     return (
-      <div className="course-detail-page">
-        <div className="course-detail-panel">
-          <p>Course not found.</p>
-          <button
-            onClick={() => navigate("/learnova/user/home")}
-            className="course-detail-back"
-          >
-            Back to home
-          </button>
-        </div>
-      </div>
-    );
-  }
+        <div className="cdp">
+            <div className="cdp__hero">
+                <div className="cdp__hero-inner">
+                    <div className="cdp__breadcrumb">
+                        {course.categoryName && <span>{course.categoryName}</span>}
+                    </div>
 
-  return (
-    <div className="course-detail-page">
-      <div className="course-detail-panel">
-        <div className="course-detail-grid">
-          <div className="course-detail-left">
-            <div className="course-detail-card">
-              <div className="course-detail-media-section">
-                <div className="course-detail-media">
-                  <img src={course.gallery[0]} alt={course.title} />
+                    <h1 className="cdp__hero-title">{course.title}</h1>
+
+                    <div className="cdp__hero-meta">
+                        <span className="cdp__hero-instructor">
+                            <FaUserGraduate /> {course.instructor?.fullName}
+                        </span>
+
+                        <span className="cdp__hero-stat">
+                            <FaPlayCircle /> {course.lessonCount || 0} lessons
+                        </span>
+
+                        <span className="cdp__hero-stat">
+                            <FaClock /> {formatHours(course.totalDurationSeconds)}
+                        </span>
+
+                        <span className="cdp__hero-stat">
+                            <FaGraduationCap /> {course.level}
+                        </span>
+
+                        {course.language && (
+                            <span className="cdp__hero-stat">
+                                <FaGlobe /> {course.language}
+                            </span>
+                        )}
+                    </div>
                 </div>
-
-                <div className="course-detail-info">
-                  <div>
-                    <FaBook /> {course.lessons} Lessons
-                  </div>
-                  <div>
-                    <FaClock /> {course.duration}
-                  </div>
-                  <div>
-                    <FaGraduationCap /> {course.level}
-                  </div>
-                  <div>
-                    <FaCertificate /> {course.certificate}
-                  </div>
-                  <div>
-                    <FaGlobe /> {course.language}
-                  </div>
-                </div>
-
-                <div className="course-detail-actions">
-                  <button type="button">
-                    <FaHeart /> Wishlist
-                  </button>
-                  <button type="button">
-                    <FaLink /> Share
-                  </button>
-                </div>
-              </div>
-
-              <div className="course-detail-meta">
-                <h1>{course.title}</h1>
-                <p>{course.description}</p>
-
-                <div className="course-detail-instructor-card">
-                  <img src="https://i.pravatar.cc/100" alt={course.teacher} />
-                  <div className="course-detail-instructor-info">
-                    <h4>{course.teacher}</h4>
-                    <p>{course.subtitle}</p>
-                  </div>
-                </div>
-
-                <div className="course-detail-stats-grid">
-                  <div className="stat-card">
-                    <div className="stat-card-value">{course.rating}★</div>
-                    <div className="stat-card-label">Rating</div>
-                  </div>
-                  <div className="stat-card">
-                    <div className="stat-card-value">{course.reviews}</div>
-                    <div className="stat-card-label">Reviews</div>
-                  </div>
-                  <div className="stat-card">
-                    <div className="stat-card-value">{course.students}</div>
-                    <div className="stat-card-label">Students</div>
-                  </div>
-                </div>
-
-                <div className="course-highlight-box">
-                  <p>
-                    <strong>✓ Giảng viên chuyên nghiệp</strong> với 15+ năm kinh
-                    nghiệm
-                  </p>
-                  <p>
-                    <strong>✓ Chứng chỉ hoàn thành</strong> được công nhận
-                  </p>
-                  <p>
-                    <strong>✓ Truy cập suốt đời</strong> vào toàn bộ nội dung
-                  </p>
-                </div>
-              </div>
             </div>
 
-            <div className="course-detail-tabs">
-              <div className="tabs-row">
-                <button
-                  className={`tab-button ${activeTab === "Overview" ? "active" : ""}`}
-                  onClick={() => setActiveTab("Overview")}
-                >
-                  Overview
-                </button>
-                <button
-                  className={`tab-button ${activeTab === "Curriculum" ? "active" : ""}`}
-                  onClick={() => setActiveTab("Curriculum")}
-                >
-                  Curriculum
-                </button>
-                <button
-                  className={`tab-button ${activeTab === "Instructor" ? "active" : ""}`}
-                  onClick={() => setActiveTab("Instructor")}
-                >
-                  Instructor
-                </button>
-                <button
-                  className={`tab-button ${activeTab === "Reviews" ? "active" : ""}`}
-                  onClick={() => setActiveTab("Reviews")}
-                >
-                  Reviews
-                </button>
-              </div>
+            <div className="cdp__body">
+                <div className="cdp__left">
+                    {course.whatYouLearn?.length > 0 && (
+                        <section className="cdp__section">
+                            <h2 className="cdp__section-title">What you'll learn</h2>
 
-              <div className="tab-content">
-                {activeTab === "Overview" && (
-                  <>
-                    <h2>About this course</h2>
-                    <p>{course.description}</p>
-                    <h2>What you'll learn</h2>
-                    <p>
-                      By the end of this course, you'll be able to build
-                      full-stack web applications using modern tools and
-                      industry best practices.
-                    </p>
-                  </>
-                )}
+                            <ul className="cdp__learn-list">
+                                {course.whatYouLearn.map((item, index) => (
+                                    <li key={index}>
+                                        <FaCheckCircle className="cdp__check-icon" />
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
 
-                {activeTab === "Curriculum" && <Curriculum />}
+                    {descParagraphs.length > 0 && (
+                        <section className="cdp__section">
+                            <h2 className="cdp__section-title">Course Description</h2>
 
-                {activeTab === "Instructor" && (
-                  <div className="instructor-section">
-                    <div className="instructor-card">
-                      <div className="instructor-avatar">
-                        <img
-                          src="https://i.pravatar.cc/200"
-                          alt={course.teacher}
-                        />
-                      </div>
-                      <div className="instructor-info">
-                        <h3>{course.teacher}</h3>
-                        <p className="instructor-subtitle">{course.subtitle}</p>
-                        <div className="instructor-stats">
-                          <div className="stat-item">
-                            <span className="stat-number">15+</span>
-                            <span className="stat-label">Years Experience</span>
-                          </div>
-                          <div className="stat-item">
-                            <span className="stat-number">50K+</span>
-                            <span className="stat-label">Students</span>
-                          </div>
-                          <div className="stat-item">
-                            <span className="stat-number">4.9★</span>
-                            <span className="stat-label">Avg Rating</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                            <div className="cdp__desc">
+                                {visibleParas.map((item, index) => (
+                                    <p key={index}>{item}</p>
+                                ))}
+                            </div>
 
-                    <div className="instructor-bio">
-                      <h4>About the Instructor</h4>
-                      <p>
-                        With 15+ years of experience in full-stack web
-                        development, {course.teacher} has trained over 50,000
-                        students worldwide. Passionate about making complex
-                        concepts simple and accessible, helping thousands
-                        transition into tech careers.
-                      </p>
-                      <p>
-                        Specializing in React, Node.js, and modern web
-                        technologies, brings real-world industry experience into
-                        every lesson, ensuring students learn practical skills
-                        used in production environments.
-                      </p>
-                    </div>
-
-                    <div className="instructor-teaching">
-                      <h4>Teaching Approach</h4>
-
-                      <div className="teaching-list">
-                        <div className="teaching-item">
-                          <span className="teaching-icon">
-                            <FaBook />
-                          </span>
-                          <div>
-                            <h5>Project-Based Learning</h5>
-                            <p>
-                              Learn by building real-world applications from
-                              scratch
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="teaching-item">
-                          <span className="teaching-icon">
-                            <FaLightbulb />
-                          </span>
-                          <div>
-                            <h5>Best Practices</h5>
-                            <p>Industry standards and clean code principles</p>
-                          </div>
-                        </div>
-
-                        <div className="teaching-item">
-                          <span className="teaching-icon">
-                            <FaBullseye />
-                          </span>
-                          <div>
-                            <h5>Career Focused</h5>
-                            <p>Structured content designed for job readiness</p>
-                          </div>
-                        </div>
-
-                        <div className="teaching-item">
-                          <span className="teaching-icon">
-                            <FaUsers />
-                          </span>
-                          <div>
-                            <h5>Community Support</h5>
-                            <p>Active Q&A and continuous student support</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === "Reviews" && (
-                  <div className="review-section">
-                    <div className="review-grid">
-                      {[
-                        {
-                          name: "Nguyen An",
-                          role: "Software Engineer",
-                          rating: 5,
-                          text: "This course helped me build real-world applications and land my first developer job.",
-                        },
-                        {
-                          name: "Le Thi Mai",
-                          role: "Frontend Developer",
-                          rating: 4,
-                          text: "The lessons are clear, practical, and the instructor explains difficult topics well.",
-                        },
-                      ].map((review, index) => (
-                        <article key={index} className="review-card">
-                          <div className="review-stars">
-                            {[...Array(5)].map((_, i) =>
-                              i < review.rating ? (
-                                <FaStar key={i} />
-                              ) : (
-                                <FaRegStar key={i} />
-                              ),
+                            {descParagraphs.length > 3 && (
+                                <button
+                                    className="cdp__toggle-btn"
+                                    type="button"
+                                    onClick={() => setDescExpanded((prev) => !prev)}
+                                >
+                                    {descExpanded ? (
+                                        <>
+                                            <FaChevronUp /> Show less
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FaChevronDown /> Show more
+                                        </>
+                                    )}
+                                </button>
                             )}
-                          </div>
+                        </section>
+                    )}
 
-                          <p className="review-text">{review.text}</p>
+                    {course.sections?.length > 0 && (
+                        <section className="cdp__section">
+                            <h2 className="cdp__section-title">Course Content</h2>
 
-                          <div className="review-author">
-                            <strong>{review.name}</strong>
-                            <span>{review.role}</span>
-                          </div>
-                        </article>
-                      ))}
+                            <p className="cdp__curriculum-meta">
+                                {course.sections.length} sections · {course.lessonCount || 0} lessons ·{" "}
+                                {formatHours(course.totalDurationSeconds)} total
+                            </p>
+
+                            <div className="cdp__curriculum">
+                                {course.sections.map((section, sectionIndex) => {
+                                    const isOpen = expandedSections.includes(section.sectionId);
+
+                                    const sectionDuration = (section.lessons || []).reduce(
+                                        (sum, lesson) => sum + Number(lesson.durationSeconds || 0),
+                                        0,
+                                    );
+
+                                    return (
+                                        <div
+                                            key={section.sectionId}
+                                            className="cdp__section-item"
+                                        >
+                                            <button
+                                                className="cdp__section-header"
+                                                type="button"
+                                                onClick={() => toggleSection(section.sectionId)}
+                                            >
+                                                <ChevronDown
+                                                    size={16}
+                                                    className={`cdp__chevron ${
+                                                        isOpen ? "cdp__chevron--open" : ""
+                                                    }`}
+                                                />
+
+                                                <span className="cdp__section-name">
+                                                    {sectionIndex + 1}. {section.title}
+                                                </span>
+
+                                                <span className="cdp__section-info">
+                                                    {(section.lessons || []).length} lessons ·{" "}
+                                                    {formatHours(sectionDuration)}
+                                                </span>
+                                            </button>
+
+                                            {isOpen && (
+                                                <ul className="cdp__lesson-list">
+                                                    {(section.lessons || []).map((lesson) => (
+                                                        <li
+                                                            key={lesson.lessonId}
+                                                            className="cdp__lesson-item"
+                                                        >
+                                                            <FaPlay className="cdp__play-icon" />
+
+                                                            <span className="cdp__lesson-title">
+                                                                {lesson.title}
+                                                            </span>
+
+                                                            {lesson.isPreview && (
+                                                                <span className="cdp__preview-badge">
+                                                                    Preview
+                                                                </span>
+                                                            )}
+
+                                                            <span className="cdp__lesson-duration">
+                                                                {formatDuration(lesson.durationSeconds)}
+                                                            </span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </section>
+                    )}
+
+                    {course.requirements?.length > 0 && (
+                        <section className="cdp__section">
+                            <h2 className="cdp__section-title">Requirements</h2>
+
+                            <ul className="cdp__req-list">
+                                {course.requirements.map((item, index) => (
+                                    <li key={index}>{item}</li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
+
+                    <section className="cdp__section">
+                        <h2 className="cdp__section-title">Instructor</h2>
+
+                        <div className="cdp__instructor">
+                            <div className="cdp__instructor-avatar">
+                                {instructorAvatarUrl ? (
+                                    <img
+                                        src={instructorAvatarUrl}
+                                        alt={course.instructor?.fullName}
+                                    />
+                                ) : (
+                                    <div className="cdp__instructor-initials">
+                                        {course.instructor?.fullName?.charAt(0) ?? "?"}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="cdp__instructor-info">
+                                <h3>{course.instructor?.fullName}</h3>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <aside className="cdp__sidebar">
+                    <div className="cdp__card">
+                        {thumbnailUrl ? (
+                            <img
+                                src={thumbnailUrl}
+                                alt={course.title}
+                                className="cdp__card-thumb"
+                            />
+                        ) : (
+                            <div className="cdp__card-thumb cdp__card-thumb--placeholder" />
+                        )}
+
+                        <div className="cdp__card-body">
+                            <div className="cdp__card-price">
+                                {formatVnd(total)}
+                            </div>
+
+                            {discount > 0 && (
+                                <div className="course-detail-order-lines">
+                                    <div>
+                                        <span>Subtotal</span>
+                                        <strong>{formatVnd(subtotal)}</strong>
+                                    </div>
+
+                                    <div>
+                                        <span>Discount</span>
+                                        <strong>-{formatVnd(discount)}</strong>
+                                    </div>
+                                </div>
+                            )}
+
+                            {!enrolled && (
+                                <div className="course-detail-voucher">
+                                    <label htmlFor="course-detail-voucher">
+                                        Voucher code
+                                    </label>
+
+                                    <div className="course-detail-voucher-input">
+                                        <input
+                                            id="course-detail-voucher"
+                                            type="text"
+                                            value={promo}
+                                            onChange={handleVoucherChange}
+                                            placeholder="Enter voucher"
+                                        />
+
+                                        <button
+                                            type="button"
+                                            onClick={handleApplyVoucher}
+                                            disabled={isApplyingVoucher}
+                                        >
+                                            {isApplyingVoucher ? "..." : "Apply"}
+                                        </button>
+                                    </div>
+
+                                    {voucherMessage && (
+                                        <p
+                                            className={`course-detail-voucher-message ${
+                                                appliedVoucher ? "success" : "error"
+                                            }`}
+                                        >
+                                            {voucherMessage}
+                                        </p>
+                                    )}
+                                </div>
+                            )}
+
+                            {enrolled ? (
+                                <button
+                                    className="cdp__btn cdp__btn--primary"
+                                    type="button"
+                                    onClick={() =>
+                                        navigate(`/learnova/user/CoursesDetail/${id}`)
+                                    }
+                                >
+                                    <FaPlay /> Start Learning
+                                </button>
+                            ) : (
+                                <>
+                                    <button
+                                        className="cdp__btn cdp__btn--primary"
+                                        type="button"
+                                        onClick={handleBuyNow}
+                                        disabled={isCreatingPayment}
+                                    >
+                                        {isCreatingPayment ? (
+                                            "Creating payment..."
+                                        ) : (
+                                            <>
+                                                <FaShoppingCart /> Buy Now
+                                            </>
+                                        )}
+                                    </button>
+
+                                    <button
+                                        className="cdp__btn cdp__btn--outline"
+                                        type="button"
+                                        onClick={handleAddToCart}
+                                    >
+                                        <FaShoppingCart /> Add to Cart
+                                    </button>
+                                </>
+                            )}
+
+                            <ul className="cdp__card-features">
+                                <li>
+                                    <FaPlayCircle /> {course.lessonCount || 0} lessons on-demand
+                                </li>
+
+                                <li>
+                                    <FaClock /> {formatHours(course.totalDurationSeconds)} total
+                                </li>
+
+                                <li>
+                                    <FaGraduationCap /> {course.level}
+                                </li>
+
+                                {course.language && (
+                                    <li>
+                                        <FaGlobe /> {course.language}
+                                    </li>
+                                )}
+
+                                <li>✓ Full lifetime access</li>
+                                <li>✓ Certificate of completion</li>
+                            </ul>
+                        </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <aside className="course-detail-sidebar">
-            <div className="course-detail-summary">
-              <div className="course-detail-price">
-                <span>{course.price}</span>
-                <span>{course.oldPrice}</span>
-              </div>
-
-              <button className="summary-button primary">Add To Cart</button>
-              <button className="summary-button secondary">Buy Now</button>
-
-              <div className="summary-features">
-                <p>✔ Full lifetime access</p>
-                <p>✔ Mobile & TV access</p>
-                <p>✔ Certificate of completion</p>
-                <p>✔ 30-day money-back guarantee</p>
-              </div>
+                </aside>
             </div>
 
-            <div className="course-includes-card">
-              <h3>This course includes:</h3>
-              <div className="includes-list">
-                {course.includes.map((item, index) => (
-                  <div key={index} className="include-item">
-                    <span className="include-text">{item.text}</span>
-                  </div>
-                ))}
-              </div>
+            <div className="chatbot-fixed">
+                <LearnovaAI />
             </div>
 
-            <div className="course-support-card">
-              <h3>Have questions?</h3>
-              <p>Our support team is here to help you.</p>
+            {activePayment && (
+                <PaymentModal
+                    payment={activePayment}
+                    onClose={() => setActivePayment(null)}
+                />
+            )}
 
-              <button className="support-button">
-                <FaPhoneAlt />
-                <span>Contact Support</span>
-              </button>
-            </div>
-
-            <button
-              onClick={() => navigate("/learnova/user/home")}
-              className="course-detail-back"
-            >
-              Back to home
-            </button>
-          </aside>
+            <ToastContainer position="top-right" autoClose={2500} />
         </div>
-      </div>
-      <div className="chatbot-fixed">
-        <LearnovaAI />
-      </div>
-    </div>
-  );
-};
-
-export default CourseDetail;
+    );
+}

@@ -14,6 +14,9 @@ import FavoriteCourseDetailSection from "./sections/favoriteCourseDetail/Favorit
 import FavoritesSection from "./sections/FavoritesSection";
 import SecuritySection from "./sections/SecuritySection";
 import ProfileFormSection from "./sections/ProfileFormSection";
+import { getMyEnrolledCoursesApi } from "../../../../api/EnrollmentApi.js";
+import { useAuth } from "../../../../hook/UseAuth.jsx";
+import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 
 const readStorage = (key, fallback) => {
   const saved = localStorage.getItem(key);
@@ -32,7 +35,12 @@ const ProfileView = ({
   onBack,
   initialTab = "profile",
 }) => {
+  const axiosPrivate = useAxiosPrivate();
+  const { accessToken, loading: authLoading } = useAuth();
   const activeTab = initialTab;
+  const [ownedCourses, setOwnedCourses] = useState(purchasedCourses);
+  const [isLoadingCourses, setIsLoadingCourses] = useState(initialTab === "courses");
+  const [coursesError, setCoursesError] = useState("");
   const [profileData, setProfileData] = useState(() =>
     readStorage("learnova_user_profile", DEFAULT_PROFILE),
   );
@@ -47,9 +55,38 @@ const ProfileView = ({
   const hasMountedRef = useRef(false);
 
   const achievements = useMemo(
-    () => buildAchievements(profileData, purchasedCourses),
-    [profileData, purchasedCourses],
+    () => buildAchievements(profileData, ownedCourses),
+    [profileData, ownedCourses],
   );
+
+  useEffect(() => {
+    if (activeTab !== "courses" && activeTab !== "favorites") return undefined;
+    if (authLoading) return undefined;
+
+    let mounted = true;
+    setIsLoadingCourses(true);
+    setCoursesError("");
+
+    getMyEnrolledCoursesApi(axiosPrivate, accessToken)
+      .then((data) => {
+        if (mounted) {
+          setOwnedCourses(Array.isArray(data) ? data.map(mapEnrolledCourse) : []);
+        }
+      })
+      .catch((err) => {
+        if (mounted) {
+          setOwnedCourses([]);
+          setCoursesError(err?.response?.data?.message || "Không tải được khóa học đã mua.");
+        }
+      })
+      .finally(() => {
+        if (mounted) setIsLoadingCourses(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [accessToken, activeTab, authLoading, axiosPrivate]);
 
   const scrollToPageTop = (behavior = "smooth") => {
     requestAnimationFrame(() => {
@@ -167,7 +204,9 @@ const ProfileView = ({
 
       return (
         <CoursesSection
-          purchasedCourses={purchasedCourses}
+          purchasedCourses={ownedCourses}
+          isLoading={isLoadingCourses}
+          error={coursesError}
           onStartCourse={onStartCourse}
           onOpenCourse={handleOpenCourse}
           onBack={onBack}
@@ -187,7 +226,7 @@ const ProfileView = ({
 
       return (
         <FavoritesSection
-          favoriteCourses={purchasedCourses}
+          favoriteCourses={ownedCourses}
           onOpenCourse={handleOpenCourse}
         />
       );
@@ -253,3 +292,27 @@ const ProfileView = ({
 };
 
 export default ProfileView;
+
+const formatRemaining = (progress) =>
+  progress > 0 ? "Continue learning" : "Not started yet";
+
+const mapEnrolledCourse = (course) => ({
+  id: course.courseId,
+  courseId: course.courseId,
+  title: course.title,
+  description: course.description,
+  instructor: course.instructorName || "LearnOva Instructor",
+  level: course.level || "All levels",
+  image:
+    course.thumbnailKey && String(course.thumbnailKey).startsWith("http")
+      ? course.thumbnailKey
+      : "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
+  progress: Number(course.progressPercent || 0),
+  lessonsDone: 0,
+  lessonsTotal: 0,
+  remaining: formatRemaining(Number(course.progressPercent || 0)),
+  rating: 4.8,
+  reviews: "0",
+  enrolledAt: course.enrolledAt,
+  completedAt: course.completedAt,
+});

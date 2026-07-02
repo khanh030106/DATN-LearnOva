@@ -3,14 +3,6 @@
   width: 100%;
 }
 
-.voucherHistoryCard {
-  padding: 22px;
-  background: #ffffff;
-  border: 1px solid rgba(37, 99, 235, 0.08);
-  border-radius: 6px;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
-}
-
 .voucherHistoryHeader {
   display: flex;
   justify-content: space-between;
@@ -162,6 +154,23 @@
   border-bottom: none;
 }
 
+.voucherHistoryLoading,
+.voucherHistoryError,
+.voucherHistoryEmpty {
+  height: 86px;
+  text-align: center !important;
+  font-weight: 600;
+}
+
+.voucherHistoryLoading,
+.voucherHistoryEmpty {
+  color: #64748b;
+}
+
+.voucherHistoryError {
+  color: #dc2626;
+}
+
 .voucherHistoryCode {
   display: inline-block;
   padding: 4px 8px;
@@ -182,6 +191,45 @@
   font-weight: 600;
 }
 
+.voucherHistoryPagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.voucherHistoryPaginationBtn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.voucherHistoryPaginationBtn:hover:not(:disabled) {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.voucherHistoryPaginationBtn--active {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.voucherHistoryPaginationBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .voucherHistoryHeader {
@@ -199,5 +247,9 @@
 
   .voucherHistoryTable {
     min-width: 100%;
+  }
+
+  .voucherHistoryPagination {
+    justify-content: flex-start;
   }
 }

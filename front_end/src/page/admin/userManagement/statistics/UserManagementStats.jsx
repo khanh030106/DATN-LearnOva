@@ -5,50 +5,65 @@ import AdminsCard from "./cards/admins/AdminsCard";
 import LockedAccountsCard from "./cards/lockedAccounts/LockedAccountsCard";
 import "./UserManagementStats.css";
 
-const statisticsCards = [
-  {
-    id: "total-users",
-    component: TotalUsersCard,
-    title: "Total Users",
-    value: "18,520",
-    trend: "+ 12% vs last month",
-    trendTone: "success",
-  },
-  {
-    id: "students",
-    component: StudentsCard,
-    title: "Students",
-    value: "15,230",
-    trend: "+ 10% vs last month",
-    trendTone: "success",
-  },
-  {
-    id: "teachers",
-    component: TeachersCard,
-    title: "Instructors",
-    value: "2,280",
-    trend: "+ 8% vs last month",
-    trendTone: "info",
-  },
-  {
-    id: "admins",
-    component: AdminsCard,
-    title: "Admins",
-    value: "10",
-    trend: "No change",
-    trendTone: "neutral",
-  },
-  {
-    id: "locked-accounts",
-    component: LockedAccountsCard,
-    title: "Locked Accounts",
-    value: "440",
-    trend: "↓ 5% vs last month",
-    trendTone: "danger",
-  },
-];
+const formatCount = (value) => new Intl.NumberFormat("en-US").format(value);
 
-const UserManagementStats = () => {
+const getStatisticsCards = (users, isLoading) => {
+  const totalUsers = users.length;
+  const students = users.filter((user) => user.roleFilter === "student").length;
+  const teachers = users.filter((user) => user.roleFilter === "teacher").length;
+  const admins = users.filter((user) => user.roleFilter === "admin").length;
+  const lockedAccounts = users.filter(
+    (user) => user.statusFilter === "locked",
+  ).length;
+  const loadingValue = isLoading ? "..." : "0";
+
+  return [
+    {
+      id: "total-users",
+      component: TotalUsersCard,
+      title: "Total Users",
+      value: totalUsers ? formatCount(totalUsers) : loadingValue,
+      trend: "Database live",
+      trendTone: "success",
+    },
+    {
+      id: "students",
+      component: StudentsCard,
+      title: "Students",
+      value: students ? formatCount(students) : loadingValue,
+      trend: "Database live",
+      trendTone: "success",
+    },
+    {
+      id: "teachers",
+      component: TeachersCard,
+      title: "Instructors",
+      value: teachers ? formatCount(teachers) : loadingValue,
+      trend: "Database live",
+      trendTone: "info",
+    },
+    {
+      id: "admins",
+      component: AdminsCard,
+      title: "Admins",
+      value: admins ? formatCount(admins) : loadingValue,
+      trend: "Database live",
+      trendTone: "neutral",
+    },
+    {
+      id: "locked-accounts",
+      component: LockedAccountsCard,
+      title: "Locked Accounts",
+      value: lockedAccounts ? formatCount(lockedAccounts) : loadingValue,
+      trend: "Inactive/deleted",
+      trendTone: "danger",
+    },
+  ];
+};
+
+const UserManagementStats = ({ users = [], isLoading = false }) => {
+  const statisticsCards = getStatisticsCards(users, isLoading);
+
   return (
     <section
       className="userManagementStats"

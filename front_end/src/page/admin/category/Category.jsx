@@ -1,71 +1,210 @@
-import { Edit3, Eye, FolderTree, Plus, Trash2, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { AlertTriangle, Edit3, FolderTree, Plus, Trash2, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
+import {
+  createAdminCategoryApi,
+  deleteAdminCategoryApi,
+  getAdminCategoriesApi,
+  updateAdminCategoryApi,
+} from "../../../api/admin/CategoryApi.js";
 import AdminHoverSelect from "../shared/AdminHoverSelect";
+import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";
 import "./Category.css";
 
-const categoryStats = [
-  { label: "Total Categories", value: "12", note: "active learning topics" },
-  { label: "Courses Assigned", value: "248", note: "mapped to categories" },
-  { label: "Pending Review", value: "5", note: "category requests" },
-  { label: "Hidden Topics", value: "3", note: "not visible to users" },
-];
+const pageSize = 6;
 
-const categories = [
-  {
-    id: "CAT-001",
-    name: "Programming",
-    parent: "Technology",
-    courses: 64,
-    status: "Active",
-    updatedAt: "2026-06-01",
-  },
-  {
-    id: "CAT-002",
-    name: "AI & Data Science",
-    parent: "Technology",
-    courses: 42,
-    status: "Active",
-    updatedAt: "2026-05-28",
-  },
-  {
-    id: "CAT-003",
-    name: "Design & UX/UI",
-    parent: "Creative",
-    courses: 31,
-    status: "Active",
-    updatedAt: "2026-05-20",
-  },
-  {
-    id: "CAT-004",
-    name: "Business",
-    parent: "Professional",
-    courses: 27,
-    status: "Active",
-    updatedAt: "2026-05-18",
-  },
-  {
-    id: "CAT-005",
-    name: "Marketing",
-    parent: "Professional",
-    courses: 18,
-    status: "Hidden",
-    updatedAt: "2026-05-12",
-  },
-];
+const formatDate = (value) => {
+  if (!value) return "N/A";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "N/A";
+  return new Intl.DateTimeFormat("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+};
+
+const normalizeCategory = (category) => ({
+  id: category.id,
+  displayId: `CAT-${String(category.id).padStart(3, "0")}`,
+  name: category.name ?? "N/A",
+  parentId: category.parentId ?? null,
+  parentName: category.parentName ?? null,
+  isDeleted: Boolean(category.isDeleted),
+  status: category.isDeleted ? "Hidden" : "Active",
+  createdAt: formatDate(category.createdAt),
+  updatedAt: formatDate(category.updatedAt),
+});
+
+const getCategoryStats = (categories) => {
+  const activeCategories = categories.filter((c) => !c.isDeleted).length;
+  const hiddenCategories = categories.filter((c) => c.isDeleted).length;
+  const rootCategories = categories.filter((c) => c.parentId == null).length;
+
+  return [
+    { label: "Total Categories", value: categories.length, note: "from database" },
+    { label: "Active Topics", value: activeCategories, note: "visible to users" },
+    { label: "Hidden Topics", value: hiddenCategories, note: "not visible to users" },
+    { label: "Root Categories", value: rootCategories, note: "no parent" },
+  ];
+};
+
+const ParentSelect = ({ value, onChange, categories, excludeId, className }) => (
+  <select className={className} value={value ?? ""} onChange={(e) => onChange(e.target.value ? Number(e.target.value) : null)}>
+    <option value="">— None (root) —</option>
+    {categories
+      .filter((c) => !c.isDeleted && c.id !== excludeId)
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((c) => (
+        <option key={c.id} value={c.id}>
+          {c.name}
+        </option>
+      ))}
+  </select>
+);
 
 const Category = () => {
+  const axiosPrivate = useAxiosPrivate();
+  const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState("All Statuses");
-  const [selectedParent, setSelectedParent] = useState("All Parents");
-  const pageSize = 4;
-  const totalPages = Math.ceil(categories.length / pageSize);
-  const statusOptions = ["All Statuses", ...new Set(categories.map((category) => category.status))];
-  const parentOptions = ["All Parents", ...new Set(categories.map((category) => category.parent))];
+  const [editingCategory, setEditingCategory] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchCategories = async () => {
+      try {
+        setIsLoading(true);
+        setError("");
+        const response = await getAdminCategoriesApi(axiosPrivate);
+        const normalized = Array.isArray(response) ? response.map(normalizeCategory) : [];
+        if (isMounted) setCategories(normalized);
+      } catch (fetchError) {
+        if (isMounted) setError(fetchError?.response?.data?.message || "Failed to load categories.");
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+    fetchCategories();
+    return () => { isMounted = false; };
+  }, [axiosPrivate]);
+
+  const categoryStats = useMemo(() => getCategoryStats(categories), [categories]);
+  const statusOptions = useMemo(() => ["All", "Active", "Hidden"], []);
+
+  const filteredCategories = useMemo(() => {
+    const keyword = searchTerm.trim().toLowerCase();
+    return categories.filter((category) => {
+      const matchesSearch =
+        !keyword ||
+        [category.displayId, category.name, category.parentName ?? ""].join(" ").toLowerCase().includes(keyword);
+      const matchesStatus =
+        selectedStatus === "All" ||
+        (selectedStatus === "Active" && !category.isDeleted) ||
+        (selectedStatus === "Hidden" && category.isDeleted);
+      return matchesSearch && matchesStatus;
+    });
+  }, [categories, searchTerm, selectedStatus]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredCategories.length / pageSize));
   const visibleCategories = useMemo(() => {
-    const startIndex = (currentPage - 1) * pageSize;
-    return categories.slice(startIndex, startIndex + pageSize);
-  }, [currentPage]);
+    const start = (currentPage - 1) * pageSize;
+    return filteredCategories.slice(start, start + pageSize);
+  }, [currentPage, filteredCategories]);
+
+  useEffect(() => { setCurrentPage(1); }, [searchTerm, selectedStatus]);
+
+  const [createForm, setCreateForm] = useState({ name: "", parentId: null, status: "Active" });
+  const [createError, setCreateError] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
+
+  const [confirmDeleteCategory, setConfirmDeleteCategory] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleConfirmDelete = async () => {
+    if (!confirmDeleteCategory) return;
+    setIsDeleting(true);
+    try {
+      await deleteAdminCategoryApi(confirmDeleteCategory.id, axiosPrivate);
+      setCategories((current) =>
+        current.map((item) =>
+          item.id === confirmDeleteCategory.id ? { ...item, isDeleted: true, status: "Hidden" } : item,
+        ),
+      );
+      setConfirmDeleteCategory(null);
+    } catch (deleteError) {
+      setError(deleteError?.response?.data?.message || "Failed to delete category.");
+      setConfirmDeleteCategory(null);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const openCreate = () => {
+    setEditingCategory(null);
+    setCreateForm({ name: "", parentId: null, status: "Active" });
+    setCreateError("");
+    setIsCreateOpen(true);
+  };
+
+  const openEdit = (category) => {
+    setEditingCategory(category);
+    setCreateForm({
+      name: category.name === "N/A" ? "" : category.name,
+      parentId: category.parentId ?? null,
+      status: category.isDeleted ? "Hidden" : "Active",
+    });
+    setCreateError("");
+    setIsCreateOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsCreateOpen(false);
+    setEditingCategory(null);
+    setCreateForm({ name: "", parentId: null, status: "Active" });
+    setCreateError("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!createForm.name.trim()) { setCreateError("Category name is required"); return; }
+    setIsCreating(true);
+    setCreateError("");
+    try {
+      if (editingCategory) {
+        const updated = await updateAdminCategoryApi(
+          editingCategory.id,
+          {
+            name: createForm.name.trim(),
+            parentId: createForm.parentId,
+            isDeleted: createForm.status === "Hidden",
+          },
+          axiosPrivate,
+        );
+        setCategories((current) =>
+          current.map((c) => (c.id === editingCategory.id ? normalizeCategory(updated) : c)),
+        );
+      } else {
+        const newCategory = await createAdminCategoryApi(
+          { name: createForm.name.trim(), parentId: createForm.parentId },
+          axiosPrivate,
+        );
+        setCategories((current) => [...current, normalizeCategory(newCategory)]);
+      }
+      toast.success(editingCategory ? "Category updated successfully!" : "Category created successfully!");
+      closeModal();
+    } catch (err) {
+      const msg = err?.response?.data?.message || `Failed to ${editingCategory ? "update" : "create"} category.`;
+      setCreateError(msg);
+      toast.error(msg);
+    } finally {
+      setIsCreating(false);
+    }
+  };
 
   return (
     <section className="adminCategoryPage" aria-label="Category management">
@@ -86,30 +225,26 @@ const Category = () => {
         </div>
 
         <div className="adminCategoryFilters">
-          <input type="search" placeholder="Search category name or parent..." />
+          <input
+            type="search"
+            placeholder="Search category name or parent..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
           <AdminHoverSelect
             className="adminCategoryFilterSelect"
             options={statusOptions}
             value={selectedStatus}
             onChange={setSelectedStatus}
-            ariaLabel="Filter categories by status"
+            ariaLabel="Filter by status"
           />
-          <AdminHoverSelect
-            className="adminCategoryFilterSelect"
-            options={parentOptions}
-            value={selectedParent}
-            onChange={setSelectedParent}
-            ariaLabel="Filter categories by parent"
-          />
-          <button
-            type="button"
-            className="adminCategoryCreateButton"
-            onClick={() => setIsCreateOpen(true)}
-          >
+          <button type="button" className="adminCategoryCreateButton" onClick={openCreate}>
             <Plus size={18} />
             New Category
           </button>
         </div>
+
+        {error ? <p className="adminCategoryError">{error}</p> : null}
 
         <div className="adminCategoryTableCard">
           <table className="adminCategoryTable">
@@ -117,8 +252,7 @@ const Category = () => {
               <tr>
                 <th>Category ID</th>
                 <th>Category Name</th>
-                <th>Parent Group</th>
-                <th>Courses</th>
+                <th>Parent</th>
                 <th>Status</th>
                 <th>Updated</th>
                 <th>Actions</th>
@@ -127,33 +261,37 @@ const Category = () => {
             <tbody>
               {visibleCategories.map((category) => (
                 <tr key={category.id}>
-                  <td>{category.id}</td>
+                  <td>{category.displayId}</td>
                   <td>{category.name}</td>
-                  <td>{category.parent}</td>
-                  <td>{category.courses}</td>
+                  <td>{category.parentName ?? <span style={{ color: "#94a3b8" }}>—</span>}</td>
                   <td>
-                    <span
-                      className={`adminCategoryStatus adminCategoryStatus--${category.status.toLowerCase()}`}
-                    >
+                    <span className={`adminCategoryStatus adminCategoryStatus--${category.status.toLowerCase()}`}>
                       {category.status}
                     </span>
                   </td>
                   <td>{category.updatedAt}</td>
                   <td>
                     <div className="adminCategoryActions">
-                      <button type="button" aria-label={`View ${category.name}`}>
-                        <Eye size={16} />
-                      </button>
-                      <button type="button" aria-label={`Edit ${category.name}`}>
+                      <button type="button" aria-label={`Edit ${category.name}`} onClick={() => openEdit(category)}>
                         <Edit3 size={16} />
                       </button>
-                      <button type="button" aria-label={`Delete ${category.name}`}>
+                      <button
+                        type="button"
+                        aria-label={`Delete ${category.name}`}
+                        onClick={() => setConfirmDeleteCategory(category)}
+                      >
                         <Trash2 size={16} />
                       </button>
                     </div>
                   </td>
                 </tr>
               ))}
+              {!isLoading && visibleCategories.length === 0 ? (
+                <tr><td colSpan={6} className="adminCategoryEmpty">No categories match the current filter.</td></tr>
+              ) : null}
+              {isLoading ? (
+                <tr><td colSpan={6} className="adminCategoryEmpty">Loading categories...</td></tr>
+              ) : null}
             </tbody>
           </table>
         </div>
@@ -163,33 +301,25 @@ const Category = () => {
             type="button"
             className="adminCategoryPageButton"
             disabled={currentPage === 1}
-            onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
           >
             Previous
           </button>
-
-          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-            (page) => (
-              <button
-                key={page}
-                type="button"
-                className={`adminCategoryPageButton ${
-                  currentPage === page ? "adminCategoryPageButton--active" : ""
-                }`}
-                onClick={() => setCurrentPage(page)}
-              >
-                {page}
-              </button>
-            ),
-          )}
-
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              type="button"
+              className={`adminCategoryPageButton ${currentPage === page ? "adminCategoryPageButton--active" : ""}`}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </button>
+          ))}
           <button
             type="button"
             className="adminCategoryPageButton"
             disabled={currentPage === totalPages}
-            onClick={() =>
-              setCurrentPage((page) => Math.min(page + 1, totalPages))
-            }
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
           >
             Next
           </button>
@@ -197,29 +327,27 @@ const Category = () => {
       </div>
 
       {isCreateOpen && (
-        <div
-          className="adminCategoryModalBackdrop"
-          role="presentation"
-          onClick={() => setIsCreateOpen(false)}
-        >
-          <div
+        <div className="adminCategoryModalBackdrop" role="presentation" onClick={closeModal}>
+          <form
             className="adminCategoryModal"
             role="dialog"
             aria-modal="true"
-            aria-labelledby="admin-category-create-title"
-            onClick={(event) => event.stopPropagation()}
+            aria-labelledby="admin-category-modal-title"
+            onClick={(e) => e.stopPropagation()}
+            onSubmit={handleSubmit}
           >
             <div className="adminCategoryModalHeader">
               <div>
-                <h2 id="admin-category-create-title">Create New Category</h2>
-                <p>Add a course category for catalog classification.</p>
+                <h2 id="admin-category-modal-title">
+                  {editingCategory ? "Edit Category" : "Create New Category"}
+                </h2>
+                <p>
+                  {editingCategory
+                    ? `Editing: ${editingCategory.name}`
+                    : "Add a course category for catalog classification."}
+                </p>
               </div>
-              <button
-                type="button"
-                className="adminCategoryModalClose"
-                onClick={() => setIsCreateOpen(false)}
-                aria-label="Close category form"
-              >
+              <button type="button" className="adminCategoryModalClose" onClick={closeModal} aria-label="Close">
                 <X size={20} />
               </button>
             </div>
@@ -227,40 +355,87 @@ const Category = () => {
             <div className="adminCategoryModalForm">
               <label>
                 Category Name
-                <input type="text" placeholder="Example: Frontend" />
+                <input
+                  type="text"
+                  placeholder="Example: Frontend Development"
+                  value={createForm.name}
+                  onChange={(e) => setCreateForm((f) => ({ ...f, name: e.target.value }))}
+                  required
+                  autoFocus
+                />
               </label>
-              <label>
-                Parent Group
-                <input type="text" placeholder="Example: Programming" />
-              </label>
-              <label>
-                Slug
-                <input type="text" placeholder="example: frontend" />
-              </label>
-              <label>
-                Status
-                <input type="text" placeholder="Active / Hidden" />
-              </label>
-              <label className="adminCategoryModalFieldWide">
-                Description
-                <textarea placeholder="Short description for this category" rows={4} />
-              </label>
-            </div>
 
-            <div className="adminCategoryModalActions">
+              <label>
+                Parent Category
+                <ParentSelect
+                  value={createForm.parentId}
+                  onChange={(val) => setCreateForm((f) => ({ ...f, parentId: val }))}
+                  categories={categories}
+                  excludeId={editingCategory?.id ?? null}
+                />
+              </label>
+
+              {editingCategory && (
+                <label className="adminCategoryModalFieldWide">
+                  Status
+                  <select
+                    value={createForm.status}
+                    onChange={(e) => setCreateForm((f) => ({ ...f, status: e.target.value }))}
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Hidden">Hidden</option>
+                  </select>
+                </label>
+              )}
+
+              {createError ? <p className="adminCategoryError">{createError}</p> : null}
+
+              <div className="adminCategoryModalActions">
+                <button type="button" className="adminCategoryModalCancel" onClick={closeModal}>
+                  Cancel
+                </button>
+                <button type="submit" className="adminCategoryModalSubmit" disabled={isCreating}>
+                  {isCreating
+                    ? (editingCategory ? "Saving..." : "Creating...")
+                    : (editingCategory ? "Save Category" : "Create Category")}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      )}
+      {confirmDeleteCategory && (
+        <div className="adminCategoryModalBackdrop" role="presentation" onClick={() => setConfirmDeleteCategory(null)}>
+          <div
+            className="adminCategoryConfirmModal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Confirm delete"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="adminCategoryConfirmIcon">
+              <AlertTriangle size={28} />
+            </div>
+            <h3>Hide this category?</h3>
+            <p>
+              <strong>{confirmDeleteCategory.name}</strong> will be set to Hidden and no longer visible to users. You can restore it later via Edit.
+            </p>
+            <div className="adminCategoryConfirmActions">
               <button
                 type="button"
                 className="adminCategoryModalCancel"
-                onClick={() => setIsCreateOpen(false)}
+                onClick={() => setConfirmDeleteCategory(null)}
+                disabled={isDeleting}
               >
                 Cancel
               </button>
               <button
                 type="button"
-                className="adminCategoryModalSubmit"
-                onClick={() => setIsCreateOpen(false)}
+                className="adminCategoryConfirmDelete"
+                onClick={handleConfirmDelete}
+                disabled={isDeleting}
               >
-                Save Category
+                {isDeleting ? "Hiding..." : "Yes, Hide"}
               </button>
             </div>
           </div>

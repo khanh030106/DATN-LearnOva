@@ -78,7 +78,6 @@ CREATE TABLE Categories (
                             name          TEXT UNIQUE NOT NULL,
                             slug          TEXT UNIQUE NOT NULL,
                             parent_id     BIGINT NULL,
-                            display_order INTEGER NOT NULL DEFAULT 0,
                             created_at    TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
                             updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                             is_deleted    BOOLEAN DEFAULT FALSE NOT NULL,
@@ -693,3 +692,32 @@ EXECUTE FUNCTION refresh_course_rating_summary();
 
 -- Cách query:
 -- SELECT * FROM CourseRatingSummary WHERE course_id = 1;
+-- ----- ----- ---- PHẦN MỚI THÊM VÀO BẢNG Q&A CHO LESSONS ---- ----- ----
+CREATE TABLE LessonQA (
+                          qa_id        BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+                          lesson_id    BIGINT NOT NULL,
+                          user_id      BIGINT NOT NULL,
+
+                          parent_id    BIGINT NULL,
+    -- NULL = câu hỏi gốc
+    -- NOT NULL = câu trả lời (reply)
+
+                          content      TEXT NOT NULL,
+
+                          type         VARCHAR(10) DEFAULT 'QUESTION',
+    -- QUESTION | ANSWER (optional, giúp dễ query UI)
+
+                          is_solved     BOOLEAN DEFAULT FALSE,
+                          is_pinned     BOOLEAN DEFAULT FALSE,
+
+                          like_count    INTEGER DEFAULT 0,
+
+                          created_at   TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                          updated_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                          is_deleted   BOOLEAN DEFAULT FALSE NOT NULL,
+
+                          FOREIGN KEY (lesson_id) REFERENCES Lessons(lesson_id) ON DELETE CASCADE,
+                          FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+                          FOREIGN KEY (parent_id) REFERENCES LessonQA(qa_id) ON DELETE CASCADE
+);

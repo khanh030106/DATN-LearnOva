@@ -8,27 +8,60 @@ import VoucherHistory from "./voucherHistory/VoucherHistory.jsx";
 import VoucherCreate from "./voucherCreate/VoucherCreate.jsx";
 
 const Vouchers = () => {
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState("create"); // create | view | edit
+  const [selectedVoucher, setSelectedVoucher] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const openCreate = () => {
+    setSelectedVoucher(null);
+    setModalMode("create");
+    setIsModalOpen(true);
+  };
+
+  const openView = (voucher) => {
+    setSelectedVoucher(voucher);
+    setModalMode("view");
+    setIsModalOpen(true);
+  };
+
+  const openEdit = (voucher) => {
+    setSelectedVoucher(voucher);
+    setModalMode("edit");
+    setIsModalOpen(true);
+  };
+
+  const handleSaved = () => {
+    setRefreshKey((prev) => prev + 1);
+    setIsModalOpen(false);
+  };
 
   return (
     <section className="vouchersPage">
       <VoucherCards />
       <div className="voucherChartsRow">
         <div className="voucherChartColumn">
-          <VoucherChart />
+          <VoucherChart refreshKey={refreshKey} />
         </div>
         <div className="voucherChartColumn">
           <VoucherCampaignChart />
         </div>
       </div>
-      <VoucherTable onCreateVoucher={() => setIsCreateOpen(true)} />
-      <VoucherHistory />
 
-      {isCreateOpen && (
+      <VoucherTable
+        onCreateVoucher={openCreate}
+        onViewVoucher={openView}
+        onEditVoucher={openEdit}
+        refreshKey={refreshKey}
+      />
+
+      <VoucherHistory refreshKey={refreshKey} />
+
+      {isModalOpen && (
         <div
           className="voucherModalBackdrop"
           role="presentation"
-          onClick={() => setIsCreateOpen(false)}
+          onClick={() => setIsModalOpen(false)}
         >
           <div
             className="voucherModal"
@@ -37,7 +70,13 @@ const Vouchers = () => {
             aria-labelledby="voucher-create-title"
             onClick={(event) => event.stopPropagation()}
           >
-            <VoucherCreate onClose={() => setIsCreateOpen(false)} />
+            <VoucherCreate
+              mode={modalMode}
+              voucher={selectedVoucher}
+              onClose={() => setIsModalOpen(false)}
+              onEdit={() => setModalMode("edit")}
+              onSaved={handleSaved}
+            />
           </div>
         </div>
       )}

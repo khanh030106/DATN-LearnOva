@@ -1,43 +1,50 @@
+import { useEffect, useState } from "react";
 import { Bell, MessageSquare, ChevronDown } from "lucide-react";
 import { useLocation } from "react-router-dom";
-import { teacherProfile } from "../../../page/teacher/data/teacherDashboardData.js";
+import { getCurrentUserApi } from "../../../api/UserApi.js";
 import "./TeacherHeader.css";
+
+const DEFAULT_AVATAR = "https://ui-avatars.com/api/?background=1d4ed8&color=fff&name=Instructor";
 
 const TeacherHeader = () => {
   const location = useLocation();
-  const pathname = location.pathname;
+  const [user, setUser] = useState(null);
 
-  let title = "";
-  let subtitle = "";
+  useEffect(() => {
+    getCurrentUserApi()
+      .then(setUser)
+      .catch(() => {});
+  }, []);
 
-  const normPath = pathname.replace(/\/$/, "");
+  const pathname = location.pathname.replace(/\/$/, "");
 
-  if (normPath === "/learnova/teacher") {
-    const firstName = teacherProfile.name.split(" ")[0] || "Instructor";
+  let title = "Dashboard";
+  if (pathname === "/learnova/teacher") {
+    const firstName = user?.fullName?.split(" ")[0] || "Instructor";
     title = `Good morning, ${firstName} 👋`;
-  } else if (normPath === "/learnova/teacher/courses") {
+  } else if (pathname === "/learnova/teacher/courses") {
     title = "Courses management";
-  } else if (normPath === "/learnova/teacher/courses/create") {
+  } else if (pathname === "/learnova/teacher/courses/create") {
     title = "Create Course";
-  } else if (normPath === "/learnova/teacher/promotions") {
+  } else if (pathname === "/learnova/teacher/promotions") {
     title = "Promotions management";
-  } else if (normPath === "/learnova/teacher/students") {
+  } else if (pathname === "/learnova/teacher/students") {
     title = "Students management";
-  } else if (normPath === "/learnova/teacher/revenue") {
+  } else if (pathname === "/learnova/teacher/revenue") {
     title = "Revenue management";
-  } else if (normPath === "/learnova/teacher/analytics") {
+  } else if (pathname === "/learnova/teacher/analytics") {
     title = "Analytics";
-  } else if (normPath === "/learnova/teacher/qa") {
+  } else if (pathname === "/learnova/teacher/qa") {
     title = "Messaging";
-  } else {
-    title = "Dashboard";
   }
+
+  const avatarSrc = user?.avatar || DEFAULT_AVATAR;
+  const displayName = user?.fullName || "Instructor";
 
   return (
     <header className="teacher-topbar">
       <div className="teacher-topbar__intro">
         <h1>{title}</h1>
-        <p>{subtitle}</p>
       </div>
 
       <div className="teacher-topbar__actions">
@@ -50,8 +57,8 @@ const TeacherHeader = () => {
           <span className="teacher-topbar__badge teacher-topbar__badge--blue">5</span>
         </button>
         <div className="teacher-profile">
-          <img src={teacherProfile.avatar} alt={teacherProfile.name} />
-          <span>{teacherProfile.name}</span>
+          <img src={avatarSrc} alt={displayName} />
+          <span>{displayName}</span>
           <ChevronDown size={16} />
         </div>
       </div>

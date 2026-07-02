@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom";
-import Footer from "../../component/footer/footer.jsx";
 
 const HomeLayout = () => {
   return (
@@ -7,8 +6,6 @@ const HomeLayout = () => {
       <main>
         <Outlet />
       </main>
-
-      <Footer />
     </div>
   );
 };

@@ -1,29 +1,101 @@
-import {useRef} from "react";
-import {FileUp} from "lucide-react";
+import {useRef, useState} from "react";
+import {CheckCircle, FileUp, XCircle} from "lucide-react";
+import {validateDocument} from "../../utils/courseValidation.js";
+import {generateUploadUrl} from "../../../../../../api/teacher/UploadApi.js";
+import {uploadFileWithProgress} from "../../../../../../services/UploadService.js";
 
-const ResourceUploader = ({courseId, lessonId, onUploadComplete}) => {
+const ResourceUploader = ({onUploadComplete}) => {
+    const [queue, setQueue] = useState([]); // [{name, progress, done, error}]
     const fileInputRef = useRef(null);
 
-    const handleFileChange = (event) => {
-        const files = Array.from(event.target.files || []);
+    const isUploading = queue.some((f) => !f.done);
 
-        if (files.length > 0) {
-            onUploadComplete?.(files, {courseId, lessonId});
+    const update = (index, patch) =>
+        setQueue((q) => q.map((item, i) => (i === index ? {...item, ...patch} : item)));
+
+    const handleFileChange = async (e) => {
+        const files = Array.from(e.target.files || []);
+        if (!files.length) return;
+        e.target.value = "";
+
+        const initialQueue = files.map((f) => ({name: f.name, progress: 0, done: false, error: null}));
+        setQueue(initialQueue);
+
+        const results = [];
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            const validationError = validateDocument(file);
+            if (validationError) {
+                update(i, {done: true, error: validationError});
+                continue;
+            }
+
+            try {
+                const {uploadUrl, fileKey} = await generateUploadUrl({
+                    type: "DOCUMENT",
+                    fileName: file.name,
+                    contentType: file.type,
+                });
+
+                await uploadFileWithProgress(uploadUrl, file, (pct) =>
+                    update(i, {progress: pct})
+                );
+
+                update(i, {progress: 100, done: true});
+                results.push({fileKey, fileName: file.name, fileSize: file.size, fileType: file.type});
+            } catch {
+                update(i, {done: true, error: "Upload failed"});
+            }
         }
 
-        event.target.value = "";
+        if (results.length > 0) {
+            onUploadComplete?.(results);
+        }
+
+        setTimeout(() => setQueue([]), 2500);
     };
 
     return (
-        <button type="button" aria-label="Upload lesson resources" onClick={() => fileInputRef.current?.click()}>
-            <FileUp size={16}/>
-            <input
-                ref={fileInputRef}
-                type="file"
-                multiple
-                onChange={handleFileChange}
-            />
-        </button>
+        <div className="teacher-resource-uploader">
+            {queue.length > 0 && (
+                <ul className="teacher-resource-queue">
+                    {queue.map((item, i) => (
+                        <li key={i} className={`teacher-resource-queue__item${item.error ? " --error" : item.done ? " --done" : ""}`}>
+                            {item.done ? (
+                                item.error
+                                    ? <XCircle size={12}/>
+                                    : <CheckCircle size={12}/>
+                            ) : null}
+                            <span className="teacher-resource-queue__name" title={item.name}>
+                                {item.name}
+                            </span>
+                            {!item.done && (
+                                <div className="teacher-upload-progress-bar teacher-upload-progress-bar--sm">
+                                    <div
+                                        className="teacher-upload-progress-bar__fill"
+                                        style={{width: `${item.progress}%`}}
+                                    />
+                                </div>
+                            )}
+                            {item.error && (
+                                <span className="teacher-resource-queue__error">{item.error}</span>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            )}
+            <button
+                type="button"
+                disabled={isUploading}
+                onClick={() => fileInputRef.current?.click()}
+                aria-label="Upload lesson resources"
+            >
+                <FileUp size={16}/>
+            </button>
+            <input ref={fileInputRef} type="file" multiple onChange={handleFileChange}/>
+        </div>
     );
 };
 
