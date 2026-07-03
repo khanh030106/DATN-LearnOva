@@ -127,12 +127,14 @@ const ProfileView = ({
     setCoursesError("");
 
     getMyEnrolledCoursesApi(axiosPrivate, accessToken)
-      .then((data) => {
-        console.log(data);
-        if (mounted) {
-          setOwnedCourses(Array.isArray(data) ? data.map(mapEnrolledCourse) : []);
-        }
-      })
+        .then((data) => {
+          console.log("API:", data);
+          console.log("First course:", JSON.stringify(data[0], null, 2));
+
+          if (mounted) {
+            setOwnedCourses(Array.isArray(data) ? data.map(mapEnrolledCourse) : []);
+          }
+        })
       .catch((err) => {
         if (mounted) {
           setOwnedCourses([]);
@@ -403,12 +405,15 @@ const mapEnrolledCourse = (course) => ({
   courseId: course.courseId,
   title: course.title,
   description: course.description,
-  instructor: course.instructorName || "LearnOva Instructor",
+
+  instructor: {
+    name: course.instructorName || "LearnOva Instructor",
+    avatar: course.instructorAvatar || "",
+  },
+
   level: course.level || "All levels",
-  image:
-      course.thumbnailKey && String(course.thumbnailKey).startsWith("http")
-          ? course.thumbnailKey
-          : "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
+
+  image: course.thumbnailKey || "",
 
   progress: Number(course.progressPercent ?? 0),
 
@@ -417,10 +422,10 @@ const mapEnrolledCourse = (course) => ({
 
   remaining: formatRemaining(Number(course.progressPercent ?? 0)),
 
-
   rating: Number(course.averageRating ?? 0).toFixed(1),
 
   reviews: Number(course.reviewCount ?? 0),
+  students: Number(course.studentCount ?? 0),
 
   enrolledAt: course.enrolledAt,
   completedAt: course.completedAt,

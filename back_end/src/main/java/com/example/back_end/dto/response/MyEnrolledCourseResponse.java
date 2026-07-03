@@ -9,6 +9,7 @@ public record MyEnrolledCourseResponse(
         String title,
         String description,
         String instructorName,
+        String instructorAvatar,
         CourseLevel level,
         String thumbnailKey,
         Integer progressPercent,
@@ -17,6 +18,7 @@ public record MyEnrolledCourseResponse(
         Integer completedLessons,
         Double averageRating,
         Long reviewCount,
+        Long studentCount,
 
         Instant enrolledAt,
         OffsetDateTime completedAt

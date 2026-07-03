@@ -9,6 +9,9 @@ import {
   Users,
   BarChart3,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+
 
 const CourseDetailSidebar = ({ course }) => {
   const radius = 54;
@@ -23,6 +26,7 @@ const CourseDetailSidebar = ({ course }) => {
     { icon: Calendar, label: "Last Updated", value: course.updatedAt },
     { icon: BarChart3, label: "Level", value: course.level },
   ];
+  const navigate = useNavigate();
 
   return (
     <aside className="learning-detail-sidebar">
@@ -59,10 +63,21 @@ const CourseDetailSidebar = ({ course }) => {
 
         <small>Keep it up! You're making great progress.</small>
 
-        <button className="learning-primary-button" type="button">
-          <Play size={16} fill="currentColor" />
-          Continue Learning
-        </button>
+        {course.progress === 100 ? (
+            <button className="learning-primary-button completed" type="button">
+              <Play size={16} fill="white" />
+              Course Completed
+            </button>
+        ) : (
+            <button
+                className="learning-primary-button"
+                type="button"
+                onClick={() => navigate(`/learnova/user/CoursesDetail/${course.courseId}`)}
+            >
+              <Play size={16} fill="currentColor" />
+              Continue Learning
+            </button>
+        )}
 
         <button className="learning-secondary-button" type="button">
           <RotateCcw size={16} />
@@ -90,19 +105,19 @@ const CourseDetailSidebar = ({ course }) => {
         </div>
       </section>
 
-      <section className="learning-support-card">
-        <h3>Need Help?</h3>
+      {/*<section className="learning-support-card">*/}
+      {/*  <h3>Need Help?</h3>*/}
 
-        <p>
-          Ask questions and get support from the instructor and learning
-          community.
-        </p>
+      {/*  <p>*/}
+      {/*    Ask questions and get support from the instructor and learning*/}
+      {/*    community.*/}
+      {/*  </p>*/}
 
-        <button type="button">
-          <HelpCircle size={18} />
-          Ask a Question
-        </button>
-      </section>
+      {/*  <button type="button">*/}
+      {/*    <HelpCircle size={18} />*/}
+      {/*    Ask a Question*/}
+      {/*  </button>*/}
+      {/*</section>*/}
     </aside>
   );
 };

@@ -4599,3 +4599,13 @@
   opacity:.4;
   cursor:not-allowed;
 }
+.learning-primary-button.completed {
+  background: #60ea93; /* xanh lá nhạt */
+  color: white;
+  font-weight: 600;
+}
+
+.learning-primary-button.completed svg {
+  color: white;
+  fill: white;
+}

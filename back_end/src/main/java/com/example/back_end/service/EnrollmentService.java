@@ -56,20 +56,28 @@ public class EnrollmentService {
 
         long reviewCount =
                 reviewRepository.countByCourseId(course.getId());
+        long studentCount =
+                enrollmentRepository.countByCourseId(course.getId());
 
         return new MyEnrolledCourseResponse(
                 course.getId(),
                 course.getTitle(),
                 course.getDescription(),
+
                 course.getInstructor().getFullName(),
-                course.getLevel(),
-                course.getThumbnailKey(),
+                course.getInstructor().getAvatar(), // ✅ instructorAvatar
+
+                course.getLevel(),                  // ✅ level
+
+                course.getThumbnailKey(),           // ✅ thumbnailKey
+
                 enrollment.getProgressPercent(),
 
                 (int) totalLessons,
                 (int) completedLessons,
                 averageRating,
                 reviewCount,
+                studentCount,
 
                 enrollment.getEnrolledAt(),
                 enrollment.getCompletedAt()
