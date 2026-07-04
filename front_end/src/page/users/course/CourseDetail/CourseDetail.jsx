@@ -8,7 +8,7 @@ import CourseVideoPlayer from "./VideoPlayer.jsx";
 import OverviewTab from "./OverviewTab.jsx";
 import QATab from "./QATab.jsx";
 import ReviewsTab from "./Review.jsx";
-import LearnovaAI from "../../../home/AI/AI.jsx";
+import LearnovaAI from "../../../home/chat-bot/chatBot.jsx";
 import QuizPage from "./QuizPage.jsx";
 import Header from "../../../../component/header/user_header/Header.jsx";
 import { getCourseReviewsApi, deleteReviewApi, getRatingSummaryApi } from "../../../../api/ReviewApi.js";

@@ -1,7 +1,7 @@
 
-import "./AI.css";
+import "./chatBot.css";
 import { FaPaperPlane } from "react-icons/fa";
-import AIImage from "../../../assets/aia.png";
+import chatBot from "../../../assets/chatbot.png";
 import { useState, useEffect, useRef } from "react";
 
 function LearnovaAI() {
@@ -9,7 +9,7 @@ function LearnovaAI() {
     const [showGreeting, setShowGreeting] = useState(true);
 
     const [greetingText, setGreetingText] = useState(
-        "👋 Xin chào! Mình là Learnova AI"
+        "👋 Xin chào! Mình là Learnova chat-bot"
     );
 
     const [message, setMessage] = useState("");
@@ -18,7 +18,7 @@ function LearnovaAI() {
     const [messages, setMessages] = useState([
         {
             sender: "bot",
-            text: "Xin chào 👋 Mình là trợ lý AI của Learnova."
+            text: "Xin chào 👋 Mình là trợ lý chat-bot của Learnova."
         }
     ]);
 
@@ -103,13 +103,6 @@ function LearnovaAI() {
 
         setMessage("");
     };
-    // const suggestions = [
-    //     "Tìm khóa học phù hợp",
-    //     "Hỏi về lộ trình học",
-    //     "Ưu đãi & khuyến mãi",
-    //     "Hướng dẫn sử dụng",
-    // ];
-
 
     return (
         <div className="ai-widget">
@@ -122,7 +115,7 @@ function LearnovaAI() {
                     <div className="chat-header">
                         <div className="header-left-AI">
                             <div className="avatar-ai">
-                                <img src={AIImage} alt="Learnova AI" />
+                                <img src={chatBot} alt="Learnova AI" />
                             </div>
 
                             <div>
@@ -214,7 +207,7 @@ function LearnovaAI() {
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <img
-                        src={AIImage}
+                        src={chatBot}
                         alt="Learnova AI"
                     />
                 </button>

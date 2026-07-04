@@ -242,7 +242,7 @@
     font-weight: 600;
 }
 
-/* Nút AI */
+/* Nút chat-bot */
 
 .floating-bot {
     width: 80px;
@@ -401,7 +401,7 @@
     word-break: break-word;
 }
 
-/* Tin nhắn AI */
+/* Tin nhắn chat-bot */
 
 .message.bot {
     background: #5c8eef;
