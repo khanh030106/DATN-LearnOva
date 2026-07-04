@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom"
 import { MessageCircle } from "lucide-react";
-import LearnovaAI from "../home/AI/AI.jsx";
+import LearnovaAI from "../home/chat-bot/chatBot.jsx";
 
 function InstructorsPage() {
   const [viewMode, setViewMode] = useState("grid");
@@ -31,7 +31,7 @@ function InstructorsPage() {
     "React",
     "JavaScript",
     "Python",
-    "AI & ML",
+    "chat-bot & ML",
     "Design",
     "Data Science",
   ];
@@ -40,7 +40,7 @@ function InstructorsPage() {
       { id: 1, name: "Web Development", count: 98, icon: Globe },
       { id: 2, name: "Mobile Development", count: 96, icon: Smartphone },
       { id: 3, name: "Data Science", count: 87, icon: BarChart3 },
-      { id: 4, name: "AI & ML", count: 72, icon: Bot },
+      { id: 4, name: "chat-bot & ML", count: 72, icon: Bot },
       { id: 5, name: "UI/UX Design", count: 64, icon: Palette },
       { id: 6, name: "DevOps", count: 80, icon: Settings },
       { id: 7, name: "Cyber Security", count: 45, icon: ShieldCheck },
@@ -105,13 +105,13 @@ function InstructorsPage() {
     {
       id: 2,
       name: "Olivia Chen",
-      title: "AI Researcher & Scientist",
+      title: "chat-bot Researcher & Scientist",
       badge: "top-rated",
       rating: 4.8,
       reviews: 8500,
       avatar:
         "https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg",
-      bio: "PhD in AI from Stanford. Focused on making AI & ML easy to understand and practical.",
+      bio: "PhD in chat-bot from Stanford. Focused on making chat-bot & ML easy to understand and practical.",
       skills: ["Python", "Machine Learning", "NLP"],
       course: {
         title: "Machine Learning",
@@ -204,12 +204,12 @@ function InstructorsPage() {
     {
       id: 6,
       name: "Lê Minh Quân",
-      title: "AI Engineer",
+      title: "chat-bot Engineer",
       badge: "verified",
       rating: 4.8,
       reviews: 5300,
       avatar: "https://via.placeholder.com/120/3B82F6/ffffff?text=LMQ",
-      bio: "AI engineer with expertise in deep learning and computer vision.",
+      bio: "chat-bot engineer with expertise in deep learning and computer vision.",
       skills: ["Deep Learning", "PyTorch", "Computer Vision"],
       course: null,
       stats: {

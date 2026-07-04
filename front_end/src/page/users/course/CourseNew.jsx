@@ -6,7 +6,7 @@ import { FaStar } from "react-icons/fa";
 import { X } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import LearnovaAI from "../../home/AI/AI.jsx";
+import LearnovaAI from "../../home/chat-bot/chatBot.jsx";
 import { useAuth } from "../../../hook/UseAuth.jsx";
 import { addStoredCartItem } from "../../../utils/cartStorage.js";
 import { getPublicCoursesApi } from "../../../api/CourseApi.js";

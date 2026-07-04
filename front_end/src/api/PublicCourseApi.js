@@ -8,3 +8,5 @@ export const getCourseDetail = (courseId) =>
 
 export const getFileUrl = (fileKey) =>
     axiosClient.get("/courses/video-url", { params: { fileKey } }).then((r) => r.data.url);
+
+

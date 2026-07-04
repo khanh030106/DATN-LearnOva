@@ -8,7 +8,7 @@ const categories = [
     color: "#1f2937",
   },
   {
-    label: "AI & Data Science",
+    label: "chat-bot & Data Science",
     percent: 25,
     amount: "$612,500",
     color: "#334155",

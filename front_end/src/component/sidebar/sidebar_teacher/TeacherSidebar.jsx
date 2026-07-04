@@ -3,8 +3,7 @@ import {
   BarChart3,
   BookOpen,
   Gift,
-  Grid2X2, Home,
-  MessageSquare,
+   Home,
   Plus,
   Users,
   WalletCards,
@@ -20,6 +19,7 @@ const teacherNavSections = [
       { label: "Dashboard", path: "/learnova/teacher", icon: Home, end: true },
       { label: "Courses", path: "/learnova/teacher/courses", icon: BookOpen },
       { label: "Students", path: "/learnova/teacher/students", icon: Users },
+      { label: "Reviews & ratings", path: "/learnova/teacher/students", icon: Users },
     ],
   },
   {
@@ -70,13 +70,6 @@ const TeacherSidebar = () => {
         <span style={{marginBottom: '3px'}}>Create new course</span>
       </NavLink>
 
-      <div className="teacher-sidebar__profile">
-        <img src={teacherProfile.avatar} alt={teacherProfile.name} />
-        <div>
-          <strong>{teacherProfile.name}</strong>
-          <small>View profile</small>
-        </div>
-      </div>
     </aside>
   );
 };
