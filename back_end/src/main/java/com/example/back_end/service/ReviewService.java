@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.back_end.dto.resquest.UpdateReviewRequest;
 import java.time.Instant;
 import java.util.List;
+import com.example.back_end.dto.response.CourseReviewResponse;
 
 
 @Slf4j
@@ -29,6 +30,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final AdminCourseRepository adminCourseRepository;
+    private final LessonProgressService lessonProgressService;
 
     @Transactional
     public ReviewResponse createReview(
@@ -40,6 +42,11 @@ public class ReviewService {
                 request.getCourseId()
         ).isPresent()) {
             throw new BusinessException("You have already reviewed this course");
+        }
+
+        var progress = lessonProgressService.getCourseProgress(userId, request.getCourseId());
+        if (!progress.isCourseCompleted()) {
+            throw new BusinessException("You must complete all lessons in the course before writing a review.");
         }
         // 1. Kiểm tra User
         User user = userRepository.findById(userId)
@@ -136,5 +143,27 @@ public class ReviewService {
 
         long total = reviews.size();
         return new RatingSummaryResponse(avg, total);
+    }
+    public CourseReviewResponse getCourseReviewSummary(Long courseId) {
+
+        List<ReviewResponse> reviews = reviewRepository.findByCourseIdWithUser(courseId)
+                .stream()
+                .map(review ->
+                        ReviewResponse.builder()
+                                .reviewId(review.getId())
+                                .userId(review.getUser().getId())
+                                .userName(review.getUser().getFullName())
+                                .rating(review.getRating())
+                                .comment(review.getComment())
+                                .createdAt(review.getCreatedAt())
+                                .build()
+                )
+                .toList();
+
+        return CourseReviewResponse.builder()
+                .averageRating(reviewRepository.getAverageRating(courseId))
+                .reviewCount(reviewRepository.countByCourseId(courseId))
+                .reviews(reviews)
+                .build();
     }
 }

@@ -1,150 +1,171 @@
-import { Camera, Check, CheckCircle2, Clock, Flame, Star } from "lucide-react";
+import { Camera } from "lucide-react";
+import { useRef } from "react";
+import defaultAvatar from "../../../../../assets/default_user_avatar.jpg";
 
-const ProfileFormSection = ({
-  profileData,
-  onInputChange,
-  onSaveProfile,
-  onOpenAvatarModal,
-}) => (
-  <form onSubmit={onSaveProfile} className="profile-form">
-    <div className="avatar-section">
-      <div className="avatar-container">
-        <div className="avatar-wrapper">
-          <img
-            src={profileData.avatar}
-            alt="Profile Large"
-            className="avatar-large"
-          />
-          <div className="avatar-overlay">
-            <span>Change</span>
+
+
+
+  function ProfileFormSection({
+                                profileData,
+                                saveSuccess,
+                                onInputChange,
+                                onSaveProfile,
+                                onAvatarChange,
+                                errors = {}
+                              }) {
+    const fileInputRef = useRef(null);
+
+  return (
+      <form onSubmit={onSaveProfile} className="profile-form">
+
+        {/* AVATAR */}
+        <div className="avatar-section">
+          <div className="avatar-container">
+            <div className="avatar-wrapper">
+              <img
+                  src={profileData.avatar || defaultAvatar}
+                  alt="Profile Large"
+                  className="avatar-large"
+              />
+
+              <div className="avatar-overlay">
+                <span>Change</span>
+              </div>
+            </div>
+
+            <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={onAvatarChange}
+            />
+
+            <button
+                type="button"
+                className="avatar-button"
+                onClick={() => fileInputRef.current?.click()}
+            >
+              <Camera size={18} />
+            </button>
+          </div>
+
+          <h2 className="profile-name">
+            {profileData.fullName || "Unknown User"}
+          </h2>
+
+          <p className="profile-subtitle">
+            Honor Student • Joined in 2026
+          </p>
+        </div>
+
+        {/* FORM GRID */}
+        <div className="form-grid">
+
+          {/* FULL NAME */}
+          <div className="form-group">
+            <label>Full Name</label>
+            <input
+                type="text"
+                value={profileData.fullName || ""}
+                onChange={(e) => onInputChange("fullName", e.target.value)}
+                className="form-input"
+            />
+            {errors?.fullName && (
+                <div className="error-text">{errors.fullName}</div>
+            )}
+          </div>
+
+          {/* EMAIL (READ ONLY) */}
+          <div className="form-group">
+            <label>Email Address</label>
+            <input
+                type="email"
+                value={profileData.email || ""}
+                className="form-input"
+                readOnly
+            />
+          </div>
+
+          {/* PHONE */}
+          <div className="form-group">
+            <label>Phone Number</label>
+            <input
+                type="text"
+                value={profileData.phone || ""}
+                placeholder="Not provided"
+                onChange={(e) => onInputChange("phone", e.target.value)}
+                className="form-input"
+            />
+            {errors?.phone && (
+                <div className="error-text">{errors.phone}</div>
+            )}
+          </div>
+
+          {/* DATE OF BIRTH */}
+          <div className="form-group">
+            <label>Date of Birth</label>
+            <input
+                type="date"
+                value={profileData.dateOfBirth || ""}
+                onChange={(e) => onInputChange("dateOfBirth", e.target.value)}
+                className="form-input"
+            />
+            {errors?.dateOfBirth && (
+                <div className="error-text">{errors.dateOfBirth}</div>
+            )}
+          </div>
+
+          {/* GENDER */}
+          <div className="form-group">
+            <label>Gender</label>
+            <select
+                value={profileData.gender || ""}
+                onChange={(e) => onInputChange("gender", e.target.value)}
+                className="form-input"
+            >
+              <option value="">Not specified</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+
+            {errors?.gender && (
+                <div className="error-text">{errors.gender}</div>
+            )}
+          </div>
+
+          {/* STATUS */}
+          <div className="form-group">
+            <label>Account Status</label>
+            <input
+                type="text"
+                value={profileData.status || "Unknown"}
+                className="form-input"
+                readOnly
+            />
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={onOpenAvatarModal}
-          className="avatar-button"
-        >
-          <Camera size={18} />
-        </button>
-      </div>
+        {/* ACTIONS */}
+        <div className="form-actions">
+          <button
+              type="button"
+              className="cancel-button"
+          >
+            Cancel
+          </button>
 
-      <h2 className="profile-name">{profileData.fullName}</h2>
+          <button
+              type="submit"
+              className="save-button"
+          >
+            Save Changes
+          </button>
+        </div>
 
-      <p className="profile-subtitle">Honor Student • Joined in 2023</p>
-    </div>
-
-    <div className="form-grid">
-      <div className="form-group">
-        <label>Full Name</label>
-        <input
-          type="text"
-          value={profileData.fullName}
-          onChange={(event) => onInputChange("fullName", event.target.value)}
-          className="form-input"
-          required
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Email Address</label>
-        <input
-          type="email"
-          value={profileData.email}
-          onChange={(event) => onInputChange("email", event.target.value)}
-          className="form-input"
-          required
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Phone Number</label>
-        <input
-          type="text"
-          value={profileData.phone}
-          onChange={(event) => onInputChange("phone", event.target.value)}
-          className="form-input"
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Learning Goal</label>
-        <input
-          type="text"
-          value={profileData.goal}
-          onChange={(event) => onInputChange("goal", event.target.value)}
-          className="form-input"
-        />
-      </div>
-    </div>
-
-    <div className="form-group full-width">
-      <label>Location</label>
-      <input
-        type="text"
-        value={profileData.address}
-        onChange={(event) => onInputChange("address", event.target.value)}
-        className="form-input"
-      />
-    </div>
-
-    <div className="form-group full-width">
-      <label>About Me</label>
-      <textarea
-        rows="4"
-        value={profileData.bio}
-        onChange={(event) => onInputChange("bio", event.target.value)}
-        className="form-textarea about-me-textarea"
-      />
-    </div>
-
-    <div className="stats-simulator">
-      <div className="stat-input-group">
-        <label>
-          <Flame size={12} /> Learning Streak
-        </label>
-        <input
-          type="number"
-          min="0"
-          value={profileData.streakDays}
-          onChange={(event) =>
-            onInputChange("streakDays", parseInt(event.target.value, 10) || 0)
-          }
-          className="form-input-small"
-        />
-      </div>
-
-      <div className="stat-input-group">
-        <label>
-          <Clock size={12} /> Total Study Hours
-        </label>
-        <input
-          type="number"
-          min="0"
-          value={profileData.studyHours}
-          onChange={(event) =>
-            onInputChange("studyHours", parseInt(event.target.value, 10) || 0)
-          }
-          className="form-input-small"
-        />
-      </div>
-
-      <div className="stat-input-group">
-        <label>
-          <Star size={12} /> Reward Points
-        </label>
-        <input
-          type="number"
-          min="0"
-          value={profileData.points}
-          onChange={(event) =>
-            onInputChange("points", parseInt(event.target.value, 10) || 0)
-          }
-          className="form-input-small"
-        />
-      </div>
-    </div>
-  </form>
-);
+      </form>
+  );
+};
 
 export default ProfileFormSection;

@@ -3,6 +3,7 @@ import { MdStar } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import { FaRegCommentDots } from "react-icons/fa";
 import {
+    createReviewApi,
     updateReviewApi,
     deleteReviewApi
 } from "../../../../api/ReviewApi.js";
@@ -21,11 +22,15 @@ function ReviewsTab({
                         handleRatingFilter,
                         currentReviewPage,
                         setCurrentReviewPage,
-                        reviewsPerPage
+                        reviewsPerPage,
+                        isCourseCompleted,
+                        hasReviewed,
+                        openReviewModal
                     }) {
     const [openMenuId, setOpenMenuId] = useState(null);
     const [editingId, setEditingId] = useState(null);
     const [editText, setEditText] = useState("");
+
     // Toggle đóng mở menu 3 chấm
     const toggleMenu = (id) => {
         setOpenMenuId(prev => (prev === id ? null : id));
@@ -56,15 +61,7 @@ function ReviewsTab({
     const isNoResult =
         !hasNoReviews &&
         filteredReviews.length === 0;
-    if (!reviewsData || reviewsData.length === 0) {
-        return (
-            <div className="no-reviews">
-                <FaRegCommentDots size={48} color="#999" />
-                <h3>No reviews yet</h3>
-                <p>Be the first to leave a review for this course.</p>
-            </div>
-        );
-    }
+
     return (
         <div className="reviews-section">
             <div className="rating-summary">
@@ -122,24 +119,16 @@ function ReviewsTab({
                     </div>
                 </div>
             </div>
+            {/* REVIEW FORM ACTION */}
+
 
             <h3 className="reviews-title">Reviews</h3>
 
             <div className="review-controls">
-                <div className="review-search">
-                    <input
-                        type="text"
-                        placeholder="Search reviews"
-                        value={reviewQuery}
-                        onChange={handleSearchReviews}
-                    />
-                    <button className="search-btn">
-                        <FiSearch />
-                    </button>
-                </div>
+
 
                 <div className="review-filter">
-                    <label>Filter ratings</label>
+
                     <select value={ratingFilter} onChange={handleRatingFilter}>
                         <option value="all">All ratings</option>
                         <option value={5}>5 stars</option>
@@ -168,8 +157,7 @@ function ReviewsTab({
                         reviewOwnerId &&
                         String(currentUserId) === String(reviewOwnerId);
 
-                    console.log("IS OWNER =", isOwner);
-                    console.log("================================");
+
 
                     const displayComment = r.comment || r.text || "";
                     const displayName = r.userName || r.name || "Anonymous";

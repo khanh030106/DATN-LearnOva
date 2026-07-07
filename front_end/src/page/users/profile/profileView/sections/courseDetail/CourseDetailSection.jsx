@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { buildCourseDetail } from "./data/courseDetailData";
+
 import CourseAbout from "./components/CourseAbout";
 import CourseCurriculum from "./components/CourseCurriculum";
 import CourseDetailHero from "./components/CourseDetailHero";
@@ -8,9 +9,28 @@ import CourseDetailTabs from "./components/CourseDetailTabs";
 import CourseInstructor from "./components/CourseInstructor";
 import CourseReviews from "./components/CourseReviews";
 
+import {
+  getCourseCurriculumApi,
+  getCourseReviewsApi,
+} from "../../../../../../api/EnrollmentApi.js";
+
+import { useAuth } from "../../../../../../hook/UseAuth.jsx";
+import { useAxiosPrivate } from "../../../../../../hook/UseAxiosPrivate.js";
+
+
+
+
 const CourseDetailSection = ({ course, onBack }) => {
   const [activeTab, setActiveTab] = useState("curriculum");
+  const axiosPrivate = useAxiosPrivate();
+  const { accessToken } = useAuth();
+
+  const [curriculum, setCurriculum] = useState(null);
+  const [loadingCurriculum, setLoadingCurriculum] = useState(true);
   const courseDetail = useMemo(() => buildCourseDetail(course), [course]);
+
+
+  const [reviewsData, setReviewsData] = useState(null);
 
   const renderTabContent = () => {
     if (activeTab === "about") {
@@ -22,11 +42,67 @@ const CourseDetailSection = ({ course, onBack }) => {
     }
 
     if (activeTab === "reviews") {
-      return <CourseReviews course={courseDetail} />;
+      return <CourseReviews
+          course={courseDetail}
+          reviewsData={reviewsData}
+      />;
     }
 
-    return <CourseCurriculum course={courseDetail} />;
+    if (loadingCurriculum) {
+      return <p>Loading curriculum...</p>;
+    }
+
+    if (!curriculum) {
+      return <p>No curriculum found.</p>;
+    }
+
+    return <CourseCurriculum course={curriculum} />;
   };
+  useEffect(() => {
+    if (!course?.courseId) return;
+
+    const fetchCurriculum = async () => {
+      try {
+        setLoadingCurriculum(true);
+
+        const data = await getCourseCurriculumApi(
+            axiosPrivate,
+            course.courseId,
+            accessToken
+        );
+
+        setCurriculum(data);
+      } catch (err) {
+        console.error("Failed to load curriculum", err);
+      } finally {
+        setLoadingCurriculum(false);
+      }
+    };
+
+    fetchCurriculum();
+  },
+      [course, axiosPrivate, accessToken]);
+  useEffect(() => {
+    if (!course?.courseId) return;
+
+    const fetchReviews = async () => {
+      try {
+        const data = await getCourseReviewsApi(
+            axiosPrivate,
+            course.courseId,
+            accessToken
+        );
+
+        console.log("Reviews:", data);
+
+        setReviewsData(data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchReviews();
+  }, [course, axiosPrivate, accessToken]);
 
   return (
     <div className="learning-detail-page">

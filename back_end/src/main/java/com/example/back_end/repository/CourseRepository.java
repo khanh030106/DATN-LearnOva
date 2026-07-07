@@ -55,5 +55,13 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Optional<Course> findCourseDetailById(@Param("id") Long id);
 
     List<Course> findByStatusAndIsDeletedFalseOrderByCreatedAtDesc(CourseStatus status);
+    @Query("""
+    SELECT DISTINCT c
+    FROM Course c
+    LEFT JOIN FETCH c.sections s
+    LEFT JOIN FETCH s.lessons
+    WHERE c.id = :courseId
+""")
+    Optional<Course> findCurriculumById(@Param("courseId") Long courseId);
 
 }

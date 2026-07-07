@@ -7,7 +7,9 @@ import com.example.back_end.dto.response.FeaturedCourseResponse;
 import com.example.back_end.dto.response.GetFileUrlResponse;
 import com.example.back_end.dto.response.PublicCourseResponse;
 import com.example.back_end.dto.response.TeacherCoursesResponse;
+import com.example.back_end.dto.response.TeacherReviewResponse;
 import com.example.back_end.dto.response.TeacherStudentResponse;
+import com.example.back_end.dto.response.TopCategoryResponse;
 import com.example.back_end.dto.resquest.CreateDraftCourseRequest;
 import com.example.back_end.dto.resquest.UpdateCourseRequest;
 import com.example.back_end.dto.resquest.UpdateCourseStatusRequest;
@@ -77,6 +79,11 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getFeaturedCourses());
     }
 
+    @GetMapping("/top-categories")
+    public ResponseEntity<List<TopCategoryResponse>> getTopCategories() {
+        return ResponseEntity.ok(courseService.getTopCategories());
+    }
+
     @GetMapping("/{courseId}")
     public ResponseEntity<CourseDetailResponse> getCourseDetail(@PathVariable Long courseId) {
         return ResponseEntity.ok(courseService.getCourseDetail(courseId));
@@ -87,6 +94,13 @@ public class CourseController {
         if (authentication == null || !authentication.isAuthenticated())
             return ResponseEntity.status(401).build();
         return ResponseEntity.ok(courseService.getMyStudents(authentication.getName()));
+    }
+
+    @GetMapping("/my-reviews")
+    public ResponseEntity<List<TeacherReviewResponse>> getMyReviews(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated())
+            return ResponseEntity.status(401).build();
+        return ResponseEntity.ok(courseService.getMyReviews(authentication.getName()));
     }
 
     @GetMapping("/my-courses")          // /courses/mine

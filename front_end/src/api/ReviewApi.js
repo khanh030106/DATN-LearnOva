@@ -27,3 +27,11 @@ export const getRatingSummaryApi = async (courseId) => {
     );
     return response.data;
 };
+// CREATE REVIEW
+export const createReviewApi = async (data) => {
+    const response = await axiosClient.post(
+        "/review/post",
+        data
+    );
+    return response.data;
+};

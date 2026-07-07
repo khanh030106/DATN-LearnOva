@@ -7,4 +7,6 @@ import java.util.List;
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     List<Lesson> findBySectionCourseId(Long courseId);
+    long countBySectionCourseId(Long courseId);
+    List<Lesson> findBySectionIdOrderByLessonOrderAsc(Long sectionId);
 }

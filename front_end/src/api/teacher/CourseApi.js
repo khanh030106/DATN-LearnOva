@@ -117,6 +117,11 @@ export const getMyStudents = async () => {
     return response.data;
 };
 
+export const getMyReviews = async () => {
+    const response = await api.get("/courses/my-reviews");
+    return response.data;
+};
+
 export const getFileUrl = async (fileKey) => {
     const response = await api.get("/courses/video-url", { params: { fileKey } });
     return response.data.url;

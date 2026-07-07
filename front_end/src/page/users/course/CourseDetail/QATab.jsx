@@ -59,6 +59,8 @@ function QATab({
     const questionsPerPage = 5;
     const [searchText, setSearchText] = useState("");
     const [activeTab, setActiveTab] = useState("all");
+    const [editAnswer, setEditAnswer] = useState(null);
+    const [editLessonId, setEditLessonId] = useState(null);
 
     const currentUserId =
         currentUser?.id ||
@@ -277,7 +279,7 @@ function QATab({
                                                     onClick={() => {
                                                         setEditId(answer.id);
                                                         setEditText(answer.content);
-                                                        setOpenMenuId(null); // đóng menu luôn cho UX tốt
+                                                        setEditAnswer(answer);
                                                     }}
                                                 >
                                                     <FaPenToSquare />
@@ -452,7 +454,10 @@ function QATab({
         }
 
         try {
-            await updateAnswerApi(id, { content });
+            await updateAnswerApi(id, {
+                parentId: editAnswer.parentId,
+                content
+            });
 
             setEditId(null);
             setEditText("");
@@ -469,6 +474,10 @@ function QATab({
 
             toast.success("Updated!");
         } catch (e) {
+
+                console.log("Status =", e.response?.status);
+                console.log("Response =", e.response?.data);
+
             console.error(e);
             toast.error("Update failed!");
         }
@@ -482,7 +491,10 @@ function QATab({
         }
 
         try {
-            await updateQuestionApi(id, { content });
+            await updateQuestionApi(id, {
+                lessonId: editLessonId,
+                content
+            });
 
             setEditQuestionId(null);
             setEditQuestionText("");
@@ -522,18 +534,7 @@ function QATab({
 
   return (
       <div className="qa-content">
-          <div className="qa-search-container">
-              <input
-                  type="text"
-                  placeholder="Search all course questions"
-                  className="qa-search-box"
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-              />
-              <button className="qa-search-btn">
-                  <FaSearch />
-              </button>
-          </div>
+
 
           {/* Filters */}
 
@@ -571,7 +572,7 @@ function QATab({
                   className="qa-ask-btn"
                   onClick={() => setShowQuestionForm(!showQuestionForm)}
               >
-                  + Ask a new question
+                  +
               </button>
 
 
@@ -912,6 +913,7 @@ function QATab({
                                                   onClick={() => {
                                                       setEditQuestionId(q.id);
                                                       setEditQuestionText(q.content);
+                                                      setEditLessonId(lessonId);
                                                       setEditQuestionError("");
                                                       setOpenMenuId(null);
                                                   }}
