@@ -1,394 +1,309 @@
 import { useEffect, useMemo, useState } from "react";
-import { Edit3, Eye, Trash2, X } from "lucide-react";
 import {
-  createAdminCourseApi,
-  deleteAdminCourseApi,
-  updateAdminCourseApi,
-} from "../../../../api/admin/CourseApi.js";
+  BookOpen,
+  Clock,
+  FileText,
+  Globe,
+  GraduationCap,
+  Info,
+  List,
+  MessageSquare,
+  PlayCircle,
+  Star,
+  Tag,
+  Users,
+  BarChart2,
+  CheckCircle,
+  ChevronDown,
+  ChevronRight,
+  Circle,
+  DollarSign,
+  X,
+} from "lucide-react";
 import "./CourseTable.css";
 
 const pageSize = 10;
-const courseStatusOptions = ["DRAFT", "PUBLISHED", "ARCHIVED", "DELETED"];
 
-const emptyForm = {
-  thumbnailKey: "",
-  title: "",
-  slug: "",
-  description: "",
-  language: "vi",
-  requirements: "",
-  whatYouLearn: "",
-  basePrice: 0,
-  level: "Beginner",
-  status: "DRAFT",
-  instructorId: "",
-  tagIds: [],
-};
-
-const formatDate = (value) => {
-  if (!value) return "N/A";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "N/A";
-  return new Intl.DateTimeFormat("vi-VN", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(date);
+const valueOrDash = (value) => {
+  if (value === null || value === undefined || value === "") return "--";
+  return value;
 };
 
 const formatPrice = (value) => {
+  if (value === null || value === undefined || value === "") return "--";
   const price = Number(value || 0);
+  if (price === 0) return "Free";
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
-    maximumFractionDigits: 0,
   }).format(price);
 };
 
-const linesToArray = (value) =>
-  value
-    .split("\n")
-    .map((item) => item.trim())
-    .filter(Boolean);
+const formatCount = (value) => new Intl.NumberFormat("vi-VN").format(Number(value) || 0);
 
-const getInstructorId = (instructor) => instructor.instructorId ?? instructor.id;
+const formatDuration = (seconds) => {
+  const totalSeconds = Number(seconds || 0);
+  if (!totalSeconds) return "--";
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const remainingSeconds = totalSeconds % 60;
+  if (hours > 0) return `${hours}h ${String(minutes).padStart(2, "0")}m`;
+  return `${minutes}m ${String(remainingSeconds).padStart(2, "0")}s`;
+};
 
-const getInstructorName = (instructor) =>
-  instructor.fullName || instructor.email || `Instructor #${getInstructorId(instructor)}`;
+const timeAgo = (value) => {
+  if (!value) return "--";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "--";
+  const diff = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (diff < 60) return "Just now";
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  if (diff < 2592000) return `${Math.floor(diff / 86400)}d ago`;
+  return date.toLocaleDateString("vi-VN");
+};
 
 const getCourseDisplayStatus = (course) => course.status || "N/A";
 
-const toFormData = (course) => ({
-  thumbnailKey: course.thumbnailKey || "",
-  title: course.title || "",
-  slug: course.slug || "",
-  description: course.description || "",
-  language: course.language || "vi",
-  requirements: (course.requirements || []).join("\n"),
-  whatYouLearn: (course.whatYouLearn || []).join("\n"),
-  basePrice: course.basePrice ?? 0,
-  level: course.level || "Beginner",
-  status: course.status || "DRAFT",
-  instructorId: course.instructorId ? String(course.instructorId) : "",
-  tagIds: (course.tagIds || []).map(Number),
-});
+const detailTabs = [
+  { id: "overview", label: "Overview", Icon: BarChart2 },
+  { id: "description", label: "Description", Icon: FileText },
+  { id: "curriculum", label: "Curriculum", Icon: List },
+];
 
-const buildPayload = (form) => ({
-  thumbnailKey: form.thumbnailKey.trim(),
-  title: form.title.trim(),
-  slug: form.slug.trim(),
-  description: form.description.trim(),
-  language: form.language.trim() || "vi",
-  requirements: linesToArray(form.requirements),
-  whatYouLearn: linesToArray(form.whatYouLearn),
-  basePrice: Number(form.basePrice || 0),
-  level: form.level,
-  status: form.status,
-  instructorId: Number(form.instructorId),
-  isDeleted: form.status === "DELETED",
-  tagIds: form.tagIds.map(Number),
-});
-
-const CourseViewModal = ({ course, availableTags, onClose }) => {
-  const tagNames = useMemo(() => {
-    if (!availableTags || !course.tagIds?.length) return [];
-    const tagMap = new Map(availableTags.map((t) => [t.id, t.name]));
-    return course.tagIds.map((id) => tagMap.get(id) || `Tag #${id}`);
-  }, [course.tagIds, availableTags]);
-
-  return (
-    <div className="courseModalBackdrop" role="presentation" onClick={onClose}>
-      <div
-        className="courseModal"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Course details"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="courseModalHeader">
-          <div>
-            <p className="courseModalEyebrow">COURSE DETAIL</p>
-            <h2>{course.title}</h2>
-          </div>
-          <button type="button" className="courseModalClose" onClick={onClose} aria-label="Close course details">
-            <X size={20} />
-          </button>
-        </div>
-
-        <div className="courseModalBody">
-          {course.thumbnailKey ? (
-            <img className="courseModalThumbnail" src={course.thumbnailKey} alt={course.title} />
-          ) : null}
-          <p><strong>Instructor:</strong> {course.instructorName || "N/A"}</p>
-          <p><strong>Slug:</strong> {course.slug || "N/A"}</p>
-          <p><strong>Level:</strong> {course.level || "N/A"}</p>
-          <p><strong>Status:</strong> {getCourseDisplayStatus(course)}</p>
-          <p><strong>Language:</strong> {course.language || "N/A"}</p>
-          <p><strong>Published At:</strong> {formatDate(course.publishedAt)}</p>
-          <p><strong>Price:</strong> {formatPrice(course.basePrice)}</p>
-          <p><strong>Description:</strong> {course.description || "N/A"}</p>
-
-          {tagNames.length > 0 && (
-            <div className="courseModalListSection">
-              <h3>Tags</h3>
-              <div className="courseTagChips">
-                {tagNames.map((name) => (
-                  <span key={name} className="courseTagChip">{name}</span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="courseModalListSection">
-            <h3>Requirements</h3>
-            <ul>{(course.requirements || []).map((item, index) => <li key={index}>{item}</li>)}</ul>
-          </div>
-
-          <div className="courseModalListSection">
-            <h3>What You Learn</h3>
-            <ul>{(course.whatYouLearn || []).map((item, index) => <li key={index}>{item}</li>)}</ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const getCourseErrorMessage = (error, fallback) => {
-  const data = error?.response?.data;
-  if (typeof data === "string") return data;
-  if (data?.message) return data.message;
-  if (data?.error) return data.error;
-  return fallback;
-};
-
-const CourseDeleteModal = ({ course, error, isDeleting, onClose, onConfirm }) => {
-  if (!course) return null;
-
-  return (
-    <div className="courseModalBackdrop" role="presentation" onClick={onClose}>
-      <div
-        className="courseDeleteModal"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Confirm delete course"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="courseDeleteIcon">
-          <Trash2 size={24} aria-hidden="true" />
-        </div>
-        <div className="courseDeleteContent">
-          <p className="courseModalEyebrow">DELETE COURSE</p>
-          <h2>Chuyển khóa học sang DELETED?</h2>
-          <p>
-            Khóa học <strong>{course.title}</strong> sẽ được xóa mềm bằng cách
-            đổi Status thành <strong>DELETED</strong>.
-          </p>
-        </div>
-        {error ? <p className="courseFormError">{error}</p> : null}
-        <div className="courseModalActions">
-          <button type="button" className="courseModalCancel" onClick={onClose} disabled={isDeleting}>
-            Cancel
-          </button>
-          <button type="button" className="courseModalDanger" onClick={onConfirm} disabled={isDeleting}>
-            {isDeleting ? "Deleting..." : "Confirm Delete"}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const CourseFormModal = ({ course, instructors, availableTags, axiosClient, onClose, onSaved }) => {
-  const isEdit = Boolean(course);
-  const [form, setForm] = useState(() => toFormData(course || emptyForm));
-  const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState("");
-  const hasInstructorOptions = instructors.length > 0;
+const CourseViewModal = ({ course, onClose }) => {
+  const [activeTab, setActiveTab] = useState("overview");
+  const [expandedSections, setExpandedSections] = useState({});
 
   useEffect(() => {
-    if (!form.instructorId && instructors.length > 0) {
-      setForm((current) => ({
-        ...current,
-        instructorId: String(getInstructorId(instructors[0])),
-      }));
-    }
-  }, [form.instructorId, instructors]);
+    const firstSectionId = course?.sections?.[0]?.sectionId;
+    setActiveTab("overview");
+    setExpandedSections(firstSectionId ? { [firstSectionId]: true } : {});
+  }, [course?.id]);
 
-  const setField = (field, value) =>
-    setForm((current) => ({ ...current, [field]: value }));
+  if (!course) return null;
 
-  const toggleTag = (tagId) => {
-    setForm((current) => {
-      const id = Number(tagId);
-      const already = current.tagIds.includes(id);
-      return {
-        ...current,
-        tagIds: already ? current.tagIds.filter((t) => t !== id) : [...current.tagIds, id],
-      };
-    });
-  };
+  const sections = Array.isArray(course.sections) ? course.sections : [];
+  const lessonCount = course.lessonCount ?? sections.reduce((total, section) => total + (section.lessons?.length || 0), 0);
+  const title = course.title || "Untitled course";
+  const status = getCourseDisplayStatus(course);
+  const isDeleted = status === "DELETED";
+  const isPublished = status === "PUBLISHED";
+  const categoryName = course.categoryName || "--";
+  const totalDurationSeconds = course.totalDurationSeconds ?? 0;
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!hasInstructorOptions) {
-      setError("Chưa có instructor để gán cho khóa học.");
-      return;
-    }
-    if (!form.instructorId) {
-      setError("Vui lòng chọn instructor trước khi lưu khóa học.");
-      return;
-    }
-    setIsSaving(true);
-    setError("");
-    try {
-      const payload = buildPayload(form);
-      const savedCourse = isEdit
-        ? await updateAdminCourseApi(course.id, payload, axiosClient)
-        : await createAdminCourseApi(payload, axiosClient);
-      onSaved(savedCourse);
-      onClose();
-    } catch (saveError) {
-      setError(getCourseErrorMessage(saveError, "Không lưu được khóa học."));
-    } finally {
-      setIsSaving(false);
-    }
+  const toggleSection = (sectionId) => {
+    setExpandedSections((current) => ({ ...current, [sectionId]: !current[sectionId] }));
   };
 
   return (
-    <div className="courseModalBackdrop" role="presentation" onClick={onClose}>
-      <form
-        className="courseFormModal"
-        role="dialog"
-        aria-modal="true"
-        aria-label={isEdit ? "Edit course" : "Create course"}
-        onClick={(event) => event.stopPropagation()}
-        onSubmit={handleSubmit}
-      >
-        <div className="courseModalHeader">
-          <div>
-            <p className="courseModalEyebrow">{isEdit ? "EDIT COURSE" : "ADD COURSE"}</p>
-            <h2>{isEdit ? "Update Course" : "Create New Course"}</h2>
-          </div>
-          <button type="button" className="courseModalClose" onClick={onClose} aria-label="Close course form">
-            <X size={20} />
-          </button>
-        </div>
-
-        <div className="courseFormGrid">
-          <label>
-            Title
-            <input value={form.title} onChange={(e) => setField("title", e.target.value)} required />
-          </label>
-          <label>
-            Slug
-            <input value={form.slug} onChange={(e) => setField("slug", e.target.value)} required />
-          </label>
-          <label className="courseFormWide">
-            Thumbnail Key
-            <input value={form.thumbnailKey} onChange={(e) => setField("thumbnailKey", e.target.value)} required />
-          </label>
-          <label>
-            Instructor
-            <select
-              value={form.instructorId}
-              onChange={(e) => setField("instructorId", e.target.value)}
-              required={hasInstructorOptions}
-            >
-              <option value="">Select instructor</option>
-              {instructors.map((instructor) => (
-                <option key={getInstructorId(instructor)} value={getInstructorId(instructor)}>
-                  {getInstructorName(instructor)}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Base Price
-            <input
-              type="number"
-              min="0"
-              value={form.basePrice}
-              onChange={(e) => setField("basePrice", e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Level
-            <select value={form.level} onChange={(e) => setField("level", e.target.value)} required>
-              <option value="Beginner">Beginner</option>
-              <option value="Intermediate">Intermediate</option>
-              <option value="Advanced">Advanced</option>
-            </select>
-          </label>
-          <label>
-            Status
-            <select value={form.status} onChange={(e) => setField("status", e.target.value)} required>
-              {courseStatusOptions.map((s) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Language
-            <input maxLength={10} value={form.language} onChange={(e) => setField("language", e.target.value)} required />
-          </label>
-          <label className="courseFormWide">
-            Description
-            <textarea rows={3} value={form.description} onChange={(e) => setField("description", e.target.value)} required />
-          </label>
-          <label>
-            Requirements
-            <textarea
-              rows={4}
-              placeholder="Mỗi dòng là một yêu cầu"
-              value={form.requirements}
-              onChange={(e) => setField("requirements", e.target.value)}
-            />
-          </label>
-          <label>
-            What You Learn
-            <textarea
-              rows={4}
-              placeholder="Mỗi dòng là một nội dung học được"
-              value={form.whatYouLearn}
-              onChange={(e) => setField("whatYouLearn", e.target.value)}
-            />
-          </label>
-
-          {availableTags && availableTags.length > 0 && (
-            <div className="courseFormWide courseFormTagSection">
-              <span className="courseFormTagLabel">Tags</span>
-              <div className="courseFormTagGrid">
-                {availableTags.map((tag) => {
-                  const selected = form.tagIds.includes(Number(tag.id));
-                  return (
-                    <button
-                      key={tag.id}
-                      type="button"
-                      className={`courseFormTag ${selected ? "courseFormTag--selected" : ""}`}
-                      onClick={() => toggleTag(tag.id)}
-                    >
-                      {tag.name}
-                    </button>
-                  );
-                })}
-              </div>
+    <div className="cdm-overlay adminCourseDetailOverlay" role="presentation" onClick={onClose}>
+      <div className="cdm adminCourseDetailModal" role="dialog" aria-modal="true" aria-label="View Course" onClick={(event) => event.stopPropagation()}>
+        <div className="cdm__thumbnail-wrap">
+          {course.thumbnailKey ? (
+            <img src={course.thumbnailKey} alt={title} className="cdm__thumbnail-img" />
+          ) : (
+            <div className="cdm__thumbnail-placeholder">
+              <BookOpen size={40} />
+              <span>No thumbnail</span>
             </div>
           )}
-        </div>
-
-        {error ? <p className="courseFormError">{error}</p> : null}
-
-        <div className="courseModalActions">
-          <button type="button" className="courseModalCancel" onClick={onClose}>
-            Cancel
-          </button>
-          <button type="submit" className="courseModalSubmit" disabled={isSaving}>
-            {isSaving ? "Saving..." : isEdit ? "Update Course" : "Create Course"}
+          <button type="button" className="cdm__close" onClick={onClose} aria-label="Close">
+            <X size={18} />
           </button>
         </div>
-      </form>
+
+        <div className="cdm__header-info">
+          <div className="cdm__badges">
+            <span className={`cdm__badge cdm__badge--${isDeleted ? "inactive" : "active"}`}>
+              <Circle size={7} fill="currentColor" />
+              {isDeleted ? "Inactive" : "Active"}
+            </span>
+            <span className={`cdm__badge cdm__badge--${isPublished ? "published" : "draft"}`}>
+              {status}
+            </span>
+            {course.level ? (
+              <span className="cdm__badge cdm__badge--level">
+                <GraduationCap size={11} />
+                {course.level}
+              </span>
+            ) : null}
+            {course.language ? (
+              <span className="cdm__badge cdm__badge--lang">
+                <Globe size={11} />
+                {course.language}
+              </span>
+            ) : null}
+          </div>
+          <h2 className="cdm__title">{title}</h2>
+          <p className="cdm__category">
+            <Tag size={13} />
+            {categoryName}
+          </p>
+        </div>
+
+        <div className="cdm__tabs">
+          {detailTabs.map(({ id, label, Icon }) => (
+            <button
+              key={id}
+              type="button"
+              className={`cdm__tab${activeTab === id ? " cdm__tab--active" : ""}`}
+              onClick={() => setActiveTab(id)}
+            >
+              <Icon size={14} />
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <div className="cdm__body">
+          <>
+              {activeTab === "overview" ? (
+                <div className="cdm__tab-content">
+                  <div className="cdm__stats-grid">
+                    {[
+                      { Icon: Users, color: "blue", label: "Students", value: valueOrDash(course.studentCount) },
+                      { Icon: Clock, color: "green", label: "Duration", value: formatDuration(totalDurationSeconds) },
+                      { Icon: BookOpen, color: "violet", label: "Lessons", value: formatCount(lessonCount) },
+                      { Icon: Star, color: "gold", label: "Rating", value: valueOrDash(course.rating) },
+                      { Icon: DollarSign, color: "teal", label: "Price", value: formatPrice(course.basePrice) },
+                      { Icon: MessageSquare, color: "orange", label: "Reviews", value: valueOrDash(course.reviewCount) },
+                    ].map(({ Icon, color, label, value }) => (
+                      <div key={label} className="cdm__stat-card">
+                        <div className={`cdm__stat-icon cdm__stat-icon--${color}`}>
+                          <Icon size={18} />
+                        </div>
+                        <div>
+                          <span>{label}</span>
+                          <strong>{value}</strong>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="cdm__info-table">
+                    {[
+                      ["Instructor", course.instructorName || "--"],
+                      ["Level", course.level || "--"],
+                      ["Language", course.language || "--"],
+                      ["Category", categoryName],
+                      ["Sections", sections.length || "--"],
+                      ["Status", status],
+                      ["Created", timeAgo(course.publishedAt)],
+                    ].map(([key, value]) => (
+                      <div key={key} className="cdm__info-row">
+                        <span>{key}</span>
+                        <strong>{value}</strong>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              {activeTab === "description" ? (
+                <div className="cdm__tab-content">
+                  {course.description ? (
+                    <section className="cdm__section">
+                      <h3 className="cdm__section-title">Description</h3>
+                      <p className="cdm__description">{course.description}</p>
+                    </section>
+                  ) : (
+                    <div className="cdm__empty">No description added yet.</div>
+                  )}
+
+                  {(course.whatYouLearn || []).filter(Boolean).length > 0 ? (
+                    <section className="cdm__section">
+                      <h3 className="cdm__section-title">What You'll Learn</h3>
+                      <ul className="cdm__learn-list">
+                        {course.whatYouLearn.filter(Boolean).map((item, index) => (
+                          <li key={`${item}-${index}`}>
+                            <CheckCircle size={15} />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  ) : null}
+
+                  {(course.requirements || []).filter(Boolean).length > 0 ? (
+                    <section className="cdm__section">
+                      <h3 className="cdm__section-title">Requirements</h3>
+                      <ul className="cdm__req-list">
+                        {course.requirements.filter(Boolean).map((item, index) => (
+                          <li key={`${item}-${index}`}>{item}</li>
+                        ))}
+                      </ul>
+                    </section>
+                  ) : null}
+                </div>
+              ) : null}
+
+              {activeTab === "curriculum" ? (
+                <div className="cdm__tab-content">
+                  {sections.length > 0 ? (
+                    <>
+                      <p className="cdm__curriculum-summary">
+                        {sections.length} section{sections.length !== 1 ? "s" : ""} · {lessonCount} lesson{lessonCount !== 1 ? "s" : ""} · {formatDuration(totalDurationSeconds)} total
+                      </p>
+                      <div className="cdm__curriculum">
+                        {sections.map((section) => (
+                          <div key={section.sectionId || section.title} className="cdm__section-block">
+                            <button
+                              type="button"
+                              className="cdm__section-header"
+                              onClick={() => toggleSection(section.sectionId || section.title)}
+                            >
+                              <span className="cdm__section-chevron">
+                                {expandedSections[section.sectionId || section.title] ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
+                              </span>
+                              <span className="cdm__section-name">
+                                Section {valueOrDash(section.sectionOrder)}: {valueOrDash(section.title)}
+                              </span>
+                              <span className="cdm__section-count">
+                                {section.lessons?.length || 0} lesson{section.lessons?.length === 1 ? "" : "s"}
+                              </span>
+                            </button>
+
+                            {expandedSections[section.sectionId || section.title] ? (
+                              <div className="cdm__lessons">
+                                {(section.lessons || []).map((lesson) => (
+                                  <div key={lesson.lessonId || lesson.title} className="cdm__lesson">
+                                    <span className="cdm__lesson-icon">
+                                      {lesson.videoKey ? <PlayCircle size={14} /> : <FileText size={14} />}
+                                    </span>
+                                    <span className="cdm__lesson-title">
+                                      {valueOrDash(lesson.lessonOrder)}. {valueOrDash(lesson.title)}
+                                    </span>
+                                    {lesson.durationSeconds ? (
+                                      <span className="cdm__lesson-duration">
+                                        <Clock size={11} />
+                                        {formatDuration(lesson.durationSeconds)}
+                                      </span>
+                                    ) : null}
+                                    {lesson.isPreview ? <span className="cdm__lesson-preview">Preview</span> : null}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : null}
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="cdm__empty">No curriculum added yet.</div>
+                  )}
+                </div>
+              ) : null}
+
+            </>
+        </div>
+
+        <div className="cdm__footer">
+          <button type="button" className="cdm__btn-cancel" onClick={onClose}>
+            Close
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
@@ -397,20 +312,11 @@ const CourseTable = ({
   courses = [],
   loading,
   error,
-  instructors = [],
-  availableTags = [],
-  axiosClient,
-  isCreateOpen,
-  onCreateClose,
-  onCourseCreated,
-  onCourseUpdated,
+  onViewCourse,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [editingCourse, setEditingCourse] = useState(null);
-  const [deletingCourse, setDeletingCourse] = useState(null);
-  const [deletingCourseId, setDeletingCourseId] = useState(null);
-  const [deleteError, setDeleteError] = useState("");
+  const [loadingDetailId, setLoadingDetailId] = useState(null);
 
   const totalPages = Math.max(1, Math.ceil(courses.length / pageSize));
   const currentPageItems = useMemo(
@@ -422,29 +328,28 @@ const CourseTable = ({
     if (currentPage > totalPages) setCurrentPage(totalPages);
   }, [currentPage, totalPages]);
 
-  const openDeleteModal = (course) => {
-    setDeletingCourse(course);
-    setDeleteError("");
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [courses]);
+
+  const closeCourseDetails = () => {
+    setSelectedCourse(null);
   };
 
-  const closeDeleteModal = () => {
-    if (deletingCourseId) return;
-    setDeletingCourse(null);
-    setDeleteError("");
-  };
+  const openCourseDetails = async (course) => {
+    if (!onViewCourse) {
+      setSelectedCourse(course);
+      return;
+    }
 
-  const handleDelete = async () => {
-    if (!deletingCourse) return;
-    setDeletingCourseId(deletingCourse.id);
-    setDeleteError("");
+    setLoadingDetailId(course.id);
     try {
-      const updatedCourse = await deleteAdminCourseApi(deletingCourse.id, axiosClient);
-      onCourseUpdated(updatedCourse);
-      setDeletingCourse(null);
-    } catch (deleteError) {
-      setDeleteError(getCourseErrorMessage(deleteError, "Không xóa được khóa học."));
+      const detailCourse = await onViewCourse(course);
+      setSelectedCourse(detailCourse);
+    } catch {
+      setSelectedCourse(course);
     } finally {
-      setDeletingCourseId(null);
+      setLoadingDetailId(null);
     }
   };
 
@@ -456,6 +361,7 @@ const CourseTable = ({
             <tr>
               <th>Course</th>
               <th>Instructor</th>
+              <th>Category</th>
               <th>Level</th>
               <th>Price</th>
               <th>Status</th>
@@ -464,11 +370,11 @@ const CourseTable = ({
           </thead>
           <tbody>
             {loading ? (
-              <tr><td className="courseTableEmpty" colSpan="6">Đang tải...</td></tr>
+              <tr><td className="courseTableEmpty" colSpan="7">Loading...</td></tr>
             ) : error ? (
-              <tr><td className="courseTableEmpty" colSpan="6">{error}</td></tr>
+              <tr><td className="courseTableEmpty" colSpan="7">{error}</td></tr>
             ) : currentPageItems.length === 0 ? (
-              <tr><td className="courseTableEmpty" colSpan="6">Không có khóa học nào.</td></tr>
+              <tr><td className="courseTableEmpty" colSpan="7">No courses found.</td></tr>
             ) : (
               currentPageItems.map((course) => (
                 <tr key={course.id}>
@@ -482,6 +388,7 @@ const CourseTable = ({
                     </div>
                   </td>
                   <td>{course.instructorName || "N/A"}</td>
+                  <td>{course.categoryName || "N/A"}</td>
                   <td>{course.level || "N/A"}</td>
                   <td>{formatPrice(course.basePrice)}</td>
                   <td>
@@ -491,19 +398,15 @@ const CourseTable = ({
                   </td>
                   <td>
                     <div className="courseTableActions">
-                      <button className="actionButton actionButton--view" aria-label="View Course" onClick={() => setSelectedCourse(course)}>
-                        <Eye className="actionIcon" />
-                      </button>
-                      <button className="actionButton actionButton--edit" aria-label="Edit Course" onClick={() => setEditingCourse(course)}>
-                        <Edit3 className="actionIcon" />
-                      </button>
                       <button
-                        className="actionButton actionButton--delete"
-                        aria-label="Delete Course"
-                        disabled={deletingCourseId === course.id}
-                        onClick={() => openDeleteModal(course)}
+                        type="button"
+                        className="actionButton actionButton--view"
+                        aria-label="View Course Details"
+                        title="View Details"
+                        disabled={loadingDetailId === course.id}
+                        onClick={() => openCourseDetails(course)}
                       >
-                        <Trash2 className="actionIcon" />
+                        <Info className="actionIcon" />
                       </button>
                     </div>
                   </td>
@@ -536,36 +439,7 @@ const CourseTable = ({
       {selectedCourse ? (
         <CourseViewModal
           course={selectedCourse}
-          availableTags={availableTags}
-          onClose={() => setSelectedCourse(null)}
-        />
-      ) : null}
-      {deletingCourse ? (
-        <CourseDeleteModal
-          course={deletingCourse}
-          error={deleteError}
-          isDeleting={deletingCourseId === deletingCourse.id}
-          onClose={closeDeleteModal}
-          onConfirm={handleDelete}
-        />
-      ) : null}
-      {editingCourse ? (
-        <CourseFormModal
-          course={editingCourse}
-          instructors={instructors}
-          availableTags={availableTags}
-          axiosClient={axiosClient}
-          onClose={() => setEditingCourse(null)}
-          onSaved={onCourseUpdated}
-        />
-      ) : null}
-      {isCreateOpen ? (
-        <CourseFormModal
-          instructors={instructors}
-          availableTags={availableTags}
-          axiosClient={axiosClient}
-          onClose={onCreateClose}
-          onSaved={onCourseCreated}
+          onClose={closeCourseDetails}
         />
       ) : null}
     </section>

@@ -3,32 +3,26 @@ import Chart from "chart.js/auto";
 import AdminHoverSelect from "../../shared/AdminHoverSelect";
 import "./GrowthChart.css";
 
-const growthChartYears = [
-  { value: "2023-2024", label: "2023 - 2024" },
-  { value: "2022-2023", label: "2022 - 2023" },
-  { value: "2021-2022", label: "2021 - 2022" },
-];
+const monthLabels = ["May", "June", "July", "August", "September", "October"];
 
-const growthChartSeries = [
-  { month: "May", value: 4000 },
-  { month: "June", value: 5500 },
-  { month: "July", value: 4800 },
-  { month: "August", value: 7200 },
-  { month: "September", value: 9100 },
-  { month: "October", value: 12400 },
-];
-
-const chartData = growthChartSeries.map((item) => item.value);
-
-const chartLabels = growthChartSeries.map((item) => item.month);
-
-const GrowthChart = () => {
+const GrowthChart = ({ series = [], yearOptions = [], selectedYear, onYearChange }) => {
   const canvasRef = useRef(null);
-  const [selectedYear, setSelectedYear] = useState(growthChartYears[0].value);
+  const chartRef = useRef(null);
+  const [fallbackYear, setFallbackYear] = useState(yearOptions[0]?.value || "");
+  const currentYear = selectedYear || fallbackYear;
+  const setCurrentYear = onYearChange || setFallbackYear;
+  const chartLabels = series.length ? series.map((item) => item.month) : monthLabels;
+  const chartData = series.length ? series.map((item) => item.value) : monthLabels.map(() => 0);
+  const maxValue = Math.max(...chartData, 0);
+  const chartMax = Math.max(4, Math.ceil((maxValue || 1) * 1.25));
 
   useEffect(() => {
     if (!canvasRef.current) {
       return undefined;
+    }
+
+    if (chartRef.current) {
+      chartRef.current.destroy();
     }
 
     const chartInstance = new Chart(canvasRef.current, {
@@ -96,9 +90,8 @@ const GrowthChart = () => {
           },
           y: {
             beginAtZero: true,
-            max: 14000,
+            suggestedMax: chartMax,
             ticks: {
-              stepSize: 3500,
               color: "#64748B",
               font: {
                 size: 11,
@@ -118,10 +111,13 @@ const GrowthChart = () => {
       },
     });
 
+    chartRef.current = chartInstance;
+
     return () => {
       chartInstance.destroy();
+      chartRef.current = null;
     };
-  }, []);
+  }, [chartData, chartLabels, chartMax]);
 
   return (
     <section className="growthChartCard" aria-label="User Growth Chart">
@@ -134,9 +130,9 @@ const GrowthChart = () => {
           <AdminHoverSelect
             id="growthChartYear"
             className="growthChartCardSelect"
-            options={growthChartYears}
-            value={selectedYear}
-            onChange={setSelectedYear}
+            options={yearOptions}
+            value={currentYear}
+            onChange={setCurrentYear}
             ariaLabel="Select growth chart year"
           />
         </div>

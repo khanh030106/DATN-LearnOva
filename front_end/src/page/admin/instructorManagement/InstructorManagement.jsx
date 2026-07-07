@@ -6,7 +6,6 @@ import "./InstructorManagement.css";
 
 const InstructorManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   return (
     <section
@@ -18,13 +17,8 @@ const InstructorManagement = () => {
         <InstructorFilters
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
-          onAddInstructor={() => setIsCreateOpen(true)}
         />
-        <InstructorTable
-          searchTerm={searchTerm}
-          isCreateOpen={isCreateOpen}
-          onCreateClose={() => setIsCreateOpen(false)}
-        />
+        <InstructorTable searchTerm={searchTerm} />
       </div>
     </section>
   );

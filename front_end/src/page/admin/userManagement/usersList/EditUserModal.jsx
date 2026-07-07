@@ -95,7 +95,7 @@ const buildSavedUser = (user, form) => {
   const isDeleted = form.isDeleted === "true";
   const status = isDeleted ? "Locked" : user.status === "Locked" ? "Active" : user.status || "Active";
   const statusTone = isDeleted ? "locked" : user.statusTone === "locked" ? "active" : user.statusTone || "active";
-  const visibility = isDeleted ? "Deleted" : "Visible";
+  const visibility = isDeleted ? "Hidden" : "Active";
   const visibilityTone = isDeleted ? "deleted" : "visible";
   const updatedAtRaw = new Date().toISOString();
 
@@ -239,7 +239,7 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
       },
       {
         icon: Calendar,
-        label: "Joined Date",
+        label: "Create",
         input: (
           <input
             className="view-user-input view-user-input-readonly"
@@ -257,8 +257,8 @@ const EditUserModal = ({ user, onClose, onSaved }) => {
             value={form.isDeleted}
             onChange={(event) => updateForm("isDeleted", event.target.value)}
           >
-            <option value="false">Visible</option>
-            <option value="true">Deleted</option>
+            <option value="false">Active</option>
+            <option value="true">Hidden</option>
           </select>
         ),
       },

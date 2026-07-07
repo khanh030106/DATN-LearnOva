@@ -1,34 +1,38 @@
 import { Star } from "lucide-react";
+import { useState } from "react";
 import "./TeacherRow.css";
 
-const teachers = [
-  {
-    id: 1,
-    name: "ThS. Nguyễn Thị Mai",
-    courses: 24,
-    rating: 4.9,
-    rank: 1,
-    avatar: "https://i.pravatar.cc/120?img=47",
-  },
-  {
-    id: 2,
-    name: "TS. Lê Hoàng Nam",
-    courses: 18,
-    rating: 4.8,
-    rank: 2,
-    avatar: "https://i.pravatar.cc/120?img=61",
-  },
-  {
-    id: 3,
-    name: "Cô Trần Phương Linh",
-    courses: 16,
-    rating: 4.7,
-    rank: 3,
-    avatar: "https://i.pravatar.cc/120?img=25",
-  },
-];
+const getInitials = (name) =>
+  String(name || "")
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
-const TeacherRow = () => {
+const TeacherAvatar = ({ instructor }) => {
+  const [hasImageError, setHasImageError] = useState(false);
+  const shouldShowImage = Boolean(instructor.avatar) && !hasImageError;
+
+  if (shouldShowImage) {
+    return (
+      <img
+        className="teacherRowAvatar"
+        src={instructor.avatar}
+        alt={instructor.name}
+        onError={() => setHasImageError(true)}
+      />
+    );
+  }
+
+  return (
+    <div className="teacherRowAvatar teacherRowAvatar--placeholder">
+      {getInitials(instructor.name)}
+    </div>
+  );
+};
+
+const TeacherRow = ({ instructors = [] }) => {
   return (
     <section className="teacherRowSection" aria-label="Featured Instructors">
       <div className="teacherRowCard">
@@ -39,21 +43,18 @@ const TeacherRow = () => {
         </div>
 
         <div className="teacherRowList">
-          {teachers.map((teacher) => (
-            <article key={teacher.id} className="teacherRowItem">
+          {instructors.length === 0 && <p className="teacherRowEmpty">No instructors yet.</p>}
+          {instructors.map((instructor) => (
+            <article key={instructor.id} className="teacherRowItem">
               <div className="teacherRowAvatarWrap">
-                <img
-                  className="teacherRowAvatar"
-                  src={teacher.avatar}
-                  alt={teacher.name}
-                />
-                <span className="teacherRowRank">{teacher.rank}</span>
+                <TeacherAvatar instructor={instructor} />
+                <span className="teacherRowRank">{instructor.rank}</span>
               </div>
 
               <div className="teacherRowContent">
-                <p className="teacherRowName">{teacher.name}</p>
+                <p className="teacherRowName">{instructor.name}</p>
                 <p className="teacherRowCourseCount">
-                  {teacher.courses} courses
+                  {instructor.courses} courses
                 </p>
               </div>
 
@@ -63,7 +64,7 @@ const TeacherRow = () => {
                   size={10}
                   fill="currentColor"
                 />
-                <span className="teacherRowRatingValue">{teacher.rating}</span>
+                <span className="teacherRowRatingValue">{instructor.rating}</span>
               </div>
             </article>
           ))}

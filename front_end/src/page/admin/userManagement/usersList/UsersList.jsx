@@ -54,13 +54,13 @@ const getUserVisibility = (user) => {
 
   if (user.isDeleted) {
     return {
-      label: "Deleted",
+      label: "Hidden",
       tone: "deleted",
     };
   }
 
   return {
-    label: "Visible",
+    label: "Active",
     tone: "visible",
   };
 };

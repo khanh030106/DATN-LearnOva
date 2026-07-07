@@ -2,39 +2,28 @@ import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import "./RoleDistribution.css";
 
-const roleData = [
-  {
-    name: "Students",
-    value: 75,
-    color: "#2563EB",
-    amount: "18.7k",
-  },
-  {
-    name: "Instructors",
-    value: 15,
-    color: "#93C5FD",
-    amount: "3.8k",
-  },
-  {
-    name: "Administrators",
-    value: 10,
-    color: "#1D4ED8",
-    amount: "2.5k",
-  },
-];
-
-const totalUsers = "25k+";
-
-const chartLabels = roleData.map((item) => item.name);
-const chartValues = roleData.map((item) => item.value);
-const chartColors = roleData.map((item) => item.color);
-
-const RoleDistribution = () => {
+const RoleDistribution = ({ data = [] }) => {
   const canvasRef = useRef(null);
+  const chartRef = useRef(null);
+  const roleData = data.length
+    ? data
+    : [
+        { name: "Students", value: 0, color: "#2563EB", amount: "0" },
+        { name: "Instructors", value: 0, color: "#93C5FD", amount: "0" },
+        { name: "Administrators", value: 0, color: "#1D4ED8", amount: "0" },
+      ];
+  const totalUsers = roleData.reduce((total, item) => total + Number(item.count || 0), 0);
+  const chartLabels = roleData.map((item) => item.name);
+  const chartValues = roleData.map((item) => item.count || item.value);
+  const chartColors = roleData.map((item) => item.color);
 
   useEffect(() => {
     if (!canvasRef.current) {
       return undefined;
+    }
+
+    if (chartRef.current) {
+      chartRef.current.destroy();
     }
 
     const chartInstance = new Chart(canvasRef.current, {
@@ -72,7 +61,8 @@ const RoleDistribution = () => {
             cornerRadius: 6,
             callbacks: {
               label(context) {
-                return `${context.label}: ${context.parsed}%`;
+                const role = roleData[context.dataIndex];
+                return `${context.label}: ${role.value}%`;
               },
             },
           },
@@ -80,10 +70,13 @@ const RoleDistribution = () => {
       },
     });
 
+    chartRef.current = chartInstance;
+
     return () => {
       chartInstance.destroy();
+      chartRef.current = null;
     };
-  }, []);
+  }, [chartColors, chartLabels, chartValues, roleData]);
 
   return (
     <section className="roleDistributionCard" aria-label="Role Distribution">

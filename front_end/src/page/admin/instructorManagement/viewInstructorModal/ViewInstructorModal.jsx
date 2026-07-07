@@ -9,6 +9,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import defaultCover from "../../../../assets/instructors/header-intructor.png";
 import "./ViewInstructorModal.css";
 
@@ -36,7 +37,7 @@ const formatDateTime = (value) => {
   }).format(date);
 };
 
-const formatMoney = (value, currency = "đ") => {
+const formatMoney = (value, currency = "VND") => {
   if (value == null || value === "") return `0 ${currency}`;
   const number = Number(value) || 0;
   return `${new Intl.NumberFormat("vi-VN").format(number)} ${currency}`;
@@ -57,6 +58,8 @@ const valueOrDash = (value) => {
   if (value === null || value === undefined || value === "") return "--";
   return value;
 };
+
+const getVisibility = (isDeleted) => (isDeleted ? "Hidden" : "Available");
 
 const prettifyStatus = (status) =>
   String(status || "N/A")
@@ -81,13 +84,34 @@ const InfoRow = ({ label, children }) => (
   </div>
 );
 
+const PanelCard = ({ icon: Icon, title, children, className = "" }) => (
+  <div className={`modal-panel-card ${className}`.trim()}>
+    <h4>
+      <span>
+        <Icon size={17} />
+      </span>
+      {title}
+    </h4>
+    {children}
+  </div>
+);
+
 const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClose }) => {
+  const [avatarError, setAvatarError] = useState(false);
+  const [coverError, setCoverError] = useState(false);
+
+  useEffect(() => {
+    setAvatarError(false);
+    setCoverError(false);
+  }, [instructor?.instructorId, instructor?.avatar, instructor?.coverImage]);
+
   if (!instructor) return null;
 
   const fullName = instructor.fullName || instructor.name || "Unknown instructor";
   const courseItems = Array.isArray(instructor.courses) ? instructor.courses : courses;
   const avatar = instructor.avatar;
   const coverImage = instructor.coverImage || defaultCover;
+  const resolvedCover = coverError ? defaultCover : coverImage;
 
   return (
     <div className="instructor-view-overlay" onClick={onClose} role="presentation">
@@ -109,12 +133,24 @@ const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClo
 
         <div className="profile-section">
           <div className="cover-image">
-            <img src={coverImage} alt="" />
+            <img
+              src={resolvedCover}
+              alt=""
+              onError={() => setCoverError(true)}
+            />
           </div>
 
           <div className="profile-info">
             <div className="avatar-box">
-              {avatar ? <img src={avatar} alt={fullName} /> : <span>{getInitials(fullName)}</span>}
+              {!avatarError && avatar ? (
+                <img
+                  src={avatar}
+                  alt={fullName}
+                  onError={() => setAvatarError(true)}
+                />
+              ) : (
+                <span>{getInitials(fullName)}</span>
+              )}
             </div>
 
             <div className="basic-profile">
@@ -127,6 +163,10 @@ const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClo
                 <Phone size={14} />
                 {valueOrDash(instructor.phone)}
               </p>
+              <p>
+                <BookOpen size={14} />
+                {valueOrDash(instructor.specialization || instructor.category)}
+              </p>
             </div>
 
             <div className="profile-extra">
@@ -135,7 +175,7 @@ const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClo
                 <span>{valueOrDash(instructor.instructorCode || instructor.id)}</span>
               </div>
               <div className="info-card">
-                <label>Joined Date</label>
+                <label>Created At</label>
                 <span>{formatDate(instructor.createdAt)}</span>
               </div>
             </div>
@@ -143,28 +183,19 @@ const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClo
         </div>
 
         <div className="content-section">
-          <div className="information-card">
-            <h4>
-              <span><UserRound size={17} /></span>
-              Basic Information
-            </h4>
-
+          <PanelCard icon={UserRound} title="Basic Information" className="modal-panel-card--info">
             <InfoRow label="Full Name">{fullName}</InfoRow>
             <InfoRow label="Email">{valueOrDash(instructor.email)}</InfoRow>
             <InfoRow label="Phone">{valueOrDash(instructor.phone)}</InfoRow>
+            <InfoRow label="Specialization">{valueOrDash(instructor.specialization || instructor.category)}</InfoRow>
             <InfoRow label="Gender">{valueOrDash(instructor.gender)}</InfoRow>
-            <InfoRow label="Is Deleted">{instructor.isDeleted ? "Yes" : "No"}</InfoRow>
+            <InfoRow label="Visibility">{getVisibility(instructor.isDeleted)}</InfoRow>
             <InfoRow label="Date Of Birth">{formatDate(instructor.dateOfBirth)}</InfoRow>
             <InfoRow label="Created At">{formatDateTime(instructor.createdAt)}</InfoRow>
             <InfoRow label="Updated At">{formatDateTime(instructor.updatedAt)}</InfoRow>
-          </div>
+          </PanelCard>
 
-          <div className="statistics-card">
-            <h4>
-              <span><BarChart3 size={17} /></span>
-              Teaching Statistics
-            </h4>
-
+          <PanelCard icon={BarChart3} title="Teaching Statistics" className="modal-panel-card--stats">
             <div className="stat-grid">
               <div className="stat-box">
                 <span className="stat-icon stat-icon-blue"><BookOpen size={26} /></span>
@@ -182,7 +213,7 @@ const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClo
                 <h2>{formatMoney(instructor.totalRevenue)}</h2>
               </div>
             </div>
-          </div>
+          </PanelCard>
         </div>
 
         <div className="course-section">
@@ -215,7 +246,7 @@ const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClo
                         <td>
                           <div className="course-cell">
                             {course.thumbnailKey ? (
-                              <img src={course.thumbnailKey} alt={course.title || "Course"} />
+                              <img src={course.thumbnailUrl || course.thumbnailKey} alt={course.title || "Course"} />
                             ) : (
                               <span className="course-thumb-fallback">AI</span>
                             )}
@@ -243,7 +274,7 @@ const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClo
                 ) : (
                   <tr>
                     <td colSpan="7" className="empty-course-row">
-                      {isLoading ? "Đang tải chi tiết..." : "Chưa có dữ liệu khóa học từ backend."}
+                      {isLoading ? "Loading details..." : "No course data returned from the backend yet."}
                     </td>
                   </tr>
                 )}

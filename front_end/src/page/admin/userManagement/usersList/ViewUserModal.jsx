@@ -83,13 +83,13 @@ const getUserVisibility = (user) => {
 
   if (user.isDeleted) {
     return {
-      label: "Deleted",
+      label: "Hidden",
       tone: "deleted",
     };
   }
 
   return {
-    label: "Visible",
+    label: "Active",
     tone: "visible",
   };
 };
@@ -123,7 +123,7 @@ const ViewUserModal = ({ user, onClose }) => {
     },
     {
       icon: Calendar,
-      label: "Joined Date",
+      label: "Create",
       value: formatDateTime(user.joinedAtRaw, user.joinedAt),
     },
     {

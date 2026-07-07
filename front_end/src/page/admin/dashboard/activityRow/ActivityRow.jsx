@@ -1,33 +1,6 @@
 import "./ActivityRow.css";
 
-const activityLogs = [
-  {
-    id: 1,
-    label: "New Course",
-    title: "2 new courses have been added to the platform",
-    time: "5 min ago",
-  },
-  {
-    id: 2,
-    label: "Users",
-    title: "12 new students registered today",
-    time: "30 min ago",
-  },
-  {
-    id: 3,
-    label: "Revenue",
-    title: "Monthly revenue report has been updated",
-    time: "2 hours ago",
-  },
-  {
-    id: 4,
-    label: "System",
-    title: "Data synchronized successfully with the server",
-    time: "Today",
-  },
-];
-
-const ActivityRow = () => {
+const ActivityRow = ({ activities = [] }) => {
   return (
     <section className="activityRowSection" aria-label="Recent Activity">
       <div className="activityRowCard">
@@ -38,7 +11,10 @@ const ActivityRow = () => {
         </div>
 
         <div className="activityRowList">
-          {activityLogs.map((activity) => (
+          {activities.length === 0 && (
+            <p className="activityRowEmpty">Activity data is not available yet.</p>
+          )}
+          {activities.map((activity) => (
             <div key={activity.id} className="activityRowItem">
               <div className="activityRowDot" aria-hidden="true" />
 

@@ -7,6 +7,7 @@ import Dashboard from "../page/admin/dashboard/Dashboard.jsx";
 import UserManagement from "../page/admin/userManagement/UserManagement.jsx";
 import InstructorManagement from "../page/admin/instructorManagement/InstructorManagement.jsx";
 import Course from "../page/admin/course/Course.jsx";
+import CourseApprovalPage from "../page/admin/courseApproval/CourseApprovalPage.jsx";
 import Revenue from "../page/admin/revenue/Revenue.jsx";
 import RevenueTopRankings from "../page/admin/revenue/RevenueTopRankings.jsx";
 import RevenueTransactions from "../page/admin/revenue/RevenueTransactions.jsx";
@@ -60,6 +61,9 @@ const App = () => {
                     <Route path="users" element={<UserManagement/>}/>
                     <Route path="teachers" element={<InstructorManagement/>}/>
                     <Route path="courses" element={<Course/>}/>
+                    <Route path="courses/edit/:courseId" element={<CourseCreationPage/>}/>
+                    <Route path="course-approval" element={<CourseApprovalPage/>}/>
+                    <Route path="course-approval/:courseId" element={<CourseApprovalPage/>}/>
                     <Route path="revenue" element={<Revenue/>}/>
                     <Route path="revenue/top-rankings" element={<RevenueTopRankings/>}/>
                     <Route path="revenue/transactions" element={<RevenueTransactions/>}/>

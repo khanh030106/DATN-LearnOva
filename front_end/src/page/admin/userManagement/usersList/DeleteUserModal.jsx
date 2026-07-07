@@ -23,7 +23,7 @@ const DeleteUserModal = ({ user, onClose, onDeleted }) => {
         status: "Inactive",
         statusTone: "locked",
         statusFilter: "locked",
-        visibility: "Deleted",
+        visibility: "Hidden",
         visibilityTone: "deleted",
         updatedAtRaw: new Date().toISOString(),
       });

@@ -57,10 +57,10 @@ const normalizeStatus = (user) => {
 
 const normalizeVisibility = (isDeleted) => {
   if (isDeleted) {
-    return { label: "Deleted", tone: "deleted" };
+    return { label: "Hidden", tone: "deleted" };
   }
 
-  return { label: "Visible", tone: "visible" };
+  return { label: "Active", tone: "visible" };
 };
 
 const getDisplayName = (user) =>

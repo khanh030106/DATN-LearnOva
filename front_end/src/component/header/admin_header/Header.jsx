@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import "./Header.css";
 
 const headerData = {
-  adminName: "Hiếu",
+  adminName: "Admin",
   roleName: "Administrator",
   avatarUrl:
     "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop",

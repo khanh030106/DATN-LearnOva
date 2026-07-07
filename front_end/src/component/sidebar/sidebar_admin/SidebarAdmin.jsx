@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import {
   BookOpen,
   CircleDollarSign,
+  ClipboardCheck,
   Flag,
   GraduationCap,
   LayoutDashboard,
@@ -42,6 +43,12 @@ const adminNavSections = [
         label: "Courses",
         icon: BookOpen,
         path: "/learnova/admin/courses",
+      },
+      {
+        id: "course-approval",
+        label: "Course Approval",
+        icon: ClipboardCheck,
+        path: "/learnova/admin/course-approval",
       },
       {
         id: "categories",

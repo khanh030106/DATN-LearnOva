@@ -1,27 +1,10 @@
-import { useState, useEffect, useRef } from "react";
-import { Search, Plus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Search } from "lucide-react";
 import "./CourseFilters.css";
-
-const categoryFilterOptions = [
-  { id: "all", label: "All Categories" },
-  { id: "programming", label: "Programming" },
-  { id: "design", label: "Design" },
-  { id: "marketing", label: "Marketing" },
-  { id: "business", label: "Business" },
-];
-
-const instructorFilterOptions = [
-  { id: "all", label: "All Instructors" },
-  { id: "instructorNguyen", label: "Nguyen Van A" },
-  { id: "instructorTran", label: "Tran Thi B" },
-  { id: "instructorLe", label: "Le Van C" },
-];
 
 const publishSortOptions = [
   { id: "newest", label: "Newest" },
   { id: "oldest", label: "Oldest" },
-  { id: "popular", label: "Most Popular" },
-  { id: "rating", label: "Highest Rated" },
 ];
 
 const priceTypeOptions = [
@@ -30,18 +13,92 @@ const priceTypeOptions = [
   { id: "free", label: "Free" },
 ];
 
-const CourseFilters = ({ onAddCourse }) => {
-  const [searchText, setSearchText] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedInstructor, setSelectedInstructor] = useState("all");
-  const [selectedPublishSort, setSelectedPublishSort] = useState("newest");
-  const [selectedPriceType, setSelectedPriceType] = useState("all");
+const getInstructorId = (instructor) => instructor.instructorId ?? instructor.id;
 
-  const [isCategoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
-  const [isInstructorDropdownOpen, setInstructorDropdownOpen] = useState(false);
-  const [isSortDropdownOpen, setSortDropdownOpen] = useState(false);
-  const [isPriceDropdownOpen, setIsPriceDropdownOpen] = useState(false);
+const getSelectedLabel = (options, selectedId, fallback) =>
+  options.find((item) => item.id === selectedId)?.label || fallback;
+
+const FilterDropdown = ({
+  id,
+  label,
+  ariaLabel,
+  options,
+  value,
+  activeDropdown,
+  setActiveDropdown,
+  onChange,
+}) => {
+  const isOpen = activeDropdown === id;
+  const selectedLabel = getSelectedLabel(options, value, label);
+  const buttonLabel = id === "instructor" || id === "publishSort" || id === "priceType"
+    ? `${label}: ${selectedLabel}`
+    : selectedLabel;
+
+  const openDropdown = () => setActiveDropdown(id);
+  const closeDropdown = () => setActiveDropdown(null);
+
+  return (
+    <div
+      className={`filterDropdownWrapper ${isOpen ? "open" : ""}`}
+      onMouseEnter={openDropdown}
+      onMouseLeave={closeDropdown}
+    >
+      <button
+        type="button"
+        className={`filterDropdownButton ${isOpen ? "active" : ""}`}
+        onClick={openDropdown}
+        aria-label={ariaLabel}
+      >
+        <span className="filterButtonLabel">
+          <span>{buttonLabel}</span>
+        </span>
+      </button>
+
+      <div className="filterDropdownMenu">
+        {options.map((option) => (
+          <button
+            key={option.id}
+            type="button"
+            className={`filterDropdownItem ${value === option.id ? "active" : ""}`}
+            onClick={() => {
+              onChange(option.id);
+              closeDropdown();
+            }}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const CourseFilters = ({
+  filters,
+  instructors = [],
+  categories = [],
+  onFiltersChange,
+}) => {
+  const [activeDropdown, setActiveDropdown] = useState(null);
   const filtersContainerRef = useRef(null);
+
+  const categoryOptions = [
+    { id: "all", label: "All Categories" },
+    ...categories
+      .filter((category) => !category.isDeleted)
+      .map((category) => ({ id: String(category.id), label: category.name })),
+  ];
+
+  const instructorOptions = [
+    { id: "all", label: "All Instructors" },
+    ...instructors.map((instructor) => {
+      const instructorId = getInstructorId(instructor);
+      return {
+        id: String(instructorId),
+        label: instructor.fullName || instructor.email || `Instructor #${instructorId}`,
+      };
+    }),
+  ];
 
   useEffect(() => {
     const closeDropdowns = (event) => {
@@ -49,77 +106,16 @@ const CourseFilters = ({ onAddCourse }) => {
         filtersContainerRef.current &&
         !filtersContainerRef.current.contains(event.target)
       ) {
-        setCategoryDropdownOpen(false);
-        setInstructorDropdownOpen(false);
-        setSortDropdownOpen(false);
-        setIsPriceDropdownOpen(false);
+        setActiveDropdown(null);
       }
     };
 
     document.addEventListener("mousedown", closeDropdowns);
-    return () => {
-      document.removeEventListener("mousedown", closeDropdowns);
-    };
+    return () => document.removeEventListener("mousedown", closeDropdowns);
   }, []);
 
-  const getSelectedCategoryLabel = () =>
-    categoryFilterOptions.find((item) => item.id === selectedCategory)?.label ||
-    "Tất cả";
-
-  const getSelectedInstructorLabel = () =>
-    instructorFilterOptions.find((item) => item.id === selectedInstructor)
-      ?.label || "Tất cả";
-
-  const getSelectedPublishSortLabel = () =>
-    publishSortOptions.find((item) => item.id === selectedPublishSort)?.label ||
-    "Mới nhất";
-
-  const getSelectedPriceTypeLabel = () =>
-    priceTypeOptions.find((item) => item.id === selectedPriceType)?.label ||
-    "Tất cả";
-
-  const openCategoryDropdown = () => {
-    setCategoryDropdownOpen(true);
-    setInstructorDropdownOpen(false);
-    setSortDropdownOpen(false);
-    setIsPriceDropdownOpen(false);
-  };
-
-  const closeCategoryDropdown = () => {
-    setCategoryDropdownOpen(false);
-  };
-
-  const openInstructorDropdown = () => {
-    setInstructorDropdownOpen(true);
-    setCategoryDropdownOpen(false);
-    setSortDropdownOpen(false);
-    setIsPriceDropdownOpen(false);
-  };
-
-  const closeInstructorDropdown = () => {
-    setInstructorDropdownOpen(false);
-  };
-
-  const openSortDropdown = () => {
-    setSortDropdownOpen(true);
-    setCategoryDropdownOpen(false);
-    setInstructorDropdownOpen(false);
-    setIsPriceDropdownOpen(false);
-  };
-
-  const closeSortDropdown = () => {
-    setSortDropdownOpen(false);
-  };
-
-  const openPriceDropdown = () => {
-    setIsPriceDropdownOpen(true);
-    setCategoryDropdownOpen(false);
-    setInstructorDropdownOpen(false);
-    setSortDropdownOpen(false);
-  };
-
-  const closePriceDropdown = () => {
-    setIsPriceDropdownOpen(false);
+  const updateFilter = (name, value) => {
+    onFiltersChange((current) => ({ ...current, [name]: value }));
   };
 
   return (
@@ -132,164 +128,55 @@ const CourseFilters = ({ onAddCourse }) => {
               type="text"
               placeholder="Search by course name or instructor..."
               className="courseSearchInput"
-              value={searchText}
-              onChange={(event) => setSearchText(event.target.value)}
+              value={filters.searchText}
+              onChange={(event) => updateFilter("searchText", event.target.value)}
               aria-label="Search Courses"
             />
           </div>
 
-          <div
-            className={`filterDropdownWrapper ${
-              isCategoryDropdownOpen ? "open" : ""
-            }`}
-            onMouseEnter={openCategoryDropdown}
-            onMouseLeave={closeCategoryDropdown}
-          >
-            <button
-              className={`filterDropdownButton ${
-                isCategoryDropdownOpen ? "active" : ""
-              }`}
-              onClick={openCategoryDropdown}
-              aria-label="Filter by Category"
-            >
-              <span className="filterButtonLabel">
-                <span>{getSelectedCategoryLabel()}</span>
-              </span>
-            </button>
-            <div className="filterDropdownMenu">
-              {categoryFilterOptions.map((option) => (
-                <button
-                  key={option.id}
-                  className={`filterDropdownItem ${
-                    selectedCategory === option.id ? "active" : ""
-                  }`}
-                  onClick={() => {
-                    setSelectedCategory(option.id);
-                    setCategoryDropdownOpen(false);
-                  }}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <FilterDropdown
+            id="category"
+            label="All Categories"
+            ariaLabel="Filter by Category"
+            options={categoryOptions}
+            value={filters.categoryId}
+            activeDropdown={activeDropdown}
+            setActiveDropdown={setActiveDropdown}
+            onChange={(value) => updateFilter("categoryId", value)}
+          />
 
-          <div
-            className={`filterDropdownWrapper ${
-              isInstructorDropdownOpen ? "open" : ""
-            }`}
-            onMouseEnter={openInstructorDropdown}
-            onMouseLeave={closeInstructorDropdown}
-          >
-            <button
-              className={`filterDropdownButton ${
-                isInstructorDropdownOpen ? "active" : ""
-              }`}
-              onClick={openInstructorDropdown}
-              aria-label="Filter by Instructor"
-            >
-              <span className="filterButtonLabel">
-                <span>Instructor ({getSelectedInstructorLabel()})</span>
-              </span>
-            </button>
-            <div className="filterDropdownMenu">
-              {instructorFilterOptions.map((option) => (
-                <button
-                  key={option.id}
-                  className={`filterDropdownItem ${
-                    selectedInstructor === option.id ? "active" : ""
-                  }`}
-                  onClick={() => {
-                    setSelectedInstructor(option.id);
-                    setInstructorDropdownOpen(false);
-                  }}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <FilterDropdown
+            id="instructor"
+            label="Instructor"
+            ariaLabel="Filter by Instructor"
+            options={instructorOptions}
+            value={filters.instructorId}
+            activeDropdown={activeDropdown}
+            setActiveDropdown={setActiveDropdown}
+            onChange={(value) => updateFilter("instructorId", value)}
+          />
 
-          <div
-            className={`filterDropdownWrapper ${
-              isSortDropdownOpen ? "open" : ""
-            }`}
-            onMouseEnter={openSortDropdown}
-            onMouseLeave={closeSortDropdown}
-          >
-            <button
-              className={`filterDropdownButton ${
-                isSortDropdownOpen ? "active" : ""
-              }`}
-              onClick={openSortDropdown}
-              aria-label="Sort Courses"
-            >
-              <span className="filterButtonLabel">
-                <span>Published: {getSelectedPublishSortLabel()}</span>
-              </span>
-            </button>
-            <div className="filterDropdownMenu">
-              {publishSortOptions.map((option) => (
-                <button
-                  key={option.id}
-                  className={`filterDropdownItem ${
-                    selectedPublishSort === option.id ? "active" : ""
-                  }`}
-                  onClick={() => {
-                    setSelectedPublishSort(option.id);
-                    setSortDropdownOpen(false);
-                  }}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <FilterDropdown
+            id="publishSort"
+            label="Published"
+            ariaLabel="Sort Courses"
+            options={publishSortOptions}
+            value={filters.publishSort}
+            activeDropdown={activeDropdown}
+            setActiveDropdown={setActiveDropdown}
+            onChange={(value) => updateFilter("publishSort", value)}
+          />
 
-          <div
-            className={`filterDropdownWrapper ${
-              isPriceDropdownOpen ? "open" : ""
-            }`}
-            onMouseEnter={openPriceDropdown}
-            onMouseLeave={closePriceDropdown}
-          >
-            <button
-              className={`filterDropdownButton ${
-                isPriceDropdownOpen ? "active" : ""
-              }`}
-              onClick={openPriceDropdown}
-              aria-label="Filter by Price Type"
-            >
-              <span className="filterButtonLabel">
-                <span>Price: {getSelectedPriceTypeLabel()}</span>
-              </span>
-            </button>
-            <div className="filterDropdownMenu">
-              {priceTypeOptions.map((option) => (
-                <button
-                  key={option.id}
-                  className={`filterDropdownItem ${
-                    selectedPriceType === option.id ? "active" : ""
-                  }`}
-                  onClick={() => {
-                    setSelectedPriceType(option.id);
-                    setIsPriceDropdownOpen(false);
-                  }}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="courseFiltersAddButton"
-            onClick={onAddCourse}
-          >
-            <Plus size={18} />
-            Add Course
-          </button>
+          <FilterDropdown
+            id="priceType"
+            label="Price"
+            ariaLabel="Filter by Price Type"
+            options={priceTypeOptions}
+            value={filters.priceType}
+            activeDropdown={activeDropdown}
+            setActiveDropdown={setActiveDropdown}
+            onChange={(value) => updateFilter("priceType", value)}
+          />
         </div>
       </div>
     </section>

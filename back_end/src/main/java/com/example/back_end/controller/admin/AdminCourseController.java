@@ -1,24 +1,23 @@
 package com.example.back_end.controller.admin;
 
 import java.util.List;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.back_end.dto.response.admin.AdminCourseDetailResponse;
 import com.example.back_end.dto.response.admin.AdminCourseResponse;
-import com.example.back_end.dto.resquest.admin.AdminCourseRequest;
 import com.example.back_end.service.admin.AdminCourseService;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/learnova/admin/courses-management")   // /admin/courses/**
+@RequestMapping("/api/learnova/admin/courses-management")
 public class AdminCourseController {
 
     private final AdminCourseService adminCourseService;
@@ -28,24 +27,21 @@ public class AdminCourseController {
         return ResponseEntity.ok(adminCourseService.getAllCourses());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AdminCourseResponse> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(adminCourseService.getCourseById(id));
+    /** Chi tiết đầy đủ kèm sections/lessons — dùng cho popup xem và trang duyệt */
+    @GetMapping("/{id}/detail")
+    public ResponseEntity<AdminCourseDetailResponse> getDetail(@PathVariable Long id) {
+        return ResponseEntity.ok(adminCourseService.getCourseDetail(id));
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<AdminCourseResponse> create(@RequestBody @Valid AdminCourseRequest request) {
-        return ResponseEntity.ok(adminCourseService.createCourse(request));
+    /** Duyệt khóa học: DRAFT → PUBLISHED */
+    @PatchMapping("/{id}/approve")
+    public ResponseEntity<AdminCourseDetailResponse> approve(@PathVariable Long id) {
+        return ResponseEntity.ok(adminCourseService.approveCourse(id));
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<AdminCourseResponse> update(@PathVariable Long id, @RequestBody @Valid AdminCourseRequest request) {
-        return ResponseEntity.ok(adminCourseService.updateCourse(id, request));
+    /** Ẩn khóa học: DRAFT → ARCHIVED */
+    @PatchMapping("/{id}/hide")
+    public ResponseEntity<AdminCourseDetailResponse> hide(@PathVariable Long id) {
+        return ResponseEntity.ok(adminCourseService.hideCourse(id));
     }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<AdminCourseResponse> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(adminCourseService.deleteCourse(id));
-    }
-
 }

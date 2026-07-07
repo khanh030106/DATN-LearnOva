@@ -8,8 +8,8 @@ import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 
 
 const formatMoney = (v) => {
-  if (v == null) return "0 đ";
-  return new Intl.NumberFormat("vi-VN").format(v) + " đ";
+  if (v == null) return "0 VND";
+  return new Intl.NumberFormat("vi-VN").format(v) + " VND";
 };
 
 const InstructorStatistics = () => {
@@ -51,7 +51,7 @@ const InstructorStatistics = () => {
   }, [axiosPrivate]);
 
   return (
-    <section className="instructorStatistics" aria-label="Thống kê giảng viên">
+    <section className="instructorStatistics" aria-label="Instructor statistics">
       {error && (
         <div style={{ 
           padding: "12px", 
@@ -61,7 +61,7 @@ const InstructorStatistics = () => {
           borderRadius: "4px",
           border: "1px solid #fcc"
         }}>
-          ⚠️ {error}
+          {error}
         </div>
       )}
       <div className="instructorStatisticsGrid">
