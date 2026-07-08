@@ -19,6 +19,7 @@ import { useAuth } from "../../../../hook/UseAuth.jsx";
 import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 import { getUserProfileApi,updateUserProfileApi,uploadAvatarApi } from "../../../../api/UserApi.js";
 import { toast } from "react-toastify";
+import { getFileUrl } from "../../../../api/PublicCourseApi";
 
 const readStorage = (key, fallback) => {
   const saved = localStorage.getItem(key);
@@ -127,12 +128,31 @@ const ProfileView = ({
     setCoursesError("");
 
     getMyEnrolledCoursesApi(axiosPrivate, accessToken)
-        .then((data) => {
+        .then(async (data) => {
           console.log("API:", data);
           console.log("First course:", JSON.stringify(data[0], null, 2));
 
+          const courses = await Promise.all(
+              data.map(async (course) => {
+                let thumbnailUrl = "";
+
+                if (course.thumbnailKey) {
+                  try {
+                    thumbnailUrl = await getFileUrl(course.thumbnailKey);
+                  } catch (e) {
+                    console.error("Get thumbnail failed:", e);
+                  }
+                }
+
+                return mapEnrolledCourse({
+                  ...course,
+                  thumbnailKey: thumbnailUrl,
+                });
+              })
+          );
+
           if (mounted) {
-            setOwnedCourses(Array.isArray(data) ? data.map(mapEnrolledCourse) : []);
+            setOwnedCourses(courses);
           }
         })
       .catch((err) => {
@@ -149,6 +169,44 @@ const ProfileView = ({
       mounted = false;
     };
   }, [accessToken, activeTab, authLoading, axiosPrivate]);
+
+  const loadMyCourses = async () => {
+    const data = await getMyEnrolledCoursesApi(
+        axiosPrivate,
+        accessToken
+    );
+
+    const courses = await Promise.all(
+        data.map(async (course) => {
+          let image = "";
+
+          if (course.thumbnailKey) {
+            try {
+              image = await getFileUrl(course.thumbnailKey);
+            } catch (e) {
+              console.error(e);
+            }
+          }
+
+          return mapEnrolledCourse({
+            ...course,
+            thumbnailKey: image,
+          });
+        })
+    );
+
+    setOwnedCourses(courses);
+
+    if (selectedCourse) {
+      const updated = courses.find(
+          (c) => c.courseId === selectedCourse.courseId
+      );
+
+      if (updated) {
+        setSelectedCourse(updated);
+      }
+    }
+  };
 
   const scrollToPageTop = (behavior = "smooth") => {
     requestAnimationFrame(() => {
@@ -297,10 +355,11 @@ const ProfileView = ({
     if (activeTab === "courses") {
       if (selectedCourse) {
         return (
-          <LearningCourseDetailSection
-            course={selectedCourse}
-            onBack={handleCloseCourseDetail}
-          />
+            <LearningCourseDetailSection
+                course={selectedCourse}
+                onBack={handleCloseCourseDetail}
+                reloadCourses={loadMyCourses}
+            />
         );
       }
 

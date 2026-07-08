@@ -18,8 +18,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
+import com.example.back_end.entity.Enrollment;
+import com.example.back_end.repository.EnrollmentRepository;
 import java.util.List;
+import com.example.back_end.entity.InstructorProfile;
+import com.example.back_end.repository.InstructorProfileRepository;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +35,8 @@ public class CourseCurriculumService {
     private final SectionRepository sectionRepository;
     private final LessonRepository lessonRepository;
     private final LessonprogressRepository lessonprogressRepository;
+    private final EnrollmentRepository enrollmentRepository;
+    private final InstructorProfileRepository instructorProfileRepository;
 
     @Transactional(readOnly = true)
     public CourseCurriculumResponse getCourseCurriculum(Long courseId) {
@@ -38,6 +46,18 @@ public class CourseCurriculumService {
         Course course = courseRepository.findCourseDetailById(courseId)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found"));
+        InstructorProfile profile = instructorProfileRepository
+                .findById(course.getInstructor().getId())
+                .orElse(null);
+
+        List<String> expertise = List.of();
+
+        if (profile != null && profile.getExpertise() != null) {
+            expertise = List.of(profile.getExpertise().split(","))
+                    .stream()
+                    .map(String::trim)
+                    .toList();
+        }
 
         List<Section> sections =
                 sectionRepository.findByCourseIdOrderBySectionOrderAsc(courseId);
@@ -95,13 +115,41 @@ public class CourseCurriculumService {
         int totalLessons = curriculum.stream()
                 .mapToInt(SectionResponse::totalLessons)
                 .sum();
+        List<String> categories = course.getCoursecategories()
+                .stream()
+                .map(courseCategory -> courseCategory.getCategory().getName())
+                .toList();
+
+        int totalDurationSeconds = sections.stream()
+                .flatMap(section ->
+                        lessonRepository
+                                .findBySectionIdOrderByLessonOrderAsc(section.getId())
+                                .stream()
+                )
+                .map(Lesson::getDurationSeconds)
+                .filter(Objects::nonNull)
+                .mapToInt(Integer::intValue)
+                .sum();
+
+        String duration = formatCourseDuration(totalDurationSeconds);
+
+
+        String updatedAt = DateTimeFormatter
+                .ofPattern("MM/yyyy")
+                .withZone(ZoneId.systemDefault())
+                .format(course.getUpdatedAt());
 
         return new CourseCurriculumResponse(
                 course.getId(),
                 course.getTitle(),
                 curriculum.size(),
                 totalLessons,
-                curriculum
+                curriculum,
+                categories,
+                course.getWhatYouLearn(),
+                course.getDescription(),
+                duration,
+                updatedAt
         );
     }
 
@@ -115,6 +163,13 @@ public class CourseCurriculumService {
         int remainSeconds = seconds % 60;
 
         return String.format("%02d:%02d", minutes, remainSeconds);
+    }
+    private String formatCourseDuration(int seconds) {
+
+        int hours = seconds / 3600;
+        int minutes = (seconds % 3600) / 60;
+
+        return String.format("%dh %02dm", hours, minutes);
     }
 
     private Long getCurrentUserId() {
@@ -133,5 +188,19 @@ public class CourseCurriculumService {
                 HttpStatus.UNAUTHORIZED,
                 "Authentication required"
         );
+    }
+    @Transactional
+    public void restartCourse(Long courseId) {
+        Long userId = getCurrentUserId();
+
+        Enrollment enrollment = enrollmentRepository
+                .findByUserIdAndCourseId(userId, courseId)
+                .orElseThrow(() -> new RuntimeException("Enrollment not found"));
+
+        enrollment.setProgressPercent(0);
+        enrollment.setCompletedAt(null);
+
+        enrollmentRepository.save(enrollment);
+        lessonprogressRepository.resetCourseProgress(userId, courseId);
     }
 }

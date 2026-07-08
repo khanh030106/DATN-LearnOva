@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import com.example.back_end.service.ReviewService;
 import com.example.back_end.dto.response.CourseReviewResponse;
+import org.springframework.http.ResponseEntity;
+import com.example.back_end.service.EnrollmentService;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,6 +16,7 @@ public class CourseCurriculumController {
 
     private final CourseCurriculumService courseCurriculumService;
     private final ReviewService reviewService;
+    private final EnrollmentService enrollmentService;
 
     @GetMapping("/{courseId}/curriculum")
     public CourseCurriculumResponse getCourseCurriculum(
@@ -26,5 +29,10 @@ public class CourseCurriculumController {
             @PathVariable Long courseId
     ) {
         return reviewService.getCourseReviewSummary(courseId);
+    }
+    @PutMapping("/{courseId}/restart")
+    public ResponseEntity<Void> restartCourse(@PathVariable Long courseId) {
+        enrollmentService.restartCourse(courseId);
+        return ResponseEntity.ok().build();
     }
 }

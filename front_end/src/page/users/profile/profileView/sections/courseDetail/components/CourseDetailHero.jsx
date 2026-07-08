@@ -6,8 +6,14 @@ import {
   Users,
 } from "lucide-react";
 import defaultAvatar from "../../../../../../../assets/default_user_avatar.jpg";
+import { useNavigate } from "react-router-dom";
 
 const CourseDetailHero = ({ course, onBack }) => {
+  const navigate = useNavigate();
+
+  const handleContinueLearning = () => {
+    navigate(`/learnova/user/CoursesDetail/${course.courseId}`);
+  };
 
   console.log("Course:", course);
 
@@ -24,11 +30,16 @@ const CourseDetailHero = ({ course, onBack }) => {
           </button>
         </div>
 
-        <div className="learning-hero-grid">
+        <div
+            className="learning-hero-grid"
+            onClick={handleContinueLearning}
+        >
           <div className="learning-video-cover">
             <img src={course.image} alt={course.title} />
 
-            <span>{course.category}</span>
+            {course.categories?.map((category) => (
+                <span key={category}>{category}</span>
+            ))}
 
             <button type="button" aria-label="Watch Lesson">
               <Play size={32} fill="currentColor" />
@@ -64,11 +75,10 @@ const CourseDetailHero = ({ course, onBack }) => {
               <CheckCircle size={17} fill="currentColor" />
             </div>
 
-            <p>{course.summary}</p>
-
+            <p>{course.description}</p>
             <div className="learning-tag-list">
-              {course.tags.map((tag) => (
-                  <span key={tag}>{tag}</span>
+              {course.categories?.map((category) => (
+                  <span key={category}>{category}</span>
               ))}
             </div>
           </div>

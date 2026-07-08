@@ -30,7 +30,6 @@ public class EnrollmentService {
     @Transactional(readOnly = true)
     public List<MyEnrolledCourseResponse> getMyEnrolledCourses() {
         Long userId = getCurrentUserId();
-
         return enrollmentRepository.findByUserIdWithCourseAndInstructor(userId)
                 .stream()
                 .map(this::toResponse)
@@ -38,12 +37,9 @@ public class EnrollmentService {
     }
 
     private MyEnrolledCourseResponse toResponse(Enrollment enrollment) {
-
         Course course = enrollment.getCourse();
-
         long totalLessons =
                 lessonRepository.countBySectionCourseId(course.getId());
-
         long completedLessons =
                 lessonprogressRepository.countCompletedLessonsByUserAndCourse(
                         enrollment.getUser().getId(),
@@ -53,7 +49,6 @@ public class EnrollmentService {
 
         double averageRating =
                 reviewRepository.getAverageRating(course.getId());
-
         long reviewCount =
                 reviewRepository.countByCourseId(course.getId());
         long studentCount =
@@ -63,22 +58,16 @@ public class EnrollmentService {
                 course.getId(),
                 course.getTitle(),
                 course.getDescription(),
-
                 course.getInstructor().getFullName(),
-                course.getInstructor().getAvatar(), // ✅ instructorAvatar
-
-                course.getLevel(),                  // ✅ level
-
-                course.getThumbnailKey(),           // ✅ thumbnailKey
-
+                course.getInstructor().getAvatar(),
+                course.getLevel(),
+                course.getThumbnailKey(),
                 enrollment.getProgressPercent(),
-
                 (int) totalLessons,
                 (int) completedLessons,
                 averageRating,
                 reviewCount,
                 studentCount,
-
                 enrollment.getEnrolledAt(),
                 enrollment.getCompletedAt()
         );
@@ -96,5 +85,22 @@ public class EnrollmentService {
                 HttpStatus.UNAUTHORIZED,
                 "Authentication required"
         );
+    }
+    @Transactional
+    public void restartCourse(Long courseId) {
+        Long userId = getCurrentUserId();
+        Enrollment enrollment = enrollmentRepository
+                .findByUserIdAndCourseId(userId, courseId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Enrollment not found"
+                ));
+        enrollment.setProgressPercent(0);
+        enrollment.setCompletedAt(null);
+        enrollment.setProgressPercent(0);
+        enrollment.setCompletedAt(null);
+        enrollmentRepository.save(enrollment);
+        enrollmentRepository.save(enrollment);
+        lessonprogressRepository.resetCourseProgress(userId, courseId);
     }
 }

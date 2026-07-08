@@ -10,10 +10,13 @@ import {
   BarChart3,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { restartCourseApi } from "../../../../../../../api/EnrollmentApi.js";
+import { useAxiosPrivate } from "../../../../../../../hook/UseAxiosPrivate.js";
+import { useAuth } from "../../../../../../../hook/UseAuth.jsx";
+import { toast } from "react-toastify";
 
 
-
-const CourseDetailSidebar = ({ course }) => {
+const CourseDetailSidebar = ({ course, reloadCourses }) => {
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (course.progress / 100) * circumference;
@@ -26,7 +29,28 @@ const CourseDetailSidebar = ({ course }) => {
     { icon: Calendar, label: "Last Updated", value: course.updatedAt },
     { icon: BarChart3, label: "Level", value: course.level },
   ];
+  const axiosPrivate = useAxiosPrivate();
+  const { accessToken } = useAuth();
   const navigate = useNavigate();
+  const handleRestartCourse = async () => {
+    try {
+      await restartCourseApi(
+          axiosPrivate,
+          course.courseId,
+          accessToken
+      );
+
+      toast.success("Course restarted successfully!");
+
+      if (reloadCourses) {
+        await reloadCourses();
+      }
+
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to restart course!");
+    }
+  };
 
   return (
     <aside className="learning-detail-sidebar">
@@ -79,7 +103,11 @@ const CourseDetailSidebar = ({ course }) => {
             </button>
         )}
 
-        <button className="learning-secondary-button" type="button">
+        <button
+            className="learning-secondary-button"
+            type="button"
+            onClick={handleRestartCourse}
+        >
           <RotateCcw size={16} />
           Restart Course
         </button>

@@ -36,3 +36,20 @@ export const getCourseReviewsApi = async (
 
     return response.data;
 };
+export const restartCourseApi = async (
+    axiosPrivate,
+    courseId,
+    accessToken
+) => {
+    const response = await axiosPrivate.put(
+        `/student/courses/${courseId}/restart`,
+        {},
+        {
+            headers: accessToken
+                ? { Authorization: `Bearer ${accessToken}` }
+                : undefined,
+        }
+    );
+
+    return response.data;
+};

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.back_end.entity.Enrollment;
 import com.example.back_end.entity.EnrollmentId;
+import java.util.Optional;
 
 public interface EnrollmentRepository extends JpaRepository<Enrollment, EnrollmentId> {
 
@@ -35,4 +36,15 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Enrollme
 
     @Query("SELECT COUNT(e) FROM Enrollment e WHERE e.course.id = :courseId")
     long countByCourseId(@Param("courseId") Long courseId);
+
+    @Query("""
+    SELECT e
+    FROM Enrollment e
+    WHERE e.user.id = :userId
+      AND e.course.id = :courseId
+    """)
+    Optional<Enrollment> findByUserIdAndCourseId(
+            @Param("userId") Long userId,
+            @Param("courseId") Long courseId
+    );
 }

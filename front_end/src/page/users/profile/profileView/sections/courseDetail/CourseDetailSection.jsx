@@ -20,7 +20,7 @@ import { useAxiosPrivate } from "../../../../../../hook/UseAxiosPrivate.js";
 
 
 
-const CourseDetailSection = ({ course, onBack }) => {
+const CourseDetailSection = ({ course, onBack, reloadCourses }) => {
   const [activeTab, setActiveTab] = useState("curriculum");
   const axiosPrivate = useAxiosPrivate();
   const { accessToken } = useAuth();
@@ -34,7 +34,7 @@ const CourseDetailSection = ({ course, onBack }) => {
 
   const renderTabContent = () => {
     if (activeTab === "about") {
-      return <CourseAbout course={courseDetail} />;
+      return <CourseAbout course={curriculum} />;
     }
 
     if (activeTab === "instructor") {
@@ -72,6 +72,7 @@ const CourseDetailSection = ({ course, onBack }) => {
         );
 
         setCurriculum(data);
+        console.log("Curriculum API:", data);
       } catch (err) {
         console.error("Failed to load curriculum", err);
       } finally {
@@ -107,7 +108,13 @@ const CourseDetailSection = ({ course, onBack }) => {
   return (
     <div className="learning-detail-page">
       <div className="learning-detail-main">
-        <CourseDetailHero course={courseDetail} onBack={onBack} />
+        <CourseDetailHero
+            course={{
+              ...courseDetail,
+              categories: curriculum?.categories ?? []
+            }}
+            onBack={onBack}
+        />
         <CourseDetailTabs
           activeTab={activeTab}
           onChangeTab={setActiveTab}
@@ -116,7 +123,18 @@ const CourseDetailSection = ({ course, onBack }) => {
         {renderTabContent()}
       </div>
 
-      <CourseDetailSidebar course={courseDetail} />
+      <CourseDetailSidebar
+          course={{
+            ...course,
+            duration: curriculum?.duration,
+            updatedAt: curriculum?.updatedAt,
+            lessonsTotal: curriculum?.lessonsTotal,
+            categories: curriculum?.categories,
+            description: curriculum?.description,
+            whatYouLearn: curriculum?.whatYouLearn,
+          }}
+          reloadCourses={reloadCourses}
+      />
     </div>
   );
 };

@@ -71,7 +71,7 @@ public class LessonProgressService {
         boolean currentlyCompleted = Boolean.TRUE.equals(progress.getIsCompleted());
         if (!currentlyCompleted && duration > 0) {
             double percent = ((double) newWatched / duration) * 100.0;
-            if (percent >= 95.0) {
+            if (percent >= 99.0) {
                 progress.setIsCompleted(true);
             }
         } else if (!currentlyCompleted && duration == 0) {
