@@ -1,13 +1,48 @@
 import React, { useRef, useEffect } from "react";
+import Hls from "hls.js";
 
 function CourseVideoPlayer({ src, loading, initialTime = 0, onProgressUpdate }) {
   const videoRef = useRef(null);
+  const hlsRef = useRef(null);
   const lastReportedTime = useRef(0);
   const hasSeekedInitial = useRef(false);
 
   useEffect(() => {
     hasSeekedInitial.current = false;
     lastReportedTime.current = 0;
+  }, [src]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !src) return;
+
+    if (hlsRef.current) {
+      hlsRef.current.destroy();
+      hlsRef.current = null;
+    }
+
+    const isHls = src.includes(".m3u8");
+    if (!isHls) {
+      video.src = src;
+      return;
+    }
+
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(src);
+      hls.attachMedia(video);
+      hlsRef.current = hls;
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      // Safari plays HLS natively
+      video.src = src;
+    }
+
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+    };
   }, [src]);
 
   const handleLoadedMetadata = () => {
@@ -57,7 +92,6 @@ function CourseVideoPlayer({ src, loading, initialTime = 0, onProgressUpdate }) 
               key={src}
               controls
               width="100%"
-              src={src}
               style={{ display: "block" }}
               onLoadedMetadata={handleLoadedMetadata}
               onTimeUpdate={handleTimeUpdate}

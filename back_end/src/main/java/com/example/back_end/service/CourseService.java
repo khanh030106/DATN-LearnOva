@@ -20,7 +20,10 @@ import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.CourseRepository;
 import com.example.back_end.repository.CoursecategoryRepository;
+import com.example.back_end.entity.Lesson;
+import com.example.back_end.entity.enums.HlsStatus;
 import com.example.back_end.repository.EnrollmentRepository;
+import com.example.back_end.repository.LessonRepository;
 import com.example.back_end.repository.PromotioncourseRepository;
 import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.repository.UserRepository;
@@ -50,6 +53,7 @@ public class CourseService {
     private final EnrollmentRepository enrollmentRepository;
     private final PromotioncourseRepository promotioncourseRepository;
     private final ReviewRepository reviewRepository;
+    private final LessonRepository lessonRepository;
 
     public Long createDraftCourse(CreateDraftCourseRequest request, String email) {
         User instructor = userRepository
@@ -559,5 +563,14 @@ public class CourseService {
                         review.getCreatedAt()
                 ))
                 .toList();
+    }
+
+    public String getHlsMasterPlaylistPathIfReady(String fileKey) {
+        return lessonRepository.findByVideoKey(fileKey)
+                .filter(lesson -> lesson.getHlsStatus() == HlsStatus.READY)
+                .map(Lesson::getVideoKey)
+                .map(MediaConvertService::videoUuidFromKey)
+                .map(videoUuid -> "/api/learnova/courses/hls/" + videoUuid + "/master.m3u8")
+                .orElse(null);
     }
 }

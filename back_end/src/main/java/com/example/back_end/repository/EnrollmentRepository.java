@@ -42,4 +42,7 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Enrollme
 
     @Query("SELECT COUNT(e) FROM Enrollment e WHERE e.course.id = :courseId")
     long countByCourseId(@Param("courseId") Long courseId);
+
+    @Query("SELECT DISTINCT e.user.id FROM Enrollment e")
+    List<Long> findDistinctUserIds();
 }

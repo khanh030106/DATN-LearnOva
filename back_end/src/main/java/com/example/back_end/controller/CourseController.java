@@ -20,6 +20,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import org.springframework.http.ResponseEntity;
 
@@ -51,7 +52,10 @@ public class CourseController {
     public GetFileUrlResponse getVideoUrl(
             @RequestParam String fileKey
     ) {
-        String url = s3Service.generatePresignedGetUrl(fileKey);
+        String hlsMasterPath = courseService.getHlsMasterPlaylistPathIfReady(fileKey);
+        String url = hlsMasterPath != null
+                ? ServletUriComponentsBuilder.fromCurrentContextPath().path(hlsMasterPath).toUriString()
+                : s3Service.generateCloudFrontSignedUrl(fileKey);
 
         return new GetFileUrlResponse(url);
     }
