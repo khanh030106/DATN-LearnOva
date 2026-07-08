@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import "./Header.css";
 
 const headerData = {
-  adminName: "Hiếu",
+  adminName: "Admin",
   roleName: "Administrator",
   avatarUrl:
     "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop",
@@ -32,8 +32,6 @@ const Header = () => {
     title = "Revenue";
   } else if (normPath === "/learnova/admin/vouchers") {
     title = "Vouchers";
-  } else if (normPath === "/learnova/admin/reviews-comments") {
-    title = "Reviews & Comments";
   } else if (normPath === "/learnova/admin/violation-reports") {
     title = "Violation Reports";
   } else if (normPath === "/learnova/admin/settings") {

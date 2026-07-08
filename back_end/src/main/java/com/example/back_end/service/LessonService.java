@@ -10,13 +10,11 @@ import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.LessonRepository;
 import com.example.back_end.repository.SectionRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
-@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -64,8 +62,6 @@ public class LessonService {
 
     @Transactional
     public void updateLessonVideo(Long lessonId, UpdateLessonVideoRequest request) {
-        log.debug("updateLessonVideo called, lessonId={}, request={}", lessonId, request);
-
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
 
@@ -87,8 +83,6 @@ public class LessonService {
         }
 
         lessonRepository.save(lesson);
-
-        log.debug("updateLessonVideo complete, lessonId={}", lessonId);
     }
 
 }

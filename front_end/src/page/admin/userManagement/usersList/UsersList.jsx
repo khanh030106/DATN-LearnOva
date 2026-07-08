@@ -6,7 +6,7 @@ import {
   PencilLine,
   Trash2,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import DeleteUserModal from "./DeleteUserModal";
 import EditUserModal from "./EditUserModal";
 import ViewUserModal from "./ViewUserModal";
@@ -16,6 +16,7 @@ const tableColumns = [
   { id: "user", label: "User" },
   { id: "role", label: "Role" },
   { id: "phone", label: "Phone" },
+  { id: "visibility", label: "Visibility" },
   { id: "joinedAt", label: "Joined At" },
   { id: "actions", label: "Actions" },
 ];
@@ -43,6 +44,27 @@ const UserAvatar = ({ user, className }) => {
   );
 };
 
+const getUserVisibility = (user) => {
+  if (user.visibility && user.visibilityTone) {
+    return {
+      label: user.visibility,
+      tone: user.visibilityTone,
+    };
+  }
+
+  if (user.isDeleted) {
+    return {
+      label: "Hidden",
+      tone: "deleted",
+    };
+  }
+
+  return {
+    label: "Active",
+    tone: "visible",
+  };
+};
+
 const UsersList = ({
   users = [],
   isLoading = false,
@@ -53,17 +75,12 @@ const UsersList = ({
   const [selectedUser, setSelectedUser] = useState(null);
 
   const totalPages = Math.max(1, Math.ceil(users.length / pageSize));
-
-  useEffect(() => {
-    setCurrentPage(1);
-    setSelectedAction(null);
-    setSelectedUser(null);
-  }, [users]);
+  const visiblePage = Math.min(currentPage, totalPages);
 
   const visibleUsers = useMemo(() => {
-    const startIndex = (currentPage - 1) * pageSize;
+    const startIndex = (visiblePage - 1) * pageSize;
     return users.slice(startIndex, startIndex + pageSize);
-  }, [currentPage, users]);
+  }, [visiblePage, users]);
 
   const openActionPopup = (action, user) => {
     setSelectedAction(action);
@@ -96,6 +113,7 @@ const UsersList = ({
 
         <div className="userManagementUsersList">
           {visibleUsers.map((user) => {
+            const visibility = getUserVisibility(user);
 
             return (
               <article key={user.id} className="userManagementUserRow">
@@ -124,6 +142,14 @@ const UsersList = ({
                 <div className="userManagementUserPhoneWrap">
                   <span className="userManagementUserPhone">
                     <span>{user.phone}</span>
+                  </span>
+                </div>
+
+                <div className="userManagementUserVisibilityWrap">
+                  <span
+                    className={`userManagementUserVisibility userManagementUserVisibility--${visibility.tone}`}
+                  >
+                    <span>{visibility.label}</span>
                   </span>
                 </div>
 
@@ -157,6 +183,7 @@ const UsersList = ({
                     className="userManagementUserActionButton userManagementUserActionButton--danger"
                     aria-label={`Delete ${user.name}`}
                     onClick={() => openActionPopup("Delete", user)}
+                    disabled={user.isDeleted}
                   >
                     <Trash2 size={14} aria-hidden="true" />
                   </button>
@@ -180,8 +207,8 @@ const UsersList = ({
 
       <div className="userManagementUsersFooter">
         <p className="userManagementUsersPageInfo">
-          Displaying {users.length ? (currentPage - 1) * pageSize + 1 : 0}-
-          {Math.min(currentPage * pageSize, users.length)} out of {users.length}{" "}
+          Displaying {users.length ? (visiblePage - 1) * pageSize + 1 : 0}-
+          {Math.min(visiblePage * pageSize, users.length)} out of {users.length}{" "}
           users
         </p>
 
@@ -192,8 +219,8 @@ const UsersList = ({
           <button
             type="button"
             className="userManagementUsersPageButton userManagementUsersPageButton--nav"
-            disabled={currentPage === 1}
-            onClick={() => goToPage(currentPage - 1)}
+            disabled={visiblePage === 1}
+            onClick={() => goToPage(visiblePage - 1)}
             aria-label="Previous page"
           >
             <ChevronLeft size={16} aria-hidden="true" />
@@ -204,7 +231,7 @@ const UsersList = ({
               <button
                 key={page}
                 type="button"
-                className={`userManagementUsersPageButton ${currentPage === page ? "userManagementUsersPageButton--active" : ""}`}
+                className={`userManagementUsersPageButton ${visiblePage === page ? "userManagementUsersPageButton--active" : ""}`}
                 onClick={() => goToPage(page)}
                 aria-label={`Go to page ${page}`}
               >
@@ -216,8 +243,8 @@ const UsersList = ({
           <button
             type="button"
             className="userManagementUsersPageButton userManagementUsersPageButton--nav"
-            disabled={currentPage === totalPages}
-            onClick={() => goToPage(currentPage + 1)}
+            disabled={visiblePage === totalPages}
+            onClick={() => goToPage(visiblePage + 1)}
             aria-label="Next page"
           >
             <ChevronRight size={16} aria-hidden="true" />

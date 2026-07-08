@@ -134,10 +134,6 @@ public class EmailService {
             Transport.send(message);
 
         } catch (Exception e) {
-
-            System.out.println("=== SEND EMAIL FAILED ===");
-            e.printStackTrace();
-
             throw new RuntimeException(
                     "Failed to send verification email",
                     e

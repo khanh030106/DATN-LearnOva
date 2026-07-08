@@ -1,5 +1,5 @@
 /* =========================================
-   1. ĐỊNH NGHĨA BIẾN MÀU (COLOR VARIABLES)
+   1. COLOR VARIABLES
 ========================================= */
 :root {
   --blue-deep-navy: #071a33;
@@ -27,7 +27,7 @@
 }
 
 /* =========================================
-   2. STYLES CHO COMPONENT
+   2. COMPONENT STYLES
 ========================================= */
 .dashboardStatistics {
   width: 100%;
@@ -87,7 +87,7 @@
 
 .dashboardStatisticsCardLabel {
   margin: 0;
-  /* CHANGED: Text Secondary theo Palette */
+  /* Text secondary from the dashboard palette */
   color: var(--text-secondary);
   font-size: 11px;
   line-height: 1.35;
@@ -111,19 +111,19 @@
 }
 
 .dashboardStatisticsCardChange--success {
-  /* Giữ màu xanh lá chuẩn semantic UI cho Success */
+  /* Semantic green for success state */
   color: #15803d;
   background: rgba(34, 197, 94, 0.12);
 }
 
 .dashboardStatisticsCardChange--info {
-  /* CHANGED: Dùng dải màu Pale/Strong cho trạng thái Info */
+  /* Pale/strong blue pair for info state */
   color: var(--blue-strong);
   background: var(--blue-pale);
 }
 
 .dashboardStatisticsCardValue {
-  /* CHANGED: Text Main theo Palette */
+  /* Main text color from the dashboard palette */
   color: var(--text-main);
   font-size: 25px;
   line-height: 1;

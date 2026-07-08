@@ -6,11 +6,11 @@ import {
 } from "lucide-react";
 import "./Statistics.css";
 
-const statisticsData = [
+const createStatisticsData = (data, loading) => [
   {
     id: "users",
     label: "Total Users",
-    value: "25,480",
+    value: loading ? "..." : data.totalUsers,
     change: "+12%",
     changeColor: "success",
     icon: SquareUserRound,
@@ -18,7 +18,7 @@ const statisticsData = [
   {
     id: "teachers",
     label: "Total Teachers",
-    value: "1,284",
+    value: loading ? "..." : data.totalTeachers,
     change: "+5%",
     changeColor: "success",
     icon: GraduationCap,
@@ -26,7 +26,7 @@ const statisticsData = [
   {
     id: "courses",
     label: "Total Courses",
-    value: "3,560",
+    value: loading ? "..." : data.totalCourses,
     change: "+8%",
     changeColor: "success",
     icon: BookOpen,
@@ -34,16 +34,18 @@ const statisticsData = [
   {
     id: "revenue",
     label: "Total Revenue",
-    value: "1.25B VND",
+    value: loading ? "..." : data.totalRevenue,
     change: "+15%",
     changeColor: "info",
     icon: CircleDollarSign,
   },
 ];
 
-const Statistics = () => {
+const Statistics = ({ data, loading = false }) => {
+  const statisticsData = createStatisticsData(data, loading);
+
   return (
-    <section className="dashboardStatistics" aria-label="Thống kê tổng quan">
+    <section className="dashboardStatistics" aria-label="Dashboard statistics">
       {statisticsData.map((item) => {
         const Icon = item.icon;
 

@@ -1,7 +1,6 @@
 package com.example.back_end.exception;
 
 import com.example.back_end.dto.response.ErrorResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.stream.Collectors;
 
-@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -60,10 +58,8 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("A record with this data already exists."));
     }
 
-    // Catch-all: log the real error server-side, return a safe generic message to the client.
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-        log.error("Unhandled exception", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse("An unexpected error occurred. Please try again later."));
     }

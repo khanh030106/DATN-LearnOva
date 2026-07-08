@@ -7,6 +7,7 @@ import Dashboard from "../page/admin/dashboard/Dashboard.jsx";
 import UserManagement from "../page/admin/userManagement/UserManagement.jsx";
 import InstructorManagement from "../page/admin/instructorManagement/InstructorManagement.jsx";
 import Course from "../page/admin/course/Course.jsx";
+import CourseApprovalPage from "../page/admin/courseApproval/CourseApprovalPage.jsx";
 import Revenue from "../page/admin/revenue/Revenue.jsx";
 import RevenueTopRankings from "../page/admin/revenue/RevenueTopRankings.jsx";
 import RevenueTransactions from "../page/admin/revenue/RevenueTransactions.jsx";
@@ -15,7 +16,6 @@ import Vouchers from "../page/admin/vouchers/Vouchers.jsx";
 import VoucherCreate from "../page/admin/vouchers/voucherCreate/VoucherCreate.jsx";
 import Category from "../page/admin/category/Category.jsx";
 import Tag from "../page/admin/tag/Tag.jsx";
-import ReviewsComments from "../page/admin/reviewsComments/ReviewsComments.jsx";
 import ViolationReports from "../page/admin/violationReports/ViolationReports.jsx";
 import TeacherLayout from "../layout/teacher/TeacherLayout.jsx";
 import OverviewPage from "../page/teacher/overview/OverviewPage.jsx";
@@ -62,6 +62,9 @@ const App = () => {
                     <Route path="users" element={<UserManagement/>}/>
                     <Route path="teachers" element={<InstructorManagement/>}/>
                     <Route path="courses" element={<Course/>}/>
+                    <Route path="courses/edit/:courseId" element={<CourseCreationPage/>}/>
+                    <Route path="course-approval" element={<CourseApprovalPage/>}/>
+                    <Route path="course-approval/:courseId" element={<CourseApprovalPage/>}/>
                     <Route path="revenue" element={<Revenue/>}/>
                     <Route path="revenue/top-rankings" element={<RevenueTopRankings/>}/>
                     <Route path="revenue/transactions" element={<RevenueTransactions/>}/>
@@ -70,7 +73,6 @@ const App = () => {
                     <Route path="vouchers/create" element={<VoucherCreate/>}/>
                     <Route path="categories" element={<Category/>}/>
                     <Route path="tags" element={<Tag/>}/>
-                    <Route path="reviews-comments" element={<ReviewsComments/>}/>
                     <Route path="violation-reports" element={<ViolationReports/>}/>
                 </Route>
 

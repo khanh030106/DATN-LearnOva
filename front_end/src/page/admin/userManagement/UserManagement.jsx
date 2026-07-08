@@ -55,6 +55,14 @@ const normalizeStatus = (user) => {
   return { label: "Active", tone: "active", filter: "active" };
 };
 
+const normalizeVisibility = (isDeleted) => {
+  if (isDeleted) {
+    return { label: "Hidden", tone: "deleted" };
+  }
+
+  return { label: "Active", tone: "visible" };
+};
+
 const getDisplayName = (user) =>
   user.fullName?.trim() || user.email?.split("@")[0] || "Unknown user";
 
@@ -63,6 +71,8 @@ const normalizeUser = (user) => {
   const status = normalizeStatus(user);
   const name = getDisplayName(user);
   const joinedAt = user.createdAt ?? user.joinedAt;
+  const isDeleted = Boolean(user.isDeleted);
+  const visibility = normalizeVisibility(isDeleted);
 
   return {
     id: user.id,
@@ -81,9 +91,11 @@ const normalizeUser = (user) => {
     status: status.label,
     statusTone: status.tone,
     statusFilter: status.filter,
+    visibility: visibility.label,
+    visibilityTone: visibility.tone,
     joinedAtRaw: joinedAt,
     joinedAt: formatDate(joinedAt),
-    isDeleted: Boolean(user.isDeleted),
+    isDeleted,
     updatedAtRaw: user.updatedAt,
     updatedAt: formatDate(user.updatedAt),
   };

@@ -5,22 +5,21 @@ export const getAdminCoursesApi = async (client = axiosClient) => {
   return response.data;
 };
 
-export const getAdminCourseByIdApi = async (id, client = axiosClient) => {
-  const response = await client.get(`/admin/courses-management/${id}`);
+/** Full detail with sections/lessons for view popups and approval pages. */
+export const getAdminCourseDetailApi = async (id, client = axiosClient) => {
+  const response = await client.get(`/admin/courses-management/${id}/detail`);
   return response.data;
 };
 
-export const createAdminCourseApi = async (payload, client = axiosClient) => {
-  const response = await client.post("/admin/courses-management/create", payload);
+/** Approve a DRAFT course and publish it. */
+export const approveAdminCourseApi = async (id, client = axiosClient) => {
+  const response = await client.patch(`/admin/courses-management/${id}/approve`);
   return response.data;
 };
 
-export const updateAdminCourseApi = async (id, payload, client = axiosClient) => {
-  const response = await client.put(`/admin/courses-management/update/${id}`, payload);
+/** Hide a DRAFT course by archiving it. */
+export const hideAdminCourseApi = async (id, client = axiosClient) => {
+  const response = await client.patch(`/admin/courses-management/${id}/hide`);
   return response.data;
 };
 
-export const deleteAdminCourseApi = async (id, client = axiosClient) => {
-  const response = await client.delete(`/admin/courses-management/delete/${id}`);
-  return response.data;
-};

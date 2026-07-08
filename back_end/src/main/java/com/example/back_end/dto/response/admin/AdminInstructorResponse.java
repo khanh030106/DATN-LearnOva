@@ -22,6 +22,7 @@ public record AdminInstructorResponse(
     Boolean isDeleted,
     Instant createdAt,
     Instant updatedAt,
+    String specialization,
     Long numberOfClasses,
     Long totalStudents,
     BigDecimal totalRevenue,

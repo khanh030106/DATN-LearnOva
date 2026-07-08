@@ -2,8 +2,8 @@ import axiosClient from "../AxiosClient.js";
 
 const ADMIN_USERS_PATH = "/admin/users";
 
-export const getAdminUsersApi = async () => {
-  const response = await axiosClient.get(ADMIN_USERS_PATH);
+export const getAdminUsersApi = async (client = axiosClient) => {
+  const response = await client.get(ADMIN_USERS_PATH);
   return response.data;
 };
 
