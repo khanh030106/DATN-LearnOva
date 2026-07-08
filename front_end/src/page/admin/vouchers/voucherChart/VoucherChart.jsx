@@ -55,7 +55,7 @@ const VoucherChart = ({ refreshKey }) => {
         if (mounted) {
           setFrequencyItems([]);
           setError(
-            err?.response?.data?.message || "Không tải được dữ liệu voucher."
+            err?.response?.data?.message || "Failed to load voucher data."
           );
         }
       } finally {
@@ -201,7 +201,7 @@ const VoucherChart = ({ refreshKey }) => {
       <div className="voucherChartCanvasWrapper">
         <canvas ref={canvasRef} aria-label="Voucher usage frequency chart" />
         {isLoading && (
-          <div className="voucherChartStatus">Đang tải dữ liệu...</div>
+          <div className="voucherChartStatus">Loading voucher data...</div>
         )}
         {!isLoading && error && (
           <div className="voucherChartStatus voucherChartStatusError">
@@ -210,7 +210,7 @@ const VoucherChart = ({ refreshKey }) => {
         )}
         {!isLoading && !error && frequencyItems.length === 0 && (
           <div className="voucherChartStatus">
-            Chưa có dữ liệu sử dụng voucher.
+            No voucher usage data available yet.
           </div>
         )}
       </div>

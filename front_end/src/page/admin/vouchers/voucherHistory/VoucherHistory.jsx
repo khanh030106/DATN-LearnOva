@@ -32,7 +32,7 @@ const VoucherHistory = ({ refreshKey }) => {
   const axiosPrivate = useAxiosPrivate();
   const [histories, setHistories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState({ page: 1, searchTerm: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -51,7 +51,7 @@ const VoucherHistory = ({ refreshKey }) => {
         if (mounted) {
           setError(
             err?.response?.data?.message ||
-              "Không tải được lịch sử sử dụng voucher."
+              "Failed to load voucher usage history."
           );
         }
       } finally {
@@ -92,9 +92,20 @@ const VoucherHistory = ({ refreshKey }) => {
     );
   }, [normalizedHistories, searchTerm]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm]);
+  const currentPage = pagination.searchTerm === searchTerm ? pagination.page : 1;
+  const setCurrentPage = (getNextPage) => {
+    setPagination((currentPagination) => {
+      const currentSearchPage =
+        currentPagination.searchTerm === searchTerm ? currentPagination.page : 1;
+      const nextPage =
+        typeof getNextPage === "function" ? getNextPage(currentSearchPage) : getNextPage;
+
+      return {
+        page: nextPage,
+        searchTerm,
+      };
+    });
+  };
 
   const totalPages = Math.max(1, Math.ceil(filteredHistories.length / pageSize));
   const currentPageItems = filteredHistories.slice(
@@ -151,7 +162,7 @@ const VoucherHistory = ({ refreshKey }) => {
               {isLoading ? (
                 <tr>
                   <td colSpan="7" className="voucherHistoryLoading">
-                    Đang tải dữ liệu...
+                    Loading voucher usage history...
                   </td>
                 </tr>
               ) : error ? (
@@ -163,7 +174,7 @@ const VoucherHistory = ({ refreshKey }) => {
               ) : currentPageItems.length === 0 ? (
                 <tr>
                   <td colSpan="7" className="voucherHistoryEmpty">
-                    Không có lịch sử sử dụng voucher phù hợp.
+                    No matching voucher usage history found.
                   </td>
                 </tr>
               ) : (

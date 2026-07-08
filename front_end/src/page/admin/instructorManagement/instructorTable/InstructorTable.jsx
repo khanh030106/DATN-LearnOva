@@ -1,9 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Eye } from "lucide-react";
-import {
-  getAdminInstructorByIdApi,
-  getAdminInstructorsApi,
-} from "../../../../api/admin/InstructorApi.js";
+import { getAdminInstructorByIdApi } from "../../../../api/admin/InstructorApi.js";
 import { getFileUrl } from "../../../../api/PublicCourseApi.js";
 import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 import ViewInstructorModal from "../viewInstructorModal/ViewInstructorModal.jsx";
@@ -47,41 +44,38 @@ const mapInstructor = (item) => ({
   isDeleted: item.isDeleted ?? false,
 });
 
-const InstructorTable = ({ searchTerm = "" }) => {
+const InstructorTable = ({
+  instructors = [],
+  searchTerm = "",
+  isLoading = false,
+  error = "",
+}) => {
   const axiosPrivate = useAxiosPrivate();
-  const [instructorsData, setInstructorsData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [pagination, setPagination] = useState({ page: 1, searchTerm: "" });
   const [selectedInstructor, setSelectedInstructor] = useState(null);
   const [isViewLoading, setIsViewLoading] = useState(false);
   const [viewError, setViewError] = useState("");
-  const [error, setError] = useState("");
   const pageSize = 10;
 
-  useEffect(() => {
-    let mounted = true;
-    const load = async () => {
-      setIsLoading(true);
-      try {
-        const data = await getAdminInstructorsApi(axiosPrivate);
-        if (!mounted) return;
-        setInstructorsData(Array.isArray(data) ? data.map(mapInstructor) : []);
-      } catch (e) {
-        console.error(e);
-        setError("Could not load instructors.");
-      } finally {
-        if (mounted) setIsLoading(false);
-      }
-    };
-    load();
-    return () => {
-      mounted = false;
-    };
-  }, [axiosPrivate]);
+  const instructorsData = useMemo(
+    () => instructors.map(mapInstructor),
+    [instructors],
+  );
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm]);
+  const currentPage = pagination.searchTerm === searchTerm ? pagination.page : 1;
+  const setCurrentPage = (getNextPage) => {
+    setPagination((currentPagination) => {
+      const currentSearchPage =
+        currentPagination.searchTerm === searchTerm ? currentPagination.page : 1;
+      const nextPage =
+        typeof getNextPage === "function" ? getNextPage(currentSearchPage) : getNextPage;
+
+      return {
+        page: nextPage,
+        searchTerm,
+      };
+    });
+  };
 
   const filteredInstructors = useMemo(() => {
     const keyword = searchTerm.trim().toLowerCase();

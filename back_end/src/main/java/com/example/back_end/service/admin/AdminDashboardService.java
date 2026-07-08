@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.LinkedHashMap;
@@ -21,7 +20,8 @@ import java.util.Map;
 public class AdminDashboardService {
 
     private static final List<String> MONTH_LABELS = List.of(
-            "May", "June", "July", "August", "September", "October"
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
     );
 
     private final AdminUserRepository adminUserRepository;
@@ -51,17 +51,15 @@ public class AdminDashboardService {
     }
 
     private List<AdminDashboardResponse.GrowthPoint> getGrowthSeries(int year) {
-        Instant startAt = LocalDate.of(year, 5, 1).atStartOfDay().toInstant(ZoneOffset.UTC);
-        Instant endAt = LocalDate.of(year, 11, 1).atStartOfDay().toInstant(ZoneOffset.UTC);
         Map<Integer, Long> totalsByMonth = new LinkedHashMap<>();
 
-        for (Object[] row : adminUserRepository.countActiveUsersByMonth(startAt, endAt)) {
+        for (Object[] row : adminUserRepository.countActiveUsersByMonth(year)) {
             totalsByMonth.put(toInt(row[0]), toLong(row[1]));
         }
 
         return MONTH_LABELS.stream()
                 .map(month -> {
-                    int monthNumber = MONTH_LABELS.indexOf(month) + 5;
+                    int monthNumber = MONTH_LABELS.indexOf(month) + 1;
                     return new AdminDashboardResponse.GrowthPoint(
                             month,
                             totalsByMonth.getOrDefault(monthNumber, 0L)

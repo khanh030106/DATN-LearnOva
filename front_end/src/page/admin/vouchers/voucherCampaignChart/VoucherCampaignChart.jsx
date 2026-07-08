@@ -1,40 +1,102 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
+import { getAdminVoucherUsageHistoriesApi } from "../../../../api/admin/VoucherApi.js";
+import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 import "./VoucherCampaignChart.css";
 
-const campaignData = [
-  {
-    code: "WELCOME2026",
-    used: 812,
-    revenue: 97440,
-    label: "WELCOME2026",
-  },
-  {
-    code: "LEARNOVA50",
-    used: 234,
-    revenue: 42120,
-    label: "LEARNOVA50",
-  },
-  {
-    code: "WEBDEV30",
-    used: 142,
-    revenue: 18460,
-    label: "WEBDEV30",
-  },
-  {
-    code: "FIX500FF",
-    used: 89,
-    revenue: 17800,
-    label: "FIX500FF",
-  },
-];
+/**
+ * Transforms raw usage history into campaign stats
+ * Groups by voucher code and aggregates usage count and revenue
+ * @param {Array} histories - Raw history records from API
+ * @returns {Array} Aggregated campaign stats sorted by usage
+ */
+const aggregateCampaignStats = (histories = []) => {
+  const campaignMap = new Map();
 
-const VoucherCampaignChart = () => {
+  histories.forEach((record) => {
+    const code = record.appliedCode || "Unknown";
+    if (!campaignMap.has(code)) {
+      campaignMap.set(code, {
+        code,
+        usedCount: 0,
+        revenue: 0,
+      });
+    }
+
+    const stats = campaignMap.get(code);
+    stats.usedCount += 1;
+    stats.revenue += Number(record.discount || 0);
+  });
+
+  // Convert to array, sort by usage (highest first), take top 4
+  return Array.from(campaignMap.values())
+    .sort((a, b) => b.usedCount - a.usedCount)
+    .slice(0, 4);
+};
+
+/**
+ * Maps campaign stats to chart data format
+ * @param {Object} item - Campaign stats item
+ * @returns {Object} Chart-ready data
+ */
+const mapCampaignFromStats = (item) => ({
+  code: item.code || "Unknown",
+  used: Number(item.usedCount || 0),
+  revenue: Number(item.revenue || 0),
+  label: item.code || "Unknown",
+});
+
+const VoucherCampaignChart = ({ refreshKey }) => {
+  const axiosPrivate = useAxiosPrivate();
   const canvasRef = useRef(null);
+  const chartRef = useRef(null);
+  const [campaignData, setCampaignData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
+  // Fetch and aggregate campaign data from API
   useEffect(() => {
-    if (!canvasRef.current) {
+    let mounted = true;
+
+    const fetchCampaignData = async () => {
+      try {
+        setIsLoading(true);
+        setError("");
+        const histories = await getAdminVoucherUsageHistoriesApi(axiosPrivate);
+
+        if (mounted) {
+          const aggregated = aggregateCampaignStats(histories);
+          const mapped = aggregated.map(mapCampaignFromStats);
+          setCampaignData(mapped);
+        }
+      } catch (err) {
+        if (mounted) {
+          setCampaignData([]);
+          setError(
+            err?.response?.data?.message || "Failed to load campaign data."
+          );
+        }
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    };
+
+    fetchCampaignData();
+
+    return () => {
+      mounted = false;
+    };
+  }, [axiosPrivate, refreshKey]);
+
+  // Create chart
+  useEffect(() => {
+    if (!canvasRef.current || campaignData.length === 0) {
       return undefined;
+    }
+
+    // Destroy previous chart if exists
+    if (chartRef.current) {
+      chartRef.current.destroy();
     }
 
     const labels = campaignData.map((item) => item.label);
@@ -88,7 +150,7 @@ const VoucherCampaignChart = () => {
                 const item = campaignData[context.dataIndex];
                 return [
                   `Used: ${item.used} times`,
-                  `Revenue: $${item.revenue.toLocaleString("vi-VN")}`,
+                  `Revenue: $${item.revenue.toLocaleString("en-US")}`,
                 ];
               },
             },
@@ -121,14 +183,18 @@ const VoucherCampaignChart = () => {
       },
     });
 
+    chartRef.current = chart;
+
     return () => {
-      chart.destroy();
+      if (chartRef.current) {
+        chartRef.current.destroy();
+      }
     };
-  }, []);
+  }, [campaignData]);
 
   const totalRevenue = campaignData.reduce(
     (sum, item) => sum + item.revenue,
-    0,
+    0
   );
 
   return (
@@ -147,11 +213,26 @@ const VoucherCampaignChart = () => {
 
       <div className="voucherCampaignChartCanvasWrapper">
         <canvas ref={canvasRef} aria-label="Voucher campaign chart" />
+        {isLoading && (
+          <div className="voucherCampaignChartStatus">
+            Loading campaign data...
+          </div>
+        )}
+        {!isLoading && error && (
+          <div className="voucherCampaignChartStatus voucherCampaignChartStatusError">
+            {error}
+          </div>
+        )}
+        {!isLoading && !error && campaignData.length === 0 && (
+          <div className="voucherCampaignChartStatus">
+            No campaign data available yet.
+          </div>
+        )}
       </div>
 
       <div className="voucherCampaignChartSummary">
         <span>Accumulated discount:</span>
-        <strong>${totalRevenue.toLocaleString("vi-VN")} USD</strong>
+        <strong>${totalRevenue.toLocaleString("en-US")} USD</strong>
       </div>
     </section>
   );

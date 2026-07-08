@@ -3,7 +3,20 @@ import Chart from "chart.js/auto";
 import AdminHoverSelect from "../../shared/AdminHoverSelect";
 import "./GrowthChart.css";
 
-const monthLabels = ["May", "June", "July", "August", "September", "October"];
+const monthLabels = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 const GrowthChart = ({ series = [], yearOptions = [], selectedYear, onYearChange }) => {
   const canvasRef = useRef(null);

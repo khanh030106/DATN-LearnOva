@@ -188,6 +188,11 @@
   color: var(--blue-strong);
 }
 
+.voucherBadge.expiring {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
 /* ===== ACTIONS (ICONS) ===== */
 .voucherActions {
   display: flex;

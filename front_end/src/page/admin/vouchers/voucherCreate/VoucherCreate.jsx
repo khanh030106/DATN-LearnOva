@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { X } from "lucide-react";
+import { toast } from "react-toastify";
 import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 import { useAuth } from "../../../../hook/UseAuth.jsx";
 import {
@@ -40,18 +41,32 @@ const formatDiscountPreview = (discountType, value) =>
     ? `${Number(value || 0)}%`
     : formatCurrency(value);
 
+const maxVoucherMoneyValue = 99999999.99;
+
 const getPayload = (form, currentUser, voucher) => ({
   code: form.code.trim(),
   description: form.description.trim(),
   discountType: form.discountType,
   discountValue: Number(form.discountValue || 0),
   minimumOrder: 0,
-  maximumDiscountAmount: form.discountType === "Percent" ? 999999999 : 0,
+  maximumDiscountAmount: form.discountType === "Percent" ? maxVoucherMoneyValue : 0,
   usageLimit: Number(form.usageLimit || 0),
   startDate: form.startDate ? `${form.startDate}T00:00:00Z` : "",
   endDate: form.endDate ? `${form.endDate}T23:59:59Z` : "",
   isActive: Boolean(form.isActive),
   createdById: currentUser?.id ?? voucher?.createdById ?? 0,
+});
+
+const getInitialForm = (voucher) => ({
+  code: voucher?.code || "",
+  description: voucher?.description || "",
+  discountType: voucher?.discountType || "Fixed",
+  discountValue:
+    voucher?.discountValue != null ? String(voucher.discountValue) : "",
+  usageLimit: voucher?.usageLimit != null ? String(voucher.usageLimit) : "",
+  startDate: toDateInputValue(voucher?.startDate),
+  endDate: toDateInputValue(voucher?.endDate),
+  isActive: voucher?.isActive !== false,
 });
 
 const VoucherCreate = ({
@@ -63,37 +78,12 @@ const VoucherCreate = ({
 }) => {
   const axiosPrivate = useAxiosPrivate();
   const { currentUser } = useAuth();
-  const [form, setForm] = useState({
-    code: "",
-    description: "",
-    discountType: "Fixed",
-    discountValue: "",
-    usageLimit: "",
-    startDate: "",
-    endDate: "",
-    isActive: true,
-  });
+  const [form, setForm] = useState(() => getInitialForm(voucher));
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
 
   const isView = mode === "view";
   const isEdit = mode === "edit";
-
-  useEffect(() => {
-    if (!voucher) return;
-
-    setForm({
-      code: voucher.code || "",
-      description: voucher.description || "",
-      discountType: voucher.discountType || "Fixed",
-      discountValue:
-        voucher.discountValue != null ? String(voucher.discountValue) : "",
-      usageLimit: voucher.usageLimit != null ? String(voucher.usageLimit) : "",
-      startDate: toDateInputValue(voucher.startDate),
-      endDate: toDateInputValue(voucher.endDate),
-      isActive: voucher.isActive !== false,
-    });
-  }, [voucher]);
 
   const handleChange = (field) => (event) => {
     const value =
@@ -113,23 +103,38 @@ const VoucherCreate = ({
     event.preventDefault();
     if (isView) return;
 
-    if (!currentUser?.id) {
-      setError("Không xác định được người dùng. Vui lòng đăng nhập lại.");
+    if (!currentUser?.id && !voucher?.createdById) {
+      setError("Failed to identify user. Please login again.");
       return;
     }
 
     if (!form.code.trim() || !form.description.trim()) {
-      setError("Code và description không được để trống.");
+      setError("Code and description are required.");
       return;
     }
 
     if (Number(form.discountValue || 0) <= 0) {
-      setError("Giá trị giảm phải lớn hơn 0.");
+      setError("Discount value must be greater than 0.");
       return;
     }
 
     if (form.discountType === "Percent" && Number(form.discountValue) > 100) {
-      setError("Phần trăm giảm không được lớn hơn 100.");
+      setError("Discount percentage cannot exceed 100.");
+      return;
+    }
+
+    if (form.discountType === "Fixed" && Number(form.discountValue) > maxVoucherMoneyValue) {
+      setError("Discount amount cannot exceed 99,999,999.99 VND.");
+      return;
+    }
+
+    if (Number(form.usageLimit || 0) < 0) {
+      setError("Usage limit cannot be negative.");
+      return;
+    }
+
+    if (form.startDate && form.endDate && form.endDate < form.startDate) {
+      setError("End date must be greater than or equal to start date.");
       return;
     }
 
@@ -141,15 +146,17 @@ const VoucherCreate = ({
 
       if (mode === "create") {
         await createAdminVoucherApi(payload, axiosPrivate);
+        toast.success("Voucher created successfully.");
       } else {
         await updateAdminVoucherApi(voucher.id, payload, axiosPrivate);
+        toast.success("Voucher updated successfully.");
       }
 
       onSaved?.();
     } catch (err) {
       console.error(err);
       setError(
-        err?.response?.data?.message || "Lưu voucher thất bại. Vui lòng thử lại."
+        err?.response?.data?.message || "Failed to save voucher. Please try again."
       );
     } finally {
       setIsSaving(false);
@@ -174,10 +181,10 @@ const VoucherCreate = ({
           </div>
           <p className="voucherCreateSubtitle">
             {isView
-              ? "Xem thông tin voucher. Nhấn Edit để sửa."
+              ? "View voucher information. Click Edit to modify."
               : isEdit
-              ? "Sửa chi tiết voucher."
-              : "Nhập thông tin để tạo voucher mới."}
+              ? "Modify voucher details."
+              : "Enter information to create a new voucher."}
           </p>
         </div>
         {onClose && (

@@ -44,7 +44,7 @@ const Vouchers = () => {
           <VoucherChart refreshKey={refreshKey} />
         </div>
         <div className="voucherChartColumn">
-          <VoucherCampaignChart />
+          <VoucherCampaignChart refreshKey={refreshKey} />
         </div>
       </div>
 

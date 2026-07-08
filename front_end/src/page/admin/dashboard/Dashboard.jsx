@@ -12,7 +12,20 @@ import UserRow from "./userRow/UserRow";
 import TeacherRow from "./teacherRow/TeacherRow";
 import ActivityRow from "./activityRow/ActivityRow";
 
-const monthLabels = ["May", "June", "July", "August", "September", "October"];
+const monthLabels = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 const currentYear = new Date().getFullYear();
 
@@ -37,7 +50,7 @@ const emptyDashboardData = {
 
 const toArray = (value) => (Array.isArray(value) ? value : []);
 
-const isActiveRecord = (item) => !Boolean(item?.isDeleted);
+const isActiveRecord = (item) => !item?.isDeleted;
 
 const formatNumber = (value) => new Intl.NumberFormat("en-US").format(Number(value || 0));
 
@@ -214,9 +227,9 @@ const mapUserGrowthFromDb = (users, year) => {
   toArray(users).forEach((user) => {
     const createdAt = new Date(user.createdAt || 0);
     if (Number.isNaN(createdAt.getTime())) return;
-    if (createdAt.getFullYear() !== year) return;
+    if (createdAt.getUTCFullYear() !== year) return;
 
-    const month = monthLabels[createdAt.getMonth() - 4];
+    const month = monthLabels[createdAt.getUTCMonth()];
     if (!month) return;
 
     monthlyCounts.set(month, monthlyCounts.get(month) + 1);

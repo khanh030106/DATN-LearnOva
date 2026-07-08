@@ -1,5 +1,6 @@
 import { FiEye, FiEdit, FiTrash2 } from "react-icons/fi";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 import AdminHoverSelect from "../../shared/AdminHoverSelect";
 import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 import {
@@ -10,6 +11,7 @@ import "./VoucherTable.css";
 
 const statusOptions = ["All statuses", "Active", "Inactive", "Expiring Soon"];
 const pageSize = 5;
+const expiringSoonDays = 7;
 
 const formatDate = (value) => {
   if (!value) return "";
@@ -35,13 +37,18 @@ const VoucherTable = ({
   onCreateVoucher,
   onViewVoucher,
   onEditVoucher,
+  onVoucherDeleted,
   refreshKey,
 }) => {
   const axiosPrivate = useAxiosPrivate();
   const [vouchers, setVouchers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(statusOptions[0]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    searchTerm: "",
+    selectedStatus: statusOptions[0],
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -59,7 +66,7 @@ const VoucherTable = ({
       } catch (err) {
         if (mounted) {
           setError(
-            err?.response?.data?.message || "Không tải được danh sách voucher."
+            err?.response?.data?.message || "Failed to load voucher list."
           );
         }
       } finally {
@@ -76,13 +83,28 @@ const VoucherTable = ({
   const normalizedVouchers = useMemo(
     () =>
       vouchers.map((item) => {
-        const isExpired = item.endDate && new Date(item.endDate) < new Date();
+        const now = new Date();
+        const endDate = item.endDate ? new Date(item.endDate) : null;
+        const isExpired = endDate && endDate < now;
+        const expiresInMs = endDate ? endDate.getTime() - now.getTime() : Infinity;
+        const isExpiringSoon =
+          Boolean(endDate) &&
+          !isExpired &&
+          expiresInMs <= expiringSoonDays * 24 * 60 * 60 * 1000;
         const usageLimit = Number(item.usageLimit || 0);
         const usedCount = Number(item.usedCount || 0);
-        const isUsageLimitReached = usageLimit <= 0 || usedCount >= usageLimit;
+        const isUsageLimitReached = usageLimit > 0 && usedCount >= usageLimit;
         const isActive = Boolean(item.isActive) && !isExpired && !isUsageLimitReached;
-        const status = isActive ? "Active" : "Inactive";
-        const statusClass = isActive ? "active" : "expired";
+        const status = isActive
+          ? isExpiringSoon
+            ? "Expiring Soon"
+            : "Active"
+          : "Inactive";
+        const statusClass = isActive
+          ? isExpiringSoon
+            ? "expiring"
+            : "active"
+          : "expired";
 
         return {
           id: item.id,
@@ -114,9 +136,28 @@ const VoucherTable = ({
     });
   }, [normalizedVouchers, searchTerm, selectedStatus]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, selectedStatus]);
+  const currentPage =
+    pagination.searchTerm === searchTerm && pagination.selectedStatus === selectedStatus
+      ? pagination.page
+      : 1;
+
+  const setCurrentPage = (getNextPage) => {
+    setPagination((currentPagination) => {
+      const currentSearchPage =
+        currentPagination.searchTerm === searchTerm &&
+        currentPagination.selectedStatus === selectedStatus
+          ? currentPagination.page
+          : 1;
+      const nextPage =
+        typeof getNextPage === "function" ? getNextPage(currentSearchPage) : getNextPage;
+
+      return {
+        page: nextPage,
+        searchTerm,
+        selectedStatus,
+      };
+    });
+  };
 
   const totalPages = Math.max(1, Math.ceil(filteredVouchers.length / pageSize));
   const currentPageItems = filteredVouchers.slice(
@@ -125,17 +166,15 @@ const VoucherTable = ({
   );
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Bạn có chắc muốn xóa voucher này không?")) return;
+    if (!window.confirm("Are you sure you want to delete this voucher?")) return;
     try {
-      const deletedVoucher = await deleteAdminVoucherApi(id, axiosPrivate);
-      setVouchers((current) =>
-        current.map((voucher) =>
-          voucher.id === id ? { ...voucher, ...deletedVoucher, isActive: false } : voucher,
-        ),
-      );
+      await deleteAdminVoucherApi(id, axiosPrivate);
+      setVouchers((current) => current.filter((voucher) => voucher.id !== id));
+      onVoucherDeleted?.();
+      toast.success("Voucher deleted successfully.");
     } catch (err) {
       console.error(err);
-      alert("Xóa voucher thất bại.");
+      toast.error(err?.response?.data?.message || "Failed to delete voucher.");
     }
   };
 
@@ -195,7 +234,7 @@ const VoucherTable = ({
               {isLoading ? (
                 <tr>
                   <td colSpan="7" className="voucherTableLoading">
-                    Đang tải dữ liệu...
+                    Loading vouchers...
                   </td>
                 </tr>
               ) : error ? (
@@ -207,7 +246,7 @@ const VoucherTable = ({
               ) : currentPageItems.length === 0 ? (
                 <tr>
                   <td colSpan="7" className="voucherTableEmpty">
-                    Không có voucher phù hợp.
+                    No matching vouchers found.
                   </td>
                 </tr>
               ) : (
@@ -227,21 +266,24 @@ const VoucherTable = ({
                       <div className="voucherActions">
                         <button
                           className="voucherActionBtn"
-                          title="Xem"
+                          title="View"
+                          aria-label={`View voucher ${v.code}`}
                           onClick={() => onViewVoucher?.(v.raw)}
                         >
                           <FiEye size={16} />
                         </button>
                         <button
                           className="voucherActionBtn"
-                          title="Sửa"
+                          title="Edit"
+                          aria-label={`Edit voucher ${v.code}`}
                           onClick={() => onEditVoucher?.(v.raw)}
                         >
                           <FiEdit size={16} />
                         </button>
                         <button
                           className="voucherActionBtn"
-                          title="Xóa"
+                          title="Delete"
+                          aria-label={`Delete voucher ${v.code}`}
                           onClick={() => handleDelete(v.id)}
                         >
                           <FiTrash2 size={16} />

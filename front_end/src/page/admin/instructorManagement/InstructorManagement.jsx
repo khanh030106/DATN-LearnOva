@@ -1,11 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getAdminInstructorsApi } from "../../../api/admin/InstructorApi.js";
+import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";
 import InstructorStatistics from "./statistics/InstructorStatistics";
 import InstructorFilters from "./filters/InstructorFilters";
 import InstructorTable from "./instructorTable/InstructorTable";
 import "./InstructorManagement.css";
 
 const InstructorManagement = () => {
+  const axiosPrivate = useAxiosPrivate();
+  const [instructors, setInstructors] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadInstructors = async () => {
+      setIsLoading(true);
+      setError("");
+
+      try {
+        const data = await getAdminInstructorsApi(axiosPrivate);
+        if (mounted) {
+          setInstructors(Array.isArray(data) ? data : []);
+        }
+      } catch (loadError) {
+        console.error(loadError);
+        if (mounted) {
+          setError("Could not load instructors.");
+        }
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadInstructors();
+
+    return () => {
+      mounted = false;
+    };
+  }, [axiosPrivate]);
 
   return (
     <section
@@ -13,12 +50,21 @@ const InstructorManagement = () => {
       aria-label="Instructor management"
     >
       <div className="instructorManagementContent">
-        <InstructorStatistics />
+        <InstructorStatistics
+          instructors={instructors}
+          isLoading={isLoading}
+          error={error}
+        />
         <InstructorFilters
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
         />
-        <InstructorTable searchTerm={searchTerm} />
+        <InstructorTable
+          instructors={instructors}
+          searchTerm={searchTerm}
+          isLoading={isLoading}
+          error={error}
+        />
       </div>
     </section>
   );
