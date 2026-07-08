@@ -17,6 +17,8 @@ import ProfileFormSection from "./sections/ProfileFormSection";
 import { getMyEnrolledCoursesApi } from "../../../../api/EnrollmentApi.js";
 import { useAuth } from "../../../../hook/UseAuth.jsx";
 import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
+import { getUserProfileApi,updateUserProfileApi,uploadAvatarApi } from "../../../../api/UserApi.js";
+import { toast } from "react-toastify";
 
 const readStorage = (key, fallback) => {
   const saved = localStorage.getItem(key);
@@ -29,14 +31,17 @@ const readStorage = (key, fallback) => {
   }
 };
 
+
+
 const ProfileView = ({
   purchasedCourses = [],
   onStartCourse,
   onBack,
   initialTab = "profile",
 }) => {
+  const [errors, setErrors] = useState({});
   const axiosPrivate = useAxiosPrivate();
-  const { accessToken, loading: authLoading } = useAuth();
+  // const { accessToken, loading: authLoading } = useAuth();
   const activeTab = initialTab;
   const [ownedCourses, setOwnedCourses] = useState(purchasedCourses);
   const [isLoadingCourses, setIsLoadingCourses] = useState(initialTab === "courses");
@@ -47,6 +52,7 @@ const ProfileView = ({
   const [activities, setActivities] = useState(() =>
     readStorage("learnova_user_activities", DEFAULT_ACTIVITIES),
   );
+
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [customAvatarUrl, setCustomAvatarUrl] = useState("");
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -54,10 +60,63 @@ const ProfileView = ({
   const [selectedCourse, setSelectedCourse] = useState(null);
   const hasMountedRef = useRef(false);
 
+  const validateProfile = () => {
+    const newErrors = {};
+
+    if (!profileData.fullName?.trim()) {
+      newErrors.fullName = "Full name is required";
+    }
+
+    if (!profileData.phone?.trim()) {
+      newErrors.phone = "Phone is required";
+    } else if (!/^\d{9,11}$/.test(profileData.phone)) {
+      newErrors.phone = "Phone must be 9-11 digits";
+    }
+
+    if (!profileData.dateOfBirth) {
+      newErrors.dateOfBirth = "Date of birth is required";
+    }
+
+    if (!profileData.gender) {
+      newErrors.gender = "Gender is required";
+    }
+
+    return newErrors;
+  };
+  const {
+    accessToken,
+    loading: authLoading,
+    setCurrentUser,
+  } = useAuth();
+
   const achievements = useMemo(
     () => buildAchievements(profileData, ownedCourses),
     [profileData, ownedCourses],
   );
+  useEffect(() => {
+    if (authLoading) return;
+
+    const fetchProfile = async () => {
+      try {
+        const data = await getUserProfileApi();
+
+        setProfileData({
+          fullName: data.fullName || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          avatar: data.avatar || "",
+          coverImage: data.coverImage || "",
+          dateOfBirth: data.dateOfBirth || "",
+          gender: data.gender || "",
+          status: data.status || "",
+        });
+      } catch (error) {
+        console.error("Failed to load profile", error);
+      }
+    };
+
+    fetchProfile();
+  }, [authLoading]);
 
   useEffect(() => {
     if (activeTab !== "courses" && activeTab !== "favorites") return undefined;
@@ -68,11 +127,14 @@ const ProfileView = ({
     setCoursesError("");
 
     getMyEnrolledCoursesApi(axiosPrivate, accessToken)
-      .then((data) => {
-        if (mounted) {
-          setOwnedCourses(Array.isArray(data) ? data.map(mapEnrolledCourse) : []);
-        }
-      })
+        .then((data) => {
+          console.log("API:", data);
+          console.log("First course:", JSON.stringify(data[0], null, 2));
+
+          if (mounted) {
+            setOwnedCourses(Array.isArray(data) ? data.map(mapEnrolledCourse) : []);
+          }
+        })
       .catch((err) => {
         if (mounted) {
           setOwnedCourses([]);
@@ -115,26 +177,65 @@ const ProfileView = ({
   const handleInputChange = (field, value) => {
     setProfileData((current) => ({ ...current, [field]: value }));
   };
-
-  const handleSaveProfile = (event) => {
+  const handleSaveProfile = async (event) => {
     event.preventDefault();
-    localStorage.setItem("learnova_user_profile", JSON.stringify(profileData));
 
-    const nextActivity = {
-      id: Date.now(),
-      type: "system",
-      text: "Updated personal account settings",
-      date: "Just now",
-    };
-    const nextActivities = [nextActivity, ...activities];
-    setActivities(nextActivities);
-    localStorage.setItem(
-      "learnova_user_activities",
-      JSON.stringify(nextActivities),
-    );
+    const validationErrors = validateProfile();
 
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setErrors({});
+
+    try {
+      const response = await updateUserProfileApi({
+        fullName: profileData.fullName,
+        phone: profileData.phone,
+        dateOfBirth: profileData.dateOfBirth,
+        gender: profileData.gender,
+        avatar: profileData.avatar,
+      });
+
+      setProfileData((prev) => ({
+        ...prev,
+        ...response,
+      }));
+
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Update failed!");
+    }
+  };
+
+  const handleAvatarChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await uploadAvatarApi(formData);
+
+      const avatar = res.avatar || res.url || res;
+
+
+      setProfileData((prev) => ({
+        ...prev,
+        avatar,
+      }));
+
+      setCurrentUser((prev) => ({
+        ...prev,
+        avatar,
+      }));
+
+      toast.success("Avatar updated!");
+    } catch (err) {
+      toast.error("Upload failed!");
+    }
   };
 
   const handleSelectAvatar = (url) => {
@@ -149,6 +250,7 @@ const ProfileView = ({
     handleSelectAvatar(customAvatarUrl.trim());
     setCustomAvatarUrl("");
   };
+
 
   const handleAddCustomActivity = (event) => {
     event.preventDefault();
@@ -201,6 +303,7 @@ const ProfileView = ({
           />
         );
       }
+
 
       return (
         <CoursesSection
@@ -259,13 +362,14 @@ const ProfileView = ({
     }
 
     return (
-      <ProfileFormSection
-        profileData={profileData}
-        saveSuccess={saveSuccess}
-        onInputChange={handleInputChange}
-        onSaveProfile={handleSaveProfile}
-        onOpenAvatarModal={() => setShowAvatarModal(true)}
-      />
+        <ProfileFormSection
+            profileData={profileData}
+            saveSuccess={saveSuccess}
+            onInputChange={handleInputChange}
+            onSaveProfile={handleSaveProfile}
+            onAvatarChange={handleAvatarChange}
+            errors={errors}
+        />
     );
   };
 
@@ -301,18 +405,28 @@ const mapEnrolledCourse = (course) => ({
   courseId: course.courseId,
   title: course.title,
   description: course.description,
-  instructor: course.instructorName || "LearnOva Instructor",
+
+  instructor: {
+    name: course.instructorName || "LearnOva Instructor",
+    avatar: course.instructorAvatar || "",
+  },
+
   level: course.level || "All levels",
-  image:
-    course.thumbnailKey && String(course.thumbnailKey).startsWith("http")
-      ? course.thumbnailKey
-      : "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
-  progress: Number(course.progressPercent || 0),
-  lessonsDone: 0,
-  lessonsTotal: 0,
-  remaining: formatRemaining(Number(course.progressPercent || 0)),
-  rating: 4.8,
-  reviews: "0",
+
+  image: course.thumbnailKey || "",
+
+  progress: Number(course.progressPercent ?? 0),
+
+  lessonsDone: Number(course.completedLessons ?? 0),
+  lessonsTotal: Number(course.totalLessons ?? 0),
+
+  remaining: formatRemaining(Number(course.progressPercent ?? 0)),
+
+  rating: Number(course.averageRating ?? 0).toFixed(1),
+
+  reviews: Number(course.reviewCount ?? 0),
+  students: Number(course.studentCount ?? 0),
+
   enrolledAt: course.enrolledAt,
   completedAt: course.completedAt,
 });

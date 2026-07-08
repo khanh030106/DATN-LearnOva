@@ -1036,7 +1036,7 @@ hr {
 .qa-ask-btn {
     background: #2563eb;
     color: white;
-    margin-left: 840px;
+    margin-left: 950px;
 }
 
 .qa-instructor-btn {
@@ -1656,6 +1656,7 @@ hr {
     display:flex;
     gap:8px;
     align-items:center;
+    margin-left: 860px;
 }
 .review-filter :focus {
     outline: none;
@@ -1686,7 +1687,7 @@ hr {
     width:48px;
     height:48px;
     border-radius:50%;
-    background:#111827; color:#fff;
+    background: #2360e4; color:#fff;
     display:flex; align-items:center;
     justify-content:center;
     font-weight:700;
@@ -2972,4 +2973,229 @@ color: #4b73e8;
 .qa-reset-btn:hover {
     background: #1d4ed8;
     transform: translateY(-1px);
+}
+.review-action{
+    margin:20px 0;
+    display:flex;
+    justify-content:flex-end;
+}
+
+.write-review-btn{
+    background:#2563eb;
+    color:#fff;
+    border:none;
+    padding:10px 22px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.review-modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.review-modal{
+    width:520px;
+    background:#fff;
+    border-radius:14px;
+    padding:25px;
+}
+
+.review-modal textarea{
+    width:100%;
+    height:130px;
+    margin-top:18px;
+    resize:none;
+    padding:12px;
+}
+
+.review-stars-select{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.star-rate{
+    font-size:40px;
+    color:#ccc;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.star-rate.active{
+    color:#f59e0b;
+}
+
+.modal-actions{
+    margin-top:20px;
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+}
+
+.cancel-btn{
+    padding:10px 18px;
+}
+
+.submit-btn{
+    background:#2563eb;
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+}
+
+/* ================= PROGRESS TRACKING & REVIEWS ================= */
+.curriculum-progress-box {
+    padding: 16px 20px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.curriculum-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.curriculum-progress-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.curriculum-progress-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6366f1;
+}
+
+.curriculum-progress-bar-track {
+    width: 100%;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.curriculum-progress-bar-fill {
+    height: 100%;
+    background: #4a8fea;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+
+.btn-review-trigger {
+    margin-top: 12px;
+    width: 100%;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(217, 119, 6, 0.25);
+    transition: all 0.2s ease;
+}
+
+.btn-review-trigger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(217, 119, 6, 0.35);
+}
+
+.lesson-icon.completed {
+    color: #10b981;
+    font-size: 16px;
+}
+
+.reviewed-badge {
+    margin-top: 12px;
+    width: 100%;
+    padding: 8px 14px;
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+}
+.generate-quiz {
+    background: linear-gradient(135deg, #1e90ff, #00c6ff);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0, 150, 255, 0.25);
+    width: 200px;
+    margin-left: 500px;
+    margin-bottom: 50px;
+
+    white-space: nowrap;
+}
+
+
+
+.generate-quiz:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 150, 255, 0.35);
+}
+
+.generate-quiz:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0, 150, 255, 0.2);
+}
+
+.generate-quiz:disabled {
+    background: #a0cfff;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.button-quiz {
+    background: linear-gradient(135deg, #1e90ff, #00c6ff);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0, 150, 255, 0.25);
+
+    width: 120px;
+    white-space: nowrap;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 500px;
+    margin-bottom: 50px;
+}
+
+.button-quiz:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 150, 255, 0.35);
+}
+
+.button-quiz:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0, 150, 255, 0.2);
 }

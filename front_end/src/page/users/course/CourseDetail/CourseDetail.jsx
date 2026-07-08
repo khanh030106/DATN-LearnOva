@@ -1,19 +1,22 @@
 import "./CourseDetail.css";
-import { FaClipboardCheck, FaPlay, FaPlayCircle, FaClock } from "react-icons/fa";
+import { FaClipboardCheck, FaPlay, FaPlayCircle, FaClock, FaCheckCircle, FaStar } from "react-icons/fa";
 import { ChevronDown } from "lucide-react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "../../../../component/footer/footer.jsx";
 import CourseVideoPlayer from "./VideoPlayer.jsx";
 import OverviewTab from "./OverviewTab.jsx";
+import SummaryTab from "./summayTab.jsx";
 import QATab from "./QATab.jsx";
 import ReviewsTab from "./Review.jsx";
-import LearnovaAI from "../../../home/chat-bot/chatBot.jsx";
+import chatbot from "../../../home/chat-bot/chatBot.jsx";
 import QuizPage from "./QuizPage.jsx";
 import Header from "../../../../component/header/user_header/Header.jsx";
-import { getCourseReviewsApi, deleteReviewApi, getRatingSummaryApi } from "../../../../api/ReviewApi.js";
+import ReviewModal from "./ReviewModal.jsx";
+import { getCourseReviewsApi, deleteReviewApi, getRatingSummaryApi, createReviewApi } from "../../../../api/ReviewApi.js";
 import { getCourseDetail, getFileUrl } from "../../../../api/PublicCourseApi.js";
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import { getCourseProgressApi, updateLessonProgressApi } from "../../../../api/ProgressApi.js";
+import React, { useState, useEffect, useContext, useCallback, useRef } from "react";
 import { AuthContext } from "../../../../context/AuthContext";
 import { useParams } from "react-router-dom";
 
@@ -29,6 +32,7 @@ const formatDuration = (totalSeconds) => {
 function CourseDetail() {
     const { courseId } = useParams();
     const reviewsPerPage = 3;
+    const [reviewsLoaded, setReviewsLoaded] = useState(false);
 
     const [course, setCourse] = useState(null);
     const [instructorAvatarUrl, setInstructorAvatarUrl] = useState(null);
@@ -47,6 +51,11 @@ function CourseDetail() {
 
     const { currentUser } = useContext(AuthContext);
     const currentUserId = currentUser?.id || currentUser?.userId || currentUser?.idUser;
+
+    const [courseProgress, setCourseProgress] = useState(null);
+    const [showReviewModal, setShowReviewModal] = useState(false);
+    const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+    const hasAutoPromptedReview = useRef(false);
 
     const [reviewQuery, setReviewQuery] = useState("");
     const [ratingFilter, setRatingFilter] = useState("all");
@@ -95,12 +104,93 @@ function CourseDetail() {
         };
         load();
     }, [courseId]);
+    useEffect(() => {
+        if (!courseId) return;
 
+        getCourseReviewsApi(courseId)
+            .then((data) => {
+                setReviewsData(data);
+            })
+            .finally(() => {
+                setReviewsLoaded(true);
+            });
+    }, [courseId]);
     useEffect(() => {
         if (!courseId) return;
         getCourseReviewsApi(courseId).then(setReviewsData).catch(console.error);
         getRatingSummaryApi(courseId).then(setRatingSummary).catch(console.error);
     }, [courseId]);
+
+    const hasReviewed = reviewsData?.some((r) => {
+        const ownerId = r.userId || r.idUser || r.id || (r.user && r.user.id);
+        return currentUserId && ownerId && String(ownerId) === String(currentUserId);
+    });
+
+    const isCourseCompleted = !!(
+        courseProgress?.isCourseCompleted ||
+        courseProgress?.courseCompleted ||
+        Math.round(courseProgress?.courseProgressPercent || 0) === 100
+    );
+
+    useEffect(() => {
+        if (!courseId || !currentUserId || !reviewsLoaded) return;
+
+        getCourseProgressApi(courseId)
+            .then((data) => {
+                setCourseProgress(data);
+
+                const isCompleted =
+                    data?.isCourseCompleted ||
+                    data?.courseCompleted ||
+                    Math.round(data?.courseProgressPercent || 0) === 100;
+
+                if (
+                    isCompleted &&
+                    !hasReviewed &&
+                    !hasAutoPromptedReview.current
+                ) {
+                    hasAutoPromptedReview.current = true;
+                    setShowReviewModal(true);
+                }
+            });
+    }, [
+        courseId,
+        currentUserId,
+        reviewsLoaded,
+        hasReviewed
+    ]);
+
+    const handleVideoProgressUpdate = useCallback(async (currentTime) => {
+        if (!activeLesson || !currentUserId) return;
+        try {
+            const res = await updateLessonProgressApi(activeLesson.lessonId, currentTime);
+            setCourseProgress(res);
+            const isCompleted = res?.isCourseCompleted || res?.courseCompleted || Math.round(res?.courseProgressPercent || 0) === 100;
+            if (isCompleted && !hasReviewed && !hasAutoPromptedReview.current) {
+                hasAutoPromptedReview.current = true;
+                setShowReviewModal(true);
+            }
+        } catch (err) {
+            // Silence progress update errors for non-enrolled users
+        }
+    }, [activeLesson, currentUserId, reviewsData, hasReviewed]);
+
+    const handleReviewSubmit = async ({ rating, comment }) => {
+        setIsSubmittingReview(true);
+        try {
+            await createReviewApi({ courseId: Number(courseId), rating, comment });
+            toast.success("Thank you for rating the course.!");
+            setShowReviewModal(false);
+            const updatedReviews = await getCourseReviewsApi(courseId);
+            setReviewsData(updatedReviews);
+            const updatedSummary = await getRatingSummaryApi(courseId);
+            setRatingSummary(updatedSummary);
+        } catch (err) {
+            toast.error(err.response?.data?.message || err.message || "Đã xảy ra lỗi khi gửi đánh giá.");
+        } finally {
+            setIsSubmittingReview(false);
+        }
+    };
 
     const handleLessonClick = useCallback(async (lesson) => {
         if (!lesson.videoKey || lesson.lessonId === activeLesson?.lessonId) return;
@@ -168,7 +258,16 @@ function CourseDetail() {
             <div className="main-layout">
                 {/* LEFT SIDE */}
                 <div className="left-side">
-                    <CourseVideoPlayer src={videoUrl} loading={loadingVideo} />
+                    <CourseVideoPlayer
+                        src={videoUrl}
+                        loading={loadingVideo}
+                        initialTime={
+                            courseProgress?.lessonProgresses?.find(
+                                (p) => p.lessonId === activeLesson?.lessonId
+                            )?.watchedSeconds || 0
+                        }
+                        onProgressUpdate={handleVideoProgressUpdate}
+                    />
                     <ToastContainer />
 
                     <div className="tabs-container">
@@ -177,6 +276,8 @@ function CourseDetail() {
                             <button className={`tab-btn ${activeTab === "qa" ? "active" : ""}`} onClick={() => setActiveTab("qa")}>Q&A</button>
                             <button className={`tab-btn ${activeTab === "reviews" ? "active" : ""}`} onClick={() => setActiveTab("reviews")}>Reviews</button>
                             <button className={`tab-btn ${activeTab === "quiz" ? "active" : ""}`} onClick={() => setActiveTab("quiz")}>Quiz</button>
+                            <button className={`tab-btn ${activeTab === "summary" ? "active" : ""}`} onClick={() => setActiveTab("summary")}>Summary</button>
+
                         </div>
                     </div>
 
@@ -193,7 +294,7 @@ function CourseDetail() {
 
                         {activeTab === "qa" && (
                             <QATab
-                                lessonId={2}
+                                lessonId={activeLesson?.lessonId}
                                 course={course}
                                 selectedQuestion={selectedQuestion}
                                 setSelectedQuestion={setSelectedQuestion}
@@ -225,11 +326,15 @@ function CourseDetail() {
                                 toggleHelpful={toggleHelpful}
                                 handleSearchReviews={handleSearchReviews}
                                 handleRatingFilter={handleRatingFilter}
+                                isCourseCompleted={isCourseCompleted}
+                                hasReviewed={hasReviewed}
+                                openReviewModal={() => setShowReviewModal(true)}
                             />
                         )}
                     </div>
 
                     {activeTab === "quiz" && <QuizPage />}
+                    {activeTab === "summary" && <SummaryTab />}
 
                     <div className="footer-wrapper">
                         <Footer />
@@ -239,6 +344,36 @@ function CourseDetail() {
                 {/* RIGHT SIDE - Curriculum */}
                 <aside className="right-side">
                     <div className="curriculum-sidebar">
+                        {courseProgress && (
+                            <div className="curriculum-progress-box">
+                                <div className="curriculum-progress-header">
+                                    <span className="curriculum-progress-title">Course progress</span>
+                                    <span className="curriculum-progress-text">
+                                        {courseProgress.completedLessonsCount}/{courseProgress.totalLessonsCount} Lesson ({Math.round(courseProgress.courseProgressPercent)}%)
+                                    </span>
+                                </div>
+                                <div className="curriculum-progress-bar-track">
+                                    <div
+                                        className="curriculum-progress-bar-fill"
+                                        style={{ width: `${courseProgress.courseProgressPercent}%` }}
+                                    />
+                                </div>
+                                {isCourseCompleted && !hasReviewed && (
+                                    <button
+                                        className="btn-review-trigger"
+                                        onClick={() => setShowReviewModal(true)}
+                                    >
+                                        <FaStar /> Course Review
+                                    </button>
+                                )}
+                                {isCourseCompleted && hasReviewed && (
+                                    <div className="reviewed-badge">
+                                        ✓ You have rated this course.
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         {course.sections.map((section, sIdx) => (
                             <div key={section.sectionId} className="curriculum-section">
                                 <div className="section-header-qa" onClick={() => toggleSection(section.sectionId)}>
@@ -265,22 +400,33 @@ function CourseDetail() {
 
                                 {expandedSections.includes(section.sectionId) && (
                                     <div className="lessons-sidebar">
-                                        {section.lessons.map((lesson) => (
-                                            <div
-                                                key={lesson.lessonId}
-                                                className={`lesson-item ${activeLesson?.lessonId === lesson.lessonId ? "active" : ""}`}
-                                                onClick={() => handleLessonClick(lesson)}
-                                                style={{ cursor: lesson.videoKey ? "pointer" : "default" }}
-                                            >
-                                                <div className="lesson-info">
-                                                    <FaPlay className="lesson-icon" />
-                                                    <span className="lesson-name">{lesson.title}</span>
+                                        {section.lessons.map((lesson) => {
+                                            const lp = courseProgress?.lessonProgresses?.find(
+                                                (p) => p.lessonId === lesson.lessonId
+                                            );
+                                            const isCompleted = lp?.isCompleted;
+
+                                            return (
+                                                <div
+                                                    key={lesson.lessonId}
+                                                    className={`lesson-item ${activeLesson?.lessonId === lesson.lessonId ? "active" : ""}`}
+                                                    onClick={() => handleLessonClick(lesson)}
+                                                    style={{ cursor: lesson.videoKey ? "pointer" : "default" }}
+                                                >
+                                                    <div className="lesson-info">
+                                                        {isCompleted ? (
+                                                            <FaCheckCircle className="lesson-icon completed" />
+                                                        ) : (
+                                                            <FaPlay className="lesson-icon" />
+                                                        )}
+                                                        <span className="lesson-name">{lesson.title}</span>
+                                                    </div>
+                                                    <span className="lesson-time">
+                                                        {formatDuration(lesson.durationSeconds)}
+                                                    </span>
                                                 </div>
-                                                <span className="lesson-time">
-                                                    {formatDuration(lesson.durationSeconds)}
-                                                </span>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
 
                                         <div
                                             className="quiz-item"
@@ -307,8 +453,15 @@ function CourseDetail() {
                 </aside>
             </div>
 
+            <ReviewModal
+                isOpen={showReviewModal}
+                onClose={() => setShowReviewModal(false)}
+                onSubmit={handleReviewSubmit}
+                isSubmitting={isSubmittingReview}
+            />
+
             <div className="chatbot-fixed">
-                <LearnovaAI />
+                <chatbot />
             </div>
         </div>
     );

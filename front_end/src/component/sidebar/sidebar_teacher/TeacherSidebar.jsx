@@ -5,10 +5,10 @@ import {
   Gift,
    Home,
   Plus,
+  Star,
   Users,
   WalletCards,
 } from "lucide-react";
-import { teacherProfile } from "../../../page/teacher/data/teacherDashboardData.js";
 import LogoText from "../../../assets/LogoText.png";
 import "./TeacherSidebar.css";
 
@@ -19,7 +19,7 @@ const teacherNavSections = [
       { label: "Dashboard", path: "/learnova/teacher", icon: Home, end: true },
       { label: "Courses", path: "/learnova/teacher/courses", icon: BookOpen },
       { label: "Students", path: "/learnova/teacher/students", icon: Users },
-      { label: "Reviews & ratings", path: "/learnova/teacher/students", icon: Users },
+      { label: "Reviews & ratings", path: "/learnova/teacher/reviews", icon: Star },
     ],
   },
   {

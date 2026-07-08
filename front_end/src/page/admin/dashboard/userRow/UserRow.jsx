@@ -1,32 +1,5 @@
 import "./UserRow.css";
 
-const recentUsers = [
-  {
-    id: 1,
-    name: "Michael Anderson",
-    email: "michael@learnoa.com",
-    role: "Student",
-  },
-  {
-    id: 2,
-    name: "Daniel Wilson",
-    email: "daniel@learnoa.com",
-    role: "Instructor",
-  },
-  {
-    id: 3,
-    name: "Sophia Johnson",
-    email: "sophia@learnoa.com",
-    role: "Student",
-  },
-  {
-    id: 4,
-    name: "James Brown",
-    email: "james@learnoa.com",
-    role: "Admin",
-  },
-];
-
 const UserRowItem = ({ user }) => {
   return (
     <div className="userRowItem">
@@ -45,7 +18,7 @@ const UserRowItem = ({ user }) => {
   );
 };
 
-const UserRow = () => {
+const UserRow = ({ users = [] }) => {
   return (
     <section className="userRowSection">
       <div className="userRowCard userRowRecentUsersCard">
@@ -61,7 +34,8 @@ const UserRow = () => {
         </div>
 
         <div className="userRowList">
-          {recentUsers.map((user) => (
+          {users.length === 0 && <p className="userRowEmpty">No recent users yet.</p>}
+          {users.map((user) => (
             <UserRowItem key={user.id} user={user} />
           ))}
         </div>

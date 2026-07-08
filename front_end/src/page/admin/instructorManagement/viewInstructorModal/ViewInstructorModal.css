@@ -3,28 +3,34 @@
   inset: 0;
   z-index: 90;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  padding: 24px 20px 40px;
+  padding: 24px;
   overflow-y: auto;
-  background: rgba(15, 23, 42, 0.36);
-  backdrop-filter: blur(7px);
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(2px);
 }
 
 .instructor-view-modal {
-  width: min(100%, 960px);
-  border: 1px solid #d9e2f1;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 22px 70px rgba(15, 23, 42, 0.24);
-  overflow: hidden;
+  width: min(1120px, 100%);
+  max-height: calc(100vh - 48px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 12px;
+  background: #f8fafc;
+  box-shadow: 0 26px 80px rgba(15, 23, 42, 0.28);
+  overflow-y: auto;
 }
 
 .instructor-view-modal .view-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 26px;
+  padding: 16px 22px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff;
 }
 
 .instructor-view-modal .view-header h2 {
@@ -59,7 +65,7 @@
 }
 
 .instructor-view-modal .instructor-view-error {
-  margin: 0 26px 14px;
+  margin: 0;
   padding: 10px 12px;
   border: 1px solid rgba(194, 65, 12, 0.22);
   border-radius: 6px;
@@ -69,21 +75,17 @@
   font-weight: 700;
 }
 
-.instructor-view-modal .profile-section,
-.instructor-view-modal .content-section,
-.instructor-view-modal .course-section {
-  margin: 0 26px;
-}
-
 .instructor-view-modal .profile-section {
-  border: 1px solid #dce5f2;
-  border-radius: 6px;
+  margin: 0;
+  padding: 18px 22px 0;
+  border: none;
+  border-radius: 0;
   overflow: hidden;
 }
 
 .instructor-view-modal .cover-image {
-  height: 104px;
-  background: #dbeafe;
+  height: 88px;
+  background: transparent;
 }
 
 .instructor-view-modal .cover-image img {
@@ -94,18 +96,19 @@
 
 .instructor-view-modal .profile-info {
   display: grid;
-  grid-template-columns: 170px minmax(0, 1fr) minmax(260px, 0.8fr);
-  gap: 18px;
-  align-items: center;
-  min-height: 150px;
-  padding: 0 24px 22px;
+  grid-template-columns: minmax(90px, 108px) 1fr minmax(260px, 0.8fr);
+  gap: 16px;
+  align-items: start;
+  min-height: 130px;
+  padding: 0 18px 18px;
 }
 
 .instructor-view-modal .avatar-box {
-  width: 132px;
-  height: 132px;
+  width: 108px;
+  height: 108px;
+  justify-self: center;
   align-self: start;
-  margin-top: -38px;
+  margin-top: -30px;
   border: 5px solid #ffffff;
   border-radius: 50%;
   background: #dbeafe;
@@ -129,8 +132,10 @@
 .instructor-view-modal .basic-profile h3 {
   margin: 0 0 10px;
   color: #0f172a;
-  font-size: 24px;
+  font-size: 21px;
   font-weight: 800;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .instructor-view-modal .basic-profile p {
@@ -190,9 +195,9 @@
 .instructor-view-modal .info-card {
   min-height: 68px;
   padding: 12px 16px;
-  border: 1px solid #dce5f2;
-  border-radius: 7px;
-  background: #ffffff;
+  border: none;
+  border-radius: 0;
+  background: transparent;
   text-align: center;
 }
 
@@ -214,22 +219,33 @@
 
 .instructor-view-modal .content-section {
   display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  grid-template-columns: 1fr 1fr;
   gap: 14px;
-  margin-top: 14px;
+  margin: 0;
+  padding: 14px 22px 0;
+  align-items: stretch;
 }
 
-.instructor-view-modal .information-card,
-.instructor-view-modal .statistics-card,
 .instructor-view-modal .course-section {
-  border: 1px solid #dce5f2;
-  border-radius: 6px;
-  background: #ffffff;
+  margin: 0;
+  padding: 14px 22px 0;
+  overflow: hidden;
+  border: none;
 }
 
-.instructor-view-modal .information-card,
-.instructor-view-modal .statistics-card {
-  padding: 16px;
+.instructor-view-modal .modal-panel-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+}
+
+.instructor-view-modal .modal-panel-card h4 {
+  margin: 14px 0;
+  padding: 0 16px;
 }
 
 .instructor-view-modal h4 {
@@ -254,9 +270,9 @@
 
 .instructor-view-modal .info-row {
   display: grid;
-  grid-template-columns: 140px 12px minmax(0, 1fr);
+  grid-template-columns: 150px 14px minmax(0, 1fr);
   gap: 12px;
-  align-items: center;
+  align-items: start;
   min-height: 26px;
   color: #475569;
   font-size: 13px;
@@ -280,20 +296,25 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+  margin: 0;
+  padding: 0 16px 16px;
+  flex: 1;
+  align-content: start;
 }
 
 .instructor-view-modal .stat-box {
-  min-height: 154px;
-  padding: 20px 12px;
-  border: 1px solid #dce5f2;
-  border-radius: 7px;
+  min-height: 128px;
+  height: 100%;
+  padding: 14px 10px;
+  border: none;
+  border-radius: 0;
   text-align: center;
 }
 
 .instructor-view-modal .stat-icon {
-  width: 44px;
-  height: 44px;
-  margin-bottom: 16px;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 12px;
   border-radius: 10px;
 }
 
@@ -322,25 +343,36 @@
 }
 
 .instructor-view-modal .stat-box h2 {
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   color: #0f172a;
-  font-size: 26px;
+  font-size: 23px;
   font-weight: 900;
 }
 
+.instructor-view-modal .modal-panel-card--info .info-row {
+  margin: 0;
+  padding: 0 16px 10px;
+}
+
+.instructor-view-modal .modal-panel-card--info .info-row:last-of-type {
+  margin-bottom: 0;
+  padding-bottom: 16px;
+}
+
 .instructor-view-modal .course-section {
-  margin-top: 14px;
-  margin-bottom: 20px;
+  margin: 0;
   overflow: hidden;
 }
 
 .instructor-view-modal .course-section h4 {
-  margin: 14px 16px;
+  margin: 14px 0;
+  padding: 0 16px;
 }
 
 .instructor-view-modal .course-table-wrap {
   width: 100%;
   overflow-x: auto;
+  padding: 0 16px;
 }
 
 .instructor-view-modal .course-section table {
@@ -352,7 +384,7 @@
 .instructor-view-modal .course-section th,
 .instructor-view-modal .course-section td {
   padding: 10px 16px;
-  border-bottom: 1px solid #edf2f7;
+  border-bottom: none;
   color: #0f172a;
   font-size: 13px;
   text-align: left;
@@ -443,15 +475,15 @@
 .instructor-view-modal .view-footer {
   display: flex;
   justify-content: flex-end;
-  padding: 16px 26px 20px;
-  border-top: 1px solid #edf2f7;
+  padding: 14px 22px 18px;
+  border-top: none;
 }
 
 .instructor-view-modal .view-footer button {
   min-width: 76px;
   min-height: 38px;
-  border: 1px solid #dce5f2;
-  border-radius: 7px;
+  border: none;
+  border-radius: 0;
   background: #ffffff;
   color: #0f172a;
   font-size: 14px;
@@ -706,6 +738,10 @@
     padding: 14px 10px 28px;
   }
 
+  .instructor-view-modal {
+    max-height: calc(100vh - 42px);
+  }
+
   .instructor-view-modal .view-header {
     padding: 18px;
   }
@@ -713,8 +749,8 @@
   .instructor-view-modal .profile-section,
   .instructor-view-modal .content-section,
   .instructor-view-modal .course-section {
-    margin-left: 16px;
-    margin-right: 16px;
+    padding-left: 14px;
+    padding-right: 14px;
   }
 
   .instructor-view-modal .profile-info {

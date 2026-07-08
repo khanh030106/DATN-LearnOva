@@ -2,6 +2,7 @@ import {
   Cake,
   Calendar,
   Clock,
+  Eye,
   ExternalLink,
   IdCard,
   Image,
@@ -9,7 +10,6 @@ import {
   Mars,
   Phone,
   Shield,
-  Trash2,
   User,
   X,
 } from "lucide-react";
@@ -73,12 +73,34 @@ const LinkValue = ({ value }) => {
   );
 };
 
+const getUserVisibility = (user) => {
+  if (user.visibility && user.visibilityTone) {
+    return {
+      label: user.visibility,
+      tone: user.visibilityTone,
+    };
+  }
+
+  if (user.isDeleted) {
+    return {
+      label: "Hidden",
+      tone: "deleted",
+    };
+  }
+
+  return {
+    label: "Active",
+    tone: "visible",
+  };
+};
+
 const ViewUserModal = ({ user, onClose }) => {
   if (!user) return null;
 
   const fullName = user.fullName || user.name || "Unknown user";
   const coverImage = user.coverImage || defaultCoverImage;
   const avatar = user.avatar || getAvatarFallback(fullName);
+  const visibility = getUserVisibility(user);
   const rows = [
     { icon: Mail, label: "Email", value: user.email },
     { icon: IdCard, label: "ID", value: user.id },
@@ -101,23 +123,24 @@ const ViewUserModal = ({ user, onClose }) => {
     },
     {
       icon: Calendar,
-      label: "Joined Date",
+      label: "Create",
       value: formatDateTime(user.joinedAtRaw, user.joinedAt),
     },
     {
-      icon: Trash2,
-      iconTone: "danger",
-      label: "Is Deleted",
+      icon: Eye,
+      label: "Visibility",
       value: (
-        <span className="view-user-badge view-user-badge-deleted">
-          {user.isDeleted ? "Yes" : "No"}
+        <span
+          className={`view-user-badge view-user-badge-visibility view-user-badge-visibility--${visibility.tone}`}
+        >
+          {visibility.label}
         </span>
       ),
     },
     { icon: Mars, label: "Gender", value: user.gender },
     {
       icon: Clock,
-      label: "Updated At",
+      label: "Update",
       value: formatDateTime(user.updatedAtRaw, user.updatedAt),
     },
     {

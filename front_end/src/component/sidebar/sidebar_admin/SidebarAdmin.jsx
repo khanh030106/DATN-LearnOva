@@ -2,10 +2,10 @@ import { NavLink } from "react-router-dom";
 import {
   BookOpen,
   CircleDollarSign,
+  ClipboardCheck,
   Flag,
   GraduationCap,
   LayoutDashboard,
-  MessageSquareText,
   Tag,
   Tags,
   Ticket,
@@ -45,6 +45,12 @@ const adminNavSections = [
         path: "/learnova/admin/courses",
       },
       {
+        id: "course-approval",
+        label: "Course Approval",
+        icon: ClipboardCheck,
+        path: "/learnova/admin/course-approval",
+      },
+      {
         id: "categories",
         label: "Categories",
         icon: Tags,
@@ -78,12 +84,6 @@ const adminNavSections = [
   {
     title: "Moderation",
     items: [
-      {
-        id: "reviews-comments",
-        label: "Reviews & Comments",
-        icon: MessageSquareText,
-        path: "/learnova/admin/reviews-comments",
-      },
       {
         id: "violation-reports",
         label: "Violation Reports",

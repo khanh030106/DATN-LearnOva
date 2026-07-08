@@ -8,3 +8,31 @@ export const getMyEnrolledCoursesApi = async (axiosPrivate, accessToken) => {
   });
   return response.data;
 };
+export const getCourseCurriculumApi = async (axiosPrivate, courseId, accessToken) => {
+  const response = await axiosPrivate.get(`/student/courses/${courseId}/curriculum`,
+      {
+        headers: accessToken
+            ? { Authorization: `Bearer ${accessToken}` }
+            : undefined,
+      }
+  );
+
+
+  return response.data;
+};
+export const getCourseReviewsApi = async (
+    axiosPrivate,
+    courseId,
+    accessToken
+) => {
+    const response = await axiosPrivate.get(
+        `/student/courses/${courseId}/reviews`,
+        {
+            headers: accessToken
+                ? { Authorization: `Bearer ${accessToken}` }
+                : undefined,
+        }
+    );
+
+    return response.data;
+};

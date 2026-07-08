@@ -26,6 +26,12 @@ import java.util.Set;
 import com.example.back_end.dto.resquest.RegisterRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.Instant;
+import com.example.back_end.dto.response.UserResponse;
+import com.example.back_end.dto.resquest.UpdateProfileRequest;
+import com.example.back_end.dto.resquest.ChangePasswordRequest;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.util.Base64;
 
 
 @Service
@@ -170,5 +176,137 @@ public class AuthService {
         String verifyLink = frontendBaseUrl + "/learnova/auth/login?token=" + verificationToken.getToken();
 
         emailService.sendVerificationEmail(user.getEmail(), user.getFullName(), verifyLink);
+    }
+    public UserResponse getUserProfile(String email) {
+
+        User user = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        String role = user.getRoles().stream()
+                .findFirst()
+                .map(roleItem -> roleItem.getRoleName().name())
+                .orElse("");
+
+        String status = Boolean.TRUE.equals(user.getIsActive())
+                ? "Active"
+                : "Inactive";
+
+        return new UserResponse(
+                user.getId(),
+                user.getFullName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getAvatar(),
+                user.getCoverImage(),
+                user.getDateOfBirth(),
+                user.getGender(),
+                role,
+                status,
+                user.getCreatedAt(),
+                user.getIsDeleted(),
+                user.getUpdatedAt()
+        );
+    }
+    @Transactional
+    public UserResponse updateProfile(String email, UpdateProfileRequest request) {
+
+        User user = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        user.setFullName(request.fullName());
+        user.setPhone(request.phone());
+        user.setDateOfBirth(request.dateOfBirth());
+        user.setGender(request.gender());
+        user.setUpdatedAt(Instant.now());
+
+        userRepository.save(user);
+
+        String role = user.getRoles().stream()
+                .findFirst()
+                .map(roleItem -> roleItem.getRoleName().name())
+                .orElse("");
+
+        String status = Boolean.TRUE.equals(user.getIsActive())
+                ? "Active"
+                : "Inactive";
+
+        return new UserResponse(
+                user.getId(),
+                user.getFullName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getAvatar(),
+                user.getCoverImage(),
+                user.getDateOfBirth(),
+                user.getGender(),
+                role,
+                status,
+                user.getCreatedAt(),
+                user.getIsDeleted(),
+                user.getUpdatedAt()
+        );
+    }
+    @Transactional
+    public UserResponse updateAvatar(String email, MultipartFile file) throws IOException {
+
+        User user = userRepository.findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        String base64 = "data:image/png;base64," +
+                Base64.getEncoder().encodeToString(file.getBytes());
+
+        user.setAvatar(base64);
+        user.setUpdatedAt(Instant.now());
+
+        userRepository.save(user);
+
+        return mapToUserResponse(user);
+    }
+    private UserResponse mapToUserResponse(User user) {
+
+        String role = user.getRoles().stream()
+                .findFirst()
+                .map(r -> r.getRoleName().name())
+                .orElse("");
+
+        String status = Boolean.TRUE.equals(user.getIsActive())
+                ? "Active"
+                : "Inactive";
+
+        String avatar = user.getAvatar(); // base64 string
+
+        return new UserResponse(
+                user.getId(),
+                user.getFullName(),
+                user.getEmail(),
+                user.getPhone(),
+                avatar,
+                user.getCoverImage(),
+                user.getDateOfBirth(),
+                user.getGender(),
+                role,
+                status,
+                user.getCreatedAt(),
+                user.getIsDeleted(),
+                user.getUpdatedAt()
+        );
+    }
+    public void changePassword(String email, ChangePasswordRequest request) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash())) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new RuntimeException("New password and confirm password do not match");
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }

@@ -5,7 +5,6 @@ import com.example.back_end.dto.response.ReviewResponse;
 import com.example.back_end.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.example.back_end.security.CustomUserDetails;
@@ -14,7 +13,6 @@ import com.example.back_end.dto.response.RatingSummaryResponse;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/learnova")
@@ -65,7 +63,6 @@ public class ReviewController {
             @PathVariable Long reviewId) {
 
         if (authentication == null) {
-            log.warn("deleteReview called with null authentication");
             throw new RuntimeException("No authentication");
         }
 
