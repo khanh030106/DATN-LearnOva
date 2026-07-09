@@ -5,7 +5,7 @@ import teacherVideo from "../../../assets/instructors/video/teacher.mp4";
 const categories = [
     { label: "Tất cả", count: 14 },
     { label: "Công nghệ", count: 2 },
-    { label: "AI & Data", count: 2 },
+    { label: "chat-bot & Data", count: 2 },
     { label: "Thiết kế", count: 2 },
     { label: "Marketing", count: 2 },
     { label: "Kinh doanh", count: 2 },
@@ -48,9 +48,9 @@ const instructors = [
     {
         id: 4,
         name: "Lê Minh Quân",
-        role: "AI ENGINEER & DATA SCIENTIST",
+        role: "chat-bot ENGINEER & DATA SCIENTIST",
         image: "https://i.pravatar.cc/300?img=4",
-        bio: "Hơn 10 năm kinh nghiệm trong lĩnh vực AI, Machine Learning và phân tích dữ liệu doanh nghiệp.",
+        bio: "Hơn 10 năm kinh nghiệm trong lĩnh vực chat-bot, Machine Learning và phân tích dữ liệu doanh nghiệp.",
         students: "8.5k+ học",
         courses: 15,
         rating: 4.8,

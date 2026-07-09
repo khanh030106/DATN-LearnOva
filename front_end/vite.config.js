@@ -7,4 +7,8 @@ export default defineConfig({
   resolve: {
     dedupe: ["react", "react-dom"],
   },
+
+  server: {
+    open: 'http://localhost:5173/learnova/home',
+  }
 });

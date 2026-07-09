@@ -4,7 +4,9 @@ import com.example.back_end.dto.response.CourseDetailResponse;
 import com.example.back_end.dto.response.FeaturedCourseResponse;
 import com.example.back_end.dto.response.PublicCourseResponse;
 import com.example.back_end.dto.response.TeacherCoursesResponse;
+import com.example.back_end.dto.response.TeacherReviewResponse;
 import com.example.back_end.dto.response.TeacherStudentResponse;
+import com.example.back_end.dto.response.TopCategoryResponse;
 import com.example.back_end.entity.Enrollment;
 import com.example.back_end.dto.resquest.CreateDraftCourseRequest;
 import com.example.back_end.dto.resquest.UpdateCourseRequest;
@@ -18,8 +20,12 @@ import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.CourseRepository;
 import com.example.back_end.repository.CoursecategoryRepository;
+import com.example.back_end.entity.Lesson;
+import com.example.back_end.entity.enums.HlsStatus;
 import com.example.back_end.repository.EnrollmentRepository;
+import com.example.back_end.repository.LessonRepository;
 import com.example.back_end.repository.PromotioncourseRepository;
+import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.repository.UserRepository;
 import com.example.back_end.repository.admin.AdminCategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -45,6 +52,8 @@ public class CourseService {
     private final AdminCategoryRepository categoryRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final PromotioncourseRepository promotioncourseRepository;
+    private final ReviewRepository reviewRepository;
+    private final LessonRepository lessonRepository;
 
     public Long createDraftCourse(CreateDraftCourseRequest request, String email) {
         User instructor = userRepository
@@ -406,6 +415,44 @@ public class CourseService {
     }
 
     @Transactional(readOnly = true)
+    public List<TopCategoryResponse> getTopCategories() {
+        List<Course> published = courseRepository.findAllByStatus(CourseStatus.PUBLISHED);
+
+        List<Long> courseIds = published.stream()
+                .map(Course::getId)
+                .toList();
+
+        Map<Long, Long> enrollmentCountByCourseId = courseIds.isEmpty()
+                ? Map.of()
+                : enrollmentRepository.findByCourseIdIn(courseIds)
+                .stream()
+                .collect(Collectors.groupingBy(e -> e.getCourse().getId(), Collectors.counting()));
+
+        Map<Category, Long> soldCountByCategory = new LinkedHashMap<>();
+        for (Course course : published) {
+            long soldCount = enrollmentCountByCourseId.getOrDefault(course.getId(), 0L);
+            for (Coursecategory coursecategory : course.getCoursecategories()) {
+                Category category = coursecategory.getCategory();
+                if (Boolean.TRUE.equals(category.getIsDeleted())) {
+                    continue;
+                }
+                soldCountByCategory.merge(category, soldCount, Long::sum);
+            }
+        }
+
+        return soldCountByCategory.entrySet().stream()
+                .sorted((a, b) -> Long.compare(b.getValue(), a.getValue()))
+                .limit(8)
+                .map(entry -> new TopCategoryResponse(
+                        entry.getKey().getId(),
+                        entry.getKey().getName(),
+                        entry.getKey().getSlug(),
+                        entry.getValue()
+                ))
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public List<PublicCourseResponse> getPublishedCourses() {
         return courseRepository
                 .findByStatusAndIsDeletedFalseOrderByCreatedAtDesc(CourseStatus.PUBLISHED)
@@ -484,5 +531,46 @@ public class CourseService {
                         Comparator.nullsLast(Comparator.reverseOrder())
                 ))
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<TeacherReviewResponse> getMyReviews(String email) {
+        User instructor = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        List<Long> courseIds = courseRepository
+                .findByInstructorIdOrderByCreatedAtDesc(instructor.getId())
+                .stream()
+                .map(Course::getId)
+                .toList();
+
+        if (courseIds.isEmpty()) {
+            return List.of();
+        }
+
+        return reviewRepository.findByCourseIdInWithUserAndCourse(courseIds)
+                .stream()
+                .map(review -> new TeacherReviewResponse(
+                        review.getId(),
+                        review.getCourse().getId(),
+                        review.getCourse().getTitle(),
+                        review.getUser().getId(),
+                        review.getUser().getFullName(),
+                        review.getUser().getAvatar(),
+                        review.getRating(),
+                        review.getComment(),
+                        review.getCreatedAt()
+                ))
+                .toList();
+    }
+
+    public String getHlsMasterPlaylistPathIfReady(String fileKey) {
+        return lessonRepository.findByVideoKey(fileKey)
+                .filter(lesson -> lesson.getHlsStatus() == HlsStatus.READY)
+                .map(Lesson::getVideoKey)
+                .map(MediaConvertService::videoUuidFromKey)
+                .map(videoUuid -> "/api/learnova/courses/hls/" + videoUuid + "/master.m3u8")
+                .orElse(null);
     }
 }

@@ -27,8 +27,8 @@ export const DEFAULT_COURSE_DETAIL = {
   duration: "12h 45m",
   level: "Beginner to Advanced",
   updatedAt: "05/2024",
-  progress: 65,
-  lessonsDone: 32,
+  progress: 0,
+  lessonsDone: 0,
   lessonsTotal: 48,
   chaptersTotal: 8,
   summary:
@@ -154,18 +154,20 @@ export const DEFAULT_COURSE_DETAIL = {
 export const buildCourseDetail = (course = {}) => ({
   ...DEFAULT_COURSE_DETAIL,
   ...course,
+
   title: course.title || DEFAULT_COURSE_DETAIL.title,
   progress: course.progress || DEFAULT_COURSE_DETAIL.progress,
   lessonsDone: course.lessonsDone || DEFAULT_COURSE_DETAIL.lessonsDone,
   lessonsTotal: course.lessonsTotal || DEFAULT_COURSE_DETAIL.lessonsTotal,
   rating: course.rating || DEFAULT_COURSE_DETAIL.rating,
   reviews: course.reviews || DEFAULT_COURSE_DETAIL.reviews,
-  students: course.students || DEFAULT_COURSE_DETAIL.students,
+  students: course.students ?? 0,
   duration: course.duration || DEFAULT_COURSE_DETAIL.duration,
   level: course.level || DEFAULT_COURSE_DETAIL.level,
   image: course.image || DEFAULT_COURSE_DETAIL.image,
+
   instructor: {
     ...DEFAULT_COURSE_DETAIL.instructor,
-    name: course.instructor || DEFAULT_COURSE_DETAIL.instructor.name,
+    ...course.instructor,
   },
 });

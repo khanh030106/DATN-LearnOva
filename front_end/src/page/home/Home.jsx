@@ -7,8 +7,8 @@ import HowItWorks from './how-it-works/HowItWorks.jsx';
 import Instructors from './instructors/Instructors.jsx';
 import Testimonials from './testimonials/Testimonials.jsx';
 import FAQ from './faq/FAQ.jsx';
-import Footer from './footer/Footer.jsx';
-import LearnovaAI from './AI/AI.jsx';
+import Footer from './../../component/footer/footer.jsx';
+import LearnovaAI from './chat-bot/chatBot.jsx';
 
 import './Home.css';
 

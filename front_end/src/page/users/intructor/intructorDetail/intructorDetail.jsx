@@ -18,7 +18,7 @@ import {MdMessage} from "react-icons/md";
 import {instructor, introText, introDetails, achievements, courses, reviews} from "./intructorData.js";
 import HeaderIntructor from "./headerIntructor.jsx";
 import MainIntructor from "./MainIntructor.jsx";
-import LearnovaAI from "../../../home/AI/AI.jsx";
+import LearnovaAI from "../../../home/chat-bot/chatBot.jsx";
 
 function InstructorDetail() {
     const [isFollowing, setIsFollowing] = useState(false);

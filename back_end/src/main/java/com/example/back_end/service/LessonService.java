@@ -5,6 +5,7 @@ import com.example.back_end.dto.resquest.UpdateLessonRequest;
 import com.example.back_end.dto.resquest.UpdateLessonVideoRequest;
 import com.example.back_end.entity.Lesson;
 import com.example.back_end.entity.Section;
+import com.example.back_end.entity.enums.HlsStatus;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.LessonRepository;
 import com.example.back_end.repository.SectionRepository;
@@ -21,6 +22,7 @@ public class LessonService {
 
     private final LessonRepository lessonRepository;
     private final SectionRepository sectionRepository;
+    private final MediaConvertService mediaConvertService;
 
     @Transactional
     public Long createLesson(
@@ -73,6 +75,12 @@ public class LessonService {
         }
 
         lesson.setUpdatedAt(Instant.now());
+
+        if (request.videoKey() != null) {
+            String jobId = mediaConvertService.createHlsJob(request.videoKey(), lessonId);
+            lesson.setMediaConvertJobId(jobId);
+            lesson.setHlsStatus(HlsStatus.PENDING);
+        }
 
         lessonRepository.save(lesson);
     }

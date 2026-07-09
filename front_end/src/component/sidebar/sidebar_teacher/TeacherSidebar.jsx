@@ -3,13 +3,12 @@ import {
   BarChart3,
   BookOpen,
   Gift,
-  Grid2X2, Home,
-  MessageSquare,
+   Home,
   Plus,
+  Star,
   Users,
   WalletCards,
 } from "lucide-react";
-import { teacherProfile } from "../../../page/teacher/data/teacherDashboardData.js";
 import LogoText from "../../../assets/LogoText.png";
 import "./TeacherSidebar.css";
 
@@ -20,6 +19,7 @@ const teacherNavSections = [
       { label: "Dashboard", path: "/learnova/teacher", icon: Home, end: true },
       { label: "Courses", path: "/learnova/teacher/courses", icon: BookOpen },
       { label: "Students", path: "/learnova/teacher/students", icon: Users },
+      { label: "Reviews & ratings", path: "/learnova/teacher/reviews", icon: Star },
     ],
   },
   {
@@ -70,13 +70,6 @@ const TeacherSidebar = () => {
         <span style={{marginBottom: '3px'}}>Create new course</span>
       </NavLink>
 
-      <div className="teacher-sidebar__profile">
-        <img src={teacherProfile.avatar} alt={teacherProfile.name} />
-        <div>
-          <strong>{teacherProfile.name}</strong>
-          <small>View profile</small>
-        </div>
-      </div>
     </aside>
   );
 };

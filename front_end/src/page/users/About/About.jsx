@@ -1,8 +1,6 @@
 import React from 'react';
 import './About.css';
 import { Award, Target, Globe, Users, ChevronRight } from 'lucide-react';
-import aboutVideo from '../../../assets/instructors/video/about.mp4'
-import LearnovaAI from "../../home/AI/AI.jsx";
 
 function AboutView() {
     return (
@@ -11,39 +9,6 @@ function AboutView() {
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
             <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-
-            {/* Hero Section */}
-            <section className="about-hero-section">
-                <div className="about-hero-video-wrapper">
-                    <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        preload="auto"
-                        className="about-hero-video"
-                    >
-                        <source src={aboutVideo} type="video/mp4" />
-                        Your browser does not support the video tag.
-                    </video>
-                    <div className="about-hero-overlay-gradient"></div>
-                    <div className="about-hero-overlay-multiply"></div>
-                </div>
-
-                <div className="about-hero-content">
-
-                    <h1 className="about-font-serif-premium about-hero-title">
-                        Vision <br className="hidden md:block" /> <span className="about-text-italic-gold">to shape</span> the future
-                    </h1>
-                    <p className="about-hero-desc">
-                        LearnOva is not just a learning platform, but a community passionate about knowledge, where each individual is empowered to unlock and fully develop their potential.
-                    </p>
-                </div>
-
-                <div className="about-scroll-indicator">
-
-                </div>
-            </section>
 
             {/* Intro Context */}
             <section className="about-section-padding">
@@ -231,7 +196,7 @@ function AboutView() {
                     </div>
                 </div>
                 <div className="chatbot-fixed">
-                    <LearnovaAI />
+                    <chatBot />
                 </div>
             </section>
         </div>

@@ -1,21 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-    FaPlay,
-    FaPlayCircle,
-    FaClock,
-    FaGraduationCap,
-    FaCheckCircle,
-    FaUserGraduate,
-    FaGlobe,
-    FaChevronDown,
-    FaChevronUp,
-    FaShoppingCart,
-} from "react-icons/fa";
+import {FaPlay, FaPlayCircle, FaClock, FaGraduationCap, FaCheckCircle, FaUserGraduate, FaGlobe, FaChevronDown, FaChevronUp, FaShoppingCart,} from "react-icons/fa";
 import { ChevronDown } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import { getCourseDetail, getFileUrl } from "../../../api/PublicCourseApi.js";
 import { checkEnrollment } from "../../../api/EnrollmentApi.js";
 import { useAuth } from "../../../hook/UseAuth.jsx";
@@ -24,7 +12,7 @@ import { addStoredCartItem } from "../../../utils/cartStorage.js";
 import { createPaymentApi } from "../../../api/PaymentApi.js";
 import { applyVoucherApi } from "../../../api/VoucherApi.js";
 import PaymentModal from "../../../component/payment/PaymentModal.jsx";
-import LearnovaAI from "../AI/AI.jsx";
+import LearnovaAI from "../chat-bot/chatBot.jsx";
 
 import "./CourseDetail.css";
 
@@ -131,6 +119,7 @@ export default function CourseDetail() {
     }, [id]);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setPromo("");
         setAppliedVoucher(null);
         setVoucherMessage("");
@@ -140,6 +129,7 @@ export default function CourseDetail() {
 
     useEffect(() => {
         if (!id || !isAuthenticated) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setEnrolled(false);
             return;
         }

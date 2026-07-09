@@ -39,101 +39,12 @@ function QuizPage() {
         }
     };
 
-    return (
-        <div className="quiz-page">
+    return(
+        <button className="button-quiz">generate quiz</button>
 
-            {/* HEADER */}
-
-            <div className="quiz-header">
-
-                <div className="quiz-progress">
-
-                    <span>
-                        Sentence {currentQuestion + 1} /
-                        {quizData.questions.length}
-                    </span>
-
-                    <div className="progress-bar">
-                        <div
-                            className="progress-fill"
-                            style={{
-                                width: `${progress}%`
-                            }}
-                        />
-                    </div>
-                </div>
-
-                <div className="quiz-timer">
-                    <FaRegClock />
-                    <span>20:00</span>
-                </div>
-            </div>
-
-            {/* QUESTION */}
-
-            <div className="quiz-card">
-
-                <h2 className="quiz-question">
-                    {question.question}
-                </h2>
-
-                <p className="quiz-subtitle">
-                    Choose the correct answer.
-                </p>
-
-                <div className="quiz-options">
-
-                    {question.options.map((option, index) => (
-
-                        <div
-                            key={index}
-                            className={`quiz-option ${
-                                selectedAnswers[question.id] === index
-                                    ? "active"
-                                    : ""
-                            }`}
-                            onClick={() => handleSelectAnswer(index)}
-                        >
-
-                            <div className="option-letter">
-                                {String.fromCharCode(65 + index)}
-                            </div>
-
-                            <span>{option}</span>
-
-                            {selectedAnswers[question.id] === index && (
-                                <div className="selected-check">
-                                    <FaCheck />
-                                </div>
-                            )}
-
-                        </div>
-
-                    ))}
-
-                </div>
-
-                <div className="quiz-footer">
-
-                    <button
-                        className="btn-prev"
-                        onClick={prevQuestion}
-                    >
-                        ← Previous sentence
-                    </button>
-
-                    <button
-                        className="btn-next"
-                        onClick={nextQuestion}
-                    >
-                        Next sentence →
-                    </button>
-
-                </div>
-            </div>
-
-        </div>
     );
+
+
 }
 
 export default QuizPage;

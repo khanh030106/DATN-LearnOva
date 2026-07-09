@@ -2,19 +2,6 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import logo from "../../../assets/LogoText.png";
-import {
-  courseCategories,
-  durationFilters,
-  instructorItems,
-  levelFilters,
-  myLearningItems,
-  notificationItems,
-  priceFilters,
-  ratingFilters,
-  searchSuggestions,
-  subscriptionPlans,
-  userMenuItems,
-} from "./components/headerData.js";
 import AvatarDropdown from "./components/AvatarDropdown.jsx";
 import CartDropdown from "./components/CartDropdown.jsx";
 import HeaderSearch from "./components/HeaderSearch.jsx";
@@ -27,19 +14,6 @@ const LoggedInHeader = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showCourses, setShowCourses] = useState(false);
 
-  const navigationData = useMemo(
-    () => ({
-      categories: courseCategories,
-      levels: levelFilters,
-      prices: priceFilters,
-      durations: durationFilters,
-      ratings: ratingFilters,
-      learningItems: myLearningItems,
-      instructorItems,
-      subscriptionPlans,
-    }),
-    [],
-  );
 
   return (
     <header className="user-logged-header">
@@ -80,27 +54,23 @@ const LoggedInHeader = () => {
             </Link>
 
             <CoursesMegaMenu
-                categories={courseCategories}
-                levels={levelFilters}
-                prices={priceFilters}
-                durations={durationFilters}
-                ratings={ratingFilters}
+
             />
           </div>
         </div>
 
         <div className="user-logged-search-area">
-          <HeaderSearch suggestions={searchSuggestions} />
+          <HeaderSearch  />
         </div>
 
         <div className={`user-logged-navigation-shell ${isMobileMenuOpen ? "is-open" : ""}`}>
-          <UserLoggedNav {...navigationData} />
+          <UserLoggedNav />
         </div>
 
         <div className="user-logged-actions">
           <CartDropdown />
-          <NotificationDropdown notifications={notificationItems} />
-          <AvatarDropdown menuItems={userMenuItems} />
+          <NotificationDropdown  />
+          <AvatarDropdown />
         </div>
       </div>
     </header>

@@ -15,7 +15,7 @@ import {
   WalletCards,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { courses, metrics, notifications, questions, teacherProfile } from "../data/teacherDashboardData.js";
+import { metrics } from "../data/teacherDashboardData.js";
 import { overviewLinks } from "./overviewConfig.js";
 import "./OverviewPage.css";
 
@@ -42,24 +42,8 @@ const quickActions = [
   { label: "View Analytics", icon: BarChart3, tone: "orange", href: overviewLinks.analytics },
 ];
 
-const recentEnrollments = [
-  { name: "Nguyen Van A", course: "Web Development Bootcamp", time: "10 minutes ago", avatar: questions[0].avatar },
-  { name: "Tran Thi B", course: "Data Science Fundamentals", time: "1 hour ago", avatar: questions[1].avatar },
-  { name: "Le Hoang C", course: "UI/UX Design Mastery", time: "2 hours ago", avatar: questions[0].avatar },
-  { name: "Pham My D", course: "Digital Marketing Strategy", time: "3 hours ago", avatar: questions[1].avatar },
-];
 
-const notices = [
-  ...notifications,
-  {
-    title: "System maintenance",
-    detail: "Scheduled maintenance on May 25, 2:00 AM - 4:00 AM.",
-    time: "2 days ago",
-    tone: "violet",
-  },
-];
 
-const headerInsights = ["+24 new students this week", "Revenue increased by 8.4%"];
 
 const formatCompletion = (value) => Number.parseInt(value, 10) || 0;
 
@@ -167,7 +151,7 @@ const QuickActions = () => (
 );
 
 const ImportantNotices = () => {
-  const noticeIcons = [Megaphone, Gift, Bell];
+
 
   return (
     <section className="overview-card overview-notices">
@@ -176,21 +160,7 @@ const ImportantNotices = () => {
         <Link to={overviewLinks.qa}>View all</Link>
       </div>
       <div className="overview-notices__list">
-        {notices.map((notice, index) => {
-          const Icon = noticeIcons[index] || Bell;
 
-          return (
-            <article key={notice.title} className={`overview-notice overview-notice--${notice.tone}`}>
-              <span className="overview-notice__icon" aria-hidden="true">
-                <Icon size={19} />
-              </span>
-              <div>
-                <strong>{notice.title}</strong>
-                <p>{notice.detail}</p>
-              </div>
-            </article>
-          );
-        })}
       </div>
     </section>
   );
@@ -203,40 +173,7 @@ const TopCourses = () => (
       <Link to={overviewLinks.courses}>View all</Link>
     </div>
     <div className="overview-course-grid">
-      {courses.slice(0, 2).map((course) => {
-        const progress = formatCompletion(course.completion);
 
-        return (
-          <article key={course.id} className="overview-course">
-            <div className="overview-course__media">
-              <img src={course.image} alt={course.title} />
-              <span>{course.status}</span>
-            </div>
-            <div className="overview-course__body">
-              <small>{course.category}</small>
-              <h3>{course.title}</h3>
-              <div className="overview-course__goal">
-                <span>Course Completion</span>
-                <strong>{progress}%</strong>
-              </div>
-              <footer>
-                <span>
-                  <Users size={14} />
-                  {course.students}
-                </span>
-                <span>
-                  <Star size={14} fill="currentColor" />
-                  {course.rating}
-                </span>
-                <div className="overview-course__progress">
-                  <i style={{ width: `${progress}%` }} />
-                </div>
-                <b>{progress}%</b>
-              </footer>
-            </div>
-          </article>
-        );
-      })}
     </div>
   </section>
 );
@@ -248,19 +185,7 @@ const RecentEnrollments = () => (
       <Link to={overviewLinks.courses}>View all</Link>
     </div>
     <div className="overview-enrollments__list">
-      {recentEnrollments.map((student) => (
-        <article key={student.name} className="overview-enrollment">
-          <img src={student.avatar} alt={student.name} />
-          <div>
-            <strong>{student.name}</strong>
-            <p>{student.course}</p>
-          </div>
-          <time>{student.time}</time>
-          <span>
-            <UserPlus size={18} />
-          </span>
-        </article>
-      ))}
+
     </div>
   </section>
 );

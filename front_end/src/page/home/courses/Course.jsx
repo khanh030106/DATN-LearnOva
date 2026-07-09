@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { getFeaturedCourses, getFileUrl } from '../../../api/PublicCourseApi.js';
+import {useEffect, useMemo, useState} from 'react';
+import {Link} from 'react-router-dom';
+import {getFeaturedCourses, getFileUrl} from '../../../api/PublicCourseApi.js';
 import './Course.css';
 
 const FALLBACK_THUMBS = [
@@ -46,7 +46,7 @@ export default function Course() {
                                 // fallback to gradient
                             }
                         }
-                        return { ...course, thumbnailUrl, fallbackBg: FALLBACK_THUMBS[idx % FALLBACK_THUMBS.length] };
+                        return {...course, thumbnailUrl, fallbackBg: FALLBACK_THUMBS[idx % FALLBACK_THUMBS.length]};
                     })
                 );
                 setCourses(withThumbs);
@@ -61,7 +61,7 @@ export default function Course() {
 
     const categoryFilters = useMemo(() => {
         const cats = [...new Set(courses.map((c) => c.categoryName).filter(Boolean))];
-        return [{ label: 'All Courses', value: 'ALL' }, ...cats.map((c) => ({ label: c, value: c }))];
+        return [{label: 'All Courses', value: 'ALL'}, ...cats.map((c) => ({label: c, value: c}))];
     }, [courses]);
 
     const visible = filter === 'ALL'
@@ -78,7 +78,7 @@ export default function Course() {
                             <h2 id="cs-heading" className="cs__title">Featured courses</h2>
                         </div>
                     </div>
-                    <div style={{ textAlign: 'center', padding: '60px 0', color: '#94a3b8', fontSize: '15px' }}>
+                    <div style={{textAlign: 'center', padding: '60px 0', color: '#94a3b8', fontSize: '15px'}}>
                         Loading courses...
                     </div>
                 </div>
@@ -123,13 +123,13 @@ export default function Course() {
                                 className="cs__thumb"
                                 style={
                                     course.thumbnailUrl
-                                        ? { background: `url(${course.thumbnailUrl}) center/cover no-repeat` }
-                                        : { background: course.fallbackBg }
+                                        ? {background: `url(${course.thumbnailUrl}) center/cover no-repeat`}
+                                        : {background: course.fallbackBg}
                                 }
                             >
                                 {!course.thumbnailUrl && (
                                     <div className="cs__play">
-                                        <div className="cs__play-tri" />
+                                        <div className="cs__play-tri"/>
                                     </div>
                                 )}
                                 {course.studentCount > 0 && (
@@ -140,10 +140,13 @@ export default function Course() {
                                 <h3 className="cs__course-title">{course.title}</h3>
                                 <p className="cs__instructor">{course.instructorName}</p>
                                 <div className="cs__rating-row">
-                                    <span className="cs__rating">★ {course.rating.toFixed(1)}</span>
+                                    <div>
+                                        <span className="cs__rating">★ </span>
+                                        <span className="cs__rating-value">{course.rating.toFixed(1)}</span>
+                                    </div>
                                     <span className="cs__reviews">(0)</span>
                                     <span className="cs__meta">
-                                        {formatHours(course.totalDurationSeconds)} · {course.level}
+                                            {formatHours(course.totalDurationSeconds)} · {course.level}
                                     </span>
                                 </div>
                                 <div className="cs__footer">
@@ -153,7 +156,8 @@ export default function Course() {
                                                 <span className="cs__price cs__price--sale">
                                                     ${(course.basePrice * (1 - course.discountPercent / 100)).toFixed(2)}
                                                 </span>
-                                                <span className="cs__original">${Number(course.basePrice).toFixed(2)}</span>
+                                                <span
+                                                    className="cs__original">${Number(course.basePrice).toFixed(2)}</span>
                                                 <span className="cs__discount-badge">-{course.discountPercent}%</span>
                                             </>
                                         ) : (

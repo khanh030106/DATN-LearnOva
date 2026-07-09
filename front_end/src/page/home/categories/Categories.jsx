@@ -1,17 +1,30 @@
+import { useEffect, useState } from 'react';
+import { getTopCategories } from '../../../api/PublicCourseApi.js';
 import './Categories.css';
 
-const categories = [
-    { name: 'Web Development', count: '8,400+ courses', color: '#2563eb', initial: 'W' },
-    { name: 'Data Science',    count: '4,200+ courses', color: '#4361ee', initial: 'D' },
-    { name: 'UI/UX Design',   count: '3,100+ courses', color: '#f72585', initial: 'U' },
-    { name: 'Business',       count: '5,600+ courses', color: '#06d6a0', initial: 'B' },
-    { name: 'Finance',        count: '2,900+ courses', color: '#8338ec', initial: 'F' },
-    { name: 'Photography',    count: '1,800+ courses', color: '#f59e0b', initial: 'P' },
-    { name: 'Marketing',      count: '3,300+ courses', color: '#118ab2', initial: 'M' },
-    { name: 'Leadership',     count: '2,100+ courses', color: '#0ea5e9', initial: 'L' },
+const PALETTE = [
+    '#2563eb', '#4361ee', '#f72585', '#06d6a0',
+    '#8338ec', '#f59e0b', '#118ab2', '#0ea5e9',
 ];
 
+const colorForCategory = (id, index) => PALETTE[(id ?? index) % PALETTE.length];
+
+const formatSoldCount = (soldCount) =>
+    soldCount > 0 ? `${soldCount.toLocaleString('vi-VN')}+ khóa học đã bán` : 'Đang cập nhật';
+
 export default function Categories() {
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        getTopCategories()
+            .then(setCategories)
+            .catch(() => setCategories([]));
+    }, []);
+
+    if (categories.length === 0) {
+        return null;
+    }
+
     return (
         <section className="cats" aria-labelledby="cats-heading">
             <div className="cats__container">
@@ -23,16 +36,16 @@ export default function Categories() {
                 </div>
 
                 <div className="cats__grid">
-                    {categories.map((cat) => (
-                        <a key={cat.name} href="/courses" className="cats__card">
+                    {categories.map((cat, index) => (
+                        <a key={cat.id} href="/learnova/courses" className="cats__card">
                             <div
                                 className="cats__icon"
-                                style={{ background: cat.color + '18', color: cat.color }}
+                                style={{ background: colorForCategory(cat.id, index) + '18', color: colorForCategory(cat.id, index) }}
                             >
-                                {cat.initial}
+                                {cat.name.charAt(0).toUpperCase()}
                             </div>
                             <p className="cats__name">{cat.name}</p>
-                            <p className="cats__count">{cat.count}</p>
+                            <p className="cats__count">{formatSoldCount(cat.soldCount)}</p>
                         </a>
                     ))}
                 </div>

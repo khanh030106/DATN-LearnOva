@@ -9,6 +9,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+
 import { useEffect, useState } from "react";
 import defaultCover from "../../../../assets/instructors/header-intructor.png";
 import "./ViewInstructorModal.css";

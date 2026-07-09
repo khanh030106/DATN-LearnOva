@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 
-const HeaderSearch = ({ suggestions }) => {
+const HeaderSearch = ({  }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedTerm, setDebouncedTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -14,16 +14,6 @@ const HeaderSearch = ({ suggestions }) => {
     return () => window.clearTimeout(timeoutId);
   }, [searchTerm]);
 
-  const filteredSuggestions = useMemo(() => {
-    if (!debouncedTerm) return suggestions.slice(0, 4);
-
-    return suggestions.filter((item) => {
-      const label = item.label.toLowerCase();
-      const type = item.type.toLowerCase();
-
-      return label.includes(debouncedTerm) || type.includes(debouncedTerm);
-    });
-  }, [debouncedTerm, suggestions]);
 
   return (
     <form className="user-logged-search" role="search">

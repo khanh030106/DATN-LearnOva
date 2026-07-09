@@ -1,5 +1,6 @@
 package com.example.back_end.entity;
 
+import com.example.back_end.entity.enums.HlsStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -44,6 +45,16 @@ public class Lesson {
 
     @Column(name = "video_size_bytes")
     private Long videoSizeBytes;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "hls_status", length = Integer.MAX_VALUE)
+    private HlsStatus hlsStatus;
+
+    @Column(name = "media_convert_job_id", length = Integer.MAX_VALUE)
+    private String mediaConvertJobId;
+
+    @Column(name = "hls_playlist_key", length = Integer.MAX_VALUE)
+    private String hlsPlaylistKey;
 
     @NotNull
     @Column(name = "lesson_order", nullable = false)
