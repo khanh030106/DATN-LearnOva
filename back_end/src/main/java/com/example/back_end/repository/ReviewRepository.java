@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,5 +26,26 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT COALESCE(AVG(r.rating), 0) FROM Review r WHERE r.course.id = :courseId")
     Double getAverageRating(@Param("courseId") Long courseId);
 
+    @Query("SELECT COALESCE(AVG(r.rating), 0) FROM Review r WHERE r.course.instructor.id = :instructorId")
+    Double getAverageRatingByInstructorId(@Param("instructorId") Long instructorId);
+
     long countByCourseId(Long courseId);
+
+    long countByCourseInstructorId(Long instructorId);
+
+    long countByCourseInstructorIdAndCreatedAtGreaterThanEqual(Long instructorId, Instant since);
+
+    interface CourseRatingProjection {
+        Long getCourseId();
+        Double getAvgRating();
+        Long getRatingCount();
+    }
+
+    @Query("SELECT r.course.id AS courseId, AVG(r.rating) AS avgRating, COUNT(r) AS ratingCount " +
+            "FROM Review r WHERE r.course.instructor.id = :instructorId GROUP BY r.course.id")
+    List<CourseRatingProjection> findAvgRatingByCourseForInstructor(@Param("instructorId") Long instructorId);
+
+    @Query("SELECT r.course.id AS courseId, AVG(r.rating) AS avgRating, COUNT(r) AS ratingCount " +
+            "FROM Review r WHERE r.course.id IN :courseIds GROUP BY r.course.id")
+    List<CourseRatingProjection> findAvgRatingByCourseIds(@Param("courseIds") List<Long> courseIds);
 }

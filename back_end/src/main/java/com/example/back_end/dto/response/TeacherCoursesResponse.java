@@ -11,11 +11,14 @@ public record TeacherCoursesResponse(
         CourseStatus status,
         BigDecimal basePrice,
         Instant createdAt,
+        Instant updatedAt,
         String categoryName,
         long lessonCount,
         long totalDurationSeconds,
         long studentCount,
         Boolean isDeleted,
-        String rejectionReason
+        String rejectionReason,
+        double avgRating,
+        long ratingCount
 ) {
 }

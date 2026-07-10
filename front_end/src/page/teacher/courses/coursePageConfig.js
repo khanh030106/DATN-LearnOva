@@ -1,9 +1,20 @@
 import { DollarSign, GraduationCap, Star, TrendingUp, Users } from "lucide-react";
 
+export const STATUS_LABELS = {
+  DRAFT: "Draft",
+  PENDING_REVIEW: "Pending Review",
+  PUBLISHED: "Published",
+  REJECTED: "Rejected",
+  DELETED: "Deleted",
+};
+
 export const courseStatusFilterOptions = [
   { label: "All Status", value: "ALL" },
-  { label: "Active", value: "ACTIVE" },
-  { label: "Inactive", value: "INACTIVE" },
+  { label: "Draft", value: "DRAFT" },
+  { label: "Pending Review", value: "PENDING_REVIEW" },
+  { label: "Published", value: "PUBLISHED" },
+  { label: "Rejected", value: "REJECTED" },
+  { label: "Deleted", value: "DELETED" },
 ];
 
 export const courseSortOptions = [
@@ -16,9 +27,9 @@ export const courseTableColumns = ["Course", "Status", "Students", "Price", "Rat
 
 export const parseCourseNumber = (value) => Number(String(value).replace(/[^\d.]/g, "")) || 0;
 
-export const buildCategoryOptions = (visibleCourses) => [
+export const buildCategoryOptions = (allCategories) => [
   "ALL",
-  ...new Set(visibleCourses.map((course) => course.category)),
+  ...allCategories.map((category) => category.name),
 ];
 
 
@@ -28,8 +39,9 @@ export const getFilteredCourses = ({ courses, activeFilter, activeCategory, sear
   return courses.filter((course) => {
     const matchesFilter =
       activeFilter === "ALL" ||
-      (activeFilter === "ACTIVE" && !course.isDeleted) ||
-      (activeFilter === "INACTIVE" && course.isDeleted);
+      (activeFilter === "DELETED"
+        ? course.isDeleted
+        : course.courseStatus === activeFilter && !course.isDeleted);
     const matchesCategory = activeCategory === "ALL" || course.category === activeCategory;
     const matchesSearch =
       !normalizedSearch ||

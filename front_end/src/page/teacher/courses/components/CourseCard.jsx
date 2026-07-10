@@ -1,4 +1,5 @@
 import { Circle, Eye, EyeOff, Info, Pencil, Star } from "lucide-react";
+import { STATUS_LABELS } from "../coursePageConfig.js";
 
 const formatDuration = (totalSeconds) => {
   if (!totalSeconds) return "0:00";
@@ -9,20 +10,12 @@ const formatDuration = (totalSeconds) => {
   return `${m}:${String(s).padStart(2, "0")}`;
 };
 
-const STATUS_LABELS = {
-  DRAFT: "Draft",
-  PENDING_REVIEW: "Pending Review",
-  PUBLISHED: "Published",
-  REJECTED: "Rejected",
-  ARCHIVED: "Archived",
-};
-
 const STATUS_MODIFIERS = {
   DRAFT: "draft",
   PENDING_REVIEW: "pending",
   PUBLISHED: "published",
   REJECTED: "rejected",
-  ARCHIVED: "archived",
+  DELETED: "inactive",
 };
 
 const CourseCard = ({ course, onDelete, onUpdate, onToggleVisibility, onViewDetail }) => {
@@ -32,8 +25,9 @@ const CourseCard = ({ course, onDelete, onUpdate, onToggleVisibility, onViewDeta
   const studentCount = isPublished ? (course.studentCount ?? 0) : "-";
   const price = isPublished ? course.displayPrice : "-";
   const rating = isPublished ? course.rating : "-";
-  const statusModifier = STATUS_MODIFIERS[course.courseStatus] ?? "draft";
-  const statusLabel = STATUS_LABELS[course.courseStatus] ?? course.courseStatus;
+  const displayStatus = course.isDeleted ? "DELETED" : course.courseStatus;
+  const statusModifier = STATUS_MODIFIERS[displayStatus] ?? "draft";
+  const statusLabel = STATUS_LABELS[displayStatus] ?? displayStatus;
 
   return (
     <article className="teacher-course-row">
@@ -74,7 +68,7 @@ const CourseCard = ({ course, onDelete, onUpdate, onToggleVisibility, onViewDeta
         )}
       </strong>
 
-      <span className="teacher-course-row__updated">{course.createdAgo}</span>
+      <span className="teacher-course-row__updated">{course.updatedAgo}</span>
 
       <div className="teacher-course-row__actions">
         <button type="button" aria-label={`Update ${course.title}`} onClick={() => onUpdate(course)}>

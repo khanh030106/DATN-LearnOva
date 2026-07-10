@@ -24,4 +24,8 @@ public interface LessonQARepository extends JpaRepository<LessonQA, Long> {
 
     @Query("SELECT a FROM LessonQA a JOIN FETCH a.user WHERE a.parent.id IN :parentIds")
     List<LessonQA> findAnswersByParentIdsWithUser(@Param("parentIds") List<Long> parentIds);
+
+    @Query("SELECT COUNT(q) FROM LessonQA q WHERE q.type = 'QUESTION' AND q.isSolved = false " +
+            "AND q.isDeleted = false AND q.lesson.section.course.instructor.id = :instructorId")
+    long countUnsolvedQuestionsByInstructor(@Param("instructorId") Long instructorId);
 }

@@ -164,6 +164,11 @@ public class CourseService {
                 .stream()
                 .collect(Collectors.groupingBy(e -> e.getCourse().getId(), Collectors.counting()));
 
+        Map<Long, ReviewRepository.CourseRatingProjection> ratingByCourseId = reviewRepository
+                .findAvgRatingByCourseForInstructor(instructor.getId())
+                .stream()
+                .collect(Collectors.toMap(ReviewRepository.CourseRatingProjection::getCourseId, r -> r));
+
         return courses.stream()
                 .map(course -> {
                     String categoryName = course.getCoursecategories().stream()
@@ -186,6 +191,10 @@ public class CourseService {
 
                     long studentCount = enrollmentCountByCourseId.getOrDefault(course.getId(), 0L);
 
+                    ReviewRepository.CourseRatingProjection rating = ratingByCourseId.get(course.getId());
+                    double avgRating = rating != null && rating.getAvgRating() != null ? rating.getAvgRating() : 0;
+                    long ratingCount = rating != null && rating.getRatingCount() != null ? rating.getRatingCount() : 0;
+
                     return new TeacherCoursesResponse(
                             course.getId(),
                             course.getTitle(),
@@ -193,12 +202,15 @@ public class CourseService {
                             course.getStatus(),
                             course.getBasePrice(),
                             course.getCreatedAt(),
+                            course.getUpdatedAt(),
                             categoryName,
                             lessonCount,
                             totalDurationSeconds,
                             studentCount,
                             course.getIsDeleted(),
-                            course.getRejectionReason()
+                            course.getRejectionReason(),
+                            avgRating,
+                            ratingCount
                     );
                 })
                 .toList();
@@ -473,10 +485,29 @@ public class CourseService {
 
     @Transactional(readOnly = true)
     public List<PublicCourseResponse> getPublishedCourses() {
-        return courseRepository
-                .findByStatusAndIsDeletedFalseOrderByCreatedAtDesc(CourseStatus.PUBLISHED)
+        List<Course> courses = courseRepository
+                .findByStatusAndIsDeletedFalseOrderByCreatedAtDesc(CourseStatus.PUBLISHED);
+
+        List<Long> courseIds = courses.stream().map(Course::getId).toList();
+
+        Map<Long, Long> studentCountByCourseId = courseIds.isEmpty()
+                ? Map.of()
+                : enrollmentRepository.findByCourseIdIn(courseIds)
                 .stream()
-                .map(this::toPublicCourseResponse)
+                .collect(Collectors.groupingBy(e -> e.getCourse().getId(), Collectors.counting()));
+
+        Map<Long, ReviewRepository.CourseRatingProjection> ratingByCourseId = courseIds.isEmpty()
+                ? Map.of()
+                : reviewRepository.findAvgRatingByCourseIds(courseIds)
+                .stream()
+                .collect(Collectors.toMap(ReviewRepository.CourseRatingProjection::getCourseId, r -> r));
+
+        return courses.stream()
+                .map(course -> toPublicCourseResponse(
+                        course,
+                        studentCountByCourseId.getOrDefault(course.getId(), 0L),
+                        ratingByCourseId.get(course.getId())
+                ))
                 .toList();
     }
 
@@ -487,10 +518,41 @@ public class CourseService {
                 .filter(item -> !Boolean.TRUE.equals(item.getIsDeleted()))
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
 
-        return toPublicCourseResponse(course);
+        long studentCount = enrollmentRepository.countByCourseId(courseId);
+        ReviewRepository.CourseRatingProjection rating = reviewRepository
+                .findAvgRatingByCourseIds(List.of(courseId))
+                .stream()
+                .findFirst()
+                .orElse(null);
+
+        return toPublicCourseResponse(course, studentCount, rating);
     }
 
-    private PublicCourseResponse toPublicCourseResponse(Course course) {
+    private PublicCourseResponse toPublicCourseResponse(
+            Course course,
+            long studentCount,
+            ReviewRepository.CourseRatingProjection rating
+    ) {
+        String categoryName = course.getCoursecategories().stream()
+                .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
+                .findFirst()
+                .map(cc -> cc.getCategory().getName())
+                .orElse(null);
+
+        var activeLessons = course.getSections().stream()
+                .filter(s -> !Boolean.TRUE.equals(s.getIsDeleted()))
+                .flatMap(s -> s.getLessons().stream())
+                .filter(l -> !Boolean.TRUE.equals(l.getIsDeleted()))
+                .toList();
+
+        long lessonCount = activeLessons.size();
+        long totalDurationSeconds = activeLessons.stream()
+                .mapToLong(l -> l.getDurationSeconds() != null ? l.getDurationSeconds() : 0)
+                .sum();
+
+        double avgRating = rating != null && rating.getAvgRating() != null ? rating.getAvgRating() : 0;
+        long ratingCount = rating != null && rating.getRatingCount() != null ? rating.getRatingCount() : 0;
+
         return new PublicCourseResponse(
                 course.getId(),
                 course.getTitle(),
@@ -499,7 +561,13 @@ public class CourseService {
                 course.getBasePrice(),
                 course.getLevel(),
                 course.getStatus(),
-                course.getThumbnailKey()
+                course.getThumbnailKey(),
+                categoryName,
+                studentCount,
+                lessonCount,
+                totalDurationSeconds,
+                avgRating,
+                ratingCount
         );
     }
 

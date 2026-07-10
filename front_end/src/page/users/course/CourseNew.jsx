@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Course.css";
 import { BiHeart, BiCart } from "react-icons/bi";
@@ -10,6 +10,18 @@ import LearnovaAI from "../../home/chat-bot/chatBot.jsx";
 import { useAuth } from "../../../hook/UseAuth.jsx";
 import { addStoredCartItem } from "../../../utils/cartStorage.js";
 import { getPublicCoursesApi } from "../../../api/CourseApi.js";
+import { getFileUrl } from "../../../api/PublicCourseApi.js";
+
+const FALLBACK_THUMBS = [
+  "linear-gradient(135deg, #2563eb 0%, #38bdf8 100%)",
+  "linear-gradient(135deg, #4361ee 0%, #7209b7 100%)",
+  "linear-gradient(135deg, #f72585 0%, #b5179e 100%)",
+  "linear-gradient(135deg, #06d6a0 0%, #118ab2 100%)",
+  "linear-gradient(135deg, #8338ec 0%, #3a0ca3 100%)",
+  "linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)",
+  "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
+  "linear-gradient(135deg, #10b981 0%, #047857 100%)",
+];
 
 const categories = [
   { id: "all", name: "All Categories", count: 120 },
@@ -25,119 +37,6 @@ const levels = [
   { id: "beginner", name: "Beginner", count: 124 },
   { id: "intermediate", name: "Intermediate", count: 156 },
   { id: "advanced", name: "Advanced", count: 78 },
-];
-
-const courses = [
-  {
-    id: 1,
-    title: "Lập trình Fullstack Master Node.js",
-    instructor: "Nguyễn Văn A",
-    category: "Technology",
-    rating: 4.9,
-    reviews: 2400,
-    price: "1.290.000đ",
-    duration: "42h",
-    tag: "BESTSELLER",
-    image:
-      "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80",
-    level: "Intermediate",
-  },
-  {
-    id: 2,
-    title: "Phân tích dữ liệu kinh doanh",
-    instructor: "Trần Thị B",
-    category: "Marketing",
-    rating: 4.8,
-    reviews: 1600,
-    price: "990.000đ",
-    duration: "28h",
-    tag: "HOT",
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
-    level: "Beginner",
-  },
-  {
-    id: 3,
-    title: "Thiết kế UI/UX Chuyên sâu",
-    instructor: "Lê Hoàng C",
-    category: "Design",
-    rating: 4.7,
-    reviews: 1800,
-    price: "1.590.000đ",
-    duration: "35h",
-    tag: "NEW",
-    image:
-      "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=600&q=80",
-    level: "Intermediate",
-  },
-  {
-    id: 4,
-    title: "Digital Marketing Mastery",
-    instructor: "Phạm Thị D",
-    category: "Marketing",
-    rating: 4.8,
-    reviews: 1200,
-    price: "690.000đ",
-    duration: "24h",
-    image:
-      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80",
-    level: "Beginner",
-  },
-  {
-    id: 5,
-    title: "Quản lý nhân sự hiện đại",
-    instructor: "Phạm Văn E",
-    category: "Business",
-    rating: 4.6,
-    reviews: 980,
-    price: "890.000đ",
-    duration: "18h",
-    image:
-      "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=600&q=80",
-    level: "Intermediate",
-  },
-  {
-    id: 6,
-    title: "Python for Data Science",
-    instructor: "Bùi Thị F",
-    category: "Technology",
-    rating: 4.8,
-    reviews: 2100,
-    price: "959.000đ",
-    originalPrice: "1.350.000đ",
-    discount: 29,
-    duration: "38h",
-    tag: "BESTSELLER",
-    image:
-      "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80",
-    level: "Intermediate",
-  },
-  {
-    id: 7,
-    title: "Nâng cao kỹ năng thuyết trình",
-    instructor: "Đặng Thị G",
-    category: "Soft Skills",
-    rating: 4.7,
-    reviews: 1260,
-    price: "690.000đ",
-    duration: "20h",
-    image:
-      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80",
-    level: "Beginner",
-  },
-  {
-    id: 8,
-    title: "Tiếng Anh giao tiếp",
-    instructor: "Dương H",
-    category: "Languages",
-    rating: 4.6,
-    reviews: 1100,
-    price: "490.000đ",
-    duration: "15h",
-    image:
-      "https://images.unsplash.com/photo-1546410531-bb4ca050552d?auto=format&fit=crop&w=600&q=80",
-    level: "Beginner",
-  },
 ];
 
 function formatCount(num) {
@@ -161,21 +60,24 @@ function getAvatarColor(name) {
 
 const formatVnd = (value) => `${Number(value || 0).toLocaleString("vi-VN")}đ`;
 
+const formatDuration = (seconds) => {
+  if (!seconds) return "0h";
+  const hours = seconds / 3600;
+  return hours >= 1 ? `${Math.round(hours)}h` : `${Math.round(seconds / 60)}m`;
+};
+
 const mapPublicCourse = (course) => ({
   id: course.courseId,
   courseId: course.courseId,
   title: course.title,
   instructor: course.instructorName || "LearnOva Instructor",
-  category: "Technology",
-  rating: 4.8,
-  reviews: 0,
+  category: course.categoryName || "Uncategorized",
+  rating: Number(course.avgRating || 0),
+  reviews: course.ratingCount || 0,
   price: formatVnd(course.basePrice),
-  duration: "Lifetime",
-  tag: course.status === "PUBLISHED" ? "LIVE" : "",
-  image:
-    course.thumbnailKey && String(course.thumbnailKey).startsWith("http")
-      ? course.thumbnailKey
-      : "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80",
+  duration: formatDuration(course.totalDurationSeconds),
+  studentCount: course.studentCount || 0,
+  thumbnailKey: course.thumbnailKey,
   level: course.level || "Intermediate",
 });
 
@@ -199,18 +101,34 @@ function CoursesPage() {
   const [selectedCategories, setSelectedCategories] = useState(["tech"]);
   const [selectedLevels, setSelectedLevels] = useState(["intermediate"]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
 
     getPublicCoursesApi()
-      .then((data) => {
-        if (mounted && Array.isArray(data) && data.length > 0) {
-          setDbCourses(data.map(mapPublicCourse));
-        }
+      .then(async (data) => {
+        const mapped = Array.isArray(data) ? data.map(mapPublicCourse) : [];
+        const withThumbs = await Promise.all(
+          mapped.map(async (course, idx) => {
+            let image = FALLBACK_THUMBS[idx % FALLBACK_THUMBS.length];
+            if (course.thumbnailKey) {
+              try {
+                image = await getFileUrl(course.thumbnailKey);
+              } catch {
+                // keep fallback gradient
+              }
+            }
+            return { ...course, image };
+          }),
+        );
+        if (mounted) setDbCourses(withThumbs);
       })
       .catch(() => {
         if (mounted) setDbCourses([]);
+      })
+      .finally(() => {
+        if (mounted) setIsLoading(false);
       });
 
     return () => {
@@ -218,10 +136,7 @@ function CoursesPage() {
     };
   }, []);
 
-  const displayCourses = useMemo(
-    () => (dbCourses.length > 0 ? dbCourses : courses),
-    [dbCourses],
-  );
+  const displayCourses = dbCourses;
 
   const coursesPerPage = 8;
   const totalPages = Math.ceil(displayCourses.length / coursesPerPage);
@@ -365,10 +280,15 @@ function CoursesPage() {
             </div>
           </div>
 
+          {isLoading ? (
+            <div className="courses-empty-state">Đang tải khóa học...</div>
+          ) : visibleCourses.length === 0 ? (
+            <div className="courses-empty-state">Chưa có khóa học nào.</div>
+          ) : (
           <div className={`courses-grid ${viewMode === "list" ? "courses-grid--list" : ""}`}>
             {visibleCourses.map((course) => (
               <div key={course.id} className="course-card-course">
-                <Link to={`/learnova/CoursesDetail/${course.id}`} className="course-card-img">
+                <Link to={`/learnova/courses/detail/${course.courseId}`} className="course-card-img">
                   <img src={course.image} alt={course.title} />
                   <button
                     type="button"
@@ -382,9 +302,9 @@ function CoursesPage() {
                   >
                     <BiHeart />
                   </button>
-                  {course.tag && (
-                    <span className={`course-tag-badge course-tag-badge--${course.tag.toLowerCase()}`}>
-                      {course.tag}
+                  {course.studentCount > 0 && (
+                    <span className="course-tag-badge course-tag-badge--bestseller">
+                      BESTSELLER
                     </span>
                   )}
                   {course.duration && (
@@ -393,7 +313,7 @@ function CoursesPage() {
                 </Link>
 
                 <div className="course-card-body">
-                  <Link to={`/learnova/CoursesDetail/${course.id}`} className="course-title">
+                  <Link to={`/learnova/courses/detail/${course.courseId}`} className="course-title">
                     <h3>{course.title}</h3>
                   </Link>
 
@@ -409,7 +329,7 @@ function CoursesPage() {
                   </div>
 
                   <div className="course-rating">
-                    <span className="course-rating-value">{course.rating}</span>
+                    <span className="course-rating-value">{course.rating.toFixed(1)}</span>
                     <div className="course-rating-stars">
                       {[1, 2, 3, 4, 5].map((i) => (
                         <FaStar
@@ -424,9 +344,6 @@ function CoursesPage() {
                   <div className="course-card-bottom">
                     <div className="course-price-block">
                       <span className="course-price">{course.price}</span>
-                      {course.originalPrice && (
-                        <span className="course-original-price">{course.originalPrice}</span>
-                      )}
                     </div>
                     <button
                       type="button"
@@ -441,6 +358,7 @@ function CoursesPage() {
               </div>
             ))}
           </div>
+          )}
 
           <div className="pagination-section" aria-label="Courses pagination">
             <button

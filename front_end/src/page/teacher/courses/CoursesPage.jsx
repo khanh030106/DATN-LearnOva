@@ -1,7 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getMyCourse, getFileUrl, softDeleteCourse, toggleCourseVisibility } from "../../../api/teacher/CourseApi.js";
+import {
+  getMyCourse,
+  getFileUrl,
+  getActiveCategories,
+  softDeleteCourse,
+  toggleCourseVisibility,
+} from "../../../api/teacher/CourseApi.js";
 import {
   buildCategoryOptions,
   getFilteredCourses,
@@ -15,6 +21,16 @@ import "./CoursesPage.css";
 
 const COURSES_CREATE_PATH = "/learnova/teacher/courses/create";
 
+const formatTimeAgo = (isoString) => {
+  if (!isoString) return "-";
+  const diffInDays = Math.floor((new Date() - new Date(isoString)) / (1000 * 60 * 60 * 24));
+  if (diffInDays === 0) return "Today";
+  if (diffInDays === 1) return "Yesterday";
+  if (diffInDays < 30) return `${diffInDays} days ago`;
+  if (diffInDays < 365) return `${Math.floor(diffInDays / 30)} months ago`;
+  return `${Math.floor(diffInDays / 365)} years ago`;
+};
+
 const CoursesPage = () => {
   const navigate = useNavigate();
   const [teacherCourses, setTeacherCourses] = useState([]);
@@ -26,6 +42,13 @@ const CoursesPage = () => {
   const [deleteModal, setDeleteModal] = useState({ open: false, courseId: null, courseName: "" });
   const [isDeleting, setIsDeleting] = useState(false);
   const [detailCourse, setDetailCourse] = useState(null);
+  const [allCategories, setAllCategories] = useState([]);
+
+  useEffect(() => {
+    getActiveCategories()
+      .then((data) => setAllCategories(Array.isArray(data) ? data : []))
+      .catch(() => setAllCategories([]));
+  }, []);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -37,15 +60,8 @@ const CoursesPage = () => {
           coursesData.map(async (course) => {
             const isPublished = course.status === "PUBLISHED";
 
-            const createdDate = new Date(course.createdAt);
-            const now = new Date();
-            const diffInDays = Math.floor((now - createdDate) / (1000 * 60 * 60 * 24));
-            const createdAgo =
-              diffInDays === 0 ? "Today" :
-              diffInDays === 1 ? "Yesterday" :
-              diffInDays < 30 ? `${diffInDays} days ago` :
-              diffInDays < 365 ? `${Math.floor(diffInDays / 30)} months ago` :
-              `${Math.floor(diffInDays / 365)} years ago`;
+            const createdAgo = formatTimeAgo(course.createdAt);
+            const updatedAgo = formatTimeAgo(course.updatedAt);
 
             let thumbnailUrl = "/default-course-thumbnail.jpg";
             if (course.thumbnailKey) {
@@ -67,15 +83,17 @@ const CoursesPage = () => {
               basePrice: course.basePrice,
               displayPrice: isPublished ? `$${course.basePrice || 0}` : "-",
               createdAt: course.createdAt,
-              updatedAt: course.createdAt,
+              updatedAt: course.updatedAt,
               createdAgo,
+              updatedAgo,
               isDeleted: course.isDeleted ?? false,
               category: course.categoryName || "Uncategorized",
               modules: course.lessonCount ?? 0,
               totalDurationSeconds: course.totalDurationSeconds ?? 0,
               studentCount: course.studentCount ?? 0,
               students: `${course.studentCount ?? 0} students`,
-              rating: isPublished ? "0.0" : "-",
+              rating: isPublished ? Number(course.avgRating ?? 0).toFixed(1) : "-",
+              ratingCount: course.ratingCount ?? 0,
             };
           })
         );
@@ -91,7 +109,7 @@ const CoursesPage = () => {
     fetchCourses();
   }, []);
 
-  const categoryOptions = useMemo(() => buildCategoryOptions(teacherCourses), [teacherCourses]);
+  const categoryOptions = useMemo(() => buildCategoryOptions(allCategories), [allCategories]);
 
   const activeCourses = useMemo(() => {
     const filteredCourses = getFilteredCourses({
@@ -142,6 +160,12 @@ const CoursesPage = () => {
     setDetailCourse(course);
   };
 
+  const handleClearFilters = () => {
+    setActiveFilter("ALL");
+    setActiveCategory("ALL");
+    setSearchTerm("");
+  };
+
   const handleToggleVisibility = async (course) => {
     try {
       await toggleCourseVisibility(course.id);
@@ -182,13 +206,29 @@ const CoursesPage = () => {
         sortOption={sortOption}
       />
 
-      <CoursesTable
-        courses={activeCourses}
-        onDeleteCourse={handleDeleteClick}
-        onUpdateCourse={handleUpdateCourse}
-        onToggleVisibility={handleToggleVisibility}
-        onViewDetail={handleViewDetail}
-      />
+      {activeCourses.length > 0 ? (
+        <CoursesTable
+          courses={activeCourses}
+          onDeleteCourse={handleDeleteClick}
+          onUpdateCourse={handleUpdateCourse}
+          onToggleVisibility={handleToggleVisibility}
+          onViewDetail={handleViewDetail}
+        />
+      ) : teacherCourses.length > 0 ? (
+        <div className="teacher-courses-empty">
+          <p>No courses match your filters.</p>
+          <button type="button" onClick={handleClearFilters}>
+            Clear filters
+          </button>
+        </div>
+      ) : (
+        <div className="teacher-courses-empty">
+          <p>You haven't created any courses yet.</p>
+          <button type="button" onClick={handleCreateCourse}>
+            Create your first course
+          </button>
+        </div>
+      )}
 
       {deleteModal.open && (
         <DeleteConfirmModal
