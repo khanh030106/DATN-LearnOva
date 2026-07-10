@@ -635,7 +635,7 @@ export default function CourseDetail() {
                 />
             )}
 
-            <ToastContainer position="top-right" autoClose={2500} />
+            <ToastContainer position="top-right" autoClose={2000} />
         </div>
     );
 }
