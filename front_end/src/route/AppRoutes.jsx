@@ -1,4 +1,5 @@
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Outlet} from "react-router-dom";
+import RequireRole from "./RequireRole.jsx";
 import AuthPage from "../page/login/AuthPage.jsx";
 import Home from "../page/home/Home.jsx";
 import HomeLayout from "../layout/home/HomeLayout.jsx";
@@ -57,7 +58,7 @@ const App = () => {
                 </Route>
 
                 {/* Admin */}
-                <Route path="/learnova/admin" element={<DashboardLayout/>}>
+                <Route path="/learnova/admin" element={<RequireRole role="ROLE_ADMIN"><DashboardLayout/></RequireRole>}>
                     <Route index element={<Dashboard/>}/>
                     <Route path="users" element={<UserManagement/>}/>
                     <Route path="teachers" element={<InstructorManagement/>}/>
@@ -77,7 +78,7 @@ const App = () => {
                 </Route>
 
                 {/* Teacher */}
-                <Route path="/learnova/teacher" element={<TeacherLayout/>}>
+                <Route path="/learnova/teacher" element={<RequireRole role="ROLE_TEACHER"><TeacherLayout/></RequireRole>}>
                     <Route index element={<OverviewPage/>}/>
                     <Route path="courses" element={<CoursesPage/>}/>
                     <Route path="courses/create" element={<CourseCreationPage/>}/>
@@ -97,10 +98,13 @@ const App = () => {
                     <Route path="/learnova/intructors" element={<InstructorsPage/>}/>
                     <Route path="/learnova/intructorDetail" element={<InstructorDetail/>}/>
                     <Route path="/learnova/about" element={<AboutView/>}/>
-                    <Route path="/learnova/user/profile" element={<ProfileViewProps key="profile" initialTab="profile"/>}/>
-                    <Route path="/learnova/user/profile/courses" element={<ProfileViewProps key="courses" initialTab="courses"/>}/>
-                    <Route path="/learnova/user/profile/favorites" element={<ProfileViewProps key="favorites" initialTab="favorites"/>}/>
-                    <Route path="/learnova/user/profile/security" element={<ProfileViewProps key="security" initialTab="security"/>}/>
+
+                    <Route element={<RequireRole><Outlet/></RequireRole>}>
+                        <Route path="/learnova/user/profile" element={<ProfileViewProps key="profile" initialTab="profile"/>}/>
+                        <Route path="/learnova/user/profile/courses" element={<ProfileViewProps key="courses" initialTab="courses"/>}/>
+                        <Route path="/learnova/user/profile/favorites" element={<ProfileViewProps key="favorites" initialTab="favorites"/>}/>
+                        <Route path="/learnova/user/profile/security" element={<ProfileViewProps key="security" initialTab="security"/>}/>
+                    </Route>
                 </Route>
 
             </Routes>

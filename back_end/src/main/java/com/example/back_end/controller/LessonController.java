@@ -7,11 +7,13 @@ import com.example.back_end.dto.resquest.UpdateLessonVideoRequest;
 import com.example.back_end.service.LessonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/learnova/courses")
+@PreAuthorize("hasRole('TEACHER')")
 public class LessonController {
 
     private final LessonService lessonService;

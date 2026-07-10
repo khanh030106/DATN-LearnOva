@@ -42,35 +42,35 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
+                        // ── Public: no authentication required ──────────────
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/learnova/auth/**").permitAll()
-                        .requestMatchers("/api/learnova/uploads/presigned-url").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/learnova/courses/public/**").permitAll()
                         .requestMatchers("/api/learnova/courses/video-url/**").permitAll()
                         .requestMatchers("/api/learnova/courses/hls/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/courses/public/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/learnova/courses/featured").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/learnova/enrollments/check").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/learnova/courses/*").permitAll()
-                        .requestMatchers("/api/learnova/courses/my-courses").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/courses/top-categories").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/learnova/courses/categories").permitAll()
-                        .requestMatchers("/api/learnova/admin/users/**").permitAll()
-                        .requestMatchers("/api/learnova/admin/categories-management/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/learnova/admin/courses-management/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/learnova/admin/courses-management/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/learnova/admin/courses-management/**").permitAll()
-                        .requestMatchers("/api/learnova/admin/courses-management/**").permitAll()
-                        .requestMatchers("/api/learnova/admin/vouchers/**").permitAll()
-                        .requestMatchers("/api/learnova/admin/revenue/**").permitAll()
-                        .requestMatchers("/api/learnova/admin/instructors-management/**").permitAll()
-                        .requestMatchers("/api/learnova/admin/tags-management/**").permitAll()
+                        // NOTE: matches course detail (GET /courses/{id}) but also shares this
+                        // single-segment shape with teacher-only GET /courses/my-courses|my-students|my-reviews.
+                        // Those three are gated by @PreAuthorize("hasRole('TEACHER')") on the controller
+                        // method itself, which is enforced independently of this permitAll.
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/courses/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/enrollments/check").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/course/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/review/summary/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/qna/course/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/qna/lesson/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/learnova/payments/webhook").permitAll()
                         .requestMatchers("/api/learnova/user/me").permitAll()
-                        .requestMatchers("/api/learnova/review/**").permitAll()
-                        .requestMatchers("/api/learnova/progress/**").permitAll()
-                        .requestMatchers("/api/learnova/auth/resend-verification").permitAll()
-//                        .requestMatchers("/api/learnova/api/qna/**").authenticated()
-                                .requestMatchers("/api/learnova/qna/**").authenticated()
-                        .requestMatchers("/error").permitAll()// để test
+                        .requestMatchers("/error").permitAll()
+
+                        // ── Admin only ────────────────────────────────────────
+                        .requestMatchers("/api/learnova/admin/**").hasRole("ADMIN")
+
+                        // ── Everything else requires a logged-in user; role-specific
+                        //    (teacher/student) checks are enforced via @PreAuthorize on
+                        //    the individual controllers/methods. ─────────────────────
                         .anyRequest().authenticated()
                 )
 

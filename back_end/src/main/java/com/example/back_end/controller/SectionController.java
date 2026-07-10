@@ -14,10 +14,12 @@ import com.example.back_end.service.SectionService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/learnova/courses")
+@PreAuthorize("hasRole('TEACHER')")
 public class SectionController {
 
     private final SectionService sectionService;
