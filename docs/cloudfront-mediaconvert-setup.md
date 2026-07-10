@@ -1,4 +1,7 @@
-# Hướng dẫn cấu hình CloudFront + MediaConvert (HLS) cho LearnOva
+# Hướng dẫn cấu hình CloudFront + MediaConvert (HLS) cho LearnOva  
+
+Trước hết cần install winget: https://apps.microsoft.com/detail/9nblggh4nns1?hl=en-US&gl=VN  
+Install openSSL: winget install -e --id ShiningLight.OpenSSL.Light
 
 Tài liệu này hướng dẫn từng bước thao tác trên **AWS Console/CLI** để hoàn thiện 2 phần hạ tầng:
 
