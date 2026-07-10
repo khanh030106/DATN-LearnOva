@@ -129,6 +129,7 @@
   background: #eff6ff;
 }
 
+.teacher-student-row > :nth-child(2),
 .teacher-student-row > :nth-child(3),
 .teacher-student-row > :nth-child(4) {
   justify-self: center;
@@ -176,6 +177,7 @@
 .teacher-student-row__courses {
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 8px;
 }
@@ -192,6 +194,7 @@
   font-size: 0.72rem;
   font-weight: 600 !important;
 }
+
 
 .teacher-student-row__date {
   color: #0f172a;
@@ -241,7 +244,7 @@
 .teacher-student-row__actions {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 8px;
 }
 

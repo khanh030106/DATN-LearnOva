@@ -16,6 +16,7 @@ import com.example.back_end.entity.Coursecategory;
 import com.example.back_end.entity.CoursecategoryId;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.CourseStatus;
+import com.example.back_end.entity.enums.NotificationType;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.CourseRepository;
@@ -35,9 +36,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -54,6 +57,9 @@ public class CourseService {
     private final PromotioncourseRepository promotioncourseRepository;
     private final ReviewRepository reviewRepository;
     private final LessonRepository lessonRepository;
+    private final NotificationService notificationService;
+
+    private static final Set<CourseStatus> TEACHER_SETTABLE_STATUSES = EnumSet.of(CourseStatus.DRAFT, CourseStatus.PENDING_REVIEW);
 
     public Long createDraftCourse(CreateDraftCourseRequest request, String email) {
         User instructor = userRepository
@@ -118,11 +124,23 @@ public class CourseService {
             throw new BusinessException("Invalid course status: " + status);
         }
 
+        if (!TEACHER_SETTABLE_STATUSES.contains(newStatus)) {
+            throw new BusinessException("You can only save as draft or submit for review. Publishing requires admin approval.");
+        }
+
         course.setStatus(newStatus);
         course.setUpdatedAt(Instant.now());
 
-        if (newStatus == CourseStatus.PUBLISHED && course.getPublishedAt() == null) {
-            course.setPublishedAt(OffsetDateTime.now());
+        if (newStatus == CourseStatus.PENDING_REVIEW) {
+            course.setRejectionReason(null);
+            notificationService.createForAll(
+                    userRepository.findAllAdmins(),
+                    NotificationType.COURSE_SUBMITTED,
+                    "New course submitted for review",
+                    course.getInstructor().getFullName() + " submitted \"" + course.getTitle() + "\" for review.",
+                    "/learnova/admin/course-approval/" + course.getId(),
+                    Map.of("courseId", course.getId(), "courseTitle", course.getTitle())
+            );
         }
 
         courseRepository.save(course);
@@ -179,7 +197,8 @@ public class CourseService {
                             lessonCount,
                             totalDurationSeconds,
                             studentCount,
-                            course.getIsDeleted()
+                            course.getIsDeleted(),
+                            course.getRejectionReason()
                     );
                 })
                 .toList();

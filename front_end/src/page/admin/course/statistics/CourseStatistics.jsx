@@ -8,7 +8,7 @@ import "./CourseStatistics.css";
 const CourseStatistics = ({ courses = [], loading = false }) => {
   const valueOrLoading = (value) => (loading ? "..." : String(value));
   const publishedCount = courses.filter((course) => course.status === "PUBLISHED").length;
-  const draftCount = courses.filter((course) => course.status === "DRAFT").length;
+  const pendingReviewCount = courses.filter((course) => course.status === "PENDING_REVIEW").length;
   const archivedCount = courses.filter((course) => course.status === "ARCHIVED").length;
   const deletedCount = courses.filter((course) => course.status === "DELETED").length;
 
@@ -32,10 +32,10 @@ const CourseStatistics = ({ courses = [], loading = false }) => {
     {
       id: "pending",
       component: PendingReviewCard,
-      label: "Draft",
-      value: valueOrLoading(draftCount),
+      label: "Pending Review",
+      value: valueOrLoading(pendingReviewCount),
       trend: "status",
-      trendPercent: "DRAFT",
+      trendPercent: "PENDING_REVIEW",
     },
     {
       id: "suspended",

@@ -1,13 +1,14 @@
 import ApprovalCourseHero from "./ApprovalCourseHero.jsx";
 import ApprovalCurriculum from "./ApprovalCurriculum.jsx";
 
-const ApprovalCourseDetail = ({ course, isSubmitting, onApprove, onHide }) => (
+const ApprovalCourseDetail = ({ course, isSubmitting, onApprove, onHide, onReject }) => (
   <>
     <ApprovalCourseHero
       course={course}
       isSubmitting={isSubmitting}
       onApprove={onApprove}
       onHide={onHide}
+      onReject={onReject}
     />
 
     {course.description && (

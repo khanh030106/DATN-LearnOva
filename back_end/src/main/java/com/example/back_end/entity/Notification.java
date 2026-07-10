@@ -1,14 +1,18 @@
 package com.example.back_end.entity;
 
+import com.example.back_end.entity.enums.NotificationType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -33,6 +37,18 @@ public class Notification {
     @NotNull
     @Column(name = "content", nullable = false, length = Integer.MAX_VALUE)
     private String content;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false, length = 50)
+    private NotificationType type;
+
+    @Column(name = "link", length = Integer.MAX_VALUE)
+    private String link;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "metadata")
+    private Map<String, Object> metadata;
 
     @NotNull
     @ColumnDefault("false")

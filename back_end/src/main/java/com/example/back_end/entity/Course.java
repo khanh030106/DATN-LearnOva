@@ -87,6 +87,9 @@
         @Column(name = "published_at")
         private OffsetDateTime publishedAt;
 
+        @Column(name = "rejection_reason", length = Integer.MAX_VALUE)
+        private String rejectionReason;
+
         @NotNull
         @ColumnDefault("CURRENT_TIMESTAMP")
         @Column(name = "updated_at", nullable = false)

@@ -9,12 +9,31 @@ const formatDuration = (totalSeconds) => {
   return `${m}:${String(s).padStart(2, "0")}`;
 };
 
+const STATUS_LABELS = {
+  DRAFT: "Draft",
+  PENDING_REVIEW: "Pending Review",
+  PUBLISHED: "Published",
+  REJECTED: "Rejected",
+  ARCHIVED: "Archived",
+};
+
+const STATUS_MODIFIERS = {
+  DRAFT: "draft",
+  PENDING_REVIEW: "pending",
+  PUBLISHED: "published",
+  REJECTED: "rejected",
+  ARCHIVED: "archived",
+};
+
 const CourseCard = ({ course, onDelete, onUpdate, onToggleVisibility, onViewDetail }) => {
   const isActive = !course.isDeleted;
   const isPublished = course.courseStatus === "PUBLISHED";
+  const isRejected = course.courseStatus === "REJECTED";
   const studentCount = isPublished ? (course.studentCount ?? 0) : "-";
   const price = isPublished ? course.displayPrice : "-";
   const rating = isPublished ? course.rating : "-";
+  const statusModifier = STATUS_MODIFIERS[course.courseStatus] ?? "draft";
+  const statusLabel = STATUS_LABELS[course.courseStatus] ?? course.courseStatus;
 
   return (
     <article className="teacher-course-row">
@@ -33,9 +52,12 @@ const CourseCard = ({ course, onDelete, onUpdate, onToggleVisibility, onViewDeta
         </div>
       </div>
 
-      <span className={`teacher-course-row__status teacher-course-row__status--${isActive ? "active" : "inactive"}`}>
+      <span
+        className={`teacher-course-row__status teacher-course-row__status--${statusModifier}`}
+        title={isRejected ? course.rejectionReason || undefined : undefined}
+      >
         <Circle size={7} fill="currentColor" />
-        {isActive ? "Active" : "Inactive"}
+        {statusLabel}
       </span>
 
       <strong>{studentCount}</strong>

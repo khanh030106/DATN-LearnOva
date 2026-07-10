@@ -592,6 +592,8 @@
   display: grid;
   gap: 6px;
   padding-top: 10px;
+  max-height: 340px;
+  overflow-y: auto;
 }
 
 .user-logged-notification-list li {
@@ -601,6 +603,12 @@
   padding: 10px;
   border-radius: 8px;
   background: #ffffff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.user-logged-notification-list li:hover {
+  background: #eff6ff;
 }
 
 .user-logged-notification-list li.is-unread {
@@ -612,6 +620,10 @@
   height: 8px;
   margin-top: 6px;
   border-radius: 999px;
+  background: transparent;
+}
+
+.user-logged-notification-list li.is-unread > span {
   background: #2563eb;
 }
 
@@ -625,6 +637,26 @@
   color: #64748b;
   font-size: 13px;
   line-height: 1.4;
+}
+
+.user-logged-notification-list small {
+  display: block;
+  margin-top: 4px;
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.user-logged-notification-empty {
+  display: block;
+  padding: 20px 10px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 13px;
+  cursor: default;
+}
+
+.user-logged-notification-empty:hover {
+  background: transparent;
 }
 
 .user-logged-avatar-button {

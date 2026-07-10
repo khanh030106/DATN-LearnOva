@@ -8,8 +8,8 @@ const PublishCard = ({status, visibility, onStatusChange, onVisibilityChange, on
             <div className="teacher-radio-group">
                 <h3>Course Status</h3>
                 {[
-                    ["DRAFT",     "Draft",     "Only you can see this course"],
-                    ["PUBLISHED", "Published", "Course is live and available to all students"],
+                    ["DRAFT",          "Draft",             "Only you can see this course"],
+                    ["PENDING_REVIEW", "Submit for Review", "Send to admin for approval before it goes live"],
                 ].map(([value, label, help]) => (
                     <label
                         key={value}
@@ -51,7 +51,7 @@ const PublishCard = ({status, visibility, onStatusChange, onVisibilityChange, on
                 title={!isReady ? "Some checklist items are incomplete" : undefined}
             >
                 <Rocket size={17}/>
-                {isSubmitting ? "Saving..." : status === "PUBLISHED" ? "Publish Course" : "Save Status"}
+                {isSubmitting ? "Saving..." : status === "PENDING_REVIEW" ? "Submit for Review" : "Save Draft"}
             </button>
         </section>
     );

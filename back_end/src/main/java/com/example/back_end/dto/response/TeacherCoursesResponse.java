@@ -15,6 +15,7 @@ public record TeacherCoursesResponse(
         long lessonCount,
         long totalDurationSeconds,
         long studentCount,
-        Boolean isDeleted
+        Boolean isDeleted,
+        String rejectionReason
 ) {
 }

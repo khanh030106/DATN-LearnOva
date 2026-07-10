@@ -11,7 +11,10 @@ const formatDate = (isoString) => {
   });
 };
 
-const StudentRow = ({ student, onViewDetail }) => (
+const StudentRow = ({ student, onViewDetail }) => {
+  const courseCount = student.courseNames.length;
+
+  return (
   <article className="teacher-student-row">
     <div className="teacher-student-row__profile">
       <img src={student.avatar || DEFAULT_AVATAR} alt={student.fullName} />
@@ -22,9 +25,9 @@ const StudentRow = ({ student, onViewDetail }) => (
     </div>
 
     <div className="teacher-student-row__courses">
-      {student.courseNames.map((name) => (
-        <span key={name}>{name}</span>
-      ))}
+      <span title={student.courseNames.join(", ")}>
+        {courseCount} khóa học
+      </span>
     </div>
 
     <time className="teacher-student-row__date">
@@ -51,6 +54,7 @@ const StudentRow = ({ student, onViewDetail }) => (
       </button>
     </div>
   </article>
-);
+  );
+};
 
 export default StudentRow;
