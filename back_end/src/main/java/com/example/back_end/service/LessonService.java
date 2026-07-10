@@ -22,7 +22,8 @@ public class LessonService {
 
     private final LessonRepository lessonRepository;
     private final SectionRepository sectionRepository;
-    private final MediaConvertService mediaConvertService;
+    // TODO: chưa có MediaConvert key, comment tạm để app chạy được. Bỏ comment khi có key.
+    // private final MediaConvertService mediaConvertService;
 
     @Transactional
     public Long createLesson(
@@ -76,11 +77,12 @@ public class LessonService {
 
         lesson.setUpdatedAt(Instant.now());
 
-        if (request.videoKey() != null) {
-            String jobId = mediaConvertService.createHlsJob(request.videoKey(), lessonId);
-            lesson.setMediaConvertJobId(jobId);
-            lesson.setHlsStatus(HlsStatus.PENDING);
-        }
+        // TODO: chưa có MediaConvert key, comment tạm để app chạy được. Bỏ comment khi có key.
+        // if (request.videoKey() != null) {
+        //     String jobId = mediaConvertService.createHlsJob(request.videoKey(), lessonId);
+        //     lesson.setMediaConvertJobId(jobId);
+        //     lesson.setHlsStatus(HlsStatus.PENDING);
+        // }
 
         lessonRepository.save(lesson);
     }
