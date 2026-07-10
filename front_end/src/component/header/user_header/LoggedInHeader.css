@@ -172,6 +172,14 @@
   left: auto;
 }
 
+/* Notification dropdown gets its own timing, independent from nav/avatar dropdowns */
+.user-logged-notification-dropdown {
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease,
+    visibility 0.28s ease;
+}
+
 .user-logged-nav-item > .user-logged-dropdown:not(.user-logged-mega-menu) {
   top: calc(100% + 5px);
   left: -70%;

@@ -13,6 +13,6 @@ createRoot(document.getElementById('root')).render(
                 <App/>
             </AxiosInterceptorSetup>
         </AuthProvider>
-        <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnHover />
+        <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} closeOnClick pauseOnHover />
     </StrictMode>,
 )

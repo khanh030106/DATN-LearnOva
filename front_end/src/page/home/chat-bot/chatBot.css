@@ -27,12 +27,12 @@
     right: 0;
     bottom: 85px;
 
-    animation: fadeIn 0.25s ease;
+    animation: chatFadeIn 0.25s ease;
     margin-right: 40px;
 
 }
 
-@keyframes fadeIn {
+@keyframes chatFadeIn {
     from {
         opacity: 0;
         transform: translateY(15px);

@@ -478,7 +478,7 @@ function CoursesPage() {
       <div className="chatbot-fixed">
         <LearnovaAI />
       </div>
-      <ToastContainer position="top-right" autoClose={2500} />
+      <ToastContainer position="top-right" autoClose={2000} />
     </div>
   );
 }

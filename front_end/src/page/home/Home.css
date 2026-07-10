@@ -67,10 +67,9 @@ body {
 ::-webkit-scrollbar-track { background: #f0f6ff; }
 ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 3px; }
 
-/* Reduced motion */
+/* Reduced motion: shorten large/looping motion, keep small hover transitions smooth */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
-    animation-duration: 1s !important;
-    transition-duration: 1s !important;
+    animation-iteration-count: 1 !important;
   }
 }
