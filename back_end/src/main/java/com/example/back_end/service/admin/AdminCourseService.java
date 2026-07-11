@@ -13,20 +13,33 @@ import com.example.back_end.dto.response.admin.AdminCourseResponse;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.CourseStatus;
+import com.example.back_end.entity.enums.NotificationType;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.admin.AdminCourseRepository;
+import com.example.back_end.service.EmailService;
+import com.example.back_end.service.NotificationService;
 
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 @Service
 @Transactional
 public class AdminCourseService {
 
-    private final AdminCourseRepository courseRepository;
+    private static final Logger log = LoggerFactory.getLogger(AdminCourseService.class);
 
-    public AdminCourseService(AdminCourseRepository courseRepository) {
+    private final AdminCourseRepository courseRepository;
+    private final NotificationService notificationService;
+    private final EmailService emailService;
+
+    public AdminCourseService(AdminCourseRepository courseRepository, NotificationService notificationService, EmailService emailService) {
         this.courseRepository = courseRepository;
+        this.notificationService = notificationService;
+        this.emailService = emailService;
     }
 
     public List<AdminCourseResponse> getAllCourses() {
@@ -45,15 +58,50 @@ public class AdminCourseService {
         Course course = courseRepository.findByIdWithDetail(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found id=" + id));
 
-        if (course.getStatus() != CourseStatus.DRAFT) {
-            throw new BusinessException("Chỉ có thể duyệt khóa học đang ở trạng thái DRAFT.");
+        if (course.getStatus() != CourseStatus.PENDING_REVIEW) {
+            throw new BusinessException("Chỉ có thể duyệt khóa học đang ở trạng thái PENDING_REVIEW.");
         }
 
         course.setStatus(CourseStatus.PUBLISHED);
         course.setIsDeleted(false);
+        course.setRejectionReason(null);
         course.setPublishedAt(OffsetDateTime.now());
         course.setUpdatedAt(Instant.now());
         courseRepository.save(course);
+
+        notifyInstructor(
+                course,
+                NotificationType.COURSE_APPROVED,
+                "Course approved",
+                "Your course \"" + course.getTitle() + "\" has been approved and published.",
+                () -> emailService.sendCourseApprovedEmail(
+                        course.getInstructor().getEmail(), course.getInstructor().getFullName(), course.getTitle())
+        );
+
+        return toDetailResponse(course);
+    }
+
+    public AdminCourseDetailResponse rejectCourse(Long id, String reason) {
+        Course course = courseRepository.findByIdWithDetail(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found id=" + id));
+
+        if (course.getStatus() != CourseStatus.PENDING_REVIEW) {
+            throw new BusinessException("Chỉ có thể từ chối khóa học đang ở trạng thái PENDING_REVIEW.");
+        }
+
+        course.setStatus(CourseStatus.REJECTED);
+        course.setRejectionReason(reason);
+        course.setUpdatedAt(Instant.now());
+        courseRepository.save(course);
+
+        notifyInstructor(
+                course,
+                NotificationType.COURSE_REJECTED,
+                "Course rejected",
+                "Your course \"" + course.getTitle() + "\" was rejected. Reason: " + reason,
+                () -> emailService.sendCourseRejectedEmail(
+                        course.getInstructor().getEmail(), course.getInstructor().getFullName(), course.getTitle(), reason)
+        );
 
         return toDetailResponse(course);
     }
@@ -62,8 +110,8 @@ public class AdminCourseService {
         Course course = courseRepository.findByIdWithDetail(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found id=" + id));
 
-        if (course.getStatus() != CourseStatus.DRAFT) {
-            throw new BusinessException("Chỉ có thể ẩn khóa học đang ở trạng thái DRAFT.");
+        if (course.getStatus() != CourseStatus.PENDING_REVIEW) {
+            throw new BusinessException("Chỉ có thể ẩn khóa học đang ở trạng thái PENDING_REVIEW.");
         }
 
         course.setStatus(CourseStatus.ARCHIVED);
@@ -72,6 +120,23 @@ public class AdminCourseService {
         courseRepository.save(course);
 
         return toDetailResponse(course);
+    }
+
+    private void notifyInstructor(Course course, NotificationType type, String title, String content, Runnable sendEmail) {
+        notificationService.create(
+                course.getInstructor(),
+                type,
+                title,
+                content,
+                "/learnova/teacher/courses",
+                Map.of("courseId", course.getId(), "courseTitle", course.getTitle())
+        );
+
+        try {
+            sendEmail.run();
+        } catch (Exception e) {
+            log.error("Failed to send course status email for course id={}", course.getId(), e);
+        }
     }
 
     private AdminCourseResponse toResponse(Course course) {

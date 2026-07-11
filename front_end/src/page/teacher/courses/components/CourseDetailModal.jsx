@@ -4,7 +4,7 @@ import {
   X, BookOpen, Clock, Users, Star, DollarSign, Globe,
   GraduationCap, Tag, CheckCircle, ChevronDown, ChevronRight,
   PlayCircle, FileText, Edit3, Circle, Loader2,
-  User, MessageSquare, List, BarChart2,
+  User, MessageSquare, List, BarChart2, AlertTriangle,
 } from "lucide-react";
 import {
   getCourseForEdit,
@@ -67,6 +67,14 @@ const CourseDetailModal = ({ course, onClose }) => {
 
   const isActive = !course.isDeleted;
   const isPublished = course.courseStatus === "PUBLISHED";
+  const isRejected = course.courseStatus === "REJECTED";
+  const statusModifier = {
+    DRAFT: "draft",
+    PENDING_REVIEW: "pending",
+    PUBLISHED: "published",
+    REJECTED: "rejected",
+    ARCHIVED: "archived",
+  }[course.courseStatus] ?? "draft";
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -141,7 +149,7 @@ const CourseDetailModal = ({ course, onClose }) => {
               <Circle size={7} fill="currentColor" />
               {isActive ? "Active" : "Inactive"}
             </span>
-            <span className={`cdm__badge cdm__badge--${isPublished ? "published" : "draft"}`}>
+            <span className={`cdm__badge cdm__badge--${statusModifier}`}>
               {course.courseStatus}
             </span>
             {detail?.level && (
@@ -163,6 +171,16 @@ const CourseDetailModal = ({ course, onClose }) => {
             {course.category}
           </p>
         </div>
+
+        {isRejected && course.rejectionReason && (
+          <div className="cdm__rejection-banner">
+            <AlertTriangle size={16} />
+            <div>
+              <strong>Rejected by admin</strong>
+              {course.rejectionReason}
+            </div>
+          </div>
+        )}
 
         {/* ── Tab bar ───────────────────────────────────────── */}
         <div className="cdm__tabs">

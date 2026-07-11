@@ -4,8 +4,8 @@ import com.example.back_end.dto.response.CourseProgressResponse;
 import com.example.back_end.dto.response.LessonProgressResponse;
 import com.example.back_end.dto.resquest.UpdateLessonProgressRequest;
 import com.example.back_end.entity.Lesson;
-import com.example.back_end.entity.Lessonprogress;
-import com.example.back_end.entity.LessonprogressId;
+import com.example.back_end.entity.LessonProgress;
+import com.example.back_end.entity.LessonProgressId;
 import com.example.back_end.entity.User;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
@@ -46,10 +46,10 @@ public class LessonProgressService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
-        Lessonprogress progress = lessonprogressRepository.findByUserIdAndLessonId(userId, request.getLessonId())
+        LessonProgress progress = lessonprogressRepository.findByUserIdAndLessonId(userId, request.getLessonId())
                 .orElseGet(() -> {
-                    Lessonprogress newProgress = new Lessonprogress();
-                    LessonprogressId id = new LessonprogressId();
+                    LessonProgress newProgress = new LessonProgress();
+                    LessonProgressId id = new LessonProgressId();
                     id.setUserId(userId);
                     id.setLessonId(request.getLessonId());
                     newProgress.setId(id);
@@ -85,10 +85,10 @@ public class LessonProgressService {
 
     public CourseProgressResponse getCourseProgress(Long userId, Long courseId) {
         List<Lesson> lessons = lessonRepository.findBySectionCourseId(courseId);
-        List<Lessonprogress> progressList = lessonprogressRepository.findByUserIdAndCourseId(userId, courseId);
+        List<LessonProgress> progressList = lessonprogressRepository.findByUserIdAndCourseId(userId, courseId);
 
         List<LessonProgressResponse> lessonResponses = lessons.stream().map(lesson -> {
-            Lessonprogress lp = progressList.stream()
+            LessonProgress lp = progressList.stream()
                     .filter(p -> p.getLesson().getId().equals(lesson.getId()))
                     .findFirst()
                     .orElse(null);

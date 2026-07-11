@@ -52,6 +52,7 @@ const Vouchers = () => {
         onCreateVoucher={openCreate}
         onViewVoucher={openView}
         onEditVoucher={openEdit}
+        onVoucherDeleted={() => setRefreshKey((prev) => prev + 1)}
         refreshKey={refreshKey}
       />
 

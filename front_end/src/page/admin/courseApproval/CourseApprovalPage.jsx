@@ -7,6 +7,7 @@ import {
   getAdminCourseDetailApi,
   getAdminCoursesApi,
   hideAdminCourseApi,
+  rejectAdminCourseApi,
 } from "../../../api/admin/CourseApi.js";
 import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";
 import ApprovalConfirmModal from "./components/ApprovalConfirmModal.jsx";
@@ -71,7 +72,7 @@ const useCourseApproval = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const draftCourses = useMemo(
-    () => courses.filter((course) => course.status === "DRAFT"),
+    () => courses.filter((course) => course.status === "PENDING_REVIEW"),
     [courses],
   );
 
@@ -89,7 +90,7 @@ const useCourseApproval = () => {
         setCourses(mappedCourses);
         setSelectedId((currentId) => {
           if (currentId) return currentId;
-          return mappedCourses.find((course) => course.status === "DRAFT")?.id ?? null;
+          return mappedCourses.find((course) => course.status === "PENDING_REVIEW")?.id ?? null;
         });
       } catch (error) {
         if (isMounted) toast.error(error?.response?.data?.message || "Failed to load courses.");
@@ -144,15 +145,21 @@ const useCourseApproval = () => {
     );
   };
 
-  const submitActiveAction = async () => {
+  const submitActiveAction = async (reason) => {
     if (!selectedId || !activeAction) return;
 
     const actionRequest =
-      activeAction === "hide" ? hideAdminCourseApi : approveAdminCourseApi;
+      activeAction === "hide"
+        ? (id, client) => hideAdminCourseApi(id, client)
+        : activeAction === "reject"
+          ? (id, client) => rejectAdminCourseApi(id, reason, client)
+          : (id, client) => approveAdminCourseApi(id, client);
     const successMessage =
       activeAction === "hide"
         ? "Course hidden successfully."
-        : "Course approved and published successfully.";
+        : activeAction === "reject"
+          ? "Course rejected. The instructor has been notified."
+          : "Course approved and published successfully.";
 
     try {
       setIsSubmitting(true);
@@ -248,7 +255,7 @@ const CourseApprovalPage = () => {
               course={detail}
               isSubmitting={isSubmitting}
               onApprove={() => openAction("approve")}
-              onHide={() => openAction("hide")}
+              onReject={() => openAction("reject")}
             />
           )}
         </main>

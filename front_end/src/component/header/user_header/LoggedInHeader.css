@@ -21,8 +21,6 @@
   display: flex;
   align-items: center;
   gap: 28px;
-  margin-left: 40px;
-
 }
 
 .user-logged-header-container {
@@ -31,10 +29,18 @@
   margin: 0 auto;
   padding: 0;
   display: grid;
-  grid-template-columns: auto auto minmax(360px, 460px) minmax(360px, 1fr) auto;
+  grid-template-columns: auto 1fr auto auto auto 1fr auto;
   align-items: center;
   gap: 22px;
 }
+
+.user-logged-brand-group { grid-column: 1; margin-left: 16px; }
+/* grid-column 2 is an intentionally empty 1fr spacer track */
+.user-logged-home-shell { grid-column: 3; }
+.user-logged-search-area { grid-column: 4; }
+.user-logged-secondary-nav { grid-column: 5; }
+/* grid-column 6 is an intentionally empty 1fr spacer track */
+.user-logged-actions { grid-column: 7; margin-right: 16px; }
 
 .user-logged-brand-group,
 .user-logged-actions,
@@ -213,6 +219,8 @@
 
 .user-logged-menu-link {
   display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
   padding: 11px 12px;
   border-radius: 8px;
@@ -357,23 +365,28 @@
   color: #64748b;
 }
 
+.user-logged-secondary-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-shrink: 0;
+  order: 4;
+}
+
 .user-logged-actions {
   flex-shrink: 0;
   gap: 16px;
-  margin-left: -60px;
   order: 5;
 }
 
 .user-logged-search-area {
-  min-width: 0;
-  justify-content: center;
-  justify-self: center;
-  width: 100%;
+  min-width: 220px;
+  flex-shrink: 0;
   order: 3;
 }
 
 .user-logged-search {
-  width: min(100%, 550px);
+  width: 340px;
   height: 38px;
   display: flex;
   align-items: center;
@@ -592,6 +605,8 @@
   display: grid;
   gap: 6px;
   padding-top: 10px;
+  max-height: 340px;
+  overflow-y: auto;
 }
 
 .user-logged-notification-list li {
@@ -601,6 +616,12 @@
   padding: 10px;
   border-radius: 8px;
   background: #ffffff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.user-logged-notification-list li:hover {
+  background: #eff6ff;
 }
 
 .user-logged-notification-list li.is-unread {
@@ -612,6 +633,10 @@
   height: 8px;
   margin-top: 6px;
   border-radius: 999px;
+  background: transparent;
+}
+
+.user-logged-notification-list li.is-unread > span {
   background: #2563eb;
 }
 
@@ -625,6 +650,26 @@
   color: #64748b;
   font-size: 13px;
   line-height: 1.4;
+}
+
+.user-logged-notification-list small {
+  display: block;
+  margin-top: 4px;
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.user-logged-notification-empty {
+  display: block;
+  padding: 20px 10px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 13px;
+  cursor: default;
+}
+
+.user-logged-notification-empty:hover {
+  background: transparent;
 }
 
 .user-logged-avatar-button {
@@ -681,9 +726,7 @@
 
 @media (max-width: 1220px) {
   .user-logged-header-container {
-    grid-template-columns:
-      auto auto minmax(280px, 420px) minmax(330px, auto)
-      auto;
+    grid-template-columns: auto 1fr auto auto auto 1fr auto;
     gap: 14px;
     padding: 0 18px;
   }

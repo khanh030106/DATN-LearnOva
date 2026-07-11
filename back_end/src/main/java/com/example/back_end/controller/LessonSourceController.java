@@ -4,6 +4,7 @@ import com.example.back_end.dto.resquest.CreateLessonSourceRequest;
 import com.example.back_end.dto.response.LessonSourceResponse;
 import com.example.back_end.service.LessonSourceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/learnova/courses")
+@PreAuthorize("hasRole('TEACHER')")
 public class LessonSourceController {
 
     private final LessonSourceService lessonSourceService;

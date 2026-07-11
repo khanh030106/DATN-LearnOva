@@ -16,6 +16,7 @@ import com.example.back_end.entity.Verificationtoken;
 import com.example.back_end.entity.enums.RoleName;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
+import com.example.back_end.repository.RoleRepository;
 import com.example.back_end.repository.UserRepository;
 import com.example.back_end.security.CustomUserDetailsService;
 import com.example.back_end.security.JwtService;
@@ -43,6 +44,7 @@ public class AuthService {
     private final VerificationTokenService verificationTokenService;
     private final CustomUserDetailsService customUserDetailsService;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
@@ -133,6 +135,9 @@ public class AuthService {
             throw new BusinessException("Passwords do not match.");
         }
 
+        Role userRole = roleRepository.findByRoleName(RoleName.ROLE_USER)
+                .orElseThrow(() -> new BusinessException("ROLE_USER not found"));
+
         User user = new User();
         user.setFullName(request.fullName().trim());
         user.setEmail(request.email().trim().toLowerCase());
@@ -140,6 +145,7 @@ public class AuthService {
         user.setIsActive(false);
         user.setIsDeleted(false);
         user.setCreatedAt(Instant.now());
+        user.setRoles(Set.of(userRole));
 
         User savedUser = userRepository.save(user);
 

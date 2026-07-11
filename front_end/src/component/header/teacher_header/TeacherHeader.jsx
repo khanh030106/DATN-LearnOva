@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Bell, MessageSquare, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { getCurrentUserApi } from "../../../api/UserApi.js";
+import NotificationBell from "./NotificationBell.jsx";
 import "./TeacherHeader.css";
 
 const DEFAULT_AVATAR = "https://ui-avatars.com/api/?background=1d4ed8&color=fff&name=Instructor";
@@ -48,14 +49,7 @@ const TeacherHeader = () => {
       </div>
 
       <div className="teacher-topbar__actions">
-        <button aria-label="Notifications" className="teacher-topbar__btn">
-          <Bell size={20} />
-          <span className="teacher-topbar__badge teacher-topbar__badge--red">3</span>
-        </button>
-        <button aria-label="Messages" className="teacher-topbar__btn">
-          <MessageSquare size={20} />
-          <span className="teacher-topbar__badge teacher-topbar__badge--blue">5</span>
-        </button>
+        <NotificationBell />
         <div className="teacher-profile">
           <img src={avatarSrc} alt={displayName} />
           <span>{displayName}</span>

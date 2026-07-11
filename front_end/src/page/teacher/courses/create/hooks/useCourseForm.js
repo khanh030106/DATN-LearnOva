@@ -514,14 +514,14 @@ export const useCourseForm = ({ editCourseId = null } = {}) => {
     const handlePublish = async () => {
         if (isSubmitting) return;
         if (!course.id) {
-            toast.error("Save the course draft before publishing.");
+            toast.error("Save the course draft before submitting.");
             return;
         }
         setIsSubmitting(true);
         try {
             await toast.promise(updateCourseStatusApi(course.id, course.status), {
                 pending: "Updating course status...",
-                success: course.status === "PUBLISHED" ? "Course published!" : "Status updated!",
+                success: course.status === "PENDING_REVIEW" ? "Submitted for review!" : "Draft saved!",
                 error: {render: ({data}) => data?.response?.data?.message || "Failed to update status"},
             });
             setIsDirty(false);

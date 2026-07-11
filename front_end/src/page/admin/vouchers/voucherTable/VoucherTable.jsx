@@ -9,9 +9,26 @@ import {
 } from "../../../../api/admin/VoucherApi.js";
 import "./VoucherTable.css";
 
-const statusOptions = ["All statuses", "Active", "Inactive", "Expiring Soon"];
+const statusOptions = ["All statuses", "Active", "Inactive", "Expiring Soon", "Delete"];
 const pageSize = 5;
 const expiringSoonDays = 7;
+const deletedVoucherStorageKey = "learnova.admin.deletedVoucherIds";
+
+const getVoucherKey = (id) => String(id ?? "");
+
+const loadDeletedVoucherIds = () => {
+  try {
+    const stored = window.localStorage.getItem(deletedVoucherStorageKey);
+    const ids = JSON.parse(stored || "[]");
+    return new Set(Array.isArray(ids) ? ids.map(getVoucherKey) : []);
+  } catch {
+    return new Set();
+  }
+};
+
+const saveDeletedVoucherIds = (ids) => {
+  window.localStorage.setItem(deletedVoucherStorageKey, JSON.stringify([...ids]));
+};
 
 const formatDate = (value) => {
   if (!value) return "";
@@ -50,6 +67,9 @@ const VoucherTable = ({
     selectedStatus: statusOptions[0],
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deletedVoucherIds, setDeletedVoucherIds] = useState(loadDeletedVoucherIds);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -94,17 +114,25 @@ const VoucherTable = ({
         const usageLimit = Number(item.usageLimit || 0);
         const usedCount = Number(item.usedCount || 0);
         const isUsageLimitReached = usageLimit > 0 && usedCount >= usageLimit;
-        const isActive = Boolean(item.isActive) && !isExpired && !isUsageLimitReached;
-        const status = isActive
-          ? isExpiringSoon
-            ? "Expiring Soon"
-            : "Active"
-          : "Inactive";
-        const statusClass = isActive
-          ? isExpiringSoon
-            ? "expiring"
-            : "active"
-          : "expired";
+        const isDeleted =
+          deletedVoucherIds.has(getVoucherKey(item.id)) ||
+          item.isActive === false;
+        const isActive =
+          !isDeleted && Boolean(item.isActive) && !isExpired && !isUsageLimitReached;
+        const status = isDeleted
+          ? "Delete"
+          : isActive
+            ? isExpiringSoon
+              ? "Expiring Soon"
+              : "Active"
+            : "Inactive";
+        const statusClass = isDeleted
+          ? "deleted"
+          : isActive
+            ? isExpiringSoon
+              ? "expiring"
+              : "active"
+            : "expired";
 
         return {
           id: item.id,
@@ -118,7 +146,7 @@ const VoucherTable = ({
           raw: item,
         };
       }),
-    [vouchers]
+    [deletedVoucherIds, vouchers]
   );
 
   const filteredVouchers = useMemo(() => {
@@ -165,16 +193,40 @@ const VoucherTable = ({
     currentPage * pageSize
   );
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this voucher?")) return;
+  const openDeleteModal = (voucher) => {
+    setDeleteTarget(voucher);
+  };
+
+  const closeDeleteModal = () => {
+    if (isDeleting) return;
+    setDeleteTarget(null);
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+
     try {
-      await deleteAdminVoucherApi(id, axiosPrivate);
-      setVouchers((current) => current.filter((voucher) => voucher.id !== id));
+      setIsDeleting(true);
+      const deletedVoucher = await deleteAdminVoucherApi(deleteTarget.id, axiosPrivate);
+      setVouchers((current) =>
+        current.map((voucher) =>
+          voucher.id === deleteTarget.id ? deletedVoucher : voucher
+        )
+      );
+      setDeletedVoucherIds((current) => {
+        const next = new Set(current);
+        next.add(getVoucherKey(deleteTarget.id));
+        saveDeletedVoucherIds(next);
+        return next;
+      });
       onVoucherDeleted?.();
-      toast.success("Voucher deleted successfully.");
+      setDeleteTarget(null);
+      toast.success("Voucher status changed to delete.");
     } catch (err) {
       console.error(err);
       toast.error(err?.response?.data?.message || "Failed to delete voucher.");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -284,7 +336,8 @@ const VoucherTable = ({
                           className="voucherActionBtn"
                           title="Delete"
                           aria-label={`Delete voucher ${v.code}`}
-                          onClick={() => handleDelete(v.id)}
+                          onClick={() => openDeleteModal(v)}
+                          disabled={v.status === "Delete"}
                         >
                           <FiTrash2 size={16} />
                         </button>
@@ -334,6 +387,49 @@ const VoucherTable = ({
           </button>
         </div>
       </div>
+
+      {deleteTarget && (
+        <div
+          className="voucherDeleteModalBackdrop"
+          role="presentation"
+          onClick={closeDeleteModal}
+        >
+          <div
+            className="voucherDeleteModal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="voucher-delete-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="voucherDeleteModalIcon">
+              <FiTrash2 size={24} />
+            </div>
+            <h3 id="voucher-delete-title">Delete voucher?</h3>
+            <p>
+              Voucher <strong>{deleteTarget.code}</strong> will be marked as
+              delete and remain visible in the archive.
+            </p>
+            <div className="voucherDeleteModalActions">
+              <button
+                type="button"
+                className="voucherDeleteCancelBtn"
+                onClick={closeDeleteModal}
+                disabled={isDeleting}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="voucherDeleteConfirmBtn"
+                onClick={handleDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? "Deleting..." : "Confirm Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

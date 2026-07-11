@@ -1,18 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
+import { User, BookOpen, Heart, LogOut } from "lucide-react";
 import HeaderDropdown from "./HeaderDropdown.jsx";
 import {useUserData} from "./headerData.js";
 import {useAuth} from "../../../../hook/UseAuth.jsx";
 
-const AvatarDropdown = ({ menuItems }) => {
+const AvatarDropdown = () => {
   const user = useUserData();
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleMenuClick = async (item) => {
-    if (item.id === "logout") {
-      await logout();
-      navigate("/learnova/auth/login");
-    }
+  const handleLogout = async () => {
+    await logout();
+    navigate("/learnova/auth/login");
   };
 
   return (
@@ -35,7 +34,30 @@ const AvatarDropdown = ({ menuItems }) => {
         </div>
 
         <ul className="user-logged-menu-list">
-
+          <li>
+            <Link to="/learnova/user/profile" className="user-logged-menu-link">
+              <User size={16} />
+              Profile
+            </Link>
+          </li>
+          <li>
+            <Link to="/learnova/user/profile/courses" className="user-logged-menu-link">
+              <BookOpen size={16} />
+              My Learning
+            </Link>
+          </li>
+          <li>
+            <Link to="/learnova/user/profile/favorites" className="user-logged-menu-link">
+              <Heart size={16} />
+              My Favourite
+            </Link>
+          </li>
+          <li className="user-logged-menu-separator">
+            <button type="button" className="user-logged-menu-link is-danger" onClick={handleLogout}>
+              <LogOut size={16} />
+              Logout
+            </button>
+          </li>
         </ul>
       </HeaderDropdown>
     </div>

@@ -1,44 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
-import { getAdminVoucherUsageHistoriesApi } from "../../../../api/admin/VoucherApi.js";
+import { getAdminVoucherCampaignStatsApi } from "../../../../api/admin/VoucherApi.js";
 import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 import "./VoucherCampaignChart.css";
 
-/**
- * Transforms raw usage history into campaign stats
- * Groups by voucher code and aggregates usage count and revenue
- * @param {Array} histories - Raw history records from API
- * @returns {Array} Aggregated campaign stats sorted by usage
- */
-const aggregateCampaignStats = (histories = []) => {
-  const campaignMap = new Map();
+const formatCurrency = (value) =>
+  new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+    maximumFractionDigits: 0,
+  }).format(Number(value || 0));
 
-  histories.forEach((record) => {
-    const code = record.appliedCode || "Unknown";
-    if (!campaignMap.has(code)) {
-      campaignMap.set(code, {
-        code,
-        usedCount: 0,
-        revenue: 0,
-      });
-    }
-
-    const stats = campaignMap.get(code);
-    stats.usedCount += 1;
-    stats.revenue += Number(record.discount || 0);
-  });
-
-  // Convert to array, sort by usage (highest first), take top 4
-  return Array.from(campaignMap.values())
-    .sort((a, b) => b.usedCount - a.usedCount)
-    .slice(0, 4);
-};
-
-/**
- * Maps campaign stats to chart data format
- * @param {Object} item - Campaign stats item
- * @returns {Object} Chart-ready data
- */
 const mapCampaignFromStats = (item) => ({
   code: item.code || "Unknown",
   used: Number(item.usedCount || 0),
@@ -54,7 +26,6 @@ const VoucherCampaignChart = ({ refreshKey }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Fetch and aggregate campaign data from API
   useEffect(() => {
     let mounted = true;
 
@@ -62,11 +33,13 @@ const VoucherCampaignChart = ({ refreshKey }) => {
       try {
         setIsLoading(true);
         setError("");
-        const histories = await getAdminVoucherUsageHistoriesApi(axiosPrivate);
+        const stats = await getAdminVoucherCampaignStatsApi(axiosPrivate);
 
         if (mounted) {
-          const aggregated = aggregateCampaignStats(histories);
-          const mapped = aggregated.map(mapCampaignFromStats);
+          const mapped = (Array.isArray(stats) ? stats : [])
+            .map(mapCampaignFromStats)
+            .sort((a, b) => b.used - a.used || b.revenue - a.revenue)
+            .slice(0, 4);
           setCampaignData(mapped);
         }
       } catch (err) {
@@ -88,13 +61,11 @@ const VoucherCampaignChart = ({ refreshKey }) => {
     };
   }, [axiosPrivate, refreshKey]);
 
-  // Create chart
   useEffect(() => {
     if (!canvasRef.current || campaignData.length === 0) {
       return undefined;
     }
 
-    // Destroy previous chart if exists
     if (chartRef.current) {
       chartRef.current.destroy();
     }
@@ -150,7 +121,7 @@ const VoucherCampaignChart = ({ refreshKey }) => {
                 const item = campaignData[context.dataIndex];
                 return [
                   `Used: ${item.used} times`,
-                  `Revenue: $${item.revenue.toLocaleString("en-US")}`,
+                  `Discount: ${formatCurrency(item.revenue)}`,
                 ];
               },
             },
@@ -206,7 +177,7 @@ const VoucherCampaignChart = ({ refreshKey }) => {
         <div>
           <h2 className="voucherCampaignChartTitle">Top Voucher Campaigns</h2>
           <p className="voucherCampaignChartSubtitle">
-            Compare discount impact and total revenue generated.
+            Compare real voucher usage and accumulated discount from orders.
           </p>
         </div>
       </div>
@@ -232,7 +203,7 @@ const VoucherCampaignChart = ({ refreshKey }) => {
 
       <div className="voucherCampaignChartSummary">
         <span>Accumulated discount:</span>
-        <strong>${totalRevenue.toLocaleString("en-US")} USD</strong>
+        <strong>{formatCurrency(totalRevenue)}</strong>
       </div>
     </section>
   );

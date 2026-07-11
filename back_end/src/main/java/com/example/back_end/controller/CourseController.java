@@ -18,6 +18,7 @@ import com.example.back_end.service.S3Service;
 import com.example.back_end.service.admin.AdminCategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -35,6 +36,7 @@ public class CourseController {
     private final S3Service s3Service;
     private final AdminCategoryService categoryService;
 
+    @PreAuthorize("hasRole('TEACHER')")
     @PostMapping("/create-draft-course")   //  /create/draft
     public CreateDraftCourseResponse createDraftCourse(
             @Valid @RequestBody CreateDraftCourseRequest request,
@@ -65,6 +67,7 @@ public class CourseController {
         return categoryService.getActiveCategories();
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @PatchMapping("/{courseId}/status")
     public ResponseEntity<Void> updateCourseStatus(
             @PathVariable Long courseId,
@@ -93,6 +96,7 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getCourseDetail(courseId));
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/my-students")
     public ResponseEntity<List<TeacherStudentResponse>> getMyStudents(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated())
@@ -100,6 +104,7 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getMyStudents(authentication.getName()));
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/my-reviews")
     public ResponseEntity<List<TeacherReviewResponse>> getMyReviews(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated())
@@ -107,6 +112,7 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getMyReviews(authentication.getName()));
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/my-courses")          // /courses/mine
     public ResponseEntity<List<TeacherCoursesResponse>> getMyCourses(
             Authentication authentication
@@ -117,6 +123,7 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getMyCourses(authentication.getName()));
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @PutMapping("/{courseId}")
     public ResponseEntity<Void> updateCourse(
             @PathVariable Long courseId,
@@ -130,6 +137,7 @@ public class CourseController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @PatchMapping("/{courseId}/visibility")
     public ResponseEntity<Void> toggleCourseVisibility(
             @PathVariable Long courseId,
@@ -141,6 +149,7 @@ public class CourseController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @DeleteMapping("/{courseId}")
     public ResponseEntity<Void> softDeleteCourse(
             @PathVariable Long courseId,

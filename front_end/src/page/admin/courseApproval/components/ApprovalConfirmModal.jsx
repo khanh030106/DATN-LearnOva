@@ -1,4 +1,5 @@
-import { CheckCircle, EyeOff } from "lucide-react";
+import { useState } from "react";
+import { CheckCircle, EyeOff, XCircle } from "lucide-react";
 
 const actionCopy = {
   approve: {
@@ -19,11 +20,23 @@ const actionCopy = {
     iconClassName: "approvalConfirmIcon approvalConfirmIcon--hide",
     buttonClassName: "approvalBtnHide",
   },
+  reject: {
+    icon: XCircle,
+    title: "Reject course?",
+    description: "Tell the instructor what needs to change before this course can be approved.",
+    confirmLabel: "Reject",
+    loadingLabel: "Rejecting...",
+    iconClassName: "approvalConfirmIcon approvalConfirmIcon--hide",
+    buttonClassName: "approvalBtnReject",
+  },
 };
 
 const ApprovalConfirmModal = ({ action, courseTitle, isSubmitting, onConfirm, onCancel }) => {
+  const [reason, setReason] = useState("");
   const copy = actionCopy[action] ?? actionCopy.approve;
   const Icon = copy.icon;
+  const isReject = action === "reject";
+  const canConfirm = !isReject || reason.trim().length > 0;
 
   return (
     <div className="approvalBackdrop" role="presentation" onClick={onCancel}>
@@ -44,6 +57,17 @@ const ApprovalConfirmModal = ({ action, courseTitle, isSubmitting, onConfirm, on
           {copy.description}
         </p>
 
+        {isReject && (
+          <textarea
+            className="approvalRejectReasonInput"
+            placeholder="Explain why this course is being rejected..."
+            value={reason}
+            onChange={(event) => setReason(event.target.value)}
+            rows={4}
+            disabled={isSubmitting}
+          />
+        )}
+
         <div className="approvalConfirmActions">
           <button
             type="button"
@@ -56,8 +80,8 @@ const ApprovalConfirmModal = ({ action, courseTitle, isSubmitting, onConfirm, on
           <button
             type="button"
             className={copy.buttonClassName}
-            onClick={onConfirm}
-            disabled={isSubmitting}
+            onClick={() => onConfirm(isReject ? reason.trim() : undefined)}
+            disabled={isSubmitting || !canConfirm}
           >
             {isSubmitting ? copy.loadingLabel : copy.confirmLabel}
           </button>

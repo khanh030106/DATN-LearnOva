@@ -76,7 +76,15 @@ export const AuthProvider = ({ children }) => {
                 setAccessToken(null);
                 setCurrentUser(null);
             } finally {
-                setLoading(false);
+                // Only the call whose version still matches the latest session is
+                // allowed to close the loading gate — a stale/superseded call (e.g.
+                // from React StrictMode's dev-only double-invoke) must not flip
+                // loading to false before the winning call has set currentUser,
+                // or route guards reading {loading, currentUser} mid-flight will
+                // see "not loading" + "no user" and redirect incorrectly.
+                if (sessionVersionRef.current === myVersion) {
+                    setLoading(false);
+                }
             }
         };
 

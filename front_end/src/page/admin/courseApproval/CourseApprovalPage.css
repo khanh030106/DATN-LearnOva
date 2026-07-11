@@ -303,6 +303,16 @@
   color: #b45309;
 }
 
+.approvalStatusBadge--pending_review {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.approvalStatusBadge--rejected {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
 .approvalStatusBadge--published {
   background: #ecfdf5;
   color: #047857;
@@ -326,7 +336,7 @@
   height: 38px;
   border: none;
   border-radius: 9px;
-  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  background-color: #16a34a;
   color: #ffffff;
   font-size: 14px;
   font-weight: 800;
@@ -339,31 +349,6 @@
 }
 
 .approvalBtnApproveMain:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.approvalBtnHideMain {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0 18px;
-  height: 38px;
-  border: none;
-  border-radius: 9px;
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-.approvalBtnHideMain:hover:not(:disabled) {
-  opacity: 0.9;
-}
-
-.approvalBtnHideMain:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -384,7 +369,7 @@
   height: 38px;
   border: none;
   border-radius: 9px;
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background-color: #ef4444;
   color: #ffffff;
   font-size: 14px;
   font-weight: 800;
@@ -825,6 +810,22 @@
   line-height: 1.6;
 }
 
+.approvalRejectReasonInput {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 14px;
+  color: #0f172a;
+  resize: vertical;
+}
+
+.approvalRejectReasonInput:focus {
+  outline: none;
+  border-color: #ef4444;
+}
+
 .approvalConfirmActions {
   display: flex;
   gap: 12px;
@@ -854,7 +855,7 @@
   height: 42px;
   border: none;
   border-radius: 9px;
-  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  background-color: #16a34a;
   color: #ffffff;
   font-size: 14px;
   font-weight: 800;
@@ -871,7 +872,7 @@
   height: 42px;
   border: none;
   border-radius: 9px;
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background-color: #475569;
   color: #ffffff;
   font-size: 14px;
   font-weight: 800;
@@ -883,8 +884,26 @@
   opacity: 0.9;
 }
 
+.approvalBtnReject {
+  flex: 1;
+  height: 42px;
+  border: none;
+  border-radius: 9px;
+  background-color: #ef4444;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.approvalBtnReject:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
 .approvalBtnApprove:disabled,
 .approvalBtnHide:disabled,
+.approvalBtnReject:disabled,
 .approvalBtnCancel:disabled {
   opacity: 0.6;
   cursor: not-allowed;

@@ -85,7 +85,7 @@ public class User {
     private Set<Enrollment> enrollments = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<Lessonprogress> lessonprogresses = new LinkedHashSet<>();
+    private Set<LessonProgress> lessonprogresses = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
     private Set<Notification> notifications = new LinkedHashSet<>();

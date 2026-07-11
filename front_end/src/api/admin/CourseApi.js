@@ -17,9 +17,15 @@ export const approveAdminCourseApi = async (id, client = axiosClient) => {
   return response.data;
 };
 
-/** Hide a DRAFT course by archiving it. */
+/** Hide a PENDING_REVIEW course by archiving it. */
 export const hideAdminCourseApi = async (id, client = axiosClient) => {
   const response = await client.patch(`/admin/courses-management/${id}/hide`);
+  return response.data;
+};
+
+/** Reject a PENDING_REVIEW course with a reason. */
+export const rejectAdminCourseApi = async (id, reason, client = axiosClient) => {
+  const response = await client.patch(`/admin/courses-management/${id}/reject`, { reason });
   return response.data;
 };
 

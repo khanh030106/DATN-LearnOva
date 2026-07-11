@@ -17,12 +17,7 @@ public class EmailService {
     private static final String APP_PASSWORD =
             "lpag jica rptg bbwb";
 
-    public void sendVerificationEmail(
-            String toEmail,
-            String fullName,
-            String verifyLink
-    ) {
-
+    private Session buildSmtpSession() {
         Properties props = new Properties();
         props.setProperty("mail.smtp.auth", "true");
         props.setProperty("mail.smtp.port", "587");
@@ -30,7 +25,7 @@ public class EmailService {
         props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
         props.setProperty("mail.smtp.host", "smtp.gmail.com");
 
-        Session session = Session.getInstance(
+        return Session.getInstance(
                 props,
                 new Authenticator() {
                     @Override
@@ -42,6 +37,28 @@ public class EmailService {
                     }
                 }
         );
+    }
+
+    private void sendHtmlEmail(String toEmail, String subject, String htmlContent) {
+        try {
+            MimeMessage message = new MimeMessage(buildSmtpSession());
+
+            message.setFrom(new InternetAddress(EMAIL, "LearnOva", StandardCharsets.UTF_8.name()));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+            message.setSubject(subject, StandardCharsets.UTF_8.name());
+            message.setContent(htmlContent, "text/html; charset=UTF-8");
+
+            Transport.send(message);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send email: " + subject, e);
+        }
+    }
+
+    public void sendVerificationEmail(
+            String toEmail,
+            String fullName,
+            String verifyLink
+    ) {
 
         String subject = "Verify Your LearnOva Account";
 
@@ -104,41 +121,94 @@ public class EmailService {
                        verifyLink
                );
 
-        try {
-            MimeMessage message =
-                    new MimeMessage(session);
+        sendHtmlEmail(toEmail, subject, content);
+    }
 
-            message.setFrom(
-                    new InternetAddress(
-                            EMAIL,
-                            "LearnOva",
-                            StandardCharsets.UTF_8.name()
-                    )
-            );
+    public void sendCourseApprovedEmail(String toEmail, String fullName, String courseTitle) {
+        String subject = "Your course has been approved";
 
-            message.setRecipients(
-                    Message.RecipientType.TO,
-                    InternetAddress.parse(toEmail)
-            );
+        String content = """
+        <div style="font-family: Arial, sans-serif; background-color:#f4f4f4; padding:20px;">
+            <div style="
+                max-width:600px;
+                margin:auto;
+                background:white;
+                border-radius:10px;
+                padding:30px;
+                box-shadow:0 4px 10px rgba(0,0,0,0.1);
+            ">
+                <h2 style="color:#059669;text-align:center;">
+                    Course Approved
+                </h2>
 
-            message.setSubject(
-                    subject,
-                    StandardCharsets.UTF_8.name()
-            );
+                <p>Hello %s,</p>
 
-            message.setContent(
-                    content,
-                    "text/html; charset=UTF-8"
-            );
+                <p>
+                    Great news! Your course <b>%s</b> has been reviewed and approved by our team.
+                    It is now live and available to students on LearnOva.
+                </p>
 
-            Transport.send(message);
+                <br>
 
-        } catch (Exception e) {
-            throw new RuntimeException(
-                    "Failed to send verification email",
-                    e
-            );
+                <p>
+                    Best regards,<br>
+                    <b>LearnOva Team</b>
+                </p>
+            </div>
+        </div>
+       """.formatted(
+                       fullName == null || fullName.isBlank() ? "Instructor" : fullName,
+                       courseTitle
+               );
 
-        }
+        sendHtmlEmail(toEmail, subject, content);
+    }
+
+    public void sendCourseRejectedEmail(String toEmail, String fullName, String courseTitle, String reason) {
+        String subject = "Your course needs changes before publishing";
+
+        String content = """
+        <div style="font-family: Arial, sans-serif; background-color:#f4f4f4; padding:20px;">
+            <div style="
+                max-width:600px;
+                margin:auto;
+                background:white;
+                border-radius:10px;
+                padding:30px;
+                box-shadow:0 4px 10px rgba(0,0,0,0.1);
+            ">
+                <h2 style="color:#dc2626;text-align:center;">
+                    Course Needs Changes
+                </h2>
+
+                <p>Hello %s,</p>
+
+                <p>
+                    Your course <b>%s</b> was reviewed but could not be approved yet. Reason:
+                </p>
+
+                <p style="background:#fef2f2;border-left:3px solid #dc2626;padding:12px 16px;color:#991b1b;">
+                    %s
+                </p>
+
+                <p>
+                    Please make the requested changes and submit the course for review again.
+                </p>
+
+                <br>
+
+                <p>
+                    Best regards,<br>
+                    <b>LearnOva Team</b>
+                </p>
+            </div>
+        </div>
+       """.formatted(
+                       fullName == null || fullName.isBlank() ? "Instructor" : fullName,
+                       courseTitle,
+                       reason
+               );
+
+        sendHtmlEmail(toEmail, subject, content);
     }
 }

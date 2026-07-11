@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Chart from "chart.js/auto";
-import { getAdminVoucherUsageFrequencyApi } from "../../../../api/admin/VoucherApi.js";
+import { getAdminVouchersApi } from "../../../../api/admin/VoucherApi.js";
 import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 import "./VoucherChart.css";
 
 const activationSeries = {
   id: "activation",
-  name: "Voucher Activations",
+  name: "Voucher Programs",
   borderColor: "#2563eb",
   pointBackgroundColor: "#2563eb",
   pointBorderColor: "#ffffff",
@@ -21,13 +21,31 @@ const formatMonthLabel = (month) => {
   return `M${Number(monthNumber)}/${year}`;
 };
 
-const buildVoucherChartData = (frequencyItems) => {
+const getCurrentYear = () => new Date().getFullYear();
+
+const buildYearMonths = (year) =>
+  Array.from({ length: 12 }, (_, index) => {
+    const monthNumber = index + 1;
+    return `${year}-${String(monthNumber).padStart(2, "0")}`;
+  });
+
+const buildVoucherChartData = (voucherItems, year = getCurrentYear()) => {
+  const activationsByMonth =
+    voucherItems
+      .map((item) => String(item.endDate || "").slice(0, 7))
+      .filter((month) => month.startsWith(`${year}-`))
+      .reduce((months, month) => {
+        months.set(month, (months.get(month) || 0) + 1);
+        return months;
+      }, new Map());
+  const yearMonths = buildYearMonths(year);
+
   return {
-    labels: frequencyItems.map((item) => formatMonthLabel(item.month)),
+    labels: yearMonths.map((month) => formatMonthLabel(month)),
     series: [
       {
         ...activationSeries,
-        values: frequencyItems.map((item) => Number(item.activations || 0)),
+        values: yearMonths.map((month) => activationsByMonth.get(month) || 0),
       },
     ],
   };
@@ -36,24 +54,24 @@ const buildVoucherChartData = (frequencyItems) => {
 const VoucherChart = ({ refreshKey }) => {
   const axiosPrivate = useAxiosPrivate();
   const canvasRef = useRef(null);
-  const [frequencyItems, setFrequencyItems] = useState([]);
+  const [vouchers, setVouchers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
     let mounted = true;
 
-    const fetchVoucherUsageFrequency = async () => {
+    const fetchVouchers = async () => {
       try {
         setIsLoading(true);
         setError("");
-        const data = await getAdminVoucherUsageFrequencyApi(axiosPrivate);
+        const data = await getAdminVouchersApi(axiosPrivate);
         if (mounted) {
-          setFrequencyItems(Array.isArray(data) ? data : []);
+          setVouchers(Array.isArray(data) ? data : []);
         }
       } catch (err) {
         if (mounted) {
-          setFrequencyItems([]);
+          setVouchers([]);
           setError(
             err?.response?.data?.message || "Failed to load voucher data."
           );
@@ -63,16 +81,20 @@ const VoucherChart = ({ refreshKey }) => {
       }
     };
 
-    fetchVoucherUsageFrequency();
+    fetchVouchers();
 
     return () => {
       mounted = false;
     };
   }, [axiosPrivate, refreshKey]);
 
+  const chartYear = useMemo(() => getCurrentYear(), []);
   const voucherChartData = useMemo(
-    () => buildVoucherChartData(frequencyItems),
-    [frequencyItems]
+    () => buildVoucherChartData(vouchers, chartYear),
+    [chartYear, vouchers]
+  );
+  const hasCurrentYearData = voucherChartData.series.some((series) =>
+    series.values.some((value) => value > 0)
   );
 
   useEffect(() => {
@@ -129,7 +151,7 @@ const VoucherChart = ({ refreshKey }) => {
             displayColors: false,
             callbacks: {
               label(context) {
-                return `Uses: ${context.parsed.y}`;
+                return `Vouchers: ${context.parsed.y}`;
               },
             },
           },
@@ -182,8 +204,7 @@ const VoucherChart = ({ refreshKey }) => {
         <div>
           <h2 className="voucherChartTitle">Voucher Usage Frequency</h2>
           <p className="voucherChartSubtitle">
-            Statistics of successful voucher code redemptions for course
-            purchases.
+            Statistics of discount programs by expiry month.
           </p>
         </div>
         <div className="voucherChartLegend">
@@ -208,7 +229,7 @@ const VoucherChart = ({ refreshKey }) => {
             {error}
           </div>
         )}
-        {!isLoading && !error && frequencyItems.length === 0 && (
+        {!isLoading && !error && !hasCurrentYearData && (
           <div className="voucherChartStatus">
             No voucher usage data available yet.
           </div>

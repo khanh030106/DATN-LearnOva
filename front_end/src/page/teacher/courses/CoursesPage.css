@@ -462,6 +462,16 @@
   color: #1d4ed8;
 }
 
+.teacher-course-row__status--pending {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.teacher-course-row__status--rejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
 .teacher-course-row__status--active {
   background: #dcfce7;
   color: #16a34a;
@@ -695,6 +705,29 @@
 .cdm__badge--inactive  { background: #fee2e2; color: #dc2626; }
 .cdm__badge--published { background: #dbeafe; color: #1d4ed8; }
 .cdm__badge--draft     { background: #fef9c3; color: #ca8a04; }
+.cdm__badge--pending   { background: #ffedd5; color: #c2410c; }
+.cdm__badge--rejected  { background: #fee2e2; color: #dc2626; }
+.cdm__badge--archived  { background: #dbeafe; color: #1d4ed8; }
+
+.cdm__rejection-banner {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 0 24px 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border-left: 3px solid #dc2626;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.cdm__rejection-banner strong {
+  display: block;
+  margin-bottom: 2px;
+  color: #dc2626;
+}
 .cdm__badge--level     { background: #ede9fe; color: #7c3aed; }
 .cdm__badge--lang      { background: #ccfbf1; color: #0d9488; }
 

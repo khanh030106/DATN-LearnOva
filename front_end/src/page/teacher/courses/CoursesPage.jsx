@@ -63,6 +63,7 @@ const CoursesPage = () => {
               image: thumbnailUrl,
               status: course.status,
               courseStatus: course.status,
+              rejectionReason: course.rejectionReason ?? null,
               basePrice: course.basePrice,
               displayPrice: isPublished ? `$${course.basePrice || 0}` : "-",
               createdAt: course.createdAt,
