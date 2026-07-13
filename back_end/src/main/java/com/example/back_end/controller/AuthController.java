@@ -2,7 +2,7 @@ package com.example.back_end.controller;
 
 import com.example.back_end.dto.response.AuthTokenResponse;
 import com.example.back_end.dto.response.LoginResponse;
-import com.example.back_end.dto.resquest.LoginRequest;
+import com.example.back_end.dto.request.LoginRequest;
 import com.example.back_end.service.AuthService;
 import com.example.back_end.service.CookieService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,9 +12,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.back_end.dto.resquest.RegisterRequest;
+import com.example.back_end.dto.request.RegisterRequest;
 import com.example.back_end.dto.response.RegisterResponse;
-import com.example.back_end.dto.resquest.ResendVerificationRequest;
+import com.example.back_end.dto.request.ResendVerificationRequest;
 
 
 @RestController

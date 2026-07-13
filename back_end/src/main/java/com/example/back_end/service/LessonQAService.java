@@ -1,7 +1,7 @@
 package com.example.back_end.service;
 
-import com.example.back_end.dto.resquest.CreateAnswerRequest;
-import com.example.back_end.dto.resquest.CreateQuestionRequest;
+import com.example.back_end.dto.request.CreateAnswerRequest;
+import com.example.back_end.dto.request.CreateQuestionRequest;
 import com.example.back_end.dto.response.AnswerResponse;
 import com.example.back_end.dto.response.LessonQAResponse;
 import com.example.back_end.dto.response.QuestionResponse;

@@ -1,6 +1,6 @@
 package com.example.back_end.controller.admin;
 
-import com.example.back_end.dto.resquest.RejectPayoutRequestRequest;
+import com.example.back_end.dto.request.RejectPayoutRequestRequest;
 import com.example.back_end.dto.response.PayoutRequestResponse;
 import com.example.back_end.service.PayoutRequestService;
 import jakarta.validation.Valid;

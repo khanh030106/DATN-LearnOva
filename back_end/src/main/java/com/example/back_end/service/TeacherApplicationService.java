@@ -1,6 +1,6 @@
 package com.example.back_end.service;
 
-import com.example.back_end.dto.resquest.CreateTeacherApplicationRequest;
+import com.example.back_end.dto.request.CreateTeacherApplicationRequest;
 import com.example.back_end.dto.response.CvUrlResponse;
 import com.example.back_end.dto.response.TeacherApplicationResponse;
 import com.example.back_end.entity.InstructorProfile;

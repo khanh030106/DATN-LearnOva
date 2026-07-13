@@ -2,7 +2,7 @@ package com.example.back_end.service;
 
 import com.example.back_end.dto.response.CreatePaymentResponse;
 import com.example.back_end.dto.response.PaymentStatusResponse;
-import com.example.back_end.dto.resquest.CreatePaymentRequest;
+import com.example.back_end.dto.request.CreatePaymentRequest;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Enrollment;
 import com.example.back_end.entity.EnrollmentId;

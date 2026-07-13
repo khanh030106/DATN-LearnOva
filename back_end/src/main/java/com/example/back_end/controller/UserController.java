@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.back_end.dto.response.UserResponse;
-import com.example.back_end.dto.resquest.UpdateProfileRequest;
+import com.example.back_end.dto.request.UpdateProfileRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import org.springframework.web.multipart.MultipartFile;
-import com.example.back_end.dto.resquest.ChangePasswordRequest;
-import com.example.back_end.dto.resquest.SwitchActiveRoleRequest;
+import com.example.back_end.dto.request.ChangePasswordRequest;
+import com.example.back_end.dto.request.SwitchActiveRoleRequest;
 
 @RestController
 @RequiredArgsConstructor

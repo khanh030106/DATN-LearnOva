@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.back_end.dto.resquest.CreateTeacherApplicationRequest;
+import com.example.back_end.dto.request.CreateTeacherApplicationRequest;
 import com.example.back_end.dto.response.CvUrlResponse;
 import com.example.back_end.dto.response.TeacherApplicationResponse;
 import com.example.back_end.service.TeacherApplicationService;

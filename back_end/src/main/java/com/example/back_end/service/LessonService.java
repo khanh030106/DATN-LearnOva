@@ -1,8 +1,8 @@
 package com.example.back_end.service;
 
-import com.example.back_end.dto.resquest.CreateLessonRequest;
-import com.example.back_end.dto.resquest.UpdateLessonRequest;
-import com.example.back_end.dto.resquest.UpdateLessonVideoRequest;
+import com.example.back_end.dto.request.CreateLessonRequest;
+import com.example.back_end.dto.request.UpdateLessonRequest;
+import com.example.back_end.dto.request.UpdateLessonVideoRequest;
 import com.example.back_end.entity.Lesson;
 import com.example.back_end.entity.Section;
 import com.example.back_end.entity.enums.HlsStatus;

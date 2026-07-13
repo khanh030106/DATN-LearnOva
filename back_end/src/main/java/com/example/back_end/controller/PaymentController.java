@@ -2,7 +2,7 @@ package com.example.back_end.controller;
 
 import com.example.back_end.dto.response.CreatePaymentResponse;
 import com.example.back_end.dto.response.PaymentStatusResponse;
-import com.example.back_end.dto.resquest.CreatePaymentRequest;
+import com.example.back_end.dto.request.CreatePaymentRequest;
 import com.example.back_end.service.PaymentService;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.validation.Valid;

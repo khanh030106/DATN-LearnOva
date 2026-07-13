@@ -1,6 +1,6 @@
 package com.example.back_end.controller;
 
-import com.example.back_end.dto.resquest.CreateReviewRequest;
+import com.example.back_end.dto.request.CreateReviewRequest;
 import com.example.back_end.dto.response.ReviewResponse;
 import com.example.back_end.service.ReviewService;
 import jakarta.validation.Valid;
@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.example.back_end.security.CustomUserDetails;
-import com.example.back_end.dto.resquest.UpdateReviewRequest;
+import com.example.back_end.dto.request.UpdateReviewRequest;
 import com.example.back_end.dto.response.RatingSummaryResponse;
 
 import java.util.List;

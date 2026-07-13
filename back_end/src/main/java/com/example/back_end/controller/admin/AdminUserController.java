@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.back_end.dto.response.admin.AdminUserResponse;
-import com.example.back_end.dto.resquest.admin.AdminUserRequest;
+import com.example.back_end.dto.request.admin.AdminUserRequest;
 import com.example.back_end.service.admin.AdminUserService;
 
 import lombok.RequiredArgsConstructor;

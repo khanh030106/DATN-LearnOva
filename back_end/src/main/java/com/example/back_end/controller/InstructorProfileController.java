@@ -1,6 +1,6 @@
 package com.example.back_end.controller;
 
-import com.example.back_end.dto.resquest.UpdateInstructorProfileRequest;
+import com.example.back_end.dto.request.UpdateInstructorProfileRequest;
 import com.example.back_end.dto.response.InstructorProfileResponse;
 import com.example.back_end.service.InstructorProfileService;
 import jakarta.validation.Valid;

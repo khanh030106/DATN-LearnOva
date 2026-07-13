@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.back_end.dto.response.CreateSectionResponse;
-import com.example.back_end.dto.resquest.CreateSectionRequest;
-import com.example.back_end.dto.resquest.UpdateSectionRequest;
+import com.example.back_end.dto.request.CreateSectionRequest;
+import com.example.back_end.dto.request.UpdateSectionRequest;
 import com.example.back_end.service.SectionService;
 
 import jakarta.validation.Valid;

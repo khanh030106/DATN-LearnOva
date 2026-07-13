@@ -1,6 +1,6 @@
 package com.example.back_end.service;
 
-import com.example.back_end.dto.resquest.CreateReviewRequest;
+import com.example.back_end.dto.request.CreateReviewRequest;
 import com.example.back_end.dto.response.ReviewResponse;
 import com.example.back_end.dto.response.RatingSummaryResponse;
 import com.example.back_end.entity.Course;
@@ -15,7 +15,7 @@ import com.example.back_end.repository.admin.AdminCourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.back_end.dto.resquest.UpdateReviewRequest;
+import com.example.back_end.dto.request.UpdateReviewRequest;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;

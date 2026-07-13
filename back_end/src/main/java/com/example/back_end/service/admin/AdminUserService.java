@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.back_end.dto.resquest.admin.AdminUserRequest;
+import com.example.back_end.dto.request.admin.AdminUserRequest;
 import com.example.back_end.dto.response.admin.AdminUserResponse;
 import com.example.back_end.entity.Role;
 import com.example.back_end.entity.User;

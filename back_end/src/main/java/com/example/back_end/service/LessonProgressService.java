@@ -2,7 +2,7 @@ package com.example.back_end.service;
 
 import com.example.back_end.dto.response.CourseProgressResponse;
 import com.example.back_end.dto.response.LessonProgressResponse;
-import com.example.back_end.dto.resquest.UpdateLessonProgressRequest;
+import com.example.back_end.dto.request.UpdateLessonProgressRequest;
 import com.example.back_end.entity.Lesson;
 import com.example.back_end.entity.Lessonprogress;
 import com.example.back_end.entity.LessonprogressId;

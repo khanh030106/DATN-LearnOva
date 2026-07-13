@@ -1,9 +1,9 @@
 package com.example.back_end.controller;
 
 import com.example.back_end.dto.response.CreateLessonResponse;
-import com.example.back_end.dto.resquest.CreateLessonRequest;
-import com.example.back_end.dto.resquest.UpdateLessonRequest;
-import com.example.back_end.dto.resquest.UpdateLessonVideoRequest;
+import com.example.back_end.dto.request.CreateLessonRequest;
+import com.example.back_end.dto.request.UpdateLessonRequest;
+import com.example.back_end.dto.request.UpdateLessonVideoRequest;
 import com.example.back_end.service.LessonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

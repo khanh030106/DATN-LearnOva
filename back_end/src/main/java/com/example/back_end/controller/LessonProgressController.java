@@ -1,7 +1,7 @@
 package com.example.back_end.controller;
 
 import com.example.back_end.dto.response.CourseProgressResponse;
-import com.example.back_end.dto.resquest.UpdateLessonProgressRequest;
+import com.example.back_end.dto.request.UpdateLessonProgressRequest;
 import com.example.back_end.security.CustomUserDetails;
 import com.example.back_end.service.LessonProgressService;
 import jakarta.validation.Valid;

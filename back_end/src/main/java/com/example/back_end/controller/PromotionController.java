@@ -1,8 +1,8 @@
 package com.example.back_end.controller;
 
 import com.example.back_end.dto.response.PromotionCourseResponse;
-import com.example.back_end.dto.resquest.CreatePromotionRequest;
-import com.example.back_end.dto.resquest.UpdatePromotionRequest;
+import com.example.back_end.dto.request.CreatePromotionRequest;
+import com.example.back_end.dto.request.UpdatePromotionRequest;
 import com.example.back_end.service.PromotionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -3,8 +3,8 @@ package com.example.back_end.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.back_end.dto.resquest.CreateSectionRequest;
-import com.example.back_end.dto.resquest.UpdateSectionRequest;
+import com.example.back_end.dto.request.CreateSectionRequest;
+import com.example.back_end.dto.request.UpdateSectionRequest;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Section;
 import com.example.back_end.repository.CourseRepository;

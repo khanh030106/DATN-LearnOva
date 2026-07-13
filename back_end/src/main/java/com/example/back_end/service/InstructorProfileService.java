@@ -1,6 +1,6 @@
 package com.example.back_end.service;
 
-import com.example.back_end.dto.resquest.UpdateInstructorProfileRequest;
+import com.example.back_end.dto.request.UpdateInstructorProfileRequest;
 import com.example.back_end.dto.response.InstructorProfileResponse;
 import com.example.back_end.entity.InstructorProfile;
 import com.example.back_end.entity.User;

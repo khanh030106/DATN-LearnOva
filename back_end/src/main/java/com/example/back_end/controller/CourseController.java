@@ -10,9 +10,10 @@ import com.example.back_end.dto.response.TeacherCoursesResponse;
 import com.example.back_end.dto.response.TeacherReviewResponse;
 import com.example.back_end.dto.response.TeacherStudentResponse;
 import com.example.back_end.dto.response.TopCategoryResponse;
-import com.example.back_end.dto.resquest.CreateDraftCourseRequest;
-import com.example.back_end.dto.resquest.UpdateCourseRequest;
-import com.example.back_end.dto.resquest.UpdateCourseStatusRequest;
+import com.example.back_end.dto.request.CreateDraftCourseRequest;
+import com.example.back_end.dto.request.ReplyReviewRequest;
+import com.example.back_end.dto.request.UpdateCourseRequest;
+import com.example.back_end.dto.request.UpdateCourseStatusRequest;
 import com.example.back_end.service.CourseService;
 import com.example.back_end.service.S3Service;
 import com.example.back_end.service.admin.AdminCategoryService;
@@ -74,9 +75,6 @@ public class CourseController {
             @Valid @RequestBody UpdateCourseStatusRequest request,
             Authentication authentication
     ) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).build();
-        }
         courseService.updateCourseStatus(courseId, authentication.getName(), request.status());
         return ResponseEntity.noContent().build();
     }
@@ -99,16 +97,12 @@ public class CourseController {
     @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/my-students")
     public ResponseEntity<List<TeacherStudentResponse>> getMyStudents(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated())
-            return ResponseEntity.status(401).build();
         return ResponseEntity.ok(courseService.getMyStudents(authentication.getName()));
     }
 
     @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/my-reviews")
     public ResponseEntity<List<TeacherReviewResponse>> getMyReviews(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated())
-            return ResponseEntity.status(401).build();
         return ResponseEntity.ok(courseService.getMyReviews(authentication.getName()));
     }
 
@@ -116,11 +110,9 @@ public class CourseController {
     @PatchMapping("/reviews/{reviewId}/reply")
     public ResponseEntity<Void> replyToReview(
             @PathVariable Long reviewId,
-            @Valid @RequestBody com.example.back_end.dto.resquest.ReplyReviewRequest request,
+            @Valid @RequestBody ReplyReviewRequest request,
             Authentication authentication
     ) {
-        if (authentication == null || !authentication.isAuthenticated())
-            return ResponseEntity.status(401).build();
         courseService.replyToReview(reviewId, authentication.getName(), request.getReply());
         return ResponseEntity.noContent().build();
     }
@@ -130,9 +122,6 @@ public class CourseController {
     public ResponseEntity<List<TeacherCoursesResponse>> getMyCourses(
             Authentication authentication
     ) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).build();
-        }
         return ResponseEntity.ok(courseService.getMyCourses(authentication.getName()));
     }
 
@@ -143,9 +132,6 @@ public class CourseController {
             @Valid @RequestBody UpdateCourseRequest request,
             Authentication authentication
     ) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).build();
-        }
         courseService.updateCourse(courseId, request, authentication.getName());
         return ResponseEntity.noContent().build();
     }
@@ -156,8 +142,6 @@ public class CourseController {
             @PathVariable Long courseId,
             Authentication authentication
     ) {
-        if (authentication == null || !authentication.isAuthenticated())
-            return ResponseEntity.status(401).build();
         courseService.toggleCourseVisibility(courseId, authentication.getName());
         return ResponseEntity.noContent().build();
     }
@@ -168,9 +152,6 @@ public class CourseController {
             @PathVariable Long courseId,
             Authentication authentication
     ) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).build();
-        }
         courseService.softDeleteCourse(courseId, authentication.getName());
         return ResponseEntity.noContent().build();
     }

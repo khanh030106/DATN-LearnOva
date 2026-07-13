@@ -1,8 +1,8 @@
 package com.example.back_end.service;
 
 import com.example.back_end.dto.response.PromotionCourseResponse;
-import com.example.back_end.dto.resquest.CreatePromotionRequest;
-import com.example.back_end.dto.resquest.UpdatePromotionRequest;
+import com.example.back_end.dto.request.CreatePromotionRequest;
+import com.example.back_end.dto.request.UpdatePromotionRequest;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Promotion;
 import com.example.back_end.entity.Promotioncours;

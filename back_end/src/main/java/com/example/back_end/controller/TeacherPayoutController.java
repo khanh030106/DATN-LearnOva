@@ -1,6 +1,6 @@
 package com.example.back_end.controller;
 
-import com.example.back_end.dto.resquest.CreatePayoutRequestRequest;
+import com.example.back_end.dto.request.CreatePayoutRequestRequest;
 import com.example.back_end.dto.response.PayoutBalanceResponse;
 import com.example.back_end.dto.response.PayoutRequestResponse;
 import com.example.back_end.service.PayoutRequestService;
