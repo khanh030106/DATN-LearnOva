@@ -7,8 +7,10 @@ public record TeacherStudentResponse(
         Long studentId,
         String fullName,
         String email,
+        String phone,
         String avatar,
-        List<String> courseNames,
+        List<TeacherStudentCourseResponse> courses,
         Instant enrolledAt,
-        int progressPercent
+        int progressPercent,
+        String status
 ) {}

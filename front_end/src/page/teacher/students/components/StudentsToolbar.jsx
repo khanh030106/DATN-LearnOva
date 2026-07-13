@@ -1,6 +1,15 @@
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search } from "lucide-react";
+import { studentStatusFilterOptions } from "../studentsPageData.js";
 
-const StudentsToolbar = ({ query, onQueryChange }) => (
+const StudentsToolbar = ({
+  query,
+  onQueryChange,
+  statusFilter,
+  onStatusFilterChange,
+  courseFilter,
+  onCourseFilterChange,
+  courseFilterOptions,
+}) => (
   <div className="teacher-students-header">
     <div className="teacher-students-tools">
       <label className="teacher-students-search">
@@ -9,12 +18,25 @@ const StudentsToolbar = ({ query, onQueryChange }) => (
           type="search"
           value={query}
           onChange={(event) => onQueryChange(event.target.value)}
-          placeholder="Tim ten hoc vien..."
+          placeholder="Tìm tên, email, SĐT học viên..."
         />
       </label>
-      <button type="button" aria-label="Filter students">
-        <SlidersHorizontal size={20} />
-      </button>
+
+      <select value={statusFilter} onChange={(event) => onStatusFilterChange(event.target.value)}>
+        {studentStatusFilterOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+
+      <select value={courseFilter} onChange={(event) => onCourseFilterChange(event.target.value)}>
+        {courseFilterOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
     </div>
   </div>
 );

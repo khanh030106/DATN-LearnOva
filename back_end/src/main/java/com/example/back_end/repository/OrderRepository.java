@@ -70,4 +70,63 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT o FROM Order o JOIN FETCH o.user WHERE o.id = :orderId")
     Optional<Order> findByIdForPaymentUpdate(@Param("orderId") Long orderId);
+
+    @Query(value = "SELECT COALESCE(SUM(oi.price), 0) FROM orderitems oi " +
+            "JOIN courses c ON c.course_id = oi.course_id " +
+            "JOIN orders o ON o.order_id = oi.order_id " +
+            "WHERE c.instructor_id = :instructorId AND o.status = 'PAID'", nativeQuery = true)
+    BigDecimal findTotalRevenueByInstructor(@Param("instructorId") Long instructorId);
+
+    @Query(value = "SELECT COUNT(DISTINCT o.order_id) FROM orderitems oi " +
+            "JOIN courses c ON c.course_id = oi.course_id " +
+            "JOIN orders o ON o.order_id = oi.order_id " +
+            "WHERE c.instructor_id = :instructorId AND o.status = 'PAID' AND o.created_at >= :since", nativeQuery = true)
+    long countOrdersByInstructorSince(@Param("instructorId") Long instructorId, @Param("since") Instant since);
+
+    @Query(value = "SELECT COALESCE(SUM(p.amount), 0) FROM payments p " +
+            "JOIN orders o ON o.order_id = p.order_id " +
+            "JOIN orderitems oi ON oi.order_id = o.order_id " +
+            "JOIN courses c ON c.course_id = oi.course_id " +
+            "WHERE c.instructor_id = :instructorId AND p.status = 'REFUNDED' AND o.created_at >= :since", nativeQuery = true)
+    BigDecimal findRefundsByInstructorSince(@Param("instructorId") Long instructorId, @Param("since") Instant since);
+
+    @Query(value = "SELECT COALESCE(SUM(p.amount), 0) FROM payments p " +
+            "JOIN orders o ON o.order_id = p.order_id " +
+            "JOIN orderitems oi ON oi.order_id = o.order_id " +
+            "JOIN courses c ON c.course_id = oi.course_id " +
+            "WHERE c.instructor_id = :instructorId AND p.status = 'REFUNDED'", nativeQuery = true)
+    BigDecimal findLifetimeRefundsByInstructor(@Param("instructorId") Long instructorId);
+
+    interface TransactionProjection {
+        Long getOrderId();
+        String getStudentName();
+        String getStudentAvatar();
+        String getCourseTitle();
+        BigDecimal getPrice();
+        String getPaymentMethod();
+        Instant getPaidAt();
+    }
+
+    @Query(value = """
+            SELECT
+                o.order_id AS orderId,
+                u.full_name AS studentName,
+                u.avatar AS studentAvatar,
+                c.title AS courseTitle,
+                oi.price AS price,
+                p.payment_method AS paymentMethod,
+                o.created_at AS paidAt
+            FROM orderitems oi
+            JOIN courses c ON c.course_id = oi.course_id
+            JOIN orders o ON o.order_id = oi.order_id AND o.status = 'PAID'
+            JOIN users u ON u.user_id = o.user_id
+            JOIN payments p ON p.order_id = o.order_id AND p.status = 'SUCCESS'
+            WHERE c.instructor_id = :instructorId
+            ORDER BY o.created_at DESC
+            LIMIT :limit
+            """, nativeQuery = true)
+    List<TransactionProjection> findRecentTransactionsByInstructor(
+            @Param("instructorId") Long instructorId,
+            @Param("limit") int limit
+    );
 }

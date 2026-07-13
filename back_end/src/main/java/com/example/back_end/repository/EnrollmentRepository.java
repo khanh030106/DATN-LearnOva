@@ -99,4 +99,33 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Enrollme
     @Query("SELECT e.course.id AS courseId, COALESCE(AVG(e.progressPercent), 0) AS avgProgress " +
             "FROM Enrollment e WHERE e.course.instructor.id = :instructorId GROUP BY e.course.id")
     List<CourseProgressProjection> findAvgProgressByCourseForInstructor(@Param("instructorId") Long instructorId);
+
+    @Query("SELECT COUNT(e) FROM Enrollment e WHERE e.course.instructor.id = :instructorId AND e.progressPercent > 0")
+    long countActiveStudentsByInstructorId(@Param("instructorId") Long instructorId);
+
+    @Query("SELECT DISTINCT e.user FROM Enrollment e WHERE e.course.instructor.id = :instructorId")
+    List<com.example.back_end.entity.User> findDistinctStudentsByInstructorId(@Param("instructorId") Long instructorId);
+
+    @Query("SELECT DISTINCT e.user FROM Enrollment e WHERE e.course.id = :courseId")
+    List<com.example.back_end.entity.User> findDistinctStudentsByCourseId(@Param("courseId") Long courseId);
+
+    interface DailyCompletionProjection {
+        java.time.LocalDate getDay();
+        Long getCount();
+    }
+
+    @Query(value = """
+            SELECT
+                date_trunc('day', e.completed_at)::date AS day,
+                COUNT(*) AS count
+            FROM enrollments e
+            JOIN courses c ON c.course_id = e.course_id
+            WHERE c.instructor_id = :instructorId AND e.completed_at >= :since
+            GROUP BY date_trunc('day', e.completed_at)
+            ORDER BY day
+            """, nativeQuery = true)
+    List<DailyCompletionProjection> findDailyCompletionsByInstructor(
+            @Param("instructorId") Long instructorId,
+            @Param("since") Instant since
+    );
 }

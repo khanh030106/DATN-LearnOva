@@ -10,7 +10,15 @@ const RequireRole = ({ role, children }) => {
     return <Navigate to="/learnova/auth/login" replace />;
   }
 
-  if (role && !currentUser?.roles?.includes(role)) {
+  const roles = currentUser?.roles ?? [];
+  const activeRole = currentUser?.activeRole;
+  // Mirror the backend's CustomUserDetails.getAuthorities(): activeRole only grants
+  // access when it's actually one of the user's currently held roles. A stale
+  // activeRole left over after a role was revoked must not unlock its route.
+  const activeRoleStillValid = activeRole && roles.includes(activeRole);
+  const hasAccess = !role || (activeRoleStillValid ? activeRole === role : roles.includes(role));
+
+  if (role && !hasAccess) {
     return <Navigate to="/learnova/home" replace />;
   }
 

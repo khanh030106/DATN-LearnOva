@@ -22,9 +22,7 @@ const PublishStep = ({
     course,
     sections,
     status,
-    visibility,
     onStatusChange,
-    onVisibilityChange,
     onPublish,
     onPrevious,
     isSubmitting,
@@ -79,9 +77,7 @@ const PublishStep = ({
 
                 <PublishCard
                     status={status}
-                    visibility={visibility}
                     onStatusChange={onStatusChange}
-                    onVisibilityChange={onVisibilityChange}
                     onPublish={onPublish}
                     isSubmitting={isSubmitting}
                     isReady={isReady}

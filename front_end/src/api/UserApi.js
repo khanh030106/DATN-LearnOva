@@ -26,3 +26,7 @@ export const changePasswordApi = async (data) => {
     const response = await axiosClient.put("/user/change-password", data);
     return response.data;
 };
+export const switchActiveRoleApi = async (role) => {
+    const response = await axiosClient.patch("/user/active-role", { role });
+    return response.data;
+};

@@ -80,6 +80,11 @@
         private Boolean isDeleted;
 
         @NotNull
+        @ColumnDefault("false")
+        @Column(name = "is_hidden", nullable = false)
+        private Boolean isHidden;
+
+        @NotNull
         @ColumnDefault("CURRENT_TIMESTAMP")
         @Column(name = "created_at", nullable = false)
         private Instant createdAt;
@@ -94,10 +99,6 @@
         @ColumnDefault("CURRENT_TIMESTAMP")
         @Column(name = "updated_at", nullable = false)
         private Instant updatedAt;
-
-        @ColumnDefault("to_tsvector('simple', ((immutable_unaccent(COALESCE(title, ''::text)) || ' '::text) || immutable_unaccent(COALESCE(description, ''))))")
-        @Column(name = "search_vector", columnDefinition = "tsvector", insertable = false, updatable = false)
-        private Object searchVector;
 
         @NotNull
         @Column(name = "thumbnail_key", nullable = false, length = Integer.MAX_VALUE)

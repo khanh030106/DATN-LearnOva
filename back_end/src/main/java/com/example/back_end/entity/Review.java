@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -40,6 +41,12 @@ public class Review {
 
     @Column(name = "comment", length = Integer.MAX_VALUE)
     private String comment;
+
+    @Column(name = "instructor_reply", length = Integer.MAX_VALUE)
+    private String instructorReply;
+
+    @Column(name = "replied_at")
+    private OffsetDateTime repliedAt;
 
     @NotNull
     @ColumnDefault("CURRENT_TIMESTAMP")

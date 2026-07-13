@@ -5,6 +5,7 @@ import com.example.back_end.dto.response.FeaturedCourseResponse;
 import com.example.back_end.dto.response.PublicCourseResponse;
 import com.example.back_end.dto.response.TeacherCoursesResponse;
 import com.example.back_end.dto.response.TeacherReviewResponse;
+import com.example.back_end.dto.response.TeacherStudentCourseResponse;
 import com.example.back_end.dto.response.TeacherStudentResponse;
 import com.example.back_end.dto.response.TopCategoryResponse;
 import com.example.back_end.entity.Enrollment;
@@ -14,6 +15,7 @@ import com.example.back_end.entity.Category;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Coursecategory;
 import com.example.back_end.entity.CoursecategoryId;
+import com.example.back_end.entity.Review;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.CourseStatus;
 import com.example.back_end.entity.enums.NotificationType;
@@ -79,6 +81,7 @@ public class CourseService {
         course.setStatus(CourseStatus.DRAFT);
         course.setInstructor(instructor);
         course.setIsDeleted(false);
+        course.setIsHidden(false);
         course.setSlug(UUID.randomUUID().toString());
         course.setCreatedAt(Instant.now());
         course.setUpdatedAt(Instant.now());
@@ -152,7 +155,7 @@ public class CourseService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         List<Course> courses = courseRepository
-                .findByInstructorIdOrderByCreatedAtDesc(instructor.getId());
+                .findByInstructorIdAndIsDeletedFalseOrderByCreatedAtDesc(instructor.getId());
 
         List<Long> courseIds = courses.stream()
                 .map(Course::getId)
@@ -208,6 +211,7 @@ public class CourseService {
                             totalDurationSeconds,
                             studentCount,
                             course.getIsDeleted(),
+                            course.getIsHidden(),
                             course.getRejectionReason(),
                             avgRating,
                             ratingCount
@@ -364,11 +368,11 @@ public class CourseService {
             throw new BusinessException("You don't have permission to modify this course");
         }
 
-        boolean newState = !Boolean.TRUE.equals(course.getIsDeleted());
-        course.setIsDeleted(newState);
+        boolean newHiddenState = !Boolean.TRUE.equals(course.getIsHidden());
+        course.setIsHidden(newHiddenState);
         course.setUpdatedAt(Instant.now());
         courseRepository.save(course);
-        return newState;
+        return newHiddenState;
     }
 
     @Transactional(readOnly = true)
@@ -486,7 +490,7 @@ public class CourseService {
     @Transactional(readOnly = true)
     public List<PublicCourseResponse> getPublishedCourses() {
         List<Course> courses = courseRepository
-                .findByStatusAndIsDeletedFalseOrderByCreatedAtDesc(CourseStatus.PUBLISHED);
+                .findByStatusAndIsDeletedFalseAndIsHiddenFalseOrderByCreatedAtDesc(CourseStatus.PUBLISHED);
 
         List<Long> courseIds = courses.stream().map(Course::getId).toList();
 
@@ -516,6 +520,7 @@ public class CourseService {
         Course course = courseRepository.findById(courseId)
                 .filter(item -> item.getStatus() == CourseStatus.PUBLISHED)
                 .filter(item -> !Boolean.TRUE.equals(item.getIsDeleted()))
+                .filter(item -> !Boolean.TRUE.equals(item.getIsHidden()))
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
 
         long studentCount = enrollmentRepository.countByCourseId(courseId);
@@ -526,6 +531,34 @@ public class CourseService {
                 .orElse(null);
 
         return toPublicCourseResponse(course, studentCount, rating);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PublicCourseResponse> getPublishedCoursesByInstructor(Long instructorId) {
+        List<Course> courses = courseRepository
+                .findByInstructorIdAndStatusAndIsDeletedFalseAndIsHiddenFalse(instructorId, CourseStatus.PUBLISHED);
+
+        List<Long> courseIds = courses.stream().map(Course::getId).toList();
+
+        Map<Long, Long> studentCountByCourseId = courseIds.isEmpty()
+                ? Map.of()
+                : enrollmentRepository.findByCourseIdIn(courseIds)
+                .stream()
+                .collect(Collectors.groupingBy(e -> e.getCourse().getId(), Collectors.counting()));
+
+        Map<Long, ReviewRepository.CourseRatingProjection> ratingByCourseId = courseIds.isEmpty()
+                ? Map.of()
+                : reviewRepository.findAvgRatingByCourseIds(courseIds)
+                .stream()
+                .collect(Collectors.toMap(ReviewRepository.CourseRatingProjection::getCourseId, r -> r));
+
+        return courses.stream()
+                .map(course -> toPublicCourseResponse(
+                        course,
+                        studentCountByCourseId.getOrDefault(course.getId(), 0L),
+                        ratingByCourseId.get(course.getId())
+                ))
+                .toList();
     }
 
     private PublicCourseResponse toPublicCourseResponse(
@@ -588,9 +621,13 @@ public class CourseService {
                     List<Enrollment> studentEnrollments = entry.getValue();
                     User student = studentEnrollments.get(0).getUser();
 
-                    List<String> courseNames = studentEnrollments.stream()
-                            .map(e -> e.getCourse().getTitle())
-                            .distinct()
+                    List<TeacherStudentCourseResponse> courses = studentEnrollments.stream()
+                            .map(e -> new TeacherStudentCourseResponse(
+                                    e.getCourse().getId(),
+                                    e.getCourse().getTitle(),
+                                    e.getProgressPercent() != null ? e.getProgressPercent() : 0,
+                                    e.getEnrolledAt()
+                            ))
                             .toList();
 
                     Instant earliestEnrolledAt = studentEnrollments.stream()
@@ -603,14 +640,20 @@ public class CourseService {
                             .average()
                             .orElse(0);
 
+                    String status = avgProgress == 0 ? "NOT_STARTED"
+                            : avgProgress == 100 ? "COMPLETED"
+                            : "IN_PROGRESS";
+
                     return new TeacherStudentResponse(
                             student.getId(),
                             student.getFullName(),
                             student.getEmail(),
+                            student.getPhone(),
                             student.getAvatar(),
-                            courseNames,
+                            courses,
                             earliestEnrolledAt,
-                            avgProgress
+                            avgProgress,
+                            status
                     );
                 })
                 .sorted(Comparator.comparing(
@@ -627,7 +670,7 @@ public class CourseService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         List<Long> courseIds = courseRepository
-                .findByInstructorIdOrderByCreatedAtDesc(instructor.getId())
+                .findByInstructorIdAndIsDeletedFalseOrderByCreatedAtDesc(instructor.getId())
                 .stream()
                 .map(Course::getId)
                 .toList();
@@ -647,9 +690,29 @@ public class CourseService {
                         review.getUser().getAvatar(),
                         review.getRating(),
                         review.getComment(),
-                        review.getCreatedAt()
+                        review.getInstructorReply(),
+                        review.getRepliedAt(),
+                        review.getCreatedAt(),
+                        review.getUpdatedAt()
                 ))
                 .toList();
+    }
+
+    public void replyToReview(Long reviewId, String email, String reply) {
+        User instructor = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
+
+        if (!review.getCourse().getInstructor().getId().equals(instructor.getId())) {
+            throw new BusinessException("You don't have permission to reply to this review");
+        }
+
+        review.setInstructorReply(reply);
+        review.setRepliedAt(OffsetDateTime.now());
+        reviewRepository.save(review);
     }
 
     public String getHlsMasterPlaylistPathIfReady(String fileKey) {

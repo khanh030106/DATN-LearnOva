@@ -1,4 +1,4 @@
-import { Circle, Eye, EyeOff, Info, Pencil, Star } from "lucide-react";
+import { Circle, Eye, EyeOff, Info, Pencil, Star, Trash2 } from "lucide-react";
 import { STATUS_LABELS } from "../coursePageConfig.js";
 
 const formatDuration = (totalSeconds) => {
@@ -15,17 +15,17 @@ const STATUS_MODIFIERS = {
   PENDING_REVIEW: "pending",
   PUBLISHED: "published",
   REJECTED: "rejected",
-  DELETED: "inactive",
+  HIDDEN: "inactive",
 };
 
 const CourseCard = ({ course, onDelete, onUpdate, onToggleVisibility, onViewDetail }) => {
-  const isActive = !course.isDeleted;
+  const isVisible = !course.isHidden;
   const isPublished = course.courseStatus === "PUBLISHED";
   const isRejected = course.courseStatus === "REJECTED";
   const studentCount = isPublished ? (course.studentCount ?? 0) : "-";
   const price = isPublished ? course.displayPrice : "-";
   const rating = isPublished ? course.rating : "-";
-  const displayStatus = course.isDeleted ? "DELETED" : course.courseStatus;
+  const displayStatus = course.isHidden ? "HIDDEN" : course.courseStatus;
   const statusModifier = STATUS_MODIFIERS[displayStatus] ?? "draft";
   const statusLabel = STATUS_LABELS[displayStatus] ?? displayStatus;
 
@@ -76,14 +76,22 @@ const CourseCard = ({ course, onDelete, onUpdate, onToggleVisibility, onViewDeta
         </button>
         <button
           type="button"
-          aria-label={isActive ? `Deactivate ${course.title}` : `Activate ${course.title}`}
-          className={isActive ? "teacher-course-row__btn--deactivate" : "teacher-course-row__btn--activate"}
+          aria-label={isVisible ? `Hide ${course.title} from students` : `Show ${course.title} to students`}
+          className={isVisible ? "teacher-course-row__btn--deactivate" : "teacher-course-row__btn--activate"}
           onClick={() => onToggleVisibility(course)}
         >
-          {isActive ? <EyeOff size={16} /> : <Eye size={16} />}
+          {isVisible ? <EyeOff size={16} /> : <Eye size={16} />}
         </button>
         <button type="button" aria-label={`View details of ${course.title}`} onClick={() => onViewDetail(course)}>
           <Info size={16} />
+        </button>
+        <button
+          type="button"
+          aria-label={`Delete ${course.title}`}
+          className="teacher-course-row__btn--delete"
+          onClick={() => onDelete(course)}
+        >
+          <Trash2 size={16} />
         </button>
       </div>
     </article>

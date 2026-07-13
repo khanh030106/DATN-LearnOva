@@ -587,43 +587,6 @@
   font-weight: 700;
 }
 
-.overview-announcement__list {
-  display: grid;
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.overview-announcement {
-  display: grid;
-  grid-template-columns: 36px minmax(0, 1fr);
-  gap: 12px;
-}
-
-.overview-announcement__icon {
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  color: #7c3aed;
-  background: #ede9fe;
-}
-
-.overview-announcement strong {
-  display: block;
-  color: #0f172a;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.overview-announcement p {
-  margin: 3px 0 0;
-  color: var(--overview-muted);
-  font-size: 12px;
-  line-height: 1.4;
-}
-
 .overview-course-table {
   width: 100%;
   min-width: 480px;

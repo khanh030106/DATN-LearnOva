@@ -162,9 +162,7 @@ const CourseCreationPage = () => {
                     course={course}
                     sections={sections}
                     status={course.status}
-                    visibility={course.visibility}
                     onStatusChange={(status) => updateCourse({status})}
-                    onVisibilityChange={(visibility) => updateCourse({visibility})}
                     onPublish={handlePublish}
                     onPrevious={() => setCurrentStep(3)}
                     isSubmitting={isSubmitting}

@@ -45,6 +45,13 @@ const CourseReviews = ({ course, reviewsData }) => {
                         </div>
 
                         <p>{review.comment}</p>
+
+                        {review.instructorReply && (
+                            <div className="learning-review-instructor-reply">
+                                <strong>Instructor reply</strong>
+                                <p>{review.instructorReply}</p>
+                            </div>
+                        )}
                     </article>
                 ))}
             </div>

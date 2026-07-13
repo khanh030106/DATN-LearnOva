@@ -188,6 +188,10 @@
   background: transparent;
 }
 
+.teacher-profile-menu {
+  position: relative;
+}
+
 .teacher-profile {
   display: flex;
   align-items: center;
@@ -218,6 +222,98 @@
 .teacher-profile:hover svg {
   color: #0f172a;
   transform: translateY(1px);
+}
+
+.teacher-profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 260px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.16);
+  z-index: 1300;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+}
+
+.teacher-profile-menu:hover > .teacher-profile-dropdown,
+.teacher-profile-menu:focus-within > .teacher-profile-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.teacher-profile-dropdown__card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 4px 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.teacher-profile-dropdown__card img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #e2e8f0;
+}
+
+.teacher-profile-dropdown__card div {
+  display: flex;
+  flex-direction: column;
+}
+
+.teacher-profile-dropdown__card strong {
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.teacher-profile-dropdown__card span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.teacher-profile-dropdown__list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0 0;
+  display: grid;
+  gap: 2px;
+}
+
+.teacher-profile-dropdown__list button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  color: #0f172a;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.teacher-profile-dropdown__list button:hover {
+  background: #f1f5f9;
+}
+
+.teacher-profile-dropdown__list button.is-danger {
+  color: #dc2626;
+}
+
+.teacher-profile-dropdown__list button.is-danger:hover {
+  background: #fef2f2;
 }
 
 @media (max-width: 760px) {

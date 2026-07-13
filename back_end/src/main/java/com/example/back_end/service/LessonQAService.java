@@ -5,10 +5,15 @@ import com.example.back_end.dto.resquest.CreateQuestionRequest;
 import com.example.back_end.dto.response.AnswerResponse;
 import com.example.back_end.dto.response.LessonQAResponse;
 import com.example.back_end.dto.response.QuestionResponse;
+import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Lesson;
 import com.example.back_end.entity.LessonQA;
 import com.example.back_end.entity.User;
+import com.example.back_end.entity.enums.NotificationType;
+import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
+import com.example.back_end.dto.response.TeacherQuestionResponse;
+import com.example.back_end.repository.EnrollmentRepository;
 import com.example.back_end.repository.LessonQARepository;
 import com.example.back_end.repository.LessonRepository;
 import com.example.back_end.repository.UserRepository;
@@ -30,6 +35,19 @@ public class LessonQAService {
     private final LessonQARepository qaRepo;
     private final LessonRepository lessonRepo;
     private final UserRepository userRepo;
+    private final NotificationService notificationService;
+    private final EnrollmentRepository enrollmentRepository;
+
+    private void requireEnrolledOrInstructor(Long userId, Course course) {
+        boolean isInstructor = course.getInstructor().getId().equals(userId);
+        if (isInstructor) {
+            return;
+        }
+        boolean isEnrolled = enrollmentRepository.existsByUserIdAndCourseId(userId, course.getId());
+        if (!isEnrolled) {
+            throw new BusinessException("You must be enrolled in this course to ask or answer questions.");
+        }
+    }
 
     // =========================
     // 1. GET Q&A COURSE
@@ -76,6 +94,7 @@ public class LessonQAService {
                 qr.setUserName(q.getUser().getFullName());
                 qr.setCreatedAt(q.getCreatedAt());
                 qr.setIsSolved(q.getIsSolved());
+                qr.setIsPinned(q.getIsPinned());
 
                 List<AnswerResponse> answerResponses =
                         answersByQuestion.getOrDefault(q.getId(), List.of())
@@ -122,6 +141,7 @@ public class LessonQAService {
                     qr.setUserName(question.getUser().getFullName());
                     qr.setCreatedAt(question.getCreatedAt());
                     qr.setIsSolved(question.getIsSolved());
+                    qr.setIsPinned(question.getIsPinned());
 
                     qr.setAnswers(buildReplies(question.getId(), replyMap));
 
@@ -149,6 +169,8 @@ public class LessonQAService {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+        requireEnrolledOrInstructor(userId, lesson.getSection().getCourse());
+
         Instant now = Instant.now();
 
         LessonQA q = new LessonQA();
@@ -168,6 +190,18 @@ public class LessonQAService {
         q.setUpdatedAt(now);
 
         qaRepo.save(q);
+
+        Course course = lesson.getSection().getCourse();
+        if (!course.getInstructor().getId().equals(user.getId())) {
+            notificationService.create(
+                    course.getInstructor(),
+                    NotificationType.NEW_QUESTION,
+                    "New question from a student",
+                    user.getFullName() + " asked a question on \"" + lesson.getTitle() + "\".",
+                    "/learnova/teacher/qna",
+                    Map.of("courseId", course.getId(), "lessonId", lesson.getId(), "questionId", q.getId())
+            );
+        }
     }
 
     // =========================
@@ -181,6 +215,8 @@ public class LessonQAService {
 
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        requireEnrolledOrInstructor(userId, parent.getLesson().getSection().getCourse());
 
         Instant now = Instant.now();
 
@@ -285,6 +321,10 @@ public class LessonQAService {
         return ar;
     }
 
+    private boolean isCourseInstructor(Long userId, LessonQA qa) {
+        return qa.getLesson().getSection().getCourse().getInstructor().getId().equals(userId);
+    }
+
     @Transactional
     public void deleteAnswer(Long userId, Long answerId) {
 
@@ -295,7 +335,7 @@ public class LessonQAService {
             throw new RuntimeException("Cannot delete question.");
         }
 
-        if (!answer.getUser().getId().equals(userId)) {
+        if (!answer.getUser().getId().equals(userId) && !isCourseInstructor(userId, answer)) {
             throw new RuntimeException("You cannot delete this answer.");
         }
 
@@ -312,7 +352,7 @@ public class LessonQAService {
             throw new RuntimeException("Not a question");
         }
 
-        if (!question.getUser().getId().equals(userId)) {
+        if (!question.getUser().getId().equals(userId) && !isCourseInstructor(userId, question)) {
             throw new RuntimeException("Not allowed");
         }
 
@@ -321,6 +361,46 @@ public class LessonQAService {
         qaRepo.deleteAll(children);
 
         qaRepo.delete(question);
+    }
+
+    @Transactional
+    public void setSolved(Long userId, Long questionId, boolean solved) {
+
+        LessonQA question = qaRepo.findById(questionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Question not found"));
+
+        if (!"QUESTION".equals(question.getType())) {
+            throw new BusinessException("Not a question");
+        }
+
+        if (!question.getUser().getId().equals(userId) && !isCourseInstructor(userId, question)) {
+            throw new BusinessException("Not allowed");
+        }
+
+        question.setIsSolved(solved);
+        question.setUpdatedAt(Instant.now());
+
+        qaRepo.save(question);
+    }
+
+    @Transactional
+    public void setPinned(Long userId, Long questionId, boolean pinned) {
+
+        LessonQA question = qaRepo.findById(questionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Question not found"));
+
+        if (!"QUESTION".equals(question.getType())) {
+            throw new BusinessException("Not a question");
+        }
+
+        if (!isCourseInstructor(userId, question)) {
+            throw new BusinessException("Only the instructor can pin questions.");
+        }
+
+        question.setIsPinned(pinned);
+        question.setUpdatedAt(Instant.now());
+
+        qaRepo.save(question);
     }
 
     @Transactional
@@ -353,5 +433,40 @@ public class LessonQAService {
         q.setUpdatedAt(Instant.now());
 
         qaRepo.save(q);
+    }
+
+    public List<TeacherQuestionResponse> getMyQuestions(String instructorEmail) {
+
+        User instructor = userRepo.findByEmailAndIsDeletedFalse(instructorEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        List<LessonQA> questions = qaRepo.findQuestionsForInstructorWithDetails(instructor.getId());
+
+        List<Long> questionIds = questions.stream().map(LessonQA::getId).toList();
+
+        Map<Long, Long> answerCountByQuestion = questionIds.isEmpty()
+                ? Map.of()
+                : qaRepo.findAnswersByParentIdsWithUser(questionIds).stream()
+                        .collect(Collectors.groupingBy(a -> a.getParent().getId(), Collectors.counting()));
+
+        return questions.stream()
+                .map(q -> {
+                    Course course = q.getLesson().getSection().getCourse();
+                    return TeacherQuestionResponse.builder()
+                            .id(q.getId())
+                            .content(q.getContent())
+                            .courseId(course.getId())
+                            .courseTitle(course.getTitle())
+                            .lessonId(q.getLesson().getId())
+                            .lessonTitle(q.getLesson().getTitle())
+                            .userId(q.getUser().getId())
+                            .userName(q.getUser().getFullName())
+                            .createdAt(q.getCreatedAt())
+                            .isSolved(q.getIsSolved())
+                            .isPinned(q.getIsPinned())
+                            .answerCount(answerCountByQuestion.getOrDefault(q.getId(), 0L).intValue())
+                            .build();
+                })
+                .toList();
     }
 }

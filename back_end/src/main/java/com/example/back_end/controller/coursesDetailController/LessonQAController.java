@@ -3,12 +3,17 @@ package com.example.back_end.controller.coursesDetailController;
 import com.example.back_end.dto.resquest.CreateAnswerRequest;
 import com.example.back_end.dto.resquest.CreateQuestionRequest;
 import com.example.back_end.dto.response.LessonQAResponse;
+import com.example.back_end.dto.response.TeacherQuestionResponse;
 import com.example.back_end.security.CustomUserDetails;
 import com.example.back_end.service.LessonQAService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -144,5 +149,58 @@ public class LessonQAController {
     ) {
         CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
         qaService.updateQuestion(user.getId(), id, req);
+    }
+
+    // ======================
+    // MARK QUESTION SOLVED / UNSOLVED
+    // Question owner or the course instructor only
+    // /api/qna/question/{id}/solved
+    // ======================
+    @PatchMapping({
+            "/qna/question/{id}/solved",
+            "/learnova/qna/question/{id}/solved"
+    })
+    public void setSolved(
+            Authentication auth,
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "true") boolean value
+    ) {
+        CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+        qaService.setSolved(user.getId(), id, value);
+    }
+
+    // ======================
+    // PIN / UNPIN QUESTION
+    // Course instructor only
+    // /api/qna/question/{id}/pinned
+    // ======================
+    @PatchMapping({
+            "/qna/question/{id}/pinned",
+            "/learnova/qna/question/{id}/pinned"
+    })
+    public void setPinned(
+            Authentication auth,
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "true") boolean value
+    ) {
+        CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+        qaService.setPinned(user.getId(), id, value);
+    }
+
+    // ======================
+    // TEACHER Q&A INBOX
+    // All questions across every course this instructor teaches
+    // /api/qna/my-questions
+    // ======================
+    @PreAuthorize("hasRole('TEACHER')")
+    @GetMapping({
+            "/qna/my-questions",
+            "/learnova/qna/my-questions"
+    })
+    public ResponseEntity<List<TeacherQuestionResponse>> getMyQuestions(Authentication auth) {
+        if (auth == null || !auth.isAuthenticated()) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(qaService.getMyQuestions(auth.getName()));
     }
 }

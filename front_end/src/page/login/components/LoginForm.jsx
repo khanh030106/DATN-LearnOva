@@ -28,7 +28,20 @@ const LoginForm = ({ onSwitchToRegister }) => {
             if (!data?.accessToken) {
                 throw new Error("No access token returned");
             }
-            navigate('/learnova/home');
+
+            const roles = data.user?.roles ?? [];
+            const activeRole = data.user?.activeRole;
+            // A stale activeRole (e.g. left over after a role was revoked) must not
+            // send the user into a dashboard they no longer have access to.
+            const effectiveRole = activeRole && roles.includes(activeRole) ? activeRole : null;
+
+            if (effectiveRole === "ROLE_ADMIN") {
+                navigate('/learnova/admin');
+            } else if (effectiveRole === "ROLE_TEACHER") {
+                navigate('/learnova/teacher');
+            } else {
+                navigate('/learnova/home');
+            }
         }catch (err) {
             const message =
                 err.response?.data?.message ||

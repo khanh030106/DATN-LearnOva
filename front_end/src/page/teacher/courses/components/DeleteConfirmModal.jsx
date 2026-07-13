@@ -7,10 +7,10 @@ const DeleteConfirmModal = ({ courseName, onConfirm, onCancel, isDeleting }) => 
                 <div className="delete-modal__icon">
                     <AlertTriangle size={32} />
                 </div>
-                <h2 className="delete-modal__title">Hide Course</h2>
+                <h2 className="delete-modal__title">Delete Course</h2>
                 <p className="delete-modal__body">
-                    Are you sure you want to hide <strong>"{courseName}"</strong>?
-                    The course will no longer be visible to students.
+                    Are you sure you want to delete <strong>"{courseName}"</strong>?
+                    This will permanently remove it from your course list.
                 </p>
                 <div className="delete-modal__actions">
                     <button
@@ -27,7 +27,7 @@ const DeleteConfirmModal = ({ courseName, onConfirm, onCancel, isDeleting }) => 
                         onClick={onConfirm}
                         disabled={isDeleting}
                     >
-                        {isDeleting ? "Hiding..." : "Yes, hide it"}
+                        {isDeleting ? "Deleting..." : "Yes, delete it"}
                     </button>
                 </div>
             </div>

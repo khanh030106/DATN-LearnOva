@@ -106,6 +106,34 @@ public class AuthService {
                 .findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+        return toCurrentUserResponse(user);
+    }
+
+    @Transactional
+    public CurrentUserResponse switchActiveRole(String email, RoleName role) {
+        User user = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        boolean isAdmin = user.getRoles().stream()
+                .anyMatch(r -> r.getRoleName() == RoleName.ROLE_ADMIN);
+        if (isAdmin) {
+            throw new BusinessException("Quản trị viên không thể chuyển đổi vai trò.");
+        }
+
+        boolean hasRole = user.getRoles().stream()
+                .anyMatch(r -> r.getRoleName() == role);
+        if (!hasRole) {
+            throw new BusinessException("User does not have role " + role);
+        }
+
+        user.setActiveRole(role);
+        userRepository.save(user);
+
+        return toCurrentUserResponse(user);
+    }
+
+    private CurrentUserResponse toCurrentUserResponse(User user) {
         Set<RoleName> roleNames = user.getRoles().stream()
                 .map(Role::getRoleName)
                 .collect(java.util.stream.Collectors.toSet());
@@ -119,7 +147,8 @@ public class AuthService {
                 user.getCoverImage(),
                 user.getDateOfBirth(),
                 user.getGender(),
-                roleNames
+                roleNames,
+                user.getActiveRole()
         );
     }
 

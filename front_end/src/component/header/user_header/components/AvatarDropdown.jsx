@@ -1,17 +1,25 @@
 import { Link, useNavigate } from "react-router-dom";
-import { User, BookOpen, Heart, LogOut } from "lucide-react";
+import { User, BookOpen, Heart, LogOut, Repeat, GraduationCap } from "lucide-react";
 import HeaderDropdown from "./HeaderDropdown.jsx";
 import {useUserData} from "./headerData.js";
 import {useAuth} from "../../../../hook/UseAuth.jsx";
 
 const AvatarDropdown = () => {
   const user = useUserData();
-  const { logout } = useAuth();
+  const { logout, switchActiveRole } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     await logout();
     navigate("/learnova/auth/login");
+  };
+
+  const isAdmin = user.roles.includes("ROLE_ADMIN");
+  const canSwitchToTeacher = user.roles.includes("ROLE_TEACHER");
+
+  const handleSwitchToTeacher = async () => {
+    await switchActiveRole("ROLE_TEACHER");
+    navigate("/learnova/teacher");
   };
 
   return (
@@ -52,7 +60,23 @@ const AvatarDropdown = () => {
               My Favourite
             </Link>
           </li>
-          <li className="user-logged-menu-separator">
+          {!isAdmin && canSwitchToTeacher && (
+            <li className="user-logged-menu-separator">
+              <button type="button" className="user-logged-menu-link" onClick={handleSwitchToTeacher}>
+                <Repeat size={16} />
+                Chuyển sang Giảng viên
+              </button>
+            </li>
+          )}
+          {!isAdmin && !canSwitchToTeacher && (
+            <li className="user-logged-menu-separator">
+              <Link to="/learnova/apply-teacher" className="user-logged-menu-link">
+                <GraduationCap size={16} />
+                Đăng ký trở thành giảng viên
+              </Link>
+            </li>
+          )}
+          <li>
             <button type="button" className="user-logged-menu-link is-danger" onClick={handleLogout}>
               <LogOut size={16} />
               Logout

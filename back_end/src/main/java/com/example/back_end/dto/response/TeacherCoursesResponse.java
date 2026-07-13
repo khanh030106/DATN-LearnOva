@@ -17,6 +17,7 @@ public record TeacherCoursesResponse(
         long totalDurationSeconds,
         long studentCount,
         Boolean isDeleted,
+        Boolean isHidden,
         String rejectionReason,
         double avgRating,
         long ratingCount

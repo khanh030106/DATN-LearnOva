@@ -7,6 +7,7 @@ import PromotionCard from "./components/PromotionCard.jsx";
 import PromotionModal from "./components/PromotionModal.jsx";
 import PromotionsToolbar from "./components/PromotionsToolbar.jsx";
 import {
+  buildPromotionCategoryOptions,
   calculatePromotionFinalPrice,
   createPromotionFormValues,
   emptyPromotionForm,
@@ -20,6 +21,8 @@ const PromotionsPage = () => {
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [categoryFilter, setCategoryFilter] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -78,9 +81,11 @@ const PromotionsPage = () => {
     fetchAll();
   }, []);
 
+  const categoryOptions = useMemo(() => buildPromotionCategoryOptions(courses), [courses]);
+
   const promotionCourses = useMemo(
-    () => filterPromotionCourses({ courses, query }),
-    [courses, query],
+    () => filterPromotionCourses({ courses, query, statusFilter, categoryFilter, promotions }),
+    [courses, query, statusFilter, categoryFilter, promotions],
   );
 
   const totalPages = Math.max(1, Math.ceil(promotionCourses.length / ITEMS_PER_PAGE));
@@ -88,6 +93,8 @@ const PromotionsPage = () => {
   const pagedCourses = promotionCourses.slice((safePage - 1) * ITEMS_PER_PAGE, safePage * ITEMS_PER_PAGE);
 
   const handleQueryChange = (q) => { setQuery(q); setCurrentPage(1); };
+  const handleStatusFilterChange = (value) => { setStatusFilter(value); setCurrentPage(1); };
+  const handleCategoryFilterChange = (value) => { setCategoryFilter(value); setCurrentPage(1); };
 
   const openPromotionModal = (course) => {
     const existing = promotions[course.id];
@@ -159,6 +166,11 @@ const PromotionsPage = () => {
       <PromotionsToolbar
         query={query}
         onQueryChange={handleQueryChange}
+        statusFilter={statusFilter}
+        onStatusFilterChange={handleStatusFilterChange}
+        categoryFilter={categoryFilter}
+        onCategoryFilterChange={handleCategoryFilterChange}
+        categoryOptions={categoryOptions}
       />
 
       {pagedCourses.length === 0 ? (

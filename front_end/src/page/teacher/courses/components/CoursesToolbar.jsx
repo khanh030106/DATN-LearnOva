@@ -1,17 +1,17 @@
-import { Plus, Search } from "lucide-react";
-import { courseSortOptions, courseStatusFilterOptions } from "../coursePageConfig.js";
+import { Plus, Search, X } from "lucide-react";
+import { courseRatingFilterOptions, courseStatusFilterOptions } from "../coursePageConfig.js";
 
 const CoursesToolbar = ({
   activeCategory,
   activeFilter,
+  activeRating,
   categoryOptions,
   onCategoryChange,
   onCreateCourse,
   onFilterChange,
+  onRatingChange,
   onSearchChange,
-  onSortChange,
   searchTerm,
-  sortOption,
 }) => {
   return (
     <div className="teacher-courses-toolbar">
@@ -23,6 +23,16 @@ const CoursesToolbar = ({
           value={searchTerm}
           onChange={(event) => onSearchChange(event.target.value)}
         />
+        {searchTerm && (
+          <button
+            type="button"
+            className="teacher-courses-search__clear"
+            onClick={() => onSearchChange("")}
+            aria-label="Clear search"
+          >
+            <X size={14} />
+          </button>
+        )}
       </label>
 
       <select value={activeFilter} onChange={(event) => onFilterChange(event.target.value)}>
@@ -41,8 +51,8 @@ const CoursesToolbar = ({
         ))}
       </select>
 
-      <select value={sortOption} onChange={(event) => onSortChange(event.target.value)}>
-        {courseSortOptions.map((option) => (
+      <select value={activeRating} onChange={(event) => onRatingChange(event.target.value)}>
+        {courseRatingFilterOptions.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>

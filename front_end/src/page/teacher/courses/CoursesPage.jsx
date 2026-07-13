@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { BookOpen, CheckCircle2, Star, Users } from "lucide-react";
 import {
   getMyCourse,
   getFileUrl,
@@ -11,7 +12,6 @@ import {
 import {
   buildCategoryOptions,
   getFilteredCourses,
-  sortCourses,
 } from "./coursePageConfig.js";
 import CoursesTable from "./components/CoursesTable.jsx";
 import CoursesToolbar from "./components/CoursesToolbar.jsx";
@@ -37,7 +37,7 @@ const CoursesPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState("ALL");
   const [activeCategory, setActiveCategory] = useState("ALL");
-  const [sortOption, setSortOption] = useState("NEWEST");
+  const [activeRating, setActiveRating] = useState("ALL");
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteModal, setDeleteModal] = useState({ open: false, courseId: null, courseName: "" });
   const [isDeleting, setIsDeleting] = useState(false);
@@ -86,7 +86,7 @@ const CoursesPage = () => {
               updatedAt: course.updatedAt,
               createdAgo,
               updatedAgo,
-              isDeleted: course.isDeleted ?? false,
+              isHidden: course.isHidden ?? false,
               category: course.categoryName || "Uncategorized",
               modules: course.lessonCount ?? 0,
               totalDurationSeconds: course.totalDurationSeconds ?? 0,
@@ -111,16 +111,29 @@ const CoursesPage = () => {
 
   const categoryOptions = useMemo(() => buildCategoryOptions(allCategories), [allCategories]);
 
-  const activeCourses = useMemo(() => {
-    const filteredCourses = getFilteredCourses({
-      activeCategory,
-      activeFilter,
-      courses: teacherCourses,
-      searchTerm,
-    });
+  const summary = useMemo(() => {
+    const total = teacherCourses.length;
+    const published = teacherCourses.filter((c) => c.status === "PUBLISHED").length;
+    const totalStudents = teacherCourses.reduce((sum, c) => sum + (c.studentCount || 0), 0);
+    const ratedCourses = teacherCourses.filter((c) => c.ratingCount > 0);
+    const avgRating =
+      ratedCourses.length > 0
+        ? (ratedCourses.reduce((sum, c) => sum + Number(c.rating), 0) / ratedCourses.length).toFixed(1)
+        : "0.0";
+    return { total, published, totalStudents, avgRating };
+  }, [teacherCourses]);
 
-    return sortCourses(filteredCourses, sortOption);
-  }, [activeCategory, activeFilter, searchTerm, sortOption, teacherCourses]);
+  const activeCourses = useMemo(
+    () =>
+      getFilteredCourses({
+        activeCategory,
+        activeFilter,
+        activeRating,
+        courses: teacherCourses,
+        searchTerm,
+      }),
+    [activeCategory, activeFilter, activeRating, searchTerm, teacherCourses]
+  );
 
   const handleCreateCourse = () => {
     navigate(COURSES_CREATE_PATH);
@@ -138,14 +151,10 @@ const CoursesPage = () => {
     setIsDeleting(true);
     try {
       await softDeleteCourse(deleteModal.courseId);
-      setTeacherCourses((courses) =>
-        courses.map((c) =>
-          c.id === deleteModal.courseId ? { ...c, isDeleted: true } : c
-        )
-      );
-      toast.success("Course hidden successfully.");
+      setTeacherCourses((courses) => courses.filter((c) => c.id !== deleteModal.courseId));
+      toast.success("Course deleted successfully.");
     } catch (err) {
-      toast.error("Failed to hide course. Please try again.");
+      toast.error("Failed to delete course. Please try again.");
     } finally {
       setIsDeleting(false);
       setDeleteModal({ open: false, courseId: null, courseName: "" });
@@ -163,6 +172,7 @@ const CoursesPage = () => {
   const handleClearFilters = () => {
     setActiveFilter("ALL");
     setActiveCategory("ALL");
+    setActiveRating("ALL");
     setSearchTerm("");
   };
 
@@ -171,10 +181,10 @@ const CoursesPage = () => {
       await toggleCourseVisibility(course.id);
       setTeacherCourses((courses) =>
         courses.map((c) =>
-          c.id === course.id ? { ...c, isDeleted: !c.isDeleted } : c
+          c.id === course.id ? { ...c, isHidden: !c.isHidden } : c
         )
       );
-      toast.success(course.isDeleted ? "Course activated." : "Course deactivated.");
+      toast.success(course.isHidden ? "Course is now visible to students." : "Course hidden from students.");
     } catch {
       toast.error("Failed to update course visibility.");
     }
@@ -192,18 +202,56 @@ const CoursesPage = () => {
 
   return (
     <section className="teacher-courses-page">
+      <div className="teacher-summary">
+        <div className="teacher-summary-item">
+          <span className="teacher-summary-item__icon teacher-summary-item__icon--blue">
+            <BookOpen size={20} />
+          </span>
+          <div className="teacher-summary-item__body">
+            <strong>{summary.total}</strong>
+            <span>Tổng khóa học</span>
+          </div>
+        </div>
+        <div className="teacher-summary-item">
+          <span className="teacher-summary-item__icon teacher-summary-item__icon--green">
+            <CheckCircle2 size={20} />
+          </span>
+          <div className="teacher-summary-item__body">
+            <strong>{summary.published}</strong>
+            <span>Đã xuất bản</span>
+          </div>
+        </div>
+        <div className="teacher-summary-item">
+          <span className="teacher-summary-item__icon teacher-summary-item__icon--violet">
+            <Users size={20} />
+          </span>
+          <div className="teacher-summary-item__body">
+            <strong>{summary.totalStudents}</strong>
+            <span>Tổng học viên</span>
+          </div>
+        </div>
+        <div className="teacher-summary-item">
+          <span className="teacher-summary-item__icon teacher-summary-item__icon--gold">
+            <Star size={20} />
+          </span>
+          <div className="teacher-summary-item__body">
+            <strong>{summary.avgRating}</strong>
+            <span>Đánh giá trung bình</span>
+          </div>
+        </div>
+      </div>
 
       <CoursesToolbar
         activeCategory={activeCategory}
         activeFilter={activeFilter}
+        activeRating={activeRating}
         categoryOptions={categoryOptions}
         onCategoryChange={setActiveCategory}
         onCreateCourse={handleCreateCourse}
         onFilterChange={setActiveFilter}
+        onRatingChange={setActiveRating}
         onSearchChange={setSearchTerm}
-        onSortChange={setSortOption}
         searchTerm={searchTerm}
-        sortOption={sortOption}
       />
 
       {activeCourses.length > 0 ? (

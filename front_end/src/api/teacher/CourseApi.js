@@ -97,11 +97,13 @@ export const updateCourse = async (courseId, payload) => {
     return response.data;
 };
 
+// Permanently removes the course from the teacher's list (soft delete on the backend).
 export const softDeleteCourse = async (courseId) => {
     const response = await api.delete(`/courses/${courseId}`);
     return response.data;
 };
 
+// Toggles whether the course is hidden from students without deleting it.
 export const toggleCourseVisibility = async (courseId) => {
     const response = await api.patch(`/courses/${courseId}/visibility`);
     return response.data;
@@ -119,6 +121,11 @@ export const getMyStudents = async () => {
 
 export const getMyReviews = async () => {
     const response = await api.get("/courses/my-reviews");
+    return response.data;
+};
+
+export const replyToReview = async (reviewId, reply) => {
+    const response = await api.patch(`/courses/reviews/${reviewId}/reply`, { reply });
     return response.data;
 };
 

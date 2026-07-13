@@ -4,8 +4,11 @@ import {
   BookOpen,
   Gift,
    Home,
+  Megaphone,
+  MessageCircleQuestion,
   Plus,
   Star,
+  User,
   Users,
   WalletCards,
 } from "lucide-react";
@@ -20,14 +23,22 @@ const teacherNavSections = [
       { label: "Courses", path: "/learnova/teacher/courses", icon: BookOpen },
       { label: "Students", path: "/learnova/teacher/students", icon: Users },
       { label: "Reviews", path: "/learnova/teacher/reviews", icon: Star },
+      { label: "Q&A", path: "/learnova/teacher/qna", icon: MessageCircleQuestion },
     ],
   },
   {
     title: "Business",
     items: [
       { label: "Promotions", path: "/learnova/teacher/promotions", icon: Gift },
+      { label: "Announcements", path: "/learnova/teacher/announcements", icon: Megaphone },
       { label: "Revenue", path: "/learnova/teacher/revenue", icon: WalletCards },
       { label: "Analytics", path: "/learnova/teacher/analytics", icon: BarChart3 },
+    ],
+  },
+  {
+    title: "Account",
+    items: [
+      { label: "Profile", path: "/learnova/teacher/profile", icon: User },
     ],
   },
 ];

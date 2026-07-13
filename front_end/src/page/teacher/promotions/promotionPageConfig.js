@@ -31,12 +31,29 @@ export const createPromotionFormValues = (course, existingPromotion) => ({
 export const calculatePromotionFinalPrice = (formValues) =>
   Math.max(0, Number(formValues.basePrice || 0) * (1 - Number(formValues.percent || 0) / 100));
 
-export const filterPromotionCourses = ({ courses, query }) => {
+export const buildPromotionCategoryOptions = (courses) => [
+  "ALL",
+  ...Array.from(new Set(courses.map((course) => course.category).filter(Boolean))),
+];
+
+export const filterPromotionCourses = ({ courses, query, statusFilter = "ALL", categoryFilter = "ALL", promotions = {} }) => {
   const normalizedQuery = query.trim().toLowerCase();
-  return courses.filter((course) =>
-    !course.isDeleted &&
-    (!normalizedQuery ||
+  return courses.filter((course) => {
+    if (course.isDeleted) return false;
+
+    const matchesQuery =
+      !normalizedQuery ||
       course.title.toLowerCase().includes(normalizedQuery) ||
-      course.category.toLowerCase().includes(normalizedQuery))
-  );
+      course.category.toLowerCase().includes(normalizedQuery);
+
+    const hasPromotion = Boolean(promotions[course.id]);
+    const matchesStatus =
+      statusFilter === "ALL" ||
+      (statusFilter === "ACTIVE" && hasPromotion) ||
+      (statusFilter === "INACTIVE" && !hasPromotion);
+
+    const matchesCategory = categoryFilter === "ALL" || course.category === categoryFilter;
+
+    return matchesQuery && matchesStatus && matchesCategory;
+  });
 };

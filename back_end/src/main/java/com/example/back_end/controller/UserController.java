@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import org.springframework.web.multipart.MultipartFile;
 import com.example.back_end.dto.resquest.ChangePasswordRequest;
+import com.example.back_end.dto.resquest.SwitchActiveRoleRequest;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,6 +39,17 @@ public class UserController {
 
         return ResponseEntity.ok(authService.getCurrentUser(authentication.getName()));
     }
+
+    @PatchMapping("/user/active-role")
+    public ResponseEntity<CurrentUserResponse> switchActiveRole(
+            Authentication authentication,
+            @Valid @RequestBody SwitchActiveRoleRequest request
+    ) {
+        return ResponseEntity.ok(
+                authService.switchActiveRole(authentication.getName(), request.role())
+        );
+    }
+
     @GetMapping("/user/profile")
     public ResponseEntity<UserResponse> getUserProfile(Authentication authentication) {
 

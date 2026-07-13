@@ -1,6 +1,7 @@
 package com.example.back_end.dto.response;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 
 public record TeacherReviewResponse(
         Long reviewId,
@@ -11,5 +12,8 @@ public record TeacherReviewResponse(
         String avatar,
         Integer rating,
         String comment,
-        Instant createdAt
+        String instructorReply,
+        OffsetDateTime repliedAt,
+        Instant createdAt,
+        Instant updatedAt
 ) {}

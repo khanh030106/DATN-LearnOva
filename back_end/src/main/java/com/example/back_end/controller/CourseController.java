@@ -113,6 +113,19 @@ public class CourseController {
     }
 
     @PreAuthorize("hasRole('TEACHER')")
+    @PatchMapping("/reviews/{reviewId}/reply")
+    public ResponseEntity<Void> replyToReview(
+            @PathVariable Long reviewId,
+            @Valid @RequestBody com.example.back_end.dto.resquest.ReplyReviewRequest request,
+            Authentication authentication
+    ) {
+        if (authentication == null || !authentication.isAuthenticated())
+            return ResponseEntity.status(401).build();
+        courseService.replyToReview(reviewId, authentication.getName(), request.getReply());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/my-courses")          // /courses/mine
     public ResponseEntity<List<TeacherCoursesResponse>> getMyCourses(
             Authentication authentication

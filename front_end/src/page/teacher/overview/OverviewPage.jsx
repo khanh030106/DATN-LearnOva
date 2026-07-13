@@ -1,12 +1,10 @@
 import {
   AlertCircle,
   BookOpenCheck,
-  BookText,
   ChevronRight,
   Clock,
   FileEdit,
   MessageSquare,
-  Sparkles,
   Star,
   TrendingDown,
   TrendingUp,
@@ -19,6 +17,7 @@ import {
 import { Link } from "react-router-dom";
 import { overviewLinks } from "./overviewConfig.js";
 import { useTeacherDashboard } from "./useTeacherDashboard.js";
+import { fillDailySeries } from "../../../utils/dateSeries.js";
 import "./OverviewPage.css";
 
 const statTones = ["blue", "gold", "green", "violet"];
@@ -373,39 +372,6 @@ const CourseStatusOverview = ({ counts }) => (
   </Panel>
 );
 
-const announcementItems = [
-  {
-    key: "ai-quiz",
-    icon: Sparkles,
-    title: "New Feature: AI Quiz Generator",
-    description: "Create quizzes in seconds with AI!",
-  },
-  {
-    key: "ai-summarize",
-    icon: BookText,
-    title: "New Feature: AI Summarize Knowledge",
-    description: "Summarize lesson with AI!",
-  },
-];
-
-const Announcements = () => (
-  <Panel title="Announcements" cardClassName="overview-sidebar-panel">
-    <div className="overview-announcement__list">
-      {announcementItems.map((item) => (
-        <div key={item.key} className="overview-announcement">
-          <span className="overview-announcement__icon">
-            <item.icon size={18} />
-          </span>
-          <div>
-            <strong>{item.title}</strong>
-            <p>{item.description}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  </Panel>
-);
-
 const OverviewPage = () => {
   const { data, isLoading, error } = useTeacherDashboard();
 
@@ -416,6 +382,8 @@ const OverviewPage = () => {
   if (error || !data) {
     return <div className="teacher-overview">Failed to load dashboard.</div>;
   }
+
+  const revenueByDay = fillDailySeries(data.revenueByDay, { valueKey: "amount" });
 
   return (
     <div className="teacher-overview">
@@ -450,7 +418,7 @@ const OverviewPage = () => {
           title="Revenue Overview"
           headline={formatCurrency(data.revenueTotal)}
           delta={data.revenueDeltaPercent}
-          points={data.revenueByDay}
+          points={revenueByDay}
           valueKey="amount"
           color="#2563eb"
           gradientId="overviewRevenueFill"
@@ -472,7 +440,6 @@ const OverviewPage = () => {
         <aside className="overview-sidebar">
           <NeedYourAttention attention={data.attention} />
           <RecentEnrollments enrollments={data.recentEnrollments} />
-          <Announcements />
         </aside>
 
         <CourseStatusOverview counts={data.courseStatusCounts} />

@@ -289,6 +289,13 @@ function ReviewsTab({
                                         displayComment
                                     )}
                                 </div>
+
+                                {r.instructorReply && (
+                                    <div className="review-instructor-reply">
+                                        <strong>Instructor reply</strong>
+                                        <p>{r.instructorReply}</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     );

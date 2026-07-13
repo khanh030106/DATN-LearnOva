@@ -23,7 +23,9 @@ import {
     deleteAnswerApi,
     deleteQuestionApi,
     updateAnswerApi,
-    updateQuestionApi
+    updateQuestionApi,
+    setQuestionSolvedApi,
+    setQuestionPinnedApi
 } from "../../../../api/lessonQAApi";
 
 import { AuthContext } from "../../../../context/AuthContext";
@@ -66,6 +68,10 @@ function QATab({
         currentUser?.id ||
         currentUser?.userId ||
         currentUser?.idUser;
+    const isInstructor =
+        !!currentUserId &&
+        !!course?.instructor?.id &&
+        String(currentUserId) === String(course.instructor.id);
     const [openMenuId, setOpenMenuId] = useState(null);
     useEffect(() => {
 
@@ -251,7 +257,7 @@ function QATab({
 
                                 </div>
 
-                                {currentUserId === answer.userId && (
+                                {(currentUserId === answer.userId || isInstructor) && (
 
                                     <div className="qa-menu">
 
@@ -274,17 +280,19 @@ function QATab({
 
                                             <div className="qa-dropdown">
 
-                                                <button
-                                                    className="qa-edit-icon"
-                                                    onClick={() => {
-                                                        setEditId(answer.id);
-                                                        setEditText(answer.content);
-                                                        setEditAnswer(answer);
-                                                    }}
-                                                >
-                                                    <FaPenToSquare />
-                                                    <span>Edit</span>
-                                                </button>
+                                                {currentUserId === answer.userId && (
+                                                    <button
+                                                        className="qa-edit-icon"
+                                                        onClick={() => {
+                                                            setEditId(answer.id);
+                                                            setEditText(answer.content);
+                                                            setEditAnswer(answer);
+                                                        }}
+                                                    >
+                                                        <FaPenToSquare />
+                                                        <span>Edit</span>
+                                                    </button>
+                                                )}
 
                                                 <button
                                                     className="qa-delete-icon"
@@ -374,7 +382,7 @@ function QATab({
                             </button>
                             <button className="btn-like">
                                 <FaRegThumbsUp />
-                                <span>{selectedQuestion.likeCount || 0}</span>
+                                <span>{answer.likeCount || 0}</span>
                             </button>
                         </div>
 
@@ -509,14 +517,45 @@ function QATab({
             toast.error("Update failed!");
         }
     };
-    const indexOfLastQuestion = currentPage * questionsPerPage;
-    const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
+    const handleToggleSolved = async (q) => {
+        try {
+            const nextValue = !q.isSolved;
+            await setQuestionSolvedApi(q.id, nextValue);
 
-    const currentQuestions = questions.slice(
-        indexOfFirstQuestion,
-        indexOfLastQuestion
-    );
-    const filteredQuestions = (currentQuestions || []).filter((q) => {
+            const data = await getLessonQAApi(lessonId);
+            setQuestions(data.questions || []);
+
+            if (selectedQuestion?.id === q.id) {
+                setSelectedQuestion(data.questions.find(item => item.id === q.id) || null);
+            }
+
+            toast.success(nextValue ? "Marked as solved!" : "Marked as unsolved!");
+        } catch (e) {
+            console.log(e);
+            toast.error("Update failed!");
+        }
+    };
+
+    const handleTogglePinned = async (q) => {
+        try {
+            const nextValue = !q.isPinned;
+            await setQuestionPinnedApi(q.id, nextValue);
+
+            const data = await getLessonQAApi(lessonId);
+            setQuestions(data.questions || []);
+
+            if (selectedQuestion?.id === q.id) {
+                setSelectedQuestion(data.questions.find(item => item.id === q.id) || null);
+            }
+
+            toast.success(nextValue ? "Question pinned!" : "Question unpinned!");
+        } catch (e) {
+            console.log(e);
+            toast.error("Update failed!");
+        }
+    };
+
+    const searchedQuestions = (questions || []).filter((q) => {
         const matchSearch =
             q.content.toLowerCase().includes(searchText.toLowerCase()) ||
             q.userName?.toLowerCase().includes(searchText.toLowerCase());
@@ -530,7 +569,19 @@ function QATab({
 
         return matchSearch && matchTab;
     });
-    const totalPages = Math.ceil(questions.length / questionsPerPage);
+    const sortedQuestions = [...searchedQuestions].sort((a, b) => {
+        if (!!b.isPinned !== !!a.isPinned) return b.isPinned ? 1 : -1;
+        return 0;
+    });
+
+    const totalPages = Math.ceil(sortedQuestions.length / questionsPerPage);
+    const indexOfLastQuestion = currentPage * questionsPerPage;
+    const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
+
+    const filteredQuestions = sortedQuestions.slice(
+        indexOfFirstQuestion,
+        indexOfLastQuestion
+    );
 
   return (
       <div className="qa-content">
@@ -628,7 +679,33 @@ function QATab({
                   <div className="qa-detail-header">
                       <div className="qa-detail-title">
                           Question
+                          {selectedQuestion.isPinned && (
+                              <span className="qa-pinned-badge">Pinned</span>
+                          )}
+                          {selectedQuestion.isSolved && (
+                              <span className="qa-solved-badge">Solved</span>
+                          )}
                       </div>
+                      {(isInstructor || currentUserId === selectedQuestion.userId) && (
+                          <div className="qa-instructor-tools">
+                              {(isInstructor || currentUserId === selectedQuestion.userId) && (
+                                  <button
+                                      className="qa-tool-btn"
+                                      onClick={() => handleToggleSolved(selectedQuestion)}
+                                  >
+                                      {selectedQuestion.isSolved ? "Mark unsolved" : "Mark solved"}
+                                  </button>
+                              )}
+                              {isInstructor && (
+                                  <button
+                                      className="qa-tool-btn"
+                                      onClick={() => handleTogglePinned(selectedQuestion)}
+                                  >
+                                      {selectedQuestion.isPinned ? "Unpin" : "Pin"}
+                                  </button>
+                              )}
+                          </div>
+                      )}
                       <div className="qa-detail-meta">
 
                           <div className="qa-author-info">
@@ -839,7 +916,11 @@ function QATab({
 
                               <div className="qa-middle">
 
-                                  <h5 className="qa-title">Question</h5>
+                                  <h5 className="qa-title">
+                                      Question
+                                      {q.isPinned && <span className="qa-pinned-badge">Pinned</span>}
+                                      {q.isSolved && <span className="qa-solved-badge">Solved</span>}
+                                  </h5>
 
                                   {editQuestionId === q.id ? (
                                       <div className="qa-edit-box">
@@ -886,7 +967,7 @@ function QATab({
 
                               </div>
 
-                              {currentUserId === q.userId && (
+                              {(currentUserId === q.userId || isInstructor) && (
                                   <div
                                       className="qa-menu"
                                       onClick={(e) => e.stopPropagation()}
@@ -908,19 +989,21 @@ function QATab({
                                               className="qa-dropdown"
                                               onClick={(e) => e.stopPropagation()}
                                           >
-                                              <button
-                                                  className="qa-edit-icon"
-                                                  onClick={() => {
-                                                      setEditQuestionId(q.id);
-                                                      setEditQuestionText(q.content);
-                                                      setEditLessonId(lessonId);
-                                                      setEditQuestionError("");
-                                                      setOpenMenuId(null);
-                                                  }}
-                                              >
-                                                  <FaPenToSquare />
-                                                  <span>Edit</span>
-                                              </button>
+                                              {currentUserId === q.userId && (
+                                                  <button
+                                                      className="qa-edit-icon"
+                                                      onClick={() => {
+                                                          setEditQuestionId(q.id);
+                                                          setEditQuestionText(q.content);
+                                                          setEditLessonId(lessonId);
+                                                          setEditQuestionError("");
+                                                          setOpenMenuId(null);
+                                                      }}
+                                                  >
+                                                      <FaPenToSquare />
+                                                      <span>Edit</span>
+                                                  </button>
+                                              )}
 
                                               <button
                                                   className="qa-delete-icon"

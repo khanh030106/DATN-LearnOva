@@ -2,6 +2,7 @@ package com.example.back_end.security;
 
 import com.example.back_end.entity.Role;
 import com.example.back_end.entity.User;
+import com.example.back_end.entity.enums.RoleName;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,6 +32,15 @@ public class CustomUserDetails implements UserDetails{
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
+
+    RoleName active = user.getActiveRole();
+    boolean stillValid = active != null && user.getRoles()
+            .stream()
+            .anyMatch(role -> role.getRoleName() == active);
+
+    if (stillValid) {
+      return List.of(new SimpleGrantedAuthority(active.name()));
+    }
 
     return user.getRoles()
             .stream()

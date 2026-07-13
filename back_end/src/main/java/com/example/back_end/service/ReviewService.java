@@ -6,6 +6,7 @@ import com.example.back_end.dto.response.RatingSummaryResponse;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Review;
 import com.example.back_end.entity.User;
+import com.example.back_end.entity.enums.NotificationType;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.ReviewRepository;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.back_end.dto.resquest.UpdateReviewRequest;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import com.example.back_end.dto.response.CourseReviewResponse;
 
 
@@ -29,6 +31,7 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final AdminCourseRepository adminCourseRepository;
     private final LessonProgressService lessonProgressService;
+    private final NotificationService notificationService;
 
     @Transactional
     public ReviewResponse createReview(
@@ -60,14 +63,17 @@ public class ReviewService {
         review.setCreatedAt(Instant.now());
         review.setUpdatedAt(Instant.now());
         reviewRepository.save(review);
-        return ReviewResponse.builder()
-                .reviewId(review.getId())
-                .userId(user.getId())
-                .userName(user.getFullName())
-                .rating(review.getRating())
-                .comment(review.getComment())
-                .createdAt(review.getCreatedAt())
-                .build();
+
+        notificationService.create(
+                course.getInstructor(),
+                NotificationType.NEW_REVIEW,
+                "New review received",
+                user.getFullName() + " left a " + review.getRating() + "-star review on \"" + course.getTitle() + "\".",
+                "/learnova/teacher/reviews",
+                Map.of("courseId", course.getId(), "reviewId", review.getId(), "rating", review.getRating())
+        );
+
+        return toResponse(review);
     }
 
     public List<ReviewResponse> getCourseReviews(
@@ -76,17 +82,21 @@ public class ReviewService {
 
         return reviewRepository.findByCourseIdWithUser(courseId)
             .stream()
-                .map(review ->
-                ReviewResponse.builder()
-                        .reviewId(review.getId())
-                        .userId(review.getUser().getId())
-                        .userName(review.getUser().getFullName())
-                        .rating(review.getRating())
-                        .comment(review.getComment())
-                        .createdAt(review.getCreatedAt())
-                        .build()
-                )
+                .map(this::toResponse)
         .toList();
+    }
+
+    private ReviewResponse toResponse(Review review) {
+        return ReviewResponse.builder()
+                .reviewId(review.getId())
+                .userId(review.getUser().getId())
+                .userName(review.getUser().getFullName())
+                .rating(review.getRating())
+                .comment(review.getComment())
+                .createdAt(review.getCreatedAt())
+                .instructorReply(review.getInstructorReply())
+                .repliedAt(review.getRepliedAt())
+                .build();
     }
 
     @Transactional
@@ -107,14 +117,7 @@ public class ReviewService {
         review.setUpdatedAt(Instant.now());
         // 4. Lưu lại vào DB
         reviewRepository.save(review);
-        return ReviewResponse.builder()
-                .reviewId(review.getId())
-                .userId(userId)
-                .userName(review.getUser().getFullName())
-                .rating(review.getRating())
-                .comment(review.getComment())
-                .createdAt(review.getCreatedAt())
-                .build();
+        return toResponse(review);
     }
 
     @Transactional
@@ -144,16 +147,7 @@ public class ReviewService {
 
         List<ReviewResponse> reviews = reviewRepository.findByCourseIdWithUser(courseId)
                 .stream()
-                .map(review ->
-                        ReviewResponse.builder()
-                                .reviewId(review.getId())
-                                .userId(review.getUser().getId())
-                                .userName(review.getUser().getFullName())
-                                .rating(review.getRating())
-                                .comment(review.getComment())
-                                .createdAt(review.getCreatedAt())
-                                .build()
-                )
+                .map(this::toResponse)
                 .toList();
 
         return CourseReviewResponse.builder()

@@ -1,5 +1,3 @@
-import {courses, introDetails, reviews} from "./intructorData.js";
-
 import React from "react";
 
 import { FaUserGraduate } from "react-icons/fa";
@@ -9,7 +7,17 @@ import {
     FaEye
 } from "react-icons/fa";
 import { FiClock } from "react-icons/fi";
-function MainIntructor({ activeTab }) {
+
+const formatDuration = (totalSeconds) => {
+    const hours = Math.round((totalSeconds || 0) / 3600);
+    return hours > 0 ? `${hours} hours` : "New";
+};
+
+function MainIntructor({ activeTab, description, expertise, courses = [] }) {
+    const expertiseTags = expertise
+        ? expertise.split(",").map((s) => s.trim()).filter(Boolean)
+        : [];
+
     return (
 
         <div className="content-left">
@@ -17,14 +25,16 @@ function MainIntructor({ activeTab }) {
             {(activeTab === "overview" || activeTab === "about") && (
             <section className="section">
                 <h2 className="section-title">Introduce</h2>
-                <p className="section-text">{introDetails}</p>
-                <div className="profile-links">
-                    <a href="#react" className="tag-link">React</a>
-                    <a href="#javascript" className="tag-link">JavaScript</a>
-                    <a href="#html5" className="tag-link">HTML 5</a>
-                    <a href="#node" className="tag-link">Node.js</a>
-                    <a href="#css" className="tag-link">Tailwind CSS</a>
-                </div>
+                <p className="section-text">
+                    {description || "This instructor hasn't added an introduction yet."}
+                </p>
+                {expertiseTags.length > 0 && (
+                    <div className="profile-links">
+                        {expertiseTags.map((tag) => (
+                            <span key={tag} className="tag-link">{tag}</span>
+                        ))}
+                    </div>
+                )}
 
             </section>)}
 
@@ -43,6 +53,9 @@ function MainIntructor({ activeTab }) {
 
                     </div>
 
+                    {courses.length === 0 ? (
+                        <p className="section-text">No published courses yet.</p>
+                    ) : (
                     <div className="courses-grid-new">
 
                         {(activeTab === "overview"
@@ -51,14 +64,14 @@ function MainIntructor({ activeTab }) {
                         ).map(course => (
 
                             <div
-                                key={course.id}
+                                key={course.courseId}
                                 className="course-card-new"
                             >
 
                                 <div className="course-image-box">
 
                                     <img
-                                        src={course.image}
+                                        src={course.thumbnailUrl || "https://api.dicebear.com/7.x/shapes/svg?seed=" + course.courseId}
                                         alt={course.title}
                                         className="course-image-new"
                                     />
@@ -84,7 +97,7 @@ function MainIntructor({ activeTab }) {
                                         <div className="meta-item">
                                             <FaStar />
                                             <span>
-                                {course.rating}
+                                {course.avgRating ? course.avgRating.toFixed(1) : "New"}
                             </span>
                                         </div>
 
@@ -93,7 +106,7 @@ function MainIntructor({ activeTab }) {
                                         <div className="meta-item">
                             <span className="student-count">
                                 <FaUserGraduate />
-                                                            {course.student}
+                                                            {course.studentCount}
                             </span>
                                         </div>
 
@@ -102,7 +115,7 @@ function MainIntructor({ activeTab }) {
                                         <div className="meta-item">
                                             <FiClock />
                                             <span>
-                                                42 Hours
+                                                {formatDuration(course.totalDurationSeconds)}
                                             </span>
                                         </div>
 
@@ -111,7 +124,9 @@ function MainIntructor({ activeTab }) {
                                     <div className="course-footer-new">
 
                                         <div className="price-new">
-                                            {course.price}
+                                            {course.basePrice != null
+                                                ? Number(course.basePrice).toLocaleString("vi-VN") + "đ"
+                                                : ""}
                                         </div>
 
                                         <div className="course-actions-new">
@@ -133,11 +148,11 @@ function MainIntructor({ activeTab }) {
                         ))}
 
                     </div>
+                    )}
 
                 </section>
             )}
 
-            {/* Reviews Section */}
             {/* Reviews Section */}
             {(activeTab === "reviews") && (
                 <section className="review-section-new">
@@ -149,8 +164,7 @@ function MainIntructor({ activeTab }) {
                             <h2>Student Reviews</h2>
 
                             <p>
-                                Genuine feedback from students who have successfully
-                                completed Tùng's courses.
+                                Aggregate rating across all of this instructor's published courses.
                             </p>
 
                             <div className="overall-rating">
@@ -161,112 +175,24 @@ function MainIntructor({ activeTab }) {
                                 </div>
 
                                 <span className="overall-score">
-                                    4.7
+                                    {courses.length > 0
+                                        ? (courses.reduce((sum, c) => sum + (c.avgRating || 0), 0) / courses.length).toFixed(1)
+                                        : "0.0"}
                                 </span>
 
                                 <span className="overall-count">
-                                    (3 verified reviews)
+                                    ({courses.reduce((sum, c) => sum + (c.ratingCount || 0), 0)} reviews)
                                 </span>
                             </div>
-                        </div>
-
-                        <div className="review-overview-right">
-
-                            {[
-                                { star: 5, count: 2, width: 80 },
-                                { star: 4, count: 1, width: 40 },
-                                { star: 3, count: 0, width: 0 },
-                                { star: 2, count: 0, width: 0 },
-                                { star: 1, count: 0, width: 0 }
-                            ].map((item) => (
-                                <div className="rating-row" key={item.star}>
-
-                                    <span>{item.star}</span>
-
-                                    <FaStar className="mini-star-review" />
-
-                                    <div className="rating-progress">
-
-                                        <div
-                                            className="rating-progress-fill"
-                                            style={{
-                                                width: `${item.width}%`
-                                            }}
-                                        />
-                                    </div>
-
-                                    <span>{item.count}</span>
-
-                                </div>
-                            ))}
-
                         </div>
 
                     </div>
 
                     {/* Content */}
                     <div className="review-content-wrapper">
-
-                        {/* Left */}
-                        <div className="review-list-new">
-
-                            {reviews.map((review) => (
-
-                                <div
-                                    key={review.id}
-                                    className="review-card-new"
-                                >
-
-                                    <div className="review-card-header">
-
-                                        <div className="review-user">
-
-                                            <img
-                                                src={review.avatar}
-                                                alt={review.name}
-                                                className="review-avatar-new"
-                                            />
-
-                                            <div>
-
-                                                <h4>{review.name}</h4>
-
-                                                <span>
-                                    Frontend Developer
-                                </span>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className="review-time-new">
-                                            2 weeks ago
-                                        </div>
-
-                                    </div>
-
-                                    <div className="review-stars-new">
-                                        {Array.from({ length: 5 }).map((_, i) => (
-                                            <FaStar
-                                                key={i}
-                                                color="#fbbf24"
-                                            />
-                                        ))}
-                                    </div>
-
-                                    <p className="review-text-new">
-                                        {review.text}
-                                    </p>
-
-                                </div>
-
-                            ))}
-
-                        </div>
-
-                        {/* Right */}
-
-
+                        <p className="section-text">
+                            Per-review comments aren't shown on the public instructor page yet — check individual course pages for detailed reviews.
+                        </p>
                     </div>
 
                 </section>)}

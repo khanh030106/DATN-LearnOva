@@ -34,7 +34,11 @@ const RevenueMetricCard = ({ metric }) => {
         <strong>{metric.value}</strong>
         <small>{metric.note}</small>
       </div>
-      {metric.bars ? <MiniBars values={metric.bars} /> : <Sparkline values={metric.sparkline} tone={metric.tone} />}
+      {metric.bars ? (
+        <MiniBars values={metric.bars} />
+      ) : metric.sparkline?.length ? (
+        <Sparkline values={metric.sparkline} tone={metric.tone} />
+      ) : null}
     </article>
   );
 };

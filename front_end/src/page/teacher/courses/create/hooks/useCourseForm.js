@@ -30,7 +30,6 @@ const createEmptyCourse = () => ({
     category: "",
     basePrice: "",
     status: "DRAFT",
-    visibility: "PUBLIC",
     requirements: [""],
     whatYouLearn: [""],
 });
@@ -89,7 +88,6 @@ export const useCourseForm = ({ editCourseId = null } = {}) => {
                     thumbnailKey: data.thumbnailKey || "",
                     thumbnailPreviewUrl,
                     status: "DRAFT",
-                    visibility: "PUBLIC",
                     requirements: data.requirements?.length ? data.requirements : [""],
                     whatYouLearn: data.whatYouLearn?.length ? data.whatYouLearn : [""],
                 });
