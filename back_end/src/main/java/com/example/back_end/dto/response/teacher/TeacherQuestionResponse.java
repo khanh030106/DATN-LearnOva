@@ -1,28 +1,19 @@
 package com.example.back_end.dto.response.teacher;
 
-import lombok.Builder;
-import lombok.Data;
-
 import java.time.Instant;
 
-@Data
-@Builder
-public class TeacherQuestionResponse {
-    private Long id;
-    private String content;
-
-    private Long courseId;
-    private String courseTitle;
-
-    private Long lessonId;
-    private String lessonTitle;
-
-    private Long userId;
-    private String userName;
-
-    private Instant createdAt;
-
-    private Boolean isSolved;
-    private Boolean isPinned;
-    private Integer answerCount;
+public record TeacherQuestionResponse(
+        Long id,
+        String content,
+        Long courseId,
+        String courseTitle,
+        Long lessonId,
+        String lessonTitle,
+        Long userId,
+        String userName,
+        Instant createdAt,
+        Boolean isSolved,
+        Boolean isPinned,
+        Integer answerCount
+) {
 }

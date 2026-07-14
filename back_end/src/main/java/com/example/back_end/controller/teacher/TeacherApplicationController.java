@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/learnova/teacher-applications")
+@RequestMapping("/api/learnova/teacher/applications")
 public class TeacherApplicationController {
 
     private final TeacherApplicationService teacherApplicationService;

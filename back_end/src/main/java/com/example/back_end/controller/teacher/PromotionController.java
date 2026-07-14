@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/learnova/promotions")
+@RequestMapping("/api/learnova/teacher/promotions")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('TEACHER')")
 public class PromotionController {

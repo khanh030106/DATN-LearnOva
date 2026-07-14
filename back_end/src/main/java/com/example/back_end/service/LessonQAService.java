@@ -452,20 +452,20 @@ public class LessonQAService {
         return questions.stream()
                 .map(q -> {
                     Course course = q.getLesson().getSection().getCourse();
-                    return TeacherQuestionResponse.builder()
-                            .id(q.getId())
-                            .content(q.getContent())
-                            .courseId(course.getId())
-                            .courseTitle(course.getTitle())
-                            .lessonId(q.getLesson().getId())
-                            .lessonTitle(q.getLesson().getTitle())
-                            .userId(q.getUser().getId())
-                            .userName(q.getUser().getFullName())
-                            .createdAt(q.getCreatedAt())
-                            .isSolved(q.getIsSolved())
-                            .isPinned(q.getIsPinned())
-                            .answerCount(answerCountByQuestion.getOrDefault(q.getId(), 0L).intValue())
-                            .build();
+                    return new TeacherQuestionResponse(
+                            q.getId(),
+                            q.getContent(),
+                            course.getId(),
+                            course.getTitle(),
+                            q.getLesson().getId(),
+                            q.getLesson().getTitle(),
+                            q.getUser().getId(),
+                            q.getUser().getFullName(),
+                            q.getCreatedAt(),
+                            q.getIsSolved(),
+                            q.getIsPinned(),
+                            answerCountByQuestion.getOrDefault(q.getId(), 0L).intValue()
+                    );
                 })
                 .toList();
     }
