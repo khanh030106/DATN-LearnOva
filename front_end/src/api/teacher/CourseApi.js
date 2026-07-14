@@ -1,7 +1,7 @@
 import api from "../AxiosClient.js";
 
 export const getMyCourse = async () => {
-    const response = await api.get("/teacher/courses/my-courses");
+    const response = await api.get("/teacher/courses");
     return response.data;
 };
 
@@ -12,7 +12,7 @@ export const getActiveCategories = async () => {
 
 export const createDraftCourse = async (payload) => {
     const response = await api.post(
-        "/teacher/courses/create-draft-course",
+        "/teacher/courses",
         payload
     );
     return response.data;
@@ -113,17 +113,17 @@ export const getCourseForEdit = async (courseId) => {
 };
 
 export const getMyStudents = async () => {
-    const response = await api.get("/teacher/courses/my-students");
+    const response = await api.get("/teacher/students");
     return response.data;
 };
 
 export const getMyReviews = async () => {
-    const response = await api.get("/teacher/courses/my-reviews");
+    const response = await api.get("/teacher/reviews");
     return response.data;
 };
 
 export const replyToReview = async (reviewId, reply) => {
-    const response = await api.patch(`/teacher/courses/reviews/${reviewId}/reply`, { reply });
+    const response = await api.patch(`/teacher/reviews/${reviewId}/reply`, { reply });
     return response.data;
 };
 

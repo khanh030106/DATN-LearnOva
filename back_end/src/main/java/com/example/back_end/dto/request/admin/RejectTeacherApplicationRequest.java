@@ -1,4 +1,4 @@
-package com.example.back_end.dto.request.teacher;
+package com.example.back_end.dto.request.admin;
 
 import jakarta.validation.constraints.NotBlank;
 
