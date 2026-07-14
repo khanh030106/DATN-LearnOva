@@ -75,7 +75,7 @@ export const getLessonSources = async (lessonId) => {
 
 export const deleteLessonSource = async (sourceId) => {
     const response = await api.delete(
-        `/teacher/courses/lessons/sources/${sourceId}`
+        `/teacher/courses/sources/${sourceId}`
     );
     return response.data;
 };

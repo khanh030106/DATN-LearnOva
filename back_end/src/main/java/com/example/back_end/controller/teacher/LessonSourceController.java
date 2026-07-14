@@ -32,7 +32,7 @@ public class LessonSourceController {
         return lessonSourceService.getLessonSources(lessonId, authentication.getName());
     }
 
-    @DeleteMapping("/lessons/sources/{sourceId}")
+    @DeleteMapping("/sources/{sourceId}")
     public void deleteLessonSource(@PathVariable Long sourceId, Authentication authentication) {
         lessonSourceService.deleteLessonSource(sourceId, authentication.getName());
     }

@@ -23,9 +23,9 @@ const pickVisibleLabels = (labels) => {
 };
 
 const RevenueChartPanel = ({ chartLabels, currentChart, previousChart, highlights }) => {
-  const activeLine = buildLinePoints(currentChart);
-  const previousLine = buildLinePoints(previousChart);
   const maxValue = Math.max(...currentChart, ...previousChart, 1);
+  const activeLine = buildLinePoints(currentChart, 720, 230, maxValue);
+  const previousLine = buildLinePoints(previousChart, 720, 230, maxValue);
   const visibleLabels = pickVisibleLabels(chartLabels);
 
   return (
