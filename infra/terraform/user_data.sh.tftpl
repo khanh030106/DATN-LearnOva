@@ -1,0 +1,28 @@
+#!/bin/bash
+set -euxo pipefail
+
+apt-get update -y
+apt-get install -y ca-certificates curl gnupg git
+
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+chmod a+r /etc/apt/keyrings/docker.asc
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
+  > /etc/apt/sources.list.d/docker.list
+apt-get update -y
+apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+systemctl enable docker
+systemctl start docker
+usermod -aG docker ubuntu
+
+# First-time checkout. Later deploys (via SSM) just `git pull` in this same directory.
+if [ ! -d /app/.git ]; then
+  git clone "${git_repo_url}" /app
+fi
+
+# Safety net: force the instance to `stopped` every night so a forgotten
+# session never runs (and bills) overnight.
+echo "0 ${shutdown_hour} * * * root shutdown -h now" > /etc/cron.d/learnova-nightly-shutdown
+chmod 0644 /etc/cron.d/learnova-nightly-shutdown

@@ -1,4 +1,24 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: learnova-postgres
+    environment:
+      # Must match DB_USERNAME / DB_PASSWORD in back_end/.env and the db name
+      # in its DB_URL — two different apps (Postgres image vs Spring
+      # datasource), no way to derive one from the other automatically.
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:9.2.8
     container_name: learnova-elasticsearch
@@ -6,15 +26,56 @@ services:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    ports:
-      - "9200:9200"
     volumes:
       - es_data:/usr/share/elasticsearch/data
+    mem_limit: 768m
     healthcheck:
       test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
+    restart: unless-stopped
+
+  ai-service:
+    build: ./ai_services
+    container_name: learnova-ai-service
+    env_file:
+      - ai_services/.env
+    mem_limit: 256m
+    restart: unless-stopped
+
+  backend:
+    build: ./back_end
+    container_name: learnova-backend
+    env_file:
+      - back_end/.env
+    environment:
+      # Overrides for the internal docker network — back_end/.env still has
+      # localhost-based values for local dev, these win at runtime.
+      DB_URL: jdbc:postgresql://postgres:5432/${DB_NAME}
+      ES_URIS: http://elasticsearch:9200
+      AI_SERVICE_URL: http://ai-service:8000
+      JAVA_TOOL_OPTIONS: -Xmx768m
+    depends_on:
+      postgres:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      ai-service:
+        condition: service_started
+    mem_limit: 1024m
+    restart: unless-stopped
+
+  frontend:
+    build: ./front_end
+    container_name: learnova-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    mem_limit: 64m
+    restart: unless-stopped
 
 volumes:
   es_data:
+  pg_data:

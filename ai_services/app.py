@@ -6,9 +6,6 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 
 load_dotenv()
 
-from services.whisper_service import transcribe_audio
-from services.summay_service import generate_summary
-from services.quiz_service import generate_questions
 from services.gemini_summary_service import summarize_video
 from services.gemini_quiz_service import generate_quiz
 
@@ -26,20 +23,6 @@ async def _save_upload_to_temp(file: UploadFile) -> str:
 def health():
     return {
         "status": "ok"
-    }
-
-@app.post("/process-video")
-def process_video():
-    file_path = "sample.mp3"
-
-    transcript = transcribe_audio(file_path)
-    summary = generate_summary(transcript)
-    questions = generate_questions(transcript)
-
-    return {
-        "transcript": transcript,
-        "summary": summary,
-        "questions": questions
     }
 
 @app.post("/summarize")
