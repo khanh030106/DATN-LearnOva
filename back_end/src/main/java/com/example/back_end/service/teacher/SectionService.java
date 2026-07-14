@@ -1,4 +1,4 @@
-package com.example.back_end.service;
+package com.example.back_end.service.teacher;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

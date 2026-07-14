@@ -45,13 +45,13 @@ public class InstructorProfileService {
                     return created;
                 });
 
-        profile.setHeadline(request.getHeadline());
-        profile.setDescription(request.getDescription());
-        profile.setExpertise(request.getExpertise());
-        if (request.getAvatarKey() != null) {
-            profile.setAvatarKey(request.getAvatarKey());
+        profile.setHeadline(request.headline());
+        profile.setDescription(request.description());
+        profile.setExpertise(request.expertise());
+        if (request.avatarKey() != null) {
+            profile.setAvatarKey(request.avatarKey());
         }
-        profile.setSocialLinks(request.getSocialLinks());
+        profile.setSocialLinks(request.socialLinks());
         profile.setUpdatedAt(Instant.now());
 
         instructorProfileRepository.save(profile);

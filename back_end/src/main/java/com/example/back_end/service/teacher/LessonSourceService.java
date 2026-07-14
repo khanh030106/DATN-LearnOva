@@ -1,4 +1,4 @@
-package com.example.back_end.service;
+package com.example.back_end.service.teacher;
 
 import com.example.back_end.dto.request.CreateLessonSourceRequest;
 import com.example.back_end.dto.response.LessonSourceResponse;

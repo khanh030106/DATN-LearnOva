@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/learnova/teacher/revenue")
+@PreAuthorize("hasRole('TEACHER')")
 public class TeacherRevenueController {
 
     private final TeacherRevenueService teacherRevenueService;
 
-    @PreAuthorize("hasRole('TEACHER')")
     @GetMapping
     public ResponseEntity<TeacherRevenueResponse> getRevenue(Authentication authentication) {
         return ResponseEntity.ok(teacherRevenueService.getRevenue(authentication.getName()));

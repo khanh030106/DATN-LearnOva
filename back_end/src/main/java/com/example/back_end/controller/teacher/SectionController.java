@@ -1,4 +1,4 @@
-package com.example.back_end.controller;
+package com.example.back_end.controller.teacher;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.back_end.dto.response.CreateSectionResponse;
 import com.example.back_end.dto.request.CreateSectionRequest;
 import com.example.back_end.dto.request.UpdateSectionRequest;
-import com.example.back_end.service.SectionService;
+import com.example.back_end.service.teacher.SectionService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/learnova/courses")
+@RequestMapping("/api/learnova/teacher/courses")
 @PreAuthorize("hasRole('TEACHER')")
 public class SectionController {
 

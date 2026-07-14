@@ -1,10 +1,10 @@
-package com.example.back_end.controller;
+package com.example.back_end.controller.teacher;
 
 import com.example.back_end.dto.response.CreateLessonResponse;
 import com.example.back_end.dto.request.CreateLessonRequest;
 import com.example.back_end.dto.request.UpdateLessonRequest;
 import com.example.back_end.dto.request.UpdateLessonVideoRequest;
-import com.example.back_end.service.LessonService;
+import com.example.back_end.service.teacher.LessonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/learnova/courses")
+@RequestMapping("/api/learnova/teacher/courses")
 @PreAuthorize("hasRole('TEACHER')")
 public class LessonController {
 

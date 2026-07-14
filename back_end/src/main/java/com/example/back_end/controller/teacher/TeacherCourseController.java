@@ -1,7 +1,7 @@
 package com.example.back_end.controller.teacher;
 
 import com.example.back_end.dto.request.CreateDraftCourseRequest;
-import com.example.back_end.dto.request.ReplyReviewRequest;
+import com.example.back_end.dto.request.teacher.ReplyReviewRequest;
 import com.example.back_end.dto.request.UpdateCourseRequest;
 import com.example.back_end.dto.request.UpdateCourseStatusRequest;
 import com.example.back_end.dto.response.CreateDraftCourseResponse;
@@ -94,7 +94,7 @@ public class TeacherCourseController {
             @Valid @RequestBody ReplyReviewRequest request,
             Authentication authentication
     ) {
-        teacherCourseService.replyToReview(reviewId, authentication.getName(), request.getReply());
+        teacherCourseService.replyToReview(reviewId, authentication.getName(), request.reply());
         return ResponseEntity.noContent().build();
     }
 }

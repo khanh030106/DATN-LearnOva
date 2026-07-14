@@ -1,4 +1,6 @@
-package com.example.back_end.service;
+package com.example.back_end.service.teacher;
+
+import com.example.back_end.service.MediaConvertService;
 
 import com.example.back_end.dto.request.CreateLessonRequest;
 import com.example.back_end.dto.request.UpdateLessonRequest;

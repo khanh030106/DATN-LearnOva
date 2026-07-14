@@ -17,17 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/learnova/teacher/profile")
+@PreAuthorize("hasRole('TEACHER')")
 public class InstructorProfileController {
 
     private final InstructorProfileService instructorProfileService;
 
-    @PreAuthorize("hasRole('TEACHER')")
     @GetMapping
     public ResponseEntity<InstructorProfileResponse> getMyProfile(Authentication authentication) {
         return ResponseEntity.ok(instructorProfileService.getMyProfile(authentication.getName()));
     }
 
-    @PreAuthorize("hasRole('TEACHER')")
     @PutMapping
     public ResponseEntity<InstructorProfileResponse> updateMyProfile(
             @Valid @RequestBody UpdateInstructorProfileRequest request,
