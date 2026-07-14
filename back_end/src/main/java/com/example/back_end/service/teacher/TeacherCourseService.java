@@ -18,6 +18,7 @@ import com.example.back_end.repository.EnrollmentRepository;
 import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.repository.UserRepository;
 import com.example.back_end.repository.admin.AdminCategoryRepository;
+import com.example.back_end.service.CourseIndexService;
 import com.example.back_end.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,7 @@ public class TeacherCourseService {
     private final EnrollmentRepository enrollmentRepository;
     private final ReviewRepository reviewRepository;
     private final NotificationService notificationService;
+    private final CourseIndexService courseIndexService;
 
     private static final Set<CourseStatus> TEACHER_SETTABLE_STATUSES = EnumSet.of(CourseStatus.DRAFT, CourseStatus.PENDING_REVIEW);
 
@@ -70,6 +72,7 @@ public class TeacherCourseService {
         course.setUpdatedAt(Instant.now());
 
         courseRepository.save(course);
+        courseIndexService.sync(course);
 
         if (request.categoryId() != null) {
             Category category = categoryRepository.findActiveById(request.categoryId())
@@ -130,6 +133,7 @@ public class TeacherCourseService {
         }
 
         courseRepository.save(course);
+        courseIndexService.sync(course);
     }
 
     public List<TeacherCoursesResponse> getMyCourses(String email) {
@@ -225,6 +229,7 @@ public class TeacherCourseService {
         course.setWhatYouLearn(request.whatYouLearn());
         course.setUpdatedAt(Instant.now());
         courseRepository.save(course);
+        courseIndexService.sync(course);
 
         if (request.categoryId() != null) {
             coursecategoryRepository.deleteByCourseId(courseId);
@@ -261,6 +266,7 @@ public class TeacherCourseService {
         course.setIsDeleted(true);
         course.setUpdatedAt(Instant.now());
         courseRepository.save(course);
+        courseIndexService.sync(course);
     }
 
     public boolean toggleCourseVisibility(Long courseId, String email) {
@@ -279,6 +285,7 @@ public class TeacherCourseService {
         course.setIsHidden(newHiddenState);
         course.setUpdatedAt(Instant.now());
         courseRepository.save(course);
+        courseIndexService.sync(course);
         return newHiddenState;
     }
 

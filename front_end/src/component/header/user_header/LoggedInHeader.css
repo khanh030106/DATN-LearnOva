@@ -416,6 +416,7 @@
 }
 
 .user-logged-search {
+  position: relative;
   width: 340px;
   height: 38px;
   display: flex;

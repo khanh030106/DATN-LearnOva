@@ -17,6 +17,7 @@ import com.example.back_end.entity.enums.NotificationType;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.admin.AdminCourseRepository;
+import com.example.back_end.service.CourseIndexService;
 import com.example.back_end.service.EmailService;
 import com.example.back_end.service.NotificationService;
 
@@ -35,11 +36,14 @@ public class AdminCourseService {
     private final AdminCourseRepository courseRepository;
     private final NotificationService notificationService;
     private final EmailService emailService;
+    private final CourseIndexService courseIndexService;
 
-    public AdminCourseService(AdminCourseRepository courseRepository, NotificationService notificationService, EmailService emailService) {
+    public AdminCourseService(AdminCourseRepository courseRepository, NotificationService notificationService,
+                               EmailService emailService, CourseIndexService courseIndexService) {
         this.courseRepository = courseRepository;
         this.notificationService = notificationService;
         this.emailService = emailService;
+        this.courseIndexService = courseIndexService;
     }
 
     public List<AdminCourseResponse> getAllCourses() {
@@ -68,6 +72,7 @@ public class AdminCourseService {
         course.setPublishedAt(OffsetDateTime.now());
         course.setUpdatedAt(Instant.now());
         courseRepository.save(course);
+        courseIndexService.sync(course);
 
         notifyInstructor(
                 course,
@@ -93,6 +98,7 @@ public class AdminCourseService {
         course.setRejectionReason(reason);
         course.setUpdatedAt(Instant.now());
         courseRepository.save(course);
+        courseIndexService.sync(course);
 
         notifyInstructor(
                 course,
@@ -118,6 +124,7 @@ public class AdminCourseService {
         course.setIsDeleted(false);
         course.setUpdatedAt(Instant.now());
         courseRepository.save(course);
+        courseIndexService.sync(course);
 
         return toDetailResponse(course);
     }

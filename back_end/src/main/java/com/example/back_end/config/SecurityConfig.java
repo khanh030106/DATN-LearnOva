@@ -59,6 +59,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/learnova/course/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/learnova/review/summary/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/learnova/instructors/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/learnova/search").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/qna/course/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/learnova/qna/lesson/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/learnova/certificates/verify/**").permitAll()

@@ -1,23 +1,54 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
+import { searchCourses } from "../../../../api/SearchApi.js";
 
-const HeaderSearch = ({  }) => {
+const HeaderSearch = ({ variant = "logged" }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedTerm, setDebouncedTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [results, setResults] = useState([]);
+  const navigate = useNavigate();
+
+  const prefix = variant === "guest" ? "header-search" : "user-logged-search";
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
-      setDebouncedTerm(searchTerm.trim().toLowerCase());
+      setDebouncedTerm(searchTerm.trim());
     }, 300);
 
     return () => window.clearTimeout(timeoutId);
   }, [searchTerm]);
 
+  useEffect(() => {
+    if (!debouncedTerm) {
+      setResults([]);
+      return;
+    }
+
+    let cancelled = false;
+    searchCourses(debouncedTerm)
+      .then((data) => {
+        if (!cancelled) setResults(data);
+      })
+      .catch(() => {
+        if (!cancelled) setResults([]);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [debouncedTerm]);
+
+  const goToCourse = (courseId) => {
+    setIsFocused(false);
+    setSearchTerm("");
+    navigate(`/learnova/courses/detail/${courseId}`);
+  };
 
   return (
-    <form className="user-logged-search" role="search">
-      <Search size={18} className="user-logged-search-icon" />
+    <form className={prefix} role="search" onSubmit={(e) => e.preventDefault()}>
+      <Search size={18} className={`${prefix}-icon`} />
       <input
         type="search"
         value={searchTerm}
@@ -25,22 +56,26 @@ const HeaderSearch = ({  }) => {
         onFocus={() => setIsFocused(true)}
         onBlur={() => window.setTimeout(() => setIsFocused(false), 120)}
         placeholder="Search Course, Instructor, Category"
-        className="user-logged-search-input"
+        className={`${prefix}-input`}
         aria-label="Search Course, Instructor, Category"
       />
 
-      {isFocused && filteredSuggestions.length > 0 && (
-        <div className="user-logged-search-suggestions">
-          {filteredSuggestions.map((item) => (
+      {isFocused && results.length > 0 && (
+        <div className={`${prefix}-suggestions`}>
+          {results.map((course) => (
             <button
-              key={item.id}
+              key={course.courseId}
               type="button"
-              className="user-logged-search-suggestion"
-              onMouseDown={() => setSearchTerm(item.label)}
+              className={`${prefix}-suggestion`}
+              onMouseDown={() => goToCourse(course.courseId)}
             >
               <Search size={15} />
-              <span>{item.label}</span>
-              <small>{item.type}</small>
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: course.titleHighlight || course.title,
+                }}
+              />
+              <small>{course.categoryName || course.instructorName}</small>
             </button>
           ))}
         </div>
