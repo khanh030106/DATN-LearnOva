@@ -1,4 +1,4 @@
-package com.example.back_end.repository;
+package com.example.back_end.repository.teacher;
 
 import com.example.back_end.entity.CourseAnnouncement;
 import org.springframework.data.domain.Page;

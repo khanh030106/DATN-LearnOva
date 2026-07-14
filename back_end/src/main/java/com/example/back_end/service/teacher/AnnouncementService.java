@@ -11,7 +11,7 @@ import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.NotificationType;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
-import com.example.back_end.repository.CourseAnnouncementRepository;
+import com.example.back_end.repository.teacher.CourseAnnouncementRepository;
 import com.example.back_end.repository.CourseRepository;
 import com.example.back_end.repository.EnrollmentRepository;
 import com.example.back_end.repository.UserRepository;

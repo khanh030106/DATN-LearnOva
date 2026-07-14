@@ -12,7 +12,7 @@ import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.CourseRepository;
 import com.example.back_end.repository.PromotioncourseRepository;
-import com.example.back_end.repository.PromotionRepository;
+import com.example.back_end.repository.teacher.PromotionRepository;
 import com.example.back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

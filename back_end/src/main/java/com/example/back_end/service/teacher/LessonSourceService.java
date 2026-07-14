@@ -8,7 +8,7 @@ import com.example.back_end.entity.User;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.LessonRepository;
-import com.example.back_end.repository.LessonsourceRepository;
+import com.example.back_end.repository.teacher.LessonsourceRepository;
 import com.example.back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
