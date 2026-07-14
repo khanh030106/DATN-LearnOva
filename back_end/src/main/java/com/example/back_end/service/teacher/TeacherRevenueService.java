@@ -1,6 +1,5 @@
 package com.example.back_end.service.teacher;
 
-import com.example.back_end.service.CourseService;
 
 import com.example.back_end.dto.response.teacher.TeacherCoursesResponse;
 import com.example.back_end.dto.response.teacher.TeacherRevenueResponse;
@@ -36,7 +35,7 @@ public class TeacherRevenueService {
     private final EnrollmentRepository enrollmentRepository;
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
-    private final CourseService courseService;
+    private final TeacherCourseService teacherCourseService;
 
     @Transactional(readOnly = true)
     public TeacherRevenueResponse getRevenue(String email) {
@@ -105,7 +104,7 @@ public class TeacherRevenueService {
                         OrderRepository.CourseRevenueProjection::getCourseId,
                         OrderRepository.CourseRevenueProjection::getAmount));
 
-        List<TeacherCoursesResponse> myCourses = courseService.getMyCourses(email);
+        List<TeacherCoursesResponse> myCourses = teacherCourseService.getMyCourses(email);
         List<TeacherRevenueResponse.TopRevenueCourse> topCourses = myCourses.stream()
                 .filter(c -> !Boolean.TRUE.equals(c.isDeleted()))
                 .map(c -> new TeacherRevenueResponse.TopRevenueCourse(

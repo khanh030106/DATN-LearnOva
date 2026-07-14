@@ -3,7 +3,7 @@ import axiosClient from "../AxiosClient.js";
 
 
 export const getMyCourse = async () => {
-    const response = await axiosClient.get("/courses/my-courses");
+    const response = await axiosClient.get("/teacher/courses/my-courses");
     return response.data;
 };
 
@@ -14,7 +14,7 @@ export const getActiveCategories = async () => {
 
 export const createDraftCourse = async (payload) => {
     const response = await api.post(
-        "/courses/create-draft-course",
+        "/teacher/courses/create-draft-course",
         payload
     );
     return response.data;
@@ -88,24 +88,24 @@ export const deleteLessonSource = async (sourceId) => {
 };
 
 export const updateCourseStatus = async (courseId, status) => {
-    const response = await api.patch(`/courses/${courseId}/status`, { status });
+    const response = await api.patch(`/teacher/courses/${courseId}/status`, { status });
     return response.data;
 };
 
 export const updateCourse = async (courseId, payload) => {
-    const response = await api.put(`/courses/${courseId}`, payload);
+    const response = await api.put(`/teacher/courses/${courseId}`, payload);
     return response.data;
 };
 
 // Permanently removes the course from the teacher's list (soft delete on the backend).
 export const softDeleteCourse = async (courseId) => {
-    const response = await api.delete(`/courses/${courseId}`);
+    const response = await api.delete(`/teacher/courses/${courseId}`);
     return response.data;
 };
 
 // Toggles whether the course is hidden from students without deleting it.
 export const toggleCourseVisibility = async (courseId) => {
-    const response = await api.patch(`/courses/${courseId}/visibility`);
+    const response = await api.patch(`/teacher/courses/${courseId}/visibility`);
     return response.data;
 };
 
@@ -115,17 +115,17 @@ export const getCourseForEdit = async (courseId) => {
 };
 
 export const getMyStudents = async () => {
-    const response = await api.get("/courses/my-students");
+    const response = await api.get("/teacher/courses/my-students");
     return response.data;
 };
 
 export const getMyReviews = async () => {
-    const response = await api.get("/courses/my-reviews");
+    const response = await api.get("/teacher/courses/my-reviews");
     return response.data;
 };
 
 export const replyToReview = async (reviewId, reply) => {
-    const response = await api.patch(`/courses/reviews/${reviewId}/reply`, { reply });
+    const response = await api.patch(`/teacher/courses/reviews/${reviewId}/reply`, { reply });
     return response.data;
 };
 

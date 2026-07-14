@@ -1,6 +1,5 @@
 package com.example.back_end.service.teacher;
 
-import com.example.back_end.service.CourseService;
 
 import com.example.back_end.dto.response.teacher.TeacherCoursesResponse;
 import com.example.back_end.dto.response.teacher.TeacherDashboardResponse;
@@ -41,7 +40,7 @@ public class TeacherDashboardService {
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
     private final LessonQARepository lessonQARepository;
-    private final CourseService courseService;
+    private final TeacherCourseService teacherCourseService;
 
     @Transactional(readOnly = true)
     public TeacherDashboardResponse getDashboard(String email) {
@@ -104,7 +103,7 @@ public class TeacherDashboardService {
                 .map(this::toRecentEnrollment)
                 .toList();
 
-        List<TeacherCoursesResponse> myCourses = courseService.getMyCourses(email);
+        List<TeacherCoursesResponse> myCourses = teacherCourseService.getMyCourses(email);
 
         Map<Long, BigDecimal> revenueByCourse = orderRepository.findRevenueByCourseForInstructor(instructorId)
                 .stream()
