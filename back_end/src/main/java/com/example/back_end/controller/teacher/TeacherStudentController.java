@@ -1,7 +1,7 @@
 package com.example.back_end.controller.teacher;
 
 import com.example.back_end.dto.response.teacher.TeacherStudentResponse;
-import com.example.back_end.service.teacher.TeacherCourseService;
+import com.example.back_end.service.teacher.TeacherStudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,10 +18,10 @@ import java.util.List;
 @PreAuthorize("hasRole('TEACHER')")
 public class TeacherStudentController {
 
-    private final TeacherCourseService teacherCourseService;
+    private final TeacherStudentService teacherStudentService;
 
     @GetMapping
     public ResponseEntity<List<TeacherStudentResponse>> getMyStudents(Authentication authentication) {
-        return ResponseEntity.ok(teacherCourseService.getMyStudents(authentication.getName()));
+        return ResponseEntity.ok(teacherStudentService.getMyStudents(authentication.getName()));
     }
 }

@@ -1,12 +1,11 @@
-package com.example.back_end.dto.request;
+package com.example.back_end.dto.response.teacher;
 
 import com.example.back_end.entity.enums.LessonSourceType;
 
-public record CreateLessonSourceRequest(
+public record LessonSourceResponse(
+        Long id,
         String fileKey,
         String originalFileName,
-        String contentType,
-        Long fileSizeBytes,
         LessonSourceType resourceType
 ) {
 }

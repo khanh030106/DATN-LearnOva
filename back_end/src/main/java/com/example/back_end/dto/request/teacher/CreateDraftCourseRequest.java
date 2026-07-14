@@ -1,4 +1,4 @@
-package com.example.back_end.dto.request;
+package com.example.back_end.dto.request.teacher;
 
 import com.example.back_end.entity.enums.CourseLevel;
 import jakarta.validation.constraints.NotBlank;
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
-public record UpdateCourseRequest(
+public record CreateDraftCourseRequest(
         @NotBlank String title,
         @NotBlank String description,
         @NotBlank String language,
@@ -17,4 +17,5 @@ public record UpdateCourseRequest(
         List<String> requirements,
         List<String> whatYouLearn,
         Long categoryId
-) {}
+) {
+}

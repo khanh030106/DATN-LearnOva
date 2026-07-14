@@ -2,9 +2,9 @@ package com.example.back_end.service.teacher;
 
 import com.example.back_end.service.MediaConvertService;
 
-import com.example.back_end.dto.request.CreateLessonRequest;
-import com.example.back_end.dto.request.UpdateLessonRequest;
-import com.example.back_end.dto.request.UpdateLessonVideoRequest;
+import com.example.back_end.dto.request.teacher.CreateLessonRequest;
+import com.example.back_end.dto.request.teacher.UpdateLessonRequest;
+import com.example.back_end.dto.request.teacher.UpdateLessonVideoRequest;
 import com.example.back_end.entity.Lesson;
 import com.example.back_end.entity.Section;
 import com.example.back_end.entity.enums.HlsStatus;

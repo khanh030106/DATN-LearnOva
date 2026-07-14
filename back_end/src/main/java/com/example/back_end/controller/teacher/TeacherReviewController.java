@@ -2,7 +2,7 @@ package com.example.back_end.controller.teacher;
 
 import com.example.back_end.dto.request.teacher.ReplyReviewRequest;
 import com.example.back_end.dto.response.teacher.TeacherReviewResponse;
-import com.example.back_end.service.teacher.TeacherCourseService;
+import com.example.back_end.service.teacher.TeacherReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +23,11 @@ import java.util.List;
 @PreAuthorize("hasRole('TEACHER')")
 public class TeacherReviewController {
 
-    private final TeacherCourseService teacherCourseService;
+    private final TeacherReviewService teacherReviewService;
 
     @GetMapping
     public ResponseEntity<List<TeacherReviewResponse>> getMyReviews(Authentication authentication) {
-        return ResponseEntity.ok(teacherCourseService.getMyReviews(authentication.getName()));
+        return ResponseEntity.ok(teacherReviewService.getMyReviews(authentication.getName()));
     }
 
     @PatchMapping("/{reviewId}/reply")
@@ -36,7 +36,7 @@ public class TeacherReviewController {
             @Valid @RequestBody ReplyReviewRequest request,
             Authentication authentication
     ) {
-        teacherCourseService.replyToReview(reviewId, authentication.getName(), request.reply());
+        teacherReviewService.replyToReview(reviewId, authentication.getName(), request.reply());
         return ResponseEntity.noContent().build();
     }
 }

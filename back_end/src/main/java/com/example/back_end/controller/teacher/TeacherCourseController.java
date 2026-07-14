@@ -1,9 +1,9 @@
 package com.example.back_end.controller.teacher;
 
-import com.example.back_end.dto.request.CreateDraftCourseRequest;
-import com.example.back_end.dto.request.UpdateCourseRequest;
-import com.example.back_end.dto.request.UpdateCourseStatusRequest;
-import com.example.back_end.dto.response.CreateDraftCourseResponse;
+import com.example.back_end.dto.request.teacher.CreateDraftCourseRequest;
+import com.example.back_end.dto.request.teacher.UpdateCourseRequest;
+import com.example.back_end.dto.request.teacher.UpdateCourseStatusRequest;
+import com.example.back_end.dto.response.teacher.CreateDraftCourseResponse;
 import com.example.back_end.dto.response.teacher.TeacherCoursesResponse;
 import com.example.back_end.service.teacher.TeacherCourseService;
 import jakarta.validation.Valid;

@@ -1,7 +1,7 @@
 package com.example.back_end.controller.teacher;
 
-import com.example.back_end.dto.request.CreateLessonSourceRequest;
-import com.example.back_end.dto.response.LessonSourceResponse;
+import com.example.back_end.dto.request.teacher.CreateLessonSourceRequest;
+import com.example.back_end.dto.response.teacher.LessonSourceResponse;
 import com.example.back_end.service.teacher.LessonSourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

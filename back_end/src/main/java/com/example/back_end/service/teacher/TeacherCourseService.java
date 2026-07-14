@@ -1,17 +1,12 @@
 package com.example.back_end.service.teacher;
 
-import com.example.back_end.dto.request.CreateDraftCourseRequest;
-import com.example.back_end.dto.request.UpdateCourseRequest;
+import com.example.back_end.dto.request.teacher.CreateDraftCourseRequest;
+import com.example.back_end.dto.request.teacher.UpdateCourseRequest;
 import com.example.back_end.dto.response.teacher.TeacherCoursesResponse;
-import com.example.back_end.dto.response.teacher.TeacherReviewResponse;
-import com.example.back_end.dto.response.teacher.TeacherStudentCourseResponse;
-import com.example.back_end.dto.response.teacher.TeacherStudentResponse;
 import com.example.back_end.entity.Category;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Coursecategory;
 import com.example.back_end.entity.CoursecategoryId;
-import com.example.back_end.entity.Enrollment;
-import com.example.back_end.entity.Review;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.CourseStatus;
 import com.example.back_end.entity.enums.NotificationType;
@@ -29,8 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -289,114 +282,4 @@ public class TeacherCourseService {
         return newHiddenState;
     }
 
-    @Transactional(readOnly = true)
-    public List<TeacherStudentResponse> getMyStudents(String email) {
-        User instructor = userRepository
-                .findByEmailAndIsDeletedFalse(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        List<Enrollment> enrollments = enrollmentRepository.findByInstructorId(instructor.getId());
-
-        // Group enrollments by student, preserving earliest enrolledAt
-        Map<Long, List<Enrollment>> byStudent = enrollments.stream()
-                .collect(Collectors.groupingBy(e -> e.getUser().getId()));
-
-        return byStudent.entrySet().stream()
-                .map(entry -> {
-                    List<Enrollment> studentEnrollments = entry.getValue();
-                    User student = studentEnrollments.get(0).getUser();
-
-                    List<TeacherStudentCourseResponse> courses = studentEnrollments.stream()
-                            .map(e -> new TeacherStudentCourseResponse(
-                                    e.getCourse().getId(),
-                                    e.getCourse().getTitle(),
-                                    e.getProgressPercent() != null ? e.getProgressPercent() : 0,
-                                    e.getEnrolledAt()
-                            ))
-                            .toList();
-
-                    Instant earliestEnrolledAt = studentEnrollments.stream()
-                            .map(Enrollment::getEnrolledAt)
-                            .min(Comparator.naturalOrder())
-                            .orElse(null);
-
-                    int avgProgress = (int) studentEnrollments.stream()
-                            .mapToInt(e -> e.getProgressPercent() != null ? e.getProgressPercent() : 0)
-                            .average()
-                            .orElse(0);
-
-                    String status = avgProgress == 0 ? "NOT_STARTED"
-                            : avgProgress == 100 ? "COMPLETED"
-                            : "IN_PROGRESS";
-
-                    return new TeacherStudentResponse(
-                            student.getId(),
-                            student.getFullName(),
-                            student.getEmail(),
-                            student.getPhone(),
-                            student.getAvatar(),
-                            courses,
-                            earliestEnrolledAt,
-                            avgProgress,
-                            status
-                    );
-                })
-                .sorted(Comparator.comparing(
-                        TeacherStudentResponse::enrolledAt,
-                        Comparator.nullsLast(Comparator.reverseOrder())
-                ))
-                .toList();
-    }
-
-    @Transactional(readOnly = true)
-    public List<TeacherReviewResponse> getMyReviews(String email) {
-        User instructor = userRepository
-                .findByEmailAndIsDeletedFalse(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        List<Long> courseIds = courseRepository
-                .findByInstructorIdAndIsDeletedFalseOrderByCreatedAtDesc(instructor.getId())
-                .stream()
-                .map(Course::getId)
-                .toList();
-
-        if (courseIds.isEmpty()) {
-            return List.of();
-        }
-
-        return reviewRepository.findByCourseIdInWithUserAndCourse(courseIds)
-                .stream()
-                .map(review -> new TeacherReviewResponse(
-                        review.getId(),
-                        review.getCourse().getId(),
-                        review.getCourse().getTitle(),
-                        review.getUser().getId(),
-                        review.getUser().getFullName(),
-                        review.getUser().getAvatar(),
-                        review.getRating(),
-                        review.getComment(),
-                        review.getInstructorReply(),
-                        review.getRepliedAt(),
-                        review.getCreatedAt(),
-                        review.getUpdatedAt()
-                ))
-                .toList();
-    }
-
-    public void replyToReview(Long reviewId, String email, String reply) {
-        User instructor = userRepository
-                .findByEmailAndIsDeletedFalse(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
-
-        if (!review.getCourse().getInstructor().getId().equals(instructor.getId())) {
-            throw new BusinessException("You don't have permission to reply to this review");
-        }
-
-        review.setInstructorReply(reply);
-        review.setRepliedAt(OffsetDateTime.now());
-        reviewRepository.save(review);
-    }
 }
