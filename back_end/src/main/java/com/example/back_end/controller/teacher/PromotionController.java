@@ -1,9 +1,9 @@
-package com.example.back_end.controller;
+package com.example.back_end.controller.teacher;
 
-import com.example.back_end.dto.response.PromotionCourseResponse;
-import com.example.back_end.dto.request.CreatePromotionRequest;
-import com.example.back_end.dto.request.UpdatePromotionRequest;
-import com.example.back_end.service.PromotionService;
+import com.example.back_end.dto.response.teacher.PromotionCourseResponse;
+import com.example.back_end.dto.request.teacher.CreatePromotionRequest;
+import com.example.back_end.dto.request.teacher.UpdatePromotionRequest;
+import com.example.back_end.service.teacher.PromotionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

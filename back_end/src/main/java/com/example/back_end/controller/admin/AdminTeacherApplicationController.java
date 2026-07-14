@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.back_end.dto.request.RejectTeacherApplicationRequest;
+import com.example.back_end.dto.request.teacher.RejectTeacherApplicationRequest;
 import com.example.back_end.dto.response.CvUrlResponse;
-import com.example.back_end.dto.response.TeacherApplicationResponse;
-import com.example.back_end.service.TeacherApplicationService;
+import com.example.back_end.dto.response.teacher.TeacherApplicationResponse;
+import com.example.back_end.service.teacher.TeacherApplicationService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

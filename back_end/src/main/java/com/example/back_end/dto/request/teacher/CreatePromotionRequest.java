@@ -1,4 +1,4 @@
-package com.example.back_end.dto.request;
+package com.example.back_end.dto.request.teacher;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

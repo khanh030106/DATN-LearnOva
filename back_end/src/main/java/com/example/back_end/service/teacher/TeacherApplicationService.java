@@ -1,8 +1,12 @@
-package com.example.back_end.service;
+package com.example.back_end.service.teacher;
 
-import com.example.back_end.dto.request.CreateTeacherApplicationRequest;
+import com.example.back_end.service.EmailService;
+import com.example.back_end.service.NotificationService;
+import com.example.back_end.service.S3Service;
+
+import com.example.back_end.dto.request.teacher.CreateTeacherApplicationRequest;
 import com.example.back_end.dto.response.CvUrlResponse;
-import com.example.back_end.dto.response.TeacherApplicationResponse;
+import com.example.back_end.dto.response.teacher.TeacherApplicationResponse;
 import com.example.back_end.entity.InstructorProfile;
 import com.example.back_end.entity.Role;
 import com.example.back_end.entity.TeacherApplication;

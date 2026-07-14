@@ -1,8 +1,8 @@
-package com.example.back_end.controller;
+package com.example.back_end.controller.teacher;
 
-import com.example.back_end.dto.request.CreateAnnouncementRequest;
-import com.example.back_end.dto.response.AnnouncementResponse;
-import com.example.back_end.service.AnnouncementService;
+import com.example.back_end.dto.request.teacher.CreateAnnouncementRequest;
+import com.example.back_end.dto.response.teacher.AnnouncementResponse;
+import com.example.back_end.service.teacher.AnnouncementService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

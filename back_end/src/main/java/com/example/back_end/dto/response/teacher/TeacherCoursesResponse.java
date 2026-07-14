@@ -1,4 +1,4 @@
-package com.example.back_end.dto.response;
+package com.example.back_end.dto.response.teacher;
 
 import com.example.back_end.entity.enums.CourseStatus;
 import java.math.BigDecimal;

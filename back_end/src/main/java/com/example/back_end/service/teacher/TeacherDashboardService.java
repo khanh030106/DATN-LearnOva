@@ -1,7 +1,9 @@
-package com.example.back_end.service;
+package com.example.back_end.service.teacher;
 
-import com.example.back_end.dto.response.TeacherCoursesResponse;
-import com.example.back_end.dto.response.TeacherDashboardResponse;
+import com.example.back_end.service.CourseService;
+
+import com.example.back_end.dto.response.teacher.TeacherCoursesResponse;
+import com.example.back_end.dto.response.teacher.TeacherDashboardResponse;
 import com.example.back_end.entity.Enrollment;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.CourseStatus;

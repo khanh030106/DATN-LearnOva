@@ -3,7 +3,7 @@ package com.example.back_end.controller.coursesDetailController;
 import com.example.back_end.dto.request.CreateAnswerRequest;
 import com.example.back_end.dto.request.CreateQuestionRequest;
 import com.example.back_end.dto.response.LessonQAResponse;
-import com.example.back_end.dto.response.TeacherQuestionResponse;
+import com.example.back_end.dto.response.teacher.TeacherQuestionResponse;
 import com.example.back_end.security.CustomUserDetails;
 import com.example.back_end.service.LessonQAService;
 import jakarta.validation.Valid;

@@ -1,7 +1,7 @@
-package com.example.back_end.controller;
+package com.example.back_end.controller.teacher;
 
-import com.example.back_end.dto.response.TeacherDashboardResponse;
-import com.example.back_end.service.TeacherDashboardService;
+import com.example.back_end.dto.response.teacher.TeacherDashboardResponse;
+import com.example.back_end.service.teacher.TeacherDashboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

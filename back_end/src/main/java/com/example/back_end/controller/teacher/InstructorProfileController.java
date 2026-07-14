@@ -1,8 +1,8 @@
-package com.example.back_end.controller;
+package com.example.back_end.controller.teacher;
 
-import com.example.back_end.dto.request.UpdateInstructorProfileRequest;
-import com.example.back_end.dto.response.InstructorProfileResponse;
-import com.example.back_end.service.InstructorProfileService;
+import com.example.back_end.dto.request.teacher.UpdateInstructorProfileRequest;
+import com.example.back_end.dto.response.teacher.InstructorProfileResponse;
+import com.example.back_end.service.teacher.InstructorProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

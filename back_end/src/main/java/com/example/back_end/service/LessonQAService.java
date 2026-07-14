@@ -12,7 +12,7 @@ import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.NotificationType;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
-import com.example.back_end.dto.response.TeacherQuestionResponse;
+import com.example.back_end.dto.response.teacher.TeacherQuestionResponse;
 import com.example.back_end.repository.EnrollmentRepository;
 import com.example.back_end.repository.LessonQARepository;
 import com.example.back_end.repository.LessonRepository;

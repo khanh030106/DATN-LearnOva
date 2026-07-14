@@ -1,4 +1,4 @@
-package com.example.back_end.controller;
+package com.example.back_end.controller.teacher;
 
 import java.util.List;
 
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.back_end.dto.request.CreateTeacherApplicationRequest;
+import com.example.back_end.dto.request.teacher.CreateTeacherApplicationRequest;
 import com.example.back_end.dto.response.CvUrlResponse;
-import com.example.back_end.dto.response.TeacherApplicationResponse;
-import com.example.back_end.service.TeacherApplicationService;
+import com.example.back_end.dto.response.teacher.TeacherApplicationResponse;
+import com.example.back_end.service.teacher.TeacherApplicationService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

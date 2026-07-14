@@ -1,4 +1,4 @@
-package com.example.back_end.controller;
+package com.example.back_end.controller.teacher;
 
 import com.example.back_end.dto.request.CreatePayoutRequestRequest;
 import com.example.back_end.dto.response.PayoutBalanceResponse;
