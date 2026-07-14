@@ -62,6 +62,23 @@ public interface AdminUserRepository extends JpaRepository<User, Long> {
     List<Object[]> findRecentActiveUserRows();
 
     @Query(value = """
+            SELECT
+              u.user_id,
+              u.full_name,
+              u.email,
+              u.created_at,
+              COALESCE(MIN(CAST(r.role_name AS text)), 'ROLE_USER') AS role_name
+            FROM users u
+            LEFT JOIN userrole ur ON ur.user_id = u.user_id
+            LEFT JOIN roles r ON r.role_id = ur.role_id
+            WHERE u.is_deleted = false
+            GROUP BY u.user_id, u.full_name, u.email, u.created_at
+            ORDER BY u.created_at DESC
+            LIMIT 4
+            """, nativeQuery = true)
+    List<Object[]> findRecentUserActivityRows();
+
+    @Query(value = """
             WITH month_range AS (
               SELECT generate_series(1, 12) AS month_number
             )

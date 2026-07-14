@@ -1,5 +1,6 @@
 import { Star } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getFileUrl } from "../../../../api/PublicCourseApi.js";
 import "./TeacherRow.css";
 
 const getInitials = (name) =>
@@ -10,17 +11,50 @@ const getInitials = (name) =>
     .slice(0, 2)
     .toUpperCase();
 
-const TeacherAvatar = ({ instructor }) => {
-  const [hasImageError, setHasImageError] = useState(false);
-  const shouldShowImage = Boolean(instructor.avatar) && !hasImageError;
+const isResolvedImageUrl = (value) => /^(https?:)?\/\//i.test(value) || /^(data|blob):/i.test(value);
+
+const TeacherAvatar = ({ instructor, getAvatarValue }) => {
+  const [failedAvatar, setFailedAvatar] = useState("");
+  const [signedAvatar, setSignedAvatar] = useState({ key: "", url: "" });
+  const avatar = getAvatarValue(instructor);
+  const resolvedAvatar = isResolvedImageUrl(avatar)
+    ? avatar
+    : signedAvatar.key === avatar
+      ? signedAvatar.url
+      : "";
+  const shouldShowImage = Boolean(resolvedAvatar) && failedAvatar !== resolvedAvatar;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (!avatar || isResolvedImageUrl(avatar)) {
+      return () => {
+        isMounted = false;
+      };
+    }
+
+    // Fetch a signed URL when the avatar value is an S3 storage key.
+    getFileUrl(avatar)
+      .then((url) => {
+        if (isMounted) setSignedAvatar({ key: avatar, url: url || "" });
+      })
+      .catch(() => {
+        if (isMounted) setSignedAvatar({ key: avatar, url: "" });
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [avatar]);
 
   if (shouldShowImage) {
     return (
       <img
         className="teacherRowAvatar"
-        src={instructor.avatar}
+        src={resolvedAvatar}
         alt={instructor.name}
-        onError={() => setHasImageError(true)}
+        loading="lazy"
+        onError={() => setFailedAvatar(resolvedAvatar)}
       />
     );
   }
@@ -32,7 +66,7 @@ const TeacherAvatar = ({ instructor }) => {
   );
 };
 
-const TeacherRow = ({ instructors = [] }) => {
+const TeacherRow = ({ instructors = [], getAvatarValue = () => "" }) => {
   return (
     <section className="teacherRowSection" aria-label="Featured Instructors">
       <div className="teacherRowCard">
@@ -47,7 +81,10 @@ const TeacherRow = ({ instructors = [] }) => {
           {instructors.map((instructor) => (
             <article key={instructor.id} className="teacherRowItem">
               <div className="teacherRowAvatarWrap">
-                <TeacherAvatar instructor={instructor} />
+                <TeacherAvatar
+                  instructor={instructor}
+                  getAvatarValue={getAvatarValue}
+                />
                 <span className="teacherRowRank">{instructor.rank}</span>
               </div>
 
@@ -69,10 +106,6 @@ const TeacherRow = ({ instructors = [] }) => {
             </article>
           ))}
         </div>
-
-        <button type="button" className="teacherRowButton">
-          View Rankings
-        </button>
       </div>
     </section>
   );

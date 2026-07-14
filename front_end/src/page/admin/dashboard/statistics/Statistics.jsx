@@ -11,32 +11,24 @@ const createStatisticsData = (data, loading) => [
     id: "users",
     label: "Total Users",
     value: loading ? "..." : data.totalUsers,
-    change: "+12%",
-    changeColor: "success",
     icon: SquareUserRound,
   },
   {
     id: "teachers",
     label: "Total Teachers",
     value: loading ? "..." : data.totalTeachers,
-    change: "+5%",
-    changeColor: "success",
     icon: GraduationCap,
   },
   {
     id: "courses",
     label: "Total Courses",
     value: loading ? "..." : data.totalCourses,
-    change: "+8%",
-    changeColor: "success",
     icon: BookOpen,
   },
   {
     id: "revenue",
     label: "Total Revenue",
     value: loading ? "..." : data.totalRevenue,
-    change: "+15%",
-    changeColor: "info",
     icon: CircleDollarSign,
   },
 ];
@@ -58,12 +50,6 @@ const Statistics = ({ data, loading = false }) => {
             <div className="dashboardStatisticsCardBody">
               <div className="dashboardStatisticsCardHeader">
                 <h3 className="dashboardStatisticsCardLabel">{item.label}</h3>
-
-                <span
-                  className={`dashboardStatisticsCardChange dashboardStatisticsCardChange--${item.changeColor}`}
-                >
-                  {item.change}
-                </span>
               </div>
 
               <div className="dashboardStatisticsCardValue">{item.value}</div>

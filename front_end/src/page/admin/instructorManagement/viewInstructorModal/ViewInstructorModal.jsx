@@ -14,21 +14,26 @@ import { useEffect, useState } from "react";
 import defaultCover from "../../../../assets/instructors/header-intructor.png";
 import "./ViewInstructorModal.css";
 
+const formatCurrency = (value) => {
+  const amount = Number(value);
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(Number.isFinite(amount) ? amount : 0);
+};
+
 const formatDate = (value) => {
   if (!value) return "--";
-
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-
   return new Intl.DateTimeFormat("en-GB").format(date);
 };
 
 const formatDateTime = (value) => {
   if (!value) return "--";
-
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-
   return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
     month: "2-digit",
@@ -38,13 +43,11 @@ const formatDateTime = (value) => {
   }).format(date);
 };
 
-const formatMoney = (value, currency = "VND") => {
-  if (value == null || value === "") return `0 ${currency}`;
-  const number = Number(value) || 0;
-  return `${new Intl.NumberFormat("vi-VN").format(number)} ${currency}`;
-};
+const formatNumber = (value) =>
+  new Intl.NumberFormat("vi-VN").format(value == null ? 0 : Number(value) || 0);
 
-const formatCount = (value) => new Intl.NumberFormat("vi-VN").format(Number(value) || 0);
+const valueOrDash = (value) =>
+  value === null || value === undefined || value === "" ? "--" : value;
 
 const getInitials = (name) =>
   String(name || "Instructor")
@@ -54,11 +57,6 @@ const getInitials = (name) =>
     .map((word) => word[0])
     .join("")
     .toUpperCase() || "I";
-
-const valueOrDash = (value) => {
-  if (value === null || value === undefined || value === "") return "--";
-  return value;
-};
 
 const getVisibility = (isDeleted) => (isDeleted ? "Hidden" : "Available");
 
@@ -201,17 +199,17 @@ const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClo
               <div className="stat-box">
                 <span className="stat-icon stat-icon-blue"><BookOpen size={26} /></span>
                 <p>Managed Courses</p>
-                <h2>{formatCount(instructor.numberOfClasses ?? instructor.classes)}</h2>
+                <h2>{formatNumber(instructor.numberOfClasses ?? instructor.displayClasses)}</h2>
               </div>
               <div className="stat-box">
                 <span className="stat-icon stat-icon-green"><Users size={26} /></span>
                 <p>Total Students</p>
-                <h2>{formatCount(instructor.totalStudents ?? instructor.students)}</h2>
+                <h2>{formatNumber(instructor.totalStudents)}</h2>
               </div>
               <div className="stat-box">
                 <span className="stat-icon stat-icon-purple"><CircleDollarSign size={26} /></span>
                 <p>Total Revenue</p>
-                <h2>{formatMoney(instructor.totalRevenue)}</h2>
+                <h2>{formatCurrency(instructor.totalRevenue)}</h2>
               </div>
             </div>
           </PanelCard>
@@ -255,14 +253,14 @@ const ViewInstructorModal = ({ instructor, courses = [], isLoading, error, onClo
                           </div>
                         </td>
                         <td>{valueOrDash(course.category || course.categoryName)}</td>
-                        <td>{formatCount(course.students || course.totalStudents)}</td>
+                        <td>{formatNumber(course.students ?? course.totalStudents)}</td>
                         <td>
                           <span className="rating-cell">
                             <Star size={14} fill="currentColor" />
                             {Number(course.rating || 0).toFixed(1)}
                           </span>
                         </td>
-                        <td>{formatMoney(course.price || course.basePrice)}</td>
+                        <td>{formatCurrency(course.price || course.basePrice)}</td>
                         <td>
                           <span className={`course-status ${getCourseStatusClass(course.status)}`}>
                             {status}

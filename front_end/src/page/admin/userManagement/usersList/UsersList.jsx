@@ -23,52 +23,41 @@ const tableColumns = [
 
 const pageSize = 10;
 
-const getInitials = (name) =>
-  name
-    .split(" ")
-    .filter(Boolean)
-    .slice(-2)
-    .map((word) => word[0])
-    .join("")
-    .toUpperCase() || "U";
+const getUserVisibility = (user) =>
+  user.isDeleted
+    ? { label: "Hidden", tone: "deleted" }
+    : { label: "Active", tone: "visible" };
 
 const UserAvatar = ({ user, className }) => {
-  if (user.avatar) {
-    return <img className={className} src={user.avatar} alt={user.name} />;
+  const [failedAvatarSrc, setFailedAvatarSrc] = useState("");
+  const avatarSrc = user.avatarUrl || user.avatar || "";
+  const shouldShowAvatar = avatarSrc && failedAvatarSrc !== avatarSrc;
+
+  if (shouldShowAvatar) {
+    return (
+      <img
+        className={className}
+        src={avatarSrc}
+        alt={user.name}
+        loading="lazy"
+        onError={() => setFailedAvatarSrc(avatarSrc)}
+      />
+    );
   }
 
   return (
-    <span className={`${className} userManagementUserAvatarFallback`}>
-      {getInitials(user.name)}
-    </span>
+    <span
+      className={`${className} userManagementUserAvatarEmpty`}
+      aria-hidden="true"
+    />
   );
-};
-
-const getUserVisibility = (user) => {
-  if (user.visibility && user.visibilityTone) {
-    return {
-      label: user.visibility,
-      tone: user.visibilityTone,
-    };
-  }
-
-  if (user.isDeleted) {
-    return {
-      label: "Hidden",
-      tone: "deleted",
-    };
-  }
-
-  return {
-    label: "Active",
-    tone: "visible",
-  };
 };
 
 const UsersList = ({
   users = [],
   isLoading = false,
   onUserUpdated = () => {},
+  onNotify = () => {},
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedAction, setSelectedAction] = useState(null);
@@ -194,12 +183,8 @@ const UsersList = ({
 
           {!isLoading && users.length === 0 ? (
             <div className="userManagementUsersEmpty">
-              Không có user nào khớp với bộ lọc hiện tại.
+              No users match the current filter.
             </div>
-          ) : null}
-
-          {isLoading ? (
-            <div className="userManagementUsersEmpty">Đang tải users...</div>
           ) : null}
         </div>
 
@@ -260,11 +245,12 @@ const UsersList = ({
         <EditUserModal
           user={selectedUser}
           onClose={closeActionPopup}
-          onSaved={(updatedUser) => {
-            onUserUpdated(updatedUser);
+          onSaved={async (updatedUser) => {
+            await onUserUpdated(updatedUser);
             setSelectedUser(updatedUser);
             closeActionPopup();
           }}
+          onNotify={onNotify}
         />
       ) : null}
 
@@ -272,11 +258,12 @@ const UsersList = ({
         <DeleteUserModal
           user={selectedUser}
           onClose={closeActionPopup}
-          onDeleted={(deletedUser) => {
-            onUserUpdated(deletedUser);
+          onDeleted={async (deletedUser) => {
+            await onUserUpdated(deletedUser);
             setSelectedUser(deletedUser);
             closeActionPopup();
           }}
+          onNotify={onNotify}
         />
       ) : null}
     </section>

@@ -6,7 +6,6 @@ const searchFields = {
   roleLabel: "Role",
 };
 
-
 const roleOptions = [
   { id: "all", label: "All" },
   { id: "student", label: "Students" },

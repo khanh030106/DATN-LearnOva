@@ -18,7 +18,13 @@ const monthLabels = [
   "December",
 ];
 
-const GrowthChart = ({ series = [], yearOptions = [], selectedYear, onYearChange }) => {
+const GrowthChart = ({
+  series = [],
+  yearOptions = [],
+  selectedYear,
+  onYearChange,
+  emptyMessage = "No user growth data for the selected year.",
+}) => {
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
   const [fallbackYear, setFallbackYear] = useState(yearOptions[0]?.value || "");
@@ -28,6 +34,7 @@ const GrowthChart = ({ series = [], yearOptions = [], selectedYear, onYearChange
   const chartData = series.length ? series.map((item) => item.value) : monthLabels.map(() => 0);
   const maxValue = Math.max(...chartData, 0);
   const chartMax = Math.max(4, Math.ceil((maxValue || 1) * 1.25));
+  const hasGrowthData = chartData.some((value) => Number(value || 0) > 0);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -154,6 +161,9 @@ const GrowthChart = ({ series = [], yearOptions = [], selectedYear, onYearChange
       <div className="growthChartCardBody">
         <div className="growthChartChartArea">
           <canvas ref={canvasRef} />
+          {!hasGrowthData && (
+            <p className="growthChartEmptyMessage">{emptyMessage}</p>
+          )}
         </div>
       </div>
     </section>

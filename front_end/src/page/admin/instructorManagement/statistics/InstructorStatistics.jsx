@@ -3,10 +3,17 @@ import StudentEnrollmentCard from "./cards/studentEnrollment/StudentEnrollmentCa
 import RevenueSummaryCard from "./cards/revenueSummary/RevenueSummaryCard";
 import "./InstructorStatistics.css";
 
-const formatMoney = (v) => {
-  if (v == null) return "0 VND";
-  return new Intl.NumberFormat("vi-VN").format(v) + " VND";
+const formatCurrency = (value) => {
+  const amount = Number(value);
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(Number.isFinite(amount) ? amount : 0);
 };
+
+const formatNumber = (value) =>
+  new Intl.NumberFormat("vi-VN").format(value == null ? 0 : Number(value) || 0);
 
 const getInstructorStats = (instructors) => ({
   totalCourses: instructors.reduce((sum, instructor) => sum + (instructor.numberOfClasses ?? 0), 0),
@@ -20,14 +27,7 @@ const InstructorStatistics = ({ instructors = [], isLoading = false, error = "" 
   return (
     <section className="instructorStatistics" aria-label="Instructor statistics">
       {error && (
-        <div style={{ 
-          padding: "12px", 
-          marginBottom: "16px", 
-          backgroundColor: "#fee", 
-          color: "#c00", 
-          borderRadius: "4px",
-          border: "1px solid #fcc"
-        }}>
+        <div className="instructorStatistics__error">
           {error}
         </div>
       )}
@@ -36,10 +36,10 @@ const InstructorStatistics = ({ instructors = [], isLoading = false, error = "" 
           <CourseLoadCard title="Managed Courses" value={isLoading ? "—" : String(stats.totalCourses)} note="Number of courses currently managed by instructors." />
         </div>
         <div>
-          <StudentEnrollmentCard title="Student Enrollment" value={isLoading ? "—" : new Intl.NumberFormat("vi-VN").format(stats.totalStudents)} note="Total number of student enrollments in existing classes." />
+          <StudentEnrollmentCard title="Student Enrollment" value={isLoading ? "—" : formatNumber(stats.totalStudents)} note="Total number of student enrollments in existing classes." />
         </div>
         <div>
-          <RevenueSummaryCard title="System Revenue" value={isLoading ? "—" : formatMoney(stats.totalRevenue)} note="Estimated total revenue from active instructors." />
+          <RevenueSummaryCard title="System Revenue" value={isLoading ? "—" : formatCurrency(stats.totalRevenue)} note="Estimated total revenue from active instructors." />
         </div>
       </div>
     </section>

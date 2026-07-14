@@ -1,5 +1,7 @@
 import "./UserRow.css";
 
+// User fields guaranteed from Dashboard.mapRecentUsersFromDb():
+// id, name, email, and normalized role all include safe fallbacks.
 const UserRowItem = ({ user }) => {
   return (
     <div className="userRowItem">
