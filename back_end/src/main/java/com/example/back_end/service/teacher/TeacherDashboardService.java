@@ -1,6 +1,5 @@
 package com.example.back_end.service.teacher;
 
-
 import com.example.back_end.dto.response.teacher.TeacherCoursesResponse;
 import com.example.back_end.dto.response.teacher.TeacherDashboardResponse;
 import com.example.back_end.entity.Enrollment;
@@ -12,6 +11,7 @@ import com.example.back_end.repository.LessonQARepository;
 import com.example.back_end.repository.OrderRepository;
 import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.repository.UserRepository;
+import com.example.back_end.util.PercentDeltaCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -25,6 +25,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,6 +63,42 @@ public class TeacherDashboardService {
         double completionRate = enrollmentRepository.findAvgProgressByInstructorId(instructorId);
         long newStudentsThisMonth = enrollmentRepository.countNewEnrollmentsSince(instructorId, monthStart);
 
+        RevenueTrend revenueTrend = buildRevenueTrend(instructorId, windowStart, prevWindowStart);
+        StudentGrowth studentGrowth = buildStudentGrowth(instructorId, windowStart, prevWindowStart);
+
+        List<TeacherDashboardResponse.RecentEnrollment> recentEnrollments = enrollmentRepository
+                .findRecentByInstructorId(instructorId, PageRequest.of(0, RECENT_ENROLLMENTS_LIMIT))
+                .stream()
+                .map(this::toRecentEnrollment)
+                .toList();
+
+        List<TeacherCoursesResponse> myCourses = teacherCourseService.getMyCourses(email);
+        List<TeacherDashboardResponse.TopCourseRow> topCourses = buildTopCourses(myCourses, instructorId);
+        TeacherDashboardResponse.AttentionSummary attention = buildAttentionSummary(myCourses, instructorId, reviewWindowStart);
+        TeacherDashboardResponse.CourseStatusCounts courseStatusCounts = buildCourseStatusCounts(myCourses);
+
+        return new TeacherDashboardResponse(
+                totalStudents,
+                avgRating,
+                ratingCount,
+                completionRate,
+                revenueTrend.total(),
+                revenueTrend.deltaPercent(),
+                newStudentsThisMonth,
+                studentGrowth.deltaPercent(),
+                revenueTrend.byDay(),
+                studentGrowth.points(),
+                recentEnrollments,
+                topCourses,
+                attention,
+                courseStatusCounts
+        );
+    }
+
+    private record RevenueTrend(List<TeacherDashboardResponse.RevenuePoint> byDay, BigDecimal total, Double deltaPercent) {
+    }
+
+    private RevenueTrend buildRevenueTrend(Long instructorId, Instant windowStart, Instant prevWindowStart) {
         List<TeacherDashboardResponse.RevenuePoint> revenueByDay = orderRepository
                 .findDailyRevenueByInstructor(instructorId, windowStart)
                 .stream()
@@ -77,13 +114,18 @@ public class TeacherDashboardService {
                 .filter(row -> row.getDay().isBefore(LocalDate.now(ZoneOffset.UTC).minusDays(TREND_WINDOW_DAYS)))
                 .map(row -> row.getAmount())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        Double revenueDeltaPercent = percentDelta(prevRevenueTotal, revenueTotal);
 
+        return new RevenueTrend(revenueByDay, revenueTotal, PercentDeltaCalculator.percentDelta(prevRevenueTotal, revenueTotal));
+    }
+
+    private record StudentGrowth(List<TeacherDashboardResponse.GrowthPoint> points, Double deltaPercent) {
+    }
+
+    private StudentGrowth buildStudentGrowth(Long instructorId, Instant windowStart, Instant prevWindowStart) {
         long enrollmentsBeforeWindow = enrollmentRepository.countEnrollmentsByInstructorIdBefore(instructorId, windowStart);
         List<EnrollmentRepository.DailyCountProjection> currentWindowDailyCounts =
                 enrollmentRepository.findDailyNewStudentsByInstructor(instructorId, windowStart);
-        List<TeacherDashboardResponse.GrowthPoint> studentGrowth = buildCumulativeGrowth(
-                currentWindowDailyCounts, enrollmentsBeforeWindow);
+        List<TeacherDashboardResponse.GrowthPoint> points = buildCumulativeGrowth(currentWindowDailyCounts, enrollmentsBeforeWindow);
 
         long enrollmentsInCurrentWindow = currentWindowDailyCounts.stream()
                 .mapToLong(EnrollmentRepository.DailyCountProjection::getCount)
@@ -94,30 +136,38 @@ public class TeacherDashboardService {
                 .filter(row -> row.getDay().isBefore(LocalDate.now(ZoneOffset.UTC).minusDays(TREND_WINDOW_DAYS)))
                 .mapToLong(EnrollmentRepository.DailyCountProjection::getCount)
                 .sum();
-        Double studentsDeltaPercent = percentDelta(
+
+        Double deltaPercent = PercentDeltaCalculator.percentDelta(
                 BigDecimal.valueOf(enrollmentsInPrevWindow), BigDecimal.valueOf(enrollmentsInCurrentWindow));
 
-        List<TeacherDashboardResponse.RecentEnrollment> recentEnrollments = enrollmentRepository
-                .findRecentByInstructorId(instructorId, PageRequest.of(0, RECENT_ENROLLMENTS_LIMIT))
-                .stream()
-                .map(this::toRecentEnrollment)
+        return new StudentGrowth(points, deltaPercent);
+    }
+
+    private List<TeacherDashboardResponse.GrowthPoint> buildCumulativeGrowth(
+            List<EnrollmentRepository.DailyCountProjection> dailyCounts, long baseline) {
+        long[] running = {baseline};
+        return dailyCounts.stream()
+                .map(row -> {
+                    running[0] += row.getCount();
+                    return new TeacherDashboardResponse.GrowthPoint(row.getDay(), running[0]);
+                })
                 .toList();
+    }
 
-        List<TeacherCoursesResponse> myCourses = teacherCourseService.getMyCourses(email);
-
+    private List<TeacherDashboardResponse.TopCourseRow> buildTopCourses(List<TeacherCoursesResponse> myCourses, Long instructorId) {
         Map<Long, BigDecimal> revenueByCourse = orderRepository.findRevenueByCourseForInstructor(instructorId)
                 .stream()
-                .collect(java.util.stream.Collectors.toMap(
+                .collect(Collectors.toMap(
                         OrderRepository.CourseRevenueProjection::getCourseId,
                         OrderRepository.CourseRevenueProjection::getAmount));
 
         Map<Long, Double> progressByCourse = enrollmentRepository.findAvgProgressByCourseForInstructor(instructorId)
                 .stream()
-                .collect(java.util.stream.Collectors.toMap(
+                .collect(Collectors.toMap(
                         EnrollmentRepository.CourseProgressProjection::getCourseId,
                         EnrollmentRepository.CourseProgressProjection::getAvgProgress));
 
-        List<TeacherDashboardResponse.TopCourseRow> topCourses = myCourses.stream()
+        return myCourses.stream()
                 .filter(c -> !Boolean.TRUE.equals(c.isDeleted()))
                 .sorted(Comparator.comparingLong(TeacherCoursesResponse::studentCount).reversed())
                 .limit(TOP_COURSES_LIMIT)
@@ -132,39 +182,6 @@ public class TeacherDashboardService {
                         revenueByCourse.getOrDefault(course.courseId(), BigDecimal.ZERO),
                         progressByCourse.getOrDefault(course.courseId(), 0.0)
                 ))
-                .toList();
-
-        TeacherDashboardResponse.AttentionSummary attention = buildAttentionSummary(
-                myCourses, instructorId, reviewWindowStart);
-
-        TeacherDashboardResponse.CourseStatusCounts courseStatusCounts = buildCourseStatusCounts(myCourses);
-
-        return new TeacherDashboardResponse(
-                totalStudents,
-                avgRating,
-                ratingCount,
-                completionRate,
-                revenueTotal,
-                revenueDeltaPercent,
-                newStudentsThisMonth,
-                studentsDeltaPercent,
-                revenueByDay,
-                studentGrowth,
-                recentEnrollments,
-                topCourses,
-                attention,
-                courseStatusCounts
-        );
-    }
-
-    private List<TeacherDashboardResponse.GrowthPoint> buildCumulativeGrowth(
-            List<EnrollmentRepository.DailyCountProjection> dailyCounts, long baseline) {
-        long[] running = {baseline};
-        return dailyCounts.stream()
-                .map(row -> {
-                    running[0] += row.getCount();
-                    return new TeacherDashboardResponse.GrowthPoint(row.getDay(), running[0]);
-                })
                 .toList();
     }
 
@@ -196,16 +213,6 @@ public class TeacherDashboardService {
         long rejected = myCourses.stream().filter(c -> !Boolean.TRUE.equals(c.isDeleted()) && c.status() == CourseStatus.REJECTED).count();
 
         return new TeacherDashboardResponse.CourseStatusCounts(published, draft, pendingReview, rejected, deleted);
-    }
-
-    private Double percentDelta(BigDecimal previous, BigDecimal current) {
-        if (previous == null || previous.compareTo(BigDecimal.ZERO) == 0) {
-            return null;
-        }
-        return current.subtract(previous)
-                .divide(previous, 4, java.math.RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(100))
-                .doubleValue();
     }
 
     private TeacherDashboardResponse.RecentEnrollment toRecentEnrollment(Enrollment enrollment) {

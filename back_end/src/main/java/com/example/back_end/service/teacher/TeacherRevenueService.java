@@ -1,6 +1,5 @@
 package com.example.back_end.service.teacher;
 
-
 import com.example.back_end.dto.response.teacher.TeacherCoursesResponse;
 import com.example.back_end.dto.response.teacher.TeacherRevenueResponse;
 import com.example.back_end.entity.User;
@@ -9,6 +8,7 @@ import com.example.back_end.repository.EnrollmentRepository;
 import com.example.back_end.repository.OrderRepository;
 import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.repository.UserRepository;
+import com.example.back_end.util.PercentDeltaCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +22,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +46,64 @@ public class TeacherRevenueService {
 
         Instant windowStart = Instant.now().minus(TREND_WINDOW_DAYS, ChronoUnit.DAYS);
         Instant prevWindowStart = Instant.now().minus((long) TREND_WINDOW_DAYS * 2, ChronoUnit.DAYS);
+
+        RevenueTrend trend = buildRevenueTrend(instructorId, windowStart, prevWindowStart);
+        BigDecimal lifetimeRevenue = orderRepository.findTotalRevenueByInstructor(instructorId);
+
+        long newStudents = enrollmentRepository.countNewEnrollmentsSince(instructorId, windowStart);
+        long prevNewStudents = enrollmentRepository.countNewEnrollmentsSince(instructorId, prevWindowStart) - newStudents;
+        Double studentsDeltaPercent = PercentDeltaCalculator.percentDelta(
+                BigDecimal.valueOf(prevNewStudents), BigDecimal.valueOf(newStudents));
+
+        long ordersCount = orderRepository.countOrdersByInstructorSince(instructorId, windowStart);
+        long prevOrdersCount = orderRepository.countOrdersByInstructorSince(instructorId, prevWindowStart) - ordersCount;
+        Double ordersDeltaPercent = PercentDeltaCalculator.percentDelta(
+                BigDecimal.valueOf(prevOrdersCount), BigDecimal.valueOf(ordersCount));
+
+        BigDecimal avgOrderValue = ordersCount > 0
+                ? trend.revenueTotal().divide(BigDecimal.valueOf(ordersCount), 0, RoundingMode.HALF_UP)
+                : BigDecimal.ZERO;
+
+        double avgRating = reviewRepository.getAverageRatingByInstructorId(instructorId);
+
+        BigDecimal totalRefunds = orderRepository.findRefundsByInstructorSince(instructorId, windowStart);
+        Double refundsPercentOfOrders = trend.revenueTotal().compareTo(BigDecimal.ZERO) > 0
+                ? totalRefunds.divide(trend.revenueTotal(), 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).doubleValue()
+                : null;
+
+        List<TeacherRevenueResponse.TopRevenueCourse> topCourses = buildTopCourses(email, instructorId);
+        List<TeacherRevenueResponse.Transaction> transactions = buildTransactions(instructorId);
+
+        return new TeacherRevenueResponse(
+                trend.revenueTotal(),
+                trend.revenueDeltaPercent(),
+                lifetimeRevenue,
+                newStudents,
+                studentsDeltaPercent,
+                ordersCount,
+                ordersDeltaPercent,
+                avgOrderValue,
+                avgRating,
+                trend.revenueByDay(),
+                trend.previousRevenueByDay(),
+                trend.highestRevenueDay(),
+                totalRefunds,
+                refundsPercentOfOrders,
+                topCourses,
+                transactions
+        );
+    }
+
+    private record RevenueTrend(
+            List<TeacherRevenueResponse.RevenuePoint> revenueByDay,
+            List<TeacherRevenueResponse.RevenuePoint> previousRevenueByDay,
+            BigDecimal revenueTotal,
+            Double revenueDeltaPercent,
+            TeacherRevenueResponse.HighestRevenueDay highestRevenueDay
+    ) {
+    }
+
+    private RevenueTrend buildRevenueTrend(Long instructorId, Instant windowStart, Instant prevWindowStart) {
         LocalDate windowBoundaryDay = LocalDate.now(ZoneOffset.UTC).minusDays(TREND_WINDOW_DAYS);
 
         List<TeacherRevenueResponse.RevenuePoint> revenueByDay = orderRepository
@@ -68,24 +127,7 @@ public class TeacherRevenueService {
                 .map(TeacherRevenueResponse.RevenuePoint::amount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        Double revenueDeltaPercent = percentDelta(prevRevenueTotal, revenueTotal);
-
-        BigDecimal lifetimeRevenue = orderRepository.findTotalRevenueByInstructor(instructorId);
-
-        long newStudents = enrollmentRepository.countNewEnrollmentsSince(instructorId, windowStart);
-        long prevNewStudents = enrollmentRepository.countNewEnrollmentsSince(instructorId, prevWindowStart)
-                - newStudents;
-        Double studentsDeltaPercent = percentDelta(BigDecimal.valueOf(prevNewStudents), BigDecimal.valueOf(newStudents));
-
-        long ordersCount = orderRepository.countOrdersByInstructorSince(instructorId, windowStart);
-        long prevOrdersCount = orderRepository.countOrdersByInstructorSince(instructorId, prevWindowStart) - ordersCount;
-        Double ordersDeltaPercent = percentDelta(BigDecimal.valueOf(prevOrdersCount), BigDecimal.valueOf(ordersCount));
-
-        BigDecimal avgOrderValue = ordersCount > 0
-                ? revenueTotal.divide(BigDecimal.valueOf(ordersCount), 0, RoundingMode.HALF_UP)
-                : BigDecimal.ZERO;
-
-        double avgRating = reviewRepository.getAverageRatingByInstructorId(instructorId);
+        Double revenueDeltaPercent = PercentDeltaCalculator.percentDelta(prevRevenueTotal, revenueTotal);
 
         TeacherRevenueResponse.HighestRevenueDay highestRevenueDay = revenueByDay.stream()
                 .max(Comparator.comparing(TeacherRevenueResponse.RevenuePoint::amount))
@@ -93,19 +135,18 @@ public class TeacherRevenueService {
                 .map(p -> new TeacherRevenueResponse.HighestRevenueDay(p.day(), p.amount()))
                 .orElse(null);
 
-        BigDecimal totalRefunds = orderRepository.findRefundsByInstructorSince(instructorId, windowStart);
-        Double refundsPercentOfOrders = revenueTotal.compareTo(BigDecimal.ZERO) > 0
-                ? totalRefunds.divide(revenueTotal, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).doubleValue()
-                : null;
+        return new RevenueTrend(revenueByDay, previousRevenueByDay, revenueTotal, revenueDeltaPercent, highestRevenueDay);
+    }
 
+    private List<TeacherRevenueResponse.TopRevenueCourse> buildTopCourses(String email, Long instructorId) {
         Map<Long, BigDecimal> revenueByCourse = orderRepository.findRevenueByCourseForInstructor(instructorId)
                 .stream()
-                .collect(java.util.stream.Collectors.toMap(
+                .collect(Collectors.toMap(
                         OrderRepository.CourseRevenueProjection::getCourseId,
                         OrderRepository.CourseRevenueProjection::getAmount));
 
         List<TeacherCoursesResponse> myCourses = teacherCourseService.getMyCourses(email);
-        List<TeacherRevenueResponse.TopRevenueCourse> topCourses = myCourses.stream()
+        return myCourses.stream()
                 .filter(c -> !Boolean.TRUE.equals(c.isDeleted()))
                 .map(c -> new TeacherRevenueResponse.TopRevenueCourse(
                         c.courseId(),
@@ -117,8 +158,10 @@ public class TeacherRevenueService {
                 .sorted(Comparator.comparing(TeacherRevenueResponse.TopRevenueCourse::revenue).reversed())
                 .limit(TOP_COURSES_LIMIT)
                 .toList();
+    }
 
-        List<TeacherRevenueResponse.Transaction> transactions = orderRepository
+    private List<TeacherRevenueResponse.Transaction> buildTransactions(Long instructorId) {
+        return orderRepository
                 .findRecentTransactionsByInstructor(instructorId, TRANSACTIONS_LIMIT)
                 .stream()
                 .map(row -> new TeacherRevenueResponse.Transaction(
@@ -131,34 +174,5 @@ public class TeacherRevenueService {
                         row.getPaidAt()
                 ))
                 .toList();
-
-        return new TeacherRevenueResponse(
-                revenueTotal,
-                revenueDeltaPercent,
-                lifetimeRevenue,
-                newStudents,
-                studentsDeltaPercent,
-                ordersCount,
-                ordersDeltaPercent,
-                avgOrderValue,
-                avgRating,
-                revenueByDay,
-                previousRevenueByDay,
-                highestRevenueDay,
-                totalRefunds,
-                refundsPercentOfOrders,
-                topCourses,
-                transactions
-        );
-    }
-
-    private Double percentDelta(BigDecimal previous, BigDecimal current) {
-        if (previous == null || previous.compareTo(BigDecimal.ZERO) == 0) {
-            return null;
-        }
-        return current.subtract(previous)
-                .divide(previous, 4, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(100))
-                .doubleValue();
     }
 }

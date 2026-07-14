@@ -1,6 +1,5 @@
 package com.example.back_end.service.teacher;
 
-
 import com.example.back_end.dto.response.teacher.TeacherAnalyticsResponse;
 import com.example.back_end.dto.response.teacher.TeacherCoursesResponse;
 import com.example.back_end.entity.User;
@@ -22,6 +21,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,9 +57,7 @@ public class TeacherAnalyticsService {
                 ? startedVsCompleted.getStartedCount() : 0;
         long completedLessonCount = startedVsCompleted != null && startedVsCompleted.getCompletedCount() != null
                 ? startedVsCompleted.getCompletedCount() : 0;
-        double dropOffRate = startedCount > 0
-                ? (1 - (double) completedLessonCount / startedCount) * 100
-                : 0;
+        double dropOffRate = dropOffRate(startedCount, completedLessonCount);
 
         Instant windowStart = Instant.now().minus(TREND_WINDOW_DAYS, ChronoUnit.DAYS);
         List<TeacherAnalyticsResponse.CompletionPoint> dailyCompletions = enrollmentRepository
@@ -68,24 +66,8 @@ public class TeacherAnalyticsService {
                 .map(row -> new TeacherAnalyticsResponse.CompletionPoint(row.getDay(), row.getCount()))
                 .toList();
 
-        Map<Long, Double> progressByCourse = enrollmentRepository.findAvgProgressByCourseForInstructor(instructorId)
-                .stream()
-                .collect(java.util.stream.Collectors.toMap(
-                        EnrollmentRepository.CourseProgressProjection::getCourseId,
-                        EnrollmentRepository.CourseProgressProjection::getAvgProgress));
-
         List<TeacherCoursesResponse> myCourses = teacherCourseService.getMyCourses(email);
-        List<TeacherAnalyticsResponse.CoursePerformance> coursePerformance = myCourses.stream()
-                .filter(c -> !Boolean.TRUE.equals(c.isDeleted()))
-                .map(c -> new TeacherAnalyticsResponse.CoursePerformance(
-                        c.courseId(),
-                        c.title(),
-                        progressByCourse.getOrDefault(c.courseId(), 0.0),
-                        c.avgRating(),
-                        c.studentCount()
-                ))
-                .sorted(Comparator.comparingLong(TeacherAnalyticsResponse.CoursePerformance::studentCount).reversed())
-                .toList();
+        List<TeacherAnalyticsResponse.CoursePerformance> coursePerformance = buildCoursePerformance(myCourses, instructorId);
 
         long activeStudents = enrollmentRepository.countActiveStudentsByInstructorId(instructorId);
         long totalStudents = enrollmentRepository.countDistinctStudentsByInstructorId(instructorId);
@@ -99,27 +81,7 @@ public class TeacherAnalyticsService {
                 ratingCount
         );
 
-        List<TeacherAnalyticsResponse.LessonAttention> lessonsAttention = lessonprogressRepository
-                .findLessonAttentionByInstructor(instructorId)
-                .stream()
-                .filter(row -> row.getStartedCount() != null && row.getStartedCount() >= MIN_STARTED_FOR_ATTENTION)
-                .map(row -> {
-                    long started = row.getStartedCount();
-                    long completed = row.getCompletedCount() != null ? row.getCompletedCount() : 0;
-                    double lessonDropOff = started > 0 ? (1 - (double) completed / started) * 100 : 0;
-                    return new TeacherAnalyticsResponse.LessonAttention(
-                            row.getLessonId(),
-                            row.getLessonTitle(),
-                            row.getCourseTitle(),
-                            started,
-                            completed,
-                            lessonDropOff
-                    );
-                })
-                .sorted(Comparator.comparingDouble(TeacherAnalyticsResponse.LessonAttention::dropOffRate).reversed())
-                .limit(LESSON_ATTENTION_LIMIT)
-                .toList();
-
+        List<TeacherAnalyticsResponse.LessonAttention> lessonsAttention = buildLessonAttention(instructorId);
         TeacherAnalyticsResponse.Demographics demographics = buildDemographics(instructorId);
 
         return new TeacherAnalyticsResponse(
@@ -134,6 +96,53 @@ public class TeacherAnalyticsService {
                 lessonsAttention,
                 demographics
         );
+    }
+
+    private double dropOffRate(long started, long completed) {
+        return started > 0 ? (1 - (double) completed / started) * 100 : 0;
+    }
+
+    private List<TeacherAnalyticsResponse.CoursePerformance> buildCoursePerformance(
+            List<TeacherCoursesResponse> myCourses, Long instructorId) {
+        Map<Long, Double> progressByCourse = enrollmentRepository.findAvgProgressByCourseForInstructor(instructorId)
+                .stream()
+                .collect(Collectors.toMap(
+                        EnrollmentRepository.CourseProgressProjection::getCourseId,
+                        EnrollmentRepository.CourseProgressProjection::getAvgProgress));
+
+        return myCourses.stream()
+                .filter(c -> !Boolean.TRUE.equals(c.isDeleted()))
+                .map(c -> new TeacherAnalyticsResponse.CoursePerformance(
+                        c.courseId(),
+                        c.title(),
+                        progressByCourse.getOrDefault(c.courseId(), 0.0),
+                        c.avgRating(),
+                        c.studentCount()
+                ))
+                .sorted(Comparator.comparingLong(TeacherAnalyticsResponse.CoursePerformance::studentCount).reversed())
+                .toList();
+    }
+
+    private List<TeacherAnalyticsResponse.LessonAttention> buildLessonAttention(Long instructorId) {
+        return lessonprogressRepository
+                .findLessonAttentionByInstructor(instructorId)
+                .stream()
+                .filter(row -> row.getStartedCount() != null && row.getStartedCount() >= MIN_STARTED_FOR_ATTENTION)
+                .map(row -> {
+                    long started = row.getStartedCount();
+                    long completed = row.getCompletedCount() != null ? row.getCompletedCount() : 0;
+                    return new TeacherAnalyticsResponse.LessonAttention(
+                            row.getLessonId(),
+                            row.getLessonTitle(),
+                            row.getCourseTitle(),
+                            started,
+                            completed,
+                            dropOffRate(started, completed)
+                    );
+                })
+                .sorted(Comparator.comparingDouble(TeacherAnalyticsResponse.LessonAttention::dropOffRate).reversed())
+                .limit(LESSON_ATTENTION_LIMIT)
+                .toList();
     }
 
     private TeacherAnalyticsResponse.Demographics buildDemographics(Long instructorId) {
