@@ -8,6 +8,7 @@ import com.example.back_end.service.teacher.LessonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,14 +19,16 @@ public class LessonController {
 
     private final LessonService lessonService;
 
-    @PostMapping("/sections/{sectionId}/lessons")  // /lesson/create
+    @PostMapping("/sections/{sectionId}/lessons")
     public CreateLessonResponse createLesson(
             @PathVariable Long sectionId,
-            @Valid @RequestBody CreateLessonRequest request
+            @Valid @RequestBody CreateLessonRequest request,
+            Authentication authentication
     ) {
         Long lessonId = lessonService.createLesson(
                 sectionId,
-                request
+                request,
+                authentication.getName()
         );
 
         return new CreateLessonResponse(lessonId);
@@ -34,17 +37,19 @@ public class LessonController {
     @PutMapping("/lessons/{lessonId}")
     public void updateLesson(
             @PathVariable Long lessonId,
-            @RequestBody UpdateLessonRequest request
+            @RequestBody UpdateLessonRequest request,
+            Authentication authentication
     ) {
-        lessonService.updateLesson(lessonId, request);
+        lessonService.updateLesson(lessonId, request, authentication.getName());
     }
 
-    @PutMapping("/lessons/{lessonId}/video")  // /lesson/{lessonId}/up
+    @PutMapping("/lessons/{lessonId}/video")
     public void updateLessonVideo(
             @PathVariable Long lessonId,
-            @RequestBody UpdateLessonVideoRequest request
+            @RequestBody UpdateLessonVideoRequest request,
+            Authentication authentication
     ) {
-        lessonService.updateLessonVideo(lessonId, request);
+        lessonService.updateLessonVideo(lessonId, request, authentication.getName());
     }
 
 }

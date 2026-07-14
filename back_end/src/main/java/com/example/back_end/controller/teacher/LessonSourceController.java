@@ -5,6 +5,7 @@ import com.example.back_end.dto.response.teacher.LessonSourceResponse;
 import com.example.back_end.service.teacher.LessonSourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,18 +21,19 @@ public class LessonSourceController {
     @PostMapping("/lessons/{lessonId}/sources")
     public LessonSourceResponse createLessonSource(
             @PathVariable Long lessonId,
-            @RequestBody CreateLessonSourceRequest request
+            @RequestBody CreateLessonSourceRequest request,
+            Authentication authentication
     ) {
-        return lessonSourceService.createLessonSource(lessonId, request);
+        return lessonSourceService.createLessonSource(lessonId, request, authentication.getName());
     }
 
     @GetMapping("/lessons/{lessonId}/sources")
-    public List<LessonSourceResponse> getLessonSources(@PathVariable Long lessonId) {
-        return lessonSourceService.getLessonSources(lessonId);
+    public List<LessonSourceResponse> getLessonSources(@PathVariable Long lessonId, Authentication authentication) {
+        return lessonSourceService.getLessonSources(lessonId, authentication.getName());
     }
 
     @DeleteMapping("/lessons/sources/{sourceId}")
-    public void deleteLessonSource(@PathVariable Long sourceId) {
-        lessonSourceService.deleteLessonSource(sourceId);
+    public void deleteLessonSource(@PathVariable Long sourceId, Authentication authentication) {
+        lessonSourceService.deleteLessonSource(sourceId, authentication.getName());
     }
 }

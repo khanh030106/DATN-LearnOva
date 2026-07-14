@@ -15,6 +15,7 @@ import com.example.back_end.service.teacher.SectionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,11 +28,13 @@ public class SectionController {
     @PostMapping("/{courseId}/sections")
     public CreateSectionResponse createSection(
             @PathVariable Long courseId,
-            @RequestBody @Valid CreateSectionRequest request
+            @RequestBody @Valid CreateSectionRequest request,
+            Authentication authentication
     ) {
         Long sectionId = sectionService.createSection(
                 courseId,
-                request
+                request,
+                authentication.getName()
         );
 
         return new CreateSectionResponse(sectionId);
@@ -40,9 +43,10 @@ public class SectionController {
     @PutMapping("/sections/{sectionId}")
     public void updateSection(
             @PathVariable Long sectionId,
-            @RequestBody @Valid UpdateSectionRequest request
+            @RequestBody @Valid UpdateSectionRequest request,
+            Authentication authentication
     ) {
-        sectionService.updateSection(sectionId, request);
+        sectionService.updateSection(sectionId, request, authentication.getName());
     }
 
 }

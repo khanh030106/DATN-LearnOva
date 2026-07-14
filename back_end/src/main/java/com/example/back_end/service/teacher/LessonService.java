@@ -7,10 +7,13 @@ import com.example.back_end.dto.request.teacher.UpdateLessonRequest;
 import com.example.back_end.dto.request.teacher.UpdateLessonVideoRequest;
 import com.example.back_end.entity.Lesson;
 import com.example.back_end.entity.Section;
+import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.HlsStatus;
+import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.LessonRepository;
 import com.example.back_end.repository.SectionRepository;
+import com.example.back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,14 +28,24 @@ public class LessonService {
     private final LessonRepository lessonRepository;
     private final SectionRepository sectionRepository;
     private final MediaConvertService mediaConvertService;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long createLesson(
             Long sectionId,
-            CreateLessonRequest request
+            CreateLessonRequest request,
+            String email
     ) {
+        User instructor = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
         Section section = sectionRepository.findById(sectionId)
-                .orElseThrow();
+                .orElseThrow(() -> new ResourceNotFoundException("Section not found"));
+
+        if (!section.getCourse().getInstructor().getId().equals(instructor.getId())) {
+            throw new BusinessException("You don't have permission to modify this section");
+        }
 
         Lesson lesson = new Lesson();
 
@@ -53,9 +66,17 @@ public class LessonService {
     }
 
     @Transactional
-    public void updateLesson(Long lessonId, UpdateLessonRequest request) {
+    public void updateLesson(Long lessonId, UpdateLessonRequest request, String email) {
+        User instructor = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
         Lesson lesson = lessonRepository.findById(lessonId)
-                .orElseThrow();
+                .orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
+
+        if (!lesson.getSection().getCourse().getInstructor().getId().equals(instructor.getId())) {
+            throw new BusinessException("You don't have permission to modify this lesson");
+        }
 
         lesson.setTitle(request.title());
         lesson.setUpdatedAt(Instant.now());
@@ -63,9 +84,17 @@ public class LessonService {
     }
 
     @Transactional
-    public void updateLessonVideo(Long lessonId, UpdateLessonVideoRequest request) {
+    public void updateLessonVideo(Long lessonId, UpdateLessonVideoRequest request, String email) {
+        User instructor = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
+
+        if (!lesson.getSection().getCourse().getInstructor().getId().equals(instructor.getId())) {
+            throw new BusinessException("You don't have permission to modify this lesson");
+        }
 
         lesson.setVideoKey(request.videoKey());
         lesson.setVideoOriginalFilename(request.videoOriginalFilename());
