@@ -261,11 +261,15 @@ function CourseDetail() {
                     <CourseVideoPlayer
                         src={videoUrl}
                         loading={loadingVideo}
-                        initialTime={
-                            courseProgress?.lessonProgresses?.find(
+                        initialTime={(() => {
+                            const lp = courseProgress?.lessonProgresses?.find(
                                 (p) => p.lessonId === activeLesson?.lessonId
-                            )?.watchedSeconds || 0
-                        }
+                            );
+                            // Already-completed lessons resume from the start instead of
+                            // seeking to the end, where they'd look stuck/paused.
+                            if (!lp || lp.isCompleted) return 0;
+                            return lp.watchedSeconds || 0;
+                        })()}
                         onProgressUpdate={handleVideoProgressUpdate}
                     />
                     <ToastContainer />
@@ -333,8 +337,8 @@ function CourseDetail() {
                         )}
                     </div>
 
-                    {activeTab === "quiz" && <QuizPage />}
-                    {activeTab === "summary" && <SummaryTab />}
+                    {activeTab === "quiz" && <QuizPage lessonId={activeLesson?.lessonId} />}
+                    {activeTab === "summary" && <SummaryTab lessonId={activeLesson?.lessonId} />}
 
                     <div className="footer-wrapper">
                         <Footer />

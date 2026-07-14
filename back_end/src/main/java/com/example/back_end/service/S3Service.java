@@ -149,4 +149,17 @@ public class S3Service {
         }
     }
 
+    public byte[] readObjectBytes(String key) {
+        GetObjectRequest request = GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+
+        try (ResponseInputStream<GetObjectResponse> in = s3Client.getObject(request)) {
+            return in.readAllBytes();
+        } catch (IOException e) {
+            throw new UncheckedIOException("Failed to read S3 object " + key, e);
+        }
+    }
+
 }
