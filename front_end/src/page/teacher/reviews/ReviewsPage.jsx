@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { MessageSquare, Star } from "lucide-react";
 import ReviewsTable from "./components/ReviewsTable.jsx";
 import ReviewsToolbar from "./components/ReviewsToolbar.jsx";
-import { getMyReviews, replyToReview } from "../../../api/teacher/CourseApi.js";
+import { getMyReviews, replyToReview } from "../../../api/teacher/ReviewApi.js";
 import { buildCourseFilterOptions, filterReviews } from "./reviewsPageUtils.js";
 import "./ReviewsPage.css";
 
@@ -17,7 +17,7 @@ const ReviewsPage = () => {
   useEffect(() => {
     getMyReviews()
       .then(setReviews)
-      .catch(() => {})
+      .catch(() => toast.error("Failed to load reviews."))
       .finally(() => setIsLoading(false));
   }, []);
 

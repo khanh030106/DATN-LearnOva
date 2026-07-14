@@ -1,26 +1,7 @@
-const stripDiacritics = (value) =>
-  value
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/đ/g, "d")
-    .replace(/Đ/g, "D");
+import { stripDiacritics, buildCourseFilterOptions as buildFilterOptions } from "../../../utils/textSearch.js";
 
-export const buildCourseFilterOptions = (questions) => {
-  const seen = new Map();
-  questions.forEach((question) => {
-    if (!seen.has(question.courseId)) {
-      seen.set(question.courseId, question.courseTitle);
-    }
-  });
-
-  return [
-    { label: "Tất cả khóa học", value: "ALL" },
-    ...Array.from(seen, ([courseId, courseTitle]) => ({
-      label: courseTitle,
-      value: String(courseId),
-    })),
-  ];
-};
+export const buildCourseFilterOptions = (questions) =>
+  buildFilterOptions(questions, (question) => [[question.courseId, question.courseTitle]]);
 
 export const filterQuestions = ({ questions, query, statusFilter = "all", courseFilter = "ALL" }) => {
   const normalizedQuery = stripDiacritics(query.trim().toLowerCase());

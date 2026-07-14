@@ -17,7 +17,7 @@ const QAInboxPage = () => {
   useEffect(() => {
     getMyQuestions()
       .then(setQuestions)
-      .catch(() => {})
+      .catch(() => toast.error("Failed to load questions."))
       .finally(() => setIsLoading(false));
   }, []);
 

@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { BarChart3, CheckCircle2, TrendingUp, Users } from "lucide-react";
+import { toast } from "react-toastify";
 import StudentsTable from "./components/StudentsTable.jsx";
 import StudentsToolbar from "./components/StudentsToolbar.jsx";
 import StudentDetailModal from "./components/StudentDetailModal.jsx";
-import { getMyStudents } from "../../../api/teacher/CourseApi.js";
+import { getMyStudents } from "../../../api/teacher/StudentApi.js";
 import { buildCourseFilterOptions, filterStudents } from "./studentsPageUtils.js";
 import "./StudentsPage.css";
 
@@ -18,7 +19,7 @@ const StudentsPage = () => {
   useEffect(() => {
     getMyStudents()
       .then(setStudents)
-      .catch(() => {})
+      .catch(() => toast.error("Failed to load students."))
       .finally(() => setIsLoading(false));
   }, []);
 

@@ -1,6 +1,6 @@
 import api from "../AxiosClient.js";
 
-export const getMyCourse = async () => {
+export const getMyCourses = async () => {
     const response = await api.get("/teacher/courses");
     return response.data;
 };
@@ -51,16 +51,11 @@ export const updateLesson = async (lessonId, payload) => {
 };
 
 export const updateLessonVideo = async (lessonId, payload) => {
-    try {
-        const response = await api.put(
-            `/teacher/courses/lessons/${lessonId}/video`,
-            payload
-        );
-        return response.data;
-    } catch (error) {
-        console.error("Error status:", error.response?.status);;
-        throw error;
-    }
+    const response = await api.put(
+        `/teacher/courses/lessons/${lessonId}/video`,
+        payload
+    );
+    return response.data;
 };
 
 export const createLessonSource = async (lessonId, payload) => {
@@ -109,21 +104,6 @@ export const toggleCourseVisibility = async (courseId) => {
 
 export const getCourseForEdit = async (courseId) => {
     const response = await api.get(`/courses/${courseId}`);
-    return response.data;
-};
-
-export const getMyStudents = async () => {
-    const response = await api.get("/teacher/students");
-    return response.data;
-};
-
-export const getMyReviews = async () => {
-    const response = await api.get("/teacher/reviews");
-    return response.data;
-};
-
-export const replyToReview = async (reviewId, reply) => {
-    const response = await api.patch(`/teacher/reviews/${reviewId}/reply`, { reply });
     return response.data;
 };
 

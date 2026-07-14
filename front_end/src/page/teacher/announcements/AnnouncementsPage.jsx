@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { ChevronLeft, ChevronRight, Megaphone, Send } from "lucide-react";
-import { getMyCourse } from "../../../api/teacher/CourseApi.js";
+import { getMyCourses } from "../../../api/teacher/CourseApi.js";
 import { getMyAnnouncements, createAnnouncement } from "../../../api/teacher/AnnouncementApi.js";
 import "./AnnouncementsPage.css";
 
@@ -33,7 +33,7 @@ const AnnouncementsPage = () => {
   };
 
   useEffect(() => {
-    getMyCourse()
+    getMyCourses()
       .then(setCourses)
       .catch(() => toast.error("Failed to load courses."));
 

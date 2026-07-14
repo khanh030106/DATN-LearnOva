@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { BookOpen, CheckCircle2, Star, Users } from "lucide-react";
 import {
-  getMyCourse,
+  getMyCourses,
   getFileUrl,
   getActiveCategories,
   softDeleteCourse,
@@ -54,7 +54,7 @@ const CoursesPage = () => {
     const fetchCourses = async () => {
       try {
         setIsLoading(true);
-        const coursesData = await getMyCourse();
+        const coursesData = await getMyCourses();
 
         const transformedCourses = await Promise.all(
           coursesData.map(async (course) => {
