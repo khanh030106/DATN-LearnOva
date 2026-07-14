@@ -1,6 +1,6 @@
 import {Rocket} from "lucide-react";
 
-const PublishCard = ({status, visibility, onStatusChange, onVisibilityChange, onPublish, isSubmitting, isReady}) => {
+const PublishCard = ({status, onStatusChange, onPublish, isSubmitting, isReady}) => {
     return (
         <section className="teacher-create-card teacher-publish-settings">
             <h2>Publish Settings</h2>
@@ -16,25 +16,6 @@ const PublishCard = ({status, visibility, onStatusChange, onVisibilityChange, on
                         className={status === value ? "teacher-radio-card teacher-radio-card--active" : "teacher-radio-card"}
                     >
                         <input type="radio" checked={status === value} onChange={() => onStatusChange(value)}/>
-                        <span>
-                            <strong>{label}</strong>
-                            <small>{help}</small>
-                        </span>
-                    </label>
-                ))}
-            </div>
-
-            <div className="teacher-radio-group">
-                <h3>Visibility</h3>
-                {[
-                    ["PUBLIC",  "Public",  "Anyone can find and enroll"],
-                    ["PRIVATE", "Private", "Only people with a link can access"],
-                ].map(([value, label, help]) => (
-                    <label
-                        key={value}
-                        className={visibility === value ? "teacher-radio-card teacher-radio-card--active" : "teacher-radio-card"}
-                    >
-                        <input type="radio" checked={visibility === value} onChange={() => onVisibilityChange?.(value)}/>
                         <span>
                             <strong>{label}</strong>
                             <small>{help}</small>

@@ -1,7 +1,7 @@
 .teacher-page,
 .teacher-courses-page {
   display: grid;
-  gap: 6px;
+  gap: 14px;
 }
 
 /* Delete Confirm Modal */
@@ -139,82 +139,68 @@
   font-weight: 800;
 }
 
-.teacher-courses-summary {
+.teacher-summary {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 7px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
 }
 
-.teacher-courses-summary-card {
-  min-height: 110px;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+.teacher-summary-item {
+  display: flex;
   align-items: center;
   gap: 14px;
-  padding: 15px;
+  min-height: 78px;
+  padding: 14px 18px;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
   background: #ffffff;
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
 }
 
-.teacher-courses-summary-card__icon {
-  width: 46px;
-  height: 46px;
+.teacher-summary-item__icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 10px;
 }
 
-.teacher-courses-summary-card__icon--navy {
+.teacher-summary-item__icon--blue {
   background: #dbeafe;
   color: #1d4ed8;
 }
 
-.teacher-courses-summary-card__icon--green {
+.teacher-summary-item__icon--green {
   background: #dcfce7;
-  color: #22c55e;
+  color: #16a34a;
 }
 
-.teacher-courses-summary-card__icon--gold {
-  background: #dbeafe;
-  color: #2563eb;
+.teacher-summary-item__icon--violet {
+  background: #ede9fe;
+  color: #7c3aed;
 }
 
-.teacher-courses-summary-card__icon--violet {
-  background: #dbeafe;
-  color: #1d4ed8;
+.teacher-summary-item__icon--gold {
+  background: #fef3c7;
+  color: #d97706;
 }
 
-.teacher-courses-summary-card__icon--blue {
-  background: #dbeafe;
-  color: #2563eb;
-}
-
-.teacher-courses-summary-card small {
+.teacher-summary-item__body strong {
   display: block;
-  color: #424242;
-  font-size: 18px;
-  font-weight: 600 !important;
+  color: #0f172a;
+  font-size: 1.25rem;
+  font-weight: 900;
+  line-height: 1.2;
 }
 
-.teacher-courses-summary-card strong {
+.teacher-summary-item__body span {
   display: block;
-  margin-top: 7px;
-  color: #071a33;
-  font-family: math;
-  font-size: 32px;
-  line-height: 1;
-}
-
-.teacher-courses-summary-card em {
-  display: block;
-  margin-top: 8px;
-  color: #059669;
+  margin-top: 3px;
+  color: #64748b;
   font-size: 0.78rem;
-  font-style: normal;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .teacher-courses-toolbar {
@@ -263,6 +249,29 @@
   font: inherit;
   font-size: 0.82rem;
   font-weight: 700;
+}
+
+.teacher-courses-search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.teacher-courses-search__clear {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.teacher-courses-search__clear:hover {
+  background: #e2e8f0;
+  color: #0f172a;
 }
 
 .teacher-courses-toolbar select {
@@ -331,6 +340,43 @@
   border-radius: 10px;
   background: #ffffff;
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
+}
+
+.teacher-courses-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 220px;
+  padding: 32px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
+  text-align: center;
+}
+
+.teacher-courses-empty p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.teacher-courses-empty button {
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 7px;
+  background: #1d4ed8;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.teacher-courses-empty button:hover {
+  background: #1e40af;
 }
 
 .teacher-course-table__head,
@@ -535,8 +581,8 @@
 }
 
 @media (max-width: 1320px) {
-  .teacher-courses-summary {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .teacher-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .teacher-courses-toolbar {
@@ -1270,7 +1316,7 @@
 }
 
 @media (max-width: 760px) {
-  .teacher-courses-summary,
+  .teacher-summary,
   .teacher-courses-toolbar {
     grid-template-columns: 1fr;
   }

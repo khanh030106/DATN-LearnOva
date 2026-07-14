@@ -13,6 +13,10 @@ import {
   getCourseCurriculumApi,
   getCourseReviewsApi,
 } from "../../../../../../api/EnrollmentApi.js";
+import {
+  getCertificateForCourseApi,
+  getCertificateDownloadUrlApi,
+} from "../../../../../../api/CertificateApi.js";
 
 import { useAuth } from "../../../../../../hook/UseAuth.jsx";
 import { useAxiosPrivate } from "../../../../../../hook/UseAxiosPrivate.js";
@@ -31,6 +35,7 @@ const CourseDetailSection = ({ course, onBack }) => {
 
 
   const [reviewsData, setReviewsData] = useState(null);
+  const [certificate, setCertificate] = useState(null);
 
   const renderTabContent = () => {
     if (activeTab === "about") {
@@ -104,6 +109,39 @@ const CourseDetailSection = ({ course, onBack }) => {
     fetchReviews();
   }, [course, axiosPrivate, accessToken]);
 
+  useEffect(() => {
+    if (!course?.courseId || course.progress !== 100) return;
+
+    const fetchCertificate = async () => {
+      try {
+        const data = await getCertificateForCourseApi(
+            axiosPrivate,
+            course.courseId,
+            accessToken
+        );
+        setCertificate(data);
+      } catch (err) {
+        console.error("Failed to load certificate", err);
+      }
+    };
+
+    fetchCertificate();
+  }, [course, axiosPrivate, accessToken]);
+
+  const handleDownloadCertificate = async () => {
+    if (!certificate?.id) return;
+    try {
+      const { downloadUrl } = await getCertificateDownloadUrlApi(
+          axiosPrivate,
+          certificate.id,
+          accessToken
+      );
+      window.open(downloadUrl, "_blank", "noopener,noreferrer");
+    } catch (err) {
+      console.error("Failed to get certificate download URL", err);
+    }
+  };
+
   return (
     <div className="learning-detail-page">
       <div className="learning-detail-main">
@@ -116,7 +154,11 @@ const CourseDetailSection = ({ course, onBack }) => {
         {renderTabContent()}
       </div>
 
-      <CourseDetailSidebar course={courseDetail} />
+      <CourseDetailSidebar
+        course={courseDetail}
+        certificate={certificate}
+        onDownloadCertificate={handleDownloadCertificate}
+      />
     </div>
   );
 };

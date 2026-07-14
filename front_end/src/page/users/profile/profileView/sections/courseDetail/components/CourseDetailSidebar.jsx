@@ -2,6 +2,7 @@ import {
   BookOpen,
   Calendar,
   Clock,
+  Download,
   HelpCircle,
   RotateCcw,
   Play,
@@ -13,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-const CourseDetailSidebar = ({ course }) => {
+const CourseDetailSidebar = ({ course, certificate, onDownloadCertificate }) => {
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (course.progress / 100) * circumference;
@@ -64,10 +65,22 @@ const CourseDetailSidebar = ({ course }) => {
         <small>Keep it up! You're making great progress.</small>
 
         {course.progress === 100 ? (
-            <button className="learning-primary-button completed" type="button">
-              <Play size={16} fill="white" />
-              Course Completed
-            </button>
+            <>
+              <button className="learning-primary-button completed" type="button">
+                <Play size={16} fill="white" />
+                Course Completed
+              </button>
+              {certificate && (
+                <button
+                    className="learning-secondary-button"
+                    type="button"
+                    onClick={onDownloadCertificate}
+                >
+                  <Download size={16} />
+                  Download Certificate
+                </button>
+              )}
+            </>
         ) : (
             <button
                 className="learning-primary-button"

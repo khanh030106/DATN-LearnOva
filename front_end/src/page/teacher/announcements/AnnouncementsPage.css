@@ -1,0 +1,163 @@
+.teacher-announcements-page {
+  display: grid;
+  gap: 18px;
+  max-width: 720px;
+}
+
+.teacher-announcement-form {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
+}
+
+.teacher-announcement-form h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.teacher-announcement-form label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.teacher-announcement-form select,
+.teacher-announcement-form input,
+.teacher-announcement-form textarea {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  color: #0f172a;
+}
+
+.teacher-announcement-form textarea {
+  resize: vertical;
+}
+
+.teacher-announcement-form button {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #1d4ed8;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.teacher-announcement-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.teacher-announcement-history h3 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.teacher-announcement-empty {
+  padding: 24px 15px;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.86rem;
+  font-weight: 600;
+  border: 1px dashed #e2e8f0;
+  border-radius: 10px;
+}
+
+.teacher-announcement-item {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.teacher-announcement-item header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.teacher-announcement-course {
+  color: #1d4ed8;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.teacher-announcement-date {
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.teacher-announcement-item strong {
+  color: #0f172a;
+  font-size: 0.9rem;
+}
+
+.teacher-announcement-item p {
+  margin: 0;
+  color: #334155;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.teacher-announcement-recipients {
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.teacher-announcement-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 0 0;
+}
+
+.teacher-announcement-pagination button {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #475569;
+  cursor: pointer;
+}
+
+.teacher-announcement-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.teacher-announcement-pagination span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #475569;
+}

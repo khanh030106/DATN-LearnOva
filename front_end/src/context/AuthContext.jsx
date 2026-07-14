@@ -1,6 +1,6 @@
 import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { loginApi, logoutApi, refreshApi } from "../api/AuthApi.js";
-import { getCurrentUserApi } from "../api/UserApi.js";
+import { getCurrentUserApi, switchActiveRoleApi } from "../api/UserApi.js";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
@@ -19,16 +19,23 @@ export const AuthProvider = ({ children }) => {
         sessionVersionRef.current++; // Invalidate any in-flight restoreSession
         const data = await loginApi(email, password, remember);
         setAccessToken(data.accessToken);
+        let user = null;
         try {
-            await fetchCurrentUser();
+            user = await fetchCurrentUser();
         } catch (e) {
             console.error("Failed to fetch user after login", e);
         }
-        return data;
+        return { ...data, user };
     };
 
     const fetchCurrentUser = async () => {
         const user = await getCurrentUserApi();
+        setCurrentUser(user);
+        return user;
+    };
+
+    const switchActiveRole = async (role) => {
+        const user = await switchActiveRoleApi(role);
         setCurrentUser(user);
         return user;
     };
@@ -103,6 +110,7 @@ export const AuthProvider = ({ children }) => {
                 logout,
                 refreshAccessToken,
                 fetchCurrentUser,
+                switchActiveRole,
             }}
         >
             {children}

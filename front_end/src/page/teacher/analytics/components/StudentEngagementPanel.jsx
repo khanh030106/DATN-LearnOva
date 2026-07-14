@@ -24,10 +24,7 @@ const StudentEngagementPanel = ({ items }) => (
               <i style={{ width: `${item.progress}%` }} />
             </p>
             <b>{item.value}</b>
-            <small>
-              ↑ {item.change}
-              <em>vs Apr 1 - Apr 30</em>
-            </small>
+            <small>{item.note}</small>
           </div>
         );
       })}

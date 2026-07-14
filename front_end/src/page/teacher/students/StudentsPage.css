@@ -2,7 +2,7 @@
 
 .teacher-students-page {
   display: grid;
-  gap: 10px;
+  gap: 14px;
 }
 
 .teacher-students-header {
@@ -54,6 +54,27 @@
   color: #94a3b8;
 }
 
+.teacher-students-tools select {
+  height: 32px;
+  min-width: 150px;
+  padding: 0 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #475569;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  outline: 0;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+}
+
+.teacher-students-tools select:focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
 .teacher-students-tools button {
   width: 32px;
   height: 32px;
@@ -90,7 +111,14 @@
 .teacher-students-table-head,
 .teacher-student-row {
   display: grid;
-  grid-template-columns: minmax(230px, 1.6fr) minmax(230px, 1.5fr) minmax(140px, 0.8fr) minmax(170px, 1fr) 64px;
+  grid-template-columns:
+    minmax(210px, 1.3fr)
+    minmax(110px, 0.7fr)
+    minmax(190px, 1.2fr)
+    minmax(120px, 0.8fr)
+    minmax(140px, 0.9fr)
+    minmax(120px, 0.8fr)
+    64px;
   align-items: center;
   column-gap: 14px;
 }
@@ -131,7 +159,9 @@
 
 .teacher-student-row > :nth-child(2),
 .teacher-student-row > :nth-child(3),
-.teacher-student-row > :nth-child(4) {
+.teacher-student-row > :nth-child(4),
+.teacher-student-row > :nth-child(5),
+.teacher-student-row > :nth-child(6) {
   justify-self: center;
   text-align: center;
 }
@@ -200,6 +230,38 @@
   color: #0f172a;
   font-size: 0.86rem;
   font-weight: 600;
+}
+
+.teacher-student-row__phone {
+  color: #475569;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.teacher-student-row__status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.teacher-student-row__status--not_started {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.teacher-student-row__status--in_progress {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.teacher-student-row__status--completed {
+  background: #d1fae5;
+  color: #065f46;
 }
 
 .teacher-student-row__progress {
@@ -287,11 +349,16 @@
 
   .teacher-students-tools {
     width: 100%;
+    flex-wrap: wrap;
     margin-left: 0;
   }
 
   .teacher-students-search {
     width: 100%;
+  }
+
+  .teacher-students-tools select {
+    flex: 1 1 140px;
   }
 }
 
@@ -519,10 +586,61 @@
   font-weight: 800;
 }
 
+.sdm__course-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .sdm__course-name {
+  overflow: hidden;
+  color: #0f172a;
   font-size: 0.84rem;
   font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sdm__course-meta {
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.sdm__course-progress {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 96px;
+}
+
+.sdm__course-progress-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.sdm__course-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: #1d4ed8;
+}
+
+.sdm__course-progress-fill--complete {
+  background: #059669;
+}
+
+.sdm__course-progress span {
+  min-width: 30px;
   color: #0f172a;
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-align: right;
 }
 
 /* Footer */

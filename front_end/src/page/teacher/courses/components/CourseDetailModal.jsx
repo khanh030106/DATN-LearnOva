@@ -65,7 +65,7 @@ const CourseDetailModal = ({ course, onClose }) => {
   const [reviewFilter, setReviewFilter] = useState("newest");
   const [expandedSections, setExpandedSections] = useState({});
 
-  const isActive = !course.isDeleted;
+  const isActive = !course.isHidden;
   const isPublished = course.courseStatus === "PUBLISHED";
   const isRejected = course.courseStatus === "REJECTED";
   const statusModifier = {

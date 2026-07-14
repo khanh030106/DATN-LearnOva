@@ -15,5 +15,6 @@ public record CurrentUserResponse(
         String coverImage,
         LocalDate dateOfBirth,
         GenderType gender,
-        Set<RoleName> roles
+        Set<RoleName> roles,
+        RoleName activeRole
 ) {}

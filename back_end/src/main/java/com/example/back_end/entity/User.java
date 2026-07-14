@@ -1,6 +1,7 @@
 package com.example.back_end.entity;
 
 import com.example.back_end.entity.enums.GenderType;
+import com.example.back_end.entity.enums.RoleName;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -106,6 +107,10 @@ public class User {
     @BatchSize(size = 50)
     @JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new LinkedHashSet<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "active_role")
+    private RoleName activeRole;
 
     @OneToMany(mappedBy = "user")
     private Set<Verificationtoken> verificationtokens = new LinkedHashSet<>();

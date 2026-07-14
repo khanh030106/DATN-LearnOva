@@ -3,6 +3,8 @@ export const overviewLinks = {
   courses: "/learnova/teacher/courses",
   qa: "/learnova/teacher/qa",
   revenue: "/learnova/teacher/revenue",
+  reviews: "/learnova/teacher/reviews",
+  courseEdit: (courseId) => `/learnova/teacher/courses/edit/${courseId}`,
 };
 
 export const monthlyRevenue = {

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.back_end.dto.resquest.RejectCourseRequest;
+import com.example.back_end.dto.request.RejectCourseRequest;
 import com.example.back_end.dto.response.admin.AdminCourseDetailResponse;
 import com.example.back_end.dto.response.admin.AdminCourseResponse;
 import com.example.back_end.dto.response.GetFileUrlResponse;

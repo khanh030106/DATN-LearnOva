@@ -16,6 +16,7 @@ public class QuestionResponse {
     private Instant createdAt;
 
     private Boolean isSolved;
+    private Boolean isPinned;
 
     private List<AnswerResponse> answers;
     private Long rootId;

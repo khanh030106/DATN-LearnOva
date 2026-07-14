@@ -355,6 +355,15 @@
   grid-template-columns: 1fr;
 }
 
+.courses-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  color: #64748b;
+  font-size: 15px;
+}
+
 .courses-grid--list .course-card-course {
   flex-direction: row;
   max-height: 220px;

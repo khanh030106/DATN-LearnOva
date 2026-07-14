@@ -2,10 +2,12 @@ package com.example.back_end.service;
 
 import com.example.back_end.dto.response.UploadUrlResponse;
 import com.example.back_end.entity.enums.UploadType;
+import com.example.back_end.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.cloudfront.CloudFrontUtilities;
 import software.amazon.awssdk.services.cloudfront.model.CannedSignerRequest;
 import software.amazon.awssdk.services.cloudfront.url.SignedUrl;
@@ -51,6 +53,10 @@ public class S3Service {
             String contentType
     ) {
 
+        if (type == UploadType.CV && !"application/pdf".equals(contentType)) {
+            throw new BusinessException("CV must be a PDF file.");
+        }
+
         String fileKey = generateFileKey(type, fileName);
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -89,6 +95,8 @@ public class S3Service {
             case THUMBNAIL -> "course-thumbnail/" + uuid + extension;
             case RESOURCE -> "course-resource/" + uuid + extension;
             case DOCUMENT -> "course-document/" + uuid + extension;
+            case CV -> "teacher-cv/" + uuid + extension;
+            case AVATAR -> "instructor-avatar/" + uuid + extension;
         };
     }
 
@@ -116,6 +124,16 @@ public class S3Service {
         SignedUrl signedUrl = cloudFrontUtilities.getSignedUrlWithCannedPolicy(signerRequest);
 
         return signedUrl.url();
+    }
+
+    public void putObject(byte[] content, String key, String contentType) {
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .contentType(contentType)
+                .build();
+
+        s3Client.putObject(putObjectRequest, RequestBody.fromBytes(content));
     }
 
     public String readTextObject(String key) {

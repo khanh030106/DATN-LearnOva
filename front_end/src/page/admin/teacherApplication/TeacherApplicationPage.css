@@ -1,0 +1,197 @@
+.teacherAppPage {
+  padding: 24px;
+}
+
+.teacherAppPageHeader h1 {
+  font-size: 22px;
+  margin: 0 0 4px;
+}
+
+.teacherAppPageHeader p {
+  color: #6b7280;
+  margin: 0 0 20px;
+}
+
+.teacherAppLayout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.teacherAppSidebar {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.teacherAppSidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.teacherAppListItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+  text-align: left;
+}
+
+.teacherAppListItem.is-active {
+  background: #eff6ff;
+}
+
+.teacherAppListItem img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #e5e7eb;
+}
+
+.teacherAppListItem div {
+  display: flex;
+  flex-direction: column;
+}
+
+.teacherAppListItem span {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.teacherAppMain {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  min-height: 300px;
+}
+
+.teacherAppEmptyState {
+  padding: 16px;
+  color: #6b7280;
+}
+
+.teacherAppEmptyStateCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #9ca3af;
+  height: 260px;
+}
+
+.teacherAppDetailHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.teacherAppDetailHeader img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #e5e7eb;
+}
+
+.teacherAppDetailHeader h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.teacherAppDetailHeader p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.teacherAppDetailField {
+  margin-bottom: 16px;
+}
+
+.teacherAppDetailField label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.teacherAppMultiline {
+  white-space: pre-wrap;
+}
+
+.teacherAppViewCvBtn {
+  background: none;
+  border: 1px solid #2563eb;
+  color: #2563eb;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.teacherAppActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.teacherAppApproveBtn,
+.teacherAppRejectBtn,
+.teacherAppActions button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.teacherAppApproveBtn {
+  background: #059669;
+  color: #fff;
+}
+
+.teacherAppRejectBtn {
+  background: #dc2626;
+  color: #fff;
+}
+
+.teacherAppActions button:not(.teacherAppApproveBtn):not(.teacherAppRejectBtn) {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.teacherAppRejectForm {
+  margin-top: 16px;
+}
+
+.teacherAppRejectForm label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.teacherAppRejectForm textarea {
+  width: 100%;
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  resize: vertical;
+}

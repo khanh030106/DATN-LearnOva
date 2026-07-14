@@ -209,6 +209,37 @@
   pointer-events: auto;
 }
 
+/* Avatar profile dropdown: synced to match the teacher header's profile dropdown look. */
+.user-logged-profile-dropdown {
+  width: 260px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.16);
+  backdrop-filter: none;
+  transform: translateY(-6px);
+}
+
+.user-logged-avatar-menu:focus-within > .user-logged-profile-dropdown,
+.user-logged-avatar-menu:hover > .user-logged-profile-dropdown {
+  transform: translateY(0);
+}
+
+/* Notification dropdown: synced to match the teacher header's notification dropdown look. */
+.user-logged-notification-dropdown {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.16);
+  backdrop-filter: none;
+  transform: translateY(-6px);
+}
+
+.user-logged-icon-menu:focus-within > .user-logged-notification-dropdown,
+.user-logged-icon-menu:hover > .user-logged-notification-dropdown {
+  transform: translateY(0);
+}
+
 .user-logged-menu-list,
 .user-logged-plan-list,
 .user-logged-notification-list {
@@ -222,16 +253,13 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  padding: 11px 12px;
+  padding: 10px 8px;
   border-radius: 8px;
-  color: #334155;
+  color: #0f172a;
   text-decoration: none;
-  font-size: 14px;
-  font-weight: 700;
-  transition:
-    color 0.2s ease,
-    background 0.2s ease,
-    transform 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.15s ease;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -240,13 +268,15 @@
 }
 
 .user-logged-menu-link:hover {
-  color: #2563eb;
-  background: #eff6ff;
-  transform: translateX(3px);
+  background: #f1f5f9;
 }
 
 .user-logged-menu-link.is-danger {
   color: #dc2626;
+}
+
+.user-logged-menu-link.is-danger:hover {
+  background: #fef2f2;
 }
 
 .user-logged-menu-separator {
@@ -386,6 +416,7 @@
 }
 
 .user-logged-search {
+  position: relative;
   width: 340px;
   height: 38px;
   display: flex;
@@ -513,8 +544,7 @@
 }
 
 .user-logged-cart-dropdown,
-.user-logged-notification-dropdown,
-.user-logged-profile-dropdown {
+.user-logged-notification-dropdown {
   width: 340px;
 }
 
@@ -527,13 +557,17 @@
 }
 
 .user-logged-dropdown-heading {
-  padding: 4px 4px 12px;
+  padding: 4px 4px 10px;
   border-bottom: 1px solid #e2e8f0;
 }
 
 .user-logged-dropdown-heading strong,
 .user-logged-cart-total strong {
   color: #0f172a;
+}
+
+.user-logged-notification-dropdown .user-logged-dropdown-heading span {
+  font-size: 12px;
 }
 
 .user-logged-dropdown-heading span,
@@ -698,15 +732,16 @@
 .user-logged-profile-card {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 6px 6px 14px;
+  gap: 10px;
+  padding: 4px 4px 12px;
   margin-bottom: 8px;
   border-bottom: 1px solid #e2e8f0;
 }
 
 .user-logged-profile-card img {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #e2e8f0;
 }
 
 .user-logged-profile-card strong,
@@ -716,12 +751,13 @@
 
 .user-logged-profile-card strong {
   color: #0f172a;
+  font-size: 14px;
 }
 
 .user-logged-profile-card span {
   margin-top: 3px;
   color: #64748b;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 @media (max-width: 1220px) {

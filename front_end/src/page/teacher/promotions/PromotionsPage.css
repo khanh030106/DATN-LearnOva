@@ -7,13 +7,9 @@
 
 .teacher-promotions-toolbar {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) 170px;
+  grid-template-columns: minmax(260px, 1fr) 180px 180px;
   align-items: center;
   gap: 8px;
-}
-
-.teacher-promotions-toolbar--search-only {
-  grid-template-columns: minmax(260px, 400px);
 }
 
 .teacher-promotions-search,
@@ -49,6 +45,16 @@
   font: inherit;
   font-size: 0.82rem;
   font-weight: 700;
+}
+
+.teacher-promotions-search__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: none;
+  color: #94a3b8;
+  cursor: pointer;
 }
 
 .teacher-promotions-toolbar select {

@@ -2,7 +2,7 @@ package com.example.back_end.service;
 
 import com.example.back_end.dto.response.CourseProgressResponse;
 import com.example.back_end.dto.response.LessonProgressResponse;
-import com.example.back_end.dto.resquest.UpdateLessonProgressRequest;
+import com.example.back_end.dto.request.UpdateLessonProgressRequest;
 import com.example.back_end.entity.Lesson;
 import com.example.back_end.entity.LessonProgress;
 import com.example.back_end.entity.LessonProgressId;
@@ -30,6 +30,7 @@ public class LessonProgressService {
     private final LessonRepository lessonRepository;
     private final UserRepository userRepository;
     private final EnrollmentRepository enrollmentRepository;
+    private final CertificateService certificateService;
 
     @Transactional
     public CourseProgressResponse updateProgress(Long userId, UpdateLessonProgressRequest request) {
@@ -80,7 +81,17 @@ public class LessonProgressService {
 
         lessonprogressRepository.save(progress);
 
-        return getCourseProgress(userId, courseId);
+        CourseProgressResponse result = getCourseProgress(userId, courseId);
+
+        // enrollments.progress_percent/completed_at are kept in sync by the
+        // trg_sync_enrollment_progress DB trigger (fires on lessonprogress.is_completed
+        // changes), so it's already updated by the time we get here — issueIfAbsent is
+        // itself idempotent, so it's safe to call on every completed check.
+        if (result.isCourseCompleted()) {
+            certificateService.issueIfAbsent(user, lesson.getSection().getCourse());
+        }
+
+        return result;
     }
 
     public CourseProgressResponse getCourseProgress(Long userId, Long courseId) {

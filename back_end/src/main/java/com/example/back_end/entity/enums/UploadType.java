@@ -4,6 +4,8 @@ public enum UploadType {
     VIDEO,
     THUMBNAIL,
     RESOURCE,
-    DOCUMENT
+    DOCUMENT,
+    CV,
+    AVATAR
 }
 

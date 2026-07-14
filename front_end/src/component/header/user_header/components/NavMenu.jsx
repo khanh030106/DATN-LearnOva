@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Search } from "lucide-react";
+import HeaderSearch from "./HeaderSearch.jsx";
 
 const leftNav = [
     { name: "Home", path: "/learnova/home" },
@@ -31,14 +31,7 @@ const NavMenu = () => {
                 ))}
 
                 <li className="nav-search-item">
-                    <form className="header-search">
-                        <Search size={18} className="header-search-icon" />
-                        <input
-                            type="text"
-                            placeholder="Search courses..."
-                            className="header-search-input"
-                        />
-                    </form>
+                    <HeaderSearch variant="guest" />
                 </li>
 
                 {rightNav.map((item, index) => (
