@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.back_end.dto.response.admin.AdminCourseDropdownResponse;
 import com.example.back_end.dto.response.admin.AdminTagResponse;
-import com.example.back_end.dto.resquest.admin.AdminTagRequest;
+import com.example.back_end.dto.request.admin.AdminTagRequest;
 import com.example.back_end.service.admin.AdminTagService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

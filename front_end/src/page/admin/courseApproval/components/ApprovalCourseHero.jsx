@@ -1,4 +1,4 @@
-import { BookOpen, CheckCircle, Clock, EyeOff, FileText } from "lucide-react";
+import { BookOpen, CheckCircle, Clock, EyeOff, FileText, XCircle } from "lucide-react";
 
 const formatDuration = (seconds) => {
   const totalSeconds = Number(seconds || 0);
@@ -36,8 +36,8 @@ const formatDate = (value) => {
   }).format(date);
 };
 
-const ApprovalCourseHero = ({ course, isSubmitting, onApprove, onHide }) => {
-  const isDraft = course.status === "DRAFT";
+const ApprovalCourseHero = ({ course, isSubmitting, onApprove, onHide, onReject }) => {
+  const isPending = course.status === "PENDING_REVIEW";
 
   const metaItems = [
     ["Instructor", course.instructorName],
@@ -69,7 +69,7 @@ const ApprovalCourseHero = ({ course, isSubmitting, onApprove, onHide }) => {
               {course.status}
             </span>
 
-            {isDraft ? (
+            {isPending ? (
               <div className="approvalActionButtonsGroup">
                 <button
                   type="button"
@@ -79,6 +79,15 @@ const ApprovalCourseHero = ({ course, isSubmitting, onApprove, onHide }) => {
                 >
                   <CheckCircle size={16} />
                   Approve & Publish
+                </button>
+                <button
+                  type="button"
+                  className="approvalBtnRejectMain"
+                  onClick={onReject}
+                  disabled={isSubmitting}
+                >
+                  <XCircle size={16} />
+                  Reject
                 </button>
                 <button
                   type="button"

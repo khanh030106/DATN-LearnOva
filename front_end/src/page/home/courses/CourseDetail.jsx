@@ -295,6 +295,9 @@ export default function CourseDetail() {
     const subtotal = Number(course.basePrice || 0);
     const discount = Number(appliedVoucher?.discountAmount || 0);
     const total = Math.max(0, subtotal - discount);
+    const isOwnCourse = Boolean(
+        currentUser?.id && course.instructor?.id && currentUser.id === course.instructor.id
+    );
 
     return (
         <div className="cdp">
@@ -560,7 +563,11 @@ export default function CourseDetail() {
                                 </div>
                             )}
 
-                            {enrolled ? (
+                            {isOwnCourse ? (
+                                <p className="cdp__own-course-note">
+                                    Đây là khóa học của bạn — không thể mua khóa học do chính bạn giảng dạy.
+                                </p>
+                            ) : enrolled ? (
                                 <button
                                     className="cdp__btn cdp__btn--primary"
                                     type="button"

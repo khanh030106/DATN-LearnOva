@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.back_end.dto.resquest.admin.AdminUserRequest;
+import com.example.back_end.dto.request.admin.AdminUserRequest;
 import com.example.back_end.dto.response.admin.AdminUserResponse;
 import com.example.back_end.entity.Role;
 import com.example.back_end.entity.User;
@@ -163,7 +163,21 @@ public class AdminUserService {
             Role role = roleRepository.findByRoleName(roleName)
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
-            user.setRoles(new LinkedHashSet<>(List.of(role)));
+            // Grant the selected role instead of replacing the whole set — a user who
+            // gained an extra role elsewhere (e.g. approved instructor application)
+            // must not lose it just because an admin edited an unrelated field here.
+            boolean alreadyHasRole = user.getRoles().stream()
+                .anyMatch(r -> r.getRoleName() == roleName);
+            boolean isAlreadyAdmin = user.getRoles().stream()
+                .anyMatch(r -> r.getRoleName() == RoleName.ROLE_ADMIN);
+            if (!alreadyHasRole) {
+                user.getRoles().add(role);
+                // Admins don't participate in the active_role switch model — granting them
+                // an extra role must not silently scope their authority away from ROLE_ADMIN.
+                if (!isAlreadyAdmin) {
+                    user.setActiveRole(roleName);
+                }
+            }
         }
 
         user.setUpdatedAt(Instant.now());

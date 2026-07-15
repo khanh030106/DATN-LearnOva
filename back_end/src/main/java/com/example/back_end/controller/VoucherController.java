@@ -1,7 +1,7 @@
 package com.example.back_end.controller;
 
 import com.example.back_end.dto.response.ApplyVoucherResponse;
-import com.example.back_end.dto.resquest.ApplyVoucherRequest;
+import com.example.back_end.dto.request.ApplyVoucherRequest;
 import com.example.back_end.service.VoucherService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;

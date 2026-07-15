@@ -1,5 +1,6 @@
-import { Bell, Settings, ChevronDown } from "lucide-react";
+import { Settings, ChevronDown } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import NotificationBell from "./NotificationBell.jsx";
 import "./Header.css";
 
 const headerData = {
@@ -49,10 +50,7 @@ const Header = () => {
       </div>
 
       <div className="admin-topbar__actions">
-        <button aria-label="Notifications" className="admin-topbar__btn">
-          <Bell size={20} />
-          <span className="admin-topbar__badge admin-topbar__badge--red">3</span>
-        </button>
+        <NotificationBell />
         <button aria-label="Settings" className="admin-topbar__btn">
           <Settings size={20} />
         </button>

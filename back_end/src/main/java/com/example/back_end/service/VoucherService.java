@@ -1,7 +1,7 @@
 package com.example.back_end.service;
 
 import com.example.back_end.dto.response.ApplyVoucherResponse;
-import com.example.back_end.dto.resquest.ApplyVoucherRequest;
+import com.example.back_end.dto.request.ApplyVoucherRequest;
 import com.example.back_end.entity.Voucher;
 import com.example.back_end.entity.enums.DiscountType;
 import com.example.back_end.exception.BusinessException;

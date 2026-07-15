@@ -2,23 +2,14 @@ package com.example.back_end.controller;
 
 import com.example.back_end.dto.response.CategoryOptionResponse;
 import com.example.back_end.dto.response.CourseDetailResponse;
-import com.example.back_end.dto.response.CreateDraftCourseResponse;
 import com.example.back_end.dto.response.FeaturedCourseResponse;
 import com.example.back_end.dto.response.GetFileUrlResponse;
 import com.example.back_end.dto.response.PublicCourseResponse;
-import com.example.back_end.dto.response.TeacherCoursesResponse;
-import com.example.back_end.dto.response.TeacherReviewResponse;
-import com.example.back_end.dto.response.TeacherStudentResponse;
 import com.example.back_end.dto.response.TopCategoryResponse;
-import com.example.back_end.dto.resquest.CreateDraftCourseRequest;
-import com.example.back_end.dto.resquest.UpdateCourseRequest;
-import com.example.back_end.dto.resquest.UpdateCourseStatusRequest;
 import com.example.back_end.service.CourseService;
 import com.example.back_end.service.S3Service;
 import com.example.back_end.service.admin.AdminCategoryService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -35,20 +26,7 @@ public class CourseController {
     private final S3Service s3Service;
     private final AdminCategoryService categoryService;
 
-    @PostMapping("/create-draft-course")   //  /create/draft
-    public CreateDraftCourseResponse createDraftCourse(
-            @Valid @RequestBody CreateDraftCourseRequest request,
-            Authentication authentication
-    ) {
-        Long courseId = courseService.createDraftCourse(
-                request,
-                authentication.getName()
-        );
-
-        return new CreateDraftCourseResponse(courseId);
-    }
-
-    @GetMapping("/video-url")            //  /video/url
+    @GetMapping("/video-url")
     public GetFileUrlResponse getVideoUrl(
             @RequestParam String fileKey
     ) {
@@ -65,19 +43,6 @@ public class CourseController {
         return categoryService.getActiveCategories();
     }
 
-    @PatchMapping("/{courseId}/status")
-    public ResponseEntity<Void> updateCourseStatus(
-            @PathVariable Long courseId,
-            @Valid @RequestBody UpdateCourseStatusRequest request,
-            Authentication authentication
-    ) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).build();
-        }
-        courseService.updateCourseStatus(courseId, authentication.getName(), request.status());
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping("/featured")
     public ResponseEntity<List<FeaturedCourseResponse>> getFeaturedCourses() {
         return ResponseEntity.ok(courseService.getFeaturedCourses());
@@ -91,66 +56,6 @@ public class CourseController {
     @GetMapping("/{courseId}")
     public ResponseEntity<CourseDetailResponse> getCourseDetail(@PathVariable Long courseId) {
         return ResponseEntity.ok(courseService.getCourseDetail(courseId));
-    }
-
-    @GetMapping("/my-students")
-    public ResponseEntity<List<TeacherStudentResponse>> getMyStudents(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated())
-            return ResponseEntity.status(401).build();
-        return ResponseEntity.ok(courseService.getMyStudents(authentication.getName()));
-    }
-
-    @GetMapping("/my-reviews")
-    public ResponseEntity<List<TeacherReviewResponse>> getMyReviews(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated())
-            return ResponseEntity.status(401).build();
-        return ResponseEntity.ok(courseService.getMyReviews(authentication.getName()));
-    }
-
-    @GetMapping("/my-courses")          // /courses/mine
-    public ResponseEntity<List<TeacherCoursesResponse>> getMyCourses(
-            Authentication authentication
-    ) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).build();
-        }
-        return ResponseEntity.ok(courseService.getMyCourses(authentication.getName()));
-    }
-
-    @PutMapping("/{courseId}")
-    public ResponseEntity<Void> updateCourse(
-            @PathVariable Long courseId,
-            @Valid @RequestBody UpdateCourseRequest request,
-            Authentication authentication
-    ) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).build();
-        }
-        courseService.updateCourse(courseId, request, authentication.getName());
-        return ResponseEntity.noContent().build();
-    }
-
-    @PatchMapping("/{courseId}/visibility")
-    public ResponseEntity<Void> toggleCourseVisibility(
-            @PathVariable Long courseId,
-            Authentication authentication
-    ) {
-        if (authentication == null || !authentication.isAuthenticated())
-            return ResponseEntity.status(401).build();
-        courseService.toggleCourseVisibility(courseId, authentication.getName());
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/{courseId}")
-    public ResponseEntity<Void> softDeleteCourse(
-            @PathVariable Long courseId,
-            Authentication authentication
-    ) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).build();
-        }
-        courseService.softDeleteCourse(courseId, authentication.getName());
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/public")

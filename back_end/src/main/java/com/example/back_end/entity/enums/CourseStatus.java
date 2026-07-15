@@ -1,5 +1,5 @@
 package com.example.back_end.entity.enums;
 
 public enum CourseStatus {
-    DRAFT, PUBLISHED, ARCHIVED, DELETED
+    DRAFT, PENDING_REVIEW, PUBLISHED, REJECTED, ARCHIVED, DELETED
 }

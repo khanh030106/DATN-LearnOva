@@ -29,3 +29,13 @@ export const updateQuestionApi = async (id, data) => {
     const res = await axiosClient.put(`/qna/question/${id}`, data);
     return res.data;
 };
+
+export const setQuestionSolvedApi = async (id, value) => {
+    const res = await axiosClient.patch(`/qna/question/${id}/solved?value=${value}`);
+    return res.data;
+};
+
+export const setQuestionPinnedApi = async (id, value) => {
+    const res = await axiosClient.patch(`/qna/question/${id}/pinned?value=${value}`);
+    return res.data;
+};

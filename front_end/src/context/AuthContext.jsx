@@ -1,6 +1,6 @@
 import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { loginApi, logoutApi, refreshApi } from "../api/AuthApi.js";
-import { getCurrentUserApi } from "../api/UserApi.js";
+import { getCurrentUserApi, switchActiveRoleApi } from "../api/UserApi.js";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
@@ -19,16 +19,23 @@ export const AuthProvider = ({ children }) => {
         sessionVersionRef.current++; // Invalidate any in-flight restoreSession
         const data = await loginApi(email, password, remember);
         setAccessToken(data.accessToken);
+        let user = null;
         try {
-            await fetchCurrentUser();
+            user = await fetchCurrentUser();
         } catch (e) {
             console.error("Failed to fetch user after login", e);
         }
-        return data;
+        return { ...data, user };
     };
 
     const fetchCurrentUser = async () => {
         const user = await getCurrentUserApi();
+        setCurrentUser(user);
+        return user;
+    };
+
+    const switchActiveRole = async (role) => {
+        const user = await switchActiveRoleApi(role);
         setCurrentUser(user);
         return user;
     };
@@ -76,7 +83,15 @@ export const AuthProvider = ({ children }) => {
                 setAccessToken(null);
                 setCurrentUser(null);
             } finally {
-                setLoading(false);
+                // Only the call whose version still matches the latest session is
+                // allowed to close the loading gate — a stale/superseded call (e.g.
+                // from React StrictMode's dev-only double-invoke) must not flip
+                // loading to false before the winning call has set currentUser,
+                // or route guards reading {loading, currentUser} mid-flight will
+                // see "not loading" + "no user" and redirect incorrectly.
+                if (sessionVersionRef.current === myVersion) {
+                    setLoading(false);
+                }
             }
         };
 
@@ -95,6 +110,7 @@ export const AuthProvider = ({ children }) => {
                 logout,
                 refreshAccessToken,
                 fetchCurrentUser,
+                switchActiveRole,
             }}
         >
             {children}

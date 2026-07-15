@@ -1,4 +1,5 @@
 import { Info } from "lucide-react";
+import { STUDENT_STATUS_LABELS } from "../studentsPageData.js";
 
 const DEFAULT_AVATAR = "https://ui-avatars.com/api/?background=1d4ed8&color=fff&name=Student";
 
@@ -11,7 +12,11 @@ const formatDate = (isoString) => {
   });
 };
 
-const StudentRow = ({ student, onViewDetail }) => (
+const StudentRow = ({ student, onViewDetail }) => {
+  const courseCount = student.courses.length;
+  const courseTitles = student.courses.map((c) => c.courseTitle);
+
+  return (
   <article className="teacher-student-row">
     <div className="teacher-student-row__profile">
       <img src={student.avatar || DEFAULT_AVATAR} alt={student.fullName} />
@@ -21,10 +26,12 @@ const StudentRow = ({ student, onViewDetail }) => (
       </div>
     </div>
 
+    <span className="teacher-student-row__phone">{student.phone || "-"}</span>
+
     <div className="teacher-student-row__courses">
-      {student.courseNames.map((name) => (
-        <span key={name}>{name}</span>
-      ))}
+      <span title={courseTitles.join(", ")}>
+        {courseCount} khóa học
+      </span>
     </div>
 
     <time className="teacher-student-row__date">
@@ -41,6 +48,10 @@ const StudentRow = ({ student, onViewDetail }) => (
       </div>
     </div>
 
+    <span className={`teacher-student-row__status teacher-student-row__status--${student.status.toLowerCase()}`}>
+      {STUDENT_STATUS_LABELS[student.status] || student.status}
+    </span>
+
     <div className="teacher-student-row__actions">
       <button
         type="button"
@@ -51,6 +62,7 @@ const StudentRow = ({ student, onViewDetail }) => (
       </button>
     </div>
   </article>
-);
+  );
+};
 
 export default StudentRow;

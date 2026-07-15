@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import CourseCardGrid from "./CourseCardGrid";
 
@@ -11,8 +12,19 @@ const CoursesSection = ({
   onBack,
   onOpenCourse,
 }) => {
+  // The URL's ?tab= param is the source of truth for which tab is active, so a
+  // notification link (or any navigation) to this same route always lands on the
+  // right tab, even when the component doesn't remount.
+  const [searchParams, setSearchParams] = useSearchParams();
   const [sortBy, setSortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
+  const statusFilter = searchParams.get("tab") === "completed" ? "completed" : "inProgress";
+
+  const selectTab = (tab) => {
+    setSearchParams(tab === "completed" ? { tab: "completed" } : {});
+    setCurrentPage(1);
+  };
+
   const courses = purchasedCourses.map((course) => ({
     ...course,
     progress: course.progress || 0,
@@ -22,8 +34,15 @@ const CoursesSection = ({
     rating: course.rating || 4.8,
     reviews: course.reviews || "0",
   }));
+  const filteredCourses = useMemo(
+    () =>
+      courses.filter((course) =>
+        statusFilter === "completed" ? course.progress >= 100 : course.progress < 100,
+      ),
+    [courses, statusFilter],
+  );
   const sortedCourses = useMemo(() => {
-    const nextCourses = [...courses];
+    const nextCourses = [...filteredCourses];
 
     if (sortBy === "oldest") {
       return nextCourses.reverse();
@@ -38,7 +57,7 @@ const CoursesSection = ({
     }
 
     return nextCourses;
-  }, [courses, sortBy]);
+  }, [filteredCourses, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(sortedCourses.length / ITEMS_PER_PAGE));
   const safePage = Math.min(currentPage, totalPages);
@@ -69,10 +88,18 @@ const CoursesSection = ({
         <div>
           <h2>Enrolled Courses</h2>
           <div className="course-tabs">
-            <button className="course-tab active" type="button">
+            <button
+              className={`course-tab ${statusFilter === "inProgress" ? "active" : ""}`}
+              type="button"
+              onClick={() => selectTab("inProgress")}
+            >
               In Progress
             </button>
-            <button className="course-tab" type="button">
+            <button
+              className={`course-tab ${statusFilter === "completed" ? "active" : ""}`}
+              type="button"
+              onClick={() => selectTab("completed")}
+            >
               Completed
             </button>
           </div>
@@ -154,6 +181,19 @@ const CoursesSection = ({
             </div>
           )}
         </>
+      ) : courses.length > 0 ? (
+        <div className="empty-state">
+          <h4>
+            {statusFilter === "completed"
+              ? "No completed courses yet"
+              : "No courses in progress"}
+          </h4>
+          <p>
+            {statusFilter === "completed"
+              ? "Finish all lessons in a course to see it here."
+              : "All your enrolled courses are completed — check the Completed tab."}
+          </p>
+        </div>
       ) : (
         <div className="empty-state">
           <h4>You Don't Own Any Courses Yet</h4>

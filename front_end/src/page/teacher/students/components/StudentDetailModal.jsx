@@ -1,4 +1,5 @@
-import { X, Mail, Calendar, BookOpen, TrendingUp, Award } from "lucide-react";
+import { X, Mail, Phone, Calendar, BookOpen, TrendingUp, Award } from "lucide-react";
+import { STUDENT_STATUS_LABELS } from "../studentsPageData.js";
 
 const DEFAULT_AVATAR = "https://ui-avatars.com/api/?background=1d4ed8&color=fff&name=Student&size=128";
 
@@ -15,7 +16,7 @@ const StudentDetailModal = ({ student, onClose }) => {
   if (!student) return null;
 
   const progress = student.progressPercent ?? 0;
-  const isComplete = progress === 100;
+  const isComplete = student.status === "COMPLETED";
 
   return (
     <div className="sdm-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
@@ -33,7 +34,7 @@ const StudentDetailModal = ({ student, onClose }) => {
           />
           <h2 className="sdm__name">{student.fullName}</h2>
           <span className={`sdm__badge ${isComplete ? "sdm__badge--complete" : "sdm__badge--active"}`}>
-            {isComplete ? "Completed" : "In Progress"}
+            {STUDENT_STATUS_LABELS[student.status] || student.status}
           </span>
         </div>
 
@@ -50,17 +51,17 @@ const StudentDetailModal = ({ student, onClose }) => {
               </div>
             </div>
             <div className="sdm__info-card">
+              <Phone size={16} className="sdm__info-icon sdm__info-icon--green" />
+              <div>
+                <span className="sdm__info-label">Điện thoại</span>
+                <span className="sdm__info-value">{student.phone || "-"}</span>
+              </div>
+            </div>
+            <div className="sdm__info-card">
               <Calendar size={16} className="sdm__info-icon sdm__info-icon--purple" />
               <div>
                 <span className="sdm__info-label">Ngày tham gia</span>
                 <span className="sdm__info-value">{formatDate(student.enrolledAt)}</span>
-              </div>
-            </div>
-            <div className="sdm__info-card">
-              <BookOpen size={16} className="sdm__info-icon sdm__info-icon--green" />
-              <div>
-                <span className="sdm__info-label">Khóa học</span>
-                <span className="sdm__info-value">{student.courseNames?.length ?? 0} khóa</span>
               </div>
             </div>
             <div className="sdm__info-card">
@@ -89,18 +90,32 @@ const StudentDetailModal = ({ student, onClose }) => {
             </div>
           </div>
 
-          {/* Courses list */}
-          {student.courseNames?.length > 0 && (
+          {/* Courses breakdown */}
+          {student.courses?.length > 0 && (
             <div className="sdm__section">
               <h3 className="sdm__section-title">
                 <BookOpen size={15} />
                 Khóa học đã đăng ký
               </h3>
               <ul className="sdm__course-list">
-                {student.courseNames.map((name, idx) => (
-                  <li key={idx} className="sdm__course-item">
+                {student.courses.map((course, idx) => (
+                  <li key={course.courseId} className="sdm__course-item">
                     <span className="sdm__course-num">{idx + 1}</span>
-                    <span className="sdm__course-name">{name}</span>
+                    <div className="sdm__course-info">
+                      <span className="sdm__course-name">{course.courseTitle}</span>
+                      <span className="sdm__course-meta">
+                        Tham gia {formatDate(course.enrolledAt)}
+                      </span>
+                    </div>
+                    <div className="sdm__course-progress">
+                      <div className="sdm__course-progress-track">
+                        <div
+                          className={`sdm__course-progress-fill ${course.progressPercent === 100 ? "sdm__course-progress-fill--complete" : ""}`}
+                          style={{ width: `${course.progressPercent}%` }}
+                        />
+                      </div>
+                      <span>{course.progressPercent}%</span>
+                    </div>
                   </li>
                 ))}
               </ul>

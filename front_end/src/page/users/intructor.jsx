@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./intructor/InstructorsPage.css";
 import { FaSearch, FaStar, FaBookmark, FaCheckCircle } from "react-icons/fa";
 import { BsGrid3X3Gap, BsList } from "react-icons/bs";
@@ -21,10 +21,67 @@ import {
 import { useNavigate } from "react-router-dom"
 import { MessageCircle } from "lucide-react";
 import LearnovaAI from "../home/chat-bot/chatBot.jsx";
+import { getInstructors } from "../../api/PublicInstructorApi.js";
+import { getFileUrl } from "../../api/PublicCourseApi.js";
+
+const DEFAULT_AVATAR =
+  "https://api.dicebear.com/7.x/initials/svg?seed=Instructor&backgroundType=gradientLinear";
+
+const formatCompactNumber = (value) => {
+  if (value >= 1000) return `${(value / 1000).toFixed(1).replace(/\.0$/, "")}K+`;
+  return String(value);
+};
 
 function InstructorsPage() {
   const [viewMode, setViewMode] = useState("grid");
+  const [instructors, setInstructors] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let isMounted = true;
+    const load = async () => {
+      try {
+        const data = await getInstructors();
+        const mapped = await Promise.all(
+          data.map(async (item) => {
+            let avatar = item.avatar || DEFAULT_AVATAR;
+            if (item.avatarKey) {
+              try {
+                avatar = await getFileUrl(item.avatarKey);
+              } catch {
+                // keep fallback avatar
+              }
+            }
+            return {
+              id: item.instructorId,
+              name: item.fullName,
+              title: item.headline || "Instructor",
+              rating: item.avgRating || 0,
+              reviews: item.ratingCount || 0,
+              avatar,
+              skills: item.expertise
+                ? item.expertise.split(",").map((s) => s.trim()).filter(Boolean)
+                : [],
+              stats: {
+                students: formatCompactNumber(item.studentCount || 0),
+                courses: String(item.courseCount || 0),
+              },
+            };
+          })
+        );
+        if (isMounted) setInstructors(mapped);
+      } catch {
+        if (isMounted) setInstructors([]);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const categories = [
     "Popular",
@@ -71,194 +128,6 @@ function InstructorsPage() {
       { id: 2, name: "Vietnamese", count: 98 }
 
     ],
-  };
-
-  const instructors = [
-    {
-      id: 1,
-      name: "Alex Morgan",
-      title: "Senior Frontend Engineer",
-      badge: "verified",
-      rating: 4.9,
-      reviews: 12000,
-      avatar:
-        "https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg",
-      bio: "Former Google engineer specializing in building scalable web applications and design systems.",
-      skills: ["React", "TypeScript", "Next.js"],
-      course: {
-        title: "React Mastery",
-        subtitle: "From Zero to Hero",
-        students: "12,450 students",
-        price: "$49.99",
-        icon: (
-          <img
-            src="https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg"
-            alt=""
-          />
-        ),
-      },
-      stats: {
-        students: "12K+",
-        courses: "18",
-      },
-    },
-    {
-      id: 2,
-      name: "Olivia Chen",
-      title: "chat-bot Researcher & Scientist",
-      badge: "top-rated",
-      rating: 4.8,
-      reviews: 8500,
-      avatar:
-        "https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg",
-      bio: "PhD in chat-bot from Stanford. Focused on making chat-bot & ML easy to understand and practical.",
-      skills: ["Python", "Machine Learning", "NLP"],
-      course: {
-        title: "Machine Learning",
-        subtitle: "A Practical Guide",
-        students: "8,321 students",
-        price: "$44.99",
-        icon: (
-          <img
-            src="https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg"
-            alt=""
-          />
-        ),
-      },
-      stats: {
-        students: "8.5K+",
-        courses: "14",
-      },
-    },
-    {
-      id: 3,
-      name: "Nguyễn Phi Thông",
-      title: "Senior Full-Stack Developer",
-      badge: "best-seller",
-      rating: 4.9,
-      reviews: 15000,
-      avatar:
-        "https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg",
-      bio: "Fullstack engineer with 10+ years building high-performance web applications.",
-      skills: ["Node.js", "React", "AWS"],
-      course: {
-        title: "Node.js & Express",
-        subtitle: "Complete Bootcamp",
-        students: "16,230 students",
-        price: "$39.99",
-        icon: (
-          <img
-            src="https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg"
-            alt=""
-          />
-        ),
-      },
-      stats: {
-        students: "15K+",
-        courses: "22",
-      },
-    },
-    {
-      id: 4,
-      name: "Sophia Lee",
-      title: "UI/UX Design Lead",
-      badge: "new",
-      rating: 4.7,
-      reviews: 6200,
-      avatar: "https://via.placeholder.com/120/9333EA/ffffff?text=SL",
-      bio: "Design lead at a top product company. Passionate about user-centered design.",
-      skills: ["Figma", "UI Design", "UX Research"],
-      course: {
-        title: "UI/UX Design",
-        subtitle: "From Scratch",
-        students: "6,231 students",
-        price: "$34.99",
-        icon: (
-          <img
-            src="https://tuanluupiano.com/wp-content/uploads/2026/01/avatar-facebook-mac-dinh-6.jpg"
-            alt=""
-          />
-        ),
-      },
-      stats: {
-        students: "6.2K+",
-        courses: "10",
-      },
-    },
-    {
-      id: 5,
-      name: "Nguyễn Văn Minh",
-      title: "Data Scientist",
-      badge: "verified",
-      rating: 4.6,
-      reviews: 7800,
-      avatar: "https://via.placeholder.com/120/0F172A/ffffff?text=NVM",
-      bio: "Data science expert specializing in analytics and business intelligence.",
-      skills: ["Python", "SQL", "Data Visualization"],
-      course: null,
-      stats: {
-        students: "7.8K+",
-        courses: "12",
-      },
-    },
-    {
-      id: 6,
-      name: "Lê Minh Quân",
-      title: "chat-bot Engineer",
-      badge: "verified",
-      rating: 4.8,
-      reviews: 5300,
-      avatar: "https://via.placeholder.com/120/3B82F6/ffffff?text=LMQ",
-      bio: "chat-bot engineer with expertise in deep learning and computer vision.",
-      skills: ["Deep Learning", "PyTorch", "Computer Vision"],
-      course: null,
-      stats: {
-        students: "5.3K+",
-        courses: "9",
-      },
-    },
-    {
-      id: 7,
-      name: "Phạm Hoàng Dung",
-      title: "Product Manager",
-      badge: "verified",
-      rating: 4.5,
-      reviews: 4310,
-      avatar: "https://via.placeholder.com/120/EC4899/ffffff?text=PHD",
-      bio: "Product manager with 8+ years experience in tech startups.",
-      skills: ["Product Strategy", "Agile", "Growth"],
-      course: null,
-      stats: {
-        students: "4.3K+",
-        courses: "7",
-      },
-    },
-    {
-      id: 8,
-      name: "David Smith",
-      title: "DevOps Engineer",
-      badge: "verified",
-      rating: 4.6,
-      reviews: 6700,
-      avatar: "https://via.placeholder.com/120/06B6D4/ffffff?text=DS",
-      bio: "DevOps expert specializing in cloud infrastructure and Kubernetes.",
-      skills: ["AWS", "Docker", "Kubernetes"],
-      course: null,
-      stats: {
-        students: "6.7K+",
-        courses: "11",
-      },
-    },
-  ];
-
-  const getBadgeInfo = (badge) => {
-    const badges = {
-      verified: { class: "badge-verified", text: "Verified" },
-      "top-rated": { class: "badge-top-rated", text: "Top Rated" },
-      "best-seller": { class: "badge-best-seller", text: "Best Seller" },
-      new: { class: "badge-new", text: "New" },
-    };
-    return badges[badge] || { class: "", text: "" };
   };
 
   return (
@@ -392,19 +261,15 @@ function InstructorsPage() {
           </div>
 
           {/* INSTRUCTORS GRID */}
+          {isLoading ? (
+            <p className="instructors-loading">Loading instructors…</p>
+          ) : instructors.length === 0 ? (
+            <p className="instructors-loading">No instructors found yet.</p>
+          ) : (
           <div className="instructors-grid-in">
             {instructors.map((instructor) => {
-              const badgeInfo = getBadgeInfo(instructor.badge);
               return (
                 <div key={instructor.id} className="instructor-card-in">
-                  {/* Card Header */}
-                  <div className="card-header-in-in">
-                    <div className={`badge-in-in ${badgeInfo.class}`}>
-                      {badgeInfo.text}
-                    </div>
-
-                  </div>
-
                   {/* Avatar */}
                   <div className="avatar-wrapper-in">
                     <img
@@ -444,34 +309,19 @@ function InstructorsPage() {
                   </div>
 
                   {/* Bio */}
-                  <p className="bio">{instructor.bio}</p>
-
-                  {/* Course Preview */}
-                  {instructor.course && (
-                    <div className="course-box">
-                      <div className="course-icon-box">
-                        {instructor.course.icon}
-                      </div>
-                      <div className="course-details">
-                        <h4>{instructor.course.title}</h4>
-                        <p>{instructor.course.subtitle}</p>
-                        <span className="course-students">
-                          {instructor.course.students}
-                        </span>
-                        <span className="course-price">
-                          {instructor.course.price}
-                        </span>
-                      </div>
-                    </div>
-                  )}
+                  {instructor.bio && <p className="bio">{instructor.bio}</p>}
 
                   {/* Stats */}
+                  <div className="rating-row">
+                    <span className="rating-count">{instructor.stats.students} students</span>
+                    <span className="rating-count">{instructor.stats.courses} courses</span>
+                  </div>
 
                   {/* Buttons */}
                   <div className="card-actions">
                     <button
                         className="view-profile-btn"
-                        onClick={() => navigate("/learnova/user/intructorDetail")}
+                        onClick={() => navigate(`/learnova/intructorDetail/${instructor.id}`)}
                     >
                       View Profile
                     </button>
@@ -483,6 +333,7 @@ function InstructorsPage() {
               );
             })}
           </div>
+          )}
         </main>
         <div className="chatbot-fixed">
           <LearnovaAI />

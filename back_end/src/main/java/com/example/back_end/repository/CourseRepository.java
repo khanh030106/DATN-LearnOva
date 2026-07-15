@@ -28,18 +28,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             LEFT JOIN FETCH s.lessons
             LEFT JOIN FETCH c.coursecategories cc
             LEFT JOIN FETCH cc.category
-            WHERE c.instructor.id = :instructorId
-            ORDER BY c.createdAt DESC
-            """)
-    List<Course> findByInstructorIdOrderByCreatedAtDesc(@Param("instructorId") Long instructorId);
-
-    @Query("""
-            SELECT DISTINCT c FROM Course c
-            LEFT JOIN FETCH c.sections s
-            LEFT JOIN FETCH s.lessons
-            LEFT JOIN FETCH c.coursecategories cc
-            LEFT JOIN FETCH cc.category
-            WHERE c.status = :status AND c.isDeleted = false
+            WHERE c.status = :status AND c.isDeleted = false AND c.isHidden = false
             """)
     List<Course> findAllByStatus(@Param("status") CourseStatus status);
 
@@ -54,7 +43,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             """)
     Optional<Course> findCourseDetailById(@Param("id") Long id);
 
-    List<Course> findByStatusAndIsDeletedFalseOrderByCreatedAtDesc(CourseStatus status);
+    List<Course> findByStatusAndIsDeletedFalseAndIsHiddenFalseOrderByCreatedAtDesc(CourseStatus status);
     @Query("""
     SELECT DISTINCT c
     FROM Course c
@@ -63,5 +52,22 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     WHERE c.id = :courseId
 """)
     Optional<Course> findCurriculumById(@Param("courseId") Long courseId);
+
+    long countByInstructorIdAndStatusAndIsDeletedFalseAndIsHiddenFalse(Long instructorId, CourseStatus status);
+
+    @Query("""
+            SELECT DISTINCT c FROM Course c
+            LEFT JOIN FETCH c.sections s
+            LEFT JOIN FETCH s.lessons
+            LEFT JOIN FETCH c.coursecategories cc
+            LEFT JOIN FETCH cc.category
+            WHERE c.instructor.id = :instructorId AND c.status = :status
+                AND c.isDeleted = false AND c.isHidden = false
+            ORDER BY c.createdAt DESC
+            """)
+    List<Course> findByInstructorIdAndStatusAndIsDeletedFalseAndIsHiddenFalse(
+            @Param("instructorId") Long instructorId,
+            @Param("status") CourseStatus status
+    );
 
 }

@@ -9,6 +9,7 @@ export const useUserData = () => {
     name: currentUser?.fullName || "Guest User",
     avatar: currentUser?.avatar || defaultAvatar,
     roles: currentUser?.roles || [],
+    activeRole: currentUser?.activeRole,
   };
 };
 

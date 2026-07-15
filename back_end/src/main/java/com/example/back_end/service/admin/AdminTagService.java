@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.back_end.dto.response.admin.AdminCourseDropdownResponse;
 import com.example.back_end.dto.response.admin.AdminTagResponse;
-import com.example.back_end.dto.resquest.admin.AdminTagRequest;
+import com.example.back_end.dto.request.admin.AdminTagRequest;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Coursetag;
 import com.example.back_end.entity.CoursetagId;

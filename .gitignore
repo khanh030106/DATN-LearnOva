@@ -34,4 +34,12 @@ build/
 
 ### ENV ###
 .env
-*.zip 
+*.zip
+
+### Terraform ###
+infra/terraform/.terraform/
+infra/terraform/terraform.tfstate
+infra/terraform/terraform.tfstate.backup
+infra/terraform/*.tfvars
+infra/terraform/crash.log
+infra/terraform/crash.*.log

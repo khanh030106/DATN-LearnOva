@@ -1,1 +1,92 @@
-import { Heart, Play, Star } from "lucide-react";const CourseCardGrid = ({ courses = [], onOpenCourse, variant = "mine" }) => {  const isFavorite = variant === "favorite";  return (    <div className="profile-course-grid">      {courses.map((course, index) => (        <article          key={`${course.title}-${index}`}          className="profile-course-card"          onClick={() => onOpenCourse?.(course)}          role="button"          tabIndex={0}          onKeyDown={(e) => e.key === "Enter" && onOpenCourse?.(course)}        >          <div className="profile-course-card-media">            <img src={course.image} alt={course.title} />            {!isFavorite && (              <span className="profile-course-progress-badge">                Progress: {course.progress}%              </span>            )}            {isFavorite && (              <button                className="profile-course-bookmark favorite"                type="button"                aria-label="Remove from favorites"                onClick={(e) => e.stopPropagation()}              >                <Heart size={18} fill="currentColor" />              </button>            )}          </div>          <div className="profile-course-card-body">            <h4>{course.title}</h4>            <div className="profile-course-teacher-row">              <span>{course.instructor.name}</span>              <span>                <Star size={12} /> {course.rating} ({course.reviews})              </span>            </div>            {!isFavorite && (              <>                <div className="profile-course-progress-bar">                  <div                    className="profile-course-progress-fill"                    style={{ width: `${course.progress}%` }}                  />                </div>                <div className="profile-course-meta">                  <span>                    {course.lessonsDone} / {course.lessonsTotal} lessons                  </span>                  <span>{course.remaining}</span>                </div>              </>            )}            {isFavorite && course.price && (              <div className="profile-course-price">{course.price}</div>            )}            <button              onClick={(e) => {                e.stopPropagation();                onOpenCourse?.(course);              }}              className="profile-course-action-btn"              type="button"            >              <Play size={13} />              {isFavorite ? "View Course" : "Continue Learning"}            </button>          </div>        </article>      ))}    </div>  );};export default CourseCardGrid;
+import { CheckCircle2, Heart, Play, Star } from "lucide-react";
+
+const CourseCardGrid = ({ courses = [], onOpenCourse, variant = "mine" }) => {
+  const isFavorite = variant === "favorite";
+
+  return (
+    <div className="profile-course-grid">
+      {courses.map((course, index) => {
+        const isCompleted = !isFavorite && course.progress >= 100;
+
+        return (
+          <article
+            key={`${course.title}-${index}`}
+            className="profile-course-card"
+            onClick={() => onOpenCourse?.(course)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === "Enter" && onOpenCourse?.(course)}
+          >
+            <div className="profile-course-card-media">
+              <img src={course.image} alt={course.title} />
+              {!isFavorite && (
+                <span className="profile-course-progress-badge">
+                  Progress: {course.progress}%
+                </span>
+              )}
+              {isFavorite && (
+                <button
+                  className="profile-course-bookmark favorite"
+                  type="button"
+                  aria-label="Remove from favorites"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Heart size={18} fill="currentColor" />
+                </button>
+              )}
+            </div>
+            <div className="profile-course-card-body">
+              <h4>{course.title}</h4>
+              <div className="profile-course-teacher-row">
+                <span>{course.instructor.name}</span>
+                <span>
+                  <Star size={12} /> {course.rating} ({course.reviews})
+                </span>
+              </div>
+              {!isFavorite && (
+                <>
+                  <div className="profile-course-progress-bar">
+                    <div
+                      className="profile-course-progress-fill"
+                      style={{ width: `${course.progress}%` }}
+                    />
+                  </div>
+                  <div className="profile-course-meta">
+                    <span>
+                      {course.lessonsDone} / {course.lessonsTotal} lessons
+                    </span>
+                    <span>{isCompleted ? "Completed" : course.remaining}</span>
+                  </div>
+                </>
+              )}
+              {isFavorite && course.price && (
+                <div className="profile-course-price">{course.price}</div>
+              )}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenCourse?.(course);
+                }}
+                className={`profile-course-action-btn${isCompleted ? " completed" : ""}`}
+                type="button"
+              >
+                {isCompleted ? (
+                  <CheckCircle2 size={13} />
+                ) : (
+                  <Play size={13} />
+                )}
+                {isFavorite
+                  ? "View Course"
+                  : isCompleted
+                    ? "Course Completed"
+                    : "Continue Learning"}
+              </button>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  );
+};
+
+export default CourseCardGrid;

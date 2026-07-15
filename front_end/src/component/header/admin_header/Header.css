@@ -83,6 +83,111 @@
   background: #2563eb;
 }
 
+.admin-notification-wrap {
+  position: relative;
+}
+
+.admin-notification-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 340px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.16);
+  z-index: 1300;
+}
+
+.admin-notification-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 4px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #0f172a;
+}
+
+.admin-notification-heading span {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-notification-list {
+  display: grid;
+  gap: 6px;
+  padding-top: 10px;
+  margin: 0;
+  list-style: none;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.admin-notification-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.admin-notification-list li:hover {
+  background: #eff6ff;
+}
+
+.admin-notification-list li.is-unread {
+  background: #f8fafc;
+}
+
+.admin-notification-list li > span {
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.admin-notification-list li.is-unread > span {
+  background: #2563eb;
+}
+
+.admin-notification-list strong {
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.admin-notification-list p {
+  margin: 3px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.admin-notification-list small {
+  display: block;
+  margin-top: 4px;
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.admin-notification-empty {
+  display: block;
+  padding: 20px 10px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 13px;
+  cursor: default;
+}
+
+.admin-notification-empty:hover {
+  background: transparent;
+}
+
 .admin-profile {
   display: flex;
   align-items: center;

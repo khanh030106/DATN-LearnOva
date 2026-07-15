@@ -57,24 +57,26 @@ function headerIntructor({
 
                         <div className="info-item">
                             <MdWork className="info-icon" />
-                            <span>Frontend Developer tại FPT Software</span>
+                            <span>{instructor.courseCount} courses</span>
                         </div>
 
                         <div className="info-item">
                             <MdVerified className="info-icon" />
-                            <span>Bắt đầu kinh nghiệm giảng dạy</span>
+                            <span>{instructor.rating}★ ({instructor.ratingCount} reviews)</span>
                         </div>
 
                         <div className="info-item">
                             <MdSchool className="info-icon" />
-                            <span>Đại học Bách Khoa Hà Nội</span>
+                            <span>{instructor.studentCount} students</span>
                         </div>
 
                     </div>
 
-                    <p className="instructor-bio-in">
-                        {introText}
-                    </p>
+                    {introText && (
+                        <p className="instructor-bio-in">
+                            {introText}
+                        </p>
+                    )}
 
                 </div>
 

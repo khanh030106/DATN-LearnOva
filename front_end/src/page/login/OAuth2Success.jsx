@@ -14,8 +14,21 @@ const OAuth2Success = () => {
         const restoreOAuthSession = async () => {
             try {
                 await refreshAccessToken();
-                await fetchCurrentUser();
-                navigate("/learnova/courses", { replace: true });
+                const user = await fetchCurrentUser();
+
+                const roles = user?.roles ?? [];
+                const activeRole = user?.activeRole;
+                // A stale activeRole (e.g. left over after a role was revoked) must not
+                // send the user into a dashboard they no longer have access to.
+                const effectiveRole = activeRole && roles.includes(activeRole) ? activeRole : null;
+
+                if (effectiveRole === "ROLE_ADMIN") {
+                    navigate("/learnova/admin", { replace: true });
+                } else if (effectiveRole === "ROLE_TEACHER") {
+                    navigate("/learnova/teacher", { replace: true });
+                } else {
+                    navigate("/learnova/courses", { replace: true });
+                }
             } catch {
                 // Cookies missing or invalid — send back to login.
                 navigate("/learnova/auth/login", { replace: true });

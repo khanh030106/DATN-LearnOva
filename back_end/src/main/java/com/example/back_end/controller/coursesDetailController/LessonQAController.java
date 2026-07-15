@@ -1,50 +1,38 @@
 package com.example.back_end.controller.coursesDetailController;
 
-import com.example.back_end.dto.resquest.CreateAnswerRequest;
-import com.example.back_end.dto.resquest.CreateQuestionRequest;
+import com.example.back_end.dto.request.CreateAnswerRequest;
+import com.example.back_end.dto.request.CreateQuestionRequest;
 import com.example.back_end.dto.response.LessonQAResponse;
+import com.example.back_end.dto.response.teacher.TeacherQuestionResponse;
 import com.example.back_end.security.CustomUserDetails;
 import com.example.back_end.service.LessonQAService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/learnova/qna")
 @RequiredArgsConstructor
 public class LessonQAController {
 
     private final LessonQAService qaService;
 
-    // ======================
-    // GET Q&A BY COURSE
-    // New API: /api/qna/course/{courseId}
-    // ======================
-    @GetMapping("/qna/course/{courseId}")
+    @GetMapping("/course/{courseId}")
     public LessonQAResponse getCourseQnA(@PathVariable Long courseId) {
         return qaService.getCourseQnA(courseId);
     }
 
-    // ======================
-    // GET Q&A BY LESSON
-    // Old API: /api/learnova/qna/lesson/{lessonId}
-    // ======================
-    @GetMapping("/learnova/qna/lesson/{lessonId}")
+    @GetMapping("/lesson/{lessonId}")
     public LessonQAResponse getLessonQnA(@PathVariable Long lessonId) {
         return qaService.getLessonQnA(lessonId);
     }
 
-    // ======================
-    // CREATE QUESTION
-    // Supports:
-    // /api/qna/question
-    // /api/learnova/qna/question
-    // ======================
-    @PostMapping({
-            "/qna/question",
-            "/learnova/qna/question"
-    })
+    @PostMapping("/question")
     public void createQuestion(
             Authentication auth,
             @Valid @RequestBody CreateQuestionRequest req
@@ -53,16 +41,7 @@ public class LessonQAController {
         qaService.createQuestion(user.getId(), req);
     }
 
-    // ======================
-    // CREATE ANSWER
-    // Supports:
-    // /api/qna/answer
-    // /api/learnova/qna/answer
-    // ======================
-    @PostMapping({
-            "/qna/answer",
-            "/learnova/qna/answer"
-    })
+    @PostMapping("/answer")
     public void createAnswer(
             Authentication auth,
             @Valid @RequestBody CreateAnswerRequest req
@@ -71,16 +50,7 @@ public class LessonQAController {
         qaService.createAnswer(user.getId(), req);
     }
 
-    // ======================
-    // DELETE ANSWER
-    // Supports:
-    // /api/qna/answer/{answerId}
-    // /api/learnova/qna/answer/{answerId}
-    // ======================
-    @DeleteMapping({
-            "/qna/answer/{answerId}",
-            "/learnova/qna/answer/{answerId}"
-    })
+    @DeleteMapping("/answer/{answerId}")
     public void deleteAnswer(
             Authentication auth,
             @PathVariable Long answerId
@@ -89,16 +59,7 @@ public class LessonQAController {
         qaService.deleteAnswer(user.getId(), answerId);
     }
 
-    // ======================
-    // DELETE QUESTION
-    // Supports:
-    // /api/qna/question/{questionId}
-    // /api/learnova/qna/question/{questionId}
-    // ======================
-    @DeleteMapping({
-            "/qna/question/{questionId}",
-            "/learnova/qna/question/{questionId}"
-    })
+    @DeleteMapping("/question/{questionId}")
     public void deleteQuestion(
             Authentication auth,
             @PathVariable Long questionId
@@ -107,36 +68,17 @@ public class LessonQAController {
         qaService.deleteQuestion(user.getId(), questionId);
     }
 
-    // ======================
-    // UPDATE ANSWER
-    // Supports:
-    // /api/qna/answer/{id}
-    // /api/learnova/qna/answer/{id}
-    // ======================
-    @PutMapping({
-            "/qna/answer/{id}",
-            "/learnova/qna/answer/{id}"
-    })
+    @PutMapping("/answer/{id}")
     public void updateAnswer(
             Authentication auth,
             @PathVariable Long id,
             @Valid @RequestBody CreateAnswerRequest req
     ) {
-        System.out.println("UPDATE CONTROLLER");
         CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
         qaService.updateAnswer(user.getId(), id, req);
     }
 
-    // ======================
-    // UPDATE QUESTION
-    // Supports:
-    // /api/qna/question/{id}
-    // /api/learnova/qna/question/{id}
-    // ======================
-    @PutMapping({
-            "/qna/question/{id}",
-            "/learnova/qna/question/{id}"
-    })
+    @PutMapping("/question/{id}")
     public void updateQuestion(
             Authentication auth,
             @PathVariable Long id,
@@ -144,5 +86,34 @@ public class LessonQAController {
     ) {
         CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
         qaService.updateQuestion(user.getId(), id, req);
+    }
+
+    /** Question owner or the course instructor only. */
+    @PatchMapping("/question/{id}/solved")
+    public void setSolved(
+            Authentication auth,
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "true") boolean value
+    ) {
+        CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+        qaService.setSolved(user.getId(), id, value);
+    }
+
+    /** Course instructor only. */
+    @PatchMapping("/question/{id}/pinned")
+    public void setPinned(
+            Authentication auth,
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "true") boolean value
+    ) {
+        CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+        qaService.setPinned(user.getId(), id, value);
+    }
+
+    /** Teacher Q&A inbox: all questions across every course this instructor teaches. */
+    @PreAuthorize("hasRole('TEACHER')")
+    @GetMapping("/my-questions")
+    public ResponseEntity<List<TeacherQuestionResponse>> getMyQuestions(Authentication auth) {
+        return ResponseEntity.ok(qaService.getMyQuestions(auth.getName()));
     }
 }

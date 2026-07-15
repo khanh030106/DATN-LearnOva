@@ -1,6 +1,6 @@
 package com.example.back_end.controller;
 
-import com.example.back_end.dto.resquest.GenerateUploadUrlRequest;
+import com.example.back_end.dto.request.GenerateUploadUrlRequest;
 import com.example.back_end.dto.response.UploadUrlResponse;
 import com.example.back_end.service.S3Service;
 import jakarta.validation.Valid;

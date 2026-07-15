@@ -9,13 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.back_end.dto.response.AuthTokenResponse;
 import com.example.back_end.dto.response.CurrentUserResponse;
 import com.example.back_end.dto.response.LoginResponse;
-import com.example.back_end.dto.resquest.LoginRequest;
+import com.example.back_end.dto.request.LoginRequest;
 import com.example.back_end.entity.Role;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.Verificationtoken;
 import com.example.back_end.entity.enums.RoleName;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
+import com.example.back_end.repository.RoleRepository;
 import com.example.back_end.repository.UserRepository;
 import com.example.back_end.security.CustomUserDetailsService;
 import com.example.back_end.security.JwtService;
@@ -23,12 +24,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import java.util.Optional;
 import java.util.Set;
-import com.example.back_end.dto.resquest.RegisterRequest;
+import com.example.back_end.dto.request.RegisterRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.Instant;
 import com.example.back_end.dto.response.UserResponse;
-import com.example.back_end.dto.resquest.UpdateProfileRequest;
-import com.example.back_end.dto.resquest.ChangePasswordRequest;
+import com.example.back_end.dto.request.UpdateProfileRequest;
+import com.example.back_end.dto.request.ChangePasswordRequest;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Base64;
@@ -43,6 +44,7 @@ public class AuthService {
     private final VerificationTokenService verificationTokenService;
     private final CustomUserDetailsService customUserDetailsService;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
@@ -104,6 +106,34 @@ public class AuthService {
                 .findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+        return toCurrentUserResponse(user);
+    }
+
+    @Transactional
+    public CurrentUserResponse switchActiveRole(String email, RoleName role) {
+        User user = userRepository
+                .findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        boolean isAdmin = user.getRoles().stream()
+                .anyMatch(r -> r.getRoleName() == RoleName.ROLE_ADMIN);
+        if (isAdmin) {
+            throw new BusinessException("Quản trị viên không thể chuyển đổi vai trò.");
+        }
+
+        boolean hasRole = user.getRoles().stream()
+                .anyMatch(r -> r.getRoleName() == role);
+        if (!hasRole) {
+            throw new BusinessException("User does not have role " + role);
+        }
+
+        user.setActiveRole(role);
+        userRepository.save(user);
+
+        return toCurrentUserResponse(user);
+    }
+
+    private CurrentUserResponse toCurrentUserResponse(User user) {
         Set<RoleName> roleNames = user.getRoles().stream()
                 .map(Role::getRoleName)
                 .collect(java.util.stream.Collectors.toSet());
@@ -117,7 +147,8 @@ public class AuthService {
                 user.getCoverImage(),
                 user.getDateOfBirth(),
                 user.getGender(),
-                roleNames
+                roleNames,
+                user.getActiveRole()
         );
     }
 
@@ -133,6 +164,9 @@ public class AuthService {
             throw new BusinessException("Passwords do not match.");
         }
 
+        Role userRole = roleRepository.findByRoleName(RoleName.ROLE_USER)
+                .orElseThrow(() -> new BusinessException("ROLE_USER not found"));
+
         User user = new User();
         user.setFullName(request.fullName().trim());
         user.setEmail(request.email().trim().toLowerCase());
@@ -140,6 +174,7 @@ public class AuthService {
         user.setIsActive(false);
         user.setIsDeleted(false);
         user.setCreatedAt(Instant.now());
+        user.setRoles(Set.of(userRole));
 
         User savedUser = userRepository.save(user);
 

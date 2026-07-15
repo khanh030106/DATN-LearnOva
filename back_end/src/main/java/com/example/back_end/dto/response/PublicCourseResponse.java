@@ -12,5 +12,11 @@ public record PublicCourseResponse(
         BigDecimal basePrice,
         CourseLevel level,
         CourseStatus status,
-        String thumbnailKey
+        String thumbnailKey,
+        String categoryName,
+        long studentCount,
+        long lessonCount,
+        long totalDurationSeconds,
+        double avgRating,
+        long ratingCount
 ) {}

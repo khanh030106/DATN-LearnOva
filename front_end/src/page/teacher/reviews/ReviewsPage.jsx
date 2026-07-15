@@ -1,46 +1,51 @@
 import { useEffect, useMemo, useState } from "react";
-import { Star } from "lucide-react";
+import { toast } from "react-toastify";
+import { MessageSquare, Star } from "lucide-react";
 import ReviewsTable from "./components/ReviewsTable.jsx";
 import ReviewsToolbar from "./components/ReviewsToolbar.jsx";
-import { getMyReviews } from "../../../api/teacher/CourseApi.js";
+import { getMyReviews, replyToReview } from "../../../api/teacher/ReviewApi.js";
+import { buildCourseFilterOptions, filterReviews } from "./reviewsPageUtils.js";
 import "./ReviewsPage.css";
-
-const filterReviews = (reviews, query, ratingFilter) => {
-  const q = query.trim().toLowerCase();
-  return reviews.filter((review) => {
-    const matchesQuery =
-      !q ||
-      [review.userName, review.courseTitle, review.comment]
-        .join(" ")
-        .toLowerCase()
-        .includes(q);
-    const matchesRating = ratingFilter === "all" || review.rating === Number(ratingFilter);
-    return matchesQuery && matchesRating;
-  });
-};
 
 const ReviewsPage = () => {
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [ratingFilter, setRatingFilter] = useState("all");
+  const [courseFilter, setCourseFilter] = useState("ALL");
 
   useEffect(() => {
     getMyReviews()
       .then(setReviews)
-      .catch(() => {})
+      .catch(() => toast.error("Failed to load reviews."))
       .finally(() => setIsLoading(false));
   }, []);
 
+  const courseFilterOptions = useMemo(() => buildCourseFilterOptions(reviews), [reviews]);
+
   const filteredReviews = useMemo(
-    () => filterReviews(reviews, query, ratingFilter),
-    [reviews, query, ratingFilter]
+    () => filterReviews({ reviews, query, ratingFilter, courseFilter }),
+    [reviews, query, ratingFilter, courseFilter]
   );
 
   const averageRating = useMemo(() => {
     if (reviews.length === 0) return 0;
     return reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
   }, [reviews]);
+
+  const handleReply = async (reviewId, reply) => {
+    try {
+      await replyToReview(reviewId, reply);
+      setReviews((prev) =>
+        prev.map((r) =>
+          r.reviewId === reviewId ? { ...r, instructorReply: reply, repliedAt: new Date().toISOString() } : r
+        )
+      );
+      toast.success("Reply posted.");
+    } catch {
+      toast.error("Failed to post reply. Please try again.");
+    }
+  };
 
   if (isLoading) {
     return (
@@ -56,13 +61,22 @@ const ReviewsPage = () => {
     <section className="teacher-page teacher-reviews-page">
       <div className="teacher-reviews-summary">
         <div className="teacher-reviews-summary__item">
-          <Star size={20} fill="#ff9800" color="#ff9800" />
-          <strong>{averageRating.toFixed(1)}</strong>
-          <span>Đánh giá trung bình</span>
+          <span className="teacher-reviews-summary__icon">
+            <Star size={20} fill="#ff9800" color="#ff9800" />
+          </span>
+          <div>
+            <strong>{averageRating.toFixed(1)}</strong>
+            <span>Đánh giá trung bình</span>
+          </div>
         </div>
         <div className="teacher-reviews-summary__item">
-          <strong>{reviews.length}</strong>
-          <span>Tổng số đánh giá</span>
+          <span className="teacher-reviews-summary__icon teacher-reviews-summary__icon--blue">
+            <MessageSquare size={20} />
+          </span>
+          <div>
+            <strong>{reviews.length}</strong>
+            <span>Tổng số đánh giá</span>
+          </div>
         </div>
       </div>
 
@@ -71,8 +85,12 @@ const ReviewsPage = () => {
         onQueryChange={setQuery}
         ratingFilter={ratingFilter}
         onRatingFilterChange={setRatingFilter}
+        courseFilter={courseFilter}
+        onCourseFilterChange={setCourseFilter}
+        courseFilterOptions={courseFilterOptions}
       />
-      <ReviewsTable reviews={filteredReviews} />
+
+      <ReviewsTable reviews={filteredReviews} onReply={handleReply} />
     </section>
   );
 };

@@ -7,21 +7,15 @@ const formatPrice = (price) => {
     return new Intl.NumberFormat("vi-VN", {style: "currency", currency: "VND"}).format(n);
 };
 
-const CoursePreview = ({course, sections, previewDevice = "Desktop"}) => {
+const CoursePreview = ({course, sections}) => {
     const lessonCount = sections.reduce((total, s) => total + s.lessons.length, 0);
     const courseTitle = course.title || "Untitled course";
     const formattedPrice = formatPrice(course.basePrice);
     const whatYouLearn = (course.whatYouLearn || []).filter(Boolean);
     const requirements = (course.requirements || []).filter(Boolean);
 
-    const deviceClass = {
-        Desktop: "",
-        Tablet: "teacher-device-preview--tablet",
-        Mobile: "teacher-device-preview--mobile",
-    }[previewDevice] ?? "";
-
     return (
-        <div className={`teacher-preview-layout ${deviceClass}`}>
+        <div className="teacher-preview-layout">
             <section className="teacher-create-card teacher-student-preview">
                 <div className="teacher-student-preview__media">
                     {course.thumbnailPreviewUrl ? (
