@@ -1,4 +1,4 @@
-import axiosClient from "./axiosClient";
+import axiosClient from "./AxiosClient";
 
 export const getLessonQAApi = async (lessonId) => {
     const res = await axiosClient.get(`/qna/lesson/${lessonId}`);

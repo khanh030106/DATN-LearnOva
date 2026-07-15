@@ -1,4 +1,4 @@
-import axiosClient from "./axiosClient";
+import axiosClient from "./AxiosClient";
 
 export const getQuizApi = async (lessonId) => {
     const res = await axiosClient.get(`/lessons/${lessonId}/quiz`);
