@@ -1,4 +1,4 @@
-import axiosClient from "./axiosClient";
+import axiosClient from "./AxiosClient";
 
 export const getLessonSummaryApi = async (lessonId) => {
     const res = await axiosClient.get(`/lessons/${lessonId}/summary`);

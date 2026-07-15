@@ -17,6 +17,37 @@ resource "aws_iam_role_policy_attachment" "ec2_ssm_core" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
+# One-off secret handoff: lets the instance pull the deploy .env files from
+# Parameter Store (SecureString — value never appears in CloudTrail/RunCommand
+# history, unlike embedding it directly in an SSM command). Scoped to just the
+# /learnova/deploy/* path; those parameters get deleted right after use.
+data "aws_kms_alias" "ssm" {
+  name = "alias/aws/ssm"
+}
+
+data "aws_caller_identity" "current" {}
+
+resource "aws_iam_role_policy" "ec2_read_deploy_params" {
+  name = "learnova-ec2-read-deploy-params"
+  role = aws_iam_role.ec2_ssm.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "ssm:GetParameter"
+        Resource = "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/learnova/deploy/*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "kms:Decrypt"
+        Resource = data.aws_kms_alias.ssm.target_key_arn
+      }
+    ]
+  })
+}
+
 resource "aws_iam_instance_profile" "ec2" {
   name = "learnova-ec2-instance-profile"
   role = aws_iam_role.ec2_ssm.name
@@ -71,8 +102,11 @@ resource "aws_iam_role_policy" "github_actions_deploy" {
         }
       },
       {
-        Effect   = "Allow"
-        Action   = "ec2:DescribeInstances"
+        Effect = "Allow"
+        Action = [
+          "ec2:DescribeInstances",
+          "ec2:DescribeInstanceStatus",
+        ]
         Resource = "*"
       },
       {
