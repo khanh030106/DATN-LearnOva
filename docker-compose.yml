@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     container_name: learnova-postgres
     environment:
       # Must match DB_USERNAME / DB_PASSWORD in back_end/.env and the db name
