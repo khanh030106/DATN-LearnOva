@@ -57,3 +57,9 @@ variable "nightly_shutdown_hour" {
   type        = number
   default     = 16 # 23:00 ICT (UTC+7)
 }
+
+variable "alb_enabled" {
+  description = "Toggle to create/destroy the ALB + target group + listeners + DNS alias on demand, without touching ACM cert or EC2. Flip via scripts/cloud-up.sh / cloud-down.sh."
+  type        = bool
+  default     = true
+}
