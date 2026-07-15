@@ -106,7 +106,7 @@ const LoginForm = ({ onSwitchToRegister }) => {
                                 Remember me
                             </label>
 
-                            <Link to="/forgot-password" className="form-option-forgot">Forgot password???</Link>
+                            <Link to="/forgot-password" className="form-option-forgot">Forgot password?</Link>
                         </div>
 
                         <button type="submit" className="auth-submit-button login-submit-button">
