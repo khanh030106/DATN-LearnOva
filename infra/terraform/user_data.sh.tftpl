@@ -2,7 +2,12 @@
 set -euxo pipefail
 
 apt-get update -y
-apt-get install -y ca-certificates curl gnupg git
+apt-get install -y ca-certificates curl gnupg git awscli
+
+# Elasticsearch requires this for mmap-based Lucene directories; default
+# Ubuntu value (65530) is below the minimum ES expects (262144).
+echo "vm.max_map_count=262144" > /etc/sysctl.d/99-elasticsearch.conf
+sysctl -p /etc/sysctl.d/99-elasticsearch.conf
 
 install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
