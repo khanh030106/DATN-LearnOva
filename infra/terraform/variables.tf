@@ -19,7 +19,7 @@ variable "root_volume_size_gb" {
 variable "domain_name" {
   description = "Full subdomain the app will be served on (ACM cert + alias record)"
   type        = string
-  default     = "learnova.khanh.engineer"
+  default     = "datn.khanh.engineer"
 }
 
 variable "root_domain" {
