@@ -56,6 +56,9 @@ services:
       # localhost-based values for local dev, these win at runtime.
       DB_URL: jdbc:postgresql://postgres:5432/${DB_NAME}
       ES_URIS: http://elasticsearch:9200
+      CORS_ALLOWED_ORIGINS: https://learnova.khanh.engineer
+      FRONTEND_BASE_URL: https://learnova.khanh.engineer
+      COOKIE_SECURE: "true"
       AI_SERVICE_URL: http://ai-service:8000
       JAVA_TOOL_OPTIONS: -Xmx768m
     depends_on:
