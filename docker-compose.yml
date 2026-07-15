@@ -28,7 +28,9 @@ services:
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
     volumes:
       - es_data:/usr/share/elasticsearch/data
-    mem_limit: 768m
+    # 768m OOM-killed the container (exit 137): -Xmx512m heap + 256m direct
+    # memory + JVM/Lucene overhead doesn't fit in 768m of cgroup headroom.
+    mem_limit: 1024m
     healthcheck:
       test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health || exit 1"]
       interval: 10s
