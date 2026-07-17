@@ -4,8 +4,8 @@ output "route53_ns_delegation" {
 }
 
 output "alb_dns_name" {
-  description = "Informational only — DNS now points here automatically via the Route53 alias record"
-  value       = aws_lb.app.dns_name
+  description = "Informational only — null when var.alb_enabled=false (see scripts/cloud-up.sh / cloud-down.sh)"
+  value       = try(aws_lb.app[0].dns_name, null)
 }
 
 output "ec2_instance_id" {

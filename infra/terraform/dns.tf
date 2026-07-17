@@ -26,16 +26,18 @@ resource "aws_acm_certificate_validation" "app" {
   validation_record_fqdns = [for r in aws_route53_record.acm_validation : r.fqdn]
 }
 
-# Alias record for the `learnova` host pointing to the ALB — free, no extra
-# DNS lookup, and alias records aren't restricted to the zone apex.
+# Alias record pointing to the ALB — free, no extra DNS lookup. count-gated
+# alongside the ALB itself (see alb.tf); disappears when var.alb_enabled=false.
 resource "aws_route53_record" "alb_alias" {
+  count = var.alb_enabled ? 1 : 0
+
   zone_id = aws_route53_zone.app.zone_id
   name    = var.domain_name
   type    = "A"
 
   alias {
-    name                   = aws_lb.app.dns_name
-    zone_id                = aws_lb.app.zone_id
+    name                   = aws_lb.app[0].dns_name
+    zone_id                = aws_lb.app[0].zone_id
     evaluate_target_health = true
   }
 }
