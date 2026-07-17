@@ -55,14 +55,14 @@ const App = () => {
 
                 <Route path="/learnova/auth/login" element={<AuthPage/>}/>
                 <Route path="/learnova/user/courses-detail" element={<CourseDetail/>}/>
-                <Route path="/learnova/user/CoursesDetail/:courseId" element={<CourseDetail/>}/>
+                <Route path="/learnova/user/courses-detail/:courseId" element={<CourseDetail/>}/>
                 <Route path="/oauth2-success" element={<OAuth2Success />}/>
                 <Route path="/payment/success" element={<PaymentSuccess />}/>
                 <Route path="/payment/cancel" element={<PaymentCancel />}/>
                 <Route path="/learnova/certificate/verify/:code" element={<VerifyCertificatePage/>}/>
 
                 <Route element={<HomeLayout/>}>
-                    <Route path="/learnova/home" element={<Home/>}/>
+                    <Route path="/" element={<Home/>}/>
                 </Route>
 
                 {/* Admin */}
