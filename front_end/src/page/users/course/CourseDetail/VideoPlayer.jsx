@@ -24,6 +24,7 @@ function CourseVideoPlayer({ src, loading, initialTime = 0, onProgressUpdate }) 
     const isHls = src.includes(".m3u8");
     if (!isHls) {
       video.src = src;
+      video.play().catch(() => {});
       return;
     }
 
@@ -31,10 +32,14 @@ function CourseVideoPlayer({ src, loading, initialTime = 0, onProgressUpdate }) 
       const hls = new Hls();
       hls.loadSource(src);
       hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch(() => {});
+      });
       hlsRef.current = hls;
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
       // Safari plays HLS natively
       video.src = src;
+      video.play().catch(() => {});
     }
 
     return () => {
