@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
+    long countByInstructorIdAndIsDeletedFalse(Long instructorId);
+
     @Query("""
             SELECT DISTINCT c FROM Course c
             LEFT JOIN FETCH c.sections s

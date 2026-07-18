@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.back_end.entity.Enrollment;
 import com.example.back_end.entity.EnrollmentId;
+import java.util.Optional;
 
 public interface EnrollmentRepository extends JpaRepository<Enrollment, EnrollmentId> {
 
@@ -31,6 +32,7 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Enrollme
     );
 
     boolean existsByIdCourseIdAndIdUserId(Long courseId, Long userId);
+    boolean existsByUser_IdAndCourse_Id(Long userId, Long courseId);
 
     @Query("SELECT e FROM Enrollment e " +
            "JOIN FETCH e.user u " +
@@ -99,4 +101,5 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Enrollme
     @Query("SELECT e.course.id AS courseId, COALESCE(AVG(e.progressPercent), 0) AS avgProgress " +
             "FROM Enrollment e WHERE e.course.instructor.id = :instructorId GROUP BY e.course.id")
     List<CourseProgressProjection> findAvgProgressByCourseForInstructor(@Param("instructorId") Long instructorId);
+    Optional<Enrollment> findByUser_IdAndCourse_Id(Long userId, Long courseId);
 }
