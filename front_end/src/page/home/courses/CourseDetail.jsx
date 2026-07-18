@@ -163,8 +163,8 @@ export default function CourseDetail() {
             return;
         }
 
-        if (!course || subtotal <= 0) {
-            toast.error("This course does not have a valid price.");
+        if (!course) {
+            toast.error("Course not found.");
             return;
         }
 
@@ -251,6 +251,18 @@ export default function CourseDetail() {
                 },
                 accessToken,
             );
+
+            // Free / $0 after voucher — already enrolled on server
+            if (
+                payment?.orderStatus === "PAID" ||
+                payment?.paymentStatus === "SUCCESS" ||
+                payment?.paymentMethod === "FREE"
+            ) {
+                setEnrolled(true);
+                toast.success("Enrolled successfully. Opening your course…");
+                navigate(`/learnova/user/CoursesDetail/${id}`);
+                return;
+            }
 
             setActivePayment(payment);
         } catch (err) {
@@ -509,7 +521,7 @@ export default function CourseDetail() {
 
                         <div className="cdp__card-body">
                             <div className="cdp__card-price">
-                                {formatUsd(total)}
+                                {total <= 0 ? "Free" : formatUsd(total)}
                             </div>
 
                             {discount > 0 && (
@@ -575,7 +587,11 @@ export default function CourseDetail() {
                                         disabled={isCreatingPayment}
                                     >
                                         {isCreatingPayment ? (
-                                            "Creating payment..."
+                                            total <= 0 ? "Enrolling..." : "Creating payment..."
+                                        ) : total <= 0 ? (
+                                            <>
+                                                <FaGraduationCap /> Enroll for free
+                                            </>
                                         ) : (
                                             <>
                                                 <FaShoppingCart /> Buy Now

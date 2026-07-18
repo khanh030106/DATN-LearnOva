@@ -27,7 +27,7 @@ const getDiscountLabel = (discountType) =>
   discountType === "Percent" ? "Discount Percent" : "Discount Amount";
 
 const getDiscountUnit = (discountType) =>
-  discountType === "Percent" ? "%" : "USD";
+  discountType === "Percent" ? "%" : "$";
 
 const formatUsd = (value) => {
   const amount = Number(value) || 0;
@@ -245,14 +245,21 @@ const VoucherCreate = ({
                 <input
                   type="number"
                   min="0"
+                  step="0.01"
                   max={form.discountType === "Percent" ? "100" : undefined}
                   value={form.discountValue}
                   onChange={handleChange("discountValue")}
                   className="voucherCreateInput voucherCreateAmountInput"
                   disabled={isView}
+                  inputMode="decimal"
                 />
-                <span>{getDiscountUnit(form.discountType)}</span>
+                <span className="voucherCreateAmountUnit">
+                  {getDiscountUnit(form.discountType)}
+                </span>
               </div>
+              {form.discountType === "Fixed" ? (
+                <small className="voucherCreateHint">USD (catalog). Decimals allowed, e.g. 57.97</small>
+              ) : null}
             </label>
           </div>
 

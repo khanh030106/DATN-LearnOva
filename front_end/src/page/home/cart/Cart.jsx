@@ -19,18 +19,19 @@ import {
   setStoredCartItems,
 } from "../../../utils/cartStorage.js";
 
-function parseCoursePrice(price) {
-  if (typeof price === "number") return Number.isFinite(price) ? price : 0;
-  const value = Number(String(price ?? "").replace(/[^\d.-]/g, ""));
-  return Number.isFinite(value) ? value : 0;
+/** Catalog prices are USD. */
+function toUsdNumber(value) {
+  if (typeof value === "number") return Number.isFinite(value) ? value : 0;
+  const parsed = Number(String(value ?? "").replace(/[^\d.-]/g, ""));
+  return Number.isFinite(parsed) ? parsed : 0;
 }
 
-function formatMoney(amount) {
-  const value = parseCoursePrice(amount);
-  const body = Number.isInteger(value)
-    ? String(value)
-    : value.toFixed(2).replace(/\.?0+$/, "");
-  return `$${body}`;
+function formatUsd(amount) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 2,
+  }).format(toUsdNumber(amount));
 }
 
 function normalizeTitle(title) {
@@ -94,7 +95,7 @@ const Cart = () => {
       .catch(() => setDbCourses([]));
   }, []);
 
-  const subtotal = items.reduce((sum, item) => sum + parseCoursePrice(item.price), 0);
+  const subtotal = items.reduce((sum, item) => sum + toUsdNumber(item.price), 0);
   const discount = Number(appliedVoucher?.discountAmount || 0);
   const total = Math.max(0, subtotal - discount);
 
@@ -173,6 +174,7 @@ const Cart = () => {
       return;
     }
 
+    // Free cart (or voucher to $0): still checkout — server enrolls without PayOS
     const checkoutPairs = items
       .map((item) => ({ item, course: findCheckoutCourse(item) }))
       .filter((pair) => pair.course);
@@ -194,16 +196,41 @@ const Cart = () => {
         },
         accessToken,
       );
+
+      if (
+        payment?.orderStatus === "PAID" ||
+        payment?.paymentStatus === "SUCCESS" ||
+        payment?.paymentMethod === "FREE"
+      ) {
+        const paidIds = checkoutPairs.map((pair) => pair.item.id);
+        if (isAuthenticated) {
+          for (const id of paidIds) {
+            try {
+              await removeCartItemApi(axiosPrivate, id, accessToken);
+            } catch {
+              // ignore
+            }
+          }
+        } else {
+          setStoredCartItems([]);
+        }
+        window.dispatchEvent(new Event(CART_UPDATED_EVENT));
+        await loadCartItems();
+        toast.success("Enrolled for free. Opening My Courses…");
+        navigate("/learnova/user/profile/courses");
+        return;
+      }
+
       setActivePayment({
         ...payment,
         cartItemIds: checkoutPairs.map((pair) => pair.item.id),
       });
     } catch (err) {
-      toast.error(
+      const msg =
         err?.response?.data?.message ||
-          err?.response?.data?.error ||
-          "Unable to create payment.",
-      );
+        err?.response?.data?.error ||
+        "Unable to create payment.";
+      toast.error(msg, { autoClose: 4000 });
     } finally {
       setIsCreatingPayment(false);
     }
@@ -260,7 +287,7 @@ const Cart = () => {
 
             {items.map((item) => {
               const courseId = item.courseId ?? item.id;
-              const priceText = formatMoney(item.price);
+              const priceText = formatUsd(item.price);
 
               return (
                 <div className="cart-item" key={courseId}>
@@ -303,12 +330,12 @@ const Cart = () => {
 
             <div className="order-row">
               <span>Subtotal ({items.length} courses)</span>
-              <span>{formatMoney(subtotal)}</span>
+              <span>{formatUsd(subtotal)}</span>
             </div>
 
             <div className="order-row">
               <span>Discount</span>
-              <span className="discount">-{formatMoney(discount)}</span>
+              <span className="discount">-{formatUsd(discount)}</span>
             </div>
 
             <div className="voucher-box">
@@ -338,7 +365,7 @@ const Cart = () => {
 
             <div className="order-total">
               <span>Total</span>
-              <span className="total-amount">{formatMoney(total)}</span>
+              <span className="total-amount">{formatUsd(total)}</span>
             </div>
 
             <button
@@ -347,7 +374,13 @@ const Cart = () => {
               onClick={handleCheckout}
               disabled={isCreatingPayment || items.length === 0}
             >
-              {isCreatingPayment ? "Creating payment..." : "Proceed to checkout"}
+              {isCreatingPayment
+                ? total <= 0
+                  ? "Enrolling..."
+                  : "Creating payment..."
+                : total <= 0
+                  ? "Enroll for free"
+                  : "Proceed to checkout"}
             </button>
 
             <button
@@ -411,7 +444,15 @@ const Cart = () => {
         />
       )}
 
-      <ToastContainer position="top-right" autoClose={2000} />
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        newestOnTop
+        closeOnClick
+        pauseOnHover={false}
+        draggable
+        limit={3}
+      />
     </div>
   );
 };
