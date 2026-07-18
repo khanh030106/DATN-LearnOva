@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { X } from "lucide-react";
-import { toast } from "react-toastify";
+import { adminNotifySuccess } from "../../../../api/NotificationApi.js";
 import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 import { useAuth } from "../../../../hook/UseAuth.jsx";
 import {
@@ -147,10 +147,10 @@ const VoucherCreate = ({
 
       if (mode === "create") {
         await createAdminVoucherApi(payload, axiosPrivate);
-        toast.success("Voucher created successfully.");
+        await adminNotifySuccess("Voucher created successfully.", { title: "Vouchers" });
       } else {
         await updateAdminVoucherApi(voucher.id, payload, axiosPrivate);
-        toast.success("Voucher updated successfully.");
+        await adminNotifySuccess("Voucher updated successfully.", { title: "Vouchers" });
       }
 
       onSaved?.();

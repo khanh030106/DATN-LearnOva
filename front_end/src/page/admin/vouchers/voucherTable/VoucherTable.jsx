@@ -1,6 +1,7 @@
 import { FiEye, FiEdit, FiTrash2 } from "react-icons/fi";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+import { adminNotifySuccess } from "../../../../api/NotificationApi.js";
 import AdminHoverSelect from "../../shared/AdminHoverSelect";
 import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 import {
@@ -222,7 +223,7 @@ const VoucherTable = ({
       });
       onVoucherDeleted?.();
       setDeleteTarget(null);
-      toast.success("Voucher status changed to delete.");
+      await adminNotifySuccess("Voucher status changed to delete.", { title: "Vouchers" });
     } catch (err) {
       console.error(err);
       toast.error(err?.response?.data?.message || "Failed to delete voucher.");

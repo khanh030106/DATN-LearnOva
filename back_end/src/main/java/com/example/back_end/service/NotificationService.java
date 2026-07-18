@@ -40,6 +40,24 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
+    public NotificationResponse createForEmail(
+            String email, NotificationType type, String title, String content, String link, Map<String, Object> metadata) {
+        User user = userRepository.findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setType(type);
+        notification.setTitle(title);
+        notification.setContent(content);
+        notification.setLink(link);
+        notification.setMetadata(metadata);
+        notification.setIsRead(false);
+        notification.setCreatedAt(Instant.now());
+        notificationRepository.saveAndFlush(notification);
+        return toResponse(notification);
+    }
+
     /**
      * Saves even if the caller transaction rolls back (e.g. money received but unlock failed).
      */

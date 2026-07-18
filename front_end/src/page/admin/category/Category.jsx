@@ -1,6 +1,7 @@
 import { AlertTriangle, Edit3, FolderTree, Plus, Trash2, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+import { adminNotifySuccess } from "../../../api/NotificationApi.js";
 import {
   createAdminCategoryApi,
   deleteAdminCategoryApi,
@@ -195,7 +196,10 @@ const Category = () => {
         );
         setCategories((current) => [...current, normalizeCategory(newCategory)]);
       }
-      toast.success(editingCategory ? "Category updated successfully!" : "Category created successfully!");
+      await adminNotifySuccess(
+        editingCategory ? "Category updated successfully!" : "Category created successfully!",
+        { title: "Categories" },
+      );
       closeModal();
     } catch (err) {
       const msg = err?.response?.data?.message || `Failed to ${editingCategory ? "update" : "create"} category.`;

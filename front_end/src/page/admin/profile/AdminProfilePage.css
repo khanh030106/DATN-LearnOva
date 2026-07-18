@@ -1,0 +1,14 @@
+.admin-profile-view.profile-view {
+  min-height: auto;
+  padding: 8px 0 24px;
+}
+
+.admin-profile-view .profile-wrapper {
+  max-width: none;
+  margin-top: 0;
+  gap: 24px;
+}
+
+.admin-profile-view .sidebar-content {
+  top: 16px;
+}

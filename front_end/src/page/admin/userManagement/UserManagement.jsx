@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+import { adminNotifySuccess } from "../../../api/NotificationApi.js";
 import { createAdminUserApi, getAdminUsersApi } from "../../../api/admin/AdminUserApi.js";
 import { getFileUrl } from "../../../api/PublicCourseApi.js";
 import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";  // ← Thêm import này
@@ -157,10 +158,11 @@ const UserManagement = () => {
   const [showAddUserModal, setShowAddUserModal] = useState(false);
 
   const showNotification = useCallback((message, type = "success", duration) => {
-    const notify = type === "error" ? toast.error : toast.success;
-    notify(message, {
-      autoClose: duration ?? (type === "error" ? 5000 : 3000),
-    });
+    if (type === "error") {
+      toast.error(message, { autoClose: duration ?? 5000 });
+      return;
+    }
+    void adminNotifySuccess(message, { title: "User management" });
   }, []);
 
   useEffect(() => {

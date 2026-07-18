@@ -71,6 +71,8 @@ const Header = () => {
     title = "Violation Reports";
   } else if (normPath === "/learnova/admin/settings") {
     title = "Settings";
+  } else if (normPath.startsWith("/learnova/admin/profile")) {
+    title = "Profile";
   } else {
     title = "Dashboard";
   }
@@ -128,7 +130,7 @@ const Header = () => {
               <ul className="admin-profile-menu">
                 <li>
                   <Link
-                    to="/learnova/user/profile"
+                    to="/learnova/admin/profile"
                     className="admin-profile-menu__item"
                     onClick={() => setIsProfileOpen(false)}
                   >

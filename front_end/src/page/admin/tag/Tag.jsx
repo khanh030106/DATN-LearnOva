@@ -1,6 +1,7 @@
 import { AlertTriangle, Edit3, Plus, Tag as TagIcon, Trash2, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+import { adminNotifySuccess } from "../../../api/NotificationApi.js";
 import {
   createAdminTagApi,
   deleteAdminTagApi,
@@ -195,7 +196,10 @@ const Tag = () => {
         );
         setTags((current) => [...current, normalizeTag(newTag)]);
       }
-      toast.success(editingTag ? "Tag updated successfully!" : "Tag created successfully!");
+      await adminNotifySuccess(
+        editingTag ? "Tag updated successfully!" : "Tag created successfully!",
+        { title: "Tags" },
+      );
       closeModal();
     } catch (err) {
       const msg = err?.response?.data?.message || `Failed to ${editingTag ? "update" : "create"} tag.`;

@@ -19,6 +19,7 @@ import Category from "../page/admin/category/Category.jsx";
 import Tag from "../page/admin/tag/Tag.jsx";
 import ViolationReports from "../page/admin/violationReports/ViolationReports.jsx";
 import Settings from "../page/admin/settings/Settings.jsx";
+import AdminProfilePage from "../page/admin/profile/AdminProfilePage.jsx";
 import TeacherLayout from "../layout/teacher/TeacherLayout.jsx";
 import OverviewPage from "../page/teacher/overview/OverviewPage.jsx";
 import CoursesPage from "../page/teacher/courses/CoursesPage.jsx";
@@ -85,6 +86,7 @@ const App = () => {
                     <Route path="tags" element={<Tag/>}/>
                     <Route path="violation-reports" element={<ViolationReports/>}/>
                     <Route path="settings" element={<Settings/>}/>
+                    <Route path="profile" element={<AdminProfilePage/>}/>
                     <Route path="teacher-applications" element={<TeacherApplicationPage/>}/>
                     <Route path="teacher-applications/:applicationId" element={<TeacherApplicationPage/>}/>
                     <Route path="payout-requests" element={<AdminPayoutRequestsPage/>}/>

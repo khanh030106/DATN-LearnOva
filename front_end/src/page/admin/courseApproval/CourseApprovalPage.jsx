@@ -2,6 +2,7 @@ import { ArrowLeft, BookOpen } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { adminNotifySuccess } from "../../../api/NotificationApi.js";
 import {
   approveAdminCourseApi,
   getAdminCourseDetailApi,
@@ -168,7 +169,7 @@ const useCourseApproval = () => {
 
       setDetail(mappedDetail);
       updateCourseStatusInList(selectedId, mappedDetail.status);
-      toast.success(successMessage);
+      await adminNotifySuccess(successMessage, { title: "Course approval" });
       setActiveAction(null);
     } catch (error) {
       toast.error(error?.response?.data?.message || "Course action failed. Please try again.");

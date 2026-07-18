@@ -2,6 +2,7 @@ import { Banknote } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { adminNotifySuccess } from "../../../api/NotificationApi.js";
 import {
   getAdminPayoutRequestsApi,
   markPayoutPaidApi,
@@ -75,7 +76,7 @@ const AdminPayoutRequestsPage = () => {
     try {
       setIsSubmitting(true);
       await markPayoutPaidApi(selectedId);
-      toast.success("Payout marked as paid.");
+      await adminNotifySuccess("Payout marked as paid.", { title: "Payout requests" });
       await refreshRequests();
     } catch (error) {
       toast.error(error?.response?.data?.message || "Failed to mark payout as paid.");
@@ -90,7 +91,7 @@ const AdminPayoutRequestsPage = () => {
     try {
       setIsSubmitting(true);
       await rejectPayoutRequestApi(selectedId, rejectReason.trim());
-      toast.success("Payout request rejected.");
+      await adminNotifySuccess("Payout request rejected.", { title: "Payout requests" });
       setShowRejectForm(false);
       setRejectReason("");
       await refreshRequests();

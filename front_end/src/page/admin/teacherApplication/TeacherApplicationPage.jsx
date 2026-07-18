@@ -2,6 +2,7 @@ import { GraduationCap } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { adminNotifySuccess } from "../../../api/NotificationApi.js";
 import {
   approveTeacherApplicationApi,
   getAdminTeacherApplicationDetailApi,
@@ -100,7 +101,9 @@ const TeacherApplicationPage = () => {
     try {
       setIsSubmitting(true);
       await approveTeacherApplicationApi(selectedId);
-      toast.success("Application approved. The user is now an instructor.");
+      await adminNotifySuccess("Application approved. The user is now an instructor.", {
+        title: "Teacher applications",
+      });
       removeFromList(selectedId);
       setDetail(null);
     } catch (error) {
@@ -116,7 +119,9 @@ const TeacherApplicationPage = () => {
     try {
       setIsSubmitting(true);
       await rejectTeacherApplicationApi(selectedId, rejectReason.trim());
-      toast.success("Application rejected. The user has been notified.");
+      await adminNotifySuccess("Application rejected. The user has been notified.", {
+        title: "Teacher applications",
+      });
       removeFromList(selectedId);
       setDetail(null);
       setShowRejectForm(false);
