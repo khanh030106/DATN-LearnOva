@@ -36,18 +36,19 @@ const formatDate = (value) => {
   return Number.isNaN(date.getTime()) ? "" : date.toLocaleDateString("en-GB");
 };
 
-const formatCurrency = (value) =>
-  new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-    maximumFractionDigits: 0,
-  }).format(Number(value || 0));
+const formatUsd = (value) => {
+  const amount = Number(value) || 0;
+  const body = Number.isInteger(amount)
+    ? String(amount)
+    : amount.toFixed(2).replace(/\.?0+$/, "");
+  return `$${body}`;
+};
 
 const formatDiscount = (voucher) => {
   if (!voucher?.discountType || voucher?.discountValue == null) return "";
   const type = String(voucher.discountType).toLowerCase();
   if (type.includes("percent")) return `${voucher.discountValue}%`;
-  return formatCurrency(voucher.discountValue);
+  return formatUsd(voucher.discountValue);
 };
 
 const VoucherTable = ({

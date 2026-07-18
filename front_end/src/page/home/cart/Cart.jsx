@@ -1,140 +1,160 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AlertTriangle, Tag, Trash2, X } from "lucide-react";
-import "./Cart.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  CART_UPDATED_EVENT,
-  getStoredCartItems,
-  removeStoredCartItem,
-  setStoredCartItems,
-} from "../../../utils/cartStorage.js";
+import "./Cart.css";
 import { applyVoucherApi } from "../../../api/VoucherApi.js";
 import { createPaymentApi } from "../../../api/PaymentApi.js";
 import { getPublicCoursesApi } from "../../../api/CourseApi.js";
+import { getMyCartApi, removeCartItemApi } from "../../../api/CartApi.js";
 import PaymentModal from "../../../component/payment/PaymentModal.jsx";
 import { useAuth } from "../../../hook/UseAuth.jsx";
 import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";
+import {
+  CART_UPDATED_EVENT,
+  getStoredCartItems,
+  mapCartApiItem,
+  removeStoredCartItem,
+  setStoredCartItems,
+} from "../../../utils/cartStorage.js";
 
-const parseCoursePrice = (price) => {
-  if (typeof price === "number") return price;
+function parseCoursePrice(price) {
+  if (typeof price === "number") return Number.isFinite(price) ? price : 0;
+  const value = Number(String(price ?? "").replace(/[^\d.-]/g, ""));
+  return Number.isFinite(value) ? value : 0;
+}
 
-  const numericValue = Number(String(price).replace(/[^\d]/g, ""));
-  return Number.isFinite(numericValue) ? numericValue : 0;
-};
+function formatMoney(amount) {
+  const value = parseCoursePrice(amount);
+  const body = Number.isInteger(value)
+    ? String(value)
+    : value.toFixed(2).replace(/\.?0+$/, "");
+  return `$${body}`;
+}
 
-const normalizeCourseTitle = (title) =>
-  String(title || "")
+function normalizeTitle(title) {
+  return String(title || "")
     .trim()
     .toLowerCase()
     .replace(/\s+/g, " ");
+}
 
 const Cart = () => {
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const { accessToken, isAuthenticated, loading: authLoading } = useAuth();
-  const [items, setItems] = useState(() => getStoredCartItems());
+
+  const [items, setItems] = useState([]);
   const [dbCourses, setDbCourses] = useState([]);
   const [promo, setPromo] = useState("");
   const [appliedVoucher, setAppliedVoucher] = useState(null);
-  const [voucherMessage, setVoucherMessage] = useState("");
   const [isApplyingVoucher, setIsApplyingVoucher] = useState(false);
   const [isCreatingPayment, setIsCreatingPayment] = useState(false);
   const [activePayment, setActivePayment] = useState(null);
   const [itemToRemove, setItemToRemove] = useState(null);
 
-  useEffect(() => {
-    const syncCartItems = () => {
+  // Load cart: guest = localStorage, logged-in = API
+  const loadCartItems = async () => {
+    if (authLoading) return;
+
+    if (!isAuthenticated) {
       setItems(getStoredCartItems());
-      setAppliedVoucher(null);
-      setVoucherMessage("");
-    };
+      return;
+    }
 
-    window.addEventListener(CART_UPDATED_EVENT, syncCartItems);
-    window.addEventListener("storage", syncCartItems);
-
-    return () => {
-      window.removeEventListener(CART_UPDATED_EVENT, syncCartItems);
-      window.removeEventListener("storage", syncCartItems);
-    };
-  }, []);
-
-  useEffect(() => {
-    let mounted = true;
-
-    getPublicCoursesApi()
-      .then((data) => {
-        if (mounted && Array.isArray(data)) {
-          setDbCourses(data);
-        }
-      })
-      .catch(() => {
-        if (mounted) setDbCourses([]);
-      });
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const askRemoveItem = (item) => setItemToRemove(item);
-
-  const closeRemovePopup = () => setItemToRemove(null);
-
-  const confirmRemoveItem = () => {
-    if (!itemToRemove) return;
-    const removedTitle = itemToRemove.title;
-    const nextItems = removeStoredCartItem(itemToRemove.id);
-    setItems(nextItems);
-    setAppliedVoucher(null);
-    setVoucherMessage("");
-    closeRemovePopup();
-    toast.success(`Đã xóa "${removedTitle}" khỏi giỏ hàng.`);
+    try {
+      const data = await getMyCartApi(axiosPrivate, accessToken);
+      setItems(Array.isArray(data) ? data.map(mapCartApiItem) : []);
+    } catch {
+      setItems(getStoredCartItems());
+    }
   };
 
-  const subtotal = items.reduce((sum, it) => sum + parseCoursePrice(it.price), 0);
+  useEffect(() => {
+    loadCartItems();
+
+    const onCartChange = () => {
+      loadCartItems();
+      setAppliedVoucher(null);
+    };
+
+    window.addEventListener(CART_UPDATED_EVENT, onCartChange);
+    window.addEventListener("storage", onCartChange);
+
+    return () => {
+      window.removeEventListener(CART_UPDATED_EVENT, onCartChange);
+      window.removeEventListener("storage", onCartChange);
+    };
+  }, [authLoading, isAuthenticated, accessToken]);
+
+  useEffect(() => {
+    getPublicCoursesApi()
+      .then((data) => setDbCourses(Array.isArray(data) ? data : []))
+      .catch(() => setDbCourses([]));
+  }, []);
+
+  const subtotal = items.reduce((sum, item) => sum + parseCoursePrice(item.price), 0);
   const discount = Number(appliedVoucher?.discountAmount || 0);
   const total = Math.max(0, subtotal - discount);
 
-  const handleVoucherChange = (event) => {
-    setPromo(event.target.value);
-    setAppliedVoucher(null);
-    setVoucherMessage("");
+  const findCheckoutCourse = (item) => {
+    const rawId = item.courseId ?? item.id;
+    const byId = dbCourses.find((course) => String(course.courseId) === String(rawId));
+    if (byId) return byId;
+
+    const title = normalizeTitle(item.title);
+    if (!title) return null;
+    return dbCourses.find((course) => normalizeTitle(course.title) === title) || null;
+  };
+
+  const confirmRemoveItem = async () => {
+    if (!itemToRemove) return;
+
+    const courseId = itemToRemove.courseId ?? itemToRemove.id;
+    const title = itemToRemove.title;
+
+    try {
+      if (isAuthenticated) {
+        await removeCartItemApi(axiosPrivate, courseId, accessToken);
+        await loadCartItems();
+        window.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT));
+      } else {
+        setItems(removeStoredCartItem(courseId));
+      }
+
+      setAppliedVoucher(null);
+      setItemToRemove(null);
+      toast.success(`Removed "${title}" from cart.`);
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Failed to remove course from cart.");
+    }
   };
 
   const handleApplyVoucher = async () => {
     const code = promo.trim();
 
     if (!code) {
-      setVoucherMessage("Vui lòng nhập mã voucher.");
+      toast.error("Please enter a voucher code.");
       return;
     }
-
     if (items.length === 0 || subtotal <= 0) {
-      setVoucherMessage("Giỏ hàng đang trống.");
+      toast.error("Your cart is empty.");
       return;
     }
-
     if (appliedVoucher?.code?.toLowerCase() === code.toLowerCase()) {
-      setVoucherMessage("Voucher này đã được áp dụng.");
+      toast.info("Voucher already applied.");
       return;
     }
 
     try {
       setIsApplyingVoucher(true);
-      setVoucherMessage("");
       const result = await applyVoucherApi({ code, subtotal });
       setAppliedVoucher(result);
-      setVoucherMessage(
-        `Đã áp dụng ${result.code}. Đã dùng ${result.usedCount}/${result.usageLimit} lượt.`,
-      );
-      toast.success("Áp dụng voucher thành công.");
+      toast.success("Voucher applied.");
     } catch (err) {
       setAppliedVoucher(null);
-      const message =
-        err?.response?.data?.message || "Voucher không hợp lệ hoặc không còn sử dụng được.";
-      setVoucherMessage(message);
+      const message = err?.response?.data?.message || "Invalid or unavailable voucher.";
       toast.error(message);
     } finally {
       setIsApplyingVoucher(false);
@@ -145,25 +165,24 @@ const Cart = () => {
     if (authLoading) return;
 
     if (!isAuthenticated) {
-      toast.error("Bạn cần đăng nhập để thanh toán.");
+      toast.error("Please log in to checkout.");
       return;
     }
-
     if (items.length === 0) {
-      toast.error("Giỏ hàng đang trống.");
+      toast.error("Your cart is empty.");
       return;
     }
 
     const checkoutPairs = items
-      .map((item) => ({ item, course: resolveCheckoutCourse(item) }))
+      .map((item) => ({ item, course: findCheckoutCourse(item) }))
       .filter((pair) => pair.course);
 
     if (checkoutPairs.length !== items.length) {
-      toast.error("Có khóa học trong giỏ không còn tồn tại hoặc chưa được publish.");
+      toast.error("Some courses in your cart are unavailable or not published.");
       return;
     }
 
-    const courseIds = Array.from(new Set(checkoutPairs.map((pair) => pair.course.courseId)));
+    const courseIds = checkoutPairs.map((pair) => pair.course.courseId);
 
     try {
       setIsCreatingPayment(true);
@@ -180,36 +199,43 @@ const Cart = () => {
         cartItemIds: checkoutPairs.map((pair) => pair.item.id),
       });
     } catch (err) {
-      const message =
+      toast.error(
         err?.response?.data?.message ||
-        err?.response?.data?.error ||
-        "Không thể tạo thanh toán payOS.";
-      toast.error(message);
+          err?.response?.data?.error ||
+          "Unable to create payment.",
+      );
     } finally {
       setIsCreatingPayment(false);
     }
   };
 
-  const resolveCheckoutCourse = (item) => {
-    const rawId = item?.courseId || item?.id;
-    const byId = dbCourses.find((course) => String(course.courseId) === String(rawId));
-    if (byId) return byId;
+  const handlePaymentPaid = async () => {
+    if (!activePayment) return;
 
-    const itemTitle = normalizeCourseTitle(item?.title);
-    if (!itemTitle) return null;
-
-    return dbCourses.find((course) => normalizeCourseTitle(course.title) === itemTitle) || null;
-  };
-
-  const handlePaymentPaid = () => {
-    if (!activePayment?.courseId) return;
-    const paidItemIds = new Set((activePayment.cartItemIds || [activePayment.cartItemId || activePayment.courseId]).map(String));
-    const nextItems = setStoredCartItems(
-      getStoredCartItems().filter((item) => !paidItemIds.has(String(item.id))),
+    const paidIds = new Set(
+      (activePayment.cartItemIds || [
+        activePayment.cartItemId || activePayment.courseId,
+      ]).map(String),
     );
-    setItems(nextItems);
+
+    if (isAuthenticated) {
+      for (const id of paidIds) {
+        try {
+          await removeCartItemApi(axiosPrivate, id, accessToken);
+        } catch {
+          // ignore single remove failure
+        }
+      }
+      await loadCartItems();
+      window.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT));
+    } else {
+      const nextItems = getStoredCartItems().filter(
+        (item) => !paidIds.has(String(item.courseId ?? item.id)),
+      );
+      setItems(setStoredCartItems(nextItems));
+    }
+
     setAppliedVoucher(null);
-    setVoucherMessage("");
   };
 
   return (
@@ -227,61 +253,62 @@ const Cart = () => {
 
             {items.length === 0 && (
               <div className="cart-empty">
-                <p>Giỏ hàng của bạn đang trống.</p>
-                <Link to="/learnova/courses">Tiếp tục mua khóa học</Link>
+                <p>Your cart is empty.</p>
+                <Link to="/learnova/courses">Continue shopping</Link>
               </div>
             )}
 
-            {items.map((item) => (
-              <div className="cart-item" key={item.id}>
-                <div className="cart-item-course">
-                  <img src={item.image} alt={item.title} />
-                  <div>
-                    <Link
-                      to={`/learnova/CoursesDetail/${item.id}`}
-                      className="cart-item-title"
-                    >
-                      {item.title}
-                    </Link>
-                    <div className="cart-item-teacher">By {item.teacher}</div>
+            {items.map((item) => {
+              const courseId = item.courseId ?? item.id;
+              const priceText = formatMoney(item.price);
+
+              return (
+                <div className="cart-item" key={courseId}>
+                  <div className="cart-item-course">
+                    <img src={item.image} alt={item.title} />
+                    <div>
+                      <Link
+                        to={`/learnova/CoursesDetail/${courseId}`}
+                        className="cart-item-title"
+                      >
+                        {item.title}
+                      </Link>
+                      <div className="cart-item-teacher">By {item.teacher}</div>
+                    </div>
                   </div>
-                </div>
 
-                <div className="cart-item-price">
-                  {parseCoursePrice(item.price).toLocaleString("vi-VN")}đ
-                </div>
+                  <div className="cart-item-price">{priceText}</div>
+                  <div className="cart-item-qty">
+                    <span className="qty-num">1</span>
+                  </div>
+                  <div className="cart-item-total">{priceText}</div>
 
-                <div className="cart-item-qty">
-                  <span className="qty-num">1</span>
+                  <button
+                    className="cart-item-remove"
+                    type="button"
+                    aria-label={`Remove ${item.title}`}
+                    onClick={() => setItemToRemove(item)}
+                  >
+                    <Trash2 size={18} />
+                  </button>
                 </div>
-
-                <div className="cart-item-total">
-                  {parseCoursePrice(item.price).toLocaleString("vi-VN")}đ
-                </div>
-
-                <button
-                  className="cart-item-remove"
-                  onClick={() => askRemoveItem(item)}
-                  type="button"
-                  aria-label={`Remove ${item.title}`}
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
         <aside className="cart-right">
           <div className="order-card">
             <h3>Order summary</h3>
+
             <div className="order-row">
               <span>Subtotal ({items.length} courses)</span>
-              <span>{subtotal.toLocaleString("vi-VN")}đ</span>
+              <span>{formatMoney(subtotal)}</span>
             </div>
+
             <div className="order-row">
               <span>Discount</span>
-              <span className="discount">-{discount.toLocaleString("vi-VN")}đ</span>
+              <span className="discount">-{formatMoney(discount)}</span>
             </div>
 
             <div className="voucher-box">
@@ -292,8 +319,11 @@ const Cart = () => {
                   id="voucher-code"
                   type="text"
                   value={promo}
-                  onChange={handleVoucherChange}
                   placeholder="Enter voucher"
+                  onChange={(event) => {
+                    setPromo(event.target.value);
+                    setAppliedVoucher(null);
+                  }}
                 />
                 <button
                   type="button"
@@ -304,20 +334,11 @@ const Cart = () => {
                   {isApplyingVoucher ? "..." : "Apply"}
                 </button>
               </div>
-              {voucherMessage ? (
-                <p
-                  className={`voucher-message ${
-                    appliedVoucher ? "voucher-message--success" : "voucher-message--error"
-                  }`}
-                >
-                  {voucherMessage}
-                </p>
-              ) : null}
             </div>
 
             <div className="order-total">
               <span>Total</span>
-              <span className="total-amount">{total.toLocaleString("vi-VN")}đ</span>
+              <span className="total-amount">{formatMoney(total)}</span>
             </div>
 
             <button
@@ -328,6 +349,7 @@ const Cart = () => {
             >
               {isCreatingPayment ? "Creating payment..." : "Proceed to checkout"}
             </button>
+
             <button
               className="continue"
               type="button"
@@ -341,17 +363,12 @@ const Cart = () => {
 
       {itemToRemove && (
         <div className="cart-popup-backdrop" role="presentation">
-          <div
-            className="cart-confirm-popup"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="remove-cart-title"
-          >
+          <div className="cart-confirm-popup" role="dialog" aria-modal="true">
             <button
               className="cart-popup-close"
               type="button"
-              onClick={closeRemovePopup}
               aria-label="Close popup"
+              onClick={() => setItemToRemove(null)}
             >
               <X size={18} />
             </button>
@@ -360,7 +377,7 @@ const Cart = () => {
               <AlertTriangle size={26} />
             </div>
 
-            <h3 id="remove-cart-title">Remove course?</h3>
+            <h3>Remove course?</h3>
             <p>
               Are you sure you want to remove{" "}
               <strong>{itemToRemove.title}</strong> from your cart?
@@ -370,7 +387,7 @@ const Cart = () => {
               <button
                 className="cart-popup-cancel"
                 type="button"
-                onClick={closeRemovePopup}
+                onClick={() => setItemToRemove(null)}
               >
                 Cancel
               </button>
@@ -385,6 +402,7 @@ const Cart = () => {
           </div>
         </div>
       )}
+
       {activePayment && (
         <PaymentModal
           payment={activePayment}
@@ -392,6 +410,7 @@ const Cart = () => {
           onPaid={handlePaymentPaid}
         />
       )}
+
       <ToastContainer position="top-right" autoClose={2000} />
     </div>
   );

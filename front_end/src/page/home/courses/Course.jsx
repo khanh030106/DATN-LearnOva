@@ -3,6 +3,14 @@ import {Link} from 'react-router-dom';
 import {getFeaturedCourses, getFileUrl} from '../../../api/PublicCourseApi.js';
 import './Course.css';
 
+const formatUsd = (value) => {
+  const amount = Number(value) || 0;
+  const body = Number.isInteger(amount)
+    ? String(amount)
+    : amount.toFixed(2).replace(/\.?0+$/, "");
+  return `$${body}`;
+};
+
 const FALLBACK_THUMBS = [
     'linear-gradient(135deg, #2563eb 0%, #38bdf8 100%)',
     'linear-gradient(135deg, #4361ee 0%, #7209b7 100%)',
@@ -154,14 +162,13 @@ export default function Course() {
                                         {course.discountPercent ? (
                                             <>
                                                 <span className="cs__price cs__price--sale">
-                                                    ${(course.basePrice * (1 - course.discountPercent / 100)).toFixed(2)}
+                                                    {formatUsd(course.basePrice * (1 - course.discountPercent / 100))}
                                                 </span>
-                                                <span
-                                                    className="cs__original">${Number(course.basePrice).toFixed(2)}</span>
+                                                <span className="cs__original">{formatUsd(course.basePrice)}</span>
                                                 <span className="cs__discount-badge">-{course.discountPercent}%</span>
                                             </>
                                         ) : (
-                                            <span className="cs__price">${Number(course.basePrice).toFixed(2)}</span>
+                                            <span className="cs__price">{formatUsd(course.basePrice)}</span>
                                         )}
                                     </div>
                                     <span className="cs__students">{formatStudents(course.studentCount)} students</span>

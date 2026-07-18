@@ -16,30 +16,31 @@ const toDateInputValue = (value) => {
   return date.toISOString().slice(0, 10);
 };
 
-const formatCurrency = (value) =>
-  new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-    maximumFractionDigits: 0,
-  }).format(Number(value || 0));
-
 const formatDateLabel = (value) => {
   if (!value) return "Not set";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "Not set";
-  return new Intl.DateTimeFormat("vi-VN").format(date);
+  return new Intl.DateTimeFormat("en-GB").format(date);
 };
 
 const getDiscountLabel = (discountType) =>
   discountType === "Percent" ? "Discount Percent" : "Discount Amount";
 
 const getDiscountUnit = (discountType) =>
-  discountType === "Percent" ? "%" : "VND";
+  discountType === "Percent" ? "%" : "USD";
+
+const formatUsd = (value) => {
+  const amount = Number(value) || 0;
+  const body = Number.isInteger(amount)
+    ? String(amount)
+    : amount.toFixed(2).replace(/\.?0+$/, "");
+  return `$${body}`;
+};
 
 const formatDiscountPreview = (discountType, value) =>
   discountType === "Percent"
     ? `${Number(value || 0)}%`
-    : formatCurrency(value);
+    : formatUsd(value);
 
 const maxVoucherMoneyValue = 99999999.99;
 
@@ -124,7 +125,7 @@ const VoucherCreate = ({
     }
 
     if (form.discountType === "Fixed" && Number(form.discountValue) > maxVoucherMoneyValue) {
-      setError("Discount amount cannot exceed 99,999,999.99 VND.");
+      setError("Discount amount cannot exceed $99,999,999.99.");
       return;
     }
 
@@ -366,7 +367,7 @@ const VoucherCreate = ({
 
           <div className="voucherCreateSummaryItem">
             <span>Usage limit</span>
-            <strong>{Number(form.usageLimit || 0).toLocaleString("vi-VN")}</strong>
+            <strong>{Number(form.usageLimit || 0).toLocaleString("en-US")}</strong>
           </div>
           <div className="voucherCreateSummaryItem">
             <span>Status</span>

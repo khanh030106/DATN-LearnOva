@@ -8,13 +8,21 @@ import { getCourseDetail, getFileUrl } from "../../../api/PublicCourseApi.js";
 import { checkEnrollment } from "../../../api/EnrollmentApi.js";
 import { useAuth } from "../../../hook/UseAuth.jsx";
 import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";
-import { addStoredCartItem } from "../../../utils/cartStorage.js";
+import { addCourseToCart } from "../../../utils/cartStorage.js";
 import { createPaymentApi } from "../../../api/PaymentApi.js";
 import { applyVoucherApi } from "../../../api/VoucherApi.js";
 import PaymentModal from "../../../component/payment/PaymentModal.jsx";
 import LearnovaAI from "../chat-bot/chatBot.jsx";
 
 import "./CourseDetail.css";
+
+const formatUsd = (value) => {
+  const amount = Number(value) || 0;
+  const body = Number.isInteger(amount)
+    ? String(amount)
+    : amount.toFixed(2).replace(/\.?0+$/, "");
+  return `$${body}`;
+};
 
 const formatDuration = (seconds) => {
     if (!seconds) return "0:00";
@@ -43,10 +51,6 @@ const formatHours = (seconds) => {
     return `${m}m`;
 };
 
-const formatVnd = (value) => {
-    return `${Number(value || 0).toLocaleString("vi-VN")}đ`;
-};
-
 export default function CourseDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -72,7 +76,6 @@ export default function CourseDetail() {
 
     const [promo, setPromo] = useState("");
     const [appliedVoucher, setAppliedVoucher] = useState(null);
-    const [voucherMessage, setVoucherMessage] = useState("");
     const [isApplyingVoucher, setIsApplyingVoucher] = useState(false);
 
     const [activePayment, setActivePayment] = useState(null);
@@ -122,7 +125,6 @@ export default function CourseDetail() {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setPromo("");
         setAppliedVoucher(null);
-        setVoucherMessage("");
         setActivePayment(null);
         setEnrolled(false);
     }, [id]);
@@ -150,7 +152,6 @@ export default function CourseDetail() {
     const handleVoucherChange = (event) => {
         setPromo(event.target.value);
         setAppliedVoucher(null);
-        setVoucherMessage("");
     };
 
     const handleApplyVoucher = async () => {
@@ -158,23 +159,22 @@ export default function CourseDetail() {
         const subtotal = Number(course?.basePrice || 0);
 
         if (!code) {
-            setVoucherMessage("Vui lòng nhập mã voucher.");
+            toast.error("Please enter a voucher code.");
             return;
         }
 
         if (!course || subtotal <= 0) {
-            setVoucherMessage("Khóa học chưa có giá hợp lệ.");
+            toast.error("This course does not have a valid price.");
             return;
         }
 
         if (appliedVoucher?.code?.toLowerCase() === code.toLowerCase()) {
-            setVoucherMessage("Voucher này đã được áp dụng.");
+            toast.info("This voucher is already applied.");
             return;
         }
 
         try {
             setIsApplyingVoucher(true);
-            setVoucherMessage("");
 
             const result = await applyVoucherApi({
                 code,
@@ -182,61 +182,60 @@ export default function CourseDetail() {
             });
 
             setAppliedVoucher(result);
-            setVoucherMessage(`Đã áp dụng ${result.code}.`);
-            toast.success("Áp dụng voucher thành công.");
+            toast.success(`Voucher ${result.code} applied.`);
         } catch (err) {
             const message =
                 err?.response?.data?.message ||
-                "Voucher không hợp lệ hoặc không còn sử dụng được.";
+                "Invalid or unavailable voucher.";
 
             setAppliedVoucher(null);
-            setVoucherMessage(message);
             toast.error(message);
         } finally {
             setIsApplyingVoucher(false);
         }
     };
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         if (authLoading || !course) return;
 
-        if (!isAuthenticated) {
-            toast.error("Bạn cần đăng nhập để thêm khóa học vào giỏ hàng.");
-            return;
-        }
-
         if (enrolled) {
-            toast.info("Bạn đã sở hữu khóa học này.");
+            toast.info("You already own this course.");
             return;
         }
 
-        const { alreadyInCart } = addStoredCartItem({
-            id: course.courseId || course.id || id,
-            courseId: course.courseId || course.id || id,
-            title: course.title,
-            teacher: course.instructor?.fullName || "LearnOva Instructor",
-            price: formatVnd(course.basePrice),
-            image: thumbnailUrl,
-        });
+        try {
+            const result = await addCourseToCart(
+                {
+                    courseId: course.courseId || course.id || id,
+                    title: course.title,
+                    teacher: course.instructor?.fullName || "LearnOva Instructor",
+                    price: Number(course.basePrice || 0),
+                    image: thumbnailUrl,
+                },
+                { isAuthenticated, accessToken },
+            );
 
-        if (alreadyInCart) {
-            toast.info("Khóa học này đã có trong giỏ hàng.");
-            return;
+            if (result.alreadyInCart) {
+                toast.info("Already in cart.");
+                return;
+            }
+
+            toast.success("Added to cart.");
+        } catch (err) {
+            toast.error(err?.response?.data?.message || "Failed to add to cart.");
         }
-
-        toast.success("Đã thêm khóa học vào giỏ hàng.");
     };
 
     const handleBuyNow = async () => {
         if (authLoading || !course) return;
 
         if (!isAuthenticated) {
-            toast.error("Bạn cần đăng nhập để thanh toán.");
+            toast.error("Please log in to checkout.");
             return;
         }
 
         if (enrolled) {
-            toast.info("Bạn đã sở hữu khóa học này.");
+            toast.info("You already own this course.");
             navigate("/learnova/user/profile/courses");
             return;
         }
@@ -258,14 +257,14 @@ export default function CourseDetail() {
             const message =
                 err?.response?.data?.message ||
                 err?.response?.data?.error ||
-                "Không thể tạo thanh toán payOS.";
+                "Unable to create payment.";
 
             if (
                 err?.response?.status === 409 &&
                 message.toLowerCase().includes("already enrolled")
             ) {
                 setEnrolled(true);
-                toast.info("Bạn đã sở hữu khóa học này.");
+                toast.info("You already own this course.");
                 navigate("/learnova/user/profile/courses");
                 return;
             }
@@ -510,19 +509,19 @@ export default function CourseDetail() {
 
                         <div className="cdp__card-body">
                             <div className="cdp__card-price">
-                                {formatVnd(total)}
+                                {formatUsd(total)}
                             </div>
 
                             {discount > 0 && (
                                 <div className="course-detail-order-lines">
                                     <div>
                                         <span>Subtotal</span>
-                                        <strong>{formatVnd(subtotal)}</strong>
+                                        <strong>{formatUsd(subtotal)}</strong>
                                     </div>
 
                                     <div>
                                         <span>Discount</span>
-                                        <strong>-{formatVnd(discount)}</strong>
+                                        <strong>-{formatUsd(discount)}</strong>
                                     </div>
                                 </div>
                             )}
@@ -550,22 +549,12 @@ export default function CourseDetail() {
                                             {isApplyingVoucher ? "..." : "Apply"}
                                         </button>
                                     </div>
-
-                                    {voucherMessage && (
-                                        <p
-                                            className={`course-detail-voucher-message ${
-                                                appliedVoucher ? "success" : "error"
-                                            }`}
-                                        >
-                                            {voucherMessage}
-                                        </p>
-                                    )}
                                 </div>
                             )}
 
                             {isOwnCourse ? (
                                 <p className="cdp__own-course-note">
-                                    Đây là khóa học của bạn — không thể mua khóa học do chính bạn giảng dạy.
+                                    This is your own course — you cannot purchase a course you teach.
                                 </p>
                             ) : enrolled ? (
                                 <button

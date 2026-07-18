@@ -28,11 +28,11 @@ const thumbnailUrlCache = new Map();
 
 const formatCurrency = (value) => {
   const amount = Number(value);
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(Number.isFinite(amount) ? amount : 0);
+  if (!Number.isFinite(amount)) return "$0";
+  const body = Number.isInteger(amount)
+    ? String(amount)
+    : amount.toFixed(2).replace(/\.?0+$/, "");
+  return `$${body}`;
 };
 
 const useCourseThumbnail = (thumbnailKeyFromDatabase) => {

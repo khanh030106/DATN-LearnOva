@@ -52,12 +52,6 @@ public class AdminCourseController {
         return ResponseEntity.ok(adminCourseService.approveCourse(id));
     }
 
-    /** Hides a course: PENDING_REVIEW to ARCHIVED. */
-    @PatchMapping("/{id}/hide")
-    public ResponseEntity<AdminCourseDetailResponse> hide(@PathVariable Long id) {
-        return ResponseEntity.ok(adminCourseService.hideCourse(id));
-    }
-
     /** Rejects a course and records the rejection reason. */
     @PatchMapping("/{id}/reject")
     public ResponseEntity<AdminCourseDetailResponse> reject(

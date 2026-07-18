@@ -8,9 +8,17 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LearnovaAI from "../../home/chat-bot/chatBot.jsx";
 import { useAuth } from "../../../hook/UseAuth.jsx";
-import { addStoredCartItem } from "../../../utils/cartStorage.js";
+import { addCourseToCart } from "../../../utils/cartStorage.js";
 import { getPublicCoursesApi } from "../../../api/CourseApi.js";
 import { getFileUrl } from "../../../api/PublicCourseApi.js";
+
+const formatUsd = (value) => {
+  const amount = Number(value) || 0;
+  const body = Number.isInteger(amount)
+    ? String(amount)
+    : amount.toFixed(2).replace(/\.?0+$/, "");
+  return `$${body}`;
+};
 
 const FALLBACK_THUMBS = [
   "linear-gradient(135deg, #2563eb 0%, #38bdf8 100%)",
@@ -58,8 +66,6 @@ function getAvatarColor(name) {
   return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 }
 
-const formatVnd = (value) => `${Number(value || 0).toLocaleString("vi-VN")}đ`;
-
 const formatDuration = (seconds) => {
   if (!seconds) return "0h";
   const hours = seconds / 3600;
@@ -74,7 +80,7 @@ const mapPublicCourse = (course) => ({
   category: course.categoryName || "Uncategorized",
   rating: Number(course.avgRating || 0),
   reviews: course.ratingCount || 0,
-  price: formatVnd(course.basePrice),
+  price: Number(course.basePrice || 0),
   duration: formatDuration(course.totalDurationSeconds),
   studentCount: course.studentCount || 0,
   thumbnailKey: course.thumbnailKey,
@@ -93,7 +99,7 @@ function FilterChip({ label, onRemove }) {
 }
 
 function CoursesPage() {
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, accessToken, loading: authLoading } = useAuth();
   const [dbCourses, setDbCourses] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [viewMode, setViewMode] = useState("grid");
@@ -105,6 +111,7 @@ function CoursesPage() {
 
   useEffect(() => {
     let mounted = true;
+    const loadingToastId = toast.loading("Loading courses...");
 
     getPublicCoursesApi()
       .then(async (data) => {
@@ -122,10 +129,28 @@ function CoursesPage() {
             return { ...course, image };
           }),
         );
-        if (mounted) setDbCourses(withThumbs);
+        if (!mounted) return;
+        setDbCourses(withThumbs);
+        if (withThumbs.length === 0) {
+          toast.update(loadingToastId, {
+            render: "No courses found.",
+            type: "info",
+            isLoading: false,
+            autoClose: 2000,
+          });
+        } else {
+          toast.dismiss(loadingToastId);
+        }
       })
       .catch(() => {
-        if (mounted) setDbCourses([]);
+        if (!mounted) return;
+        setDbCourses([]);
+        toast.update(loadingToastId, {
+          render: "Failed to load courses.",
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+        });
       })
       .finally(() => {
         if (mounted) setIsLoading(false);
@@ -133,6 +158,7 @@ function CoursesPage() {
 
     return () => {
       mounted = false;
+      toast.dismiss(loadingToastId);
     };
   }, []);
 
@@ -196,34 +222,35 @@ function CoursesPage() {
     );
   };
 
-  const handleAddToCart = (course) => {
+  const handleAddToCart = async (course) => {
     if (authLoading) return;
 
-    if (!isAuthenticated) {
-      toast.error("Bạn cần đăng nhập để thêm khóa học vào giỏ hàng.");
-      return;
-    }
-
     if (!course.courseId) {
-      toast.error("Khóa học này chưa có dữ liệu thật trong hệ thống.");
+      toast.error("This course is not available.");
       return;
     }
 
-    const { alreadyInCart } = addStoredCartItem({
-      id: course.courseId || course.id,
-      courseId: course.courseId || course.id,
-      title: course.title,
-      teacher: course.instructor,
-      price: course.price,
-      image: course.image,
-    });
+    try {
+      const result = await addCourseToCart(
+        {
+          courseId: course.courseId,
+          title: course.title,
+          teacher: course.instructor,
+          price: course.price,
+          image: course.image,
+        },
+        { isAuthenticated, accessToken },
+      );
 
-    if (alreadyInCart) {
-      toast.info("Khóa học này đã có trong giỏ hàng.");
-      return;
+      if (result.alreadyInCart) {
+        toast.info("Already in cart.");
+        return;
+      }
+
+      toast.success("Added to cart.");
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Failed to add to cart.");
     }
-
-    toast.success("Đã thêm khóa học vào giỏ hàng.");
   };
 
   return (
@@ -280,11 +307,7 @@ function CoursesPage() {
             </div>
           </div>
 
-          {isLoading ? (
-            <div className="courses-empty-state">Đang tải khóa học...</div>
-          ) : visibleCourses.length === 0 ? (
-            <div className="courses-empty-state">Chưa có khóa học nào.</div>
-          ) : (
+          {!isLoading && visibleCourses.length > 0 && (
           <div className={`courses-grid ${viewMode === "list" ? "courses-grid--list" : ""}`}>
             {visibleCourses.map((course) => (
               <div key={course.id} className="course-card-course">
@@ -343,7 +366,7 @@ function CoursesPage() {
 
                   <div className="course-card-bottom">
                     <div className="course-price-block">
-                      <span className="course-price">{course.price}</span>
+                      <span className="course-price">{formatUsd(course.price)}</span>
                     </div>
                     <button
                       type="button"

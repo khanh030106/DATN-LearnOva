@@ -1,11 +1,40 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Globe } from "lucide-react";
+import {
+  CART_UPDATED_EVENT,
+  getStoredCartItems,
+} from "../../../../utils/cartStorage.js";
 
 const HeaderAction = () => {
+  const [totalItems, setTotalItems] = useState(0);
+
+  useEffect(() => {
+    const loadCount = () => {
+      setTotalItems(getStoredCartItems().length);
+    };
+
+    loadCount();
+    window.addEventListener(CART_UPDATED_EVENT, loadCount);
+    window.addEventListener("storage", loadCount);
+
+    return () => {
+      window.removeEventListener(CART_UPDATED_EVENT, loadCount);
+      window.removeEventListener("storage", loadCount);
+    };
+  }, []);
+
   return (
     <div className="header-section">
-      <Link to="/learnova/cart" className="header-action-cart">
+      <Link
+        to="/learnova/cart"
+        className="header-action-cart"
+        style={{ position: "relative", display: "inline-flex" }}
+      >
         <ShoppingCart size={22} />
+        {totalItems > 0 && (
+          <span className="user-logged-badge">{totalItems}</span>
+        )}
       </Link>
 
       <Link to="/learnova/auth/login" className="header-action-login">
@@ -16,7 +45,7 @@ const HeaderAction = () => {
         Sign up
       </Link>
 
-      <button className="header-action-language">
+      <button className="header-action-language" type="button">
         <Globe size={22} />
       </button>
     </div>

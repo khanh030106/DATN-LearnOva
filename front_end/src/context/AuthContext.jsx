@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { loginApi, logoutApi, refreshApi } from "../api/AuthApi.js";
 import { getCurrentUserApi, switchActiveRoleApi } from "../api/UserApi.js";
+import { mergeGuestCartToServer } from "../utils/cartStorage.js";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
@@ -12,26 +13,34 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     const sessionVersionRef = useRef(0);
-    // Deduplicates concurrent refresh calls (StrictMode double-invoke, multiple 401s, etc.)
     const pendingRefreshRef = useRef(null);
 
+    const fetchCurrentUser = async () => {
+        const user = await getCurrentUserApi();
+        setCurrentUser(user);
+        return user;
+    };
+
     const login = async (email, password, remember) => {
-        sessionVersionRef.current++; // Invalidate any in-flight restoreSession
+        sessionVersionRef.current++;
         const data = await loginApi(email, password, remember);
         setAccessToken(data.accessToken);
+
         let user = null;
         try {
             user = await fetchCurrentUser();
         } catch (e) {
             console.error("Failed to fetch user after login", e);
         }
-        return { ...data, user };
-    };
 
-    const fetchCurrentUser = async () => {
-        const user = await getCurrentUserApi();
-        setCurrentUser(user);
-        return user;
+        // Guest cart (local) → SQL, rồi xóa local
+        try {
+            await mergeGuestCartToServer(data.accessToken);
+        } catch (e) {
+            console.error("Failed to merge guest cart after login", e);
+        }
+
+        return { ...data, user };
     };
 
     const switchActiveRole = async (role) => {
@@ -41,9 +50,6 @@ export const AuthProvider = ({ children }) => {
     };
 
     const refreshAccessToken = useCallback(async () => {
-        // If a refresh is already in flight, share the same promise instead of
-        // firing a second request. This prevents token rotation failures when
-        // React StrictMode double-invokes the restoreSession effect.
         if (pendingRefreshRef.current) {
             return pendingRefreshRef.current;
         }
@@ -59,7 +65,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const logout = useCallback(async () => {
-        sessionVersionRef.current++; // Invalidate any in-flight restoreSession
+        sessionVersionRef.current++;
         try {
             await logoutApi();
         } finally {
@@ -68,27 +74,24 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    // On every page load, try to restore the session from the refreshToken cookie.
-    // If the cookie is missing or expired the refresh call returns 401 and we stay logged out.
     useEffect(() => {
         const myVersion = ++sessionVersionRef.current;
 
         const restoreSession = async () => {
             try {
-                await refreshAccessToken();
-                if (sessionVersionRef.current !== myVersion) return; // login() was called, bail
+                const token = await refreshAccessToken();
+                if (sessionVersionRef.current !== myVersion) return;
                 await fetchCurrentUser();
+                try {
+                    await mergeGuestCartToServer(token);
+                } catch (e) {
+                    console.error("Failed to merge guest cart on session restore", e);
+                }
             } catch {
                 if (sessionVersionRef.current !== myVersion) return;
                 setAccessToken(null);
                 setCurrentUser(null);
             } finally {
-                // Only the call whose version still matches the latest session is
-                // allowed to close the loading gate — a stale/superseded call (e.g.
-                // from React StrictMode's dev-only double-invoke) must not flip
-                // loading to false before the winning call has set currentUser,
-                // or route guards reading {loading, currentUser} mid-flight will
-                // see "not loading" + "no user" and redirect incorrectly.
                 if (sessionVersionRef.current === myVersion) {
                     setLoading(false);
                 }
