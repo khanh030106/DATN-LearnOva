@@ -2,7 +2,7 @@ import axiosClient from "./axiosClient.js";
 
 export const getCourseReviewsApi = async (courseId) => {
     const response = await axiosClient.get(
-        `/course/${courseId}`   //review/course/${courseId}
+        `/course/${courseId}`
     );
     return response.data;
 };

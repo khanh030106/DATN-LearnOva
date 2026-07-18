@@ -115,8 +115,8 @@ export const DEFAULT_ENROLLED_COURSES = [
 
 export const FAVORITE_COURSE_TABS = [
   { id: "all", label: "All" },
-  { id: "purchased", label: "Purchased" },
-  { id: "unpurchased", label: "Not Purchased" },
+  { id: "purchased", label: "Not Purchased" },
+  { id: "unpurchased", label: "Purchased" },
 ];
 
 export const FAVORITE_COURSE_STATUS = {

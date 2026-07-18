@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Course.css";
-import { BiHeart, BiCart } from "react-icons/bi";
+import { BiHeart, BiSolidHeart, BiCart } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
 import { X } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,6 +11,12 @@ import { useAuth } from "../../../hook/UseAuth.jsx";
 import { addStoredCartItem } from "../../../utils/cartStorage.js";
 import { getPublicCoursesApi } from "../../../api/CourseApi.js";
 import { getFileUrl } from "../../../api/PublicCourseApi.js";
+import {
+  addWishlistApi,
+  removeWishlistApi,
+  getWishlistApi,
+  syncWishlistApi,
+} from "../../../api/WishlistApi";
 
 const FALLBACK_THUMBS = [
   "linear-gradient(135deg, #2563eb 0%, #38bdf8 100%)",
@@ -190,11 +196,7 @@ function CoursesPage() {
     setSelectedLevels(["intermediate"]);
   };
 
-  const toggleWishlist = (courseId) => {
-    setWishlist((prev) =>
-      prev.includes(courseId) ? prev.filter((id) => id !== courseId) : [...prev, courseId],
-    );
-  };
+
 
   const handleAddToCart = (course) => {
     if (authLoading) return;
@@ -224,6 +226,168 @@ function CoursesPage() {
     }
 
     toast.success("Đã thêm khóa học vào giỏ hàng.");
+  };
+  // ===============================
+// LOAD WISHLIST
+// ===============================
+  useEffect(() => {
+
+    const loadWishlist = async () => {
+
+      try {
+
+        if (isAuthenticated) {
+
+          const response = await getWishlistApi();
+
+          setWishlist(response.data.map(item => item.courseId));
+
+        } else {
+
+          const favorites =
+              JSON.parse(localStorage.getItem("favoriteCourses")) || [];
+
+          setWishlist(favorites);
+
+        }
+
+      } catch (e) {
+
+        console.log(e);
+
+      }
+
+    };
+
+    loadWishlist();
+
+  }, [isAuthenticated]);
+
+
+// ===============================
+// SYNC LOCAL -> SQL
+// ===============================
+  useEffect(() => {
+
+    if (!isAuthenticated) return;
+
+    const syncWishlist = async () => {
+
+      try {
+
+        const localFavorites =
+            JSON.parse(localStorage.getItem("favoriteCourses")) || [];
+
+        if (localFavorites.length > 0) {
+
+          await syncWishlistApi(localFavorites);
+
+          localStorage.removeItem("favoriteCourses");
+
+        }
+
+        const response = await getWishlistApi();
+
+        setWishlist(response.data.map(item => item.courseId));
+
+      } catch (e) {
+
+        console.log(e);
+
+      }
+
+    };
+
+    syncWishlist();
+
+  }, [isAuthenticated]);
+
+
+// ===============================
+// TOGGLE WISHLIST
+
+  const toggleWishlist = async (courseId) => {
+
+    if (authLoading) return;
+
+    // ===== NOT LOGGED IN =====
+    if (!isAuthenticated) {
+
+      const favorites =
+          JSON.parse(localStorage.getItem("favoriteCourses")) || [];
+
+      let newFavorites;
+
+      if (favorites.includes(courseId)) {
+
+        newFavorites = favorites.filter(id => id !== courseId);
+
+        toast.info("Removed from wishlist.");
+
+      } else {
+
+        newFavorites = [...favorites, courseId];
+
+        toast.success("Added to wishlist.");
+
+      }
+
+      localStorage.setItem(
+          "favoriteCourses",
+          JSON.stringify(newFavorites)
+      );
+
+      setWishlist(newFavorites);
+
+      return;
+    }
+
+    // ===== LOGGED IN =====
+    try {
+
+      if (wishlist.includes(courseId)) {
+
+        await removeWishlistApi(courseId);
+
+        setWishlist(prev =>
+            prev.filter(id => id !== courseId)
+        );
+
+        toast.info("Removed from wishlist.");
+
+      } else {
+
+        await addWishlistApi(courseId);
+
+        setWishlist(prev => [...prev, courseId]);
+
+        toast.success("Added to wishlist.");
+
+      }
+
+    } catch (e) {
+
+      // If the course already exists in SQL, reload wishlist
+      if (
+          e.response?.data?.message ===
+          "Course already exists in wishlist"
+      ) {
+
+        const response = await getWishlistApi();
+
+        setWishlist(response.data.map(item => item.courseId));
+
+        toast.info("This course is already in your wishlist.");
+
+        return;
+      }
+
+      console.error(e);
+
+      toast.error("Something went wrong. Please try again.");
+
+    }
+
   };
 
   return (
@@ -300,7 +464,7 @@ function CoursesPage() {
                     }}
                     aria-label="Add to wishlist"
                   >
-                    <BiHeart />
+                    {wishlist.includes(course.id) ? <BiSolidHeart /> : <BiHeart />}
                   </button>
                   {course.studentCount > 0 && (
                     <span className="course-tag-badge course-tag-badge--bestseller">

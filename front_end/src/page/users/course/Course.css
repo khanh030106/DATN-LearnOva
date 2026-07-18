@@ -1966,3 +1966,19 @@ a.course-title:hover h3 {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+.course-wishlist {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  font-size: 24px;
+  transition: .2s;
+}
+
+.course-wishlist.active {
+  color: #ef4444;
+}
+
+.course-wishlist:hover {
+  transform: scale(1.1);
+}

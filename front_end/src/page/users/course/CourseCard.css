@@ -95,3 +95,18 @@
     align-items: center;
     justify-content: center;
 }
+.favorite {
+    cursor: pointer;
+    color: #9ca3af;
+    fill: transparent;
+    transition: all 0.2s ease;
+}
+
+.favorite.active {
+    color: #ef4444;
+    fill: #ef4444;
+}
+
+.favorite:hover {
+    transform: scale(1.1);
+}

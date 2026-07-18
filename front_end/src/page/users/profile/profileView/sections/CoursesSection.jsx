@@ -11,6 +11,7 @@ const CoursesSection = ({
   onBack,
   onOpenCourse,
 }) => {
+  const [filterTab, setFilterTab] = useState("in_progress");
   const [sortBy, setSortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
   const courses = purchasedCourses.map((course) => ({
@@ -22,8 +23,20 @@ const CoursesSection = ({
     rating: course.rating || 4.8,
     reviews: course.reviews || "0",
   }));
+  const filteredCourses = useMemo(() => {
+    return courses.filter((course) => {
+      if (filterTab === "in_progress") {
+        return course.progress < 100;
+      }
+      if (filterTab === "completed") {
+        return course.progress >= 100;
+      }
+      return true;
+    });
+  }, [courses, filterTab]);
+
   const sortedCourses = useMemo(() => {
-    const nextCourses = [...courses];
+    const nextCourses = [...filteredCourses];
 
     if (sortBy === "oldest") {
       return nextCourses.reverse();
@@ -38,7 +51,7 @@ const CoursesSection = ({
     }
 
     return nextCourses;
-  }, [courses, sortBy]);
+  }, [filteredCourses, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(sortedCourses.length / ITEMS_PER_PAGE));
   const safePage = Math.min(currentPage, totalPages);
@@ -69,10 +82,18 @@ const CoursesSection = ({
         <div>
           <h2>Enrolled Courses</h2>
           <div className="course-tabs">
-            <button className="course-tab active" type="button">
+            <button 
+              className={`course-tab ${filterTab === "in_progress" ? "active" : ""}`}
+              type="button"
+              onClick={() => { setFilterTab("in_progress"); setCurrentPage(1); }}
+            >
               In Progress
             </button>
-            <button className="course-tab" type="button">
+            <button 
+              className={`course-tab ${filterTab === "completed" ? "active" : ""}`}
+              type="button"
+              onClick={() => { setFilterTab("completed"); setCurrentPage(1); }}
+            >
               Completed
             </button>
           </div>
