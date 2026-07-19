@@ -11,13 +11,13 @@ const LoggedInHeader = () => {
     <header className="user-logged-header">
       <div className="user-logged-header-container">
         <div className="user-logged-brand-group">
-          <Link to="/learnova/home" className="user-logged-logo">
+          <Link to="/" className="user-logged-logo">
             <img src={logo} alt="Learnova" />
           </Link>
         </div>
 
         <div className="user-logged-home-shell">
-          <Link to="/learnova/home" className="user-logged-home-link">
+          <Link to="/" className="user-logged-home-link">
             Home
           </Link>
 
@@ -37,7 +37,7 @@ const LoggedInHeader = () => {
           <Link to="/learnova/intructors" className="user-logged-nav-button">
             Instructors
           </Link>
-          <Link to="/learnova/home" className="user-logged-nav-button">
+          <Link to="/" className="user-logged-nav-button">
             Subscribe
           </Link>
         </nav>

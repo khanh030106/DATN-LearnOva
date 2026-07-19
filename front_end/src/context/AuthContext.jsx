@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
         try {
             user = await fetchCurrentUser();
         } catch (e) {
-            console.error("Failed to fetch user after login", e);
+            console.error("Failed to fetch user after auth", e);
         }
         return { ...data, user };
     };
@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
         const restoreSession = async () => {
             try {
                 await refreshAccessToken();
-                if (sessionVersionRef.current !== myVersion) return; // login() was called, bail
+                if (sessionVersionRef.current !== myVersion) return; // auth() was called, bail
                 await fetchCurrentUser();
             } catch {
                 if (sessionVersionRef.current !== myVersion) return;

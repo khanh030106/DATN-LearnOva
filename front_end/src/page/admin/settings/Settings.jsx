@@ -15,7 +15,7 @@ const settingGroups = [
   },
   {
     title: "Security Policy",
-    description: "Define administrator login protection and session behavior.",
+    description: "Define administrator auth protection and session behavior.",
     icon: ShieldCheck,
     items: [
       { label: "Two-factor authentication", value: "Required for admins" },

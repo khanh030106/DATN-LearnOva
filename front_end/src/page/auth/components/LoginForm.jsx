@@ -40,7 +40,7 @@ const LoginForm = ({ onSwitchToRegister }) => {
             } else if (effectiveRole === "ROLE_TEACHER") {
                 navigate('/learnova/teacher');
             } else {
-                navigate('/learnova/home');
+                navigate('/');
             }
         }catch (err) {
             const message =

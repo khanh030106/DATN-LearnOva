@@ -12,7 +12,7 @@ const VerifyAccount = () => {
 
         if (!token) {
             toast.error("Mã xác thực không tồn tại hoặc không hợp lệ!");
-            navigate("/learnova/auth/login"); // Đá về trang login của bạn
+            navigate("/learnova/auth/auth"); // Đá về trang auth của bạn
             return;
         }
 
@@ -22,12 +22,12 @@ const VerifyAccount = () => {
                 toast.success(res.data?.message || "Kích hoạt tài khoản thành công!");
 
                 // ĐIỀU HƯỚNG CHUẨN: Chuyển thẳng về trang Login hệ thống của bạn
-                navigate("/learnova/auth/login");
+                navigate("/learnova/auth/auth");
             })
             .catch((err) => {
                 const errorMsg = err.response?.data?.message || "Kích hoạt thất bại hoặc link đã hết hạn!";
                 toast.error(errorMsg);
-                navigate("/learnova/auth/login");
+                navigate("/learnova/auth/auth");
             });
     }, [navigate]);
 

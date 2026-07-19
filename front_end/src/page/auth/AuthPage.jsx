@@ -54,7 +54,7 @@ const AuthPage = () => {
 
     return (
         <div className={`auth-page ${isRegisterMode ? "register-mode" : ""}`} style={{ position: "relative" }}>
-            <Link to="/learnova/home" className="auth-back-home">
+            <Link to="/" className="auth-back-home">
                 <ArrowLeft size={20}/>
                 <span>Back to home</span>
             </Link>

@@ -36,9 +36,9 @@ const InstructorStatistics = () => {
       } catch (error) {
         console.error("Error fetching instructor statistics:", error);
         if (mounted) {
-        const errorMessage = 
+        const errorMessage =
           error.response?.status === 403 ? "You don't have permission to view this data" :
-          error.response?.status === 401 ? "Your session has expired. Please login again" :
+          error.response?.status === 401 ? "Your session has expired. Please auth again" :
           error.message || "Failed to load instructor statistics";
         setError(errorMessage);
         }
@@ -53,11 +53,11 @@ const InstructorStatistics = () => {
   return (
     <section className="instructorStatistics" aria-label="Instructor statistics">
       {error && (
-        <div style={{ 
-          padding: "12px", 
-          marginBottom: "16px", 
-          backgroundColor: "#fee", 
-          color: "#c00", 
+        <div style={{
+          padding: "12px",
+          marginBottom: "16px",
+          backgroundColor: "#fee",
+          color: "#c00",
           borderRadius: "4px",
           border: "1px solid #fcc"
         }}>
