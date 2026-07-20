@@ -1,13 +1,13 @@
 package com.example.back_end.repository.admin;
 
-import com.example.back_end.entity.Orderitem;
+import com.example.back_end.entity.OrderItem;
 import java.math.BigDecimal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface AdminRevenueRepository extends JpaRepository<Orderitem, Long> {
+public interface AdminRevenueRepository extends JpaRepository<OrderItem, Long> {
 
     interface CourseRankingProjection {
         Long getCourseId();
@@ -56,11 +56,11 @@ public interface AdminRevenueRepository extends JpaRepository<Orderitem, Long> {
                         FROM courses c
                         LEFT JOIN users u
                                ON c.instructor_id = u.user_id
-                        LEFT JOIN coursecategories cc
+                        LEFT JOIN course_categories cc
                                ON c.course_id = cc.course_id
                         LEFT JOIN categories cate
                                ON cc.category_id = cate.category_id
-                        JOIN orderitems oi
+                        JOIN order_items oi
                                ON c.course_id = oi.course_id
                         JOIN orders o
                                ON oi.order_id = o.order_id
@@ -88,11 +88,11 @@ public interface AdminRevenueRepository extends JpaRepository<Orderitem, Long> {
                             c.course_id,
                             cate.category_id
                         FROM courses c
-                        LEFT JOIN coursecategories cc
+                        LEFT JOIN course_categories cc
                                ON c.course_id = cc.course_id
                         LEFT JOIN categories cate
                                ON cc.category_id = cate.category_id
-                        JOIN orderitems oi
+                        JOIN order_items oi
                                ON c.course_id = oi.course_id
                         JOIN orders o
                                ON oi.order_id = o.order_id
@@ -131,14 +131,14 @@ public interface AdminRevenueRepository extends JpaRepository<Orderitem, Long> {
                                 2
                             ) AS avg_per_course
                         FROM users u
-                        JOIN userrole ur
+                        JOIN user_role ur
                           ON ur.user_id = u.user_id
                         JOIN roles r
                           ON r.role_id = ur.role_id
                         LEFT JOIN courses c
                           ON c.instructor_id = u.user_id
                          AND c.is_deleted = FALSE
-                        JOIN orderitems oi
+                        JOIN order_items oi
                           ON oi.course_id = c.course_id
                         JOIN orders o
                           ON o.order_id = oi.order_id
@@ -160,14 +160,14 @@ public interface AdminRevenueRepository extends JpaRepository<Orderitem, Long> {
                     FROM (
                         SELECT u.user_id
                         FROM users u
-                        JOIN userrole ur
+                        JOIN user_role ur
                           ON ur.user_id = u.user_id
                         JOIN roles r
                           ON r.role_id = ur.role_id
                         LEFT JOIN courses c
                           ON c.instructor_id = u.user_id
                          AND c.is_deleted = FALSE
-                        JOIN orderitems oi
+                        JOIN order_items oi
                           ON oi.course_id = c.course_id
                         JOIN orders o
                           ON o.order_id = oi.order_id

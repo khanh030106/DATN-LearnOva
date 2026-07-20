@@ -6,7 +6,7 @@ import com.example.back_end.entity.User;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.EnrollmentRepository;
 import com.example.back_end.repository.LessonQARepository;
-import com.example.back_end.repository.LessonprogressRepository;
+import com.example.back_end.repository.LessonProgressRepository;
 import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class TeacherAnalyticsService {
     private final UserRepository userRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final ReviewRepository reviewRepository;
-    private final LessonprogressRepository lessonprogressRepository;
+    private final LessonProgressRepository lessonProgressRepository;
     private final LessonQARepository lessonQARepository;
     private final TeacherCourseService teacherCourseService;
 
@@ -48,11 +48,11 @@ public class TeacherAnalyticsService {
         double avgRating = reviewRepository.getAverageRatingByInstructorId(instructorId);
         long ratingCount = reviewRepository.countByCourseInstructorId(instructorId);
 
-        Double avgWatchedSeconds = lessonprogressRepository.findAvgWatchedSecondsByInstructor(instructorId);
+        Double avgWatchedSeconds = lessonProgressRepository.findAvgWatchedSecondsByInstructor(instructorId);
         double avgWatchTimeMinutes = (avgWatchedSeconds != null ? avgWatchedSeconds : 0) / 60.0;
 
-        LessonprogressRepository.StartedCompletedProjection startedVsCompleted =
-                lessonprogressRepository.findStartedVsCompletedByInstructor(instructorId);
+        LessonProgressRepository.StartedCompletedProjection startedVsCompleted =
+                lessonProgressRepository.findStartedVsCompletedByInstructor(instructorId);
         long startedCount = startedVsCompleted != null && startedVsCompleted.getStartedCount() != null
                 ? startedVsCompleted.getStartedCount() : 0;
         long completedLessonCount = startedVsCompleted != null && startedVsCompleted.getCompletedCount() != null
@@ -124,7 +124,7 @@ public class TeacherAnalyticsService {
     }
 
     private List<TeacherAnalyticsResponse.LessonAttention> buildLessonAttention(Long instructorId) {
-        return lessonprogressRepository
+        return lessonProgressRepository
                 .findLessonAttentionByInstructor(instructorId)
                 .stream()
                 .filter(row -> row.getStartedCount() != null && row.getStartedCount() >= MIN_STARTED_FOR_ATTENTION)

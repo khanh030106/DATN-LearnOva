@@ -1,5 +1,0 @@
-ALTER TABLE users
-    ALTER COLUMN full_name DROP NOT NULL;
-
-ALTER TABLE users
-    ALTER COLUMN updated_at DROP NOT NULL;

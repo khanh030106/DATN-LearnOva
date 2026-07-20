@@ -1,7 +1,7 @@
 package com.example.back_end.service;
 
 import com.example.back_end.entity.User;
-import com.example.back_end.entity.Verificationtoken;
+import com.example.back_end.entity.VerificationToken;
 import com.example.back_end.entity.enums.VerificationType;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
@@ -31,7 +31,7 @@ public class VerificationTokenService {
     private Long refreshTokenRememberExpiration;
 
     @Transactional
-    public Verificationtoken createRefreshToken(String email, Boolean rememberMe) {
+    public VerificationToken createRefreshToken(String email, Boolean rememberMe) {
         User user = userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
@@ -39,7 +39,7 @@ public class VerificationTokenService {
 
         Long expiration = Boolean.TRUE.equals(rememberMe) ? refreshTokenRememberExpiration : refreshTokenExpiration;
 
-        Verificationtoken refreshToken = new Verificationtoken();
+        VerificationToken refreshToken = new VerificationToken();
         refreshToken.setUser(user);
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setTokenType(VerificationType.REFRESH_TOKEN);
@@ -50,8 +50,8 @@ public class VerificationTokenService {
         return verificationTokenRepository.save(refreshToken);
     }
 
-    public Verificationtoken verifyRefreshToken(String token) {
-        Verificationtoken refreshToken = verificationTokenRepository
+    public VerificationToken verifyRefreshToken(String token) {
+        VerificationToken refreshToken = verificationTokenRepository
                 .findByTokenAndTokenTypeAndIsUsedFalse(token, VerificationType.REFRESH_TOKEN)
                 .orElseThrow(() -> new BusinessException("Token not found"));
 
@@ -76,10 +76,10 @@ public class VerificationTokenService {
     }
 
     @Transactional
-    public Verificationtoken createActiveAccountToken(User user) {
+    public VerificationToken createActiveAccountToken(User user) {
         verificationTokenRepository.deleteByUserAndTokenType(user, VerificationType.ACTIVE_ACCOUNT);
 
-        Verificationtoken token = new Verificationtoken();
+        VerificationToken token = new VerificationToken();
         token.setUser(user);
         token.setToken(UUID.randomUUID().toString());
         token.setTokenType(VerificationType.ACTIVE_ACCOUNT);
@@ -90,8 +90,8 @@ public class VerificationTokenService {
     }
 
     // Expiry is checked here, consistent with verifyRefreshToken.
-    public Verificationtoken verifyActiveAccountToken(String token) {
-        Verificationtoken verificationToken = verificationTokenRepository
+    public VerificationToken verifyActiveAccountToken(String token) {
+        VerificationToken verificationToken = verificationTokenRepository
                 .findByTokenAndTokenTypeAndIsUsedFalse(token, VerificationType.ACTIVE_ACCOUNT)
                 .orElseThrow(() -> new BusinessException("Invalid or already used activation link"));
 
@@ -103,7 +103,7 @@ public class VerificationTokenService {
     }
 
     @Transactional
-    public void markAsUsed(Verificationtoken token) {
+    public void markAsUsed(VerificationToken token) {
         token.setIsUsed(true);
         verificationTokenRepository.save(token);
     }

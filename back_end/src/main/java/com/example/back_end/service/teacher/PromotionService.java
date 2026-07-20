@@ -5,13 +5,13 @@ import com.example.back_end.dto.request.teacher.CreatePromotionRequest;
 import com.example.back_end.dto.request.teacher.UpdatePromotionRequest;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Promotion;
-import com.example.back_end.entity.Promotioncours;
-import com.example.back_end.entity.PromotioncoursId;
+import com.example.back_end.entity.PromotionCourse;
+import com.example.back_end.entity.PromotionCourseId;
 import com.example.back_end.entity.User;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.CourseRepository;
-import com.example.back_end.repository.PromotioncourseRepository;
+import com.example.back_end.repository.PromotionCourseRepository;
 import com.example.back_end.repository.teacher.PromotionRepository;
 import com.example.back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,14 +29,14 @@ import java.util.List;
 public class PromotionService {
 
     private final PromotionRepository promotionRepository;
-    private final PromotioncourseRepository promotioncourseRepository;
+    private final PromotionCourseRepository promotionCourseRepository;
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public List<PromotionCourseResponse> getMyPromotions(String email) {
         User teacher = findTeacher(email);
-        return promotioncourseRepository.findByInstructorId(teacher.getId())
+        return promotionCourseRepository.findByInstructorId(teacher.getId())
                 .stream()
                 .map(pc -> toResponse(pc.getCourse().getId(), pc.getPromotion()))
                 .toList();
@@ -52,7 +52,7 @@ public class PromotionService {
         }
 
         // Upsert: if course already has a promotion, update it
-        return promotioncourseRepository.findByCourse_Id(course.getId())
+        return promotionCourseRepository.findByCourse_Id(course.getId())
                 .map(pc -> {
                     Promotion p = pc.getPromotion();
                     applyFields(p, request.discountPercent(), request.startDate(), request.endDate());
@@ -66,15 +66,15 @@ public class PromotionService {
                     applyFields(p, request.discountPercent(), request.startDate(), request.endDate());
                     promotionRepository.save(p);
 
-                    PromotioncoursId joinId = new PromotioncoursId();
+                    PromotionCourseId joinId = new PromotionCourseId();
                     joinId.setPromotionId(p.getId());
                     joinId.setCourseId(course.getId());
 
-                    Promotioncours join = new Promotioncours();
+                    PromotionCourse join = new PromotionCourse();
                     join.setId(joinId);
                     join.setPromotion(p);
                     join.setCourse(course);
-                    promotioncourseRepository.save(join);
+                    promotionCourseRepository.save(join);
 
                     return toResponse(course.getId(), p);
                 });
@@ -83,7 +83,7 @@ public class PromotionService {
     public PromotionCourseResponse updatePromotion(Long promotionId, UpdatePromotionRequest request, String email) {
         User teacher = findTeacher(email);
 
-        Promotioncours pc = promotioncourseRepository.findByPromotion_Id(promotionId)
+        PromotionCourse pc = promotionCourseRepository.findByPromotion_Id(promotionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Promotion not found"));
 
         if (!pc.getCourse().getInstructor().getId().equals(teacher.getId())) {
@@ -100,14 +100,14 @@ public class PromotionService {
     public void deletePromotion(Long promotionId, String email) {
         User teacher = findTeacher(email);
 
-        Promotioncours pc = promotioncourseRepository.findByPromotion_Id(promotionId)
+        PromotionCourse pc = promotionCourseRepository.findByPromotion_Id(promotionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Promotion not found"));
 
         if (!pc.getCourse().getInstructor().getId().equals(teacher.getId())) {
             throw new BusinessException("You don't own this promotion");
         }
 
-        promotioncourseRepository.delete(pc);
+        promotionCourseRepository.delete(pc);
         promotionRepository.deleteById(promotionId);
     }
 

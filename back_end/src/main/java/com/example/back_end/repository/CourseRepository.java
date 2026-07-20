@@ -15,7 +15,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             SELECT DISTINCT c FROM Course c
             LEFT JOIN FETCH c.sections s
             LEFT JOIN FETCH s.lessons
-            LEFT JOIN FETCH c.coursecategories cc
+            LEFT JOIN FETCH c.courseCategories cc
             LEFT JOIN FETCH cc.category
             WHERE c.instructor.id = :instructorId AND c.isDeleted = false
             ORDER BY c.createdAt DESC
@@ -26,7 +26,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             SELECT DISTINCT c FROM Course c
             LEFT JOIN FETCH c.sections s
             LEFT JOIN FETCH s.lessons
-            LEFT JOIN FETCH c.coursecategories cc
+            LEFT JOIN FETCH c.courseCategories cc
             LEFT JOIN FETCH cc.category
             WHERE c.status = :status AND c.isDeleted = false AND c.isHidden = false
             """)
@@ -37,7 +37,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             LEFT JOIN FETCH c.instructor
             LEFT JOIN FETCH c.sections s
             LEFT JOIN FETCH s.lessons
-            LEFT JOIN FETCH c.coursecategories cc
+            LEFT JOIN FETCH c.courseCategories cc
             LEFT JOIN FETCH cc.category
             WHERE c.id = :id AND c.isDeleted = false
             """)
@@ -59,7 +59,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             SELECT DISTINCT c FROM Course c
             LEFT JOIN FETCH c.sections s
             LEFT JOIN FETCH s.lessons
-            LEFT JOIN FETCH c.coursecategories cc
+            LEFT JOIN FETCH c.courseCategories cc
             LEFT JOIN FETCH cc.category
             WHERE c.instructor.id = :instructorId AND c.status = :status
                 AND c.isDeleted = false AND c.isHidden = false
