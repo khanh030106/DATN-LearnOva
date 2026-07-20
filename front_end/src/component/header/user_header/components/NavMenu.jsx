@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import HeaderSearch from "./HeaderSearch.jsx";
 
 const leftNav = [
-    { name: "Home", path: "/learnova/home" },
+    { name: "Home", path: "/" },
     { name: "Courses", path: "/learnova/courses" },
 ];
 

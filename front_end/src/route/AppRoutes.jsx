@@ -1,6 +1,6 @@
 import {BrowserRouter, Routes, Route, Outlet} from "react-router-dom";
 import RequireRole from "./RequireRole.jsx";
-import AuthPage from "../page/login/AuthPage.jsx";
+import AuthPage from "../page/auth/AuthPage.jsx";
 import Home from "../page/home/Home.jsx";
 import HomeLayout from "../layout/home/HomeLayout.jsx";
 import DashboardLayout from "../layout/admin/DashboardLayout.jsx";
@@ -39,7 +39,7 @@ import CoursePage from "../page/users/course/CourseNew.jsx";
 import CourseDetail from "../page/users/course/CourseDetail/CourseDetail.jsx";
 import CourseDetaill from "../page/home/courses/CourseDetail.jsx";
 import Cart from "../page/home/cart/Cart.jsx";
-import OAuth2Success from "./../page/login/OAuth2Success.jsx";
+import OAuth2Success from "../page/auth/OAuth2Success.jsx";
 import PaymentSuccess from "../page/home/payment/PaymentSuccess.jsx";
 import PaymentCancel from "../page/home/payment/PaymentCancel.jsx";
 import ApplyTeacherPage from "../page/teacherApplication/ApplyTeacherPage.jsx";
@@ -55,14 +55,14 @@ const App = () => {
 
                 <Route path="/learnova/auth/login" element={<AuthPage/>}/>
                 <Route path="/learnova/user/courses-detail" element={<CourseDetail/>}/>
-                <Route path="/learnova/user/CoursesDetail/:courseId" element={<CourseDetail/>}/>
+                <Route path="/learnova/user/courses-detail/:courseId" element={<CourseDetail/>}/>
                 <Route path="/oauth2-success" element={<OAuth2Success />}/>
                 <Route path="/payment/success" element={<PaymentSuccess />}/>
                 <Route path="/payment/cancel" element={<PaymentCancel />}/>
                 <Route path="/learnova/certificate/verify/:code" element={<VerifyCertificatePage/>}/>
 
                 <Route element={<HomeLayout/>}>
-                    <Route path="/learnova/home" element={<Home/>}/>
+                    <Route path="/" element={<Home/>}/>
                 </Route>
 
                 {/* Admin */}

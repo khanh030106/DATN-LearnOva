@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hook/UseAuth.jsx";
 
-// After Google / Facebook OAuth2 login the backend sets HttpOnly auth cookies
+// After Google / Facebook OAuth2 auth the backend sets HttpOnly auth cookies
 // and redirects here with no tokens in the URL. We restore session the same way
 // a normal page refresh does: call /auth/refresh (cookie is already set), then
 // load the current user.
@@ -30,8 +30,8 @@ const OAuth2Success = () => {
                     navigate("/learnova/courses", { replace: true });
                 }
             } catch {
-                // Cookies missing or invalid — send back to login.
-                navigate("/learnova/auth/login", { replace: true });
+                // Cookies missing or invalid — send back to auth.
+                navigate("/learnova/auth/auth", { replace: true });
             }
         };
 
