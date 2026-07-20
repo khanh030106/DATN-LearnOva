@@ -64,6 +64,6 @@ public class Category {
     private Set<Category> categories = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "category")
-    private Set<Coursecategory> coursecategories = new LinkedHashSet<>();
+    private Set<CourseCategory> courseCategories = new LinkedHashSet<>();
 
 }

@@ -7,7 +7,7 @@ import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Enrollment;
 import com.example.back_end.entity.EnrollmentId;
 import com.example.back_end.entity.Order;
-import com.example.back_end.entity.Orderitem;
+import com.example.back_end.entity.OrderItem;
 import com.example.back_end.entity.Payment;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.Voucher;
@@ -20,7 +20,7 @@ import com.example.back_end.entity.enums.PaymentStatus;
 import com.example.back_end.repository.CourseRepository;
 import com.example.back_end.repository.EnrollmentRepository;
 import com.example.back_end.repository.OrderRepository;
-import com.example.back_end.repository.OrderitemRepository;
+import com.example.back_end.repository.OrderItemRepository;
 import com.example.back_end.repository.PaymentRepository;
 import com.example.back_end.repository.UserRepository;
 import com.example.back_end.repository.VoucherRepository;
@@ -52,7 +52,7 @@ public class PaymentService {
     private final CourseRepository courseRepository;
     private final VoucherRepository voucherRepository;
     private final OrderRepository orderRepository;
-    private final OrderitemRepository orderitemRepository;
+    private final OrderItemRepository orderItemRepository;
     private final PaymentRepository paymentRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final UserRepository userRepository;
@@ -91,7 +91,7 @@ public class PaymentService {
         orderRepository.saveAndFlush(order);
 
         BigDecimal remainingDiscount = discount;
-        List<Orderitem> orderitems = new ArrayList<>();
+        List<OrderItem> orderItems = new ArrayList<>();
         for (int index = 0; index < courses.size(); index++) {
             Course course = courses.get(index);
             BigDecimal itemDiscount = index == courses.size() - 1
@@ -99,12 +99,12 @@ public class PaymentService {
                     : discount.multiply(course.getBasePrice()).divide(subtotal, 2, RoundingMode.HALF_UP);
             remainingDiscount = remainingDiscount.subtract(itemDiscount);
 
-            Orderitem orderitem = new Orderitem();
-            orderitem.setOrder(order);
-            orderitem.setCourse(course);
-            orderitem.setOriginalPrice(course.getBasePrice());
-            orderitem.setPrice(course.getBasePrice().subtract(itemDiscount).max(BigDecimal.ZERO));
-            orderitems.add(orderitemRepository.save(orderitem));
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setCourse(course);
+            orderItem.setOriginalPrice(course.getBasePrice());
+            orderItem.setPrice(course.getBasePrice().subtract(itemDiscount).max(BigDecimal.ZERO));
+            orderItems.add(orderItemRepository.save(orderItem));
         }
 
         Payment payment = new Payment();
@@ -160,15 +160,15 @@ public class PaymentService {
 
         syncPayOSPaymentStatus(order, payment);
 
-        List<Orderitem> orderitems = orderitemRepository.findByOrderIdWithCourse(orderId);
-        if (orderitems.isEmpty()) {
+        List<OrderItem> orderItems = orderItemRepository.findByOrderIdWithCourse(orderId);
+        if (orderItems.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order item not found");
         }
-        Orderitem primaryOrderitem = orderitems.getFirst();
-        Course primaryCourse = primaryOrderitem.getCourse();
-        String courseTitle = orderitems.size() == 1
+        OrderItem primaryOrderItem = orderItems.getFirst();
+        Course primaryCourse = primaryOrderItem.getCourse();
+        String courseTitle = orderItems.size() == 1
                 ? primaryCourse.getTitle()
-                : primaryCourse.getTitle() + " +" + (orderitems.size() - 1);
+                : primaryCourse.getTitle() + " +" + (orderItems.size() - 1);
 
         return new PaymentStatusResponse(
                 order.getId(),
@@ -207,14 +207,14 @@ public class PaymentService {
     }
 
     private void markOrderPaid(Order order, Payment payment) {
-        List<Orderitem> orderitems = orderitemRepository.findByOrderIdWithCourse(order.getId());
-        if (orderitems.isEmpty()) {
+        List<OrderItem> orderItems = orderItemRepository.findByOrderIdWithCourse(order.getId());
+        if (orderItems.isEmpty()) {
             throw new IllegalStateException("Order item not found");
         }
         User user = order.getUser();
 
-        for (Orderitem orderitem : orderitems) {
-            Course course = orderitem.getCourse();
+        for (OrderItem orderItem : orderItems) {
+            Course course = orderItem.getCourse();
             if (!enrollmentRepository.existsByIdCourseIdAndIdUserId(course.getId(), user.getId())) {
                 EnrollmentId enrollmentId = new EnrollmentId();
                 enrollmentId.setCourseId(course.getId());

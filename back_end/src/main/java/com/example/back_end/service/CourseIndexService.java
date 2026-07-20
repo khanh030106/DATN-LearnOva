@@ -2,7 +2,7 @@ package com.example.back_end.service;
 
 import com.example.back_end.document.CourseDocument;
 import com.example.back_end.entity.Course;
-import com.example.back_end.entity.Coursecategory;
+import com.example.back_end.entity.CourseCategory;
 import com.example.back_end.entity.Tag;
 import com.example.back_end.entity.enums.CourseStatus;
 import com.example.back_end.repository.CourseRepository;
@@ -52,7 +52,7 @@ public class CourseIndexService {
     }
 
     private CourseDocument toDocument(Course course) {
-        String categoryName = course.getCoursecategories().stream()
+        String categoryName = course.getCourseCategories().stream()
                 .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
                 .findFirst()
                 .map(cc -> cc.getCategory().getName())

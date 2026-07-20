@@ -3,12 +3,12 @@ package com.example.back_end.service.teacher;
 import com.example.back_end.dto.request.teacher.CreateLessonSourceRequest;
 import com.example.back_end.dto.response.teacher.LessonSourceResponse;
 import com.example.back_end.entity.Lesson;
-import com.example.back_end.entity.Lessonsource;
+import com.example.back_end.entity.LessonSource;
 import com.example.back_end.entity.User;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.LessonRepository;
-import com.example.back_end.repository.teacher.LessonsourceRepository;
+import com.example.back_end.repository.teacher.LessonSourceRepository;
 import com.example.back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LessonSourceService {
 
-    private final LessonsourceRepository lessonsourceRepository;
+    private final LessonSourceRepository lessonSourceRepository;
     private final LessonRepository lessonRepository;
     private final UserRepository userRepository;
 
@@ -43,7 +43,7 @@ public class LessonSourceService {
             throw new BusinessException("You don't have permission to modify this lesson");
         }
 
-        Lessonsource lessonSource = new Lessonsource();
+        LessonSource lessonSource = new LessonSource();
         lessonSource.setLesson(lesson);
         lessonSource.setFileKey(request.fileKey());
         lessonSource.setOriginalFileName(request.originalFileName());
@@ -53,7 +53,7 @@ public class LessonSourceService {
         lessonSource.setResourceType(request.resourceType());
         lessonSource.setCreatedAt(Instant.now());
 
-        lessonsourceRepository.save(lessonSource);
+        lessonSourceRepository.save(lessonSource);
 
         return new LessonSourceResponse(
                 lessonSource.getId(),
@@ -74,7 +74,7 @@ public class LessonSourceService {
             throw new BusinessException("You don't have permission to view this lesson");
         }
 
-        return lessonsourceRepository.findByLessonId(lessonId)
+        return lessonSourceRepository.findByLessonId(lessonId)
                 .stream()
                 .map(source -> new LessonSourceResponse(
                         source.getId(),
@@ -89,13 +89,13 @@ public class LessonSourceService {
     public void deleteLessonSource(Long sourceId, String email) {
         User instructor = requireInstructor(email);
 
-        Lessonsource lessonSource = lessonsourceRepository.findById(sourceId)
+        LessonSource lessonSource = lessonSourceRepository.findById(sourceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson source not found"));
 
         if (!lessonSource.getLesson().getSection().getCourse().getInstructor().getId().equals(instructor.getId())) {
             throw new BusinessException("You don't have permission to delete this lesson source");
         }
 
-        lessonsourceRepository.deleteById(sourceId);
+        lessonSourceRepository.deleteById(sourceId);
     }
 }

@@ -12,19 +12,19 @@ import com.example.back_end.dto.response.admin.AdminInstructorResponse;
 import com.example.back_end.dto.response.admin.AdminInstructorResponse.CourseSummary;
 import com.example.back_end.entity.Category;
 import com.example.back_end.entity.Course;
-import com.example.back_end.entity.Coursecategory;
+import com.example.back_end.entity.CourseCategory;
 import com.example.back_end.entity.Enrollment;
 import com.example.back_end.entity.Order;
-import com.example.back_end.entity.Orderitem;
+import com.example.back_end.entity.OrderItem;
 import com.example.back_end.entity.Review;
 import com.example.back_end.entity.Role;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.RoleName;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
-import com.example.back_end.repository.CoursecategoryRepository;
+import com.example.back_end.repository.CourseCategoryRepository;
 import com.example.back_end.repository.EnrollmentRepository;
-import com.example.back_end.repository.OrderitemRepository;
+import com.example.back_end.repository.OrderItemRepository;
 import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.repository.admin.AdminCourseRepository;
 import com.example.back_end.repository.admin.AdminUserRepository;
@@ -38,9 +38,9 @@ public class AdminInstructorService {
     private final AdminUserRepository adminUserRepository;
     private final AdminCourseRepository courseRepository;
     private final EnrollmentRepository enrollmentRepository;
-    private final OrderitemRepository orderitemRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ReviewRepository reviewRepository;
-    private final CoursecategoryRepository coursecategoryRepository;
+    private final CourseCategoryRepository courseCategoryRepository;
 
     @Transactional(readOnly = true)
     public List<AdminInstructorResponse> getAllInstructors() {
@@ -67,17 +67,17 @@ public class AdminInstructorService {
 
         List<Long> courseIds = allCourses.stream().map(Course::getId).toList();
         List<Enrollment> allEnrollments = enrollmentRepository.findByCourseIdIn(courseIds);
-        List<Orderitem> allOrderitems = orderitemRepository.findByCourseIdInWithOrder(courseIds);
+        List<OrderItem> allOrderItems = orderItemRepository.findByCourseIdInWithOrder(courseIds);
         List<Review> allReviews = reviewRepository.findByCourseIdIn(courseIds);
-        List<Coursecategory> allCoursecategories = coursecategoryRepository.findByCourseIdInWithCategory(courseIds);
+        List<CourseCategory> allCoursecategories = courseCategoryRepository.findByCourseIdInWithCategory(courseIds);
 
         Map<Long, List<Enrollment>> enrollmentsByCourse = allEnrollments.stream()
                 .collect(Collectors.groupingBy(e -> e.getCourse().getId()));
-        Map<Long, List<Orderitem>> orderitemsByCourse = allOrderitems.stream()
+        Map<Long, List<OrderItem>> orderitemsByCourse = allOrderItems.stream()
                 .collect(Collectors.groupingBy(oi -> oi.getCourse().getId()));
         Map<Long, List<Review>> reviewsByCourse = allReviews.stream()
                 .collect(Collectors.groupingBy(r -> r.getCourse().getId()));
-        Map<Long, List<Coursecategory>> categoriesByCourse = allCoursecategories.stream()
+        Map<Long, List<CourseCategory>> categoriesByCourse = allCoursecategories.stream()
                 .collect(Collectors.groupingBy(cc -> cc.getCourse().getId()));
         Map<Long, List<Course>> coursesByInstructor = allCourses.stream()
                 .collect(Collectors.groupingBy(c -> c.getInstructor().getId()));
@@ -100,7 +100,7 @@ public class AdminInstructorService {
                                         && order.getStatus() != null
                                         && "PAID".equals(order.getStatus().name());
                             })
-                            .map(Orderitem::getPrice)
+                            .map(OrderItem::getPrice)
                             .filter(price -> price != null)
                             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
@@ -125,16 +125,16 @@ public class AdminInstructorService {
                                                     && order.getStatus() != null
                                                     && "PAID".equals(order.getStatus().name());
                                         })
-                                        .map(Orderitem::getPrice)
+                                        .map(OrderItem::getPrice)
                                         .filter(price -> price != null)
                                         .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-                                List<Coursecategory> categories = categoriesByCourse.getOrDefault(course.getId(), List.of());
+                                List<CourseCategory> categories = categoriesByCourse.getOrDefault(course.getId(), List.of());
                                 String category = categories.stream()
                                         .filter(coursecategory -> Boolean.TRUE.equals(coursecategory.getIsPrimary()))
                                         .findFirst()
                                         .or(() -> categories.stream().findFirst())
-                                        .map(Coursecategory::getCategory)
+                                        .map(CourseCategory::getCategory)
                                         .map(Category::getName)
                                         .orElse("N/A");
 
@@ -187,14 +187,14 @@ public class AdminInstructorService {
                 .distinct()
                 .count();
         BigDecimal totalRevenue = courses.stream()
-                .flatMap(course -> course.getOrderitems().stream())
+                .flatMap(course -> course.getOrderItems().stream())
                 .filter(orderitem -> {
                     Order order = orderitem.getOrder();
                     return order != null
                             && order.getStatus() != null
                             && "PAID".equals(order.getStatus().name());
                 })
-                .map(Orderitem::getPrice)
+                .map(OrderItem::getPrice)
                 .filter(price -> price != null)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
@@ -212,22 +212,22 @@ public class AdminInstructorService {
                             .average()
                             .orElse(0);
 
-                    BigDecimal revenue = course.getOrderitems().stream()
+                    BigDecimal revenue = course.getOrderItems().stream()
                             .filter(orderitem -> {
                                 Order order = orderitem.getOrder();
                                 return order != null
                                         && order.getStatus() != null
                                         && "PAID".equals(order.getStatus().name());
                             })
-                            .map(Orderitem::getPrice)
+                            .map(OrderItem::getPrice)
                             .filter(price -> price != null)
                             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-                    String category = course.getCoursecategories().stream()
+                    String category = course.getCourseCategories().stream()
                             .filter(coursecategory -> Boolean.TRUE.equals(coursecategory.getIsPrimary()))
                             .findFirst()
-                            .or(() -> course.getCoursecategories().stream().findFirst())
-                            .map(Coursecategory::getCategory)
+                            .or(() -> course.getCourseCategories().stream().findFirst())
+                            .map(CourseCategory::getCategory)
                             .map(Category::getName)
                             .orElse("N/A");
 
@@ -258,7 +258,7 @@ public class AdminInstructorService {
 
     private String buildSpecialization(List<Course> courses) {
         return courses.stream()
-                .flatMap(course -> course.getCoursecategories().stream())
+                .flatMap(course -> course.getCourseCategories().stream())
                 .filter(coursecategory -> coursecategory.getCategory() != null)
                 .map(coursecategory -> coursecategory.getCategory().getName())
                 .filter(name -> name != null && !name.isBlank())
@@ -271,7 +271,7 @@ public class AdminInstructorService {
                 }));
     }
 
-    private String buildSpecialization(List<Course> courses, Map<Long, List<Coursecategory>> categoriesByCourse) {
+    private String buildSpecialization(List<Course> courses, Map<Long, List<CourseCategory>> categoriesByCourse) {
         List<String> categories = courses.stream()
                 .flatMap(course -> categoriesByCourse.getOrDefault(course.getId(), List.of()).stream())
                 .filter(coursecategory -> coursecategory.getCategory() != null)

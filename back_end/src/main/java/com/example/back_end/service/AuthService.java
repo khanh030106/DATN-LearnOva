@@ -12,7 +12,7 @@ import com.example.back_end.dto.response.LoginResponse;
 import com.example.back_end.dto.request.LoginRequest;
 import com.example.back_end.entity.Role;
 import com.example.back_end.entity.User;
-import com.example.back_end.entity.Verificationtoken;
+import com.example.back_end.entity.VerificationToken;
 import com.example.back_end.entity.enums.RoleName;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
@@ -67,7 +67,7 @@ public class AuthService {
         }
 
         String accessToken = jwtService.generateAccessToken(userDetails);
-        Verificationtoken refreshToken = verificationTokenService.createRefreshToken(userDetails.getUsername(), request.rememberMe());
+        VerificationToken refreshToken = verificationTokenService.createRefreshToken(userDetails.getUsername(), request.rememberMe());
 
         return new AuthTokenResponse(accessToken, refreshToken.getToken());
     }
@@ -75,7 +75,7 @@ public class AuthService {
     // Rotates the refresh token on every use — a stolen token can only be used once.
     @Transactional
     public AuthTokenResponse refreshAccessToken(String refreshToken) {
-        Verificationtoken validRefreshToken = verificationTokenService.verifyRefreshToken(refreshToken);
+        VerificationToken validRefreshToken = verificationTokenService.verifyRefreshToken(refreshToken);
 
         User user = validRefreshToken.getUser();
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getEmail());
@@ -94,7 +94,7 @@ public class AuthService {
             return;
         }
         try {
-            Verificationtoken token = verificationTokenService.verifyRefreshToken(refreshToken);
+            VerificationToken token = verificationTokenService.verifyRefreshToken(refreshToken);
             verificationTokenService.deleteRefreshTokenByUser(token.getUser());
         } catch (Exception ignored) {
             // Token already expired or not found — still a valid logout.
@@ -178,7 +178,7 @@ public class AuthService {
 
         User savedUser = userRepository.save(user);
 
-        Verificationtoken verificationToken = verificationTokenService.createActiveAccountToken(savedUser);
+        VerificationToken verificationToken = verificationTokenService.createActiveAccountToken(savedUser);
 
         String verifyLink = frontendBaseUrl + "/learnova/auth/login?token=" + verificationToken.getToken();
 
@@ -188,7 +188,7 @@ public class AuthService {
     @Transactional
     public void verifyEmail(String token) {
         // Expiry is now checked inside verifyActiveAccountToken.
-        Verificationtoken verificationToken = verificationTokenService.verifyActiveAccountToken(token);
+        VerificationToken verificationToken = verificationTokenService.verifyActiveAccountToken(token);
 
         User user = verificationToken.getUser();
         user.setIsActive(true);
@@ -207,7 +207,7 @@ public class AuthService {
         }
 
         User user = userOpt.get();
-        Verificationtoken verificationToken = verificationTokenService.createActiveAccountToken(user);
+        VerificationToken verificationToken = verificationTokenService.createActiveAccountToken(user);
         String verifyLink = frontendBaseUrl + "/learnova/auth/login?token=" + verificationToken.getToken();
 
         emailService.sendVerificationEmail(user.getEmail(), user.getFullName(), verifyLink);

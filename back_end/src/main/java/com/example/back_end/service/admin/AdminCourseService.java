@@ -156,7 +156,7 @@ public class AdminCourseService {
         String status = Boolean.TRUE.equals(course.getIsDeleted()) ? "DELETED"
                 : (course.getStatus() == null ? null : course.getStatus().name());
 
-        var primaryCategory = course.getCoursecategories().stream()
+        var primaryCategory = course.getCourseCategories().stream()
                 .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
                 .findFirst()
                 .orElse(null);
@@ -188,7 +188,7 @@ public class AdminCourseService {
         String status = Boolean.TRUE.equals(course.getIsDeleted()) ? "DELETED"
                 : (course.getStatus() == null ? null : course.getStatus().name());
 
-        var primaryCategory = course.getCoursecategories().stream()
+        var primaryCategory = course.getCourseCategories().stream()
                 .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
                 .findFirst()
                 .orElse(null);

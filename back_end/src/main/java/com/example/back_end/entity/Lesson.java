@@ -90,10 +90,10 @@ public class Lesson {
     private Instant updatedAt;
 
     @OneToMany(mappedBy = "lesson")
-    private Set<Lessonprogress> lessonprogresses = new LinkedHashSet<>();
+    private Set<LessonProgress> lessonProgresses = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Lessonsource> lessonsources = new LinkedHashSet<>();
+    private Set<LessonSource> lessonSources = new LinkedHashSet<>();
 
 
 }
