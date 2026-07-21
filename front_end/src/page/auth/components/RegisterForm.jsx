@@ -78,6 +78,7 @@ const RegisterForm = ({ onSwitchToLogin }) => {
             setLoading(false);
         }
     };
+    
     const handleResendEmail = async (e) => {
         e.preventDefault();
         if (!canResend || loading) return;
