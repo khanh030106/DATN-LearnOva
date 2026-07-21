@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import com.example.back_end.dto.resquest.RegisterRequest;
 import com.example.back_end.dto.response.RegisterResponse;
 import com.example.back_end.dto.resquest.ResendVerificationRequest;
+import com.example.back_end.dto.resquest.ForgotPasswordRequest;
+import com.example.back_end.dto.resquest.ResetPasswordRequest;
 
 
 @RestController
@@ -101,6 +103,34 @@ public class AuthController {
         return ResponseEntity.ok(new RegisterResponse(
                 true,
                 "If that email is registered and unverified, a verification link has been sent."
+        ));
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<RegisterResponse> forgotPassword(
+            @Valid @RequestBody ForgotPasswordRequest request
+    ) {
+        authService.forgotPassword(request.getEmail());
+        return ResponseEntity.ok(new RegisterResponse(
+                true,
+                "A password reset link has been sent to your email."
+        ));
+    }
+
+    @GetMapping("/validate-reset-token")
+    public ResponseEntity<RegisterResponse> validateResetToken(@RequestParam("token") String token) {
+        authService.validateResetToken(token);
+        return ResponseEntity.ok(new RegisterResponse(true, "Token is valid."));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<RegisterResponse> resetPassword(
+            @Valid @RequestBody ResetPasswordRequest request
+    ) {
+        authService.resetPassword(request.getToken(), request.getNewPassword());
+        return ResponseEntity.ok(new RegisterResponse(
+                true,
+                "Password has been changed successfully."
         ));
     }
 }

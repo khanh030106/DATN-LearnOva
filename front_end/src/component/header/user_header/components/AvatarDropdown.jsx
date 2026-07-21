@@ -1,5 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { User, BookOpen, Heart, LogOut } from "lucide-react";
+import {
+  User,
+  BookOpen,
+  Heart,
+  Shield,
+  LogOut,
+} from "lucide-react";
 import HeaderDropdown from "./HeaderDropdown.jsx";
 import {useUserData} from "./headerData.js";
 import {useAuth} from "../../../../hook/UseAuth.jsx";
@@ -50,6 +56,15 @@ const AvatarDropdown = () => {
             <Link to="/learnova/user/profile/favorites" className="user-logged-menu-link">
               <Heart size={16} />
               My Favourite
+            </Link>
+          </li>
+          <li>
+            <Link
+                to="/learnova/user/profile/security"
+                className="user-logged-menu-link"
+            >
+              <Shield size={16} />
+              Security
             </Link>
           </li>
           <li className="user-logged-menu-separator">

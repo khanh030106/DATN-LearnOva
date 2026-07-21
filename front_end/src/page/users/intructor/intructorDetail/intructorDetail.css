@@ -1115,6 +1115,49 @@ hr.hr-in {
     height: 90px;
     object-fit: contain;
 }
+
+.instructor-highlight-card p {
+    margin-bottom: 20px;
+}
+
+.instructor-highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    position: relative;
+    z-index: 1;
+}
+
+.instructor-highlight-item {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+}
+
+.instructor-highlight-item svg {
+    color: #4f46e5;
+    font-size: 18px;
+    margin-bottom: 2px;
+}
+
+.instructor-highlight-item strong {
+    font-size: 20px;
+    color: #0f172a;
+}
+
+.instructor-highlight-item span {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
 .review-section-new {
     margin-top: 30px;
 }

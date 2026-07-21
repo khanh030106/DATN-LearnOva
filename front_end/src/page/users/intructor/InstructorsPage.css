@@ -2145,9 +2145,19 @@ body {
 }
 
 .message-btn::after {
-  content: "Message";
+  content: "Follow";
   font-size: 11px;
   font-weight: 600;
+}
+
+.message-btn.following {
+  background: var(--blue-strong);
+  color: var(--text-white);
+  border-color: var(--blue-strong);
+}
+
+.message-btn.following::after {
+  content: "Following";
 }
 
 @media (max-width: 1200px) {

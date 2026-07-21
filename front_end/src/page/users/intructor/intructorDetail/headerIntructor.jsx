@@ -1,92 +1,149 @@
-import React, { useState } from "react";
-import { MdMessage, MdSchool, MdVerified, MdWork } from "react-icons/md";
-import { FaUserCheck, FaUserPlus } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { FaStar, FaUserGraduate, FaBookOpen, FaUserPlus, FaUserCheck } from "react-icons/fa";
+import defaultAvatar from "../../../../assets/default_user_avatar.jpg";
+import { useAuth } from "../../../../hook/UseAuth.jsx";
+import {
+    getFollowStatusApi,
+    followInstructorApi,
+    unfollowInstructorApi,
+} from "../../../../api/FollowApi.js";
+import {
+    FaGithub,
+    FaFacebook,
+    FaLinkedin,
+    FaGlobe,
+    FaYoutube,
+    FaTwitter,
+    FaInstagram,
+} from "react-icons/fa";
 
-function headerIntructor({
-                             instructor,
-                             isFollowing,
-                             setIsFollowing,
-                             introText,
-                             activeTab,
-                             setActiveTab
-                         })  {
+function HeaderIntructor({ instructor, activeTab, setActiveTab }) {
+    const navigate = useNavigate();
+    const { isAuthenticated, loading: authLoading } = useAuth();
 
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [followerCount, setFollowerCount] = useState(instructor.followerCount ?? 0);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const getSocialIcon = (platform) => {
+        switch (platform.toLowerCase()) {
+            case "github":
+                return <FaGithub />;
+            case "facebook":
+                return <FaFacebook />;
+            case "linkedin":
+                return <FaLinkedin />;
+            case "youtube":
+                return <FaYoutube />;
+            case "twitter":
+                return <FaTwitter />;
+            case "instagram":
+                return <FaInstagram />;
+            case "website":
+                return <FaGlobe />;
+            default:
+                return <FaGlobe />;
+        }
+    };
 
+    useEffect(() => {
+        if (authLoading || !isAuthenticated) return;
+
+        getFollowStatusApi(instructor.instructorId)
+            .then((data) => {
+                setIsFollowing(data.following);
+                setFollowerCount(data.followerCount);
+            })
+            .catch((err) => console.error("Failed to load follow status", err));
+    }, [authLoading, isAuthenticated, instructor.instructorId]);
+
+    const handleToggleFollow = async () => {
+        if (authLoading) return;
+
+        if (!isAuthenticated) {
+            toast.error("Please log in to follow this instructor.");
+            navigate("/learnova/auth/login");
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const data = isFollowing
+                ? await unfollowInstructorApi(instructor.instructorId)
+                : await followInstructorApi(instructor.instructorId);
+
+            setIsFollowing(data.following);
+            setFollowerCount(data.followerCount);
+
+            if (data.following) {
+                toast.success(`You are now following ${instructor.fullName}.`);
+            }
+        } catch (err) {
+            console.error("Failed to update follow status", err);
+            toast.error("Something went wrong. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     return (
         <div className="profile-header-in">
-
-            {/* Cover */}
             <div className="header-img"></div>
 
-            {/* Content */}
             <div className="profile-header-under">
-
                 <div className="profile-left">
                     <div className="profile-image-container">
                         <img
-                            src={instructor.image}
-                            alt={instructor.name}
+                            src={instructor.avatar?.trim() ? instructor.avatar : defaultAvatar}
+                            alt={instructor.fullName}
                             className="profile-image"
                         />
-
-                        <div className="verified-badge">
-                            ✓
-                        </div>
                     </div>
                 </div>
 
                 <div className="profile-center">
-
                     <div className="profile-name-section">
-                        <h1 className="instructor-name-in">
-                            {instructor.name}
-                        </h1>
-
-                        <div className="verified-icon">
-                            ✓
-                        </div>
+                        <h1 className="instructor-name-in">{instructor.fullName}</h1>
                     </div>
 
-                    <p className="instructor-title">
-                        {instructor.title}
-                    </p>
+                    <p className="instructor-title">{instructor.headline || "Instructor"}</p>
 
                     <div className="profile-info">
-
                         <div className="info-item">
-                            <MdWork className="info-icon" />
-                            <span>Frontend Developer tại FPT Software</span>
+                            <FaStar className="info-icon" />
+                            <span>{instructor.rating.toFixed(1)}/5 ({instructor.reviewCount} reviews)</span>
                         </div>
 
                         <div className="info-item">
-                            <MdVerified className="info-icon" />
-                            <span>Bắt đầu kinh nghiệm giảng dạy</span>
+                            <FaUserGraduate className="info-icon" />
+                            <span>{instructor.studentCount} students</span>
                         </div>
 
                         <div className="info-item">
-                            <MdSchool className="info-icon" />
-                            <span>Đại học Bách Khoa Hà Nội</span>
+                            <FaBookOpen className="info-icon" />
+                            <span>{instructor.courseCount} courses</span>
                         </div>
 
+                        <div className="info-item">
+                            <FaUserCheck className="info-icon" />
+                            <span>{followerCount} followers</span>
+                        </div>
                     </div>
 
-                    <p className="instructor-bio-in">
-                        {introText}
-                    </p>
-
+                    {instructor.description && (
+                        <p className="instructor-bio-in">{instructor.description}</p>
+                    )}
                 </div>
 
                 <div className="profile-right">
-
                     <div className="profile-actions-vertical">
-
                         <button
-                            className={`follow-btn ${
-                                isFollowing ? "following" : ""
-                            }`}
-                            onClick={() => setIsFollowing(!isFollowing)}
+                            className={`follow-btn ${isFollowing ? "following" : ""}`}
+                            onClick={handleToggleFollow}
+                            disabled={isSubmitting}
+                            type="button"
                         >
                             {isFollowing ? (
                                 <>
@@ -101,81 +158,59 @@ function headerIntructor({
                             )}
                         </button>
 
-                        <button className="message-btn">
-                            <MdMessage />
-                        </button>
-
-                        <div className="social-links-in">
-                            {instructor.socials.map((social, idx) => (
-                                <a
-                                    key={idx}
-                                    href={social.url}
-                                    className="social-link-in"
-                                    title="Social"
-                                >
-                                    <social.icon
-                                        size={20}
-                                        style={{
-                                            color: social.color
-                                        }}
-                                    />
-                                </a>
-                            ))}
-                        </div>
-
+                        {instructor.socialLinks && Object.keys(instructor.socialLinks).length > 0 && (
+                            <div className="social-links-in">
+                                {Object.entries(instructor.socialLinks).map(([platform, url]) => (
+                                    <a
+                                        key={platform}
+                                        href={url}
+                                        className="social-link-in"
+                                        title={platform}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        {getSocialIcon(platform)}
+                                    </a>
+                                ))}
+                            </div>
+                        )}
                     </div>
-
                 </div>
-
             </div>
 
             <hr className="hr-in" />
 
-            {/* Tabs */}
             <div className="instructor-tabs-in">
-
                 <button
-                    className={`tab-btn ${
-                        activeTab === "overview" ? "active" : ""
-                    }`}
+                    className={`tab-btn ${activeTab === "overview" ? "active" : ""}`}
                     onClick={() => setActiveTab("overview")}
                 >
-                    Tổng quan
+                    Overview
                 </button>
 
                 <button
-                    className={`tab-btn ${
-                        activeTab === "about" ? "active" : ""
-                    }`}
+                    className={`tab-btn ${activeTab === "about" ? "active" : ""}`}
                     onClick={() => setActiveTab("about")}
                 >
-                    Giới thiệu
+                    About
                 </button>
 
                 <button
-                    className={`tab-btn ${
-                        activeTab === "courses" ? "active" : ""
-                    }`}
+                    className={`tab-btn ${activeTab === "courses" ? "active" : ""}`}
                     onClick={() => setActiveTab("courses")}
                 >
-                    Khóa học
+                    Courses
                 </button>
 
                 <button
-                    className={`tab-btn ${
-                        activeTab === "reviews" ? "active" : ""
-                    }`}
+                    className={`tab-btn ${activeTab === "reviews" ? "active" : ""}`}
                     onClick={() => setActiveTab("reviews")}
                 >
-                    Đánh giá
+                    Reviews
                 </button>
-
             </div>
-
         </div>
     );
-
-
 }
 
-export default headerIntructor;
+export default HeaderIntructor;

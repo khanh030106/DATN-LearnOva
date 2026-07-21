@@ -15,7 +15,7 @@ const OAuth2Success = () => {
             try {
                 await refreshAccessToken();
                 await fetchCurrentUser();
-                navigate("/learnova/courses", { replace: true });
+                navigate("/learnova/home", { replace: true });
             } catch {
                 // Cookies missing or invalid — send back to login.
                 navigate("/learnova/auth/login", { replace: true });

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {FaPlay, FaPlayCircle, FaClock, FaGraduationCap, FaCheckCircle, FaUserGraduate, FaGlobe, FaChevronDown, FaChevronUp, FaShoppingCart,} from "react-icons/fa";
+import {FaPlay, FaPlayCircle, FaClock, FaGraduationCap, FaCheckCircle, FaUserGraduate, FaGlobe, FaChevronDown, FaChevronUp, FaShoppingCart, FaHeart, FaRegHeart,} from "react-icons/fa";
 import { ChevronDown } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCourseDetail, getFileUrl } from "../../../api/PublicCourseApi.js";
 import { checkEnrollment } from "../../../api/EnrollmentApi.js";
+import { addWishlistApi, removeWishlistApi, getWishlistApi } from "../../../api/WishlistApi.js";
 import { useAuth } from "../../../hook/UseAuth.jsx";
 import { useAxiosPrivate } from "../../../hook/UseAxiosPrivate.js";
 import { addStoredCartItem } from "../../../utils/cartStorage.js";
@@ -66,6 +67,8 @@ export default function CourseDetail() {
 
     const [isLoading, setIsLoading] = useState(true);
     const [enrolled, setEnrolled] = useState(false);
+    const [isWishlisted, setIsWishlisted] = useState(false);
+    const [isTogglingWishlist, setIsTogglingWishlist] = useState(false);
 
     const [expandedSections, setExpandedSections] = useState([]);
     const [descExpanded, setDescExpanded] = useState(false);
@@ -138,6 +141,50 @@ export default function CourseDetail() {
             .then(setEnrolled)
             .catch(() => setEnrolled(false));
     }, [id, isAuthenticated, currentUser]);
+
+    useEffect(() => {
+        if (!id || !isAuthenticated) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setIsWishlisted(false);
+            return;
+        }
+
+        getWishlistApi()
+            .then((response) => {
+                const items = response?.data || [];
+                setIsWishlisted(items.some((item) => String(item.courseId) === String(id)));
+            })
+            .catch(() => setIsWishlisted(false));
+    }, [id, isAuthenticated, currentUser]);
+
+    const handleToggleWishlist = async () => {
+        if (authLoading || !course) return;
+
+        if (!isAuthenticated) {
+            toast.error("Bạn cần đăng nhập để thêm khóa học yêu thích.");
+            return;
+        }
+
+        const courseId = course.courseId || course.id || id;
+
+        setIsTogglingWishlist(true);
+        try {
+            if (isWishlisted) {
+                await removeWishlistApi(courseId);
+                setIsWishlisted(false);
+                toast.success("Đã xóa khỏi danh sách yêu thích.");
+            } else {
+                await addWishlistApi(courseId);
+                setIsWishlisted(true);
+                toast.success("Đã thêm vào danh sách yêu thích.");
+            }
+        } catch (err) {
+            console.error("Failed to toggle wishlist", err);
+            toast.error("Không thể cập nhật danh sách yêu thích.");
+        } finally {
+            setIsTogglingWishlist(false);
+        }
+    };
 
     const toggleSection = (sectionId) => {
         setExpandedSections((prev) =>
@@ -488,6 +535,11 @@ export default function CourseDetail() {
 
                             <div className="cdp__instructor-info">
                                 <h3>{course.instructor?.fullName}</h3>
+                                {course.instructor?.description && (
+                                    <p className="cdp__instructor-bio">
+                                        {course.instructor.description}
+                                    </p>
+                                )}
                             </div>
                         </div>
                     </section>
@@ -596,6 +648,23 @@ export default function CourseDetail() {
                                     </button>
                                 </>
                             )}
+
+                            <button
+                                className="cdp__btn cdp__btn--outline"
+                                type="button"
+                                onClick={handleToggleWishlist}
+                                disabled={isTogglingWishlist}
+                            >
+                                {isWishlisted ? (
+                                    <>
+                                        <FaHeart color="#e11d48" /> Wishlisted
+                                    </>
+                                ) : (
+                                    <>
+                                        <FaRegHeart /> Add to Wishlist
+                                    </>
+                                )}
+                            </button>
 
                             <ul className="cdp__card-features">
                                 <li>

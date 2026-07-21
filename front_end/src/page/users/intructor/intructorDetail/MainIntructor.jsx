@@ -1,157 +1,178 @@
-import {courses, introDetails, reviews} from "./intructorData.js";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { FaUserGraduate, FaStar, FaRegHeart, FaHeart } from "react-icons/fa";
+import defaultAvatar from "../../../../assets/default_user_avatar.jpg";
+import { getFileUrl } from "../../../../api/PublicCourseApi.js";
+import { addWishlistApi, removeWishlistApi, getWishlistApi } from "../../../../api/WishlistApi.js";
+import { useAuth } from "../../../../hook/UseAuth.jsx";
 
-import React from "react";
+function MainIntructor({
+    activeTab,
+    description,
+    expertiseTags = [],
+    courses = [],
+    reviews = [],
+    rating = 0,
+    reviewCount = 0,
+}) {
+    const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+    const [thumbnailUrls, setThumbnailUrls] = useState({});
+    const [wishlistedIds, setWishlistedIds] = useState(new Set());
 
-import { FaUserGraduate } from "react-icons/fa";
-import {
-    FaStar,
-    FaRegHeart,
-    FaEye
-} from "react-icons/fa";
-import { FiClock } from "react-icons/fi";
-function MainIntructor({ activeTab }) {
+    useEffect(() => {
+        courses.forEach((course) => {
+            if (!course.thumbnailKey?.trim() || thumbnailUrls[course.courseId]) return;
+
+            getFileUrl(course.thumbnailKey)
+                .then((url) =>
+                    setThumbnailUrls((prev) => ({ ...prev, [course.courseId]: url })),
+                )
+                .catch(() => {});
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [courses]);
+
+    useEffect(() => {
+        if (!isAuthenticated || courses.length === 0) {
+            setWishlistedIds(new Set());
+            return;
+        }
+
+        getWishlistApi()
+            .then((response) => {
+                const items = response?.data || [];
+                setWishlistedIds(new Set(items.map((item) => String(item.courseId))));
+            })
+            .catch(() => setWishlistedIds(new Set()));
+    }, [isAuthenticated, courses]);
+
+    const handleToggleWishlist = async (event, courseId) => {
+        event.stopPropagation();
+
+        if (!isAuthenticated) {
+            toast.error("Please log in to save favorite courses.");
+            return;
+        }
+
+        const key = String(courseId);
+        const isWishlisted = wishlistedIds.has(key);
+
+        try {
+            if (isWishlisted) {
+                await removeWishlistApi(courseId);
+                setWishlistedIds((prev) => {
+                    const next = new Set(prev);
+                    next.delete(key);
+                    return next;
+                });
+                toast.success("Removed from wishlist.");
+            } else {
+                await addWishlistApi(courseId);
+                setWishlistedIds((prev) => new Set(prev).add(key));
+                toast.success("Added to wishlist.");
+            }
+        } catch (err) {
+            console.error("Failed to toggle wishlist", err);
+            toast.error("Something went wrong. Please try again.");
+        }
+    };
+
+    const starBreakdown = [5, 4, 3, 2, 1].map((star) => {
+        const count = reviews.filter((review) => review.rating === star).length;
+        const width = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
+        return { star, count, width };
+    });
+
     return (
-
         <div className="content-left">
-            {/* Introduction Section */}
             {(activeTab === "overview" || activeTab === "about") && (
-            <section className="section">
-                <h2 className="section-title">Introduce</h2>
-                <p className="section-text">{introDetails}</p>
-                <div className="profile-links">
-                    <a href="#react" className="tag-link">React</a>
-                    <a href="#javascript" className="tag-link">JavaScript</a>
-                    <a href="#html5" className="tag-link">HTML 5</a>
-                    <a href="#node" className="tag-link">Node.js</a>
-                    <a href="#css" className="tag-link">Tailwind CSS</a>
-                </div>
-
-            </section>)}
-
-            {/* Courses Section */}
-
-            {(activeTab === "overview" || activeTab === "courses") && (
                 <section className="section">
-
-                    <div className="section-header-course">
-
-                        <h2 className="section-title">
-                            Instructor's Courses
-                        </h2>
-
-
-
-                    </div>
-
-                    <div className="courses-grid-new">
-
-                        {(activeTab === "overview"
-                                ? courses.slice(0, 4)
-                                : courses
-                        ).map(course => (
-
-                            <div
-                                key={course.id}
-                                className="course-card-new"
-                            >
-
-                                <div className="course-image-box">
-
-                                    <img
-                                        src={course.image}
-                                        alt={course.title}
-                                        className="course-image-new"
-                                    />
-
-
-
-                                    <button className="wishlist-btn">
-                                        <FaRegHeart />
-                                    </button>
-
-
-
-                                </div>
-
-                                <div className="course-content-new">
-
-                                    <h3 className="course-title-new">
-                                        {course.title}
-                                    </h3>
-
-                                    <div className="course-meta-new">
-
-                                        <div className="meta-item">
-                                            <FaStar />
-                                            <span>
-                                {course.rating}
-                            </span>
-                                        </div>
-
-                                        <div className="meta-divider"></div>
-
-                                        <div className="meta-item">
-                            <span className="student-count">
-                                <FaUserGraduate />
-                                                            {course.student}
-                            </span>
-                                        </div>
-
-                                        <div className="meta-divider"></div>
-
-                                        <div className="meta-item">
-                                            <FiClock />
-                                            <span>
-                                                42 Hours
-                                            </span>
-                                        </div>
-
-                                    </div>
-
-                                    <div className="course-footer-new">
-
-                                        <div className="price-new">
-                                            {course.price}
-                                        </div>
-
-                                        <div className="course-actions-new">
-
-                                            <button className="buy-btn-new">
-                                                Buy Now
-                                            </button>
-
-
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        ))}
-
-                    </div>
-
+                    <h2 className="section-title">Introduce</h2>
+                    <p className="section-text">{description || "This instructor hasn't added a bio yet."}</p>
+                    {expertiseTags.length > 0 && (
+                        <div className="profile-links">
+                            {expertiseTags.map((tag) => (
+                                <span key={tag} className="tag-link">{tag}</span>
+                            ))}
+                        </div>
+                    )}
                 </section>
             )}
 
-            {/* Reviews Section */}
-            {/* Reviews Section */}
-            {(activeTab === "reviews") && (
+            {(activeTab === "overview" || activeTab === "courses") && (
+                <section className="section">
+                    <div className="section-header-course">
+                        <h2 className="section-title">Instructor's Courses</h2>
+                    </div>
+
+                    {courses.length === 0 ? (
+                        <p className="section-text">This instructor hasn't published any courses yet.</p>
+                    ) : (
+                        <div className="courses-grid-new">
+                            {(activeTab === "overview" ? courses.slice(0, 4) : courses).map((course) => (
+                                <div
+                                    key={course.courseId}
+                                    className="course-card-new"
+                                    onClick={() => navigate(`/learnova/courses/detail/${course.courseId}`)}
+                                    role="button"
+                                    tabIndex={0}
+                                >
+                                    <div className="course-image-box">
+                                        <img
+                                            src={thumbnailUrls[course.courseId] || defaultAvatar}
+                                            alt={course.title}
+                                            className="course-image-new"
+                                        />
+                                        <button
+                                            className="wishlist-btn"
+                                            onClick={(event) => handleToggleWishlist(event, course.courseId)}
+                                        >
+                                            {wishlistedIds.has(String(course.courseId)) ? (
+                                                <FaHeart color="#e11d48" />
+                                            ) : (
+                                                <FaRegHeart />
+                                            )}
+                                        </button>
+                                    </div>
+
+                                    <div className="course-content-new">
+                                        <h3 className="course-title-new">{course.title}</h3>
+
+                                        <div className="course-meta-new">
+                                            <div className="meta-item">
+                                                <FaStar />
+                                                <span>{course.rating.toFixed(1)}</span>
+                                            </div>
+                                            <div className="meta-divider"></div>
+                                            <div className="meta-item">
+                                                <span className="student-count">
+                                                    <FaUserGraduate />
+                                                    {course.studentCount}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="course-footer-new">
+                                            <div className="price-new">
+                                                {Number(course.basePrice).toLocaleString("vi-VN")}₫
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </section>
+            )}
+
+            {activeTab === "reviews" && (
                 <section className="review-section-new">
-
-                    {/* Header Review */}
                     <div className="review-overview-card">
-
                         <div className="review-overview-left">
                             <h2>Student Reviews</h2>
-
-                            <p>
-                                Genuine feedback from students who have successfully
-                                completed Tùng's courses.
-                            </p>
+                            <p>Genuine feedback from students who have completed this instructor's courses.</p>
 
                             <div className="overall-rating">
                                 <div className="overall-stars">
@@ -159,118 +180,69 @@ function MainIntructor({ activeTab }) {
                                         <FaStar key={i} />
                                     ))}
                                 </div>
-
-                                <span className="overall-score">
-                                    4.7
-                                </span>
-
-                                <span className="overall-count">
-                                    (3 verified reviews)
-                                </span>
+                                <span className="overall-score">{rating.toFixed(1)}</span>
+                                <span className="overall-count">({reviewCount} reviews)</span>
                             </div>
                         </div>
 
                         <div className="review-overview-right">
-
-                            {[
-                                { star: 5, count: 2, width: 80 },
-                                { star: 4, count: 1, width: 40 },
-                                { star: 3, count: 0, width: 0 },
-                                { star: 2, count: 0, width: 0 },
-                                { star: 1, count: 0, width: 0 }
-                            ].map((item) => (
+                            {starBreakdown.map((item) => (
                                 <div className="rating-row" key={item.star}>
-
                                     <span>{item.star}</span>
-
                                     <FaStar className="mini-star-review" />
-
                                     <div className="rating-progress">
-
                                         <div
                                             className="rating-progress-fill"
-                                            style={{
-                                                width: `${item.width}%`
-                                            }}
+                                            style={{ width: `${item.width}%` }}
                                         />
                                     </div>
-
                                     <span>{item.count}</span>
-
                                 </div>
                             ))}
-
                         </div>
-
                     </div>
 
-                    {/* Content */}
                     <div className="review-content-wrapper">
-
-                        {/* Left */}
                         <div className="review-list-new">
-
-                            {reviews.map((review) => (
-
-                                <div
-                                    key={review.id}
-                                    className="review-card-new"
-                                >
-
-                                    <div className="review-card-header">
-
-                                        <div className="review-user">
-
-                                            <img
-                                                src={review.avatar}
-                                                alt={review.name}
-                                                className="review-avatar-new"
-                                            />
-
-                                            <div>
-
-                                                <h4>{review.name}</h4>
-
-                                                <span>
-                                    Frontend Developer
-                                </span>
-
+                            {reviews.length === 0 ? (
+                                <p className="section-text">No reviews yet.</p>
+                            ) : (
+                                reviews.map((review, index) => (
+                                    <div key={`${review.reviewerName}-${index}`} className="review-card-new">
+                                        <div className="review-card-header">
+                                            <div className="review-user">
+                                                <img
+                                                    src={review.reviewerAvatar?.trim() ? review.reviewerAvatar : defaultAvatar}
+                                                    alt={review.reviewerName}
+                                                    className="review-avatar-new"
+                                                />
+                                                <div>
+                                                    <h4>{review.reviewerName}</h4>
+                                                    <span>{review.courseTitle}</span>
+                                                </div>
                                             </div>
 
+                                            <div className="review-time-new">
+                                                {new Date(review.createdAt).toLocaleDateString("en-US")}
+                                            </div>
                                         </div>
 
-                                        <div className="review-time-new">
-                                            2 weeks ago
+                                        <div className="review-stars-new">
+                                            {Array.from({ length: review.rating }).map((_, i) => (
+                                                <FaStar key={i} color="#fbbf24" />
+                                            ))}
                                         </div>
 
+                                        <p className="review-text-new">{review.comment}</p>
                                     </div>
-
-                                    <div className="review-stars-new">
-                                        {Array.from({ length: 5 }).map((_, i) => (
-                                            <FaStar
-                                                key={i}
-                                                color="#fbbf24"
-                                            />
-                                        ))}
-                                    </div>
-
-                                    <p className="review-text-new">
-                                        {review.text}
-                                    </p>
-
-                                </div>
-
-                            ))}
-
+                                ))
+                            )}
                         </div>
-
-                        {/* Right */}
-
-
                     </div>
-
-                </section>)}
+                </section>
+            )}
         </div>
     );
 }
-    export default MainIntructor;
+
+export default MainIntructor;

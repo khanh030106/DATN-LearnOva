@@ -1,6 +1,8 @@
 import {BrowserRouter, Routes, Route, Outlet} from "react-router-dom";
 import RequireRole from "./RequireRole.jsx";
 import AuthPage from "../page/login/AuthPage.jsx";
+import ForgotPassword from "../page/login/ForgotPassword.jsx";
+import ResetPassword from "../page/login/ResetPassword.jsx";
 import Home from "../page/home/Home.jsx";
 import HomeLayout from "../layout/home/HomeLayout.jsx";
 import DashboardLayout from "../layout/admin/DashboardLayout.jsx";
@@ -47,6 +49,8 @@ const App = () => {
             <Routes>
 
                 <Route path="/learnova/auth/login" element={<AuthPage/>}/>
+                <Route path="/forgot-password" element={<ForgotPassword/>}/>
+                <Route path="/reset-password" element={<ResetPassword/>}/>
                 <Route path="/learnova/user/courses-detail" element={<CourseDetail/>}/>
                 <Route path="/learnova/user/CoursesDetail/:courseId" element={<CourseDetail/>}/>
                 <Route path="/oauth2-success" element={<OAuth2Success />}/>
@@ -96,7 +100,7 @@ const App = () => {
                     <Route path="/learnova/cart" element={<Cart/>}/>
                     <Route path="/learnova/courses/detail/:id" element={<CourseDetaill/>}/>
                     <Route path="/learnova/intructors" element={<InstructorsPage/>}/>
-                    <Route path="/learnova/intructorDetail" element={<InstructorDetail/>}/>
+                    <Route path="/learnova/intructorDetail/:id" element={<InstructorDetail/>}/>
                     <Route path="/learnova/about" element={<AboutView/>}/>
 
                     <Route element={<RequireRole><Outlet/></RequireRole>}>

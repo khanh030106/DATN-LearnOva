@@ -1,6 +1,7 @@
 package com.example.back_end.repository;
 
 import com.example.back_end.entity.Review;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -48,4 +49,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT r.course.id AS courseId, AVG(r.rating) AS avgRating, COUNT(r) AS ratingCount " +
             "FROM Review r WHERE r.course.id IN :courseIds GROUP BY r.course.id")
     List<CourseRatingProjection> findAvgRatingByCourseIds(@Param("courseIds") List<Long> courseIds);
+
+    @Query("SELECT r FROM Review r JOIN FETCH r.user JOIN FETCH r.course " +
+            "WHERE r.course.instructor.id = :instructorId ORDER BY r.createdAt DESC")
+    List<Review> findRecentByInstructorId(@Param("instructorId") Long instructorId, Pageable pageable);
 }

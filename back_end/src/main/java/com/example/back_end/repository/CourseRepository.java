@@ -57,6 +57,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Optional<Course> findCourseDetailById(@Param("id") Long id);
 
     List<Course> findByStatusAndIsDeletedFalseOrderByCreatedAtDesc(CourseStatus status);
+
+    List<Course> findByInstructorIdAndStatusAndIsDeletedFalseOrderByCreatedAtDesc(
+            Long instructorId, CourseStatus status);
     @Query("""
     SELECT DISTINCT c
     FROM Course c

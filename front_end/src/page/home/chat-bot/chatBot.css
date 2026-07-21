@@ -429,6 +429,10 @@
 
     transform: rotate(35deg);
 }
+.typing-indicator {
+    font-style: italic;
+    opacity: 0.8;
+}
 .message.user {
     background: #e9f2ff;
     color: #1f2937;
