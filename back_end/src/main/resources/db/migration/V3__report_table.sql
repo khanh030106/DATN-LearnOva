@@ -1,5 +1,5 @@
 CREATE TABLE reports (
-                         report_id                BIGSERIAL PRIMARY KEY,
+                         report_id                BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                          reporter_id              BIGINT NOT NULL REFERENCES users(user_id),
                          course_id                BIGINT NOT NULL REFERENCES courses(course_id),
                          lesson_id                BIGINT NULL REFERENCES lessons(lesson_id),
@@ -11,4 +11,9 @@ CREATE TABLE reports (
                          teacher_visible          BOOLEAN NOT NULL DEFAULT FALSE,
                          created_at               TIMESTAMPTZ NOT NULL DEFAULT now(),
                          updated_at               TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE report_categories (
+                                   category_id   BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                                   name          TEXT NOT NULL
 );
