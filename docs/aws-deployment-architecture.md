@@ -130,40 +130,4 @@ trong CI.
   tag `Name=learnova-app`), `ec2:DescribeInstances`, `ec2:DescribeInstanceStatus`,
   `ssm:SendCommand`, `ssm:GetCommandInvocation`.
 
-## Chi phí & an toàn ngân sách
 
-- Ước tính **~$20-25 cho 20 ngày** (EC2 chỉ bật lúc cần ~3h/ngày, ALB chạy 24/7 vì không có
-  trạng thái "stopped").
-- **ALB là khoản lớn nhất** (~$13-15/20 ngày) — đánh đổi lấy TLS chuẩn qua ACM, không cần lo
-  Certbot/renew, chấp nhận được so với công sức tự động hoá tạo/xoá ALB theo giờ.
-- Cron trong EC2 tự `shutdown -h now` lúc 23h ICT (16h UTC) mỗi ngày — lưới an toàn cuối cùng
-  chống quên tắt máy qua đêm, chuyển instance sang `stopped` (ngừng tính tiền compute).
-- `terraform destroy` dọn sạch toàn bộ (EC2, ALB, Route53 record, ACM cert, IAM role) trong
-  1 lệnh khi kết thúc đợt bảo vệ.
-
-## Data & persistence — điểm cần lưu ý
-
-DB **không dùng RDS** (quá đắt/phức tạp cho scope 20 ngày) — Postgres chạy như 1 container
-thường, data lưu ở Docker volume `app_pg_data`, nằm **trên cùng EBS root volume** với EC2
-instance (không phải EBS riêng). Hệ quả:
-
-- **Không có backup tự động, không Multi-AZ, không point-in-time recovery.**
-- Nếu EC2/volume bị xoá (kể cả vô tình), data mất hoàn toàn — bắt buộc phải tự `pg_dump`
-  backup tay trước khi `terraform destroy` lúc kết thúc đợt.
-- Schema được Flyway tự tạo từ `back_end/src/main/resources/db/migration/` mỗi lần backend
-  khởi động — **không có migration seed data nào**, nên DB trên EC2 hiện đang trống (0 user,
-  0 course), tách biệt hoàn toàn với DB local dùng để dev. Restore data thật (nếu cần cho
-  demo) là việc làm riêng, chưa thực hiện.
-
-Bí mật (`.env` thật của `back_end`, `ai_services`, và root `.env` cho Postgres credentials)
-**không nằm trong git** (gitignore) — được chuyển 1 lần lên EC2 qua SSM Parameter Store
-(`SecureString`, tên `/learnova/deploy/*`), EC2 tự `get-parameter --with-decryption` rồi ghi
-ra file, sau đó parameter bị xoá ngay. GitHub Actions không giữ bất kỳ secret ứng dụng nào —
-chỉ có quyền IAM để start máy + gửi lệnh SSM.
-
-## Việc còn tồn đọng
-
-- Restore data thật từ Postgres local lên EC2 (chưa làm, DB deploy hiện đang trống).
-- Rotate `JWT_SECRET` (bị in ra ngoài ý muốn 1 lần trong lúc debug `docker compose config`).
-- Trước khi bảo vệ: đổi trigger `deploy.yml` sang `workflow_dispatch`, backup Postgres, xác
-  nhận `terraform destroy` chạy sạch sau khi xong.
