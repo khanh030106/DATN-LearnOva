@@ -1,5 +1,5 @@
 import "./CourseDetail.css";
-import { FaClipboardCheck, FaPlay, FaPlayCircle, FaClock, FaCheckCircle, FaStar } from "react-icons/fa";
+import { FaClipboardCheck, FaPlay, FaPlayCircle, FaClock, FaCheckCircle, FaStar, FaFlag } from "react-icons/fa";
 import { ChevronDown } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,7 +13,9 @@ import chatbot from "../../../home/chat-bot/chatBot.jsx";
 import QuizPage from "./QuizPage.jsx";
 import Header from "../../../../component/header/user_header/Header.jsx";
 import ReviewModal from "./ReviewModal.jsx";
+import ReportCourseModal from "./ReportCourseModal.jsx";
 import { getCourseReviewsApi, deleteReviewApi, getRatingSummaryApi, createReviewApi } from "../../../../api/ReviewApi.js";
+import axiosClient from "../../../../api/AxiosClient.js";
 import { getCourseDetail, getFileUrl } from "../../../../api/PublicCourseApi.js";
 import { getCourseProgressApi, updateLessonProgressApi } from "../../../../api/ProgressApi.js";
 import React, { useState, useEffect, useContext, useCallback, useRef } from "react";
@@ -55,6 +57,8 @@ function CourseDetail() {
     const [courseProgress, setCourseProgress] = useState(null);
     const [showReviewModal, setShowReviewModal] = useState(false);
     const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+    const [showReportModal, setShowReportModal] = useState(false);
+    const [isSubmittingReport, setIsSubmittingReport] = useState(false);
     const hasAutoPromptedReview = useRef(false);
 
     const [reviewQuery, setReviewQuery] = useState("");
@@ -131,6 +135,31 @@ function CourseDetail() {
         courseProgress?.courseCompleted ||
         Math.round(courseProgress?.courseProgressPercent || 0) === 100
     );
+
+    const isCourseInstructor = !!(
+        currentUserId &&
+        course?.instructor?.id &&
+        String(course.instructor.id) === String(currentUserId)
+    );
+
+    const handleSubmitReport = async ({ reason, description }) => {
+        if (!courseId) return;
+        setIsSubmittingReport(true);
+        try {
+            await axiosClient.post("/reports", {
+                courseId: Number(courseId),
+                reason,
+                description: description || null,
+                lessonId: activeLesson?.lessonId || null,
+            });
+            toast.success("Report submitted. Admins will review it.");
+            setShowReportModal(false);
+        } catch (err) {
+            toast.error(err.response?.data?.message || "Failed to submit report.");
+        } finally {
+            setIsSubmittingReport(false);
+        }
+    };
 
     useEffect(() => {
         if (!courseId || !currentUserId || !reviewsLoaded) return;
@@ -281,8 +310,18 @@ function CourseDetail() {
                             <button className={`tab-btn ${activeTab === "reviews" ? "active" : ""}`} onClick={() => setActiveTab("reviews")}>Reviews</button>
                             <button className={`tab-btn ${activeTab === "quiz" ? "active" : ""}`} onClick={() => setActiveTab("quiz")}>Quiz</button>
                             <button className={`tab-btn ${activeTab === "summary" ? "active" : ""}`} onClick={() => setActiveTab("summary")}>Summary</button>
-
                         </div>
+                        {!isCourseInstructor && (
+                            <button
+                                type="button"
+                                className="course-report-btn"
+                                onClick={() => setShowReportModal(true)}
+                                aria-label="Report this course"
+                            >
+                                <FaFlag size={13} />
+                                Report
+                            </button>
+                        )}
                     </div>
 
                     <div className="content-section">
@@ -462,6 +501,13 @@ function CourseDetail() {
                 onClose={() => setShowReviewModal(false)}
                 onSubmit={handleReviewSubmit}
                 isSubmitting={isSubmittingReview}
+            />
+
+            <ReportCourseModal
+                isOpen={showReportModal}
+                onClose={() => setShowReportModal(false)}
+                onSubmit={handleSubmitReport}
+                isSubmitting={isSubmittingReport}
             />
 
             <div className="chatbot-fixed">

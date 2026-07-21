@@ -21,6 +21,8 @@ import {
   X,
 } from "lucide-react";
 import axiosClient from "../../../../api/AxiosClient.js";
+import { getFileUrl } from "../../../../api/PublicCourseApi.js";
+import CourseVideoPlayer from "../../../users/course/CourseDetail/VideoPlayer.jsx";
 import "./CourseTable.css";
 
 const pageSize = 10;
@@ -113,16 +115,57 @@ const detailTabs = [
   { id: "curriculum", label: "Curriculum", Icon: List },
 ];
 
-const CourseViewModal = ({ course, onClose }) => {
+const CourseViewModal = ({ course, onClose, focusLessonId = null, enableVideoPreview = false }) => {
   const [activeTab, setActiveTab] = useState("overview");
   const [expandedSections, setExpandedSections] = useState({});
+  const [previewLesson, setPreviewLesson] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState("");
   const thumbnailUrl = useCourseThumbnail(course?.thumbnailKey);
 
   useEffect(() => {
-    const firstSectionId = course?.sections?.[0]?.sectionId;
-    setActiveTab("overview");
-    setExpandedSections(firstSectionId ? { [firstSectionId]: true } : {});
-  }, [course?.id]);
+    const sections = Array.isArray(course?.sections) ? course.sections : [];
+    let focusSectionId = sections[0]?.sectionId;
+    let focusedLesson = null;
+    if (focusLessonId != null) {
+      for (const section of sections) {
+        const hit = (section.lessons || []).find(
+          (lesson) => String(lesson.lessonId) === String(focusLessonId),
+        );
+        if (hit) {
+          focusSectionId = section.sectionId;
+          focusedLesson = hit;
+          break;
+        }
+      }
+    }
+    setActiveTab(focusLessonId != null ? "curriculum" : "overview");
+    setExpandedSections(focusSectionId ? { [focusSectionId]: true } : {});
+    setPreviewLesson(null);
+    setPreviewUrl("");
+    setPreviewError("");
+
+    if (!enableVideoPreview || !focusedLesson?.videoKey) return undefined;
+
+    let alive = true;
+    setPreviewLesson(focusedLesson);
+    setPreviewLoading(true);
+    getFileUrl(focusedLesson.videoKey)
+      .then((url) => {
+        if (alive) setPreviewUrl(url);
+      })
+      .catch(() => {
+        if (alive) setPreviewError("Could not load video preview.");
+      })
+      .finally(() => {
+        if (alive) setPreviewLoading(false);
+      });
+
+    return () => {
+      alive = false;
+    };
+  }, [course?.id, focusLessonId, enableVideoPreview]);
 
   if (!course) return null;
 
@@ -137,6 +180,22 @@ const CourseViewModal = ({ course, onClose }) => {
 
   const toggleSection = (sectionId) => {
     setExpandedSections((current) => ({ ...current, [sectionId]: !current[sectionId] }));
+  };
+
+  const openLessonPreview = async (lesson) => {
+    if (!enableVideoPreview || !lesson?.videoKey) return;
+    setPreviewLesson(lesson);
+    setPreviewUrl("");
+    setPreviewError("");
+    setPreviewLoading(true);
+    try {
+      const url = await getFileUrl(lesson.videoKey);
+      setPreviewUrl(url);
+    } catch {
+      setPreviewError("Could not load video preview.");
+    } finally {
+      setPreviewLoading(false);
+    }
   };
 
   return (
@@ -284,6 +343,34 @@ const CourseViewModal = ({ course, onClose }) => {
 
               {activeTab === "curriculum" ? (
                 <div className="cdm__tab-content">
+                  {enableVideoPreview ? (
+                    <div className="cdm__video-preview">
+                      {previewLoading ? (
+                        <p className="cdm__empty">Loading reported video…</p>
+                      ) : previewError ? (
+                        <p className="cdm__empty">{previewError}</p>
+                      ) : previewUrl ? (
+                        <>
+                          <p className="cdm__curriculum-summary">
+                            Playing: {previewLesson?.title || "Lesson"}
+                            {focusLessonId &&
+                            String(previewLesson?.lessonId) === String(focusLessonId)
+                              ? " (reported)"
+                              : ""}
+                          </p>
+                          <div className="cdm__video-player-wrap">
+                            <CourseVideoPlayer src={previewUrl} loading={false} />
+                          </div>
+                        </>
+                      ) : (
+                        <p className="cdm__empty">
+                          {focusLessonId
+                            ? "Select the highlighted lesson below to preview the reported video."
+                            : "Select a lesson with video to preview."}
+                        </p>
+                      )}
+                    </div>
+                  ) : null}
                   {sections.length > 0 ? (
                     <>
                       <p className="cdm__curriculum-summary">
@@ -310,23 +397,36 @@ const CourseViewModal = ({ course, onClose }) => {
 
                             {expandedSections[section.sectionId || section.title] ? (
                               <div className="cdm__lessons">
-                                {(section.lessons || []).map((lesson) => (
-                                  <div key={lesson.lessonId || lesson.title} className="cdm__lesson">
-                                    <span className="cdm__lesson-icon">
-                                      {lesson.videoKey ? <PlayCircle size={14} /> : <FileText size={14} />}
-                                    </span>
-                                    <span className="cdm__lesson-title">
-                                      {valueOrDash(lesson.lessonOrder)}. {valueOrDash(lesson.title)}
-                                    </span>
-                                    {lesson.durationSeconds ? (
-                                      <span className="cdm__lesson-duration">
-                                        <Clock size={11} />
-                                        {formatDuration(lesson.durationSeconds)}
+                                {(section.lessons || []).map((lesson) => {
+                                  const isFocused =
+                                    focusLessonId != null &&
+                                    String(lesson.lessonId) === String(focusLessonId);
+                                  const canPlay = enableVideoPreview && Boolean(lesson.videoKey);
+                                  return (
+                                    <button
+                                      key={lesson.lessonId || lesson.title}
+                                      type="button"
+                                      className={`cdm__lesson${isFocused ? " cdm__lesson--reported" : ""}${canPlay ? " cdm__lesson--playable" : ""}`}
+                                      onClick={() => openLessonPreview(lesson)}
+                                      disabled={!canPlay}
+                                    >
+                                      <span className="cdm__lesson-icon">
+                                        {lesson.videoKey ? <PlayCircle size={14} /> : <FileText size={14} />}
                                       </span>
-                                    ) : null}
-                                    {lesson.isPreview ? <span className="cdm__lesson-preview">Preview</span> : null}
-                                  </div>
-                                ))}
+                                      <span className="cdm__lesson-title">
+                                        {valueOrDash(lesson.lessonOrder)}. {valueOrDash(lesson.title)}
+                                        {isFocused ? " · Reported" : ""}
+                                      </span>
+                                      {lesson.durationSeconds ? (
+                                        <span className="cdm__lesson-duration">
+                                          <Clock size={11} />
+                                          {formatDuration(lesson.durationSeconds)}
+                                        </span>
+                                      ) : null}
+                                      {lesson.isPreview ? <span className="cdm__lesson-preview">Preview</span> : null}
+                                    </button>
+                                  );
+                                })}
                               </div>
                             ) : null}
                           </div>
@@ -498,4 +598,5 @@ const CourseThumbnail = ({ course }) => {
   ) : null;
 };
 
+export { CourseViewModal };
 export default CourseTable;

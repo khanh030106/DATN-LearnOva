@@ -289,6 +289,11 @@ body {
     border-bottom: 1px solid #e5e7eb;
     background: #fff;
     flex-shrink: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-right: 1.5rem;
 }
 
 .tabs-wrapper {
@@ -296,6 +301,28 @@ body {
     gap: 0;
     padding: 0 2rem;
     margin-top: 10px;
+    min-width: 0;
+}
+
+.course-report-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.55rem;
+    padding: 0.45rem 0.85rem;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fff;
+    color: #dc2626;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.course-report-btn:hover {
+    background: #fef2f2;
 }
 
 .tab-btn {
