@@ -12,7 +12,7 @@ const HeaderAction = () => {
         Log in
       </Link>
 
-      <Link to="/learnova/auth/register" className="header-action-signup">
+      <Link to="/learnova/auth/login?mode=register" className="header-action-signup">
         Sign up
       </Link>
 

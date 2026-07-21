@@ -11,7 +11,7 @@ const AvatarDropdown = () => {
 
   const handleLogout = async () => {
     await logout();
-    navigate("/learnova/auth/auth");
+    navigate("/learnova/auth/login");
   };
 
   const isAdmin = user.roles.includes("ROLE_ADMIN");
