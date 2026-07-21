@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { quizData } from "./mockCourseData.js";
+import { quizData } from "../mockCourseData.js";
 import { FaCheck } from "react-icons/fa";
 import { FaRegClock } from "react-icons/fa";
-import "./QuizPage.css";
+import "../css/QuizPage.css";
 
 function QuizPage() {
 

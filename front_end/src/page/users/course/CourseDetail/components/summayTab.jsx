@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import "./QuizPage.css";
+import "../css/QuizPage.css";
 
 function SummaryTab() {
     return (

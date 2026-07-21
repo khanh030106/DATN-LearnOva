@@ -1,5 +1,6 @@
 package com.example.back_end.service;
 
+import com.example.back_end.dto.response.ContinueLearningResponse;
 import com.example.back_end.dto.response.MyEnrolledCourseResponse;
 import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Enrollment;
@@ -124,6 +125,54 @@ public class EnrollmentService {
                 enrollment.getEnrolledAt(),
                 enrollment.getCompletedAt(),
                 course.getUpdatedAt()
+        );
+    }
+
+    // Picks the in-progress course to resume: prefers the one with the most
+    // recently updated lesson-progress row (real "last watched" signal), and
+    // falls back to the most recently enrolled incomplete course if the user
+    // has never watched a lesson yet.
+    @Transactional(readOnly = true)
+    public ContinueLearningResponse getContinueLearning() {
+        Long userId = getCurrentUserId();
+
+        List<MyEnrolledCourseResponse> enrolledCourses = getMyEnrolledCourses();
+        if (enrolledCourses.isEmpty()) {
+            return null;
+        }
+
+        java.util.Map<Long, MyEnrolledCourseResponse> byCourseId = enrolledCourses.stream()
+                .collect(java.util.stream.Collectors.toMap(
+                        MyEnrolledCourseResponse::courseId, c -> c, (a, b) -> a));
+
+        List<Long> recentCourseIds = lessonprogressRepository.findCourseIdsOrderByLastActivity(userId);
+
+        for (Long courseId : recentCourseIds) {
+            MyEnrolledCourseResponse course = byCourseId.get(courseId);
+            if (course != null && course.completedLessons() < course.totalLessons()) {
+                return toContinueLearningResponse(course);
+            }
+        }
+
+        return enrolledCourses.stream()
+                .filter(c -> c.completedLessons() < c.totalLessons())
+                .max(Comparator.comparing(MyEnrolledCourseResponse::enrolledAt))
+                .map(this::toContinueLearningResponse)
+                .orElse(null);
+    }
+
+    private ContinueLearningResponse toContinueLearningResponse(MyEnrolledCourseResponse course) {
+        int progressPercent = course.totalLessons() > 0
+                ? (int) Math.round((course.completedLessons() * 100.0) / course.totalLessons())
+                : 0;
+
+        return new ContinueLearningResponse(
+                course.courseId(),
+                course.title(),
+                course.thumbnailKey(),
+                progressPercent,
+                course.completedLessons(),
+                course.totalLessons()
         );
     }
 

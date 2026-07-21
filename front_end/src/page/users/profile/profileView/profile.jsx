@@ -184,6 +184,7 @@ const ProfileView = ({
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      toast.error("Please fix the highlighted fields before saving.");
       return;
     }
 

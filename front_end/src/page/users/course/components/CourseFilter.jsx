@@ -1,5 +1,5 @@
 import React from "react";
-import "./CourseFilter.css";
+import "../css/CourseFilter.css";
 
 export default function CourseFilter() {
     return (

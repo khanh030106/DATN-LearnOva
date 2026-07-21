@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaStar, FaTimes, FaRegCheckCircle } from "react-icons/fa";
-import "./ReviewModal.css";
+import "../css/ReviewModal.css";
 
 function ReviewModal({ isOpen, onClose, onSubmit, isSubmitting }) {
   const [rating, setRating] = useState(5);

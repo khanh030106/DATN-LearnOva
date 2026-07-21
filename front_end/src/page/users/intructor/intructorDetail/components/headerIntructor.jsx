@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaStar, FaUserGraduate, FaBookOpen, FaUserPlus, FaUserCheck } from "react-icons/fa";
-import defaultAvatar from "../../../../assets/default_user_avatar.jpg";
-import { useAuth } from "../../../../hook/UseAuth.jsx";
+import defaultAvatar from "../../../../../assets/default_user_avatar.jpg";
+import { useAuth } from "../../../../../hook/UseAuth.jsx";
 import {
     getFollowStatusApi,
     followInstructorApi,
     unfollowInstructorApi,
-} from "../../../../api/FollowApi.js";
+} from "../../../../../api/FollowApi.js";
 import {
     FaGithub,
     FaFacebook,

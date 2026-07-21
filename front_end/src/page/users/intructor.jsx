@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import "./intructor/InstructorsPage.css";
+import "./intructor/css/InstructorsPage.css";
 import { FaStar, FaCheckCircle } from "react-icons/fa";
 import { UserPlus, UserCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";

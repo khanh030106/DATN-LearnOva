@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import "./Course.css";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import "./css/Course.css";
 import { BiHeart, BiSolidHeart, BiCart } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
 import { X } from "lucide-react";
@@ -100,14 +100,21 @@ function FilterChip({ label, onRemove }) {
 
 function CoursesPage() {
   const { isAuthenticated, loading: authLoading } = useAuth();
+  const [searchParams] = useSearchParams();
   const [dbCourses, setDbCourses] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("popular");
-  const [selectedCategories, setSelectedCategories] = useState(["tech"]);
-  const [selectedLevels, setSelectedLevels] = useState(["intermediate"]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedLevels, setSelectedLevels] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setSearchTerm(searchParams.get("search") || "");
+    setCurrentPage(1);
+  }, [searchParams]);
 
   useEffect(() => {
     let mounted = true;
@@ -142,7 +149,41 @@ function CoursesPage() {
     };
   }, []);
 
-  const displayCourses = dbCourses;
+  const displayCourses = useMemo(() => {
+    let result = dbCourses;
+
+    const trimmedSearch = searchTerm.trim().toLowerCase();
+    if (trimmedSearch) {
+      result = result.filter(
+        (course) =>
+          course.title?.toLowerCase().includes(trimmedSearch) ||
+          course.instructor?.toLowerCase().includes(trimmedSearch) ||
+          course.category?.toLowerCase().includes(trimmedSearch),
+      );
+    }
+
+    if (selectedCategories.length > 0 && !selectedCategories.includes("all")) {
+      const selectedCategoryNames = selectedCategories
+        .map((id) => categories.find((cat) => cat.id === id)?.name?.toLowerCase())
+        .filter(Boolean);
+
+      result = result.filter((course) =>
+        selectedCategoryNames.includes((course.category || "").toLowerCase()),
+      );
+    }
+
+    if (selectedLevels.length > 0) {
+      const selectedLevelNames = selectedLevels
+        .map((id) => levels.find((lvl) => lvl.id === id)?.name?.toLowerCase())
+        .filter(Boolean);
+
+      result = result.filter((course) =>
+        selectedLevelNames.includes((course.level || "").toLowerCase()),
+      );
+    }
+
+    return result;
+  }, [dbCourses, selectedCategories, selectedLevels, searchTerm]);
 
   const coursesPerPage = 8;
   const totalPages = Math.ceil(displayCourses.length / coursesPerPage);
@@ -158,6 +199,8 @@ function CoursesPage() {
   ];
 
   const toggleCategory = (id) => {
+    setCurrentPage(1);
+
     if (id === "all") {
       setSelectedCategories(["all"]);
       return;
@@ -171,6 +214,7 @@ function CoursesPage() {
   };
 
   const toggleLevel = (id) => {
+    setCurrentPage(1);
     setSelectedLevels((prev) =>
       prev.includes(id) ? prev.filter((l) => l !== id) : [...prev, id],
     );
@@ -192,8 +236,8 @@ function CoursesPage() {
   };
 
   const resetFilters = () => {
-    setSelectedCategories(["tech"]);
-    setSelectedLevels(["intermediate"]);
+    setSelectedCategories([]);
+    setSelectedLevels([]);
   };
 
 
@@ -440,14 +484,25 @@ function CoursesPage() {
           <div className="courses-toolbar">
 
             <div className="toolbar-right">
-
+              <input
+                type="text"
+                className="courses-search-input"
+                placeholder="Search courses, instructors, categories..."
+                value={searchTerm}
+                onChange={(event) => {
+                  setSearchTerm(event.target.value);
+                  setCurrentPage(1);
+                }}
+              />
             </div>
           </div>
 
           {isLoading ? (
             <div className="courses-empty-state">Đang tải khóa học...</div>
           ) : visibleCourses.length === 0 ? (
-            <div className="courses-empty-state">Chưa có khóa học nào.</div>
+              <div className="courses-empty-state">
+                No courses available yet.
+              </div>
           ) : (
           <div className={`courses-grid ${viewMode === "list" ? "courses-grid--list" : ""}`}>
             {visibleCourses.map((course) => (

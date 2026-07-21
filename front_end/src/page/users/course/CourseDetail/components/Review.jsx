@@ -6,7 +6,7 @@ import {
     createReviewApi,
     updateReviewApi,
     deleteReviewApi
-} from "../../../../api/ReviewApi.js";
+} from "../../../../../api/ReviewApi.js";
 import { toast } from "react-toastify";
 import { FaCheck } from "react-icons/fa";
 

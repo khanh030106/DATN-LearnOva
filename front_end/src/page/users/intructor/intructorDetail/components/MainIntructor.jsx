@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaUserGraduate, FaStar, FaRegHeart, FaHeart } from "react-icons/fa";
-import defaultAvatar from "../../../../assets/default_user_avatar.jpg";
-import { getFileUrl } from "../../../../api/PublicCourseApi.js";
-import { addWishlistApi, removeWishlistApi, getWishlistApi } from "../../../../api/WishlistApi.js";
-import { useAuth } from "../../../../hook/UseAuth.jsx";
+import defaultAvatar from "../../../../../assets/default_user_avatar.jpg";
+import { getFileUrl } from "../../../../../api/PublicCourseApi.js";
+import { addWishlistApi, removeWishlistApi, getWishlistApi } from "../../../../../api/WishlistApi.js";
+import { useAuth } from "../../../../../hook/UseAuth.jsx";
 
 function MainIntructor({
     activeTab,

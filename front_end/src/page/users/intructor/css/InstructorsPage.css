@@ -2151,9 +2151,14 @@ body {
 }
 
 .message-btn.following {
-  background: var(--blue-strong);
+  background: #10b981;
   color: var(--text-white);
-  border-color: var(--blue-strong);
+  border-color: #10b981;
+}
+
+.message-btn.following:hover {
+  background: #059669;
+  border-color: #059669;
 }
 
 .message-btn.following::after {

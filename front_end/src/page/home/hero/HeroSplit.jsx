@@ -1,14 +1,15 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './HeroSplit.css';
 
 export default function HeroSplit() {
     const [search, setSearch] = useState('');
+    const navigate = useNavigate();
 
     const handleSearch = (e) => {
         e.preventDefault();
-        if (search.trim()) {
-            window.location.href = `/courses?q=${encodeURIComponent(search.trim())}`;
-        }
+        const trimmed = search.trim();
+        navigate(trimmed ? `/learnova/courses?search=${encodeURIComponent(trimmed)}` : '/learnova/courses');
     };
 
     return (

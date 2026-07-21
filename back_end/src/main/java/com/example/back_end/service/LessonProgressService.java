@@ -78,6 +78,7 @@ public class LessonProgressService {
             progress.setIsCompleted(true);
         }
 
+        progress.setUpdatedAt(java.time.Instant.now());
         lessonprogressRepository.save(progress);
 
         return getCourseProgress(userId, courseId);

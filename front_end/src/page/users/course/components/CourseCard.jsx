@@ -1,8 +1,8 @@
 import React from "react";
-import "./CourseCard.css";
+import "../css/CourseCard.css";
 import { toast } from "react-toastify";
-import { useAuth } from "../../../hook/UseAuth.jsx";
-import { addStoredCartItem } from "../../../utils/cartStorage.js";
+import { useAuth } from "../../../../hook/UseAuth.jsx";
+import { addStoredCartItem } from "../../../../utils/cartStorage.js";
 import { Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 

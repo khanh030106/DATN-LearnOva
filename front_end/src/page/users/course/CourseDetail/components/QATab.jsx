@@ -24,9 +24,9 @@ import {
     deleteQuestionApi,
     updateAnswerApi,
     updateQuestionApi
-} from "../../../../api/lessonQAApi";
+} from "../../../../../api/lessonQAApi";
 
-import { AuthContext } from "../../../../context/AuthContext";
+import { AuthContext } from "../../../../../context/AuthContext";
 
 function QATab({
                    lessonId,

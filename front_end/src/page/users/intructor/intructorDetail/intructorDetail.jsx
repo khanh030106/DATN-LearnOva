@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import './intructorDetail.css';
+import './css/intructorDetail.css';
 import { FaBookOpen, FaStar, FaUserFriends, FaUserGraduate } from 'react-icons/fa';
-import HeaderIntructor from "./headerIntructor.jsx";
-import MainIntructor from "./MainIntructor.jsx";
+import HeaderIntructor from "./components/headerIntructor.jsx";
+import MainIntructor from "./components/MainIntructor.jsx";
 import LearnovaAI from "../../../home/chat-bot/chatBot.jsx";
 import { getPublicInstructorByIdApi } from "../../../../api/InstructorApi.js";
 
