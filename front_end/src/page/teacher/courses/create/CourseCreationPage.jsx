@@ -52,8 +52,6 @@ const CourseCreationPage = () => {
         onLessonSourceChange: updateLessonSource,
     });
 
-    // Video/resource uploads happen inside VideoUploader/ResourceUploader components.
-    // These callbacks just update form state with the completed upload result.
     const handleVideoUploaded = (sectionId, lessonId, result) => {
         setLessonVideo(sectionId, lessonId, result);
     };
@@ -62,8 +60,6 @@ const CourseCreationPage = () => {
         updateLessonResources(sectionId, lessonId, results);
     };
 
-    // Users can jump back to any step they've already completed.
-    // Forward navigation requires the course draft to exist.
     const canNavigateTo = (step) => {
         if (step === currentStep) return false;
         if (step < currentStep) return true;          // always can go back
