@@ -24,7 +24,7 @@ const AuthPage = () => {
             hasFetched.current = true;
             setIsVerifying(true);
             setVerifyStatus("processing");
-            axios.get(`http://localhost:8080/api/learnova/auth/verify?token=${token}`)
+            axios.get(`https://datn.khanh.engineer/api/learnova/auth/verify?token=${token}`)
                 .then((res) => {
                     setVerifyStatus("success");
                     setVerifyMessage(res.data?.message || "Tài khoản của bạn đã được kích hoạt thành công. Hãy bắt đầu trải nghiệm học tập ngay!");

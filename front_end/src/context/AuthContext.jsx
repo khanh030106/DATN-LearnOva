@@ -41,9 +41,6 @@ export const AuthProvider = ({ children }) => {
     };
 
     const refreshAccessToken = useCallback(async () => {
-        // If a refresh is already in flight, share the same promise instead of
-        // firing a second request. This prevents token rotation failures when
-        // React StrictMode double-invokes the restoreSession effect.
         if (pendingRefreshRef.current) {
             return pendingRefreshRef.current;
         }
