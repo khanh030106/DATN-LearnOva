@@ -60,10 +60,12 @@ services:
 
       # CloudFront
       CLOUDFRONT_PRIVATE_KEY_PATH: /app/secrets/cloudfront-private-key.pem
-      volumes:
-        - ./cloudfront-private-key.pem:/app/secrets/cloudfront-private-key.pem:ro
       
       JAVA_TOOL_OPTIONS: -Xmx768m
+
+      volumes:
+        - ./cloudfront-private-key.pem:/app/secrets/cloudfront-private-key.pem:ro
+
     depends_on:
       postgres:
         condition: service_healthy
