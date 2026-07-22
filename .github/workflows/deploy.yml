@@ -45,7 +45,16 @@ jobs:
           COMMAND_ID=$(aws ssm send-command \
             --instance-ids "${{ vars.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
-            --parameters 'commands=["cd /app && git pull && docker compose up --build -d"]' \
+            --parameters '{
+              "commands": [
+                "cd /app",
+                "git pull",
+                "mkdir -p /home/ec2-user/secrets",
+                "aws ssm get-parameter --region ap-southeast-1 --name /learnova/cloudfront/private-key --with-decryption --query Parameter.Value --output text > /home/ec2-user/secrets/cloudfront-private-key.pem",
+                "chmod 400 /home/ec2-user/secrets/cloudfront-private-key.pem",
+                "docker compose up --build -d"
+              ]
+            }' \
             --query "Command.CommandId" --output text)
 
           echo "SSM command: $COMMAND_ID"
