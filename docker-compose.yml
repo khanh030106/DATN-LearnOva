@@ -63,8 +63,8 @@ services:
       
       JAVA_TOOL_OPTIONS: -Xmx768m
 
-      volumes:
-        - /home/ec2-user/secrets/cloudfront-private-key.pem:/app/secrets/cloudfront-private-key.pem:ro
+    volumes:
+      - /home/ec2-user/secrets/cloudfront-private-key.pem:/app/secrets/cloudfront-private-key.pem:ro
 
     depends_on:
       postgres:
