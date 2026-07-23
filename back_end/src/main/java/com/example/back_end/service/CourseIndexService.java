@@ -63,7 +63,7 @@ public class CourseIndexService {
     }
 
     private CourseDocument toDocument(Course course) {
-        String categoryName = course.getCoursecategories().stream()
+        String categoryName = course.getCourseCategories().stream()
                 .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
                 .findFirst()
                 .map(cc -> cc.getCategory().getName())

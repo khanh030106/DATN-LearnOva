@@ -25,7 +25,7 @@ public interface AdminVoucherRepository extends JpaRepository<Voucher, Long> {
             + "from orders o "
             + "join users u on o.user_id = u.user_id "
             + "join vouchers v on o.voucher_id = v.voucher_id "
-            + "join orderitems oi on oi.order_id = o.order_id "
+            + "join order_items oi on oi.order_id = o.order_id "
             + "join courses c on c.course_id = oi.course_id "
             + "where o.status = 'PAID' "
             + "and o.voucher_id is not null "

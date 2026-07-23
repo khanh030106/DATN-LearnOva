@@ -86,7 +86,7 @@ public class User {
     private Set<Enrollment> enrollments = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<LessonProgress> lessonprogresses = new LinkedHashSet<>();
+    private Set<LessonProgress> lessonProgresses = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
     private Set<Notification> notifications = new LinkedHashSet<>();
@@ -101,11 +101,11 @@ public class User {
     private Set<Review> reviews = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<Userauthprovider> userauthproviders = new LinkedHashSet<>();
+    private Set<UserAuthProvider> userAuthProviders = new LinkedHashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @BatchSize(size = 50)
-    @JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new LinkedHashSet<>();
 
     @Enumerated(EnumType.STRING)
@@ -113,7 +113,7 @@ public class User {
     private RoleName activeRole;
 
     @OneToMany(mappedBy = "user")
-    private Set<Verificationtoken> verificationtokens = new LinkedHashSet<>();
+    private Set<VerificationToken> verificationTokens = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "createdBy")
     private Set<Voucher> vouchers = new LinkedHashSet<>();

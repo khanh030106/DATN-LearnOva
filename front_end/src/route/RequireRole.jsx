@@ -19,7 +19,7 @@ const RequireRole = ({ role, children }) => {
   const hasAccess = !role || (activeRoleStillValid ? activeRole === role : roles.includes(role));
 
   if (role && !hasAccess) {
-    return <Navigate to="/learnova/home" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return children;

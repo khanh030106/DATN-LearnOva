@@ -11,7 +11,7 @@ import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.EnrollmentRepository;
 import com.example.back_end.repository.LessonRepository;
-import com.example.back_end.repository.LessonprogressRepository;
+import com.example.back_end.repository.LessonProgressRepository;
 import com.example.back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class LessonProgressService {
 
-    private final LessonprogressRepository lessonprogressRepository;
+    private final LessonProgressRepository lessonProgressRepository;
     private final LessonRepository lessonRepository;
     private final UserRepository userRepository;
     private final EnrollmentRepository enrollmentRepository;
@@ -47,7 +47,7 @@ public class LessonProgressService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
-        LessonProgress progress = lessonprogressRepository.findByUserIdAndLessonId(userId, request.getLessonId())
+        LessonProgress progress = lessonProgressRepository.findByUserIdAndLessonId(userId, request.getLessonId())
                 .orElseGet(() -> {
                     LessonProgress newProgress = new LessonProgress();
                     LessonProgressId id = new LessonProgressId();
@@ -79,7 +79,7 @@ public class LessonProgressService {
             progress.setIsCompleted(true);
         }
 
-        lessonprogressRepository.save(progress);
+        lessonProgressRepository.save(progress);
 
         CourseProgressResponse result = getCourseProgress(userId, courseId);
 
@@ -96,7 +96,7 @@ public class LessonProgressService {
 
     public CourseProgressResponse getCourseProgress(Long userId, Long courseId) {
         List<Lesson> lessons = lessonRepository.findBySectionCourseId(courseId);
-        List<LessonProgress> progressList = lessonprogressRepository.findByUserIdAndCourseId(userId, courseId);
+        List<LessonProgress> progressList = lessonProgressRepository.findByUserIdAndCourseId(userId, courseId);
 
         List<LessonProgressResponse> lessonResponses = lessons.stream().map(lesson -> {
             LessonProgress lp = progressList.stream()

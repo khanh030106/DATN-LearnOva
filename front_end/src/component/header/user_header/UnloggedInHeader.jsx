@@ -11,7 +11,7 @@ const Header = () => {
     const normalizedPath = pathname.toLowerCase();
     const isCartHeader = normalizedPath.startsWith("/learnova/cart");
     const isHeroHeader =
-        normalizedPath.startsWith("/learnova/home") ||
+        normalizedPath === "/" ||
         normalizedPath.startsWith("/learnova/about");
     const useSolidHeader =
         normalizedPath.startsWith("/learnova/courses") ||
@@ -54,7 +54,7 @@ const Header = () => {
             className={`main-header${useSolidHeader || isCartHeader ? " scrolled" : ""}${isCartHeader ? " cart-header" : ""}`}
         >
             <div className="header-container">
-                <a href="/learnova/home" className="logo">
+                <a href="/" className="logo">
                     <img src={logo} alt="logo" />
                 </a>
 

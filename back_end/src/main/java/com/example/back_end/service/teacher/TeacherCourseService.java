@@ -5,15 +5,15 @@ import com.example.back_end.dto.request.teacher.UpdateCourseRequest;
 import com.example.back_end.dto.response.teacher.TeacherCoursesResponse;
 import com.example.back_end.entity.Category;
 import com.example.back_end.entity.Course;
-import com.example.back_end.entity.Coursecategory;
-import com.example.back_end.entity.CoursecategoryId;
+import com.example.back_end.entity.CourseCategory;
+import com.example.back_end.entity.CourseCategoryId;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.CourseStatus;
 import com.example.back_end.entity.enums.NotificationType;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.CourseRepository;
-import com.example.back_end.repository.CoursecategoryRepository;
+import com.example.back_end.repository.CourseCategoryRepository;
 import com.example.back_end.repository.EnrollmentRepository;
 import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.repository.UserRepository;
@@ -39,7 +39,7 @@ public class TeacherCourseService {
 
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
-    private final CoursecategoryRepository coursecategoryRepository;
+    private final CourseCategoryRepository courseCategoryRepository;
     private final AdminCategoryRepository categoryRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final ReviewRepository reviewRepository;
@@ -78,17 +78,17 @@ public class TeacherCourseService {
             Category category = categoryRepository.findActiveById(request.categoryId())
                     .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
-            CoursecategoryId ccId = new CoursecategoryId();
+            CourseCategoryId ccId = new CourseCategoryId();
             ccId.setCourseId(course.getId());
             ccId.setCategoryId(category.getId());
 
-            Coursecategory cc = new Coursecategory();
+            CourseCategory cc = new CourseCategory();
             cc.setId(ccId);
             cc.setCourse(course);
             cc.setCategory(category);
             cc.setIsPrimary(true);
 
-            coursecategoryRepository.save(cc);
+            courseCategoryRepository.save(cc);
         }
 
         return course.getId();
@@ -161,7 +161,7 @@ public class TeacherCourseService {
 
         return courses.stream()
                 .map(course -> {
-                    String categoryName = course.getCoursecategories().stream()
+                    String categoryName = course.getCourseCategories().stream()
                             .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
                             .findFirst()
                             .map(cc -> cc.getCategory().getName())
@@ -232,22 +232,22 @@ public class TeacherCourseService {
         courseIndexService.sync(course);
 
         if (request.categoryId() != null) {
-            coursecategoryRepository.deleteByCourseId(courseId);
+            courseCategoryRepository.deleteByCourseId(courseId);
 
             Category category = categoryRepository.findActiveById(request.categoryId())
                     .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
-            CoursecategoryId ccId = new CoursecategoryId();
+            CourseCategoryId ccId = new CourseCategoryId();
             ccId.setCourseId(courseId);
             ccId.setCategoryId(category.getId());
 
-            Coursecategory cc = new Coursecategory();
+            CourseCategory cc = new CourseCategory();
             cc.setId(ccId);
             cc.setCourse(course);
             cc.setCategory(category);
             cc.setIsPrimary(true);
 
-            coursecategoryRepository.save(cc);
+            courseCategoryRepository.save(cc);
         }
     }
 

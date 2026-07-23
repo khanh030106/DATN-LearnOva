@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
         try {
             user = await fetchCurrentUser();
         } catch (e) {
-            console.error("Failed to fetch user after login", e);
+            console.error("Failed to fetch user after auth", e);
         }
 
         // Guest cart (local) → SQL, rồi xóa local
@@ -79,10 +79,12 @@ export const AuthProvider = ({ children }) => {
 
         const restoreSession = async () => {
             try {
-                const token = await refreshAccessToken();
-                if (sessionVersionRef.current !== myVersion) return;
+                await refreshAccessToken();
+                if (sessionVersionRef.current !== myVersion) return; // auth() was called, bail
                 await fetchCurrentUser();
                 try {
+                    const token = await refreshAccessToken();
+                    if (sessionVersionRef.current !== myVersion) return;
                     await mergeGuestCartToServer(token);
                 } catch (e) {
                     console.error("Failed to merge guest cart on session restore", e);

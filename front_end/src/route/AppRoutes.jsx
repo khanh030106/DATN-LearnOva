@@ -1,6 +1,6 @@
 import {BrowserRouter, Routes, Route, Outlet} from "react-router-dom";
 import RequireRole from "./RequireRole.jsx";
-import AuthPage from "../page/login/AuthPage.jsx";
+import AuthPage from "../page/auth/AuthPage.jsx";
 import Home from "../page/home/Home.jsx";
 import HomeLayout from "../layout/home/HomeLayout.jsx";
 import DashboardLayout from "../layout/admin/DashboardLayout.jsx";
@@ -36,7 +36,7 @@ import CoursePage from "../page/users/course/CourseNew.jsx";
 import CourseDetail from "../page/users/course/CourseDetail/CourseDetail.jsx";
 import CourseDetaill from "../page/home/courses/CourseDetail.jsx";
 import Cart from "../page/home/cart/Cart.jsx";
-import OAuth2Success from "./../page/login/OAuth2Success.jsx";
+import OAuth2Success from "../page/auth/OAuth2Success.jsx";
 import PaymentSuccess from "../page/home/payment/PaymentSuccess.jsx";
 import PaymentCancel from "../page/home/payment/PaymentCancel.jsx";
 

@@ -5,7 +5,7 @@ import com.example.back_end.entity.Course;
 import com.example.back_end.entity.Enrollment;
 import com.example.back_end.repository.EnrollmentRepository;
 import com.example.back_end.repository.LessonRepository;
-import com.example.back_end.repository.LessonprogressRepository;
+import com.example.back_end.repository.LessonProgressRepository;
 import com.example.back_end.repository.ReviewRepository;
 import com.example.back_end.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class EnrollmentService {
     private final EnrollmentRepository enrollmentRepository;
     private final LessonRepository lessonRepository;
     private final ReviewRepository reviewRepository;
-    private final LessonprogressRepository lessonprogressRepository;
+    private final LessonProgressRepository lessonProgressRepository;
 
     @Transactional(readOnly = true)
     public List<MyEnrolledCourseResponse> getMyEnrolledCourses() {
@@ -45,7 +45,7 @@ public class EnrollmentService {
                 lessonRepository.countBySectionCourseId(course.getId());
 
         long completedLessons =
-                lessonprogressRepository.countCompletedLessonsByUserAndCourse(
+                lessonProgressRepository.countCompletedLessonsByUserAndCourse(
                         enrollment.getUser().getId(),
                         course.getId()
                 );

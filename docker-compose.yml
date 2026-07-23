@@ -3,9 +3,6 @@ services:
     image: postgres:17-alpine
     container_name: learnova-postgres
     environment:
-      # Must match DB_USERNAME / DB_PASSWORD in back_end/.env and the db name
-      # in its DB_URL — two different apps (Postgres image vs Spring
-      # datasource), no way to derive one from the other automatically.
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}

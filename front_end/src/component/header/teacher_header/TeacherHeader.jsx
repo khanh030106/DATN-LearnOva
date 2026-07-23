@@ -25,12 +25,12 @@ const TeacherHeader = () => {
 
   const handleSwitchToUser = async () => {
     await switchActiveRole("ROLE_USER");
-    navigate("/learnova/home");
+    navigate("/");
   };
 
   const handleLogout = async () => {
     await logout();
-    navigate("/learnova/auth/login");
+    navigate("/learnova/auth/auth");
   };
 
   const pathname = location.pathname.replace(/\/$/, "");

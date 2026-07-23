@@ -70,7 +70,7 @@ public class Order {
     private Set<Enrollment> enrollments = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "order")
-    private Set<Orderitem> orderitems = new LinkedHashSet<>();
+    private Set<OrderItem> orderItems = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "order")
     private Set<Payment> payments = new LinkedHashSet<>();

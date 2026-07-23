@@ -15,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsUsersByEmail(String email);
 
     @Query(value = "SELECT u.* FROM users u " +
-                   "JOIN userrole ur ON u.user_id = ur.user_id " +
+                   "JOIN user_role ur ON u.user_id = ur.user_id " +
                    "JOIN roles r ON r.role_id = ur.role_id " +
                    "WHERE r.role_name = 'ROLE_TEACHER' AND u.is_deleted = FALSE " +
                    "ORDER BY u.user_id", nativeQuery = true)
@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
     @Query(value = "SELECT u.* FROM users u " +
-                   "JOIN userrole ur ON u.user_id = ur.user_id " +
+                   "JOIN user_role ur ON u.user_id = ur.user_id " +
                    "JOIN roles r ON r.role_id = ur.role_id " +
                    "WHERE r.role_name = 'ROLE_ADMIN' AND u.is_deleted = FALSE " +
                    "ORDER BY u.user_id", nativeQuery = true)

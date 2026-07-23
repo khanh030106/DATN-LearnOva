@@ -6,7 +6,7 @@ import com.example.back_end.dto.response.PublicCourseResponse;
 import com.example.back_end.dto.response.TopCategoryResponse;
 import com.example.back_end.entity.Category;
 import com.example.back_end.entity.Course;
-import com.example.back_end.entity.Coursecategory;
+import com.example.back_end.entity.CourseCategory;
 import com.example.back_end.entity.Lesson;
 import com.example.back_end.entity.User;
 import com.example.back_end.entity.enums.CourseStatus;
@@ -15,7 +15,7 @@ import com.example.back_end.exception.ResourceNotFoundException;
 import com.example.back_end.repository.CourseRepository;
 import com.example.back_end.repository.EnrollmentRepository;
 import com.example.back_end.repository.LessonRepository;
-import com.example.back_end.repository.PromotioncourseRepository;
+import com.example.back_end.repository.PromotionCourseRepository;
 import com.example.back_end.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
     private final EnrollmentRepository enrollmentRepository;
-    private final PromotioncourseRepository promotioncourseRepository;
+    private final PromotionCourseRepository promotionCourseRepository;
     private final ReviewRepository reviewRepository;
     private final LessonRepository lessonRepository;
 
@@ -44,7 +44,7 @@ public class CourseService {
         Course course = courseRepository.findCourseDetailById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
 
-        var primaryCategory = course.getCoursecategories().stream()
+        var primaryCategory = course.getCourseCategories().stream()
                 .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
                 .findFirst()
                 .orElse(null);
@@ -141,7 +141,7 @@ public class CourseService {
         List<Long> top8Ids = top8.stream().map(Course::getId).toList();
         Map<Long, Integer> discountByCourseId = top8Ids.isEmpty()
                 ? Map.of()
-                : promotioncourseRepository.findActivePromotionsByCourseIds(top8Ids, now)
+                : promotionCourseRepository.findActivePromotionsByCourseIds(top8Ids, now)
                 .stream()
                 .collect(Collectors.toMap(
                         pc -> pc.getCourse().getId(),
@@ -151,7 +151,7 @@ public class CourseService {
 
         return top8.stream()
                 .map(course -> {
-                    String categoryName = course.getCoursecategories().stream()
+                    String categoryName = course.getCourseCategories().stream()
                             .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
                             .findFirst()
                             .map(cc -> cc.getCategory().getName())
@@ -206,7 +206,7 @@ public class CourseService {
         Map<Category, Long> soldCountByCategory = new LinkedHashMap<>();
         for (Course course : published) {
             long soldCount = enrollmentCountByCourseId.getOrDefault(course.getId(), 0L);
-            for (Coursecategory coursecategory : course.getCoursecategories()) {
+            for (CourseCategory coursecategory : course.getCourseCategories()) {
                 Category category = coursecategory.getCategory();
                 if (Boolean.TRUE.equals(category.getIsDeleted())) {
                     continue;
@@ -306,7 +306,7 @@ public class CourseService {
             long studentCount,
             ReviewRepository.CourseRatingProjection rating
     ) {
-        String categoryName = course.getCoursecategories().stream()
+        String categoryName = course.getCourseCategories().stream()
                 .filter(cc -> Boolean.TRUE.equals(cc.getIsPrimary()))
                 .findFirst()
                 .map(cc -> cc.getCategory().getName())

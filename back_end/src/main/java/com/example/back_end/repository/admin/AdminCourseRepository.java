@@ -14,7 +14,7 @@ public interface AdminCourseRepository extends JpaRepository<Course, Long> {
     @Query("""
             SELECT DISTINCT c FROM Course c
             JOIN FETCH c.instructor
-            LEFT JOIN FETCH c.coursecategories cc
+            LEFT JOIN FETCH c.courseCategories cc
             LEFT JOIN FETCH cc.category
             """)
     List<Course> findAllWithInstructor();
@@ -26,7 +26,7 @@ public interface AdminCourseRepository extends JpaRepository<Course, Long> {
 
     @Query(value = """
             SELECT COALESCE(SUM(oi.price), 0)
-            FROM orderitems oi
+            FROM order_items oi
             JOIN orders o ON o.order_id = oi.order_id
             JOIN courses c ON c.course_id = oi.course_id
             WHERE CAST(o.status AS text) = 'PAID'
@@ -67,7 +67,7 @@ public interface AdminCourseRepository extends JpaRepository<Course, Long> {
               ) AS average_rating,
               (
                 SELECT COALESCE(SUM(oi.price), 0)
-                FROM orderitems oi
+                FROM order_items oi
                 JOIN orders o ON o.order_id = oi.order_id
                 JOIN courses c ON c.course_id = oi.course_id
                 WHERE c.instructor_id = u.user_id
@@ -85,7 +85,7 @@ public interface AdminCourseRepository extends JpaRepository<Course, Long> {
             WHERE u.is_deleted = false
               AND EXISTS (
                 SELECT 1
-                FROM userrole ur
+                FROM user_role ur
                 JOIN roles r ON r.role_id = ur.role_id
                 WHERE ur.user_id = u.user_id
                   AND CAST(r.role_name AS text) = 'ROLE_TEACHER'
@@ -101,7 +101,7 @@ public interface AdminCourseRepository extends JpaRepository<Course, Long> {
             LEFT JOIN FETCH c.tags
             LEFT JOIN FETCH c.sections s
             LEFT JOIN FETCH s.lessons
-            LEFT JOIN FETCH c.coursecategories cc
+            LEFT JOIN FETCH c.courseCategories cc
             LEFT JOIN FETCH cc.category
             WHERE c.id = :id
             """)

@@ -8,7 +8,7 @@ import com.example.back_end.entity.Lesson;
 import com.example.back_end.entity.Section;
 import com.example.back_end.repository.CourseRepository;
 import com.example.back_end.repository.LessonRepository;
-import com.example.back_end.repository.LessonprogressRepository;
+import com.example.back_end.repository.LessonProgressRepository;
 import com.example.back_end.repository.SectionRepository;
 import com.example.back_end.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class CourseCurriculumService {
     private final CourseRepository courseRepository;
     private final SectionRepository sectionRepository;
     private final LessonRepository lessonRepository;
-    private final LessonprogressRepository lessonprogressRepository;
+    private final LessonProgressRepository lessonProgressRepository;
 
     @Transactional(readOnly = true)
     public CourseCurriculumResponse getCourseCurriculum(Long courseId) {
@@ -52,7 +52,7 @@ public class CourseCurriculumService {
                             .map(lesson -> {
 
                                 boolean completed =
-                                        lessonprogressRepository
+                                        lessonProgressRepository
                                                 .existsByUser_IdAndLesson_IdAndIsCompletedTrue(
                                                         userId,
                                                         lesson.getId()

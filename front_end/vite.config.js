@@ -9,6 +9,6 @@ export default defineConfig({
   },
 
   server: {
-    open: 'http://localhost:5173/learnova/home',
+    open: 'http://localhost:5173/',
   }
 });

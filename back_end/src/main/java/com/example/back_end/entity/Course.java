@@ -100,19 +100,18 @@
         @Column(name = "updated_at", nullable = false)
         private Instant updatedAt;
 
-        @NotNull
-        @Column(name = "thumbnail_key", nullable = false, length = Integer.MAX_VALUE)
+        @Column(name = "thumbnail_key", length = Integer.MAX_VALUE)
         private String thumbnailKey;
 
         @OneToMany(mappedBy = "course")
         private Set<Cart> carts = new LinkedHashSet<>();
 
         @OneToMany(mappedBy = "course")
-        private Set<Coursecategory>  coursecategories = new LinkedHashSet<>();
+        private Set<CourseCategory>  courseCategories = new LinkedHashSet<>();
 
         @ManyToMany
         @JoinTable(
-                name = "coursetags",
+                name = "course_tags",
                 joinColumns = @JoinColumn(name = "course_id"),
                 inverseJoinColumns = @JoinColumn(name = "tag_id")
         )
@@ -122,11 +121,11 @@
         private Set<Enrollment> enrollments = new LinkedHashSet<>();
 
         @OneToMany(mappedBy = "course")
-        private Set<Orderitem> orderitems = new LinkedHashSet<>();
+        private Set<OrderItem> orderItems = new LinkedHashSet<>();
 
         @ManyToMany
         @JoinTable(
-                name = "promotioncourses",
+                name = "promotion_courses",
                 joinColumns = @JoinColumn(name = "course_id"),
                 inverseJoinColumns = @JoinColumn(name = "promotion_id")
         )

@@ -14,12 +14,12 @@ import com.example.back_end.dto.response.admin.AdminCourseDropdownResponse;
 import com.example.back_end.dto.response.admin.AdminTagResponse;
 import com.example.back_end.dto.request.admin.AdminTagRequest;
 import com.example.back_end.entity.Course;
-import com.example.back_end.entity.Coursetag;
-import com.example.back_end.entity.CoursetagId;
+import com.example.back_end.entity.CourseTag;
+import com.example.back_end.entity.CourseTagId;
 import com.example.back_end.entity.Tag;
 import com.example.back_end.exception.BusinessException;
 import com.example.back_end.exception.ResourceNotFoundException;
-import com.example.back_end.repository.CoursetagRepository;
+import com.example.back_end.repository.CourseTagRepository;
 import com.example.back_end.repository.admin.AdminCourseRepository;
 import com.example.back_end.repository.admin.AdminTagRepository;
 
@@ -32,15 +32,15 @@ public class AdminTagService {
 
     private final AdminTagRepository tagRepository;
     private final AdminCourseRepository courseRepository;
-    private final CoursetagRepository coursetagRepository;
+    private final CourseTagRepository courseTagRepository;
 
     public List<AdminTagResponse> getAllTags() {
         List<Tag> tags = tagRepository.findAllForAdmin();
-        Map<Long, Course> tagCourseMap = coursetagRepository.findAllWithCourse()
+        Map<Long, Course> tagCourseMap = courseTagRepository.findAllWithCourse()
             .stream()
             .collect(Collectors.toMap(
                 ct -> ct.getId().getTagId(),
-                Coursetag::getCourse,
+                CourseTag::getCourse,
                 (a, b) -> a
             ));
         return tags.stream()
@@ -51,7 +51,7 @@ public class AdminTagService {
     public AdminTagResponse getTagById(Long id) {
         Tag tag = tagRepository.findByIdForAdmin(id)
             .orElseThrow(() -> new ResourceNotFoundException("Tag not found with id: " + id));
-        List<Coursetag> cts = coursetagRepository.findByTagIdWithCourse(id);
+        List<CourseTag> cts = courseTagRepository.findByTagIdWithCourse(id);
         Course course = cts.isEmpty() ? null : cts.get(0).getCourse();
         return buildResponse(tag, course);
     }
@@ -109,7 +109,7 @@ public class AdminTagService {
         Tag saved = tagRepository.save(tag);
 
         // Replace course association
-        coursetagRepository.deleteByTagId(id);
+        courseTagRepository.deleteByTagId(id);
         Course course = null;
         if (request.courseId() != null) {
             course = assignCourse(saved, request.courseId());
@@ -129,14 +129,14 @@ public class AdminTagService {
     private Course assignCourse(Tag tag, Long courseId) {
         Course course = courseRepository.findById(courseId)
             .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + courseId));
-        CoursetagId ctId = new CoursetagId();
+        CourseTagId ctId = new CourseTagId();
         ctId.setCourseId(courseId);
         ctId.setTagId(tag.getId());
-        Coursetag ct = new Coursetag();
+        CourseTag ct = new CourseTag();
         ct.setId(ctId);
         ct.setCourse(course);
         ct.setTag(tag);
-        coursetagRepository.save(ct);
+        courseTagRepository.save(ct);
         return course;
     }
 
