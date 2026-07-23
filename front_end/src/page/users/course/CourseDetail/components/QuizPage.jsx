@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { quizData } from "../mockCourseData.js";
 import { FaCheck } from "react-icons/fa";
 import { FaRegClock } from "react-icons/fa";
 import "../css/QuizPage.css";
 
 function QuizPage() {
+    const { t } = useTranslation();
 
     const [currentQuestion, setCurrentQuestion] = useState(0);
 
@@ -40,7 +42,7 @@ function QuizPage() {
     };
 
     return(
-        <button className="button-quiz">generate quiz</button>
+        <button className="button-quiz">{t("courseDetail.quiz.generate")}</button>
 
     );
 

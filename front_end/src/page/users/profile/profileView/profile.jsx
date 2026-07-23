@@ -18,7 +18,10 @@ import { getMyEnrolledCoursesApi } from "../../../../api/EnrollmentApi.js";
 import { useAuth } from "../../../../hook/UseAuth.jsx";
 import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
 import { getUserProfileApi,updateUserProfileApi,uploadAvatarApi } from "../../../../api/UserApi.js";
+import { getUserStatsApi } from "../../../../api/UserStatsApi.js";
 import { toast } from "react-toastify";
+
+const EMPTY_STATS = { totalStudyHours: 0, streakDays: 0, enrolledCourseCount: 0, completedCourseCount: 0, points: 0 };
 
 const readStorage = (key, fallback) => {
   const saved = localStorage.getItem(key);
@@ -89,10 +92,31 @@ const ProfileView = ({
     setCurrentUser,
   } = useAuth();
 
+  const [stats, setStats] = useState(null);
+
   const achievements = useMemo(
-    () => buildAchievements(profileData, ownedCourses),
-    [profileData, ownedCourses],
+    () => buildAchievements(stats || EMPTY_STATS, profileData, ownedCourses),
+    [stats, profileData, ownedCourses],
   );
+
+  useEffect(() => {
+    if (authLoading) return;
+
+    let mounted = true;
+    getUserStatsApi()
+      .then((data) => {
+        if (mounted) setStats(data);
+      })
+      .catch((error) => {
+        console.error("Failed to load user stats", error);
+        if (mounted) setStats(EMPTY_STATS);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [authLoading]);
+
   useEffect(() => {
     if (authLoading) return;
 
@@ -348,7 +372,7 @@ const ProfileView = ({
       return (
         <AchievementsSection
           achievements={achievements}
-          points={profileData.points}
+          points={stats ? stats.points : 0}
           onBack={onBack}
         />
       );

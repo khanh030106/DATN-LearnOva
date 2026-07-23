@@ -13,6 +13,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     long countByInstructorIdAndIsDeletedFalse(Long instructorId);
 
+    long countByStatusAndIsDeletedFalse(CourseStatus status);
+
     @Query("""
             SELECT DISTINCT c FROM Course c
             LEFT JOIN FETCH c.sections s

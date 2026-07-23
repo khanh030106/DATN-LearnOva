@@ -11,6 +11,7 @@ import {
 } from "../data/profileData";
 import CourseCardGrid from "./CourseCardGrid";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -23,7 +24,14 @@ import { getFileUrl } from "../../../../../api/PublicCourseApi.js";
 
 const ITEMS_PER_PAGE = 8;
 
+const TAB_LABEL_KEYS = {
+  all: "profile.favorites.tabAll",
+  purchased: "profile.favorites.tabPurchased",
+  unpurchased: "profile.favorites.tabUnpurchased",
+};
+
 const FavoritesSection = ({ onOpenCourse }) => {
+  const { t } = useTranslation();
   const [favoriteCourses, setFavoriteCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(FAVORITE_COURSE_TABS[0].id);
@@ -90,12 +98,12 @@ const FavoritesSection = ({ onOpenCourse }) => {
           prev.filter((course) => course.id !== courseId)
       );
 
-      toast.info("Removed from wishlist.");
+      toast.info(t("profile.favorites.removedFromWishlist"));
 
     } catch (e) {
       console.error(e);
 
-      toast.error("Something went wrong.");
+      toast.error(t("profile.favorites.genericError"));
     }
   };
 
@@ -181,7 +189,7 @@ const FavoritesSection = ({ onOpenCourse }) => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>{t("profile.favorites.loading")}</div>;
   }
 
   if (favoriteCourses.length === 0) {
@@ -189,11 +197,10 @@ const FavoritesSection = ({ onOpenCourse }) => {
         <div className="favorite-empty">
           <div className="favorite-empty-icon">💙</div>
 
-          <h2>No favorite courses yet</h2>
+          <h2>{t("profile.favorites.emptyTitle")}</h2>
 
           <p>
-            Save the courses you're interested in by clicking the heart icon.
-            They'll appear here for easy access.
+            {t("profile.favorites.emptySubtitle")}
           </p>
 
           <button
@@ -201,7 +208,7 @@ const FavoritesSection = ({ onOpenCourse }) => {
               className="favorite-empty-btn"
               onClick={() => (window.location.href = "/learnova/courses")}
           >
-            Browse Courses
+            {t("profile.favorites.browseCourses")}
           </button>
         </div>
     );
@@ -211,7 +218,7 @@ const FavoritesSection = ({ onOpenCourse }) => {
     <div className="courses-dashboard">
       <div className="courses-topbar">
         <div>
-          <h2>Favorite Courses</h2>
+          <h2>{t("profile.favorites.title")}</h2>
           <div className="course-tabs">
             {FAVORITE_COURSE_TABS.map((tab) => (
               <button
@@ -223,7 +230,7 @@ const FavoritesSection = ({ onOpenCourse }) => {
                   setCurrentPage(1);
                 }}
               >
-                {tab.label}
+                {t(TAB_LABEL_KEYS[tab.id])}
               </button>
             ))}
           </div>
@@ -233,7 +240,7 @@ const FavoritesSection = ({ onOpenCourse }) => {
           <label className="course-search">
             <input
                 type="text"
-                placeholder="Search favorite courses..."
+                placeholder={t("profile.favorites.searchPlaceholder")}
                 value={searchKeyword}
                 onChange={(e) => {
                   setSearchKeyword(e.target.value);
@@ -251,12 +258,12 @@ const FavoritesSection = ({ onOpenCourse }) => {
                 setSortBy(event.target.value);
                 setCurrentPage(1);
               }}
-              aria-label="Sort favorite courses"
+              aria-label={t("profile.favorites.sortAria")}
             >
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-              <option value="az">A-Z</option>
-              <option value="rating">Highest rating</option>
+              <option value="newest">{t("profile.favorites.sortNewest")}</option>
+              <option value="oldest">{t("profile.favorites.sortOldest")}</option>
+              <option value="az">{t("profile.favorites.sortAz")}</option>
+              <option value="rating">{t("profile.favorites.sortRating")}</option>
             </select>
             <ChevronDown size={15} />
           </label>

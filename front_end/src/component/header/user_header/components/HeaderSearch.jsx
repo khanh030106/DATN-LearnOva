@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Search } from "lucide-react";
 
 const HeaderSearch = ({  }) => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedTerm, setDebouncedTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -24,9 +26,9 @@ const HeaderSearch = ({  }) => {
         onChange={(event) => setSearchTerm(event.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => window.setTimeout(() => setIsFocused(false), 120)}
-        placeholder="Search Course, Instructor, Category"
+        placeholder={t("header.searchCourseInstructorCategory")}
         className="user-logged-search-input"
-        aria-label="Search Course, Instructor, Category"
+        aria-label={t("header.searchCourseInstructorCategory")}
       />
 
       {isFocused && filteredSuggestions.length > 0 && (

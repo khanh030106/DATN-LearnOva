@@ -50,4 +50,11 @@ export const resetPasswordApi = async (token, newPassword) => {
     return res.data;
 };
 
+export const verifyAccountApi = async (token) => {
+    const res = await axiosClient.get("/auth/verify", {
+        params: { token },
+    });
+    return res.data;
+};
+
 

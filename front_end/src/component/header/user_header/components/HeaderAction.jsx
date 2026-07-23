@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
-import { ShoppingCart, Globe } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { ShoppingCart } from "lucide-react";
+import LanguageSwitcher from "./LanguageSwitcher.jsx";
 
 const HeaderAction = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="header-section">
       <Link to="/learnova/cart" className="header-action-cart">
@@ -9,16 +13,14 @@ const HeaderAction = () => {
       </Link>
 
       <Link to="/learnova/auth/login" className="header-action-login">
-        Log in
+        {t("header.login")}
       </Link>
 
       <Link to="/learnova/auth/register" className="header-action-signup">
-        Sign up
+        {t("header.signup")}
       </Link>
 
-      <button className="header-action-language">
-        <Globe size={22} />
-      </button>
+      <LanguageSwitcher />
     </div>
   );
 };

@@ -18,6 +18,8 @@ import com.example.back_end.dto.resquest.UpdateReviewRequest;
 import java.time.Instant;
 import java.util.List;
 import com.example.back_end.dto.response.CourseReviewResponse;
+import com.example.back_end.dto.response.TestimonialResponse;
+import org.springframework.data.domain.PageRequest;
 
 
 @Service
@@ -161,5 +163,18 @@ public class ReviewService {
                 .reviewCount(reviewRepository.countByCourseId(courseId))
                 .reviews(reviews)
                 .build();
+    }
+
+    public List<TestimonialResponse> getPlatformTestimonials(int limit) {
+        return reviewRepository.findTopTestimonials(PageRequest.of(0, limit))
+                .stream()
+                .map(review -> new TestimonialResponse(
+                        review.getId(),
+                        review.getUser().getFullName(),
+                        review.getUser().getAvatar(),
+                        review.getRating(),
+                        review.getComment(),
+                        review.getCourse().getTitle()))
+                .toList();
     }
 }

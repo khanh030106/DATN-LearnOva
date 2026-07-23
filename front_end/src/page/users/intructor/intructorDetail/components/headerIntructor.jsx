@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { FaStar, FaUserGraduate, FaBookOpen, FaUserPlus, FaUserCheck } from "react-icons/fa";
 import defaultAvatar from "../../../../../assets/default_user_avatar.jpg";
@@ -20,6 +21,7 @@ import {
 } from "react-icons/fa";
 
 function HeaderIntructor({ instructor, activeTab, setActiveTab }) {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { isAuthenticated, loading: authLoading } = useAuth();
 
@@ -63,7 +65,7 @@ function HeaderIntructor({ instructor, activeTab, setActiveTab }) {
         if (authLoading) return;
 
         if (!isAuthenticated) {
-            toast.error("Please log in to follow this instructor.");
+            toast.error(t("instructorDetailPage.loginToFollow"));
             navigate("/learnova/auth/login");
             return;
         }
@@ -78,11 +80,11 @@ function HeaderIntructor({ instructor, activeTab, setActiveTab }) {
             setFollowerCount(data.followerCount);
 
             if (data.following) {
-                toast.success(`You are now following ${instructor.fullName}.`);
+                toast.success(t("instructorDetailPage.nowFollowing", { name: instructor.fullName }));
             }
         } catch (err) {
             console.error("Failed to update follow status", err);
-            toast.error("Something went wrong. Please try again.");
+            toast.error(t("instructorDetailPage.followError"));
         } finally {
             setIsSubmitting(false);
         }
@@ -108,27 +110,27 @@ function HeaderIntructor({ instructor, activeTab, setActiveTab }) {
                         <h1 className="instructor-name-in">{instructor.fullName}</h1>
                     </div>
 
-                    <p className="instructor-title">{instructor.headline || "Instructor"}</p>
+                    <p className="instructor-title">{instructor.headline || t("instructorDetailPage.instructorFallback")}</p>
 
                     <div className="profile-info">
                         <div className="info-item">
                             <FaStar className="info-icon" />
-                            <span>{instructor.rating.toFixed(1)}/5 ({instructor.reviewCount} reviews)</span>
+                            <span>{t("instructorDetailPage.reviewsCount", { rating: instructor.rating.toFixed(1), count: instructor.reviewCount })}</span>
                         </div>
 
                         <div className="info-item">
                             <FaUserGraduate className="info-icon" />
-                            <span>{instructor.studentCount} students</span>
+                            <span>{t("instructorDetailPage.studentsCount", { count: instructor.studentCount })}</span>
                         </div>
 
                         <div className="info-item">
                             <FaBookOpen className="info-icon" />
-                            <span>{instructor.courseCount} courses</span>
+                            <span>{t("instructorDetailPage.coursesCount", { count: instructor.courseCount })}</span>
                         </div>
 
                         <div className="info-item">
                             <FaUserCheck className="info-icon" />
-                            <span>{followerCount} followers</span>
+                            <span>{t("instructorDetailPage.followersCount", { count: followerCount })}</span>
                         </div>
                     </div>
 
@@ -148,12 +150,12 @@ function HeaderIntructor({ instructor, activeTab, setActiveTab }) {
                             {isFollowing ? (
                                 <>
                                     <FaUserCheck />
-                                    Following
+                                    {t("instructorDetailPage.following")}
                                 </>
                             ) : (
                                 <>
                                     <FaUserPlus />
-                                    Follow
+                                    {t("instructorDetailPage.follow")}
                                 </>
                             )}
                         </button>
@@ -185,28 +187,28 @@ function HeaderIntructor({ instructor, activeTab, setActiveTab }) {
                     className={`tab-btn ${activeTab === "overview" ? "active" : ""}`}
                     onClick={() => setActiveTab("overview")}
                 >
-                    Overview
+                    {t("instructorDetailPage.tabOverview")}
                 </button>
 
                 <button
                     className={`tab-btn ${activeTab === "about" ? "active" : ""}`}
                     onClick={() => setActiveTab("about")}
                 >
-                    About
+                    {t("instructorDetailPage.tabAbout")}
                 </button>
 
                 <button
                     className={`tab-btn ${activeTab === "courses" ? "active" : ""}`}
                     onClick={() => setActiveTab("courses")}
                 >
-                    Courses
+                    {t("instructorDetailPage.tabCourses")}
                 </button>
 
                 <button
                     className={`tab-btn ${activeTab === "reviews" ? "active" : ""}`}
                     onClick={() => setActiveTab("reviews")}
                 >
-                    Reviews
+                    {t("instructorDetailPage.tabReviews")}
                 </button>
             </div>
         </div>

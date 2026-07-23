@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "./css/Course.css";
 import { BiHeart, BiSolidHeart, BiCart } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
@@ -99,6 +100,7 @@ function FilterChip({ label, onRemove }) {
 }
 
 function CoursesPage() {
+  const { t } = useTranslation();
   const { isAuthenticated, loading: authLoading } = useAuth();
   const [searchParams] = useSearchParams();
   const [dbCourses, setDbCourses] = useState([]);
@@ -246,12 +248,12 @@ function CoursesPage() {
     if (authLoading) return;
 
     if (!isAuthenticated) {
-      toast.error("Bạn cần đăng nhập để thêm khóa học vào giỏ hàng.");
+      toast.error(t("coursesPage.loginRequired"));
       return;
     }
 
     if (!course.courseId) {
-      toast.error("Khóa học này chưa có dữ liệu thật trong hệ thống.");
+      toast.error(t("coursesPage.courseNotAvailable"));
       return;
     }
 
@@ -265,11 +267,11 @@ function CoursesPage() {
     });
 
     if (alreadyInCart) {
-      toast.info("Khóa học này đã có trong giỏ hàng.");
+      toast.info(t("coursesPage.alreadyInCart"));
       return;
     }
 
-    toast.success("Đã thêm khóa học vào giỏ hàng.");
+    toast.success(t("coursesPage.addedToCart"));
   };
   // ===============================
 // LOAD WISHLIST
@@ -366,13 +368,13 @@ function CoursesPage() {
 
         newFavorites = favorites.filter(id => id !== courseId);
 
-        toast.info("Removed from wishlist.");
+        toast.info(t("coursesPage.removedFromWishlist"));
 
       } else {
 
         newFavorites = [...favorites, courseId];
 
-        toast.success("Added to wishlist.");
+        toast.success(t("coursesPage.addedToWishlist"));
 
       }
 
@@ -397,7 +399,7 @@ function CoursesPage() {
             prev.filter(id => id !== courseId)
         );
 
-        toast.info("Removed from wishlist.");
+        toast.info(t("coursesPage.removedFromWishlist"));
 
       } else {
 
@@ -405,7 +407,7 @@ function CoursesPage() {
 
         setWishlist(prev => [...prev, courseId]);
 
-        toast.success("Added to wishlist.");
+        toast.success(t("coursesPage.addedToWishlist"));
 
       }
 
@@ -421,14 +423,14 @@ function CoursesPage() {
 
         setWishlist(response.data.map(item => item.courseId));
 
-        toast.info("This course is already in your wishlist.");
+        toast.info(t("coursesPage.alreadyInWishlist"));
 
         return;
       }
 
       console.error(e);
 
-      toast.error("Something went wrong. Please try again.");
+      toast.error(t("coursesPage.genericError"));
 
     }
 
@@ -443,7 +445,7 @@ function CoursesPage() {
             <div className="filter-scroll-course">
               <div className="filter-group-course">
                 <div className="filter-title-course">
-                  <span>Categories</span>
+                  <span>{t("coursesPage.categories")}</span>
                 </div>
                 {categories.map((cat) => (
                   <label key={cat.id} className="filter-item-course">
@@ -461,7 +463,7 @@ function CoursesPage() {
 
               <div className="filter-group-course">
                 <div className="filter-title-course">
-                  <span>Level</span>
+                  <span>{t("coursesPage.level")}</span>
                 </div>
                 {levels.map((lvl) => (
                   <label key={lvl.id} className="filter-item-course">
@@ -487,7 +489,7 @@ function CoursesPage() {
               <input
                 type="text"
                 className="courses-search-input"
-                placeholder="Search courses, instructors, categories..."
+                placeholder={t("coursesPage.searchPlaceholder")}
                 value={searchTerm}
                 onChange={(event) => {
                   setSearchTerm(event.target.value);
@@ -498,10 +500,10 @@ function CoursesPage() {
           </div>
 
           {isLoading ? (
-            <div className="courses-empty-state">Đang tải khóa học...</div>
+            <div className="courses-empty-state">{t("coursesPage.loading")}</div>
           ) : visibleCourses.length === 0 ? (
               <div className="courses-empty-state">
-                No courses available yet.
+                {t("coursesPage.noCourses")}
               </div>
           ) : (
           <div className={`courses-grid ${viewMode === "list" ? "courses-grid--list" : ""}`}>
@@ -517,13 +519,13 @@ function CoursesPage() {
                       event.stopPropagation();
                       toggleWishlist(course.id);
                     }}
-                    aria-label="Add to wishlist"
+                    aria-label={t("coursesPage.wishlistAria")}
                   >
                     {wishlist.includes(course.id) ? <BiSolidHeart /> : <BiHeart />}
                   </button>
                   {course.studentCount > 0 && (
                     <span className="course-tag-badge course-tag-badge--bestseller">
-                      BESTSELLER
+                      {t("coursesPage.bestseller")}
                     </span>
                   )}
                   {course.duration && (
@@ -567,7 +569,7 @@ function CoursesPage() {
                     <button
                       type="button"
                       className="enroll-btn enroll-btn--cart"
-                      aria-label="Add to cart"
+                      aria-label={t("coursesPage.addToCartAria")}
                       onClick={() => handleAddToCart(course)}
                     >
                       <BiCart />

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { MdStar } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import { FaRegCommentDots } from "react-icons/fa";
@@ -27,6 +28,7 @@ function ReviewsTab({
                         hasReviewed,
                         openReviewModal
                     }) {
+    const { t } = useTranslation();
     const [openMenuId, setOpenMenuId] = useState(null);
     const [editingId, setEditingId] = useState(null);
     const [editText, setEditText] = useState("");
@@ -87,7 +89,7 @@ function ReviewsTab({
                     </div>
 
                     <div className="rating-label">
-                        Course Rating ({ratingSummary?.totalReviews || 0} reviews)
+                        {t("courseDetail.reviews.courseRating", { count: ratingSummary?.totalReviews || 0 })}
                     </div>
                 </div>
 
@@ -122,7 +124,7 @@ function ReviewsTab({
             {/* REVIEW FORM ACTION */}
 
 
-            <h3 className="reviews-title">Reviews</h3>
+            <h3 className="reviews-title">{t("courseDetail.reviews.title")}</h3>
 
             <div className="review-controls">
 
@@ -130,10 +132,10 @@ function ReviewsTab({
                 <div className="review-filter">
 
                     <select value={ratingFilter} onChange={handleRatingFilter}>
-                        <option value="all">All ratings</option>
-                        <option value={5}>5 stars</option>
-                        <option value={4}>4 stars</option>
-                        <option value={3}>3 stars</option>
+                        <option value="all">{t("courseDetail.reviews.allRatings")}</option>
+                        <option value={5}>{t("courseDetail.reviews.stars", { count: 5 })}</option>
+                        <option value={4}>{t("courseDetail.reviews.stars", { count: 4 })}</option>
+                        <option value={3}>{t("courseDetail.reviews.stars", { count: 3 })}</option>
                     </select>
                 </div>
             </div>
@@ -141,8 +143,8 @@ function ReviewsTab({
             {isNoResult ? (
                 <div className="no-search-result">
                     <FaRegCommentDots size={40} color="#999" />
-                    <h3>No reviews found</h3>
-                    <p>Your search did not match any reviews.</p>
+                    <h3>{t("courseDetail.reviews.noResultsTitle")}</h3>
+                    <p>{t("courseDetail.reviews.noResultsSub")}</p>
                 </div>
             ) : (
                 <div className="reviews-list">
@@ -175,7 +177,7 @@ function ReviewsTab({
                                                 <MdStar key={i} className="star small" />
                                             ))}
                                         </span>
-                                        <span className="review-time">{r.time || "Just now"}</span>
+                                        <span className="review-time">{r.time || t("courseDetail.reviews.justNow")}</span>
                                     </div>
 
                                     {/* CHỈ HIỂN THỊ NÚT 3 CHẤM NẾU ĐÚNG CHỦ SỞ HỮU ĐANG ĐĂNG NHẬP */}
@@ -197,7 +199,7 @@ function ReviewsTab({
                                                             setOpenMenuId(null);
                                                         }}
                                                     >
-                                                        Edit
+                                                        {t("courseDetail.reviews.edit")}
                                                     </button>
 
 
@@ -206,13 +208,13 @@ function ReviewsTab({
                                                             try {
                                                                 await handleDeleteReview(r.reviewId);
 
-                                                                toast.success("Delete review successfully!", {
+                                                                toast.success(t("courseDetail.reviews.deleteSuccess"), {
                                                                     position: "top-right",
                                                                     autoClose: 2000
                                                                 });
 
                                                             } catch (err) {
-                                                                toast.error("Delete review failed!", {
+                                                                toast.error(t("courseDetail.reviews.deleteFailed"), {
                                                                     position: "top-right",
                                                                     autoClose: 2000
                                                                 });
@@ -223,7 +225,7 @@ function ReviewsTab({
                                                             setOpenMenuId(null);
                                                         }}
                                                     >
-                                                        Delete
+                                                        {t("courseDetail.reviews.delete")}
                                                     </button>
                                                 </div>
                                             )}
@@ -259,7 +261,7 @@ function ReviewsTab({
 
                                                             setEditingId(null);
 
-                                                            toast.success("Update review successfully!", {
+                                                            toast.success(t("courseDetail.reviews.updateSuccess"), {
                                                                 position: "top-right",
                                                                 autoClose: 2000,
                                                                 className: "toast-green",
@@ -270,18 +272,18 @@ function ReviewsTab({
                                                         } catch (err) {
                                                             console.log("Lỗi cập nhật review:", err);
 
-                                                            toast.error("Update review failed!", {
+                                                            toast.error(t("courseDetail.reviews.updateFailed"), {
                                                                 position: "top-right",
                                                                 autoClose: 2000
                                                             });
                                                         }
                                                     }}
                                                 >
-                                                    Save
+                                                    {t("courseDetail.reviews.save")}
                                                 </button>
 
                                                 <button onClick={() => setEditingId(null)}>
-                                                    Cancel
+                                                    {t("courseDetail.reviews.cancel")}
                                                 </button>
                                             </div>
                                         </div>
@@ -307,7 +309,7 @@ function ReviewsTab({
                 </button>
 
                 <span>
-        Page {currentReviewPage} / {totalPages || 1}
+        {t("courseDetail.reviews.page", { current: currentReviewPage, total: totalPages || 1 })}
     </span>
 
                 <button

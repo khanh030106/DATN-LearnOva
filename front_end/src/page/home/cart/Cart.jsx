@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { AlertTriangle, Tag, Trash2, X } from "lucide-react";
 import "./Cart.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -31,6 +32,7 @@ const normalizeCourseTitle = (title) =>
     .replace(/\s+/g, " ");
 
 const Cart = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const { accessToken, isAuthenticated, loading: authLoading } = useAuth();
@@ -90,7 +92,7 @@ const Cart = () => {
     setAppliedVoucher(null);
     setVoucherMessage("");
     closeRemovePopup();
-    toast.success(`Đã xóa "${removedTitle}" khỏi giỏ hàng.`);
+    toast.success(t("cart.removedFromCart", { title: removedTitle }));
   };
 
   const subtotal = items.reduce((sum, it) => sum + parseCoursePrice(it.price), 0);
@@ -107,17 +109,17 @@ const Cart = () => {
     const code = promo.trim();
 
     if (!code) {
-      setVoucherMessage("Vui lòng nhập mã voucher.");
+      setVoucherMessage(t("cart.enterVoucherCode"));
       return;
     }
 
     if (items.length === 0 || subtotal <= 0) {
-      setVoucherMessage("Giỏ hàng đang trống.");
+      setVoucherMessage(t("cart.cartEmpty"));
       return;
     }
 
     if (appliedVoucher?.code?.toLowerCase() === code.toLowerCase()) {
-      setVoucherMessage("Voucher này đã được áp dụng.");
+      setVoucherMessage(t("cart.voucherAlreadyApplied"));
       return;
     }
 
@@ -127,13 +129,13 @@ const Cart = () => {
       const result = await applyVoucherApi({ code, subtotal });
       setAppliedVoucher(result);
       setVoucherMessage(
-        `Đã áp dụng ${result.code}. Đã dùng ${result.usedCount}/${result.usageLimit} lượt.`,
+        t("cart.voucherApplied", { code: result.code, usedCount: result.usedCount, usageLimit: result.usageLimit }),
       );
-      toast.success("Áp dụng voucher thành công.");
+      toast.success(t("cart.voucherAppliedSuccess"));
     } catch (err) {
       setAppliedVoucher(null);
       const message =
-        err?.response?.data?.message || "Voucher không hợp lệ hoặc không còn sử dụng được.";
+        err?.response?.data?.message || t("cart.voucherInvalid");
       setVoucherMessage(message);
       toast.error(message);
     } finally {
@@ -145,12 +147,12 @@ const Cart = () => {
     if (authLoading) return;
 
     if (!isAuthenticated) {
-      toast.error("Bạn cần đăng nhập để thanh toán.");
+      toast.error(t("cart.loginToCheckout"));
       return;
     }
 
     if (items.length === 0) {
-      toast.error("Giỏ hàng đang trống.");
+      toast.error(t("cart.cartEmpty"));
       return;
     }
 
@@ -159,7 +161,7 @@ const Cart = () => {
       .filter((pair) => pair.course);
 
     if (checkoutPairs.length !== items.length) {
-      toast.error("Có khóa học trong giỏ không còn tồn tại hoặc chưa được publish.");
+      toast.error(t("cart.coursesUnavailable"));
       return;
     }
 
@@ -183,7 +185,7 @@ const Cart = () => {
       const message =
         err?.response?.data?.message ||
         err?.response?.data?.error ||
-        "Không thể tạo thanh toán payOS.";
+        t("cart.paymentCreateError");
       toast.error(message);
     } finally {
       setIsCreatingPayment(false);
@@ -218,17 +220,17 @@ const Cart = () => {
         <div className="cart-left">
           <div className="cart-list">
             <div className="cart-list-header">
-              <div>Course</div>
-              <div>Price</div>
-              <div>Quantity</div>
-              <div>Total</div>
-              <div>Actions</div>
+              <div>{t("cart.colCourse")}</div>
+              <div>{t("cart.colPrice")}</div>
+              <div>{t("cart.colQuantity")}</div>
+              <div>{t("cart.colTotal")}</div>
+              <div>{t("cart.colActions")}</div>
             </div>
 
             {items.length === 0 && (
               <div className="cart-empty">
-                <p>Giỏ hàng của bạn đang trống.</p>
-                <Link to="/learnova/courses">Tiếp tục mua khóa học</Link>
+                <p>{t("cart.emptyMessage")}</p>
+                <Link to="/learnova/courses">{t("cart.continueBrowsing")}</Link>
               </div>
             )}
 
@@ -243,7 +245,7 @@ const Cart = () => {
                     >
                       {item.title}
                     </Link>
-                    <div className="cart-item-teacher">By {item.teacher}</div>
+                    <div className="cart-item-teacher">{t("cart.byInstructor", { name: item.teacher })}</div>
                   </div>
                 </div>
 
@@ -263,7 +265,7 @@ const Cart = () => {
                   className="cart-item-remove"
                   onClick={() => askRemoveItem(item)}
                   type="button"
-                  aria-label={`Remove ${item.title}`}
+                  aria-label={t("cart.removeAria", { title: item.title })}
                 >
                   <Trash2 size={18} />
                 </button>
@@ -274,18 +276,18 @@ const Cart = () => {
 
         <aside className="cart-right">
           <div className="order-card">
-            <h3>Order summary</h3>
+            <h3>{t("cart.orderSummary")}</h3>
             <div className="order-row">
-              <span>Subtotal ({items.length} courses)</span>
+              <span>{t("cart.subtotal", { count: items.length })}</span>
               <span>{subtotal.toLocaleString("vi-VN")}đ</span>
             </div>
             <div className="order-row">
-              <span>Discount</span>
+              <span>{t("cart.discount")}</span>
               <span className="discount">-{discount.toLocaleString("vi-VN")}đ</span>
             </div>
 
             <div className="voucher-box">
-              <label htmlFor="voucher-code">Voucher code</label>
+              <label htmlFor="voucher-code">{t("cart.voucherLabel")}</label>
               <div className="voucher-input-wrap">
                 <Tag size={18} />
                 <input
@@ -293,7 +295,7 @@ const Cart = () => {
                   type="text"
                   value={promo}
                   onChange={handleVoucherChange}
-                  placeholder="Enter voucher"
+                  placeholder={t("cart.voucherPlaceholder")}
                 />
                 <button
                   type="button"
@@ -301,7 +303,7 @@ const Cart = () => {
                   onClick={handleApplyVoucher}
                   disabled={isApplyingVoucher}
                 >
-                  {isApplyingVoucher ? "..." : "Apply"}
+                  {isApplyingVoucher ? t("cart.applying") : t("cart.apply")}
                 </button>
               </div>
               {voucherMessage ? (
@@ -316,7 +318,7 @@ const Cart = () => {
             </div>
 
             <div className="order-total">
-              <span>Total</span>
+              <span>{t("cart.total")}</span>
               <span className="total-amount">{total.toLocaleString("vi-VN")}đ</span>
             </div>
 
@@ -326,14 +328,14 @@ const Cart = () => {
               onClick={handleCheckout}
               disabled={isCreatingPayment || items.length === 0}
             >
-              {isCreatingPayment ? "Creating payment..." : "Proceed to checkout"}
+              {isCreatingPayment ? t("cart.creatingPayment") : t("cart.proceedToCheckout")}
             </button>
             <button
               className="continue"
               type="button"
               onClick={() => navigate("/learnova/courses")}
             >
-              Continue shopping
+              {t("cart.continueShopping")}
             </button>
           </div>
         </aside>
@@ -351,7 +353,7 @@ const Cart = () => {
               className="cart-popup-close"
               type="button"
               onClick={closeRemovePopup}
-              aria-label="Close popup"
+              aria-label={t("cart.closePopup")}
             >
               <X size={18} />
             </button>
@@ -360,10 +362,10 @@ const Cart = () => {
               <AlertTriangle size={26} />
             </div>
 
-            <h3 id="remove-cart-title">Remove course?</h3>
+            <h3 id="remove-cart-title">{t("cart.removeTitle")}</h3>
             <p>
-              Are you sure you want to remove{" "}
-              <strong>{itemToRemove.title}</strong> from your cart?
+              {t("cart.removeConfirm")}{" "}
+              <strong>{itemToRemove.title}</strong> {t("cart.removeConfirmSuffix")}
             </p>
 
             <div className="cart-popup-actions">
@@ -372,14 +374,14 @@ const Cart = () => {
                 type="button"
                 onClick={closeRemovePopup}
               >
-                Cancel
+                {t("cart.cancel")}
               </button>
               <button
                 className="cart-popup-confirm"
                 type="button"
                 onClick={confirmRemoveItem}
               >
-                Remove
+                {t("cart.remove")}
               </button>
             </div>
           </div>

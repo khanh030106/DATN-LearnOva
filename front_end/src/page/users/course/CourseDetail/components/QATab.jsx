@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
+import { useTranslation } from "react-i18next";
 
 import { toast } from "react-toastify";
 import { FaInbox } from "react-icons/fa";
@@ -41,6 +42,7 @@ function QATab({
                    setReplyText,
                    handleReplySubmit
                }) {
+    const { t } = useTranslation();
     const [questions, setQuestions] = useState([]);
     const [questionContent, setQuestionContent] = useState("");
     const [questionError, setQuestionError] = useState("");
@@ -93,7 +95,7 @@ function QATab({
     const handleCreateQuestion = async () => {
 
         if (!questionContent.trim()) {
-            setQuestionError("Please enter your question.");
+            setQuestionError(t("courseDetail.qa.enterQuestion"));
             return;
         }
 
@@ -104,7 +106,7 @@ function QATab({
                 content: questionContent
             });
 
-            toast.success("Question sent successfully!", {
+            toast.success(t("courseDetail.qa.questionSent"), {
                 position: "top-right",
                 autoClose: 1000,
                 className: "toast-green",
@@ -123,7 +125,7 @@ function QATab({
 
             console.log(error);
 
-            toast.error("Failed to send question!", {
+            toast.error(t("courseDetail.qa.questionSendFailed"), {
                 position: "top-right",
                 autoClose: 1000
             });
@@ -133,7 +135,7 @@ function QATab({
     const handleReplySubmituser = async () => {
 
         if (!replyText.trim()) {
-            setReplyError("Please enter your reply.");
+            setReplyError(t("courseDetail.qa.enterReply"));
             return;
         }
 
@@ -156,7 +158,7 @@ function QATab({
                 content: replyText
             });
 
-            toast.success("Reply sent successfully!", {
+            toast.success(t("courseDetail.qa.replySent"), {
                 position: "top-right",
                 autoClose: 1000,
                 className: "toast-green",
@@ -189,7 +191,7 @@ function QATab({
                 console.log("Data =", error.response.data);
             }
 
-            toast.error("Failed to send reply!", {
+            toast.error(t("courseDetail.qa.replySendFailed"), {
                 position: "top-right",
                 autoClose: 1000
             });
@@ -240,7 +242,7 @@ function QATab({
 
                                         {answer.instructor && (
                                             <span className="qa-instructor-badge">
-                    Instructor
+                    {t("courseDetail.qa.instructorBadge")}
                 </span>
                                         )}
                                     </div>
@@ -283,7 +285,7 @@ function QATab({
                                                     }}
                                                 >
                                                     <FaPenToSquare />
-                                                    <span>Edit</span>
+                                                    <span>{t("courseDetail.qa.edit")}</span>
                                                 </button>
 
                                                 <button
@@ -291,7 +293,7 @@ function QATab({
                                                     onClick={() => handleDeleteAnswer(answer.id)}
                                                 >
                                                     <FaTrashCan />
-                                                    <span>Delete</span>
+                                                    <span>{t("courseDetail.qa.delete")}</span>
                                                 </button>
 
                                             </div>
@@ -332,14 +334,14 @@ function QATab({
                                             className="qa-edit-save-btn"
                                             onClick={() => handleUpdateAnswer(answer.id)}
                                         >
-                                            Save
+                                            {t("courseDetail.qa.save")}
                                         </button>
 
                                         <button
                                             className="qa-edit-cancel-btn"
                                             onClick={() => setEditId(null)}
                                         >
-                                            Cancel
+                                            {t("courseDetail.qa.cancel")}
                                         </button>
                                     </div>
                                 </div>
@@ -370,7 +372,7 @@ function QATab({
                                     }}
                             >
                                 <FaRegCommentDots />
-                                Reply
+                                {t("courseDetail.qa.reply")}
                             </button>
                             <button className="btn-like">
                                 <FaRegThumbsUp />
@@ -406,7 +408,7 @@ function QATab({
 
             await deleteAnswerApi(answerId);
 
-            toast.success("Deleted successfully!");
+            toast.success(t("courseDetail.qa.deleted"));
 
             setOpenMenuId(null);
 
@@ -423,14 +425,14 @@ function QATab({
         } catch (e) {
 
             console.log(e);
-            toast.error("Delete failed!");
+            toast.error(t("courseDetail.qa.deleteFailed"));
         }
     };
     const handleDeleteQuestion = async (id) => {
         try {
             await deleteQuestionApi(id);
 
-            toast.success("Deleted successfully!");
+            toast.success(t("courseDetail.qa.deleted"));
 
             // reset UI trước
             setSelectedQuestion(null);
@@ -449,7 +451,7 @@ function QATab({
 
 
         if (!content) {
-            setEditError("Content cannot be empty.");
+            setEditError(t("courseDetail.qa.contentEmpty"));
             return;
         }
 
@@ -472,21 +474,21 @@ function QATab({
 
             setSelectedQuestion(updatedQuestion);
 
-            toast.success("Updated!");
+            toast.success(t("courseDetail.qa.updated"));
         } catch (e) {
 
                 console.log("Status =", e.response?.status);
                 console.log("Response =", e.response?.data);
 
             console.error(e);
-            toast.error("Update failed!");
+            toast.error(t("courseDetail.qa.updateFailed"));
         }
     };
     const handleUpdateQuestion = async (id) => {
         const content = editQuestionText.trim();
 
         if (!content) {
-            setEditQuestionError("Question content cannot be empty.");
+            setEditQuestionError(t("courseDetail.qa.questionEmpty"));
             return;
         }
 
@@ -503,10 +505,10 @@ function QATab({
             const data = await getLessonQAApi(lessonId);
             setQuestions(data.questions || []);
 
-            toast.success("Question updated!");
+            toast.success(t("courseDetail.qa.questionUpdated"));
         } catch (e) {
             console.error(e);
-            toast.error("Update failed!");
+            toast.error(t("courseDetail.qa.updateFailed"));
         }
     };
     const indexOfLastQuestion = currentPage * questionsPerPage;
@@ -546,25 +548,25 @@ function QATab({
                       className={`qa-tab-btn ${activeTab === "all" ? "active" : ""}`}
                       onClick={() => setActiveTab("all")}
                   >
-                      All questions
+                      {t("courseDetail.qa.allQuestions")}
                   </button>
 
                   <button
                       className={`qa-tab-btn ${activeTab === "unanswered" ? "active" : ""}`}
                       onClick={() => setActiveTab("unanswered")}
                   >
-                      Unanswered
+                      {t("courseDetail.qa.unanswered")}
                   </button>
 
                   <button
                       className={`qa-tab-btn ${activeTab === "answered" ? "active" : ""}`}
                       onClick={() => setActiveTab("answered")}
                   >
-                      Answered
+                      {t("courseDetail.qa.answered")}
                   </button>
               </div>
               <span className="qa-total">
-                {questions.length} Questions
+                {t("courseDetail.qa.questionsCount", { count: questions.length })}
             </span>
           </div>
           <div className="qa-action-bar">
@@ -581,10 +583,10 @@ function QATab({
               showQuestionForm && (
                   <div className="qa-question-form">
 
-                      <h4>Ask the instructor a question</h4>
+                      <h4>{t("courseDetail.qa.askPlaceholderTitle")}</h4>
 
                       <textarea
-                          placeholder="Describe your question in detail..."
+                          placeholder={t("courseDetail.qa.askPlaceholder")}
                           className="qa-textarea"
                           value={questionContent}
                           onChange={(e) => {
@@ -604,14 +606,14 @@ function QATab({
                               onClick={() => setShowQuestionForm(false)}
                               className="qa-cancel-btn"
                           >
-                              Cancel
+                              {t("courseDetail.qa.cancel")}
                           </button>
 
                           <button
                               className="qa-submit-btn"
                               onClick={handleCreateQuestion}
                           >
-                              Send question
+                              {t("courseDetail.qa.sendQuestion")}
                           </button>
                       </div>
 
@@ -623,11 +625,11 @@ function QATab({
           {/* QA area */}
           {selectedQuestion ? (
               <div className="qa-detail">
-                  <button className="qa-back" onClick={() => setSelectedQuestion(null)}>‹ Back to questions list</button>
+                  <button className="qa-back" onClick={() => setSelectedQuestion(null)}>{t("courseDetail.qa.backToList")}</button>
 
                   <div className="qa-detail-header">
                       <div className="qa-detail-title">
-                          Question
+                          {t("courseDetail.qa.question")}
                       </div>
                       <div className="qa-detail-meta">
 
@@ -683,7 +685,7 @@ function QATab({
                                               }}
                                       >
                                           <FaRegCommentDots />
-                                          <span>Reply</span>
+                                          <span>{t("courseDetail.qa.reply")}</span>
                                       </button>
 
                                       <button className="btn-like">
@@ -723,7 +725,7 @@ function QATab({
                       >
                           {replyTarget && (
                               <div className="reply-to-box">
-                                  Replying to <b className="user-1">@{replyTarget.userName}</b>
+                                  {t("courseDetail.qa.replyingTo")} <b className="user-1">@{replyTarget.userName}</b>
                               </div>
                           )}
                           <textarea
@@ -734,7 +736,7 @@ function QATab({
                                                    setReplyText(e.target.value);
                                                    setReplyError("");
                                                }}
-                                               placeholder="Write your reply..."
+                                               placeholder={t("courseDetail.qa.replyPlaceholder")}
                                                rows={4}
                                            />
 
@@ -754,14 +756,14 @@ function QATab({
                                       setReplyText("");
                                   }}
                               >
-                                  Cancel
+                                  {t("courseDetail.qa.cancel")}
                               </button>
 
                               <button
                                   className="btn-primary"
                                   onClick={handleReplySubmituser}
                               >
-                                  Send
+                                  {t("courseDetail.qa.send")}
                               </button>
                           </div>
                       </div>
@@ -776,10 +778,10 @@ function QATab({
                               <FaInbox size={40} />
                           </div>
 
-                          <h3>No results found</h3>
+                          <h3>{t("courseDetail.qa.noResults")}</h3>
 
                           <p>
-                              No questions match your search:{" "}
+                              {t("courseDetail.qa.noResultsMatch")}{" "}
                               <b>"{searchText}"</b>
                           </p>
 
@@ -790,7 +792,7 @@ function QATab({
                                   setActiveTab("all");
                               }}
                           >
-                              Clear filters
+                              {t("courseDetail.qa.clearFilters")}
                           </button>
                       </div>
                   ) : (
@@ -839,7 +841,7 @@ function QATab({
 
                               <div className="qa-middle">
 
-                                  <h5 className="qa-title">Question</h5>
+                                  <h5 className="qa-title">{t("courseDetail.qa.question")}</h5>
 
                                   {editQuestionId === q.id ? (
                                       <div className="qa-edit-box">
@@ -864,7 +866,7 @@ function QATab({
                                                   className="qa-edit-save-btn"
                                                   onClick={() => handleUpdateQuestion(q.id)}
                                               >
-                                                  Save
+                                                  {t("courseDetail.qa.save")}
                                               </button>
 
                                               <button
@@ -875,7 +877,7 @@ function QATab({
                                                       setEditQuestionError("");
                                                   }}
                                               >
-                                                  Cancel
+                                                  {t("courseDetail.qa.cancel")}
                                               </button>
                                           </div>
 
@@ -919,7 +921,7 @@ function QATab({
                                                   }}
                                               >
                                                   <FaPenToSquare />
-                                                  <span>Edit</span>
+                                                  <span>{t("courseDetail.qa.edit")}</span>
                                               </button>
 
                                               <button
@@ -927,7 +929,7 @@ function QATab({
                                                   onClick={() => handleDeleteQuestion(q.id)}
                                               >
                                                   <FaTrashCan />
-                                                  <span>Delete</span>
+                                                  <span>{t("courseDetail.qa.delete")}</span>
                                               </button>
                                           </div>
                                       )}

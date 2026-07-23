@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { FaUserGraduate, FaStar, FaRegHeart, FaHeart } from "react-icons/fa";
 import defaultAvatar from "../../../../../assets/default_user_avatar.jpg";
@@ -16,6 +17,7 @@ function MainIntructor({
     rating = 0,
     reviewCount = 0,
 }) {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
     const [thumbnailUrls, setThumbnailUrls] = useState({});
@@ -52,7 +54,7 @@ function MainIntructor({
         event.stopPropagation();
 
         if (!isAuthenticated) {
-            toast.error("Please log in to save favorite courses.");
+            toast.error(t("instructorDetailPage.loginToWishlist"));
             return;
         }
 
@@ -67,15 +69,15 @@ function MainIntructor({
                     next.delete(key);
                     return next;
                 });
-                toast.success("Removed from wishlist.");
+                toast.success(t("instructorDetailPage.removedFromWishlist"));
             } else {
                 await addWishlistApi(courseId);
                 setWishlistedIds((prev) => new Set(prev).add(key));
-                toast.success("Added to wishlist.");
+                toast.success(t("instructorDetailPage.addedToWishlist"));
             }
         } catch (err) {
             console.error("Failed to toggle wishlist", err);
-            toast.error("Something went wrong. Please try again.");
+            toast.error(t("instructorDetailPage.wishlistError"));
         }
     };
 
@@ -89,8 +91,8 @@ function MainIntructor({
         <div className="content-left">
             {(activeTab === "overview" || activeTab === "about") && (
                 <section className="section">
-                    <h2 className="section-title">Introduce</h2>
-                    <p className="section-text">{description || "This instructor hasn't added a bio yet."}</p>
+                    <h2 className="section-title">{t("instructorDetailPage.introduce")}</h2>
+                    <p className="section-text">{description || t("instructorDetailPage.noBio")}</p>
                     {expertiseTags.length > 0 && (
                         <div className="profile-links">
                             {expertiseTags.map((tag) => (
@@ -104,11 +106,11 @@ function MainIntructor({
             {(activeTab === "overview" || activeTab === "courses") && (
                 <section className="section">
                     <div className="section-header-course">
-                        <h2 className="section-title">Instructor's Courses</h2>
+                        <h2 className="section-title">{t("instructorDetailPage.instructorCourses")}</h2>
                     </div>
 
                     {courses.length === 0 ? (
-                        <p className="section-text">This instructor hasn't published any courses yet.</p>
+                        <p className="section-text">{t("instructorDetailPage.noCourses")}</p>
                     ) : (
                         <div className="courses-grid-new">
                             {(activeTab === "overview" ? courses.slice(0, 4) : courses).map((course) => (
@@ -171,8 +173,8 @@ function MainIntructor({
                 <section className="review-section-new">
                     <div className="review-overview-card">
                         <div className="review-overview-left">
-                            <h2>Student Reviews</h2>
-                            <p>Genuine feedback from students who have completed this instructor's courses.</p>
+                            <h2>{t("instructorDetailPage.studentReviews")}</h2>
+                            <p>{t("instructorDetailPage.reviewsSubtitle")}</p>
 
                             <div className="overall-rating">
                                 <div className="overall-stars">
@@ -181,7 +183,7 @@ function MainIntructor({
                                     ))}
                                 </div>
                                 <span className="overall-score">{rating.toFixed(1)}</span>
-                                <span className="overall-count">({reviewCount} reviews)</span>
+                                <span className="overall-count">{t("instructorDetailPage.reviewsCountLabel", { count: reviewCount })}</span>
                             </div>
                         </div>
 
@@ -205,7 +207,7 @@ function MainIntructor({
                     <div className="review-content-wrapper">
                         <div className="review-list-new">
                             {reviews.length === 0 ? (
-                                <p className="section-text">No reviews yet.</p>
+                                <p className="section-text">{t("instructorDetailPage.noReviews")}</p>
                             ) : (
                                 reviews.map((review, index) => (
                                     <div key={`${review.reviewerName}-${index}`} className="review-card-new">

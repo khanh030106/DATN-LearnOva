@@ -420,6 +420,14 @@ public class CourseService {
                                                                 pc -> pc.getPromotion().getDiscountPercent(),
                                                                 (a, b) -> a));
 
+                Map<Long, ReviewRepository.CourseRatingProjection> ratingByCourseId = top8Ids.isEmpty()
+                                ? Map.of()
+                                : reviewRepository.findAvgRatingByCourseIds(top8Ids)
+                                                .stream()
+                                                .collect(Collectors.toMap(
+                                                                ReviewRepository.CourseRatingProjection::getCourseId,
+                                                                r -> r));
+
                 return top8.stream()
                                 .map(course -> {
                                         String categoryName = course.getCoursecategories().stream()
@@ -444,6 +452,11 @@ public class CourseService {
 
                                         long studentCount = enrollmentCountByCourseId.getOrDefault(course.getId(), 0L);
 
+                                        ReviewRepository.CourseRatingProjection rating = ratingByCourseId.get(course.getId());
+                                        double avgRating = rating != null && rating.getAvgRating() != null
+                                                        ? rating.getAvgRating()
+                                                        : 0.0;
+
                                         return new FeaturedCourseResponse(
                                                         course.getId(),
                                                         course.getTitle(),
@@ -456,9 +469,19 @@ public class CourseService {
                                                         totalDurationSeconds,
                                                         categoryName,
                                                         course.getLevel(),
-                                                        0.0);
+                                                        avgRating);
                                 })
                                 .toList();
+        }
+
+        @Transactional(readOnly = true)
+        public com.example.back_end.dto.response.PlatformStatsResponse getPlatformStats() {
+                long totalLearners = enrollmentRepository.countDistinctUsers();
+                long totalCourses = courseRepository.countByStatusAndIsDeletedFalse(CourseStatus.PUBLISHED);
+                double avgRating = reviewRepository.getPlatformAverageRating();
+
+                return new com.example.back_end.dto.response.PlatformStatsResponse(
+                                totalLearners, totalCourses, avgRating);
         }
 
         @Transactional(readOnly = true)

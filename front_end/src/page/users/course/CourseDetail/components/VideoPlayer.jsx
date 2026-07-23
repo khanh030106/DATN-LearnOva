@@ -1,7 +1,9 @@
 import React, { useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import Hls from "hls.js";
 
 function CourseVideoPlayer({ src, loading, initialTime = 0, onProgressUpdate }) {
+  const { t } = useTranslation();
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
   const lastReportedTime = useRef(0);
@@ -84,7 +86,7 @@ function CourseVideoPlayer({ src, loading, initialTime = 0, onProgressUpdate }) 
         <div className="video-placeholder">
           {loading ? (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "#94a3b8", fontSize: "15px" }}>
-              Loading video...
+              {t("courseDetail.video.loading")}
             </div>
           ) : src ? (
             <video
@@ -100,7 +102,7 @@ function CourseVideoPlayer({ src, loading, initialTime = 0, onProgressUpdate }) 
             />
           ) : (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "#94a3b8", fontSize: "15px" }}>
-              Select a lesson to start watching
+              {t("courseDetail.video.selectLesson")}
             </div>
           )}
         </div>

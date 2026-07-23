@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "./Instructors.css";
 import { getPublicInstructorsApi } from "../../../api/InstructorApi.js";
 
@@ -19,6 +20,7 @@ function getAvatarColor(name) {
 }
 
 export default function Instructors() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [instructors, setInstructors] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -55,13 +57,13 @@ export default function Instructors() {
         <section className="inst" aria-labelledby="inst-heading">
             <div className="inst__container">
                 <div className="inst__header">
-                    <span className="section-eyebrow">Instructor Spotlight</span>
-                    <h2 id="inst-heading" className="inst__title">Learn from the best</h2>
+                    <span className="section-eyebrow">{t('home.instructors.eyebrow')}</span>
+                    <h2 id="inst-heading" className="inst__title">{t('home.instructors.title')}</h2>
                 </div>
 
                 <div className="inst__grid">
                     {isLoading ? (
-                        <p className="inst__loading">Loading instructors...</p>
+                        <p className="inst__loading">{t('home.instructors.loading')}</p>
                     ) : (
                         instructors.map((inst) => (
                             <article key={inst.instructorId} className="inst__card">
@@ -79,20 +81,20 @@ export default function Instructors() {
                                     </div>
                                 )}
                                 <h3 className="inst__name">{inst.fullName}</h3>
-                                <p className="inst__role">{inst.headline || "Instructor"}</p>
+                                <p className="inst__role">{inst.headline || t('home.instructors.instructorFallback')}</p>
 
                                 <div className="inst__stats">
                                     <div className="inst__stat">
                                         <strong>{inst.studentCount}</strong>
-                                        <span>Students</span>
+                                        <span>{t('home.instructors.statStudents')}</span>
                                     </div>
                                     <div className="inst__stat">
                                         <strong>{inst.courseCount}</strong>
-                                        <span>Courses</span>
+                                        <span>{t('home.instructors.statCourses')}</span>
                                     </div>
                                     <div className="inst__stat">
                                         <strong>{inst.rating.toFixed(1)}</strong>
-                                        <span>Rating</span>
+                                        <span>{t('home.instructors.statRating')}</span>
                                     </div>
                                 </div>
 
@@ -101,7 +103,7 @@ export default function Instructors() {
                                     className="inst__cta"
                                     onClick={() => navigate(`/learnova/intructorDetail/${inst.instructorId}`)}
                                 >
-                                    View Courses
+                                    {t('home.instructors.viewCourses')}
                                 </button>
                             </article>
                         ))

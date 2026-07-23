@@ -35,3 +35,10 @@ export const createReviewApi = async (data) => {
     );
     return response.data;
 };
+// PLATFORM TESTIMONIALS (public, real top reviews for the Home page)
+export const getPlatformTestimonialsApi = async () => {
+    const response = await axiosClient.get(
+        "/review/testimonials"
+    );
+    return response.data;
+};

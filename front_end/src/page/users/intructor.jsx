@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "./intructor/css/InstructorsPage.css";
 import { FaStar, FaCheckCircle } from "react-icons/fa";
 import { UserPlus, UserCheck } from "lucide-react";
@@ -12,28 +13,29 @@ import defaultAvatar from "../../assets/default_user_avatar.jpg";
 
 const RATING_BUCKETS = [
   { value: 5, label: "5.0" },
-  { value: 4.5, label: "4.5 & up" },
-  { value: 4.0, label: "4.0 & up" },
-  { value: 3.5, label: "3.5 & up" },
+  { value: 4.5, label: "4.5+" },
+  { value: 4.0, label: "4.0+" },
+  { value: 3.5, label: "3.5+" },
 ];
-
-const SORT_OPTIONS = [
-  { value: "popular", label: "Most Popular" },
-  { value: "rating", label: "Top Rated" },
-  { value: "students", label: "Most Students" },
-  { value: "courses", label: "Most Courses" },
-];
-
-const getBadge = (instructor) => {
-  if (instructor.studentCount >= 10000) return { class: "badge-best-seller", text: "Best Seller" };
-  if (instructor.rating >= 4.8) return { class: "badge-top-rated", text: "Top Rated" };
-  if (instructor.courseCount > 0) return { class: "badge-verified", text: "Verified" };
-  return null;
-};
 
 function InstructorsPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+
+  const SORT_OPTIONS = [
+    { value: "popular", label: t("instructorsPage.sortPopular") },
+    { value: "rating", label: t("instructorsPage.sortRating") },
+    { value: "students", label: t("instructorsPage.sortStudents") },
+    { value: "courses", label: t("instructorsPage.sortCourses") },
+  ];
+
+  const getBadge = (instructor) => {
+    if (instructor.studentCount >= 10000) return { class: "badge-best-seller", text: t("instructorsPage.badgeBestSeller") };
+    if (instructor.rating >= 4.8) return { class: "badge-top-rated", text: t("instructorsPage.badgeTopRated") };
+    if (instructor.courseCount > 0) return { class: "badge-verified", text: t("instructorsPage.badgeVerified") };
+    return null;
+  };
 
   const [instructors, setInstructors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -54,7 +56,7 @@ function InstructorsPage() {
       })
       .catch((err) => {
         console.error("Failed to load instructors", err);
-        if (mounted) setError("Failed to load instructors.");
+        if (mounted) setError(t("instructorsPage.loadError"));
       })
       .finally(() => {
         if (mounted) setIsLoading(false);
@@ -97,7 +99,7 @@ function InstructorsPage() {
     event.stopPropagation();
 
     if (!isAuthenticated) {
-      toast.error("Please log in to follow this instructor.");
+      toast.error(t("instructorsPage.loginToFollow"));
       navigate("/learnova/auth/login");
       return;
     }
@@ -112,11 +114,11 @@ function InstructorsPage() {
       setFollowMap((prev) => ({ ...prev, [instructorId]: data }));
 
       if (data.following) {
-        toast.success("You are now following this instructor.");
+        toast.success(t("instructorsPage.nowFollowing"));
       }
     } catch (err) {
       console.error("Failed to update follow status", err);
-      toast.error("Something went wrong. Please try again.");
+      toast.error(t("instructorsPage.followError"));
     }
   };
 
@@ -180,8 +182,8 @@ function InstructorsPage() {
           <aside className="sidebar-in">
             <div className="filter-group-in">
               <div className="filter-title">
-                <span>Expertise</span>
-                <small>{expertiseOptions.length} topics</small>
+                <span>{t("instructorsPage.expertise")}</span>
+                <small>{t("instructorsPage.topicsCount", { count: expertiseOptions.length })}</small>
               </div>
               <div className="filter-chip-grid">
                 {expertiseOptions.map((item) => (
@@ -201,8 +203,8 @@ function InstructorsPage() {
 
             <div className="filter-group-in">
               <div className="filter-title">
-                <span>Rating</span>
-                <small>Minimum score</small>
+                <span>{t("instructorsPage.rating")}</span>
+                <small>{t("instructorsPage.minimumScore")}</small>
               </div>
               <div className="filter-list">
                 <label className="filter-row-in">
@@ -212,7 +214,7 @@ function InstructorsPage() {
                     checked={minRating == null}
                     onChange={() => setMinRating(null)}
                   />
-                  <span className="filter-row-main">All ratings</span>
+                  <span className="filter-row-main">{t("instructorsPage.allRatings")}</span>
                 </label>
                 {RATING_BUCKETS.map((item) => (
                   <label key={item.value} className="filter-row-in">
@@ -232,7 +234,7 @@ function InstructorsPage() {
 
         <main className="main-content">
           <div className="category-section">
-            <span className="tag-label">Popular:</span>
+            <span className="tag-label">{t("instructorsPage.popular")}</span>
             <div className="tags">
               {categories.map((cat) => (
                 <button
@@ -246,7 +248,7 @@ function InstructorsPage() {
               ))}
             </div>
             <label className="sort-control">
-              <span>Sort by:</span>
+              <span>{t("instructorsPage.sortBy")}</span>
               <select value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
                 {SORT_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -259,7 +261,7 @@ function InstructorsPage() {
 
           {isLoading ? (
             <div className="empty-state">
-              <h4>Loading instructors...</h4>
+              <h4>{t("instructorsPage.loading")}</h4>
             </div>
           ) : error ? (
             <div className="empty-state">
@@ -267,7 +269,7 @@ function InstructorsPage() {
             </div>
           ) : filteredInstructors.length === 0 ? (
             <div className="empty-state">
-              <h4>No matching instructors found</h4>
+              <h4>{t("instructorsPage.noResults")}</h4>
             </div>
           ) : (
             <div className="instructors-grid-in">
@@ -292,7 +294,7 @@ function InstructorsPage() {
                       <FaCheckCircle className="check-icon" />
                     </h3>
                     <p className="instructor-title-new-in">
-                      {instructor.headline || "Instructor"}
+                      {instructor.headline || t("instructorsPage.instructorFallback")}
                     </p>
 
                     {instructor.expertiseTags?.length > 0 && (
@@ -315,19 +317,19 @@ function InstructorsPage() {
                       </div>
                     </div>
 
-                    <p className="bio">{instructor.description || "No description yet."}</p>
+                    <p className="bio">{instructor.description || t("instructorsPage.noDescription")}</p>
 
                     <div className="card-actions">
                       <button
                         className="view-profile-btn"
                         onClick={() => navigate(`/learnova/intructorDetail/${instructor.instructorId}`)}
                       >
-                        View Profile
+                        {t("instructorsPage.viewProfile")}
                       </button>
                       <button
                         className={`message-btn ${followMap[instructor.instructorId]?.following ? "following" : ""}`}
                         onClick={(event) => handleToggleFollow(event, instructor.instructorId)}
-                        title={followMap[instructor.instructorId]?.following ? "Unfollow" : "Follow"}
+                        title={followMap[instructor.instructorId]?.following ? t("instructorsPage.unfollow") : t("instructorsPage.follow")}
                       >
                         {followMap[instructor.instructorId]?.following ? (
                           <UserCheck size={18} />

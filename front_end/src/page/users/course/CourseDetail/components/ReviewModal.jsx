@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { FaStar, FaTimes, FaRegCheckCircle } from "react-icons/fa";
 import "../css/ReviewModal.css";
 
 function ReviewModal({ isOpen, onClose, onSubmit, isSubmitting }) {
+  const { t } = useTranslation();
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -21,11 +23,11 @@ function ReviewModal({ isOpen, onClose, onSubmit, isSubmitting }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (rating < 1) {
-      setError("Please select a star rating (from 1 to 5).");
+      setError(t("courseDetail.reviewModal.ratingRequired"));
       return;
     }
     if (!comment.trim()) {
-      setError("The review content must not be left blank.");
+      setError(t("courseDetail.reviewModal.commentRequired"));
       return;
     }
     setError("");
@@ -41,11 +43,11 @@ function ReviewModal({ isOpen, onClose, onSubmit, isSubmitting }) {
 
         <div className="congrats-badge">
           <FaRegCheckCircle className="congrats-icon" />
-          <h3 className="review-modal-title">Congratulations on completing the course!</h3>
+          <h3 className="review-modal-title">{t("courseDetail.reviewModal.congrats")}</h3>
         </div>
 
         <p className="review-modal-subtitle">
-          You have successfully completed all the lessons. Please share your thoughts and feedback on this course!
+          {t("courseDetail.reviewModal.subtitle")}
         </p>
 
         <form onSubmit={handleSubmit}>
@@ -63,7 +65,7 @@ function ReviewModal({ isOpen, onClose, onSubmit, isSubmitting }) {
 
           <textarea
             className="review-textarea"
-            placeholder="Enter your comments about the course..."
+            placeholder={t("courseDetail.reviewModal.commentPlaceholder")}
             value={comment}
             onChange={(e) => {
               setComment(e.target.value);
@@ -82,10 +84,10 @@ function ReviewModal({ isOpen, onClose, onSubmit, isSubmitting }) {
 
           <div className="review-modal-actions">
             <button type="button" className="btn-cancel-review" onClick={onClose}>
-              Post-assessment
+              {t("courseDetail.reviewModal.later")}
             </button>
             <button type="submit" className="btn-submit-review" disabled={isSubmitting}>
-              {isSubmitting ? "Đang gửi..." : "Gửi đánh giá"}
+              {isSubmitting ? t("courseDetail.reviewModal.submitting") : t("courseDetail.reviewModal.submit")}
             </button>
           </div>
         </form>

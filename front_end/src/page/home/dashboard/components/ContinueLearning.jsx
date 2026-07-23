@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { PlayCircle, X,Hand } from "lucide-react";
 import { useAuth } from "../../../../hook/UseAuth.jsx";
 import { useAxiosPrivate } from "../../../../hook/UseAxiosPrivate.js";
@@ -11,6 +12,7 @@ import "../css/ContinueLearning.css";
 const DISMISS_KEY = "learnova_continue_learning_dismissed";
 
 const ContinueLearning = () => {
+    const { t } = useTranslation();
     const { isAuthenticated, loading: authLoading, accessToken, currentUser } = useAuth();
     const axiosPrivate = useAxiosPrivate();
 
@@ -86,7 +88,7 @@ const ContinueLearning = () => {
                     type="button"
                     className="welcome-back-close"
                     onClick={dismiss}
-                    aria-label="Close"
+                    aria-label={t('home.continueLearning.closeAriaLabel')}
                 >
                     <X size={18} />
                 </button>
@@ -95,10 +97,10 @@ const ContinueLearning = () => {
 
                 {/*<Hand className="welcome-back-icon" size={24} />*/}
                 <h2 className="welcome-back-title">
-                    Welcome back{firstName ? `, ${firstName}` : ""}!
+                    {t('home.continueLearning.welcomeBack', { name: firstName ? `, ${firstName}` : "" })}
                 </h2>
                 <p className="welcome-back-subtitle">
-                    Ready to pick up where you left off?
+                    {t('home.continueLearning.subtitle')}
                 </p>
 
                 <div className="welcome-back-card">
@@ -120,7 +122,11 @@ const ContinueLearning = () => {
                             />
                         </div>
                         <span className="welcome-back-progress-label">
-                            {course.completedLessons}/{course.totalLessons} lessons · {course.progressPercent}% complete
+                            {t('home.continueLearning.lessonsProgress', {
+                                completed: course.completedLessons,
+                                total: course.totalLessons,
+                                percent: course.progressPercent,
+                            })}
                         </span>
                     </div>
                 </div>
@@ -131,7 +137,7 @@ const ContinueLearning = () => {
                         className="welcome-back-btn welcome-back-btn--ghost"
                         onClick={dismiss}
                     >
-                        Maybe later
+                        {t('home.continueLearning.maybeLater')}
                     </button>
                     <button
                         type="button"
@@ -139,7 +145,7 @@ const ContinueLearning = () => {
                         onClick={handleContinue}
                     >
                         <PlayCircle size={18} />
-                        Continue Learning
+                        {t('home.continueLearning.continueBtn')}
                     </button>
                 </div>
             </div>
