@@ -137,7 +137,7 @@ const CourseInfoStep = ({
                     </label>
 
                     <div className={fieldClass("basePrice")}>
-                        <span>Price (VND) *</span>
+                        <span>Price ($) *</span>
                         <input
                             name="basePrice"
                             type="number"
