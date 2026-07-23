@@ -38,7 +38,7 @@ const TeacherHeader = () => {
   let title = "Dashboard";
   if (pathname === "/learnova/teacher") {
     const firstName = user?.fullName?.split(" ")[0] || "Instructor";
-    title = `Good morning, ${firstName} 👋`;
+    title = `Welcome back, ${firstName} 👋`;
   } else if (pathname === "/learnova/teacher/courses") {
     title = "Courses management";
   } else if (pathname === "/learnova/teacher/courses/create") {

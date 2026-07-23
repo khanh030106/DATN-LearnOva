@@ -29,6 +29,7 @@ const CourseInfoStep = ({
     const isFormValid = Object.keys(errors).length === 0;
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsLoadingCategories(true);
         getActiveCategories()
             .then((data) => setCategories(Array.isArray(data) ? data : []))
@@ -136,7 +137,7 @@ const CourseInfoStep = ({
                     </label>
 
                     <div className={fieldClass("basePrice")}>
-                        <span>Price (VND) *</span>
+                        <span>Price ($) *</span>
                         <input
                             name="basePrice"
                             type="number"

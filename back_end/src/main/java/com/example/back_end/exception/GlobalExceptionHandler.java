@@ -1,6 +1,7 @@
 package com.example.back_end.exception;
 
 import com.example.back_end.dto.response.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -107,6 +109,8 @@ public class GlobalExceptionHandler {
         if (ex instanceof ResponseStatusException responseStatusException) {
             return handleResponseStatus(responseStatusException);
         }
+
+        log.error("Unhandled exception", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorResponse("An unexpected error occurred. Please try again later."));

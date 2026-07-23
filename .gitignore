@@ -43,3 +43,7 @@ infra/terraform/terraform.tfstate.backup
 infra/terraform/*.tfvars
 infra/terraform/crash.log
 infra/terraform/crash.*.log
+
+# secrets
+secrets/
+*.pem

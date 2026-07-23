@@ -1,8 +1,6 @@
 import {generateUploadUrl} from "../../../../../api/teacher/UploadApi.js";
 import {uploadFileToS3} from "../../../../../services/UploadService.js";
 
-// Video and resource uploads are handled inside their respective uploader components.
-// This hook owns only thumbnail (no XHR progress needed) and source-file handling.
 export const useCourseUpload = ({onCourseChange, onLessonSourceChange} = {}) => {
 
     const handleThumbnailSelected = async (file) => {

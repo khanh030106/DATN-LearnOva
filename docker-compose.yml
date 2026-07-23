@@ -57,7 +57,15 @@ services:
       FRONTEND_BASE_URL: https://datn.khanh.engineer
       COOKIE_SECURE: "true"
       AI_SERVICE_URL: http://ai-service:8000
+
+      # CloudFront
+      CLOUDFRONT_PRIVATE_KEY_PATH: /app/secrets/cloudfront-private-key.pem
+      
       JAVA_TOOL_OPTIONS: -Xmx768m
+
+    volumes:
+      - /home/ec2-user/secrets/cloudfront-private-key.pem:/app/secrets/cloudfront-private-key.pem:ro
+
     depends_on:
       postgres:
         condition: service_healthy
