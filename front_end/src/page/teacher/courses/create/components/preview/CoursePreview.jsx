@@ -4,7 +4,10 @@ const formatPrice = (price) => {
     if (price === "" || price === null || price === undefined) return null;
     const n = Number(price);
     if (n === 0) return "Free";
-    return new Intl.NumberFormat("vi-VN", {style: "currency", currency: "VND"}).format(n);
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    }).format(n);
 };
 
 const CoursePreview = ({course, sections}) => {
@@ -62,7 +65,7 @@ const CoursePreview = ({course, sections}) => {
                         <h3>Requirements</h3>
                         <ul className="teacher-student-preview__requirements">
                             {requirements.map((item, i) => (
-                                <li key={i}>{item}</li>
+                                <li key={i}>- {item}</li>
                             ))}
                         </ul>
                     </div>
