@@ -43,8 +43,11 @@ const formatHours = (seconds) => {
     return `${m}m`;
 };
 
-const formatVnd = (value) => {
-    return `${Number(value || 0).toLocaleString("vi-VN")}đ`;
+const formatUsd = (value) => {
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    }).format(value || 0);
 };
 
 export default function CourseDetail() {
@@ -215,7 +218,7 @@ export default function CourseDetail() {
             courseId: course.courseId || course.id || id,
             title: course.title,
             teacher: course.instructor?.fullName || "LearnOva Instructor",
-            price: formatVnd(course.basePrice),
+            price: formatUsd(course.basePrice),
             image: thumbnailUrl,
         });
 
@@ -510,19 +513,19 @@ export default function CourseDetail() {
 
                         <div className="cdp__card-body">
                             <div className="cdp__card-price">
-                                {formatVnd(total)}
+                                {formatUsd(total)}
                             </div>
 
                             {discount > 0 && (
                                 <div className="course-detail-order-lines">
                                     <div>
                                         <span>Subtotal</span>
-                                        <strong>{formatVnd(subtotal)}</strong>
+                                        <strong>{formatUsd(subtotal)}</strong>
                                     </div>
 
                                     <div>
                                         <span>Discount</span>
-                                        <strong>-{formatVnd(discount)}</strong>
+                                        <strong>-{formatUsd(discount)}</strong>
                                     </div>
                                 </div>
                             )}
